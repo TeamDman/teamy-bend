@@ -85,7 +85,8 @@ No existing checkout was fetched, pulled or rewritten.
 
 Completion: `gh repo create TeamDman/teamy-bend --public` succeeded at
 https://github.com/TeamDman/teamy-bend. Local main branch is initialized with
-the user's public pseudonym and GitHub noreply identity. First push pending.
+the user's public pseudonym and GitHub noreply identity. First implementation
+commit `2e540f9` was pushed to public `main`.
 
 ### [x] 1.3 Establish compatible licensing and provenance
 
@@ -99,7 +100,8 @@ Translated files keep Apache licensing; new files use MPL.
 
 Completion notes: identity/env names, CLI commands, profiler default and README
 adapted. Logging, structured output, cancellation, Windows resources and CLI
-fuzzing retained. `check-all.ps1`, help/version and native command tests passed.
+fuzzing retained. `check-all.ps1` passes all 58 tests, formatting, Clippy and
+all-feature compilation. Help/version and native command checks passed.
 
 Work: replace identity, CLI commands, env names, examples and profiler defaults;
 retain logging/output/cancellation/build-resource and fuzz infrastructure.
@@ -234,12 +236,14 @@ state checking and unproved full-deck/network/UI behavior.
 
 ## 5. Validation and publication
 
-### [~] 5.1 Publish the reviewed implementation and evidence
+### [x] 5.1 Publish the first verified implementation and evidence
 
 Completion notes: public remote exists; first milestone review excludes local
 paths, raw diagnostics, build outputs and reference downloads. Full quality gate
-and final upstream audit passed. First commit/push pending. Both source and
-Poche remotes were verified public; Poche itself is not being published here.
+and final upstream audit passed. First implementation commit `2e540f9` is on
+public `main` at https://github.com/TeamDman/teamy-bend. Both source and Poche
+remotes were verified public; Poche changes remain locally reviewable. This
+completes initial publication, not the broad rewrite/formalization goal.
 
 Work: README, compatibility status, docs and licence headers; inspect all staged
 content and commit identity; commit and push the requested public repository.
