@@ -225,6 +225,51 @@ fn array_sugar_and_nested_type_closers_parse() {
     );
 }
 
+#[test]
+fn empty_datatype_parameters_and_reusable_parallel_lets_work() {
+    let source = format!(
+        "{NAT}{}",
+        r"
+type Marker<> is Data:
+  Marker{}
+def id(n: Nat) -> Nat: n
+def use(a: Nat, b: Nat, c: Nat, d: Nat) -> Nat: a
+def result() -> Nat:
+  +a +b = id(1n) id(2n)
+  use(a,a,b,b)
+"
+    );
+    let checked = check_book(&parse(&source).expect("source parses")).expect("source checks");
+    assert_eq!(
+        checked.evaluate("result", &[]).expect("result").to_string(),
+        "Succ{Zero{}}"
+    );
+}
+
+#[test]
+fn array_write_statements_rebind_in_source_order() {
+    let source = format!(
+        "{}{}",
+        include_str!("../src/syntax/base.bend"),
+        r"
+def Array.set(-T: Type, array: T, index: U32, value: T) -> T: value
+def writes(a: U32) -> U32:
+  a[0] <- 1
+  a[1] <- 2; b = a
+  b
+"
+    );
+    let checked =
+        check_book(&parse(&source).expect("write statements parse")).expect("rebindings check");
+    assert_eq!(
+        checked
+            .evaluate("writes", &[parse_term("0").expect("U32")])
+            .expect("result")
+            .to_string(),
+        parse_term("2").expect("expected U32").to_string()
+    );
+}
+
 static NEXT: AtomicUsize = AtomicUsize::new(0);
 struct Fixture(PathBuf);
 impl Fixture {
@@ -274,6 +319,24 @@ fn import_cycles_are_rejected() {
             .message
             .contains("cycle")
     );
+}
+
+#[test]
+fn unsupported_features_and_bad_imports_have_specific_locations() {
+    let failure = parse_term("f!(x)").expect_err("offload unsupported");
+    assert_eq!((failure.line, failure.column), (1, 2));
+    assert!(failure.message.contains("GPU offload"));
+    assert!(
+        parse_term("f(~Type)")
+            .expect_err("template unsupported")
+            .message
+            .contains("template arguments")
+    );
+    let fixture = Fixture::new();
+    let entry = fixture.write("bad-import.bend", "# heading\n\n  import nope.txt as Foo\n");
+    let failure = load(entry).expect_err("invalid import extension");
+    assert_eq!((failure.line, failure.column), (3, 3));
+    assert!(failure.message.contains(".bend path"));
 }
 
 #[test]

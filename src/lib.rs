@@ -6,6 +6,8 @@ pub mod compiler;
 pub mod kernel;
 pub mod logging_init;
 pub mod paths;
+pub mod protocol;
+mod runtime;
 pub mod syntax;
 #[cfg(windows)]
 mod windows_startup;
@@ -46,12 +48,24 @@ fn version() -> String {
 ///
 /// # Errors
 ///
-/// This function will return an error if `color_eyre` installation, CLI parsing, logging initialization, command execution, or command output rendering fails.
-///
-/// # Panics
-///
-/// Panics if the CLI schema is invalid (should never happen with correct code).
+/// This function will return an error if the worker cannot start or panics,
+/// or if `color_eyre` installation, CLI parsing, logging initialization,
+/// command execution, or command output rendering fails.
 pub fn main() -> eyre::Result<()> {
+    // The Windows main stack is too small for the kernel's bounded recursion
+    // in debug builds. Keep source checking and output on a fixed worker stack
+    // so the existing AST, nesting and fuel limits can reject input normally.
+    // Bend terms remain on this thread; no Rc-backed terms cross the boundary.
+    std::thread::Builder::new()
+        .name("bend-cli".to_owned())
+        .stack_size(16 * 1024 * 1024)
+        .spawn(run)
+        .map_err(|error| eyre::eyre!("cannot start CLI worker: {error}"))?
+        .join()
+        .map_err(|_panic_payload| eyre::eyre!("CLI worker panicked"))?
+}
+
+fn run() -> eyre::Result<()> {
     // Install color_eyre for better error reports
     color_eyre::install()?;
     let cancellation_token = CtrlCHandler::default().install()?;

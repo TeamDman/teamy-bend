@@ -4,7 +4,7 @@ The reference is Bend 2.0.5, revision
 `e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`. This tool currently implements a
 supported subset. It is not a drop-in replacement for the full upstream CLI.
 
-## Supported first milestone
+## Supported surface
 
 - Dependent functions, algebraic datatypes, kinds and quantities; erased,
   affine and reusable binders; structural recursion; equality, reflexivity and
@@ -14,15 +14,19 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   lets, reusable binders, local module imports/aliases, literals and operators,
   pure do notation and array syntax lowering. Syntax support alone does not
   provide an absent library operation or runtime intrinsic.
-- Pure normalization, typed Nat batch calls, and Rust-authored JavaScript
-  generation with closures, constructors, pattern matches and simultaneous
-  let scope. No TypeScript interpreter implements these operations.
-- 114 selected pure Base declarations: dependent pairs/existentials, sums,
+- Pure normalization, typed Nat batch calls, persistent constructor calls,
+  and Rust-authored JavaScript/C11 generation with closures, constructors,
+  pattern matches and simultaneous let scope. Persistent calls use a separate
+  lazy native data runtime after checking their arguments. No TypeScript
+  interpreter implements these operations.
+- 173 selected pure Base declaration events: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
-  and selected String helpers. `src/syntax/base.bend` is the exact inventory.
+  and selected String helpers, including pure Word/U32 arithmetic helpers.
+  `src/syntax/base.bend` is the exact inventory (150 definitions, six laws and
+  17 datatypes).
 
-Templates, foreign C/JS bodies, GPU calls, hub fetch/publish, implicit array-write
-rebinding, effects, the full array/word/numeric library, optimized C and GPU
+Templates, foreign C/JS bodies, GPU calls, hub fetch/publish,
+effects, the full array/word/numeric library, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish arithmetic or floating-point proof support.
 
@@ -39,12 +43,25 @@ Limits return failure, never a successful proof. They deliberately restrict
 large programs until compact representations and iterative traversals are
 implemented. Evaluation performance and sharing are not at upstream parity.
 
+The persistent data runtime has separate arena, continuation and output limits
+documented in [the protocol](data-protocol.md). It does not replace the proof
+normalizer. The baseline C backend limits instruction generation to 250,000
+nodes and defaults to 2,000,000 runtime steps, 64 MiB of tracked allocations,
+nesting depth 1,024 and 8 MiB of output. Generated programs release their arena
+after either success or failure. C and JavaScript emit an explicit erased marker
+for proof/type results; the constructor-only data protocol rejects such results.
+
 ## Reproduce the upstream audit
 
-The 2026-09-19 audit covered all 1,302 fixtures: 302 expected-positive programs
-checked, 551 expected-positive programs were rejected, and all 449 expected
+The 2026-09-19 audit covered all 1,302 fixtures: 344 expected-positive programs
+checked, 509 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
+
+The numeric/parser expansion adds 42 accepted positives over the first
+milestone. A newly exposed debug Windows stack overflow in `run/fuel_loops.bend`
+was reduced to a large unary Nat, fixed with a bounded CLI worker stack, and
+rerun through this complete audit. Kernel proof limits remain unchanged.
 
 Use an existing separate upstream checkout at the reference revision:
 
@@ -76,3 +93,11 @@ This establishes the documented finite scalar domains and two universal
 definitional equalities. The entire game state machine, full deck, network
 protocol, privacy, UI and money-transfer implementation remain outside that
 receipt. Full state-model integration remains in the active implementation plan.
+
+The separate `micro-v1` model now covers the complete six-card, two-seat 1/2/1
+state schema. Its trajectory gate passes 21 transitions, 22 inspections, all
+300 deal partitions and eight rejection controls. A distributed sample passes
+1,000 states and 1,000 edges. Seven compiled witnesses and two well-typed model
+mutants also pass their expected-value checks. These receipts are explicitly
+non-exhaustive; comparison of all 431,800 reachable states and 549,896 labeled
+edges remains outstanding.

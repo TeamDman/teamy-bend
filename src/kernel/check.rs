@@ -49,6 +49,7 @@ impl KernelError {
 #[derive(Clone, Debug)]
 pub struct CheckedBook {
     engine: Engine,
+    runtime: crate::runtime::Program,
 }
 
 impl CheckedBook {
@@ -63,6 +64,27 @@ impl CheckedBook {
     /// # Errors
     /// Rejects unknown definitions, incorrect arguments, and exhausted limits.
     pub fn evaluate(&self, name: &str, args: &[TermRef]) -> Result<TermRef, KernelError> {
+        let mut engine = self.check_arguments(name, args)?;
+        engine.normalize(&apply(
+            term(Term::Ref(name.into())),
+            args.iter().map(Rc::clone),
+        ))
+    }
+
+    /// Evaluate checked arguments with the bounded lazy constructor runtime.
+    ///
+    /// Argument arity and dependent types are checked on every call. Runtime
+    /// thunks and memoized values belong to that call; proof checking continues
+    /// to use the kernel normalizer exclusively.
+    ///
+    /// # Errors
+    /// Rejects invalid arguments, non-data results, and exhausted runtime limits.
+    pub fn evaluate_data(&self, name: &str, args: &[TermRef]) -> Result<TermRef, KernelError> {
+        self.check_arguments(name, args)?;
+        self.runtime.evaluate(name, args)
+    }
+
+    fn check_arguments(&self, name: &str, args: &[TermRef]) -> Result<Engine, KernelError> {
         let mut engine = self.engine.clone();
         engine.reset();
         for arg in args {
@@ -108,10 +130,7 @@ impl CheckedBook {
             )?;
             ty = substitute(body, *id, arg);
         }
-        engine.normalize(&apply(
-            term(Term::Ref(name.into())),
-            args.iter().map(Rc::clone),
-        ))
+        Ok(engine)
     }
 
     /// Names of all checked definitions, in lexical order.
@@ -120,10 +139,89 @@ impl CheckedBook {
     }
 }
 
+#[cfg(test)]
+mod benchmark {
+    use super::check_book;
+    use crate::protocol::DataValue;
+    use crate::protocol::Request;
+    use crate::protocol::arguments;
+    use std::collections::BTreeMap;
+    use std::time::Instant;
+
+    fn high_natural(values: &[DataValue]) -> bool {
+        let mut work: Vec<_> = values.iter().map(|value| (value, 0)).collect();
+        while let Some((value, consecutive)) = work.pop() {
+            let next = if value.constructor == "Succ" {
+                consecutive + 1
+            } else {
+                0
+            };
+            if next >= 48 {
+                return true;
+            }
+            work.extend(value.fields.iter().map(|field| (field, next)));
+        }
+        false
+    }
+
+    fn profile() {
+        let model = std::env::var_os("TEAMY_BEND_BENCH_MODEL").expect("set benchmark model");
+        let transcript =
+            std::env::var_os("TEAMY_BEND_BENCH_TRANSCRIPT").expect("set benchmark transcript");
+        let checked =
+            check_book(&crate::syntax::load(std::path::Path::new(&model)).unwrap()).unwrap();
+        let transcript = std::fs::read_to_string(transcript).unwrap();
+        let requests = transcript
+            .lines()
+            .filter_map(|line| line.strip_prefix("> "))
+            .map(|line| facet_json::from_str::<Request>(line).unwrap())
+            .filter(|request| high_natural(&request.args))
+            .map(|request| (request.entry, arguments(&request.args).unwrap()))
+            .collect::<Vec<_>>();
+        assert!(
+            !requests.is_empty(),
+            "transcript needs input naturals at least48"
+        );
+        let mut totals = BTreeMap::<String, (usize, u128, u128)>::new();
+        for _ in 0..200 {
+            for (entry, args) in &requests {
+                let at = Instant::now();
+                drop(checked.check_arguments(entry, args).unwrap());
+                let validation = at.elapsed().as_micros();
+                let at = Instant::now();
+                std::hint::black_box(checked.runtime.evaluate(entry, args).unwrap());
+                let runtime = at.elapsed().as_micros();
+                let total = totals.entry(entry.clone()).or_default();
+                total.0 += 1;
+                total.1 += validation;
+                total.2 += runtime;
+            }
+        }
+        for (entry, (calls, validation, runtime)) in totals {
+            eprintln!(
+                "entry={entry} calls={calls} argument_validation_us={validation} lazy_runtime_us={runtime}"
+            );
+        }
+    }
+
+    #[test]
+    #[ignore = "local profiler needs explicit trajectory/model benchmark environment"]
+    fn profile_high_score_validation_and_runtime() {
+        std::thread::Builder::new()
+            .stack_size(16 * 1024 * 1024)
+            .spawn(profile)
+            .unwrap()
+            .join()
+            .unwrap();
+    }
+}
+
 #[derive(Clone, Debug)]
 pub(crate) struct Engine {
-    pub(crate) defs: BTreeMap<String, DefDecl>,
-    pub(crate) adts: BTreeMap<String, AdtDecl>,
+    // Declaration maps are immutable after checking. Evaluation clones only
+    // these shared pointers; each call still owns its aliases and budgets.
+    pub(crate) defs: Rc<BTreeMap<String, DefDecl>>,
+    pub(crate) adts: Rc<BTreeMap<String, AdtDecl>>,
     pub(crate) aliases: BTreeMap<usize, TermRef>,
     fresh_id: usize,
     fuel: usize,
@@ -247,8 +345,8 @@ pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
         }
     }
     let mut engine = Engine {
-        defs: BTreeMap::new(),
-        adts: BTreeMap::new(),
+        defs: Rc::new(BTreeMap::new()),
+        adts: Rc::new(BTreeMap::new()),
         aliases: BTreeMap::new(),
         fresh_id: highest
             .checked_add(1)
@@ -282,7 +380,8 @@ pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
             open.join(", ")
         )));
     }
-    Ok(CheckedBook { engine })
+    let runtime = crate::runtime::Program::from_checked(&engine.defs, &engine.adts);
+    Ok(CheckedBook { engine, runtime })
 }
 
 impl Engine {
@@ -307,7 +406,7 @@ impl Engine {
         }
         let mut pending = definition.clone();
         pending.body = None;
-        self.defs.insert(definition.name.clone(), pending);
+        Rc::make_mut(&mut self.defs).insert(definition.name.clone(), pending);
         let lhs = Lhs {
             name: definition.name.clone(),
             equation: term(Term::Ref(definition.name.clone())),
@@ -341,8 +440,7 @@ impl Engine {
             };
             self.check(&lhs, body, Quant::Lone, &definition.ty, &Context::new())?;
         }
-        self.defs
-            .insert(definition.name.clone(), definition.clone());
+        Rc::make_mut(&mut self.defs).insert(definition.name.clone(), definition.clone());
         Ok(())
     }
 
@@ -365,8 +463,7 @@ impl Engine {
                 )));
             }
         }
-        self.adts
-            .insert(declaration.name.clone(), declaration.clone());
+        Rc::make_mut(&mut self.adts).insert(declaration.name.clone(), declaration.clone());
         let lhs = Lhs::default();
         self.check(
             &lhs,

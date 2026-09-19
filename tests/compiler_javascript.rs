@@ -70,6 +70,12 @@ fn assert_matches_kernel(book: &Book, entry: &str) {
     let normal = checked
         .evaluate(entry, &[])
         .expect("reference kernel normalizes source");
+    if matches!(normal.as_ref(), Term::Ctr { .. }) {
+        let native = checked
+            .evaluate_data(entry, &[])
+            .expect("native lazy runtime evaluates data");
+        assert_eq!(data_json(&native), data_json(&normal));
+    }
     let source = compile_javascript(book, entry).expect("compile checked source");
     let output = Script::new(&source).run();
     assert!(

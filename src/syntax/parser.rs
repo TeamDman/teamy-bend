@@ -272,7 +272,7 @@ impl Parser<'_> {
         if !s.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
             || KEYWORDS.contains(&s.as_str())
         {
-            return Err(self.error("expected a name"));
+            return Err(self.error(format!("expected a name, found {:?}", self.current().text)));
         }
         Ok(self.bump())
     }
@@ -408,7 +408,9 @@ impl Parser<'_> {
             token.start += 1;
             token.column += 1;
         }
-        let parameters = if erased_first || self.take("<") {
+        let parameters = if self.take("<>") {
+            Vec::new()
+        } else if erased_first || self.take("<") {
             self.telescope(">")?
         } else {
             Vec::new()
@@ -624,6 +626,11 @@ impl Parser<'_> {
                 return Err(self.error("expression spine exceeds the parser resource limit of 256"));
             }
             let same_line = self.at > 0 && self.tokens[self.at - 1].line == self.current().line;
+            if self.is("!") {
+                return Err(self.error(
+                    "GPU offload calls (!) are not supported by this Rust implementation yet",
+                ));
+            }
             if self.is("(") && same_line {
                 self.bump();
                 let args = self.arguments(")")?;
@@ -780,6 +787,11 @@ impl Parser<'_> {
         reason = "Surface forms are kept in upstream grammar order for auditability"
     )]
     fn atom(&mut self) -> Result<TermRef, ParseError> {
+        if self.is("~") {
+            return Err(self.error(
+                "template arguments (~) are not supported by this Rust implementation yet",
+            ));
+        }
         if self.take("Type") {
             return Ok(term(Term::Typ(term(Term::Qua(Quant::Lone)))));
         }
@@ -1371,6 +1383,7 @@ impl Parser<'_> {
         let start = self.at;
         let mut quant = self.quant();
         let mut patterns = Vec::new();
+        let mut values = Vec::new();
         if quant != Quant::Lone && self.tokens.get(self.at + 1).is_some_and(|t| t.text == "=") {
             let name = self.name()?;
             patterns.push(term(Term::Ref(name)));
@@ -1381,21 +1394,29 @@ impl Parser<'_> {
             patterns.push(self.expression(0)?);
             while self.at > 0
                 && self.tokens[self.at - 1].line == self.current().line
-                && self
-                    .current()
-                    .text
-                    .starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
+                && (self.is("+")
+                    || self
+                        .current()
+                        .text
+                        .starts_with(|c: char| c.is_ascii_alphabetic() || c == '_'))
                 && !KEYWORDS.contains(&self.current().text.as_str())
             {
                 patterns.push(self.expression(0)?);
             }
             if patterns.len() == 1 && !self.is("=") {
-                return Ok(Body::Reply(patterns.remove(0)));
+                let more = self.is(";")
+                    || !self.is("") && self.current().column == self.tokens[start].column;
+                if let Some(variable) = array_write_binder(&patterns[0]).filter(|_| more) {
+                    values.push(patterns.remove(0));
+                    patterns.push(variable);
+                } else {
+                    return Ok(Body::Reply(patterns.remove(0)));
+                }
+            } else {
+                self.expect("=")?;
             }
-            self.expect("=")?;
         }
-        let mut values = Vec::new();
-        for _ in &patterns {
+        while values.len() < patterns.len() {
             values.push(self.expression(0)?);
         }
         self.take(";");
@@ -1413,6 +1434,24 @@ impl Parser<'_> {
             body: Box::new(body),
         })
     }
+}
+
+fn array_write_binder(value: &TermRef) -> Option<TermRef> {
+    let Term::App(set_with_index, _) = value.as_ref() else {
+        return None;
+    };
+    let Term::App(set_with_array, _) = set_with_index.as_ref() else {
+        return None;
+    };
+    let Term::App(set_with_type, array) = set_with_array.as_ref() else {
+        return None;
+    };
+    let Term::App(head, _) = set_with_type.as_ref() else {
+        return None;
+    };
+    (matches!(head.as_ref(), Term::Ref(name) if name == "Array.set")
+        && matches!(array.as_ref(), Term::Var { .. }))
+    .then(|| Rc::clone(array))
 }
 
 fn operator(op: &str) -> Option<(u8, bool, &'static str)> {
@@ -1797,7 +1836,16 @@ impl Loader {
         let mut header = true;
         for (line_number, line) in source.lines().enumerate() {
             let text = line.split('#').next().unwrap_or("").trim();
-            if header && text.starts_with("import") && text[6..].starts_with(char::is_whitespace) {
+            if header
+                && (text == "import"
+                    || text.starts_with("import") && text[6..].starts_with(char::is_whitespace))
+            {
+                let import_failure = |message: String| ParseError {
+                    source: path.display().to_string(),
+                    line: line_number + 1,
+                    column: line.find("import").unwrap_or(0) + 1,
+                    message,
+                };
                 let parts = text.split_whitespace().collect::<Vec<_>>();
                 if parts == ["import", "Base"] {
                     if !self.base {
@@ -1819,16 +1867,18 @@ impl Loader {
                         || !alias.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
                         || !alias.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
                     {
-                        return Err(error(format!("invalid import at line {}", line_number + 1)));
+                        return Err(import_failure(
+                            "expected a .bend path and a simple alias".into(),
+                        ));
                     }
                     if relative.starts_with("0x") {
-                        return Err(error(
+                        return Err(import_failure(
                             "hub package imports are not supported; use a local .bend module"
                                 .into(),
                         ));
                     }
                     if aliases.contains_key(*alias) {
-                        return Err(error(format!("duplicate import alias: {alias}")));
+                        return Err(import_failure(format!("duplicate import alias: {alias}")));
                     }
                     let import_path = Path::new(relative);
                     let at = path
@@ -1848,7 +1898,9 @@ impl Loader {
                     aliases.insert((*alias).into(), sub.clone());
                     self.file(&at, &sub)?;
                 } else {
-                    return Err(error(format!("invalid import at line {}", line_number + 1)));
+                    return Err(import_failure(
+                        "expected 'import Base' or 'import path.bend as Name'".into(),
+                    ));
                 }
                 cleaned.push('\n');
             } else {

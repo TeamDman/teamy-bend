@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
+use crate::compiler::compile_c;
 use crate::compiler::compile_javascript;
 use crate::syntax;
 use arbitrary::Arbitrary;
@@ -11,7 +12,17 @@ use figue as args;
 use std::io::Write;
 use teamy_cancellation::CancellationToken;
 
-/// Compile checked pure Bend source into a standalone JavaScript program.
+/// Generated source language for a standalone program.
+#[derive(Facet, Arbitrary, Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[facet(rename_all = "kebab-case")]
+#[repr(u8)]
+pub enum CompileTarget {
+    #[default]
+    Javascript,
+    C,
+}
+
+/// Compile checked pure Bend source into a standalone program.
 #[derive(Facet, Arbitrary, Debug, PartialEq)]
 pub struct CompileArgs {
     /// Bend source file.
@@ -20,7 +31,10 @@ pub struct CompileArgs {
     /// Closed data entry point, defaulting to main.
     #[facet(args::named)]
     pub entry: Option<String>,
-    /// Output JavaScript file to create.
+    /// Output source language: javascript (default) or c.
+    #[facet(args::named, default)]
+    pub target: CompileTarget,
+    /// Output source file to create.
     #[facet(args::named)]
     pub output: String,
     /// Replace an existing output file after successful checking.
@@ -44,8 +58,12 @@ impl CompileArgs {
         cancellation.bail_if_cancelled()?;
         let book =
             syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
-        let program = compile_javascript(&book, self.entry.as_deref().unwrap_or("main"))
-            .map_err(|error| eyre!("{error}"))?;
+        let entry = self.entry.as_deref().unwrap_or("main");
+        let (target, program) = match self.target {
+            CompileTarget::Javascript => ("javascript", compile_javascript(&book, entry)),
+            CompileTarget::C => ("c", compile_c(&book, entry)),
+        };
+        let program = program.map_err(|error| eyre!("{error}"))?;
         cancellation.bail_if_cancelled()?;
         let mut options = std::fs::OpenOptions::new();
         options.write(true);
@@ -62,7 +80,7 @@ impl CompileArgs {
             .wrap_err("cannot write compiled output")?;
         Ok(CliOutput::facet(CompileReport {
             output: self.output,
-            target: "javascript".to_owned(),
+            target: target.to_owned(),
             bytes: program.len(),
         }))
     }

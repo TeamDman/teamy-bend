@@ -7,6 +7,7 @@ pub mod facet_shape;
 pub mod global_args;
 pub mod home;
 pub mod output;
+pub mod serve;
 
 use crate::cli::batch::BatchArgs;
 use crate::cli::cache::CacheArgs;
@@ -16,6 +17,7 @@ use crate::cli::eval::EvalArgs;
 use crate::cli::global_args::GlobalArgs;
 use crate::cli::home::HomeArgs;
 use crate::cli::output::CliOutput;
+use crate::cli::serve::ServeArgs;
 use arbitrary::Arbitrary;
 use eyre::Context;
 use facet::Facet;
@@ -81,8 +83,10 @@ pub enum Command {
     Eval(EvalArgs),
     /// Evaluate rows of natural-number arguments against one checked program.
     Batch(BatchArgs),
-    /// Compile a checked pure Bend program to standalone JavaScript.
+    /// Compile a checked pure Bend program to standalone JavaScript or C.
     Compile(CompileArgs),
+    /// Serve typed constructor calls over persistent newline-delimited JSON.
+    Serve(ServeArgs),
 }
 
 impl Command {
@@ -98,6 +102,7 @@ impl Command {
             Command::Eval(args) => args.invoke(&cancellation_token),
             Command::Batch(args) => args.invoke(&cancellation_token),
             Command::Compile(args) => args.invoke(&cancellation_token),
+            Command::Serve(args) => args.invoke(&cancellation_token),
         }
     }
 }

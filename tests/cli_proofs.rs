@@ -119,6 +119,33 @@ fn incomplete_and_unsafe_proofs_fail_closed() {
 }
 
 #[test]
+fn native_cli_reaches_nesting_limit_without_stack_overflow() {
+    // A direct Nat128 body is below the parser's expansion cap. On Windows,
+    // checking it used to overflow the debug CLI's main stack before the
+    // kernel could return its normal nesting-limit error.
+    let fixture = Fixture::new(&format!("{NAT}\ndef main() -> Nat:\n  128n\n"));
+    for command in ["check", "eval"] {
+        let result = invoke(command, &fixture.source(), &[]);
+        assert_eq!(
+            result.status.code(),
+            Some(1),
+            "{command} crashed: {}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        assert!(String::from_utf8_lossy(&result.stderr).contains("kernel nesting limit exhausted"));
+        assert!(result.stdout.is_empty(), "failure emitted a success report");
+    }
+
+    let supported = Fixture::new(&format!("{NAT}\ndef main() -> Nat:\n  120n\n"));
+    let result = invoke("check", &supported.source(), &[]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+}
+
+#[test]
 fn malformed_batch_data_and_wrong_arity_are_errors() {
     let fixture = Fixture::new(&format!("{NAT}\ndef identity(n: Nat) -> Nat:\n  n\n"));
     let rows = fixture.0.join("rows.json");

@@ -725,3 +725,370 @@ def String.repeat(+s: String, n: Nat) -> String:
 
 def Char.show(c: Char) -> String:
   SCon{c, SNil{}}
+
+# Pure Word and U32 operations from upstream Base.
+
+def Word.zero(n: Nat) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      WCon{False{}, Word.zero(p)}
+
+def Word.not(n: Nat, w: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          WCon{Bool.not(b), Word.not(p, t)}
+
+def Word.and(n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match a b:
+        case WCon{ab, at} WCon{bb, bt}:
+          WCon{Bool.and(ab, bb), Word.and(p, at, bt)}
+
+def Word.or(n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match a b:
+        case WCon{ab, at} WCon{bb, bt}:
+          WCon{Bool.or(ab, bb), Word.or(p, at, bt)}
+
+def Word.xor(n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match a b:
+        case WCon{ab, at} WCon{bb, bt}:
+          WCon{Bool.xor(ab, bb), Word.xor(p, at, bt)}
+
+def Word.shl.put(n: Nat, c: Bool, w: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          WCon{c, Word.shl.put(p, b, t)}
+
+def Word.shl(n: Nat, w: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          WCon{False{}, Word.shl.put(p, b, t)}
+
+def Word.shl.out.con(-p: Nat, c: Bool, r: Bool & Word(p)) -> Bool & Word(1n+p):
+  (hi, t2) = r
+  (hi, WCon{c, t2})
+
+def Word.shl.out(n: Nat, c: Bool, w: Word(n)) -> Bool & Word(n):
+  match n:
+    case 0n:
+      (c, WNil{})
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          Word.shl.out.con(p, c, Word.shl.out(p, b, t))
+
+def Word.shr.pad(n: Nat, w: Word(n)) -> Word(1n+n):
+  match n:
+    case 0n:
+      WCon{False{}, w}
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          WCon{b, Word.shr.pad(p, t)}
+
+def Word.shr(n: Nat, w: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match w:
+        case WCon{b, t}:
+          Word.shr.pad(p, t)
+
+def Word.cmp.fin(ab: Bool, bb: Bool, t: Cmp) -> Cmp:
+  match t:
+    case LT{}:
+      LT{}
+    case EQ{}:
+      Bool.cmp(ab, bb)
+    case GT{}:
+      GT{}
+
+def Word.cmp(n: Nat, a: Word(n), b: Word(n)) -> Cmp:
+  match n:
+    case 0n:
+      EQ{}
+    case 1n+p:
+      match a b:
+        case WCon{ab, at} WCon{bb, bt}:
+          Word.cmp.fin(ab, bb, Word.cmp(p, at, bt))
+
+def Word.inc(n: Nat, w: Word(n)) -> Word(n):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match w:
+        case WCon{False{}, t}:
+          WCon{True{}, t}
+        case WCon{True{}, t}:
+          WCon{False{}, Word.inc(p, t)}
+
+law Word.adc:
+  for n: Nat
+  for a: Word(n)
+  for b: Word(n)
+  for f: Bool
+  for c: Bool
+  Word(n)
+
+# The helper recursion is inlined so every live call targets a checked definition.
+# Sum = a xor b xor c; carry = (a and b) or (c and (a xor b)).
+def Word.adc(n, a, b, f, c):
+  match n:
+    case 0n:
+      WNil{}
+    case 1n+p:
+      match a b:
+        case WCon{+ab, at} WCon{+bb, bt}:
+          +carry = c
+          +flip = f
+          +bit = Bool.xor(bb, flip)
+          WCon{Bool.xor(Bool.xor(ab, bit), carry),
+            Word.adc(p, at, bt, flip,
+              Bool.or(Bool.and(ab, bit), Bool.and(carry, Bool.xor(ab, bit))))}
+
+def Word.adc.con(p: Nat, at: Word(p), bt: Word(p), f: Bool, sk: Bool & Bool) ->
+  Word(1n+p):
+  (s, k) = sk
+  WCon{s, Word.adc(p, at, bt, f, k)}
+def Word.add(n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  Word.adc(n, a, b, False{}, False{})
+
+def Word.sub(n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  Word.adc(n, a, b, True{}, True{})
+
+def Word.to_nat(n: Nat, w: Word(n)) -> Nat:
+  match n:
+    case 0n:
+      0n
+    case 1n+p:
+      match w:
+        case WCon{False{}, t}:
+          Nat.double(Word.to_nat(p, t))
+        case WCon{True{}, t}:
+          1n+Nat.double(Word.to_nat(p, t))
+
+def Word.mul.go(+n: Nat, m: Nat, a: Word(m), +b: Word(n), acc: Word(n)) ->
+  Word(n):
+  match m:
+    case 0n:
+      acc
+    case 1n+mp:
+      match a:
+        case WCon{False{}, at}:
+          Word.mul.go(n, mp, at, Word.shl(n, b), acc)
+        case WCon{True{}, at}:
+          Word.mul.go(n, mp, at, Word.shl(n, b), Word.add(n, acc, b))
+
+def Word.mul(+n: Nat, a: Word(n), b: Word(n)) -> Word(n):
+  Word.mul.go(n, n, a, b, Word.zero(n))
+
+# U32
+# ---
+
+def U32.inc(a: U32) -> U32:
+  match a:
+    case U32{x}:
+      U32{Word.inc(32n, x)}
+
+def U32.add(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.add(32n, x, y)}
+
+def U32.sub(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.sub(32n, x, y)}
+
+def U32.mul(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.mul(32n, x, y)}
+
+def U32.not(a: U32) -> U32:
+  match a:
+    case U32{x}:
+      U32{Word.not(32n, x)}
+
+def U32.and(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.and(32n, x, y)}
+
+def U32.or(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.or(32n, x, y)}
+
+def U32.xor(a: U32, b: U32) -> U32:
+  match a b:
+    case U32{x} U32{y}:
+      U32{Word.xor(32n, x, y)}
+
+def U32.shl(a: U32) -> U32:
+  match a:
+    case U32{x}:
+      U32{Word.shl(32n, x)}
+
+def U32.shr(a: U32) -> U32:
+  match a:
+    case U32{x}:
+      U32{Word.shr(32n, x)}
+
+def U32.shln(a: U32, n: Nat) -> U32:
+  match n:
+    case 0n:
+      a
+    case 1n+p:
+      U32.shl(U32.shln(a, p))
+
+def U32.shrn(a: U32, n: Nat) -> U32:
+  match n:
+    case 0n:
+      a
+    case 1n+p:
+      U32.shr(U32.shrn(a, p))
+
+def U32.cmp(a: U32, b: U32) -> Cmp:
+  match a b:
+    case U32{x} U32{y}:
+      Word.cmp(32n, x, y)
+
+def U32.is_eq(a: U32, b: U32) -> Bool:
+  Cmp.is_eq(U32.cmp(a, b))
+
+def U32.is_ne(a: U32, b: U32) -> Bool:
+  Bool.not(Cmp.is_eq(U32.cmp(a, b)))
+
+def U32.is_lt(a: U32, b: U32) -> Bool:
+  Cmp.is_lt(U32.cmp(a, b))
+
+def U32.is_le(a: U32, b: U32) -> Bool:
+  Cmp.is_le(U32.cmp(a, b))
+
+def U32.is_gt(a: U32, b: U32) -> Bool:
+  Cmp.is_gt(U32.cmp(a, b))
+
+def U32.is_ge(a: U32, b: U32) -> Bool:
+  Cmp.is_ge(U32.cmp(a, b))
+
+def U32.is_zero(a: U32) -> Bool:
+  U32.is_eq(a, 0)
+
+def U32.to_nat(a: U32) -> Nat:
+  match a:
+    case U32{w}:
+      Word.to_nat(32n, w)
+
+def U32.from_nat(n: Nat) -> U32:
+  match n:
+    case 0n:
+      0
+    case 1n+p:
+      U32.inc(U32.from_nat(p))
+
+def U32.divmod.go.fin(-p: Nat, q: Word(p), s: U32, b: U32, g: Bool) ->
+  Word(1n+p) & U32:
+  match g:
+    case True{}:
+      (WCon{True{}, q}, U32.sub(s, b))
+    case False{}:
+      (WCon{False{}, q}, s)
+
+def U32.divmod.go.shl(-p: Nat, q: Word(p), +b: U32, ts: Bool & Word(32n)) ->
+  Word(1n+p) & U32:
+  (t, s) = ts
+  +s2 = {U32{s} : U32}
+  U32.divmod.go.fin(p, q, s2, b, Bool.or(t, U32.is_ge(s2, b)))
+
+def U32.divmod.go.rec(-p: Nat, a0: Bool, +b: U32, qr: Word(p) & U32) ->
+  Word(1n+p) & U32:
+  (q, r) = qr
+  U32{rw} = r
+  U32.divmod.go.shl(p, q, b, Word.shl.out(32n, a0, rw))
+
+def U32.divmod.go(m: Nat, a: Word(m), +b: U32) -> Word(m) & U32:
+  match m a:
+    case 0n WNil{}:
+      (WNil{}, 0)
+    case 1n+p WCon{a0, hi}:
+      U32.divmod.go.rec(p, a0, b, U32.divmod.go(p, hi, b))
+
+def U32.div.fin(qr: Word(32n) & U32) -> U32:
+  (q, r) = qr
+  U32{q}
+
+def U32.div.if(aw: Word(32n), b: U32, z: Bool) -> U32:
+  match z:
+    case True{}:
+      0
+    case False{}:
+      U32.div.fin(U32.divmod.go(32n, aw, b))
+
+def U32.div(a: U32, +b: U32) -> U32:
+  U32{aw} = a
+  U32.div.if(aw, b, U32.is_zero(b))
+
+def U32.mod.fin(qr: Word(32n) & U32) -> U32:
+  (q, r) = qr
+  r
+
+def U32.mod.if(aw: Word(32n), b: U32, z: Bool) -> U32:
+  match z:
+    case True{}:
+      U32{aw}
+    case False{}:
+      U32.mod.fin(U32.divmod.go(32n, aw, b))
+
+def U32.mod(a: U32, +b: U32) -> U32:
+  U32{aw} = a
+  U32.mod.if(aw, b, U32.is_zero(b))
+
+def U32.min(+a: U32, +b: U32) -> U32:
+  Bool.pick(U32, U32.is_lt(a, b), a, b)
+
+def U32.max(+a: U32, +b: U32) -> U32:
+  Bool.pick(U32, U32.is_lt(a, b), b, a)
+
+def U32.clamp(x: U32, lo: U32, hi: U32) -> U32:
+  U32.min(U32.max(x, lo), hi)
+
+def U32.pow(+a: U32, n: Nat) -> U32:
+  match n:
+    case 0n:
+      1
+    case 1n+p:
+      U32.mul(a, U32.pow(a, p))
+
+def U32.is_even(a: U32) -> Bool:
+  U32.is_zero(U32.and(a, 1))
+
+# F32
+# ---

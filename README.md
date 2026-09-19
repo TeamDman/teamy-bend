@@ -4,8 +4,8 @@ A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).
 
 **Status: working proof-language subset; full rewrite in progress.** Native
-checking, pure evaluation, batch conformance and JavaScript generation work.
-The bundled Base contains 114 selected pure upstream declarations. C, GPU,
+checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
+The bundled Base contains 173 selected pure upstream declaration events. GPU,
 effects, templates and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
@@ -18,8 +18,10 @@ cargo run -- check examples/laws.bend
 cargo run -- check examples/induction.bend
 cargo run -- eval examples/laws.bend --entry main
 cargo run -- --output-format json batch examples/laws.bend --entry identity --args-json examples/arguments.json
+cargo run -- serve examples/laws.bend
 cargo run -- compile examples/induction.bend --output target/induction.cjs
 node target/induction.cjs
+cargo run -- compile examples/induction.bend --target c --output target/induction.c
 ```
 
 `check` requires definitions and complete proofs for every law in the loaded
@@ -37,6 +39,13 @@ internally, but function-valued final results are unsupported. Existing output
 files require `--force`. Node.js is required to run generated programs and
 compiler integration tests, or configure `TEAMY_BEND_NODE` for the tests.
 
+`compile --target c` emits portable C11 with the same output format, lazy
+closures and checked proof erasure. Build the emitted file with a C11 compiler.
+This baseline uses immutable instruction tables and a bounded runtime; upstream
+C optimization and foreign code support remain open. Runtime failures return
+an error without a partial JSON result. C integration tests require a compiler
+on `PATH` or `TEAMY_BEND_CC`; they can discover Visual Studio's C tools on Windows.
+
 `batch` checks once and applies a function to each row of a JSON array of arrays
 of natural numbers. It returns `{"results":[...]}`. This interface requires
 the conventional `Nat` datatype with `Zero{}` and `Succ{pred: Nat}` constructors.
@@ -46,6 +55,14 @@ below the transport ceiling can still receive a resource-limit error.
 The command rejects negative/fractional inputs, wrong argument types and
 non-natural results. This supports independent finite-domain conformance tests
 without implementing domain rules in the host application.
+
+`serve` checks once and reads newline-delimited JSON calls from standard input.
+It returns a flushed JSON response for each request, allowing a client to pass
+typed constructor trees and receive game states or other structured data.
+For example, `{"id":1,"entry":"identity","args":[{"constructor":"Zero","fields":[]}]}`
+returns `{"id":1,"value":{"constructor":"Zero","fields":[]},"error":null}`.
+IDs must strictly increase. See the [data protocol](docs/data-protocol.md) for
+error handling and size limits.
 
 Output defaults to JSON when redirected and text in an interactive terminal.
 Use `--output-format json`, `text` or `csv` explicitly. Nested reports may not

@@ -1,0 +1,423 @@
+// SPDX-License-Identifier: MPL-2.0
+//! Call-by-need execution of completely checked definitions. Proof checking
+//! never uses this runtime. An explicit continuation stack bounds evaluation
+//! without recursive host calls, and each invocation owns its complete arena.
+
+use crate::kernel::AdtDecl;
+use crate::kernel::DefDecl;
+use crate::kernel::KernelError;
+use crate::kernel::Term;
+use crate::kernel::TermRef;
+use crate::kernel::term;
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+type ThunkId = usize;
+type EnvId = usize;
+const STEPS: usize = 2_000_000;
+const ARENA_LIMIT: usize = 131_072;
+const FRAME_LIMIT: usize = 4_096;
+const OUTPUT_DEPTH: usize = 96;
+const OUTPUT_NODES: usize = 16_384;
+
+/// Only constructed after complete checking; all stored syntax is immutable.
+#[derive(Clone, Debug)]
+pub(crate) struct Program {
+    definitions: Rc<BTreeMap<String, DefDecl>>,
+    datatypes: Rc<BTreeMap<String, AdtDecl>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn resource_limits_reject_before_growing_their_arenas() {
+        let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
+        let mut machine = Machine::new(&program);
+        machine.remaining = 0;
+        machine.tick().expect_err("step budget is enforced");
+        machine
+            .arena
+            .resize(ARENA_LIMIT, Thunk::Ready(Value::Erased));
+        machine
+            .allocate(Thunk::Ready(Value::Erased))
+            .expect_err("thunk arena is bounded");
+        machine
+            .environments
+            .resize_with(ARENA_LIMIT, || Environment {
+                parent: None,
+                bindings: Vec::new(),
+            });
+        machine
+            .environment(0, Vec::new())
+            .expect_err("environment arena is bounded");
+        let mut frames = (0..FRAME_LIMIT).map(Frame::Update).collect();
+        Machine::push(&mut frames, Frame::Update(0)).expect_err("continuations are bounded");
+    }
+}
+
+impl Program {
+    pub(crate) fn from_checked(
+        definitions: &Rc<BTreeMap<String, DefDecl>>,
+        datatypes: &Rc<BTreeMap<String, AdtDecl>>,
+    ) -> Self {
+        Self {
+            definitions: Rc::clone(definitions),
+            datatypes: Rc::clone(datatypes),
+        }
+    }
+
+    pub(crate) fn evaluate(&self, name: &str, args: &[TermRef]) -> Result<TermRef, KernelError> {
+        let mut machine = Machine::new(self);
+        let mut entry = machine.reference(name)?;
+        for argument in args {
+            let argument = machine.expression(Rc::clone(argument), 0)?;
+            entry = machine.allocate(Thunk::Application(entry, argument))?;
+        }
+        machine.materialize(entry, 0)
+    }
+}
+
+#[derive(Clone)]
+enum Value {
+    Constructor {
+        name: String,
+        fields: Vec<ThunkId>,
+    },
+    Closure {
+        binder: usize,
+        body: TermRef,
+        environment: EnvId,
+    },
+    Match {
+        constructor: String,
+        arm: ThunkId,
+        fallback: ThunkId,
+    },
+    Impossible,
+    Erased,
+}
+
+#[derive(Clone)]
+enum Thunk {
+    Expression(TermRef, EnvId),
+    Application(ThunkId, ThunkId),
+    Evaluating,
+    Ready(Value),
+}
+
+struct Environment {
+    parent: Option<EnvId>,
+    bindings: Vec<(usize, ThunkId)>,
+}
+
+enum Frame {
+    Update(ThunkId),
+    Apply(ThunkId),
+    Match {
+        constructor: String,
+        arm: ThunkId,
+        fallback: ThunkId,
+        argument: ThunkId,
+    },
+}
+
+struct Machine<'program> {
+    program: &'program Program,
+    arena: Vec<Thunk>,
+    environments: Vec<Environment>,
+    globals: BTreeMap<String, ThunkId>,
+    remaining: usize,
+    output_nodes: usize,
+}
+
+impl<'program> Machine<'program> {
+    fn new(program: &'program Program) -> Self {
+        Self {
+            program,
+            arena: Vec::new(),
+            environments: vec![Environment {
+                parent: None,
+                bindings: Vec::new(),
+            }],
+            globals: BTreeMap::new(),
+            remaining: STEPS,
+            output_nodes: 0,
+        }
+    }
+
+    fn tick(&mut self) -> Result<(), KernelError> {
+        self.remaining = self
+            .remaining
+            .checked_sub(1)
+            .ok_or_else(|| KernelError::new("data runtime step budget exhausted"))?;
+        Ok(())
+    }
+
+    fn allocate(&mut self, thunk: Thunk) -> Result<ThunkId, KernelError> {
+        if self.arena.len() >= ARENA_LIMIT {
+            return Err(KernelError::new("data runtime thunk budget exhausted"));
+        }
+        let id = self.arena.len();
+        self.arena.push(thunk);
+        Ok(id)
+    }
+
+    fn expression(
+        &mut self,
+        expression: TermRef,
+        environment: EnvId,
+    ) -> Result<ThunkId, KernelError> {
+        self.allocate(Thunk::Expression(expression, environment))
+    }
+
+    fn reference(&mut self, name: &str) -> Result<ThunkId, KernelError> {
+        if let Some(id) = self.globals.get(name) {
+            return Ok(*id);
+        }
+        let id = if let Some(definition) = self.program.definitions.get(name) {
+            let body = definition
+                .body
+                .as_ref()
+                .ok_or_else(|| KernelError::new("unchecked open definition reached runtime"))?;
+            self.expression(Rc::clone(body), 0)?
+        } else if self.program.datatypes.contains_key(name) {
+            self.allocate(Thunk::Ready(Value::Erased))?
+        } else {
+            return Err(KernelError::new(format!(
+                "undefined runtime reference {name}"
+            )));
+        };
+        self.globals.insert(name.into(), id);
+        Ok(id)
+    }
+
+    fn environment(
+        &mut self,
+        parent: EnvId,
+        bindings: Vec<(usize, ThunkId)>,
+    ) -> Result<EnvId, KernelError> {
+        if self.environments.len() >= ARENA_LIMIT {
+            return Err(KernelError::new(
+                "data runtime environment budget exhausted",
+            ));
+        }
+        let id = self.environments.len();
+        self.environments.push(Environment {
+            parent: Some(parent),
+            bindings,
+        });
+        Ok(id)
+    }
+
+    fn variable(&mut self, mut environment: EnvId, binder: usize) -> Result<ThunkId, KernelError> {
+        loop {
+            self.tick()?;
+            let current = &self.environments[environment];
+            if let Some((_, thunk)) = current.bindings.iter().find(|(id, _)| *id == binder) {
+                return Ok(*thunk);
+            }
+            environment = current
+                .parent
+                .ok_or_else(|| KernelError::new("unbound runtime variable"))?;
+        }
+    }
+
+    fn push(frames: &mut Vec<Frame>, frame: Frame) -> Result<(), KernelError> {
+        if frames.len() >= FRAME_LIMIT {
+            return Err(KernelError::new(
+                "data runtime continuation depth exhausted",
+            ));
+        }
+        frames.push(frame);
+        Ok(())
+    }
+
+    #[expect(
+        clippy::too_many_lines,
+        reason = "the explicit evaluation machine keeps every continuation transition visible together"
+    )]
+    fn force(&mut self, mut current: ThunkId) -> Result<Value, KernelError> {
+        let mut frames = Vec::new();
+        'evaluate: loop {
+            self.tick()?;
+            let value = match self.arena[current].clone() {
+                Thunk::Ready(value) => value,
+                Thunk::Evaluating => {
+                    return Err(KernelError::new("cyclic data runtime evaluation"));
+                }
+                Thunk::Application(function, argument) => {
+                    self.arena[current] = Thunk::Evaluating;
+                    Self::push(&mut frames, Frame::Update(current))?;
+                    Self::push(&mut frames, Frame::Apply(argument))?;
+                    current = function;
+                    continue;
+                }
+                Thunk::Expression(expression, environment) => {
+                    self.arena[current] = Thunk::Evaluating;
+                    Self::push(&mut frames, Frame::Update(current))?;
+                    match expression.as_ref() {
+                        Term::Var { id, .. } => {
+                            current = self.variable(environment, *id)?;
+                            continue;
+                        }
+                        Term::Ref(name) => {
+                            current = self.reference(name)?;
+                            continue;
+                        }
+                        Term::Lam { id, body, .. } => Value::Closure {
+                            binder: *id,
+                            body: Rc::clone(body),
+                            environment,
+                        },
+                        Term::App(function, argument) => {
+                            let argument = self.expression(Rc::clone(argument), environment)?;
+                            Self::push(&mut frames, Frame::Apply(argument))?;
+                            current = self.expression(Rc::clone(function), environment)?;
+                            continue;
+                        }
+                        Term::Ctr { name, args } => {
+                            let fields = args
+                                .iter()
+                                .map(|arg| self.expression(Rc::clone(arg), environment))
+                                .collect::<Result<_, _>>()?;
+                            Value::Constructor {
+                                name: name.clone(),
+                                fields,
+                            }
+                        }
+                        Term::Mat {
+                            constructor,
+                            arm,
+                            fallback,
+                        } => Value::Match {
+                            constructor: constructor.clone(),
+                            arm: self.expression(Rc::clone(arm), environment)?,
+                            fallback: self.expression(Rc::clone(fallback), environment)?,
+                        },
+                        Term::Let { bindings, body } => {
+                            // Every RHS sees the original environment: lets are simultaneous.
+                            let bindings = bindings
+                                .iter()
+                                .map(|binding| {
+                                    Ok((
+                                        binding.id,
+                                        self.expression(Rc::clone(&binding.value), environment)?,
+                                    ))
+                                })
+                                .collect::<Result<_, KernelError>>()?;
+                            let environment = self.environment(environment, bindings)?;
+                            current = self.expression(Rc::clone(body), environment)?;
+                            continue;
+                        }
+                        Term::Ann(body, _) | Term::Rwt { body, .. } => {
+                            current = self.expression(Rc::clone(body), environment)?;
+                            continue;
+                        }
+                        Term::Efq => Value::Impossible,
+                        Term::Typ(_)
+                        | Term::Qnt
+                        | Term::Qua(_)
+                        | Term::Min(_, _)
+                        | Term::All { .. }
+                        | Term::Adt { .. }
+                        | Term::Eql { .. }
+                        | Term::Rfl => Value::Erased,
+                        Term::Hole(_) => {
+                            return Err(KernelError::new("unchecked hole reached data runtime"));
+                        }
+                    }
+                }
+            };
+            loop {
+                self.tick()?;
+                match frames.pop() {
+                    None => return Ok(value),
+                    Some(Frame::Update(id)) => self.arena[id] = Thunk::Ready(value.clone()),
+                    Some(Frame::Apply(argument)) => match value {
+                        Value::Closure {
+                            binder,
+                            body,
+                            environment,
+                        } => {
+                            let environment =
+                                self.environment(environment, vec![(binder, argument)])?;
+                            current = self.expression(body, environment)?;
+                            continue 'evaluate;
+                        }
+                        Value::Match {
+                            constructor,
+                            arm,
+                            fallback,
+                        } => {
+                            Self::push(
+                                &mut frames,
+                                Frame::Match {
+                                    constructor,
+                                    arm,
+                                    fallback,
+                                    argument,
+                                },
+                            )?;
+                            current = argument;
+                            continue 'evaluate;
+                        }
+                        Value::Impossible => {
+                            return Err(KernelError::new(
+                                "entered an impossible runtime match branch",
+                            ));
+                        }
+                        _ => return Err(KernelError::new("runtime application of a non-function")),
+                    },
+                    Some(Frame::Match {
+                        constructor,
+                        arm,
+                        fallback,
+                        argument,
+                    }) => {
+                        let Value::Constructor { name, fields } = value else {
+                            return Err(KernelError::new(
+                                "runtime match expected constructor data",
+                            ));
+                        };
+                        if name == constructor {
+                            current = arm;
+                            for field in fields {
+                                current = self.allocate(Thunk::Application(current, field))?;
+                            }
+                        } else {
+                            current = self.allocate(Thunk::Application(fallback, argument))?;
+                        }
+                        continue 'evaluate;
+                    }
+                }
+            }
+        }
+    }
+
+    fn materialize(&mut self, thunk: ThunkId, depth: usize) -> Result<TermRef, KernelError> {
+        self.tick()?;
+        if depth > OUTPUT_DEPTH || self.output_nodes >= OUTPUT_NODES {
+            return Err(KernelError::new(
+                "data runtime output depth or node budget exhausted",
+            ));
+        }
+        self.output_nodes += 1;
+        match self.force(thunk)? {
+            Value::Constructor { name, fields } => {
+                let args = fields
+                    .into_iter()
+                    .map(|field| self.materialize(field, depth + 1))
+                    .collect::<Result<_, _>>()?;
+                Ok(term(Term::Ctr { name, args }))
+            }
+            Value::Erased => Err(KernelError::new(
+                "data runtime result contains an erased type or proof",
+            )),
+            Value::Closure { .. } | Value::Match { .. } | Value::Impossible => {
+                Err(KernelError::new("data runtime result contains a function"))
+            }
+        }
+    }
+}

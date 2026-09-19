@@ -19,7 +19,7 @@ pub struct CompileError {
 }
 
 impl CompileError {
-    fn new(message: impl Into<String>) -> Self {
+    pub(super) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
         }

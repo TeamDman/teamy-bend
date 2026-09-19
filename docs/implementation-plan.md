@@ -100,8 +100,9 @@ Translated files keep Apache licensing; new files use MPL.
 
 Completion notes: identity/env names, CLI commands, profiler default and README
 adapted. Logging, structured output, cancellation, Windows resources and CLI
-fuzzing retained. `check-all.ps1` passes all 58 tests, formatting, Clippy and
-all-feature compilation. Help/version and native command checks passed.
+fuzzing retained. The latest `check-all.ps1` passes 100 tests, formatting,
+Clippy and all-feature compilation; two opt-in local profilers are ignored.
+Help/version and native command checks passed.
 
 Work: replace identity, CLI commands, env names, examples and profiler defaults;
 retain logging/output/cancellation/build-resource and fuzz infrastructure.
@@ -133,9 +134,10 @@ unsafe or incomplete proof can produce a successful check report.
 ### [~] 2.2 Port parsing and module loading
 
 Completion notes: source declarations, nested patterns, quantities, literals,
-operators, do/array sugar and local imports implemented; 14 parser tests pass.
-Templates, foreign bodies, GPU calls, hub packages and implicit array-write
-rebinding remain open. Exact supported surface/limits: `docs/compatibility.md`.
+operators, do/array sugar and local imports implemented; 17 parser tests pass.
+Empty datatypes, reusable parallel lets and implicit array-write rebinding are
+covered. Templates, foreign bodies, GPU calls and hub packages remain open.
+Exact supported surface/limits: `docs/compatibility.md`.
 
 Work: parse Bend syntax and declarations, namespace imports and desugaring
 against upstream sources. Keep diagnostics useful on native Windows.
@@ -153,6 +155,13 @@ and zero accepted negative cases. This is checking acceptance only; exact error
 messages, values, runtime behavior and performance remain unverified by this
 audit. Raw path-containing output is ignored under `target/`.
 
+Next-slice audit: 344 positives checked, 509 positives rejected, all 449
+negatives rejected, zero accepted negatives and zero abnormal exits. The
+newly exposed `run/fuel_loops.bend` debug stack overflow was reduced to a
+Nat128 body and repaired with a bounded 16 MiB CLI worker stack. Nat128 now
+returns the existing nesting error; nearby Nat120 passes. Proof limits did
+not change. The complete audit was rerun after the repair.
+
 Work: use upstream `#|` fixture expectations in a local test harness. Do not run
 upstream cluster scripts. There are 1,302 fixtures; enumerate and classify all
 instead of claiming parity from a handful of examples.
@@ -167,8 +176,16 @@ differences are named, with work retained in this plan.
 Completion notes: native Rust JavaScript generator and `compile` CLI implemented.
 Ten Node execution tests and source-name escaping test pass. Closures, patterns,
 parallel let scope and recursive arithmetic run independently of TypeScript.
-`compile examples/induction.bend` produces a program returning Nat 5. C, effects,
-upstream optimization strategy and GPU runtime remain open.
+`compile examples/induction.bend` produces a program returning Nat 5. A baseline
+portable C11 backend now passes 11 real MSVC compile/run tests against the
+normalizer and JavaScript; `compile --target c` selects it. Effects, foreign
+bodies, upstream optimization strategy and GPU runtime remain open.
+
+The complete Poche `absorbed_trace` also compiles and runs through C with its
+default limits, yielding exactly the JavaScript constructor result. Both the
+full witness and focused closure/allocation-failure fixtures pass MSVC
+AddressSanitizer checks. Generated C is a portable baseline, not upstream
+optimization parity.
 
 Work: map `comp.ts` IR, lowering, code generation and runtime functions to Rust;
 cover upstream C and JS behavior before GPU runtime integration.
@@ -177,10 +194,13 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 114 selected pure upstream Base declarations are bundled with
-Apache attribution. Six Base regressions cover dependent witnesses, Boolean
-proofs, open equality transport, polymorphic lists, division and false claims.
-Full Base and target coverage remain required.
+Completion notes: 173 selected pure upstream declaration events are bundled
+with Apache attribution (150 definitions, six laws, 17 datatypes). Six Base
+regressions and four numeric regressions cover witnesses, Boolean proofs,
+equality transport, lists, division, Word/U32 helpers and false claims. The
+Word full-adder formula has an exhaustive checked Boolean law. A targeted
+audit accepts 23 more of 133 previously rejected positive fixtures without
+crashes. Full Base and target coverage remain required.
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
 record unavailable hardware and platform-specific validations accurately.
@@ -219,12 +239,31 @@ discriminating negative controls for each kernel.
 Completion: actual production/oracle results agree with the independent Bend
 program over stated domains; mismatches show inputs and outputs.
 
-### [ ] 4.3 Extend the independent model to state transitions
+### [~] 4.3 Extend the independent model to state transitions
 
 Design handoff: `docs/poche-state-model-design.md` specifies exact public-getter
 adapters, typed constructor protocol, state/action schema, deterministic replay,
-431,800-state/549,896-edge reference and negative controls. Implementation has
-not started; scalar success does not mark this task complete.
+431,800-state/549,896-edge reference and negative controls. The independent
+micro model now checks, and its first-round trace produces the expected
+scores. The persistent typed constructor protocol and Rust micro adapter pass
+22 state inspections, 21 transitions, all 300 chance partitions and eight
+invalid-state/action controls. A release sample also passed 1,000 distributed
+states and 1,000 edges, including both observation projections. This is not
+exhaustive evidence. The measured 38.487-second sample projects roughly five
+hours for the full graph with the substitution-based evaluator.
+
+A separate native call-by-need runtime now passes differential and independent
+adversarial tests for checked data calls. Complete program checking and per-call
+dependent argument type checks remain mandatory; the proof normalizer stays
+independent. The same sample passes in 10.520 seconds, with backend evaluation
+about 6.3 times faster (roughly 44 minutes projected for the complete graph).
+Profiling found runtime computation, rather than JSON or argument validation,
+dominates the remaining work, so the existing codec is retained. Run the
+complete graph using a clean, fingerprinted release executable.
+Poche's compiled
+21-transition witness also succeeds, and well-typed wrong-leader/wrong-scoring
+source mutants produce the precise expected mismatches. Scalar or sample
+success does not mark this task complete.
 
 Work: phases, exact card partition, immutable bids, trick progression, winner
 leads, score/pot separation, absorbing finish and decreasing progress. Compare
