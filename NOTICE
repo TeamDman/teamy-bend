@@ -1,0 +1,20 @@
+teamy-bend
+
+New project code is licensed under the Mozilla Public License 2.0 (LICENSE).
+
+The Rust language implementation derives from Bend 2:
+Copyright 2026 HigherOrderCO
+https://github.com/bendlang/bend
+Reference revision: e6676b080f25b1bc1bf5b5b7d7a17e22f8022599
+
+Files marked SPDX-License-Identifier: Apache-2.0 are translated or adapted
+from Bend and remain under Apache License 2.0 (licenses/Apache-2.0.txt).
+Changes include translation from TypeScript to Rust and explicit interfaces
+for native checking and evaluation. This is an independent project and is
+not an official Bend release.
+
+The CLI infrastructure is adapted from TeamDman/teamy-rust-cli (MPL-2.0),
+using the reviewed working tree based on revision
+7e62d72bbbf3ea1b302e48008da565e92d4b6c93. The source checkout contained
+local changes to dependencies and observability; these were preserved in
+the scaffold without altering the source checkout.

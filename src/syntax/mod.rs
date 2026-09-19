@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: Apache-2.0
+// Derived from Bend 2.0.5, Copyright 2026 HigherOrderCO, Apache-2.0.
+// Rust translation and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
+//! Bend source parsing and local module loading.
+
+mod parser;
+mod surface;
+
+pub use parser::ParseError;
+pub use parser::load;
+pub use parser::parse;
+pub use parser::parse_term;

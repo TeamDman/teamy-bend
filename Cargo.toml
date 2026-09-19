@@ -1,0 +1,94 @@
+[package]
+name = "teamy-bend"
+version = "0.1.0"
+edition = "2024"
+authors = ["TeamDman"]
+description = "Rust implementation of Bend 2 with checked laws and executable formal models"
+license = "MPL-2.0 AND Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/TeamDman/teamy-bend"
+keywords = ["bend", "proof", "verification", "language", "cli"]
+categories = ["command-line-utilities"]
+documentation = "https://github.com/TeamDman/teamy-bend"
+
+[dependencies]
+arbitrary = { version = "1.4.1", features = ["derive"] }
+chrono = "0.4"
+color-eyre = "0.6.5"
+eyre = "0.6.12"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", default-features = false, features = [
+    "ansi",
+    "env-filter",
+    "fmt",
+    "json",
+    "registry",
+] }
+tracing-tracy = { version = "0.11", optional = true, default-features = false, features = ["enable", "system-tracing", "context-switch-tracing", "sampling", "code-transfer", "callstack-inlines", "only-localhost"] }
+directories-next = "2"
+tokio = { version = "1.49.0", features = ["full"] }
+teamy-cancellation = { git = "https://github.com/TeamDman/teamy-cancellation.git", rev = "7c77848", features = ["figue", "arbitrary"] }
+facet = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "facet", features = ["uuid", "compact_str", "chrono", "net"] }
+facet-csv = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "facet-csv" }
+facet-json = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "facet-json" }
+facet-pretty = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "facet-pretty" }
+figue = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "figue", features = ["arbitrary"] }
+open = "5"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62.2", features = [
+    "Win32_Globalization",
+    "Win32_System_Console",
+] }
+
+[features]
+default = []
+extended_observability = []
+tracy = ["extended_observability", "dep:tracing-tracy"]
+
+[build-dependencies]
+embed-resource = "3.0.6"
+
+[lints.rust]
+ambiguous_negative_literals = "warn"
+unfulfilled_lint_expectations = "deny"
+missing_debug_implementations = "warn"
+redundant_imports = "warn"
+redundant_lifetimes = "warn"
+trivial_numeric_casts = "warn"
+unsafe_op_in_unsafe_fn = "warn"
+unused_lifetimes = "warn"
+
+[lints.clippy]
+cargo = { level = "warn", priority = -1 }
+complexity = { level = "warn", priority = -1 }
+correctness = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+perf = { level = "warn", priority = -1 }
+style = { level = "warn", priority = -1 }
+suspicious = { level = "warn", priority = -1 }
+multiple_crate_versions = "allow" # turn this off periodically to see how bad it has gotten :P
+# nursery = { level = "warn", priority = -1 }  # optional, might cause more false positives
+multiple_unsafe_ops_per_block = "deny"
+module_inception = "allow"
+allow_attributes = "deny"
+allow_attributes_without_reason = "warn"
+as_pointer_underscore = "warn"
+assertions_on_result_states = "warn"
+clone_on_ref_ptr = "warn"
+deref_by_slicing = "warn"
+disallowed_script_idents = "allow" # facet macros use Unicode identifiers
+empty_drop = "warn"
+empty_enum_variants_with_brackets = "warn"
+empty_structs_with_brackets = "warn"
+fn_to_numeric_cast_any = "warn"
+if_then_some_else_none = "warn"
+map_err_ignore = "warn"
+redundant_type_annotations = "warn"
+renamed_function_params = "warn"
+semicolon_outside_block = "warn"
+undocumented_unsafe_blocks = "warn"
+unnecessary_safety_comment = "warn"
+unnecessary_safety_doc = "warn"
+unneeded_field_pattern = "warn"
+unused_result_ok = "warn"
