@@ -252,8 +252,7 @@ fn array_write_statements_rebind_in_source_order() {
         "{}{}",
         include_str!("../src/syntax/base.bend"),
         r"
-def Array.set(-T: Type, array: T, index: U32, value: T) -> T: value
-def writes(a: U32) -> U32:
+def writes(a: Array<U32>) -> Array<U32>:
   a[0] <- 1
   a[1] <- 2; b = a
   b
@@ -263,10 +262,15 @@ def writes(a: U32) -> U32:
         check_book(&parse(&source).expect("write statements parse")).expect("rebindings check");
     assert_eq!(
         checked
-            .evaluate("writes", &[parse_term("0").expect("U32")])
+            .evaluate(
+                "writes",
+                &[parse_term("ANode{ALeaf{0}, ALeaf{0}}").expect("U32 array")]
+            )
             .expect("result")
             .to_string(),
-        parse_term("2").expect("expected U32").to_string()
+        parse_term("ANode{ALeaf{1}, ALeaf{2}}")
+            .expect("expected U32 array")
+            .to_string()
     );
 }
 

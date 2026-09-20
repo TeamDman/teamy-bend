@@ -6,8 +6,8 @@ A Rust rewrite of the Bend 2 proof language, started from
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 290 selected pure source declarations, including
-14 templates. GPU, effects and complete library compatibility remain unfinished.
+The bundled Base contains 312 selected pure source declarations, including
+17 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).

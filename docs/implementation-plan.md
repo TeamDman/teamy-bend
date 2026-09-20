@@ -25,7 +25,7 @@
 | U3 | Make the new repo public. | 1.2, 5.1 |
 | U4 | Use MPL-2.0 if compatible with Bend's licence. | 1.3 |
 | U5 | Use `teamy-rust-cli` as the starting template. | 1.4 |
-| U6 | Rewrite Bend in Rust. | 2.1–3.2, full compatibility remains open |
+| U6 | Rewrite Bend in Rust. | 2.1–3.3, full compatibility remains open |
 | U7 | Then use the rewrite to formalize the user's Poche4 repo. | 4.1–4.3 |
 | U8 | Locate Poche4 at the approximate older games-repository path. | 1.1 |
 | U9 | Set an active goal for this work. | Goal tool, done |
@@ -183,6 +183,13 @@ require IO, GPU offload or unsafe execution; dedicated pure template tests
 provide that supported feature's execution evidence. The audit's compiled
 source fingerprints match the implementation being published.
 
+Array audit: 360 positives checked, 493 positives rejected and all 449 negatives
+rejected across all 1,302 fixtures. There are zero accepted negatives, crashes
+or newly rejected positives. Eleven further positives cover array statements,
+array literals, chained expressions and literal readback. The complete quality
+gate passes 131 tests with two opt-in local profilers ignored. All 14 finite
+Array behavior examples also match the upstream normalizer independently.
+
 Work: use upstream `#|` fixture expectations in a local test harness. Do not run
 upstream cluster scripts. There are 1,302 fixtures; enumerate and classify all
 instead of claiming parity from a handful of examples.
@@ -215,8 +222,8 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 290 selected pure upstream source declarations are bundled
-with Apache attribution (254 definition forms including 14 templates, 18 laws,
+Completion notes: 312 selected pure upstream source declarations are bundled
+with Apache attribution (274 definition forms including 17 templates, 20 laws,
 18 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
@@ -233,8 +240,15 @@ Upstream's seeded Base can skip ordinary source-order validation; this port
 checks its bundled pure Base. Rewrite forward helper cycles into equivalent
 structural definitions rather than allowing unchecked live forward laws.
 
-Remaining library work includes the pure Array operations, complete numeric
-behavior, effects and foreign implementation contracts. Representation or
+The pure Array operations now check and execute: size/new/get/swap/set/clone,
+to-list and map. Five focused tests cover 14 finite behavior cases and six
+negative controls, including illegal affine duplication and false equality.
+A wrapped-update/mapping fixture also agrees across the normalizer, native
+runtime, JavaScript and C. Existing array-write parser coverage now uses the
+real implementation instead of a temporary function stub.
+
+Remaining library work includes complete numeric behavior, effects and foreign
+implementation contracts. Representation or
 syntax support alone does not establish an operation's implementation.
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
@@ -242,6 +256,23 @@ record unavailable hardware and platform-specific validations accurately.
 Validation: compatibility matrix with observed results, not assumed parity.
 Completion: U6 has a documented complete scope and verified coverage; any
 remaining unsupported areas keep the broad rewrite goal active.
+
+### [~] 3.3 Implement effects and foreign execution contracts
+
+Reference reconnaissance is complete in [the effects design](effects-design.md).
+The next implementation needs a separate executable-check result, retained
+foreign source/origin metadata, exact IO continuations and a native effect
+driver. Begin with ordinary IO helpers and console execution, then preserve
+arbitrary JavaScript/C interfaces, scheduling, handles and all 34 Base effects.
+Upstream foreign return contracts can contain false equality payloads; they
+are runtime assumptions and must never mint strict proof evidence. This is
+required remaining rewrite work, not optional replacement scope.
+
+Validation: actual stdout/stderr/status and effect ordering against upstream
+fixtures, request-versus-constructor rejection, forged-origin tests, marshalling
+and callback behavior, plus unchanged strict proof and Poche protocol tests.
+Completion: the full documented effect/interface inventory executes through
+Rust implementations and Rust-generated backends with observed compatibility.
 
 ## 4. Poche formalization using this rewrite
 
@@ -354,7 +385,20 @@ fingerprint the actual executable, the served model snapshot, and the compiled
 Rust rules/explorer/adapter sources. The complete micro comparison will use
 that fixed release while broader library work continues independently.
 
-## Completion and risks
+### [x] 5.3 Publish templates, checked collections and Poche evidence
+
+Completion: `92d20eebcac1df2e98c7af992cda1c76a0ad1fe1` is verified on
+the public `main` branch. A clean release snapshot identifies revision
+`92d20ee`. Its Poche scalar gate passed all 15,503 comparisons, seven checked
+equalities and two negative controls; its trajectory gate passed 22 states,
+21 transitions, all 300 chance partitions and eight rejection controls.
+The exhaustive graph receipt remains tied to the separately retained
+`6802c1e` binary, without attributing that run to the newer release.
+
+Next work: complete pure Array operations against the current strict kernel,
+then implement effects/foreign execution with an explicit separation between
+ordinary proofs and external implementation contracts. Local reference review
+is in progress; no new trust assumption has been introduced.
 
 The template/library publication slice passes the complete quality gate
 (124 tests and two ignored local profilers), plus the subsequently added
@@ -363,6 +407,8 @@ found no new defect in specialization keys, closure checks, declaration order,
 budgets or affine collection behavior. `base` source/name/type output and
 invalid selectors passed native CLI smoke checks. All 1,302 upstream fixtures
 were audited against a fixed executable while development continued separately.
+
+## Completion and risks
 
 The goal is complete only when U1–U9 are delivered and no required rewrite or
 formalization work remains. A scaffold or supported language subset is progress.

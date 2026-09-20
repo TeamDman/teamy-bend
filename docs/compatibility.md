@@ -21,15 +21,17 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 290 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 312 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
-  and Map, Char/String operations, List templates and pure Word/U32 helpers.
-  `src/syntax/base.bend` is the exact inventory (254 definition forms including
-  14 templates, 18 laws and 18 datatypes). Templates enter the checked book only
+  and Map, Char/String operations, List templates, Array operations and pure
+  Word/U32 helpers. Array creation uses a power-of-two depth, indexing wraps,
+  and clone/get require reusable elements; swap/set/map retain affine ownership.
+  `src/syntax/base.bend` is the exact inventory (274 definition forms including
+  17 templates, 20 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
 Foreign C/JS bodies, GPU calls, hub fetch/publish,
-effects, the full array/word/numeric library, optimized C and GPU
+effects, the complete numeric library, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish arithmetic or floating-point proof support.
 
@@ -64,13 +66,14 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The 2026-09-19 audit covered all 1,302 fixtures: 349 expected-positive programs
-checked, 504 expected-positive programs were rejected, and all 449 expected
+The 2026-09-19 audit covered all 1,302 fixtures: 360 expected-positive programs
+checked, 493 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
 
-The template/collection slice adds five accepted positives over the previous
-344-positive audit. All 32 upstream comptime fixtures still reject because the
+The template/collection slice added five positives over the 344-positive
+audit, and Array support added 11 more without losing any previous positives.
+All 32 upstream comptime fixtures still reject because the
 positive programs require other unfinished features; this category does not
 establish template parity. The 13 focused template tests, import tests and
 native/JavaScript/C execution comparisons provide the supported evidence.

@@ -1998,3 +1998,149 @@ def List.show(~a: Quant, ~A: Kind(a), ~f: A -> String, xs: List<a, A>) ->
       "[]"
     case h <> t:
       "[" ++ f(h) ++ List.show.go(~a, ~A, ~f, t)
+
+# The swap/get decisions are typed local lambdas so recursive declarations
+# check in source order. Helper APIs follow the checked recursive definitions.
+# Array
+# -----
+
+def Array.size.node(-T: Type, ys: Array<T>, r: Array<T> & U32) ->
+  Array<T> & U32:
+  (xs2, n) = r
+  (ANode{xs2, ys}, U32.shl(n))
+
+def Array.size(-T: Type, a: Array<T>) -> Array<T> & U32:
+  match a:
+    case ALeaf{x}:
+      (ALeaf{x}, 1)
+    case ANode{xs, ys}:
+      Array.size.node(T, ys, Array.size(T, xs))
+
+def Array.swap.lo(-T: Type, ys: Array<T>, r: Array<T> & T) -> Array<T> & T:
+  (nxs, old) = r
+  (ANode{nxs, ys}, old)
+
+def Array.swap.hi(-T: Type, xs: Array<T>, r: Array<T> & T) -> Array<T> & T:
+  (nys, old) = r
+  (ANode{xs, nys}, old)
+
+law Array.swap.go:
+  for -T: Type
+  for  a: Array<T>
+  for  n: U32
+  for +i: U32
+  for  v: T
+  Array<T> & T
+
+def Array.swap.go(T, a, n, i, v):
+  match a:
+    case ALeaf{x}:
+      (ALeaf{v}, x)
+    case ANode{xs, ys}:
+      +h = U32.shr(n)
+      {(z =>
+        match z:
+          case True{}:
+            Array.swap.lo(T, ys, Array.swap.go(T, xs, h, i, v))
+          case False{}:
+            Array.swap.hi(T, xs, Array.swap.go(T, ys, h, U32.sub(i, h), v))
+      ) : Bool -> (Array<T> & T)}(U32.is_lt(i, h))
+
+def Array.swap.if(
+  -T: Type, xs: Array<T>, ys: Array<T>, +h: U32, i: U32, v: T, z: Bool
+) -> Array<T> & T:
+  match z:
+    case True{}:
+      Array.swap.lo(T, ys, Array.swap.go(T, xs, h, i, v))
+    case False{}:
+      Array.swap.hi(T, xs, Array.swap.go(T, ys, h, U32.sub(i, h), v))
+
+def Array.swap.at(-T: Type, i: U32, v: T, an: Array<T> & U32) -> Array<T> & T:
+  (a, +n) = an
+  Array.swap.go(T, a, n, U32.and(i, U32.sub(n, 1)), v)
+
+def Array.swap(-T: Type, a: Array<T>, +i: U32, v: T) -> Array<T> & T:
+  Array.swap.at(T, i, v, Array.size(T, a))
+
+def Array.clone.node(
+  -T: Data, cx: Array<T> & Array<T>, cy: Array<T> & Array<T>
+) -> Array<T> & Array<T>:
+  (xa, xb) = cx
+  (ya, yb) = cy
+  (ANode{xa, ya}, ANode{xb, yb})
+
+def Array.clone(-T: Data, a: Array<T>) -> Array<T> & Array<T>:
+  match a:
+    case ALeaf{+x}:
+      (ALeaf{x}, ALeaf{x})
+    case ANode{xs, ys}:
+      Array.clone.node(T, Array.clone(T, xs), Array.clone(T, ys))
+
+def Array.new(-T: Data, +d: Nat, +v: T) -> Array<T>:
+  match d:
+    case 0n:
+      ALeaf{v}
+    case 1n+p:
+      ANode{[v : T^p], [v : T^p]}
+
+def Array.set.fin(-T: Type, r: Array<T> & T) -> Array<T>:
+  (na, old) = r
+  na
+
+def Array.set(-T: Type, a: Array<T>, i: U32, v: T) -> Array<T>:
+  Array.set.fin(T, Array.swap(T, a, i, v))
+
+law Array.get.go:
+  for -T: Data
+  for  a: Array<T>
+  for  n: U32
+  for +i: U32
+  Array<T> & T
+
+def Array.get.go(T, a, n, i):
+  match a:
+    case ALeaf{+x}:
+      (ALeaf{x}, x)
+    case ANode{xs, ys}:
+      +h = U32.shr(n)
+      {(z =>
+        match z:
+          case True{}:
+            Array.swap.lo(T, ys, Array.get.go(T, xs, h, i))
+          case False{}:
+            Array.swap.hi(T, xs, Array.get.go(T, ys, h, U32.sub(i, h)))
+      ) : Bool -> (Array<T> & T)}(U32.is_lt(i, h))
+
+def Array.get.if(
+  -T: Data, xs: Array<T>, ys: Array<T>, +h: U32, i: U32, z: Bool
+) -> Array<T> & T:
+  match z:
+    case True{}:
+      Array.swap.lo(T, ys, Array.get.go(T, xs, h, i))
+    case False{}:
+      Array.swap.hi(T, xs, Array.get.go(T, ys, h, U32.sub(i, h)))
+
+def Array.get.at(-T: Data, i: U32, an: Array<T> & U32) -> Array<T> & T:
+  (a, +n) = an
+  Array.get.go(T, a, n, U32.and(i, U32.sub(n, 1)))
+
+def Array.get(-T: Data, a: Array<T>, +i: U32) -> Array<T> & T:
+  Array.get.at(T, i, Array.size(T, a))
+
+def Array.to_list.go(~T: Type, a: Array<T>, acc: List<T>) -> List<T>:
+  match a:
+    case ALeaf{x}:
+      x <> acc
+    case ANode{xs, ys}:
+      Array.to_list.go(~T, xs, Array.to_list.go(~T, ys, acc))
+
+def Array.to_list(~T: Type, a: Array<T>) -> List<T>:
+  Array.to_list.go(~T, a, Nil{})
+
+def Array.map(~T: Type, ~U: Type, ~f: T -> U, a: Array<T>) -> Array<U>:
+  match a:
+    case ALeaf{x}:
+      ALeaf{f(x)}
+    case ANode{xs, ys}:
+      l r = Array.map(~T, ~U, ~f, xs) Array.map(~T, ~U, ~f, ys)
+      ANode{l, r}

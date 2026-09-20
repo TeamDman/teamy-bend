@@ -451,3 +451,27 @@ def main() -> Report:
     );
     assert_matches(&book, "main");
 }
+
+#[test]
+fn compiled_arrays_preserve_wrapped_updates_and_template_mapping() {
+    let book = parse(&format!(
+        "{}\n{}",
+        include_str!("../src/syntax/base.bend"),
+        r"
+def increment(n: Nat) -> Nat: 1n+n
+def finish(result: Array<Nat> & Nat) -> List<Nat> & Nat:
+  (array, old) = result
+  (Array.to_list(~Nat, Array.map(~Nat, ~Nat, ~increment, array)), old)
+def main() -> List<Nat> & Nat:
+  finish(Array.swap(Nat, Array.new(Nat, 2n, 1n), 5, 8n))
+"
+    ))
+    .expect("bundled array program parses");
+    let expected = teamy_bend::syntax::parse_term("([2n,9n,2n,2n],1n)").unwrap();
+    let checked = check_book(&book).expect("all ordinary library definitions check");
+    assert_eq!(
+        checked.evaluate_data("main", &[]).unwrap().to_string(),
+        expected.to_string()
+    );
+    assert_matches(&book, "main");
+}
