@@ -2,6 +2,7 @@
 //! Loader-owned execution contracts, deliberately separate from proof books.
 
 use crate::kernel::Book;
+use crate::kernel::Quant;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::path::PathBuf;
@@ -43,8 +44,29 @@ pub(crate) enum NumericIntrinsic {
     Mul,
     Div,
     Mod,
+    Pow,
+    Atan2,
     Neg,
     Abs,
+    Sqrt,
+    Exp,
+    Log,
+    Log2,
+    Log10,
+    Sin,
+    Cos,
+    Tan,
+    Asin,
+    Acos,
+    Atan,
+    Sinh,
+    Cosh,
+    Tanh,
+    Floor,
+    Ceil,
+    Trunc,
+    Show,
+    Read,
     Bits,
     IsEq,
     IsNe,
@@ -64,8 +86,29 @@ impl NumericIntrinsic {
             "F32.mul" => Self::Mul,
             "F32.div" => Self::Div,
             "F32.mod" => Self::Mod,
+            "F32.pow" => Self::Pow,
+            "F32.atan2" => Self::Atan2,
             "F32.neg" => Self::Neg,
             "F32.abs" => Self::Abs,
+            "F32.sqrt" => Self::Sqrt,
+            "F32.exp" => Self::Exp,
+            "F32.log" => Self::Log,
+            "F32.log2" => Self::Log2,
+            "F32.log10" => Self::Log10,
+            "F32.sin" => Self::Sin,
+            "F32.cos" => Self::Cos,
+            "F32.tan" => Self::Tan,
+            "F32.asin" => Self::Asin,
+            "F32.acos" => Self::Acos,
+            "F32.atan" => Self::Atan,
+            "F32.sinh" => Self::Sinh,
+            "F32.cosh" => Self::Cosh,
+            "F32.tanh" => Self::Tanh,
+            "F32.floor" => Self::Floor,
+            "F32.ceil" => Self::Ceil,
+            "F32.trunc" => Self::Trunc,
+            "F32.show" => Self::Show,
+            "F32.read" => Self::Read,
             "F32.bits" => Self::Bits,
             "F32.is_eq" => Self::IsEq,
             "F32.is_ne" => Self::IsNe,
@@ -79,14 +122,34 @@ impl NumericIntrinsic {
 
     pub(crate) const fn arity(self) -> usize {
         match self {
-            Self::U32ToF32 | Self::F32ToU32 | Self::Neg | Self::Abs | Self::Bits => 1,
-            _ => 2,
+            Self::Add
+            | Self::Sub
+            | Self::Mul
+            | Self::Div
+            | Self::Mod
+            | Self::Pow
+            | Self::Atan2
+            | Self::IsEq
+            | Self::IsNe
+            | Self::IsLt
+            | Self::IsLe
+            | Self::IsGt
+            | Self::IsGe => 2,
+            _ => 1,
+        }
+    }
+
+    pub(crate) const fn input_quant(self) -> Quant {
+        match self {
+            Self::Show => Quant::Many,
+            _ => Quant::Lone,
         }
     }
 
     pub(crate) const fn input_type(self) -> &'static str {
         match self {
             Self::U32ToF32 => "U32",
+            Self::Read => "String",
             _ => "F32",
         }
     }
@@ -94,6 +157,8 @@ impl NumericIntrinsic {
     pub(crate) const fn output_type(self) -> &'static str {
         match self {
             Self::F32ToU32 | Self::Bits => "U32",
+            Self::Show => "String",
+            Self::Read => "Maybe",
             Self::IsEq | Self::IsNe | Self::IsLt | Self::IsLe | Self::IsGt | Self::IsGe => "Bool",
             _ => "F32",
         }

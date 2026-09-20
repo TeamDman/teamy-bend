@@ -1,10 +1,11 @@
 # Numeric execution contracts
 
-The execution-only Base supplies 16 sealed numeric contracts: `U32.to_f32`,
-`F32.to_u32`, `F32.add/sub/mul/div/mod`, `F32.neg/abs/bits`, and the six
-`F32.is_eq/is_ne/is_lt/is_le/is_gt/is_ge` comparisons. Their source signatures
-follow Bend 2.0.5. The reference has 37 numeric laws without ordinary bodies;
-the remaining 21 operations are still required work.
+The execution-only Base supplies all 37 numeric primitive contracts from
+Bend 2.0.5. They cover conversion, arithmetic, powers, transcendental functions,
+rounding, comparisons, bits and F32 text conversion. The exact inventory and
+signatures are in [the executable Base](../src/syntax/executable-base.bend),
+along with ten ordinary F32 helpers. `F32.show` requires its upstream reusable
+argument; `F32.read` returns exactly `Maybe<&2, F32>`.
 
 Only the embedded loader grants these identities. A declaration with a familiar
 name in a user file cannot obtain a host implementation. This registry is
@@ -39,12 +40,13 @@ Boundary, partial-application, forged-origin and malformed-Word tests cover
 this separate optimization; runtime limits remain unchanged. These results
 establish the stated cases, not complete numeric program compatibility.
 
-The current pure `run` entry still prints proof-normalizer output, so an opaque
-numeric application there remains unevaluated. Use an IO action to execute
-these primitives. Pure evaluation, strict data calls and the existing pure
+Pure `run` normalizes without executing opaque numeric contracts, matching the
+reference interpreter. Its surface printer remains incomplete: numeric literals
+and application sugar still print as expanded core terms. Use an IO action to
+execute these primitives natively. Pure evaluation, strict data calls and the existing pure
 JavaScript/C compilers do not acquire numeric assumptions through this feature.
 
-Executable JavaScript implements the same 16 contracts with native Number
+Executable JavaScript implements the same 37 contracts with native Number
 values and binary32 rounding. Its signaling-NaN round trip matches the upstream
 JavaScript target. All 31 generated numeric boundary cases and the three
 unchanged upstream programs agree exactly on stdout, stderr and status.
@@ -52,7 +54,56 @@ Native execution agrees on 33 of those cases and retains the documented
 signaling-NaN difference. Printable JavaScript pure entries also execute those
 operations.
 
-Remaining work includes executable C, all transcendental and
-rounding functions, F32 text parsing/formatting, the rest of the Nat/U32 library,
-large Nat representation, and structural word-pattern limits. There is no
-separate signed integer language family in this reference revision.
+## Text and target behavior
+
+F32 formatting follows the reference's search for a short decimal spelling
+that rounds back to the same binary32 value, including `-0`, `inf`, `-inf` and
+`nan`. Native formatting matches 20,012 bit patterns against the separately
+compiled upstream C helper; JavaScript matches 20,000 against the actual
+reference JavaScript helper.
+
+The two upstream readers deliberately have different behavior. Generated
+JavaScript uses the reference decimal/exponent, infinity and NaN grammar,
+including leading JavaScript whitespace. Native Rust implements the C-locale
+grammar with ASCII whitespace, hexadecimal floats and NaN payload syntax.
+Both reject trailing whitespace. The native reader also preserves the C
+helper's first-NUL behavior: a nonempty string starting with NUL reads zero,
+and a valid numeric prefix before NUL can ignore following bytes. JavaScript
+rejects embedded NUL. These execution contracts are not proof assumptions
+about how untrusted external text should be validated by an application.
+
+The safe Rust native reader matches Microsoft `strtof` on 14,862 boundary and
+random inputs, including long hexadecimal mantissas, exact ties, overflow,
+subnormals, signed zero and NUL tails. On MSVC targets, valid NaN spellings use
+the observed all-one payload while preserving the sign. Other native targets
+use the documented conventional payload policy; their host CRT NaN payload
+behavior is not verified. Locale changes in a host process do not change this
+reader's C-locale contract. JavaScript read matches 177,624 grammar/whitespace
+inputs against the reference helper. Its equivalent linear regex also avoids
+quadratic backtracking on long invalid digit strings.
+
+Native scalar math follows the reference C lane's binary64 library operation
+followed by a binary32 cast. JavaScript uses its own Math functions followed by
+`Math.fround`. Domain NaNs and exceptional power cases can differ by target;
+arithmetic NaN payload identity and universal cross-library bit equality are
+not promised. Output comparisons therefore distinguish each target's oracle.
+All 186 generated math cases match their respective C and JavaScript oracles;
+finite values, infinities and signed zeros compare by bits, while NaNs compare
+by classification. Fourteen unchanged upstream numeric IO programs also match
+stdout, stderr and exit status on both targets.
+
+## Ordinary integer readers
+
+Nat and U32 decimal readers and their public helpers are ordinary checked Bend
+definitions. U32 reading preserves the full unsigned range and rejects overflow.
+Nat reading preserves the reference's 48-bit maximum, 281474976710655. Its
+decimal guard avoids first expanding that huge unary bound for small inputs.
+Generated JavaScript verifies the maximum, the first overflow and leading-zero
+cases against upstream. Large native Nat values still exhaust the existing
+representation limits explicitly; they are not reported as invalid input to
+simulate a smaller accepted range. The ordinary Word/U32 addition commutativity
+proof is now included and checked by structural induction.
+
+Remaining work includes native surface printing, executable C,
+large native Nat representation and structural word-pattern limits. There is
+no separate signed integer language family in this reference revision.

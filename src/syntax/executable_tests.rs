@@ -21,7 +21,7 @@ fn numeric_metadata_is_sealed_and_independent_from_foreign_contracts() {
     let fixture = Fixture::new();
     let path = fixture.write("main.bend", "import Base\n");
     let mut source = load_executable(&path).expect("load numeric contracts");
-    assert_eq!(source.numeric.len(), 16);
+    assert_eq!(source.numeric.len(), 37);
     assert_eq!(source.numeric["F32.add"], NumericIntrinsic::Add);
     assert!(!source.foreign.contains_key("F32.add"));
     source
@@ -45,11 +45,10 @@ fn numeric_metadata_is_sealed_and_independent_from_foreign_contracts() {
 
     let mut source = load_executable(&path).unwrap();
     source.numeric.remove("F32.add");
+    let missing = check_executable(&source).unwrap_err().to_string();
     assert!(
-        check_executable(&source)
-            .unwrap_err()
-            .to_string()
-            .contains("unfilled laws: F32.add")
+        missing.contains("F32.add") && missing.contains("unfilled"),
+        "{missing}"
     );
 
     let mut source = load_executable(&path).unwrap();
@@ -84,6 +83,61 @@ fn constructor_tags_retain_original_spelling_before_qualification() {
     assert!(source.numeric.is_empty());
     assert!(source.base_names.is_empty());
     check_executable(&source).expect("constructor metadata does not change proof rules");
+}
+
+#[test]
+fn text_numeric_contracts_require_exact_quantities_and_maybe_payload() {
+    use crate::kernel::Term;
+    use crate::syntax::parse_term;
+    use std::rc::Rc;
+
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    check_executable(&load_executable(&path).unwrap()).expect("unaltered numeric contracts check");
+    for (name, replacement, diagnostic) in [
+        ("F32.show", "show-quantity", "invalid parameter"),
+        ("F32.read", "Maybe<&1, F32>", "invalid result type"),
+        ("F32.read", "Maybe<&2, U32>", "invalid result type"),
+        ("F32.read", "F32", "invalid result type"),
+        ("F32.read", "excluded", "invalid result type"),
+    ] {
+        let mut source = load_executable(&path).unwrap();
+        let definition = source
+            .book
+            .declarations
+            .iter_mut()
+            .find_map(|declaration| match declaration {
+                Declaration::Def(definition) if definition.name == name => Some(definition),
+                _ => None,
+            })
+            .unwrap();
+        let Term::All { quant, body, .. } = Rc::make_mut(&mut definition.ty) else {
+            panic!("unary numeric signature");
+        };
+        if replacement == "show-quantity" {
+            definition.parameters[0].quant = Quant::Lone;
+            *quant = Quant::Lone;
+        } else if replacement == "excluded" {
+            let Term::Adt { excluded, .. } = Rc::make_mut(body) else {
+                panic!("actual Maybe family");
+            };
+            excluded.push("Some".into());
+        } else {
+            *body = parse_term(replacement).unwrap();
+        }
+        let error = check_executable(&source)
+            .expect_err("altered numeric signature must fail")
+            .to_string();
+        assert!(error.contains(diagnostic), "{name}: {error}");
+    }
+    let mut source = load_executable(&path).unwrap();
+    source.base_names.remove("Maybe");
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("actual Base datatypes")
+    );
 }
 
 struct Fixture(PathBuf);
@@ -139,7 +193,7 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     }
     check_book(&source.book).expect_err("foreign contracts cannot become a strict proof token");
     source.book.declarations.retain(
-        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign || source.numeric.contains_key(&definition.name)),
+        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign || source.numeric.contains_key(&definition.name) || definition.name.starts_with("F32.")),
     );
     check_book(&source.book)
         .expect("ordinary IO continuation helpers are checked without runtime assumptions");

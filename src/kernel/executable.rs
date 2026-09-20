@@ -270,7 +270,8 @@ fn numeric_contract(
             "invalid bundled numeric contract metadata",
         ));
     }
-    for name in [intrinsic.input_type(), intrinsic.output_type()] {
+    // Read additionally carries F32 in the actual Maybe<&2, F32> family.
+    for name in [intrinsic.input_type(), intrinsic.output_type(), "F32"] {
         if !source.base_names.contains(name) || !engine.adts.contains_key(name) {
             return Err(KernelError::new(
                 "numeric signatures require actual Base datatypes",
@@ -291,8 +292,8 @@ fn numeric_contract(
                 "numeric contract has an invalid function telescope",
             ));
         };
-        if *quant != Quant::Lone
-            || parameter.quant != Quant::Lone
+        if *quant != intrinsic.input_quant()
+            || parameter.quant != intrinsic.input_quant()
             || *id != parameter.id
             || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
             || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
@@ -303,7 +304,15 @@ fn numeric_contract(
         }
         result = strip_annotations(body);
     }
-    if !matches!(result.as_ref(), Term::Ref(name) if name == intrinsic.output_type()) {
+    let valid_result = if intrinsic == NumericIntrinsic::Read {
+        matches!(result.as_ref(), Term::Adt { name, args, excluded }
+            if name == "Maybe" && excluded.is_empty() && args.len() == 2
+                && matches!(strip_annotations(&args[0]).as_ref(), Term::Qua(Quant::Many))
+                && matches!(strip_annotations(&args[1]).as_ref(), Term::Ref(name) if name == "F32"))
+    } else {
+        matches!(result.as_ref(), Term::Ref(name) if name == intrinsic.output_type())
+    };
+    if !valid_result {
         return Err(KernelError::new(
             "numeric contract has an invalid result type",
         ));

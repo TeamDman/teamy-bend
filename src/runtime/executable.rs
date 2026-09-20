@@ -19,7 +19,7 @@ use std::io::ErrorKind;
 use std::io::Write;
 use std::rc::Rc;
 
-const TEXT_BYTES: usize = 8 * 1024 * 1024;
+pub(super) const TEXT_BYTES: usize = 8 * 1024 * 1024;
 
 impl Program {
     pub(crate) fn from_executable(

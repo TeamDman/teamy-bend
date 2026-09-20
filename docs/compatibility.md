@@ -21,20 +21,21 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 327 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 350 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
   and Map, Char/String operations, List templates, Array operations and pure
-  Word/U32 helpers and decimal U32/Nat text. Array creation uses a power-of-two depth, indexing wraps,
+  Word/U32 helpers, decimal U32/Nat formatting and parsing, and checked addition
+  commutativity. Array creation uses a power-of-two depth, indexing wraps,
   and clone/get require reusable elements; swap/set/map retain affine ownership.
-  `src/syntax/base.bend` is the exact inventory (288 definition forms including
-  17 templates, 21 laws and 18 datatypes). Templates enter the checked book only
+  `src/syntax/base.bend` is the exact inventory (307 definition forms including
+  17 templates, 25 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
 GPU calls, hub fetch/publish, asynchronous foreign execution, non-console Base effects,
-the complete numeric library, optimized C and GPU
+large native Nat values, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
-supports [16 sealed numeric contracts](numeric-execution.md), also implemented
+supports [all 37 numeric primitive contracts](numeric-execution.md), also implemented
 by executable JavaScript. Strict checking and
 the pure compilers do not admit their opaque implementation assumptions.
 

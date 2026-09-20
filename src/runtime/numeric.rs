@@ -16,6 +16,9 @@ use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 
+#[path = "numeric_text.rs"]
+mod text;
+
 #[cfg(test)]
 #[path = "numeric_tests.rs"]
 mod tests;
@@ -126,9 +129,16 @@ pub(super) struct NumericArguments {
 }
 
 pub(super) enum NumericFrame {
-    Unwrap(NumericArguments),
-    Word(NumericArguments, u32, u32),
-    Bit(NumericArguments, u32, u32, ThunkId),
+    Unwrap(WordTarget),
+    Word(WordTarget, u32, u32),
+    Bit(WordTarget, u32, u32, ThunkId),
+    Text(String),
+    Character(String, ThunkId),
+}
+
+pub(super) enum WordTarget {
+    Arguments(NumericArguments),
+    Character(String, ThunkId),
 }
 
 impl Machine<'_> {
@@ -150,14 +160,19 @@ impl Machine<'_> {
             return Err(KernelError::new("numeric intrinsic has an invalid arity"));
         }
         let first = arguments[0];
-        Self::push(
-            frames,
-            Frame::Numeric(NumericFrame::Unwrap(NumericArguments {
+        let frame = if matches!(
+            operation,
+            NumericOperation::Intrinsic(NumericIntrinsic::Read)
+        ) {
+            NumericFrame::Text(String::new())
+        } else {
+            NumericFrame::Unwrap(WordTarget::Arguments(NumericArguments {
                 operation,
                 arguments,
                 words: Vec::new(),
-            })),
-        )?;
+            }))
+        };
+        Self::push(frames, Frame::Numeric(frame))?;
         Ok(first)
     }
 
@@ -172,26 +187,24 @@ impl Machine<'_> {
         };
         match frame {
             NumericFrame::Unwrap(state) => {
-                if name != state.operation.input_type() || fields.len() != 1 {
+                let wrapper = match &state {
+                    WordTarget::Arguments(arguments) => arguments.operation.input_type(),
+                    WordTarget::Character(..) => "U32",
+                };
+                if name != wrapper || fields.len() != 1 {
                     return Err(KernelError::new("numeric argument has an invalid wrapper"));
                 }
                 Self::push(frames, Frame::Numeric(NumericFrame::Word(state, 0, 0)))?;
                 Ok(fields[0])
             }
-            NumericFrame::Word(mut state, bit, word) => {
+            NumericFrame::Word(state, bit, word) => {
                 if bit == 32 {
                     if name != "WNil" || !fields.is_empty() {
                         return Err(KernelError::new(
                             "numeric argument needs exactly 32 Word bits",
                         ));
                     }
-                    state.words.push(word);
-                    if state.words.len() == state.arguments.len() {
-                        return self.numeric_result(state.operation, &state.words);
-                    }
-                    let next = state.arguments[state.words.len()];
-                    Self::push(frames, Frame::Numeric(NumericFrame::Unwrap(state)))?;
-                    return Ok(next);
+                    return self.numeric_word(state, word, frames);
                 }
                 if name != "WCon" || fields.len() != 2 {
                     return Err(KernelError::new("numeric argument needs a 32-bit Word"));
@@ -223,6 +236,63 @@ impl Machine<'_> {
                 )?;
                 Ok(tail)
             }
+            NumericFrame::Text(text) => match (name.as_str(), fields.as_slice()) {
+                ("SNil", []) => match text::read(&text) {
+                    Some(bits) => {
+                        let value = self.numeric_word_value("F32", bits)?;
+                        self.ready_constructor("Some", vec![value])
+                    }
+                    None => self.ready_constructor("None", vec![]),
+                },
+                ("SCon", [head, tail]) => {
+                    Self::push(frames, Frame::Numeric(NumericFrame::Character(text, *tail)))?;
+                    Ok(*head)
+                }
+                _ => Err(KernelError::new("numeric argument needs a String value")),
+            },
+            NumericFrame::Character(text, tail) => {
+                if name != "Chr" || fields.len() != 1 {
+                    return Err(KernelError::new("numeric text needs a Char value"));
+                }
+                Self::push(
+                    frames,
+                    Frame::Numeric(NumericFrame::Unwrap(WordTarget::Character(text, tail))),
+                )?;
+                Ok(fields[0])
+            }
+        }
+    }
+
+    fn numeric_word(
+        &mut self,
+        target: WordTarget,
+        word: u32,
+        frames: &mut Vec<Frame>,
+    ) -> Result<ThunkId, KernelError> {
+        match target {
+            WordTarget::Arguments(mut state) => {
+                state.words.push(word);
+                if state.words.len() == state.arguments.len() {
+                    return self.numeric_result(state.operation, &state.words);
+                }
+                let next = state.arguments[state.words.len()];
+                Self::push(
+                    frames,
+                    Frame::Numeric(NumericFrame::Unwrap(WordTarget::Arguments(state))),
+                )?;
+                Ok(next)
+            }
+            WordTarget::Character(mut text, tail) => {
+                let scalar = char::from_u32(word).ok_or_else(|| {
+                    KernelError::new("numeric text contains an invalid Unicode scalar")
+                })?;
+                if text.len() + scalar.len_utf8() > super::executable::TEXT_BYTES {
+                    return Err(KernelError::new("numeric text byte budget exhausted"));
+                }
+                text.push(scalar);
+                Self::push(frames, Frame::Numeric(NumericFrame::Text(text)))?;
+                Ok(tail)
+            }
         }
     }
 
@@ -231,6 +301,20 @@ impl Machine<'_> {
         operation: NumericOperation,
         words: &[u32],
     ) -> Result<ThunkId, KernelError> {
+        if matches!(
+            operation,
+            NumericOperation::Intrinsic(NumericIntrinsic::Show)
+        ) {
+            let shown = text::show(f32::from_bits(words[0]));
+            let mut string = self.ready_constructor("SNil", vec![])?;
+            for byte in shown.bytes().rev() {
+                self.tick()?;
+                let code = self.numeric_word_value("U32", u32::from(byte))?;
+                let character = self.ready_constructor("Chr", vec![code])?;
+                string = self.ready_constructor("SCon", vec![character, string])?;
+            }
+            return Ok(string);
+        }
         let result = match operation {
             NumericOperation::Intrinsic(intrinsic) => intrinsic_result(intrinsic, words),
             NumericOperation::Optimized(PureOptimization::U32Add) => {
@@ -240,6 +324,10 @@ impl Machine<'_> {
         if operation.output_type() == "Bool" {
             return self.ready_constructor(if result == 0 { "False" } else { "True" }, vec![]);
         }
+        self.numeric_word_value(operation.output_type(), result)
+    }
+
+    fn numeric_word_value(&mut self, wrapper: &str, result: u32) -> Result<ThunkId, KernelError> {
         let mut word = self.ready_constructor("WNil", vec![])?;
         for bit in (0..32).rev() {
             let head = self.ready_constructor(
@@ -252,7 +340,7 @@ impl Machine<'_> {
             )?;
             word = self.ready_constructor("WCon", vec![head, word])?;
         }
-        self.ready_constructor(operation.output_type(), vec![word])
+        self.ready_constructor(wrapper, vec![word])
     }
 
     fn ready_constructor(
@@ -275,6 +363,10 @@ impl Machine<'_> {
     clippy::float_cmp,
     reason = "Bend float comparison primitives use IEEE equality"
 )]
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "upstream C computes transcendental functions in double precision, then rounds to binary32"
+)]
 fn intrinsic_result(intrinsic: NumericIntrinsic, words: &[u32]) -> u32 {
     use NumericIntrinsic::Abs;
     use NumericIntrinsic::Add;
@@ -294,6 +386,7 @@ fn intrinsic_result(intrinsic: NumericIntrinsic, words: &[u32]) -> u32 {
     use NumericIntrinsic::U32ToF32;
     let a = f32::from_bits(words[0]);
     let b = f32::from_bits(words.get(1).copied().unwrap_or(0));
+    let double = f64::from(a);
     match intrinsic {
         U32ToF32 => (words[0] as f32).to_bits(),
         F32ToU32 => float_to_u32(a),
@@ -312,6 +405,28 @@ fn intrinsic_result(intrinsic: NumericIntrinsic, words: &[u32]) -> u32 {
         IsLe => u32::from(a <= b),
         IsGt => u32::from(a > b),
         IsGe => u32::from(a >= b),
+        NumericIntrinsic::Pow => (double.powf(f64::from(b)) as f32).to_bits(),
+        NumericIntrinsic::Atan2 => (double.atan2(f64::from(b)) as f32).to_bits(),
+        NumericIntrinsic::Sqrt => (double.sqrt() as f32).to_bits(),
+        NumericIntrinsic::Exp => (double.exp() as f32).to_bits(),
+        NumericIntrinsic::Log => (double.ln() as f32).to_bits(),
+        NumericIntrinsic::Log2 => (double.log2() as f32).to_bits(),
+        NumericIntrinsic::Log10 => (double.log10() as f32).to_bits(),
+        NumericIntrinsic::Sin => (double.sin() as f32).to_bits(),
+        NumericIntrinsic::Cos => (double.cos() as f32).to_bits(),
+        NumericIntrinsic::Tan => (double.tan() as f32).to_bits(),
+        NumericIntrinsic::Asin => (double.asin() as f32).to_bits(),
+        NumericIntrinsic::Acos => (double.acos() as f32).to_bits(),
+        NumericIntrinsic::Atan => (double.atan() as f32).to_bits(),
+        NumericIntrinsic::Sinh => (double.sinh() as f32).to_bits(),
+        NumericIntrinsic::Cosh => (double.cosh() as f32).to_bits(),
+        NumericIntrinsic::Tanh => (double.tanh() as f32).to_bits(),
+        NumericIntrinsic::Floor => (double.floor() as f32).to_bits(),
+        NumericIntrinsic::Ceil => (double.ceil() as f32).to_bits(),
+        NumericIntrinsic::Trunc => (double.trunc() as f32).to_bits(),
+        NumericIntrinsic::Show | NumericIntrinsic::Read => {
+            unreachable!("text contracts have dedicated runtime continuations")
+        }
     }
 }
 

@@ -222,8 +222,8 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 327 selected pure upstream source declarations are bundled
-with Apache attribution (288 definition forms including 17 templates, 21 laws,
+Completion notes: 350 selected pure source declarations are bundled
+with Apache attribution (307 definition forms including 17 templates, 25 laws,
 18 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
@@ -251,12 +251,12 @@ Remaining library work includes complete numeric behavior, effects and foreign
 implementation contracts. Representation or
 syntax support alone does not establish an operation's implementation.
 
-The first 16 execution-only F32 contracts are now implemented in a separate
-sealed registry, with bounded native IO evaluation. Strict proof normalization
-keeps them opaque. Thirty cases match actual upstream JavaScript and a raw
-signaling-NaN case records the target difference. Executable JavaScript now
-implements those 16 contracts, including printable pure main entries. Native
-pure-main numeric dispatch, the remaining 21 contracts and executable C remain unfinished;
+All 37 execution-only numeric contracts are now implemented in a separate
+sealed registry, with bounded native IO evaluation and executable JavaScript.
+Strict proof normalization keeps them opaque. Ten ordinary F32 helpers,
+Nat/U32 decimal readers and checked addition commutativity complete the missing
+ordinary numeric helper inventory identified in this slice. Native surface
+printing, large native Nat representation and executable C remain unfinished;
 see [numeric execution](numeric-execution.md).
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
@@ -553,6 +553,34 @@ receipt retains its original `6802c1e` attribution.
 Full scheduling, executable C, remaining library/CLI and GPU behavior still
 keep the goal active. The next implementation work remains in 3.2 and 3.3;
 completion of this publication milestone does not complete U6.
+
+### [~] 5.7 Complete numeric execution and ordinary readers
+
+Implementation is complete: all 37 upstream numeric primitive contracts preserve
+exact quantities and the `Maybe<&2, F32>` read result. The 19 remaining scalar
+math operations and F32 show/read execute in native Rust and JavaScript. Ten
+ordinary F32 helpers, pure Nat/U32 readers and checked addition commutativity
+complete this numeric helper slice. The Nat reader retains its full 48-bit
+contract without first expanding its enormous unary bound for small inputs;
+materialized large native values still return explicit resource errors.
+
+The complete quality gate passes 254 tests, including four compile-fail API
+examples, with two optional profilers ignored. Strict library/test Clippy and
+independent implementation, proof-boundary and publication reviews pass.
+The frozen candidate passes 186 math cases on each target against its own
+oracle, with exact non-NaN bits and NaN classification. Fourteen unchanged
+upstream numeric IO programs match stdout/stderr/status on both targets.
+Native text comparisons cover 20,012 formatting and 14,862 parsing inputs;
+JavaScript covers 20,000 formatting and 177,624 grammar/whitespace inputs.
+Eighteen ordinary reader cases match upstream, including full 48-bit Nat bounds.
+Target-specific parsing and NaN differences remain documented.
+
+The frozen candidate's complete strict audit covers 1,302 fixtures: 361 accepted
+positives, 492 rejected positives and 449 rejected negatives, with no accepted
+negatives, crashes or newly rejected positives. The additional accepted fixture
+is `proof/word_add_comm.bend`. All compiled source fingerprints remain unchanged
+after the audit. Clean-release Poche regressions and publication remain pending.
+Native surface printing, scheduler, executable C and remaining U6 scope stay open.
 
 ## Completion and risks
 

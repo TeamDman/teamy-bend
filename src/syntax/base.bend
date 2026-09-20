@@ -2255,3 +2255,170 @@ def Nat.show.fin(g: Nat, acc: String, dq: Char & Nat) -> String:
 def Nat.show(n: Nat) -> String:
   +m = n
   Nat.show.fin(m, SNil{}, Nat.show.put(Nat.divmod(m, 10n)))
+
+# Decimal reading retains the reference's full 48-bit Nat bound. Comparing the
+# decimal accumulator avoids forcing that bound into a gigantic unary Nat just
+# to parse a small input. Large materialized Nat results still use the evaluator's
+# ordinary resource limits; there is no smaller accepted numeric range here.
+def Nat.read.max() -> Nat:
+  Nat.mul(U32.to_nat(16777215), U32.to_nat(16777217))
+
+def Nat.read.fit(acc: Nat, qr: Nat & Nat) -> Bool:
+  (q, r) = qr
+  Bool.not(Nat.is_lt(q, acc))
+
+def Nat.read.bound_digit(d: U32, order: Cmp) -> Bool:
+  match order:
+    case LT{}: True{}
+    case EQ{}: U32.is_le(d, 5)
+    case GT{}: False{}
+
+def Nat.read.bound_text(text: String, d: U32, length: Cmp) -> Bool:
+  match length:
+    case LT{}: True{}
+    case EQ{}: Nat.read.bound_digit(d, String.order(text, "28147497671065"))
+    case GT{}: False{}
+
+def Nat.read.bound(acc: Nat, d: U32) -> Bool:
+  +text = Nat.show(acc)
+  Nat.read.bound_text(text, d, Nat.cmp(String.length(text), 14n))
+
+def Nat.read.go(s: String, +acc: Nat) -> Maybe<&2, Nat>:
+  match s:
+    case SNil{}: Some{acc}
+    case SCon{Chr{x}, t}:
+      +d = U32.sub(x, 48)
+      {(ok =>
+        match ok:
+          case True{}: Nat.read.go(t, Nat.add(Nat.mul(acc, 10n), U32.to_nat(d)))
+          case False{}: None{}
+      ) : Bool -> Maybe<&2, Nat>}(Bool.and(U32.is_lt(d, 10), Nat.read.bound(acc, d)))
+
+def Nat.read.if(t: String, acc: Nat, d: U32, ok: Bool) -> Maybe<&2, Nat>:
+  match ok:
+    case True{}: Nat.read.go(t, Nat.add(Nat.mul(acc, 10n), U32.to_nat(d)))
+    case False{}: None{}
+
+def Nat.read(s: String) -> Maybe<&2, Nat>:
+  match s:
+    case SNil{}: None{}
+    case SCon{h, t}: Nat.read.go(SCon{h, t}, 0n)
+
+# floor((10 * acc + digit) mod 2^32 / 10) == acc is equivalent to
+# a decimal digit and acc < 429496729, or acc == 429496729 and digit <= 5.
+# This avoids division while retaining the reference read.go helper's behavior
+# even when callers supply a nonzero accumulator directly.
+def U32.read.bound_digit(d: U32, order: Cmp) -> Bool:
+  match order:
+    case LT{}: True{}
+    case EQ{}: U32.is_le(d, 5)
+    case GT{}: False{}
+
+def U32.read.bound(acc: U32, +d: U32) -> Bool:
+  Bool.and(U32.is_lt(d, 10), U32.read.bound_digit(d, U32.cmp(acc, 429496729)))
+
+def U32.read.times_ten(+acc: U32) -> U32:
+  U32.add(U32.shl(acc), U32.shl(U32.shl(U32.shl(acc))))
+
+def U32.read.go(s: String, +acc: U32) -> Maybe<&2, U32>:
+  match s:
+    case SNil{}: Some{acc}
+    case SCon{Chr{x}, t}:
+      +d = U32.sub(x, 48)
+      {(ok =>
+        match ok:
+          case True{}: U32.read.go(t, U32.add(U32.read.times_ten(acc), d))
+          case False{}: None{}
+      ) : Bool -> Maybe<&2, U32>}(U32.read.bound(acc, d))
+
+def U32.read.if(t: String, n: U32, ok: Bool) -> Maybe<&2, U32>:
+  match ok:
+    case True{}: U32.read.go(t, n)
+    case False{}: None{}
+
+def U32.read(s: String) -> Maybe<&2, U32>:
+  match s:
+    case SNil{}: None{}
+    case SCon{h, t}: U32.read.go(SCon{h, t}, 0)
+
+# Addition commutativity uses the checked ripple-carry definition above. The
+# congruence helper is independent of the induction, so no forward proof cycle
+# grants an assumption while checking the recursive argument.
+def Word.add_comm.lift(
+  -p: Nat, -h: Bool, -at: Word(p), -bt: Word(p), -k: Bool,
+  e: {Word.adc(p, at, bt, False{}, k) == Word.adc(p, bt, at, False{}, k) : Word(p)}
+) -> {WCon{h, Word.adc(p, at, bt, False{}, k)}
+      == WCon{h, Word.adc(p, bt, at, False{}, k)} : Word.Con<p>}:
+  Equal.cong(Word(p), Word(1n+p), w => WCon{h, w},
+    Word.adc(p, at, bt, False{}, k), Word.adc(p, bt, at, False{}, k), e)
+
+law Word.add_comm.go:
+  for n: Nat
+  for a: Word(n)
+  for b: Word(n)
+  for c: Bool
+  {Word.adc(n, a, b, False{}, c) == Word.adc(n, b, a, False{}, c) : Word(n)}
+
+def Word.add_comm.go(n, a, b, c):
+  match n:
+    case 0n:
+      match a b:
+        case WNil{} WNil{}: {==}
+    case 1n+p:
+      match a b c:
+        case WCon{False{}, at} WCon{False{}, bt} False{}:
+          Word.add_comm.lift(p, False{}, at, bt, False{},
+            Word.add_comm.go(p, at, bt, False{}))
+        case WCon{False{}, at} WCon{False{}, bt} True{}:
+          Word.add_comm.lift(p, True{}, at, bt, False{},
+            Word.add_comm.go(p, at, bt, False{}))
+        case WCon{False{}, at} WCon{True{}, bt} False{}:
+          Word.add_comm.lift(p, True{}, at, bt, False{},
+            Word.add_comm.go(p, at, bt, False{}))
+        case WCon{False{}, at} WCon{True{}, bt} True{}:
+          Word.add_comm.lift(p, False{}, at, bt, True{},
+            Word.add_comm.go(p, at, bt, True{}))
+        case WCon{True{}, at} WCon{False{}, bt} False{}:
+          Word.add_comm.lift(p, True{}, at, bt, False{},
+            Word.add_comm.go(p, at, bt, False{}))
+        case WCon{True{}, at} WCon{False{}, bt} True{}:
+          Word.add_comm.lift(p, False{}, at, bt, True{},
+            Word.add_comm.go(p, at, bt, True{}))
+        case WCon{True{}, at} WCon{True{}, bt} False{}:
+          Word.add_comm.lift(p, False{}, at, bt, True{},
+            Word.add_comm.go(p, at, bt, True{}))
+        case WCon{True{}, at} WCon{True{}, bt} True{}:
+          Word.add_comm.lift(p, True{}, at, bt, True{},
+            Word.add_comm.go(p, at, bt, True{}))
+
+law Word.add_comm.arm:
+  for p: Nat
+  for -h: Bool
+  for at: Word(p)
+  for bt: Word(p)
+  for k: Bool
+  {WCon{h, Word.adc(p, at, bt, False{}, k)}
+    == WCon{h, Word.adc(p, bt, at, False{}, k)} : Word.Con<p>}
+
+def Word.add_comm.arm(p, h, at, bt, k):
+  Word.add_comm.lift(p, h, at, bt, k, Word.add_comm.go(p, at, bt, k))
+
+law Word.add_comm:
+  for n: Nat
+  for a: Word(n)
+  for b: Word(n)
+  {Word.add(n, a, b) == Word.add(n, b, a) : Word(n)}
+
+def Word.add_comm(n, a, b):
+  Word.add_comm.go(n, a, b, False{})
+
+law U32.add_comm:
+  for a: U32
+  for b: U32
+  {U32.add(a, b) == U32.add(b, a) : U32}
+
+def U32.add_comm(a, b):
+  match a b:
+    case U32{x} U32{y}:
+      Equal.cong(Word(32n), U32, w => U32{w}, Word.add(32n, x, y),
+        Word.add(32n, y, x), Word.add_comm(32n, x, y))

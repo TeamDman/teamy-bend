@@ -7,10 +7,10 @@ A Rust rewrite of the Bend 2 proof language, started from
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Native console IO and executable JavaScript use a separate contract checker.
 Generated JavaScript supports synchronous foreign calls and callbacks.
-Sixteen core F32 operations execute in native IO and generated JavaScript;
+All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 327 selected pure source declarations, including
+The bundled Base contains 350 selected pure source declarations, including
 17 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the

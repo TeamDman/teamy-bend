@@ -197,6 +197,27 @@ const $tb = (() => {
       case 'F32.neg': return -a;
       case 'F32.abs': return Math.fround(Math.abs(a));
       case 'F32.bits': return bits(a);
+      case 'F32.pow': return Math.fround(Math.pow(a,b));
+      case 'F32.atan2': return Math.fround(Math.atan2(a,b));
+      case 'F32.sqrt': return Math.fround(Math.sqrt(a));
+      case 'F32.exp': return Math.fround(Math.exp(a));
+      case 'F32.log': return Math.fround(Math.log(a));
+      case 'F32.log2': return Math.fround(Math.log2(a));
+      case 'F32.log10': return Math.fround(Math.log10(a));
+      case 'F32.sin': return Math.fround(Math.sin(a));
+      case 'F32.cos': return Math.fround(Math.cos(a));
+      case 'F32.tan': return Math.fround(Math.tan(a));
+      case 'F32.asin': return Math.fround(Math.asin(a));
+      case 'F32.acos': return Math.fround(Math.acos(a));
+      case 'F32.atan': return Math.fround(Math.atan(a));
+      case 'F32.sinh': return Math.fround(Math.sinh(a));
+      case 'F32.cosh': return Math.fround(Math.cosh(a));
+      case 'F32.tanh': return Math.fround(Math.tanh(a));
+      case 'F32.floor': return Math.fround(Math.floor(a));
+      case 'F32.ceil': return Math.fround(Math.ceil(a));
+      case 'F32.trunc': return Math.fround(Math.trunc(a));
+      case 'F32.show': return floatText(a);
+      case 'F32.read': return readFloat(a);
       case 'Nat.add': return nat(a+b);
       case 'Nat.sub': return a < b ? 0n : a-b;
       case 'Nat.mul': return nat(a*b);
@@ -228,6 +249,14 @@ const $tb = (() => {
       text = String(Number(value.toExponential(precision - 1)));
     }
     return text;
+  }
+  function readFloat(text) {
+    // This has the same grammar and final-line-terminator rule as upstream.
+    // Keeping the optional fractional digits behind a dot avoids quadratic
+    // backtracking when a long run of digits ends in an invalid character.
+    const grammar = /^\s*[+-]?((\d+(?:\.\d*)?|\.\d+)(e[+-]?\d+)?|inf(inity)?|nan)$/i;
+    const value = Number(text.replace(/inf\w*/i, 'Infinity'));
+    return grammar.test(text) ? {$:'Some',value:Math.fround(value)} : {$:'None'};
   }
   function escaped(character, quote) {
     const code = character.codePointAt(0);

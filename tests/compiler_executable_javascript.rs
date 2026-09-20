@@ -304,3 +304,70 @@ def main() -> IO(String): IO.pure(String, grow(24n, "a"))
     assert!(String::from_utf8_lossy(&output.stderr).contains("string byte budget exhausted"));
     assert!(output.stdout.is_empty());
 }
+
+#[test]
+fn extended_numeric_operations_round_to_binary32() {
+    let fixture = Fixture::new();
+    fixture.expect(
+        r"
+import Base
+def main() -> List<U32>:
+  [F32.bits(F32.pow(2.0, 3.0)), F32.bits(F32.atan2(1.0, 1.0)),
+   F32.bits(F32.sqrt(2.0)), F32.bits(F32.exp(1.0)), F32.bits(F32.log(2.0)),
+   F32.bits(F32.log2(8.0)), F32.bits(F32.log10(100.0)),
+   F32.bits(F32.sin(1.0)), F32.bits(F32.cos(1.0)), F32.bits(F32.tan(1.0)),
+   F32.bits(F32.asin(0.5)), F32.bits(F32.acos(0.5)), F32.bits(F32.atan(1.0)),
+   F32.bits(F32.sinh(1.0)), F32.bits(F32.cosh(1.0)), F32.bits(F32.tanh(1.0)),
+   F32.bits(F32.floor(F32.neg(1.5))), F32.bits(F32.ceil(F32.neg(1.5))),
+   F32.bits(F32.trunc(F32.neg(1.5)))]
+",
+        "[1090519040, 1061752795, 1068827891, 1076754516, 1060205080, 1077936128, 1073741824, 1062693540, 1057640768, 1070029091, 1057360530, 1065749138, 1061752795, 1066822910, 1069908907, 1061353430, 3221225472, 3212836864, 3212836864]\n",
+    );
+}
+
+#[test]
+fn numeric_text_preserves_special_values_rounding_and_decimal_style() {
+    let fixture = Fixture::new();
+    fixture.expect(
+        r"
+import Base
+def make(value: U32) -> F32:
+  match value:
+    case U32{word}: F32{word}
+def main() -> List<String>:
+  [F32.show(F32.sqrt(F32.neg(1.0))), F32.show(F32.log(0.0)),
+   F32.show(F32.exp(1000.0)), F32.show(F32.pow(F32.neg(0.0), F32.neg(3.0))),
+   F32.show(F32.sqrt(F32.neg(0.0))), F32.show(F32.ceil(F32.neg(0.1))),
+   F32.show(F32.trunc(F32.neg(0.1))), F32.show(F32.sin(F32.neg(0.0))),
+   F32.show(0.0), F32.show(1.0), F32.show(0.1), F32.show(16777217.0),
+   F32.show(0.000001), F32.show(0.0000001), F32.show(1000000000000000000000.0),
+   F32.show(make(1)), F32.show(make(8388608)), F32.show(make(2139095039))]
+",
+        "[\"nan\", \"-inf\", \"inf\", \"-inf\", \"-0\", \"-0\", \"-0\", \"-0\", \"0\", \"1\", \"0.1\", \"16777216\", \"0.000001\", \"1e-7\", \"1e+21\", \"1e-45\", \"1.1754944e-38\", \"3.4028235e+38\"]\n",
+    );
+}
+
+#[test]
+fn float_read_matches_upstream_decimal_and_special_value_grammar() {
+    let fixture = Fixture::new();
+    fixture.expect(
+        r#"
+import Base
+def show_read(parsed: Maybe<&2, F32>) -> String:
+  match parsed:
+    case None{}: "invalid"
+    case Some{value}: F32.show(value)
+def main() -> List<String>:
+  [show_read(F32.read("  +1.25")), show_read(F32.read("\t\n\r-0")),
+   show_read(F32.read(".5")), show_read(F32.read("1.")), show_read(F32.read("01.2e+1")),
+   show_read(F32.read("INF")), show_read(F32.read("-infinity")), show_read(F32.read("+NaN")),
+   show_read(F32.read("-nan")), show_read(F32.read("1e1000")),
+   show_read(F32.read("-1e-1000")), show_read(F32.read("1e-1000")),
+   show_read(F32.read("16777217")), show_read(F32.read("1 ")), show_read(F32.read("1\n")),
+   show_read(F32.read("1\r")), show_read(F32.read("0x10")), show_read(F32.read("1_000")),
+   show_read(F32.read("1e")), show_read(F32.read(".")), show_read(F32.read("")),
+   show_read(F32.read(" ")), show_read(F32.read("infinite")), show_read(F32.read("nan(payload)"))]
+"#,
+        "[\"1.25\", \"-0\", \"0.5\", \"1\", \"12\", \"inf\", \"-inf\", \"nan\", \"nan\", \"inf\", \"-0\", \"0\", \"16777216\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\"]\n",
+    );
+}

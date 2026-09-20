@@ -131,8 +131,8 @@ The complete foreign Base inventory has 34 functions:
 | Windows | Window.open, Window.frame, Window.set_title, Window.close |
 | Audio | Audio.open, Audio.write, Audio.close |
 
-The scheduler, opaque handle ownership, ordinary IO.fork/join and App helpers,
-and the remaining 21 of 37 numeric Base primitives are still required. Preserve asynchronous
+The scheduler, opaque handle ownership, ordinary IO.fork/join and App helpers
+are still required. Preserve asynchronous
 suspension, channel close wakeups and tasks that outlive main.
 
 Start actual-output regression testing with upstream `tests/io/hello_print`,
@@ -154,5 +154,6 @@ The synchronous JavaScript slice is implemented in
 embeds reachable foreign sources without executing them during compilation,
 preserves native representations and callbacks, and supplies a console driver.
 Undefined returns, promises and readiness hooks reject pending scheduler work.
-The first 16 numeric contracts execute in native IO and generated JavaScript;
-the other 21 of the reference's 37 numeric contracts remain unfinished.
+All 37 numeric contracts now execute in native IO and generated JavaScript;
+their proof signatures remain opaque, with target-specific text and math
+behavior recorded in [numeric execution](numeric-execution.md).

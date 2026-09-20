@@ -145,7 +145,7 @@ def erased_symbol(): {==}
 ",
     );
     let checked = fixture.checked();
-    assert_eq!(checked.numeric_names().count(), 16);
+    assert_eq!(checked.numeric_names().count(), 37);
     assert_eq!(checked.foreign_names().count(), 3);
     let mut stdout = Vec::new();
     checked
@@ -298,4 +298,202 @@ fn upstream_float_comparison_digest_and_decimal_formatting_fit_existing_budgets(
         output(include_str!("fixtures/float_compare.bend")),
         "1999985\n"
     );
+}
+
+#[test]
+fn remaining_float_math_matches_independent_c_binary32_witnesses() {
+    // Captured from the fixed upstream C expressions: double math, then a float
+    // cast. Decimal bit witnesses make rounding and signed-zero changes visible.
+    for (expression, expected) in [
+        ("F32.sqrt(2.0)", 1_068_827_891_u32),
+        ("F32.exp(1.0)", 1_076_754_516),
+        ("F32.log(2.0)", 1_060_205_080),
+        ("F32.log2(3.0)", 1_070_260_237),
+        ("F32.log10(2.0)", 1_050_288_283),
+        ("F32.sin(1.0)", 1_062_693_540),
+        ("F32.cos(1.0)", 1_057_640_768),
+        ("F32.tan(1.0)", 1_070_029_091),
+        ("F32.asin(0.5)", 1_057_360_530),
+        ("F32.acos(0.5)", 1_065_749_138),
+        ("F32.atan(1.0)", 1_061_752_795),
+        ("F32.sinh(1.0)", 1_066_822_910),
+        ("F32.cosh(1.0)", 1_069_908_907),
+        ("F32.tanh(1.0)", 1_061_353_430),
+        ("F32.floor(F32.neg(1.25))", 3_221_225_472),
+        ("F32.ceil(F32.neg(0.25))", 2_147_483_648),
+        ("F32.trunc(F32.neg(0.75))", 2_147_483_648),
+        ("F32.pow(2.0, 0.5)", 1_068_827_891),
+        ("F32.atan2(F32.neg(0.0), F32.neg(1.0))", 3_226_013_659),
+        ("F32.pow(F32.neg(2.0), 3.0)", 3_238_002_688),
+        ("F32.sqrt(F32.neg(0.0))", 2_147_483_648),
+        ("F32.exp(100.0)", 2_139_095_040),
+        ("F32.exp(F32.neg(104.0))", 0),
+        ("F32.log(0.0)", 4_286_578_688),
+        ("F32.sinh(F32.neg(0.0))", 2_147_483_648),
+        ("F32.tanh(make(2139095040))", 1_065_353_216),
+        ("F32.atan2(0.0, F32.neg(0.0))", 1_078_530_011),
+        ("F32.floor(F32.neg(0.0))", 2_147_483_648),
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{HELPERS}def main() -> IO(Unit): IO.print(U32.show(F32.bits({expression})))\n"
+            )),
+            format!("{expected}\n"),
+            "{expression}"
+        );
+    }
+    // Domain failures are NaNs; a portable test must not demand a particular
+    // libm NaN payload or sign for arithmetic results.
+    for expression in [
+        "F32.pow(F32.neg(2.0), 0.5)",
+        "F32.sqrt(F32.neg(1.0))",
+        "F32.log(F32.neg(1.0))",
+        "F32.sin(make(2139095040))",
+        "F32.cos(make(2139095040))",
+        "F32.asin(2.0)",
+        "F32.acos(F32.neg(2.0))",
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{HELPERS}def main() -> IO(Unit): IO.print(F32.show({expression}))\n"
+            )),
+            "nan\n"
+        );
+    }
+}
+
+const READ_HELPER: &str = r#"def show_read(x: Maybe<&2, F32>) -> String:
+  match x:
+    case None{}: "none"
+    case Some{value}: U32.show(F32.bits(value))
+def from_read(x: Maybe<&2, F32>) -> F32:
+  match x:
+    case None{}: 0.0
+    case Some{value}: value
+"#;
+
+#[test]
+fn native_float_text_executes_through_strings_and_maybe_constructors() {
+    for (source_text, expected) in [
+        (r#""""#, "none"),
+        (r#""\0""#, "0"),
+        (r#""\0tail""#, "0"),
+        (r#""1.5\0tail""#, "1069547520"),
+        (r#""\t\n 1.5""#, "1069547520"),
+        (r#""1.5 ""#, "none"),
+        (r#""1.5\n""#, "none"),
+        (r#""0x1.8p+1""#, "1077936128"),
+        (r#""0x1.000002p-150""#, "1"),
+        (r#""0x1p""#, "none"),
+        (r#""-0""#, "2147483648"),
+        (r#""inf""#, "2139095040"),
+        (r#""nan(a-b)""#, "none"),
+        (r#""\u{a0}1""#, "none"),
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{HELPERS}{READ_HELPER}def main() -> IO(Unit): IO.print(show_read(F32.read({source_text})))\n"
+            )),
+            format!("{expected}\n"),
+            "{source_text}"
+        );
+    }
+    for (expression, expected) in [
+        ("F32.neg(0.0)", "-0"),
+        ("make(1)", "1e-45"),
+        ("make(1621981420)", "100000000000000000000"),
+        ("make(1649989415)", "1e+21"),
+        ("make(2139095039)", "3.4028235e+38"),
+        ("F32.hypot(3.0, 4.0)", "5"),
+        ("F32.round(F32.neg(1.5))", "-1"),
+        ("F32.clamp(3.0, 0.0, 2.0)", "2"),
+        ("F32.lerp(2.0, 4.0, 0.25)", "2.5"),
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{HELPERS}def main() -> IO(Unit): IO.print(F32.show({expression}))\n"
+            )),
+            format!("{expected}\n"),
+            "{expression}"
+        );
+    }
+}
+
+#[test]
+fn extended_intrinsics_keep_higher_order_calls_and_proof_opacity() {
+    assert_eq!(
+        output(&format!(
+            r#"{HELPERS}{READ_HELPER}
+def apply(f: F32 -> F32, x: F32) -> F32: f(x)
+def render(f: (@+x: F32 -> String), +x: F32) -> String: f(x)
+def parse_with(f: String -> Maybe<&2, F32>, s: String) -> F32: from_read(f(s))
+def main() -> IO(Unit):
+  IO.print(render(F32.show, apply(F32.pow(2.0), parse_with(F32.read, "3"))))
+"#
+        )),
+        "8\n"
+    );
+    for body in [
+        "def false_sqrt() -> {F32.sqrt(4.0) == 2.0 : F32}: {==}",
+        r#"def false_show() -> {F32.show(1.0) == "1" : String}: {==}"#,
+        r#"def false_read() -> {F32.read("1") == Some{1.0} : Maybe<&2, F32>}: {==}"#,
+    ] {
+        let fixture = Fixture::new(&format!("import Base\n{body}\n"));
+        let error = check_executable(&load_executable(&fixture.0).unwrap())
+            .expect_err("runtime contracts do not establish equality proofs")
+            .to_string();
+        assert!(error.contains("reflexivity"), "{error}");
+    }
+    for (body, diagnostic) in [
+        ("def F32.sqrt(a): a", "numeric executable declaration"),
+        (
+            "def erased_text(-x: String) -> Maybe<&2, F32>: F32.read(x)",
+            "permits None use",
+        ),
+        (
+            "def erased_float(-x: F32) -> String: F32.show(x)",
+            "permits None use",
+        ),
+    ] {
+        let fixture = Fixture::new(&format!("import Base\n{body}\n"));
+        let error = check_executable(&load_executable(&fixture.0).unwrap())
+            .expect_err("extended contracts obey ordinary fill and resource rules")
+            .to_string();
+        assert!(error.contains(diagnostic), "{error}");
+    }
+}
+
+#[test]
+fn nested_float_text_uses_bounded_continuations_and_cancellable_decoding() {
+    let helper = format!(
+        "{HELPERS}{READ_HELPER}def nest(n: Nat, +x: F32) -> String:\n  match n:\n    case Zero{{}}: F32.show(x)\n    case Succ{{p}}: F32.show(from_read(F32.read(nest(p, x))))\n"
+    );
+    assert_eq!(
+        output(&format!(
+            "{helper}def main() -> IO(Unit): IO.print(nest(20n, 1.5))\n"
+        )),
+        "1.5\n"
+    );
+    let fixture = Fixture::new(&format!(
+        "{helper}def main() -> IO(Unit): IO.print(nest(U32.to_nat(5000), 1.5))\n"
+    ));
+    let error = fixture
+        .checked()
+        .run_main(&mut Vec::new(), &mut Vec::new(), &|| false)
+        .expect_err("nested text calls must stay on the bounded continuation stack")
+        .to_string();
+    assert!(error.contains("continuation depth exhausted"), "{error}");
+    let fixture = Fixture::new(&format!(
+        r#"{HELPERS}{READ_HELPER}def main() -> IO(Unit): IO.print(show_read(F32.read(String.repeat("0", U32.to_nat(1000)))))"#
+    ));
+    let ticks = std::cell::Cell::new(0);
+    let error = fixture
+        .checked()
+        .run_main(&mut Vec::new(), &mut Vec::new(), &|| {
+            ticks.set(ticks.get() + 1);
+            ticks.get() > 1000
+        })
+        .expect_err("numeric String traversal remains cancellable")
+        .to_string();
+    assert!(error.contains("cancelled"), "{error}");
 }
