@@ -14,8 +14,8 @@
   into a claim that the entire requested rewrite is complete.
 - Historical parallel ownership is not a list of currently running agents.
   Native tasks, timers and channels are complete for this bounded native slice
-  (5.12). Environment and file effects (5.13) are in final validation. The next
-  engine focus is descriptor readiness and TCP/UDP (5.14). Keep existing Poche
+  (5.12), as are environment and file effects (5.13). The next engine focus is
+  descriptor readiness and TCP/UDP (5.14). Keep existing Poche
   checks as regressions and defer model expansion.
 
 ## Goal wording and scope
@@ -995,7 +995,12 @@ Descriptor readiness, arbitrary native foreign callbacks, remaining platform
 effects, executable C and the remaining CLI/kernel/GPU scope stay open. This
 finishes the native task/timer/channel milestone, not the overall rewrite.
 
-### [~] 5.13 Add native environment and file effects
+### [x] 5.13 Add native environment and file effects
+
+Implementation: ac4a9e5. Its retained clean release matches all 91 compiled-source
+fingerprints from the frozen, audited candidate. The following documentation-only
+closure preserves those source fingerprints; retain its clean release and refresh
+the short Poche receipts before pushing it.
 
 IO.get_env and File.open/read/read_bytes/write/close are implemented in native
 Rust and generated executable JavaScript. Exact signatures and loader origin
@@ -1039,15 +1044,23 @@ All 256 integer comparisons and 21 original Image workloads pass. The strict
 1,302-fixture audit remains 362 accepted positives / 491 rejected positives /
 449 rejected negatives, with no accepted negatives, crashes, changed source
 fingerprints or new rejections. This audit does not measure whole-engine
-completeness. Clean release and short Poche regressions remain the publication
-gate. Candidate source fingerprinting covers 91 files. Ignored
+completeness. Candidate source fingerprinting covers 91 files. Ignored
 evidence lives under target/audit-native-files, target/native-files-c-oracle,
 target/native-files-release-comparison, target/packed-word-native-files and
 target/image-native-files. Retained clean releases use target/verified-<commit>.
 
-Completion: publish the validated engine slice with an unchanged Poche source
-snapshot. Descriptor readiness, other platform effects, arbitrary native FFI,
-executable C and GPU remain unfinished engine work.
+The clean ac4a9e5 release passes the unchanged Poche regression gates: seven
+symbolic privacy theorems, three imported equalities and one well-typed rejected
+mutant; 15,503 scalar cases with seven equalities and two negative controls; and
+the 22-state/21-transition trajectory with 44 observations, all 300 chance
+partitions, eight controls and 67 requests. All 17 source hashes, 13 compiled
+conformance fingerprints, Poche HEAD and dirty paths are unchanged. Receipts are
+retained in target/verified-ac4a9e5/poche-regression.json. This does not rerun or
+reattribute the prior exhaustive graph evidence from 6802c1e.
+
+This completes the bounded environment/file milestone. Descriptor readiness,
+other platform effects, arbitrary native FFI, executable C and GPU remain
+unfinished engine work. The overall goal stays active.
 
 ### [ ] 5.14 Add native descriptor readiness and TCP/UDP
 
