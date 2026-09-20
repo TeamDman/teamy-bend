@@ -113,7 +113,9 @@ impl Marks<'_> {
                 self.thunk(*arm)?;
                 self.thunk(*fallback)?;
             }
-            Value::Foreign { arguments, .. } | Value::Numeric { arguments, .. } => {
+            Value::Foreign { arguments, .. }
+            | Value::Numeric { arguments, .. }
+            | Value::Natural { arguments, .. } => {
                 for id in arguments {
                     self.thunk(*id)?;
                 }
@@ -128,7 +130,8 @@ impl Marks<'_> {
                 }
                 self.thunk(*continuation)?;
             }
-            Value::PackedWord { .. }
+            Value::PackedNat(_)
+            | Value::PackedWord { .. }
             | Value::PackedBits { .. }
             | Value::EmitContinuation
             | Value::Impossible
@@ -141,6 +144,7 @@ impl Marks<'_> {
         match frame {
             Frame::Update(id) | Frame::Apply(id) => self.thunk(*id)?,
             Frame::Numeric(frame) => frame.visit_roots(|id| self.thunk(id))?,
+            Frame::Natural(frame) => frame.visit_roots(|id| self.thunk(id))?,
             Frame::Match {
                 arm,
                 fallback,
@@ -216,6 +220,7 @@ impl Machine<'_> {
         for id in self.globals.values().chain(self.gc.roots.iter()) {
             marks.thunk(*id)?;
         }
+        self.scheduler.visit_roots(|id| marks.thunk(id))?;
         while let Some(node) = marks.pending.pop() {
             marks.charge()?;
             match node {

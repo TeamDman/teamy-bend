@@ -588,14 +588,14 @@ def io_now() -> IO(Nat): import "now.js"
 }
 
 #[test]
-fn native_scheduler_refusal_precedes_arity_and_console_payload_decoding() {
-    for (name, body) in [
+fn bundled_scheduler_contracts_execute_without_console_payload_decoding() {
+    for (body, expected) in [
         (
-            "IO.spawn",
-            r#"def main() -> IO(Unit): IO.spawn(Unit, IO.print("child must not run"))"#,
+            r#"def main() -> IO(Unit): IO.spawn(Unit, IO.print("child"))"#,
+            "child\n",
         ),
-        ("IO.sleep", "def main() -> IO(Unit): IO.sleep(1)"),
-        ("IO.now", "def main() -> IO(Nat): IO.now()"),
+        ("def main() -> IO(Unit): IO.sleep(1)", ""),
+        ("def main() -> IO(Nat): IO.now()", ""),
     ] {
         let fixture = Fixture::new();
         let path = fixture.write("main.bend", &format!("import Base\n{body}\n"));
@@ -603,15 +603,12 @@ fn native_scheduler_refusal_precedes_arity_and_console_payload_decoding() {
             check_executable(&load_executable(path).unwrap()).expect("scheduler action checks");
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let error = checked
+        let status = checked
             .run_main(&mut stdout, &mut stderr, &|| false)
-            .expect_err("native scheduling remains explicitly unavailable")
-            .to_string();
-        assert!(
-            error.contains(&format!("scheduler builtin {name}")),
-            "{error}"
-        );
-        assert!(stdout.is_empty() && stderr.is_empty());
+            .expect("bundled native scheduler contract executes");
+        assert_eq!(status, 0);
+        assert_eq!(stdout, expected.as_bytes());
+        assert!(stderr.is_empty());
     }
 }
 

@@ -2,3 +2,5 @@
 /tracy/
 ignore
 *.tracy
+# Machine-specific reference locations and private handoff notes.
+/.local/

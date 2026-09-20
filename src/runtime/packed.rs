@@ -184,6 +184,15 @@ impl Machine<'_> {
     ) -> Result<(String, Vec<ThunkId>), KernelError> {
         match value {
             Value::Constructor { name, fields } => Ok((name, fields)),
+            Value::PackedNat(value) => {
+                self.tick()?;
+                if value == 0 {
+                    Ok(("Zero".into(), vec![]))
+                } else {
+                    let tail = self.nat(value - 1)?;
+                    Ok(("Succ".into(), vec![tail]))
+                }
+            }
             Value::PackedWord { wrapper, bits } => {
                 self.tick()?;
                 let word = self.allocate(Thunk::Ready(Value::PackedBits { bits, width: 32 }))?;

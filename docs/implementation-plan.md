@@ -3,7 +3,7 @@
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
 **Last updated:** 2026-09-20
-**Intent audit:** Passed 2026-09-19 against the initiating user request
+**Intent audit:** Updated 2026-09-20 against the original request and available scope/GPU follow-ups
 
 ## How to update this plan
 
@@ -12,9 +12,33 @@
   complete only when all its work is complete.
 - Preserve the requirements ledger. Do not convert a first supported subset
   into a claim that the entire requested rewrite is complete.
-- Parallel tracks: kernel agent owns `src/kernel`; parser agent owns
-  `src/syntax`; Poche agent owns the target project's Bend integration;
-  root owns CLI, repository setup, validation and publication.
+- Historical parallel ownership is not a list of currently running agents.
+  The current implementation focus is native runtime scheduling
+  (5.12). Keep existing Poche checks as regression coverage; defer model
+  expansion while engine compatibility is the priority.
+
+## Goal wording and scope
+
+The user resumed the goal with the following wording on 2026-09-20. It preserves
+the original intent and makes engine priority and later GPU references explicit:
+
+> Complete teamy-bend, the public Rust port of Bend2 created with gh from
+> teamy-rust-cli, using MPL-2.0 where compatible with upstream licensing.
+> Prioritize the checker, parser, compiler and CPU/GPU runtimes, validated against
+> upstream behavior. Use the port to formalize Poche4's rules and state model with
+> explicit proof boundaries and validation, preserving its existing application
+> architecture. During the GPU phase, evaluate the Makepad and teamy-tts
+> strategies recorded in this plan.
+
+The user's concern is scope drift into rebuilding Poche or Bevy. Engine parity
+remains the main unfinished work. Existing bounded Poche evidence is useful
+validation, not a claim of whole-game/application correctness and not a silent
+redefinition of the final requested formalization. Resolve any additional
+formalization acceptance scope before declaring the overall goal complete.
+
+The goal tool now reports active. When GPU work becomes the active phase, read
+[GPU port references](gpu-port-references.md); exact local checkout locations are
+in the ignored `.local/gpu-port-references.md` file at the repository root.
 
 ## Authoritative guidance ledger
 
@@ -29,6 +53,10 @@
 | U7 | Then use the rewrite to formalize the user's Poche4 repo. | 4.1–4.3 |
 | U8 | Locate Poche4 at the approximate older games-repository path. | 1.1 |
 | U9 | Set an active goal for this work. | Goal tool, done |
+| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12; existing Poche regression coverage |
+| U11 | Makepad strategies identified by the user as Rik Arends's work may help the later Bend GPU port. | GPU port references; 3.4, evaluation deferred to GPU phase |
+| U12 | The user reports those strategies improved teamy-tts; retain it as a second implementation reference. | GPU port references; user-reported provenance distinguished from inspected source |
+| U13 | Persist both local reference paths and their purpose across compaction; assess current goal wording. | Ignored local reference note; portable GPU reference document; accepted wording above |
 
 ## Intent audit evidence
 
@@ -40,7 +68,24 @@
 - Adversarial omission: retained the licence condition, uncertainty in repo
   names, and the requirement to use our implementation in Poche. Existing
   Poche formalization is foundation, not grounds to omit the integration.
-- Known source limitation: none.
+- Follow-up extraction pass (2026-09-20): reread the available original request,
+  scope/progress questions and GPU-reference message. Added U10-U13, preserving
+  both named checkouts, the reported Makepad-to-teamy-tts relationship, the
+  qualifiers "may be useful" and "when it's time", and the request for durable
+  notes and a wording assessment.
+- Follow-up traceability pass: U10 maps to the current engine milestone and
+  Poche regression boundary; U11-U12 map to deferred GPU evaluation; U13 maps to
+  the portable reference document, exact ignored local paths and proposed goal
+  wording. U1-U9 remain unchanged.
+- Follow-up adversarial omission pass: no immediate GPU implementation, mandated
+  Makepad dependency, imported UI framework, guaranteed speedup or reduced
+  formalization scope was inferred. The recommendation does not change the
+  recorded goal. Local paths remain untracked.
+- The subsequent goal continuation adopts the recommended wording and resumes
+  implementation; U1-U13 and their existing acceptance boundaries remain intact.
+- Known source limitation: intervening implementation conversations have been
+  compacted; their existing ledger and completion evidence are retained. The
+  original request and the current scope/GPU follow-ups are available directly.
 
 ## Verified foundation and references
 
@@ -311,6 +356,30 @@ fixtures, request-versus-constructor rejection, forged-origin tests, marshalling
 and callback behavior, plus unchanged strict proof and Poche protocol tests.
 Completion: the full documented effect/interface inventory executes through
 Rust implementations and Rust-generated backends with observed compatibility.
+
+### [ ] 3.4 Evaluate Makepad and teamy-tts strategies during the GPU port
+
+This is a deferred reference/decision task within the existing GPU scope, not
+the next implementation milestone. Start with
+[GPU port references](gpu-port-references.md) and its local checkout map.
+
+Work: compare the original Bend2 offload/compiler/runtime requirements with the
+reference approaches to device residency, transfer/synchronization boundaries,
+buffer reuse, batching and workload-specific kernels. Decide which mechanisms
+fit Bend's semantics and target hardware before introducing an implementation
+dependency. Record relevant source revisions and provenance for any reuse.
+
+Validation: preserve upstream outputs and ownership/effect behavior; measure
+representative Bend workloads in release builds with hardware, cold/warm timing,
+transfer and synchronization costs recorded. Any CPU/GPU numerical difference
+must have a documented semantic justification. A reported TTS improvement is
+not evidence of a Bend improvement; unavailable targets stay explicitly
+unverified.
+
+Completion: the GPU design records evaluated references, adopted or rejected
+mechanisms with reasons, and actual compatibility/performance evidence. Existing
+CPU/runtime work and Poche application architecture are not expanded by this
+reference task.
 
 ## 4. Poche formalization using this rewrite
 
@@ -856,9 +925,40 @@ compact-word release. Poche changes remain local; exhaustive graph evidence
 retains its original `6802c1e` attribution. The Image workload milestone is
 complete; full Bend parity remains required and the broad goal stays active.
 
-### [ ] 5.12 Add native cooperative tasks, timers and channels
+### [~] 5.12 Add native cooperative tasks, timers and channels
 
-Start with FIFO spawn/timer scheduling. Preserve run-until-suspension behavior,
+Native FIFO tasks and timers are implemented and validated on Windows.
+The clock uses OS monotonic nanoseconds (Windows performance counter; Unix
+CLOCK_MONOTONIC), retaining its origin across invocations. IO.now returns elapsed
+milliseconds as executable-only compact Nat, with the upstream native 48-bit
+Nat bound and lazy constructor views. Queues/timers are owned and traced by the
+Machine; host waits are capped at 100 ms between cancellation checks without
+charging idle time against the evaluation budget. Unix clock code remains
+unverified on Unix hardware. Native channels are the next implementation slice;
+5.12 stays in progress until that work and its acceptance are complete.
+
+Validation: the full quality gate passes 391 tests including five compile-fail
+examples, with two optional local profilers ignored. Strict Clippy covers the
+library and tests. Eleven Nat tests cover exact dependency guards, alpha-renaming,
+48-bit bounds, source-order/lazy fallback, output limits and collection. Nine
+checked-program scheduler tests and nine private clock/collection tests cover
+ordering, large clock origins, sub-millisecond flooring, cross-invocation clock
+continuity, output flushing, cancellation and a 10,000-poll idle wait.
+
+The frozen release candidate matches all 13 scheduler programs (including five
+unchanged upstream fixtures), with 26 actual upstream JavaScript runs across two
+clock origins as the independent comparison. All 256 integer arithmetic cases
+and 21 original Image workloads still pass. The complete 1,302-fixture strict
+audit remains 362 accepted positives / 491 rejected positives / 449 rejected
+negatives, with zero accepted negatives, abnormal exits or new rejections.
+Candidate sources are fingerprinted under ignored `target/audit-native-scheduler/`;
+comparison receipts are in `target/native-scheduler-release-comparison/`,
+`target/native-scheduler-integer-comparison/` and `target/image-native-scheduler/`.
+Retained clean builds and short Poche regression receipts belong under the
+existing `target/verified-<commit>/` convention; the earlier exhaustive graph
+retains its original attribution. The broad rewrite remains incomplete.
+
+The implemented scheduler preserves run-until-suspension behavior,
 children outliving main, ready tasks before zero timers, registration order for
 overdue timers, any-task Halt cancellation and deadlock reporting. Keep scheduler
 queues and waits on the Machine and trace their roots directly; a caller-root
@@ -885,7 +985,7 @@ quality gate, strict audit and retained-release Poche checks for each publicatio
 
 ## Completion and risks
 
-The goal is complete only when U1–U9 are delivered and no required rewrite or
+The goal is complete only when U1–U13 are delivered and no required rewrite or
 formalization work remains. A scaffold or supported language subset is progress.
 Proof soundness risk is controlled by preserving erasure/resource/descent rules,
 rejecting unsupported constructs and testing false proofs. Model correspondence

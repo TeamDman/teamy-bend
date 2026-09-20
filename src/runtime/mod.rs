@@ -17,8 +17,11 @@ use std::rc::Rc;
 
 mod executable;
 mod gc;
+mod nat;
 mod numeric;
 mod packed;
+mod runtime_clock;
+mod scheduler;
 
 type ThunkId = usize;
 type EnvId = usize;
@@ -36,6 +39,7 @@ pub(crate) struct Program {
     foreign: Rc<BTreeMap<String, ForeignDefinition>>,
     numeric: Rc<BTreeMap<String, NumericIntrinsic>>,
     optimizations: Rc<BTreeSet<numeric::PureOptimization>>,
+    nat_optimizations: Rc<BTreeSet<nat::Operation>>,
     packed: bool,
 }
 
@@ -80,6 +84,7 @@ impl Program {
             foreign: Rc::new(BTreeMap::new()),
             numeric: Rc::new(BTreeMap::new()),
             optimizations: Rc::new(BTreeSet::new()),
+            nat_optimizations: Rc::new(BTreeSet::new()),
             packed: false,
         }
     }
@@ -97,6 +102,7 @@ impl Program {
 
 #[derive(Clone)]
 enum Value {
+    PackedNat(u64),
     PackedWord {
         wrapper: packed::Wrapper,
         bits: u32,
@@ -127,6 +133,10 @@ enum Value {
         operation: numeric::NumericOperation,
         arguments: Vec<ThunkId>,
     },
+    Natural {
+        operation: nat::Operation,
+        arguments: Vec<ThunkId>,
+    },
     Request {
         name: String,
         arguments: Vec<ThunkId>,
@@ -154,6 +164,7 @@ enum Frame {
     Update(ThunkId),
     Apply(ThunkId),
     Numeric(numeric::NumericFrame),
+    Natural(nat::Evaluation),
     Match {
         constructor: String,
         arm: ThunkId,
@@ -167,6 +178,7 @@ struct Machine<'program> {
     arena: Vec<Option<Thunk>>,
     environments: Vec<Option<Environment>>,
     gc: gc::State,
+    scheduler: scheduler::State,
     #[cfg(test)]
     gc_mode: gc::Mode,
     globals: BTreeMap<String, ThunkId>,
@@ -185,6 +197,7 @@ impl<'program> Machine<'program> {
                 bindings: Vec::new(),
             })],
             gc: gc::State::default(),
+            scheduler: scheduler::State::default(),
             #[cfg(test)]
             gc_mode: gc::Mode::Automatic,
             globals: BTreeMap::new(),
@@ -238,6 +251,16 @@ impl<'program> Machine<'program> {
         {
             self.allocate(Thunk::Ready(Value::Numeric {
                 operation: numeric::NumericOperation::Optimized(*optimization),
+                arguments: Vec::new(),
+            }))?
+        } else if let Some(operation) = self
+            .program
+            .nat_optimizations
+            .iter()
+            .find(|operation| operation.name() == name)
+        {
+            self.allocate(Thunk::Ready(Value::Natural {
+                operation: *operation,
                 arguments: Vec::new(),
             }))?
         } else if self.program.foreign.contains_key(name) {
@@ -367,7 +390,9 @@ impl<'program> Machine<'program> {
                             if let Some(value) = self
                                 .program
                                 .packed
-                                .then(|| packed::literal(name, args))
+                                .then(|| {
+                                    packed::literal(name, args).or_else(|| nat::literal(name, args))
+                                })
                                 .flatten()
                             {
                                 value
@@ -434,6 +459,10 @@ impl<'program> Machine<'program> {
                         current = self.numeric_step(frame, value, &mut frames)?;
                         continue 'evaluate;
                     }
+                    Some(Frame::Natural(frame)) => {
+                        current = self.nat_step(frame, value, &mut frames)?;
+                        continue 'evaluate;
+                    }
                     Some(Frame::Apply(argument)) => match value {
                         Value::Closure {
                             binder,
@@ -477,6 +506,14 @@ impl<'program> Machine<'program> {
                         } => {
                             current =
                                 self.apply_numeric(operation, arguments, argument, &mut frames)?;
+                            continue 'evaluate;
+                        }
+                        Value::Natural {
+                            operation,
+                            arguments,
+                        } => {
+                            current =
+                                self.apply_nat(operation, arguments, argument, &mut frames)?;
                             continue 'evaluate;
                         }
                         Value::EmitContinuation => {
@@ -525,6 +562,7 @@ impl<'program> Machine<'program> {
         self.output_nodes += 1;
         match self.force(thunk)? {
             value @ (Value::Constructor { .. }
+            | Value::PackedNat(_)
             | Value::PackedWord { .. }
             | Value::PackedBits { .. }) => {
                 let (name, fields) = self.constructor_value(value)?;
@@ -548,6 +586,7 @@ impl<'program> Machine<'program> {
             | Value::Match { .. }
             | Value::Foreign { .. }
             | Value::Numeric { .. }
+            | Value::Natural { .. }
             | Value::EmitContinuation
             | Value::Impossible => Err(KernelError::new("data runtime result contains a function")),
         }

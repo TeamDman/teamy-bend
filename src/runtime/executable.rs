@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Console execution of checked executable contracts. Requests remain private
+//! Native execution of checked executable contracts. Requests remain private
 //! machine values and are never reduced or accepted by the proof kernel.
 
 use super::Machine;
@@ -8,6 +8,10 @@ use super::Thunk;
 use super::ThunkId;
 use super::Value;
 use super::packed::Wrapper;
+use super::runtime_clock::Clock;
+use super::runtime_clock::MAX_WAIT_NANOS;
+use super::runtime_clock::NANOS_PER_MILLI;
+use super::runtime_clock::SystemClock;
 use crate::kernel::AdtDecl;
 use crate::kernel::DefDecl;
 use crate::kernel::KernelError;
@@ -21,6 +25,15 @@ use std::io::Write;
 use std::rc::Rc;
 
 pub(super) const TEXT_BYTES: usize = 8 * 1024 * 1024;
+
+#[cfg(test)]
+mod scheduler_tests;
+
+enum TaskOutcome {
+    Complete,
+    Parked,
+    Halt(u32),
+}
 
 impl Program {
     pub(crate) fn from_executable(
@@ -40,6 +53,11 @@ impl Program {
                 base_names,
             )),
             packed: super::packed::checked_layouts(datatypes, base_names),
+            nat_optimizations: Rc::new(super::nat::checked_optimizations(
+                definitions,
+                datatypes,
+                base_names,
+            )),
         }
     }
 
@@ -54,31 +72,108 @@ impl Program {
         machine.cancelled = Some(cancelled);
         machine.tick()?;
         let entry = machine.reference(name)?;
-        // IO(A) keeps its erased R lambda in this machine. The driver supplies
-        // an erased value followed by the terminal continuation; it never
-        // manufactures a kernel proof or evaluates the result as evidence.
-        let result_type = machine.allocate(Thunk::Ready(Value::Erased))?;
-        let continuation = machine.allocate(Thunk::Ready(Value::EmitContinuation))?;
-        let action = machine.allocate(Thunk::Application(entry, result_type))?;
-        let current = machine.allocate(Thunk::Application(action, continuation))?;
+        let current = machine.io_action(entry)?;
         machine.drive_io(current, stdout, stderr)
     }
 }
 
 impl Machine<'_> {
+    fn io_action(&mut self, entry: ThunkId) -> Result<ThunkId, KernelError> {
+        // IO(A) retains its erased R lambda. Supply erased R and an Emit
+        // continuation without manufacturing proof evidence or forcing payloads.
+        let result_type = self.allocate(Thunk::Ready(Value::Erased))?;
+        let continuation = self.allocate(Thunk::Ready(Value::EmitContinuation))?;
+        let action = self.allocate(Thunk::Application(entry, result_type))?;
+        self.allocate(Thunk::Application(action, continuation))
+    }
+
     fn drive_io(
+        &mut self,
+        current: ThunkId,
+        stdout: &mut dyn Write,
+        stderr: &mut dyn Write,
+    ) -> Result<u32, KernelError> {
+        self.drive_io_with_clock(current, stdout, stderr, &mut SystemClock)
+    }
+
+    fn drive_io_with_clock(
+        &mut self,
+        current: ThunkId,
+        stdout: &mut dyn Write,
+        stderr: &mut dyn Write,
+        clock: &mut dyn Clock,
+    ) -> Result<u32, KernelError> {
+        self.scheduler.spawn(current)?;
+        let result = self.drive_tasks(stdout, stderr, clock);
+        // Halt, cancellation and failures discard every remaining task/timer.
+        self.scheduler = super::scheduler::State::default();
+        result
+    }
+
+    fn drive_tasks(
+        &mut self,
+        stdout: &mut dyn Write,
+        stderr: &mut dyn Write,
+        clock: &mut dyn Clock,
+    ) -> Result<u32, KernelError> {
+        loop {
+            self.tick()?;
+            if let Some(current) = self.scheduler.next() {
+                match self.run_task(current, stdout, stderr, clock)? {
+                    TaskOutcome::Complete => self.scheduler.complete()?,
+                    TaskOutcome::Parked => {}
+                    TaskOutcome::Halt(code) => return Ok(code),
+                }
+                continue;
+            }
+            if self.scheduler.finished() {
+                self.flush(stdout, "stdout")?;
+                return Ok(0);
+            }
+            self.wait_for_task(stdout, clock)?;
+        }
+    }
+
+    fn wait_for_task(
+        &mut self,
+        stdout: &mut dyn Write,
+        clock: &mut dyn Clock,
+    ) -> Result<(), KernelError> {
+        // Upstream flushes before entering its poller, including zero-time
+        // waits. Buffered output must be visible while every task is parked.
+        self.flush(stdout, "stdout")?;
+        loop {
+            // Waiting does not consume evaluation steps. In particular, the
+            // full U32 sleep range must not exhaust the budget merely because
+            // the host adapter polls cancellation every 100 milliseconds.
+            if self.cancelled.is_some_and(|cancelled| cancelled()) {
+                return Err(KernelError::new("execution cancelled"));
+            }
+            let now = clock.now()?;
+            self.scheduler.wake(now);
+            if self.scheduler.has_ready() {
+                return Ok(());
+            }
+            let deadline = self.scheduler.next_deadline().ok_or_else(|| {
+                KernelError::new("native IO scheduler deadlock: no runnable task or timer")
+            })?;
+            clock.wait(deadline.saturating_sub(now).min(MAX_WAIT_NANOS))?;
+        }
+    }
+
+    fn run_task(
         &mut self,
         mut current: ThunkId,
         stdout: &mut dyn Write,
         stderr: &mut dyn Write,
-    ) -> Result<u32, KernelError> {
+        clock: &mut dyn Clock,
+    ) -> Result<TaskOutcome, KernelError> {
         loop {
             self.tick()?;
             match self.force(current)? {
                 Value::Constructor { name, fields } if name == "Emit" && fields.len() == 1 => {
                     // Successful IO discards its result, including IO(U32).
-                    self.flush(stdout, "stdout")?;
-                    return Ok(0);
+                    return Ok(TaskOutcome::Complete);
                 }
                 Value::Constructor { name, fields } if name == "Halt" && fields.len() == 2 => {
                     let (code, message) = self.with_roots(&fields, |machine| {
@@ -90,7 +185,7 @@ impl Machine<'_> {
                     self.write_bytes(stderr, &message, "stderr")?;
                     self.write_bytes(stderr, b"\n", "stderr")?;
                     self.flush(stderr, "stderr")?;
-                    return Ok(code);
+                    return Ok(TaskOutcome::Halt(code));
                 }
                 Value::Request {
                     name,
@@ -99,14 +194,75 @@ impl Machine<'_> {
                 } => {
                     let mut roots = arguments.clone();
                     roots.push(continuation);
-                    current = self.with_roots(&roots, |machine| {
-                        let answer = machine.console_request(&name, &arguments, stdout, stderr)?;
-                        machine.allocate(Thunk::Application(continuation, answer))
+                    let next = self.with_roots(&roots, |machine| {
+                        machine.io_request(&name, &arguments, continuation, stdout, stderr, clock)
                     })?;
+                    if let Some(next) = next {
+                        current = next;
+                    } else {
+                        return Ok(TaskOutcome::Parked);
+                    }
                 }
                 _ => return Err(KernelError::new("main did not produce an IO operation")),
             }
         }
+    }
+
+    fn unit(&mut self) -> Result<ThunkId, KernelError> {
+        self.allocate(Thunk::Ready(Value::Constructor {
+            name: "Unit".into(),
+            fields: Vec::new(),
+        }))
+    }
+
+    fn io_request(
+        &mut self,
+        name: &str,
+        arguments: &[ThunkId],
+        continuation: ThunkId,
+        stdout: &mut dyn Write,
+        stderr: &mut dyn Write,
+        clock: &mut dyn Clock,
+    ) -> Result<Option<ThunkId>, KernelError> {
+        let builtin = self
+            .program
+            .foreign
+            .get(name)
+            .and_then(|foreign| foreign.builtin);
+        let answer = match builtin {
+            Some(BuiltinForeign::Spawn) => {
+                let [_, action] = arguments else {
+                    return Err(KernelError::new("spawn request has an invalid arity"));
+                };
+                let action = self.io_action(*action)?;
+                self.scheduler.spawn(action)?;
+                self.unit()?
+            }
+            Some(BuiltinForeign::Sleep) => {
+                let [milliseconds] = arguments else {
+                    return Err(KernelError::new("sleep request has an invalid arity"));
+                };
+                let milliseconds = self.read_u32(*milliseconds)?;
+                let deadline = clock
+                    .now()?
+                    .checked_add(u64::from(milliseconds) * NANOS_PER_MILLI)
+                    .ok_or_else(|| KernelError::new("native timer deadline overflow"))?;
+                let unit = self.unit()?;
+                let action = self.allocate(Thunk::Application(continuation, unit))?;
+                self.scheduler.sleep(deadline, action)?;
+                return Ok(None);
+            }
+            Some(BuiltinForeign::Now) => {
+                if !arguments.is_empty() {
+                    return Err(KernelError::new("clock request has an invalid arity"));
+                }
+                self.nat(clock.now()? / NANOS_PER_MILLI)?
+            }
+            _ => self.console_request(name, arguments, stdout, stderr)?,
+        };
+        Ok(Some(
+            self.allocate(Thunk::Application(continuation, answer))?,
+        ))
     }
 
     pub(super) fn apply_foreign(
@@ -158,7 +314,7 @@ impl Machine<'_> {
         match builtin {
             BuiltinForeign::Spawn | BuiltinForeign::Sleep | BuiltinForeign::Now => {
                 return Err(KernelError::new(format!(
-                    "native execution does not support the scheduler builtin {name}; compile to executable JavaScript"
+                    "scheduler builtin {name} reached console-only dispatch"
                 )));
             }
             BuiltinForeign::ChanNew
@@ -200,7 +356,9 @@ impl Machine<'_> {
     fn console_constructor(&mut self, value: Value) -> Result<(String, Vec<ThunkId>), KernelError> {
         match value {
             Value::Constructor { name, fields } => Ok((name, fields)),
-            Value::PackedWord { .. } | Value::PackedBits { .. } => self.constructor_value(value),
+            Value::PackedWord { .. } | Value::PackedBits { .. } | Value::PackedNat(_) => {
+                self.constructor_value(value)
+            }
             Value::Request { .. } => Err(KernelError::new(
                 "runtime fail-stop: a foreign effect request escaped the IO driver",
             )),

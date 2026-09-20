@@ -492,7 +492,11 @@ impl Machine<'_> {
         self.numeric_word_value(operation.output_type(), result)
     }
 
-    fn numeric_word_value(&mut self, wrapper: &str, result: u32) -> Result<ThunkId, KernelError> {
+    pub(super) fn numeric_word_value(
+        &mut self,
+        wrapper: &str,
+        result: u32,
+    ) -> Result<ThunkId, KernelError> {
         if self.program.packed {
             let wrapper = Wrapper::from_name(wrapper)
                 .ok_or_else(|| KernelError::new("numeric result has an invalid wrapper"))?;
@@ -516,7 +520,7 @@ impl Machine<'_> {
         self.ready_constructor(wrapper, vec![word])
     }
 
-    fn ready_constructor(
+    pub(super) fn ready_constructor(
         &mut self,
         name: &str,
         fields: Vec<ThunkId>,

@@ -35,7 +35,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   when instantiated, so check-report counts differ from source-form counts.
 
 GPU calls, hub fetch/publish, host readiness, most non-console Base effects,
-large native Nat values, optimized C and GPU
+general large native Nat computation, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
 supports [all 37 numeric primitive contracts](numeric-execution.md), also implemented
@@ -81,7 +81,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-native Rust scheduling/channels, file/network/window/audio Base effects and unsafe execution remain
+native Rust channels, file/network/window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -92,8 +92,25 @@ synchronous waits; JavaScript event-loop callbacks and promises are not pumped.
 Channels support buffered and zero-capacity transfer, closure and ordinary
 fork/join. A separately sealed opaque Chan family grants executable handle
 types; strict checking still rejects that unfilled law. List.for_each executes
-callbacks sequentially. Descriptor readiness remains unsupported. Native `run` explicitly
-rejects these scheduler contracts before invoking their arguments.
+callbacks sequentially. Descriptor readiness remains unsupported.
+
+Native `run` supports IO.spawn, IO.sleep and IO.now with cooperative FIFO tasks.
+Spawn continues its parent; sleeping yields even for zero milliseconds; ready
+tasks run before timers and all overdue timers resume in registration order.
+Children outlive main. Halt, cancellation and errors discard remaining tasks.
+Task/timer roots participate directly in the native garbage collector. Native
+channels and arbitrary foreign callbacks remain unfinished.
+
+Native IO.now retains the OS monotonic clock origin: Windows performance-counter
+nanoseconds or Unix CLOCK_MONOTONIC, floored to milliseconds. It is not rebased
+per invocation or narrowed to U32. Waiting polls cancellation at intervals of at
+most 100 ms without charging evaluation steps for idle time. Compact executable
+Nat values support these timestamps up to the reference native 48-bit bound;
+subtraction, comparison, decimal display and U32 conversions have guarded fast
+paths. Ordinary constructor matching remains available, and proof normalization
+and output limits are unchanged. This does not establish general large-Nat
+arithmetic parity. Platform clock validation currently covers Windows; the
+Unix adapter still needs execution on a Unix host.
 
 App.more/fold/play run through native IO and executable JavaScript. Finite
 playback consumes frames in order, preserves affine state, stops at None or
@@ -157,13 +174,20 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The current full quality gate passes 357 tests, including five compile-fail
+The current full quality gate passes 391 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has
 separate actual-output comparisons in
 [executable JavaScript](executable-javascript.md) and
 [numeric execution](numeric-execution.md); the strict audit does not test it.
+
+Native scheduler validation includes nine checked-program tests, nine private
+virtual-clock/collection tests, and 13 complete programs matched against actual
+upstream generated JavaScript. The upstream comparison runs each program with
+two clock origins, including one above U32. All 256 integer comparisons and 21
+Image workloads continue to pass. Native arbitrary FFI, channels and readiness
+remain unsupported; this evidence does not establish those features.
 
 The latest pure-library comparison matches 19 complete programs against upstream.
 The unchanged `base/string_kit.bend` and `base/num_kit.bend` still hit the kernel

@@ -1475,6 +1475,7 @@ dependencies = [
  "facet-json",
  "facet-pretty",
  "figue",
+ "libc",
  "open",
  "teamy-cancellation",
  "tokio",

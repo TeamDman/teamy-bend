@@ -39,7 +39,11 @@ open = "5"
 windows = { version = "0.62.2", features = [
     "Win32_Globalization",
     "Win32_System_Console",
+    "Win32_System_Performance",
 ] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
 
 [features]
 default = []

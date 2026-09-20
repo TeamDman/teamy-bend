@@ -136,9 +136,26 @@ suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
 remaining work. The Node timer adapter retains the synchronous polling model.
 Generated JavaScript also supports the sealed opaque Chan family and four
 channel operations, with ordinary IO.fork/join and sequential List.for_each.
-The channel family remains absent from strict Base. Native Rust scheduling,
+The channel family remains absent from strict Base. Native Rust channels,
 descriptor readiness, remaining opaque handle families and window-backed App helpers are
 still required.
+
+Native Rust scheduling now uses Machine-owned FIFO tasks and timer queues whose
+continuations are traced by the collector. Synchronous effects run until a task
+parks or completes. Ready tasks precede timers; overdue timers preserve their
+registration order. Any Halt ends the invocation with its full u32 API status.
+The clock adapter uses OS monotonic nanoseconds and does not reset its origin
+between invocations. IO.now exposes integer milliseconds through compact Nat.
+The 100 ms cancellation polling interval bounds each host wait; idle polls do
+not consume evaluation steps. Flush stdout before waiting, including sleep(0).
+Windows uses QueryPerformanceCounter; Unix uses CLOCK_MONOTONIC. The latter is
+source-implemented but awaits runtime validation on Unix.
+
+Private virtual clocks cover oversleep and out-of-order deadlines without
+flaky wall-time assertions. Forced-collection tests retain both spawned and
+sleeping continuations. Additional integration programs exercise the checked
+source path and compare with actual upstream generated JavaScript. These do not
+establish arbitrary native FFI, descriptor readiness or channel support.
 
 Finite App.more/fold/play and its App datatype are now ordinary executable
 Base definitions. They run scripted Event frames through tick with affine state

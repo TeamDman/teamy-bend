@@ -121,6 +121,16 @@ representation limits explicitly; they are not reported as invalid input to
 simulate a smaller accepted range. The ordinary Word/U32 addition commutativity
 proof is now included and checked by structural induction.
 
+Executable-only compact Nat now supports monotonic timestamps without unary
+allocation. Values retain the reference native 48-bit bound and expose ordinary
+Zero/Succ views on demand. Guarded fast paths cover Nat.sub, Nat.cmp, Nat.show,
+U32.from_nat and U32.to_nat; they require loader-sealed origins and exact checked
+bodies and transitive dependencies, modulo binder identities. Other bodies and
+partially known arguments retain ordinary lazy evaluation. Strict proof/data
+normalization does not use these fast paths, and materialized unary output still
+obeys the original depth/node limits. General large-Nat arithmetic and reading
+remain unfinished; this is not a claim of complete native Nat parity.
+
 Remaining work includes native surface printing, executable C,
-large native Nat representation and structural word-pattern limits. There is
+general large native Nat computation and structural word-pattern limits. There is
 no separate signed integer language family in this reference revision.
