@@ -475,3 +475,36 @@ def main() -> List<Nat> & Nat:
     );
     assert_matches(&book, "main");
 }
+
+#[test]
+fn compiled_images_and_events_preserve_nested_data_and_field_order() {
+    let book = parse(&format!(
+        "{}\n{}",
+        include_str!("../src/syntax/base.bend"),
+        r"
+type GraphicsReport is Data:
+  GraphicsReport{image: Image, events: List<&2, Event>, released: Unit}
+def turn(image: Image) -> Image:
+  match image:
+    case Pix{color}: Pix{color}
+    case Qua{tl, tr, bl, br}: Qua{br, bl, tr, tl}
+def main() -> GraphicsReport:
+  GraphicsReport{
+    turn(Qua{Pix{1}, Qua{Pix{2}, Pix{3}, Pix{4}, Pix{5}}, Pix{6}, Pix{7}}),
+    [Key{8, True{}}, Mouse{9, 10, 11, False{}}, Move{12, 13}, Close{}],
+    Image.drop(Qua{Pix{14}, Pix{15}, Pix{16}, Pix{17}})
+  }
+"
+    ))
+    .expect("bundled graphics values parse");
+    let expected = teamy_bend::syntax::parse_term(
+        "GraphicsReport{Qua{Pix{7}, Pix{6}, Qua{Pix{2}, Pix{3}, Pix{4}, Pix{5}}, Pix{1}}, [Key{8, True{}}, Mouse{9, 10, 11, False{}}, Move{12, 13}, Close{}], Unit{}}",
+    )
+    .unwrap();
+    let checked = check_book(&book).expect("ordinary Image and Event definitions check");
+    assert_eq!(
+        checked.evaluate_data("main", &[]).unwrap().to_string(),
+        expected.to_string()
+    );
+    assert_matches(&book, "main");
+}

@@ -2468,3 +2468,38 @@ def Set.from_list.go(keys: List<&2, String>, s: Set()) -> Set():
 
 def Set.from_list(keys: List<&2, String>) -> Set():
   Set.from_list.go(keys, Set.new())
+
+type Image is Data:
+  Pix{color: U32}
+  Qua{tl: Image, tr: Image, bl: Image, br: Image}
+
+type Event is Data:
+  Key{code: U32, down: Bool}
+  Mouse{x: U32, y: U32, button: U32, down: Bool}
+  Move{x: U32, y: U32}
+  Close{}
+
+def Image.sink(img: Image) -> Unit:
+  Unit{}
+
+def Image.drop.join(a: Unit, b: Unit, c: Unit, d: Unit) -> Unit:
+  match a b c d:
+    case Unit{} Unit{} Unit{} Unit{}:
+      Unit{}
+
+# Forks k levels, then a dead parameter sinks the rest in one loop.
+def Image.free(+k: Nat, img: Image) -> Unit:
+  match k:
+    case 0n:
+      Image.sink(img)
+    case 1n+e:
+      match img:
+        case Pix{c}:
+          Unit{}
+        case Qua{tl, tr, bl, br}:
+          a b c d = Image.free(e, tl) Image.free(e, tr) Image.free(e, bl)
+            Image.free(e, br)
+          Image.drop.join(a, b, c, d)
+
+def Image.drop(img: Image) -> Unit:
+  Image.free(7n, img)

@@ -299,3 +299,29 @@ def List.for_each(
       IO.pure(Unit, Unit{})
     case h <> t:
       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))
+
+type App<-S: Type> is Type:
+  App{view: S -> Pair(S, Image), tick: List<Event> -> S -> IO(Maybe<S>)}
+
+def App.more(-S: Type, rest: S -> IO(Maybe<S>), next: Maybe<S>) ->
+  IO(Maybe<S>):
+  match next:
+    case None{}:
+      IO.pure(Maybe<S>, None{})
+    case Some{state}:
+      rest(state)
+
+def App.fold(
+  -S: Type, app: App<S>, events: List<Event>, state: S,
+  rest: S -> IO(Maybe<S>)
+) -> IO(Maybe<S>):
+  App{view, tick} = app
+  IO.bind(Maybe<S>, Maybe<S>, tick(events, state), App.more(S, rest))
+
+def App.play(~S: Type, ~app: App<S>, frames: List<List<Event>>, state: S) ->
+  IO(Maybe<S>):
+  match frames:
+    case Nil{}:
+      IO.pure(Maybe<S>, Some{state})
+    case events <> rest:
+      App.fold(S, app, events, state, s => App.play(~S, ~app, rest, s))

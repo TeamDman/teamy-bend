@@ -11,8 +11,10 @@ and channels with fork/join.
 All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 361 selected pure source declarations, including
-18 templates. GPU, effects and complete library compatibility remain unfinished.
+The bundled Base contains 367 selected pure source declarations, including
+18 templates, Image quadtrees and Event values. Finite App playback runs through
+native console IO and generated JavaScript. GPU, effects and complete library
+compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).
@@ -37,6 +39,7 @@ cargo run -- compile --executable examples/tasks.bend --output target/tasks.cjs
 node target/tasks.cjs
 cargo run -- compile --executable examples/channels.bend --output target/channels.cjs
 node target/channels.cjs
+cargo run -- run examples/app-playback.bend
 ```
 
 `check` requires complete proofs for every ordinary law and checks ordinary
@@ -66,6 +69,12 @@ foreign source; running the generated program executes it with Node's host
 permissions. Channel values preserve the reference foreign interface; fork/join
 helpers use the same scheduler. Host readiness and executable C remain unfinished.
 See [executable JavaScript](docs/executable-javascript.md).
+
+`App.play` feeds finite lists of events through an App's tick callback and
+returns its final state, stopping when tick returns None or halts. It supports
+affine state and does not call the view callback or open a window. Image values
+and their ordinary drop helpers do not establish GPU execution or parallel
+memory reclamation. Interactive window-backed App helpers remain unfinished.
 
 `compile --target c` emits portable C11 with the same output format, lazy
 closures and checked proof erasure. Build the emitted file with a C11 compiler.

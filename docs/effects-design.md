@@ -137,8 +137,14 @@ remaining work. The Node timer adapter retains the synchronous polling model.
 Generated JavaScript also supports the sealed opaque Chan family and four
 channel operations, with ordinary IO.fork/join and sequential List.for_each.
 The channel family remains absent from strict Base. Native Rust scheduling,
-descriptor readiness, remaining opaque handle families and App helpers are
+descriptor readiness, remaining opaque handle families and window-backed App helpers are
 still required.
+
+Finite App.more/fold/play and its App datatype are now ordinary executable
+Base definitions. They run scripted Event frames through tick with affine state
+and do not need Window or invoke view. Image/Event values and ordinary Image
+cleanup helpers are checked in pure Base. Interactive App.turn still depends
+on GPU offload and Window contracts, which remain unfinished.
 
 Start actual-output regression testing with upstream `tests/io/hello_print`,
 `hello_end_to_end`, `print_write`, `print_utf8_law`, `halt_utf8_law`,

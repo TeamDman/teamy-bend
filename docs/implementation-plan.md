@@ -222,9 +222,9 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 361 selected pure source declarations are bundled
-with Apache attribution (318 definition forms including 18 templates, 25 laws,
-18 datatypes). Template instances enter the checked book at their call sites;
+Completion notes: 367 selected pure source declarations are bundled
+with Apache attribution (322 definition forms including 18 templates, 25 laws,
+20 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
 equality transport, lists, division, Word/U32 helpers and false claims. The
@@ -247,7 +247,7 @@ A wrapped-update/mapping fixture also agrees across the normalizer, native
 runtime, JavaScript and C. Existing array-write parser coverage now uses the
 real implementation instead of a temporary function stub.
 
-Remaining library work includes Image/App helpers, effects and foreign
+Remaining library work includes window-backed App helpers, effects and foreign
 implementation contracts. Representation or
 syntax support alone does not establish an operation's implementation.
 
@@ -262,10 +262,12 @@ see [numeric execution](numeric-execution.md).
 Bool.show, Maybe.show, the nine Set definitions and sequential List.for_each
 are implemented. Channels have a separate sealed executable-only opaque Chan
 contract, four JavaScript foreign operations and four ordinary IO.fork/join
-helpers. A declaration-name inventory still finds 13 ordinary definitions, 24
-foreign functions, five opaque laws and three datatypes absent from the union of
-pure and executable Base after the channel slice. Completing that inventory alone
-does not establish target, runtime or language parity.
+helpers. Image/Event and four ordinary Image helpers are implemented; executable
+Base adds App and finite more/fold/play helpers. A declaration-name inventory
+still finds six ordinary definitions, 24 foreign functions and five opaque laws
+absent from the union of pure and executable Base after the playback slice.
+Completing that inventory alone does not establish target, runtime or language
+parity.
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
 record unavailable hardware and platform-specific validations accurately.
@@ -692,20 +694,45 @@ fingerprints and 17 source fingerprints are unchanged from the timer release.
 Poche source changes remain local; the exhaustive graph is still attributed
 solely to `6802c1e`. Remaining U6 target/runtime/CLI work keeps the goal active.
 
-### [ ] 5.10 Add Image/Event values and finite App playback
+### [~] 5.10 Add Image/Event values and finite App playback
 
-Next scope: add the exact Image and Event datatypes with Image.sink, drop.join,
-free and drop to strict Base. These depend on existing Unit/Nat/U32/Bool and do
-not require a platform window driver. Add App and its more/fold/play helpers
-to executable Base, preserving affine state and closed template specialization.
-Read-only reconnaissance checks the Image subset and compiles an extracted
-App.play program; runtime compatibility remains to be implemented and verified.
+Implementation is complete: exact Image/Event datatypes and Image.sink,
+drop.join/free/drop in strict Base; exact App and more/fold/play in executable
+Base. These ten declarations introduce no kernel, compiler or runtime rule.
+Finite playback preserves affine state and closed template specialization,
+processes frames sequentially and stops at None/Halt without invoking view.
 
-Validation: strict finite Image equalities and resource-negative controls;
-actual-output comparisons for finite App.play and affine-state examples;
-empty-frame and early-stop behavior; complete quality gate, strict audit and
-retained-release Poche regressions. Window-dependent App helpers, opaque handles,
-remaining platform effects and all other unfinished U6 work remain separate.
+Five pure tests cover 20 checked equalities, 22 runtime values and seven rejection
+controls, including constructor order, reusable kinds, erased/affine ownership
+and descent. Eight native/JavaScript App tests cover all Event fields, callbacks,
+empty input, early stopping, unused view and captured/duplicated affine values.
+An explicitly invoked expensive view still reaches unchanged resource limits.
+The asymmetric Image/Event result matches its literal expected tree in native
+evaluation and agrees across normalization, generated JavaScript and compiled C.
+The public playback example prints Processed events: 3 on both executable targets.
+The full quality gate passes 313 tests with two optional profilers ignored;
+strict library/test Clippy and independent source/boundary reviews pass.
+Six JavaScript comparisons against independently generated upstream programs
+match stdout/stderr/status. Native execution matches four of five applicable
+programs; the large Image observation fails as detailed below. The arbitrary
+foreign callback observer is excluded only from native execution.
+
+An exact Image build/fold extraction from the upstream window fixture exposes
+a native compatibility gap: depth zero through two passes, but depth three
+(64 leaves) onward exhausts the thunk arena. Shape-only counting passes depth
+four but fails at five; following one path and forcing Image.free pass through
+depth six. All 21 reduction probes have upstream output oracles. Cumulative
+intermediate allocation is the likely cause; this is an inference awaiting
+runtime instrumentation. The depth-six JavaScript workload passes, while the
+native failure remains recorded without smaller-workload substitution or raised
+budgets. Completing the library names does not resolve this runtime work.
+
+The frozen candidate's complete 1,302-fixture strict audit has unchanged
+362 accepted positives, 491 rejected positives and 449 rejected negatives,
+with no accepted negatives, abnormal exits or changed source fingerprints.
+Publication and retained-release Poche regressions are pending.
+Window-dependent App helpers, opaque handles, remaining platform effects and
+all other unfinished U6 work remain required.
 
 ## Completion and risks
 

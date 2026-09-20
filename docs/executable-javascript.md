@@ -101,6 +101,24 @@ again halts with the reference closed-channel message. List.for_each is an
 ordinary template that preserves sequential callback order and stops at Halt.
 Native Rust channel execution remains unsupported.
 
+## Finite App playback
+
+App.play specializes a closed App value and state type, then passes each frame's
+Event list to tick in sequence. An empty frame list returns Some(state); None
+stops playback, and Halt stops the IO driver. App.more and App.fold are ordinary
+checked continuation helpers. The state type remains affine, and playback does
+not invoke view or require a window. The same finite console programs run on
+the native Rust IO driver. Interactive App helpers and platform windows remain
+unfinished.
+
+Six upstream-generated JavaScript comparisons agree on stdout/stderr/status:
+the unchanged App.play fixture, the public example, affine state, foreign
+callback order, Image observations and every Event field. Native execution
+matches the four playback/event programs; the foreign callback program is
+outside its supported contracts, and the large Image fold reaches its arena
+limit. These exclusions and failures remain explicit in
+[compatibility](compatibility.md).
+
 ## Limits and verification
 
 Generated Bend evaluation shares a 2,000,000-transition budget, allows 512

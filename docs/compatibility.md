@@ -21,14 +21,17 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 361 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 367 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
   and Map/Set, Char/String operations, Bool/Maybe formatting, List templates, Array operations and pure
   Word/U32 helpers, decimal U32/Nat formatting and parsing, and checked addition
-  commutativity. Array creation uses a power-of-two depth, indexing wraps,
+  commutativity, Image quadtrees and Key/Mouse/Move/Close events. The four ordinary
+  Image cleanup helpers preserve checked structural recursion; they do not
+  provide GPU offload or parallel reclamation. Array creation uses a power-of-two
+  depth, indexing wraps,
   and clone/get require reusable elements; swap/set/map retain affine ownership.
-  `src/syntax/base.bend` is the exact inventory (318 definition forms including
-  18 templates, 25 laws and 18 datatypes). Templates enter the checked book only
+  `src/syntax/base.bend` is the exact inventory (322 definition forms including
+  18 templates, 25 laws and 20 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
 GPU calls, hub fetch/publish, host readiness, most non-console Base effects,
@@ -89,6 +92,22 @@ types; strict checking still rejects that unfilled law. List.for_each executes
 callbacks sequentially. Descriptor readiness remains unsupported. Native `run` explicitly
 rejects these scheduler contracts before invoking their arguments.
 
+App.more/fold/play run through native IO and executable JavaScript. Finite
+playback consumes frames in order, preserves affine state, stops at None or
+Halt and skips the view callback. App and its helpers live in executable Base;
+Image and Event are also available to strict checking and the pure compilers.
+The window-dependent App.next/turn/draw/step/loop/run helpers remain unfinished.
+
+Image workloads still expose native runtime limits. Using the exact pure build
+and fold definitions from upstream's window fixture, summing pixel colors
+passes depths zero through two but exhausts the 131,072-thunk arena from depth
+three (64 pixels). Generated executable JavaScript completes the full depth-six
+case (4,096 pixels). Counting leaves while discarding colors passes native depth
+four but fails at five; following one path and forcing Image.free both pass
+through depth six. These results distinguish cumulative evaluation cost from
+tree depth. No limits were raised, and the full native workload remains a
+compatibility gap.
+
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in
 the same module scope as explicit constructors; separate modules' types remain
@@ -135,7 +154,8 @@ The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
-The current full quality gate passes 299 tests, including five compile-fail
+The Image/App slice preserves all of those acceptance decisions.
+The current full quality gate passes 313 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has
