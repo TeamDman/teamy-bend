@@ -16,6 +16,7 @@ use crate::kernel::elaborate::Expression;
 use crate::kernel::elaborate::ExpressionKind;
 use crate::kernel::substitute;
 use crate::syntax::executable::NumericIntrinsic;
+use crate::syntax::executable::OpaqueType;
 use std::collections::BTreeMap;
 use std::fmt::Write;
 use std::rc::Rc;
@@ -56,6 +57,7 @@ pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, Co
             .filter(|p| p.quant != Quant::None)
             .count();
         let body = match &definition.body {
+            DefinitionBody::OpaqueType(OpaqueType::Chan) => "null".into(),
             DefinitionBody::Numeric(intrinsic) => native_function(numeric_name(*intrinsic), arity),
             DefinitionBody::Foreign(_) => {
                 let index = foreign

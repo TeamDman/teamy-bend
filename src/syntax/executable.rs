@@ -25,13 +25,37 @@ use std::path::PathBuf;
 ///     source.numeric.clear();
 /// }
 /// ```
+///
+/// ```compile_fail
+/// use teamy_bend::syntax::ExecutableSource;
+/// fn forge_opaque_origin(source: &mut ExecutableSource) {
+///     source.opaque.clear();
+/// }
+/// ```
 #[derive(Debug)]
 pub struct ExecutableSource {
     pub(crate) book: Book,
     pub(crate) foreign: BTreeMap<String, ForeignDefinition>,
     pub(crate) numeric: BTreeMap<String, NumericIntrinsic>,
+    pub(crate) opaque: BTreeMap<String, OpaqueType>,
     pub(crate) constructor_tags: BTreeMap<String, String>,
     pub(crate) base_names: BTreeSet<String>,
+}
+
+/// Sealed execution-only type families. These have no Bend constructors or body.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u8)]
+pub(crate) enum OpaqueType {
+    Chan,
+}
+
+impl OpaqueType {
+    pub(crate) fn bundled(name: &str) -> Option<Self> {
+        match name {
+            "Chan" => Some(Self::Chan),
+            _ => None,
+        }
+    }
 }
 
 /// Execution-only numeric operations; the loader mints these only for bundled laws.
@@ -173,6 +197,10 @@ pub(crate) enum BuiltinForeign {
     Spawn,
     Sleep,
     Now,
+    ChanNew,
+    ChanSend,
+    ChanRecv,
+    ChanClose,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]

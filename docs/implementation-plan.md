@@ -2,7 +2,7 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-09-19
+**Last updated:** 2026-09-20
 **Intent audit:** Passed 2026-09-19 against the initiating user request
 
 ## How to update this plan
@@ -222,8 +222,8 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 350 selected pure source declarations are bundled
-with Apache attribution (307 definition forms including 17 templates, 25 laws,
+Completion notes: 361 selected pure source declarations are bundled
+with Apache attribution (318 definition forms including 18 templates, 25 laws,
 18 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
@@ -247,7 +247,7 @@ A wrapped-update/mapping fixture also agrees across the normalizer, native
 runtime, JavaScript and C. Existing array-write parser coverage now uses the
 real implementation instead of a temporary function stub.
 
-Remaining library work includes complete numeric behavior, effects and foreign
+Remaining library work includes Image/App helpers, effects and foreign
 implementation contracts. Representation or
 syntax support alone does not establish an operation's implementation.
 
@@ -259,12 +259,12 @@ ordinary numeric helper inventory identified in this slice. Native surface
 printing, large native Nat representation and executable C remain unfinished;
 see [numeric execution](numeric-execution.md).
 
-The next ordinary library group is Bool.show, Maybe.show, the nine Set helpers
-and sequential List.for_each. Channels need a separate sealed executable-only
-opaque Chan contract, four foreign operations and the four ordinary IO.fork/join
-helpers. A declaration-name inventory still finds 29 ordinary definitions, 28
-foreign functions, six opaque laws and three datatypes absent from the union of
-pure and executable Base after the timer slice. Completing that inventory alone
+Bool.show, Maybe.show, the nine Set definitions and sequential List.for_each
+are implemented. Channels have a separate sealed executable-only opaque Chan
+contract, four JavaScript foreign operations and four ordinary IO.fork/join
+helpers. A declaration-name inventory still finds 13 ordinary definitions, 24
+foreign functions, five opaque laws and three datatypes absent from the union of
+pure and executable Base after the channel slice. Completing that inventory alone
 does not establish target, runtime or language parity.
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
@@ -641,6 +641,47 @@ and eight controls. The 67 trajectory requests complete in 304 ms. All 13
 compiled conformance fingerprints and original model/privacy bytes are unchanged.
 Poche changes remain local; exhaustive evidence remains attributed to `6802c1e`.
 Channels and ordinary fork/join helpers remain the following scheduler work.
+
+### [~] 5.9 Add checked Set helpers and executable channels
+
+Implementation is complete: eleven ordinary Bool/Maybe formatting and Set
+definitions, sequential List.for_each, an exact loader-sealed executable-only
+Chan contract, four JavaScript channel operations and four ordinary fork/join
+helpers. All 21 added Base declarations match the fixed reference source.
+Channels preserve FIFO buffers, zero-capacity rendezvous, affine payloads,
+close wakeups and raw foreign rows. Private cleanup retains host-visible rows.
+The reference's null sender/receiver-marker collision is preserved and tested.
+Chan never becomes a strict proof certificate; native channels remain unfinished.
+
+The real chan_pipe fixture exposed rejection of structurally smaller let aliases.
+Descent now follows original let RHS aliases and annotations, with existing
+step/nesting bounds and no general function reduction. Ten reduced cases and
+seven independent edge cases agree with upstream, including rejection controls.
+The complete 1,302-fixture strict audit accepts 362 positives and rejects 491
+positives and all 449 negatives, with no crashes, newly rejected positives or
+changed compiled source fingerprints. The newly accepted positive is
+proof/rewrite_type_family.bend.
+
+The complete quality gate passes 299 tests, including five compile-fail API
+examples, with two optional profilers ignored. Strict library/test Clippy and
+independent boundary, driver, descent and publication reviews pass. All 509
+deterministic channel traces and 209 scheduler traces match upstream, including
+raw row state. The 34 previous executable comparisons still pass (31 exact and
+three expected diagnostic differences), as do five timer fixtures.
+Nine unchanged channel/fork/join fixtures agree with upstream under both exact
+virtual waits and injected oversleep: 18 comparisons, with only expected deadlock
+diagnostic wording different. An original real-clock mismatch was retained and
+reproduced in upstream: multiple overdue timers wake in registration order.
+Both runtimes produce either observed order under the same shared clock adapter.
+
+Pure-helper evidence includes 28 runtime values, 25 checked equalities/projections
+and seven negative controls. Nineteen complete comparison programs agree with
+upstream. Two unchanged long IO programs still reach the existing nesting limit;
+all 67 print expressions match in nine shorter chunks. This does not count as
+whole-program equivalence. No resource budget was raised.
+
+Publication and retained-clean-release Poche regressions are pending. The full
+U6 target/runtime/CLI work remains active.
 
 ## Completion and risks
 

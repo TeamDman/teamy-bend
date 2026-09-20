@@ -65,12 +65,41 @@ its implementation. Runnable work precedes timer checks, and multiple overdue
 timers resume in registration order. The Node adapter uses bounded synchronous
 Atomics waits, preserving upstream's synchronous polling model. It does not
 pump event-loop callbacks or await promises; promises still reject explicitly.
-Descriptor readiness, channels and the remaining Base effects require further
+Descriptor readiness and the remaining Base effects require further
 work. Companion helpers `io_bytes`,
 `io_text`, `io_out`, `io_errs`, `io_done` and `io_tup` are provided. Native
 system FFI and descriptor readiness helpers reject explicitly pending the platform layer.
 Foreign sources depending on upstream's Bun/POSIX system driver still require
 that missing compatibility layer.
+
+## Channels and ordinary helpers
+
+Chan is a loader-sealed opaque executable type family. It has no source
+constructors or body, and its runtime contracts cannot become strict proof
+evidence. Handles are reusable even when their payloads are affine. The
+generated backend implements Chan.new/send/recv/close, including FIFO buffering,
+zero-capacity rendezvous, suspended senders/receivers, and close wakeups.
+Buffered values remain available after close; sending to a closed channel
+returns false and receiving from an empty closed channel returns None.
+
+The foreign representation is the reference's raw row with room, ring, wait
+and shut fields. Foreign-created rows are accepted with bounded accounting;
+rows without ring/wait arrays or exceeding accounting limits fail when used.
+Other host fields retain the raw foreign semantics. Private scheduler cleanup does not
+rewrite a row retained by foreign code. Pending effect requests keep their
+separate private identity.
+
+The reference uses null as its receiver marker. Live type/proof values also
+compile to null, so a blocked sender with such a payload has the same marker.
+In particular, sending a proof first on a zero-capacity channel deadlocks;
+receiving first or using a buffer succeeds. This observable reference behavior
+is preserved and tested; channel signatures are runtime assumptions.
+
+IO.fork/join are ordinary checked helpers: fork creates a capacity-one channel
+and spawns the action; join receives and closes it. Joining the copied handle
+again halts with the reference closed-channel message. List.for_each is an
+ordinary template that preserves sequential callback order and stops at Halt.
+Native Rust channel execution remains unsupported.
 
 ## Limits and verification
 
@@ -80,7 +109,9 @@ use a trampoline. Pure output limits are 96 levels, 16,384 visited nodes and
 8 MiB of text; string construction and each console write also have an 8 MiB
 byte limit. These are fail-closed execution limits, not upstream performance
 parity. The scheduler shares the transition budget and permits at most 131,072
-live tasks and 131,072 queued tasks/timers. Each individual timer wait is capped
+live tasks and 131,072 queued tasks/timers/channel waiters in total. Channel
+accounting also caps retained handles and buffered payload slots at 131,072 each.
+Each individual timer wait is capped
 at one second before rechecking the clock; this does not shorten its deadline.
 Arbitrary host JavaScript runs outside Bend's evaluation budget.
 
@@ -108,6 +139,16 @@ programs also match stdout, stderr and status. These timer comparisons replace
 only upstream's Bun/POSIX host polling with an explicitly identified Node
 timer-only adapter; they do not establish descriptor-readiness compatibility.
 
-The full rewrite still requires channels, host readiness, native Rust scheduling,
+Channel comparisons cover 509 deterministic scenarios against actual upstream
+channel operations and scheduling, including final raw rows. Nine unchanged
+channel/fork/join programs also agree under two shared clock adapters: exact
+waits and an injected oversleep, for 18 comparisons. Deadlock wording differs;
+the other eight programs agree exactly on stdout/stderr/status in both modes.
+Real-clock runs exposed variable worker order when multiple timers become
+overdue together. The upstream program reproduced this variation, and both
+implementations produce the same order with identical injected oversleep.
+These comparisons cover timer behavior without claiming wall-clock determinism.
+
+The full rewrite still requires host readiness, native Rust scheduling/channels,
 executable C, remaining library contracts, GPU support and the rest of the upstream
 CLI. See the [implementation plan](implementation-plan.md).

@@ -2422,3 +2422,49 @@ def U32.add_comm(a, b):
     case U32{x} U32{y}:
       Equal.cong(Word(32n), U32, w => U32{w}, Word.add(32n, x, y),
         Word.add(32n, y, x), Word.add_comm(32n, x, y))
+
+def Bool.show(b: Bool) -> String:
+  match b:
+    case False{}:
+      "False"
+    case True{}:
+      "True"
+
+def Maybe.show(~a: Quant, ~A: Kind(a), ~f: A -> String, m: Maybe<a, A>) ->
+  String:
+  match m:
+    case None{}:
+      "None"
+    case Some{x}:
+      "Some(" ++ f(x) ++ ")"
+
+def Set() -> Data:
+  Map<&2, Unit>
+
+def Set.new() -> Set():
+  Map.new(&2, Unit)
+
+def Set.add(s: Set(), key: String) -> Set():
+  Map.set(&2, Unit, s, key, Unit{})
+
+def Set.has(s: Set(), key: String) -> Set() & Bool:
+  Map.has(&2, Unit, s, key)
+
+def Set.del(s: Set(), key: String) -> Set():
+  Map.del(&2, Unit, s, key)
+
+def Set.size(s: Set()) -> Nat:
+  Map.size(&2, Unit, s)
+
+def Set.to_list(s: Set()) -> List<&2, String>:
+  Map.keys(&2, Unit, s)
+
+def Set.from_list.go(keys: List<&2, String>, s: Set()) -> Set():
+  match keys:
+    case Nil{}:
+      s
+    case h <> t:
+      Set.from_list.go(t, Set.add(s, h))
+
+def Set.from_list(keys: List<&2, String>) -> Set():
+  Set.from_list.go(keys, Set.new())

@@ -4,6 +4,7 @@
 // Execution-only IO driver. Foreign JavaScript is trusted host code;
 // its returned values are not proof certificates or validated Bend constructors.
 const $tbRequests = new WeakSet();
+const $tbChannelRows = new WeakMap();
 let $tbIo = null;
 const $tbPendingLimit = 131072;
 const $tbWaitWord = new Int32Array(new SharedArrayBuffer(4));
@@ -84,9 +85,112 @@ function $tbSleepNeed() { return { time: true }; }
 function $tbNow() { return BigInt(Math.floor(performance.now())); }
 
 function $tbPending(io, extra) {
-  if (io.runs.length - io.head + io.waits.length + extra > $tbPendingLimit) {
+  if (io.runs.length - io.head + io.waits.length + io.channelWaiters + extra > $tbPendingLimit) {
     throw new Error('IO pending task budget exhausted');
   }
+}
+
+// Handles deliberately retain upstream's raw row/array representation. Foreign
+// code may supply rows or keep aliases; accounting is reconciled on each access.
+// Arbitrary mutations performed by host code remain outside Bend's budget.
+function $tbChannel(row) {
+  const io = $tbIo;
+  if (io === null) throw new Error('channel operation requires an active IO scheduler');
+  if (row === null || typeof row !== 'object'
+      || !Array.isArray(row.ring) || !Array.isArray(row.wait)) {
+    throw new Error('invalid channel row');
+  }
+  let entry = $tbChannelRows.get(row);
+  if (entry?.owner !== io) {
+    if (io.channels.size >= $tbPendingLimit) throw new Error('IO channel handle budget exhausted');
+    entry = { owner: io, buffered: 0, waiting: 0 };
+    $tbChannelRows.set(row, entry);
+    io.channels.add(row);
+  }
+  const buffered = io.channelBuffered + row.ring.length - entry.buffered;
+  const waiting = io.channelWaiters + row.wait.length - entry.waiting;
+  if (buffered > $tbPendingLimit) throw new Error('IO channel buffer budget exhausted');
+  if (waiting > $tbPendingLimit) throw new Error('IO channel waiter budget exhausted');
+  $tbPending(io, waiting - io.channelWaiters);
+  io.channelBuffered = buffered;
+  io.channelWaiters = waiting;
+  entry.buffered = row.ring.length;
+  entry.waiting = row.wait.length;
+  return row;
+}
+
+function $tbChanNew(room) {
+  return $tbChannel({ room: Number(room), ring: [], wait: [], shut: false });
+}
+
+function $tbChanWake(row, value) {
+  const waiter = row.wait.shift();
+  $tbChannel(row);
+  $tbPush(waiter.cont, value, false);
+  return waiter.item;
+}
+
+function $tbChanTake(row) {
+  const value = row.ring.shift();
+  $tbChannel(row);
+  if (row.wait.length > 0) {
+    row.ring.push($tbChanWake(row, true));
+    $tbChannel(row);
+  }
+  return value;
+}
+
+function $tbChanSend(handle, value, continuation) {
+  const row = $tbChannel(handle);
+  if (row.shut) return false;
+  // Upstream uses null as its receiver sentinel, including the observable
+  // collision with a blocked sender whose live type/proof payload is null.
+  if (row.wait.length > 0 && row.wait[0].item === null) {
+    $tbChanWake(row, { $: 'Some', value });
+    return true;
+  }
+  if (row.ring.length < row.room) {
+    if ($tbIo.channelBuffered >= $tbPendingLimit) throw new Error('IO channel buffer budget exhausted');
+    row.ring.push(value);
+    $tbChannel(row);
+    return true;
+  }
+  $tbPending($tbIo, 1);
+  row.wait.push({ cont: continuation, item: value });
+  $tbChannel(row);
+  return undefined;
+}
+
+function $tbChanRecv(handle, continuation) {
+  const row = $tbChannel(handle);
+  if (row.ring.length > 0) {
+    return { $: 'Some', value: $tbChanTake(row) };
+  }
+  if (row.wait.length > 0 && row.wait[0].item !== null) {
+    return { $: 'Some', value: $tbChanWake(row, true) };
+  }
+  if (row.shut) return { $: 'None' };
+  $tbPending($tbIo, 1);
+  row.wait.push({ cont: continuation, item: null });
+  $tbChannel(row);
+  return undefined;
+}
+
+function $tbChanShut(row) {
+  row.shut = true;
+  // No queued continuation runs during close. Drain once, retaining the
+  // original public wait array identity and the exact FIFO wake-up order.
+  const waiters = row.wait.splice(0);
+  $tbChannel(row);
+  for (const waiter of waiters) {
+    $tbPush(waiter.cont, waiter.item === null ? { $: 'None' } : false, false);
+  }
+}
+
+function $tbChanClose(handle) {
+  const row = $tbChannel(handle);
+  if (!row.shut) $tbChanShut(row);
+  return { $: 'Unit' };
 }
 
 function $tbPush(fun, arg, fresh) {
@@ -128,7 +232,7 @@ function $tbWait(io) {
 
 function $tbRunTasks(main) {
   if ($tbIo !== null) throw new Error('IO scheduler is already active');
-  const io = { runs: [], head: 0, live: 0, waits: [] };
+  const io = { runs: [], head: 0, live: 0, waits: [], channels: new Set(), channelBuffered: 0, channelWaiters: 0 };
   $tbIo = io;
   try {
     $tbPush(main, value => ({ $: 'Emit', value }), true);
@@ -185,6 +289,14 @@ function $tbRunTasks(main) {
       }
     }
   } finally {
+    for (const row of io.channels) {
+      // Drop private accounting without changing raw rows retained by foreign
+      // code. Upstream leaves their buffers, waiters and closed flag observable.
+      $tbChannelRows.delete(row);
+    }
+    io.channels.clear();
+    io.channelBuffered = 0;
+    io.channelWaiters = 0;
     io.runs.length = 0;
     io.waits.length = 0;
     io.live = 0;
@@ -213,6 +325,9 @@ function io_fail(code) {
 }
 function io_push(fun, arg, fresh) { $tbPush(fun, arg, fresh); }
 function io_park_on() { throw new Error('IO readiness scheduling is not supported'); }
+function chan_wake(row, value) { return $tbChanWake($tbChannel(row), value); }
+function chan_take(row) { return $tbChanTake($tbChannel(row)); }
+function chan_shut(row) { $tbChanShut($tbChannel(row)); }
 
 function $tbSuspendable(value) {
   if (value !== null && (typeof value === 'object' || typeof value === 'function')

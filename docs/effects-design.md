@@ -134,9 +134,11 @@ The complete foreign Base inventory has 34 functions:
 Generated JavaScript now has the FIFO continuation scheduler, undefined
 suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
 remaining work. The Node timer adapter retains the synchronous polling model.
-Native Rust scheduling, descriptor readiness, opaque handle ownership,
-channels, ordinary IO.fork/join and App helpers are still required. Preserve
-channel close wakeups and task lifetime when adding them.
+Generated JavaScript also supports the sealed opaque Chan family and four
+channel operations, with ordinary IO.fork/join and sequential List.for_each.
+The channel family remains absent from strict Base. Native Rust scheduling,
+descriptor readiness, remaining opaque handle families and App helpers are
+still required.
 
 Start actual-output regression testing with upstream `tests/io/hello_print`,
 `hello_end_to_end`, `print_write`, `print_utf8_law`, `halt_utf8_law`,

@@ -7,6 +7,7 @@ use super::executable::ForeignDefinition;
 use super::executable::ForeignImport;
 use super::executable::ForeignTarget;
 use super::executable::NumericIntrinsic;
+use super::executable::OpaqueType;
 use super::surface::Body;
 use super::surface::Pattern;
 use super::surface::Row;
@@ -777,6 +778,10 @@ impl Parser<'_> {
                 "IO.spawn" => Some(BuiltinForeign::Spawn),
                 "IO.sleep" => Some(BuiltinForeign::Sleep),
                 "IO.now" => Some(BuiltinForeign::Now),
+                "Chan.new" => Some(BuiltinForeign::ChanNew),
+                "Chan.send" => Some(BuiltinForeign::ChanSend),
+                "Chan.recv" => Some(BuiltinForeign::ChanRecv),
+                "Chan.close" => Some(BuiltinForeign::ChanClose),
                 _ => None,
             }
         } else {
@@ -2388,6 +2393,7 @@ struct Loader {
     executable: bool,
     foreign: BTreeMap<String, ForeignDefinition>,
     numeric: BTreeMap<String, NumericIntrinsic>,
+    opaque: BTreeMap<String, OpaqueType>,
     constructor_tags: BTreeMap<String, String>,
     base_names: BTreeSet<String>,
 }
@@ -2557,6 +2563,9 @@ impl Loader {
                 if let Some(intrinsic) = NumericIntrinsic::bundled(name) {
                     self.numeric.insert(name.clone(), intrinsic);
                 }
+                if let Some(opaque) = OpaqueType::bundled(name) {
+                    self.opaque.insert(name.clone(), opaque);
+                }
             }
         }
         Ok(())
@@ -2627,6 +2636,7 @@ pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, Parse
         book: loader.book,
         foreign: loader.foreign,
         numeric: loader.numeric,
+        opaque: loader.opaque,
         constructor_tags: loader.constructor_tags,
         base_names: loader.base_names,
     })

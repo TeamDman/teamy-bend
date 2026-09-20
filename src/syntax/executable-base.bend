@@ -195,6 +195,12 @@ def F32.from_nat(n: Nat) -> F32:
 def F32.to_nat(a: F32) -> Nat:
   U32.to_nat(F32.to_u32(a))
 
+# A channel is Data: the computations it links each hold a copy.
+# This sealed execution-only type family has no Bend constructors or body.
+law Chan:
+  for -A: Type
+  Data
+
 type IO.OP<-R: Type> is Type:
   Emit{value: R}
   Halt{code: U32, message: String}
@@ -250,3 +256,46 @@ def IO.sleep(ms: U32) -> IO(Unit):
 def IO.now() -> IO(Nat):
   import "./effs/now.c"
   import "./effs/now.js"
+
+def Chan.new(-A: Type, room: U32) -> IO(Chan(A)):
+  import "./effs/chan_new.c"
+  import "./effs/chan_new.js"
+
+def Chan.send(-A: Type, chan: Chan(A), value: A) -> IO(Bool):
+  import "./effs/chan_send.c"
+  import "./effs/chan_send.js"
+
+def Chan.recv(-A: Type, chan: Chan(A)) -> IO(Maybe<&1, A>):
+  import "./effs/chan_recv.c"
+  import "./effs/chan_recv.js"
+
+def Chan.close(-A: Type, chan: Chan(A)) -> IO(Unit):
+  import "./effs/chan_close.c"
+  import "./effs/chan_close.js"
+
+def IO.fork.go(-A: Type, act: IO(A), chan: Chan(A)) -> IO(Chan(A)):
+  +c = chan
+  sent = IO.bind(A, Bool, act, x => Chan.send(A, c, x))
+  IO.bind(Unit, Chan(A), IO.spawn(Bool, sent), u => IO.pure(Chan(A), c))
+
+def IO.fork(-A: Type, act: IO(A)) -> IO(Chan(A)):
+  IO.bind(Chan(A), Chan(A), Chan.new(A, 1), IO.fork.go(A, act))
+
+def IO.join.go(-A: Type, chan: Chan(A), got: Maybe<&1, A>) -> IO(A):
+  match got:
+    case None{}:
+      IO.die(A, 1, "IO.join: the channel was closed")
+    case Some{value}:
+      IO.bind(Unit, A, Chan.close(A, chan), u => IO.pure(A, value))
+
+def IO.join(-A: Type, +chan: Chan(A)) -> IO(A):
+  IO.bind(Maybe<&1, A>, A, Chan.recv(A, chan), IO.join.go(A, chan))
+
+def List.for_each(
+  ~a: Quant, ~A: Kind(a), ~f: A -> IO(Unit), xs: List<a, A>
+) -> IO(Unit):
+  match xs:
+    case Nil{}:
+      IO.pure(Unit, Unit{})
+    case h <> t:
+      IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))

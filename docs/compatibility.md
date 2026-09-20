@@ -21,14 +21,14 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 350 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 361 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
-  and Map, Char/String operations, List templates, Array operations and pure
+  and Map/Set, Char/String operations, Bool/Maybe formatting, List templates, Array operations and pure
   Word/U32 helpers, decimal U32/Nat formatting and parsing, and checked addition
   commutativity. Array creation uses a power-of-two depth, indexing wraps,
   and clone/get require reusable elements; swap/set/map retain affine ownership.
-  `src/syntax/base.bend` is the exact inventory (307 definition forms including
-  17 templates, 25 laws and 18 datatypes). Templates enter the checked book only
+  `src/syntax/base.bend` is the exact inventory (318 definition forms including
+  18 templates, 25 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
 GPU calls, hub fetch/publish, host readiness, most non-console Base effects,
@@ -75,7 +75,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-channels, native Rust scheduling, file/network/window/audio Base effects and unsafe execution remain
+native Rust scheduling/channels, file/network/window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -83,7 +83,10 @@ a cooperative FIFO scheduler. Undefined foreign returns suspend; saved
 continuations can resume through io_push. Main completion waits for spawned
 tasks, while Halt stops all pending work. Timers use a monotonic Node clock and
 synchronous waits; JavaScript event-loop callbacks and promises are not pumped.
-Descriptor readiness and channels remain unsupported. Native `run` explicitly
+Channels support buffered and zero-capacity transfer, closure and ordinary
+fork/join. A separately sealed opaque Chan family grants executable handle
+types; strict checking still rejects that unfilled law. List.for_each executes
+callbacks sequentially. Descriptor readiness remains unsupported. Native `run` explicitly
 rejects these scheduler contracts before invoking their arguments.
 
 Imported standalone models may use Nat literals and default Nat operators for
@@ -124,19 +127,27 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The latest 2026-09-19 audit covered all 1,302 fixtures: 361 expected-positive programs
-checked, 492 expected-positive programs were rejected, and all 449 expected
+The latest 2026-09-20 audit covered all 1,302 fixtures: 362 expected-positive programs
+checked, 491 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
 The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
-accepted positives; the scheduler slice preserves those acceptance decisions.
-The current full quality gate passes 266 tests, including four compile-fail
+accepted positives. Transparent let aliases in structural descent add
+`proof/rewrite_type_family.bend`; no previous positive was lost. This follows
+only aliases and annotations, without unfolding computed recursive arguments.
+The current full quality gate passes 299 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has
 separate actual-output comparisons in
 [executable JavaScript](executable-javascript.md) and
 [numeric execution](numeric-execution.md); the strict audit does not test it.
+
+The latest pure-library comparison matches 19 complete programs against upstream.
+The unchanged `base/string_kit.bend` and `base/num_kit.bend` still hit the kernel
+nesting limit in their long IO chains. All 67 print expressions match in nine
+shorter chunks, which does not establish whole-program compatibility. The limits
+remain unchanged.
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

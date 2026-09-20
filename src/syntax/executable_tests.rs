@@ -2,6 +2,7 @@
 use super::executable::BuiltinForeign;
 use super::executable::ForeignTarget;
 use super::executable::NumericIntrinsic;
+use super::executable::OpaqueType;
 use super::load;
 use super::load_executable;
 use super::parse;
@@ -15,6 +16,185 @@ use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 
 static NEXT: AtomicUsize = AtomicUsize::new(0);
+
+#[test]
+fn opaque_chan_metadata_requires_exact_origin_signature_and_declaration() {
+    use crate::kernel::Term;
+    use crate::kernel::term;
+    use std::rc::Rc;
+
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(&path).unwrap();
+    assert_eq!(source.opaque.len(), 1);
+    assert_eq!(source.opaque["Chan"], OpaqueType::Chan);
+    assert!(!source.foreign.contains_key("Chan") && !source.numeric.contains_key("Chan"));
+    assert!(!source.book.declarations.iter().any(|declaration| {
+        matches!(declaration, Declaration::Adt(datatype) if datatype.name == "Chan")
+    }));
+    check_executable(&source).unwrap();
+    check_book(&source.book)
+        .expect_err("executable assumptions cannot produce a strict proof token");
+
+    for mutation in [
+        "order",
+        "origin",
+        "missing",
+        "extra",
+        "arity",
+        "quantity",
+        "parameter-quantity",
+        "id",
+        "domain",
+        "parameter-domain",
+        "result",
+        "body",
+        "foreign",
+        "unsafe",
+    ] {
+        let mut source = load_executable(&path).unwrap();
+        match mutation {
+            "order" => {
+                let index = source.book.declarations.iter().position(|declaration| {
+                    matches!(declaration, Declaration::Def(definition) if definition.name == "Chan")
+                }).unwrap();
+                let declaration = source.book.declarations.remove(index);
+                source.book.declarations.push(declaration);
+            }
+            "origin" => {
+                source.base_names.remove("Chan");
+            }
+            "missing" => {
+                source.opaque.remove("Chan");
+            }
+            "extra" => {
+                source.opaque.insert("absent".into(), OpaqueType::Chan);
+            }
+            _ => {
+                let declaration = source
+                    .book
+                    .declarations
+                    .iter_mut()
+                    .find_map(|declaration| match declaration {
+                        Declaration::Def(definition) if definition.name == "Chan" => {
+                            Some(definition)
+                        }
+                        _ => None,
+                    })
+                    .unwrap();
+                match mutation {
+                    "arity" => declaration.parameters.clear(),
+                    "parameter-quantity" => declaration.parameters[0].quant = Quant::Lone,
+                    "id" => declaration.parameters[0].id += 1,
+                    "parameter-domain" => {
+                        declaration.parameters[0].ty =
+                            term(Term::Typ(term(Term::Qua(Quant::Many))));
+                    }
+                    "body" => declaration.body = Some(term(Term::Ref("U32".into()))),
+                    "foreign" => declaration.foreign = true,
+                    "unsafe" => declaration.unsafe_ = true,
+                    _ => {
+                        let Term::All {
+                            quant,
+                            domain,
+                            body,
+                            ..
+                        } = Rc::make_mut(&mut declaration.ty)
+                        else {
+                            panic!("opaque telescope");
+                        };
+                        match mutation {
+                            "quantity" => *quant = Quant::Lone,
+                            "domain" => *domain = term(Term::Typ(term(Term::Qua(Quant::Many)))),
+                            "result" => *body = term(Term::Typ(term(Term::Qua(Quant::Lone)))),
+                            _ => unreachable!(),
+                        }
+                    }
+                }
+            }
+        }
+        check_executable(&source).expect_err(mutation);
+    }
+}
+
+#[test]
+fn channel_contracts_keep_exact_quantities_and_erased_source_arity() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(path).unwrap();
+    let checked = check_executable(&source).unwrap();
+    for (name, builtin, arity, expected) in [
+        (
+            "Chan.new",
+            BuiltinForeign::ChanNew,
+            2,
+            "@-A:Type -> @room:U32 -> IO(Chan(A))",
+        ),
+        (
+            "Chan.send",
+            BuiltinForeign::ChanSend,
+            3,
+            "@-A:Type -> @chan:Chan(A) -> @value:A -> IO(Bool)",
+        ),
+        (
+            "Chan.recv",
+            BuiltinForeign::ChanRecv,
+            2,
+            "@-A:Type -> @chan:Chan(A) -> IO(Maybe<&1, A>)",
+        ),
+        (
+            "Chan.close",
+            BuiltinForeign::ChanClose,
+            2,
+            "@-A:Type -> @chan:Chan(A) -> IO(Unit)",
+        ),
+    ] {
+        assert_eq!(source.foreign[name].builtin, Some(builtin));
+        assert_eq!(source.foreign[name].declared_arity, arity);
+        assert_eq!(checked.definition_type(name).unwrap().to_string(), expected);
+        let declaration = source
+            .book
+            .declarations
+            .iter()
+            .find_map(|declaration| match declaration {
+                Declaration::Def(definition) if definition.name == name => Some(definition),
+                _ => None,
+            })
+            .unwrap();
+        assert_eq!(declaration.parameters[0].quant, Quant::None);
+        assert!(
+            declaration.parameters[1..]
+                .iter()
+                .all(|parameter| parameter.quant == Quant::Lone)
+        );
+    }
+}
+
+#[test]
+fn local_opaque_names_never_acquire_bundled_origin() {
+    let fixture = Fixture::new();
+    fixture.write("other.bend", "law Chan:\n  for -A: Type\n  Data\n");
+    let path = fixture.write("main.bend", "import other.bend as O\n");
+    let source = load_executable(path).unwrap();
+    assert!(source.opaque.is_empty());
+    assert!(source.base_names.is_empty());
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("unfilled laws: other.Chan")
+    );
+    let path = fixture.write("fake.bend", "type Chan<-A: Type> is Data: Fake{}\n");
+    let source = load_executable(path).unwrap();
+    assert!(source.opaque.is_empty());
+    check_executable(&source).unwrap();
+    let path = fixture.write(
+        "foreign.bend",
+        "import Base\ndef chan_new(-A: Type, room: U32) -> IO(Chan(A)): import \"fake.js\"\n",
+    );
+    let source = load_executable(path).unwrap();
+    assert_eq!(source.foreign["chan_new"].builtin, None);
+}
 
 #[test]
 fn numeric_metadata_is_sealed_and_independent_from_foreign_contracts() {
@@ -177,7 +357,7 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     assert!(source.base_names.contains("IO"));
     assert!(source.base_names.contains("IO.OP"));
     assert!(!source.base_names.contains("main"));
-    assert_eq!(source.foreign.len(), 6);
+    assert_eq!(source.foreign.len(), 10);
     for (name, builtin) in [
         ("IO.print", BuiltinForeign::Print),
         ("IO.write", BuiltinForeign::Write),
@@ -193,10 +373,10 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     }
     check_book(&source.book).expect_err("foreign contracts cannot become a strict proof token");
     source.book.declarations.retain(
-        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign || source.numeric.contains_key(&definition.name) || definition.name.starts_with("F32.")),
+        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign || source.numeric.contains_key(&definition.name) || source.opaque.contains_key(&definition.name) || definition.name.starts_with("F32.") || definition.name.starts_with("IO.fork") || definition.name.starts_with("IO.join")),
     );
     check_book(&source.book)
-        .expect("ordinary IO continuation helpers are checked without runtime assumptions");
+        .expect("pure IO continuation helpers are checked without runtime assumptions");
     let strict = load(&path).expect("strict loading retains the pure Base");
     assert!(!strict.declarations.iter().any(
         |declaration| matches!(declaration, Declaration::Def(definition) if definition.name == "IO")

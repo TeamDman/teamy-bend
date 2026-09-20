@@ -143,6 +143,14 @@ impl Machine<'_> {
                     "native execution does not support the scheduler builtin {name}; compile to executable JavaScript"
                 )));
             }
+            BuiltinForeign::ChanNew
+            | BuiltinForeign::ChanSend
+            | BuiltinForeign::ChanRecv
+            | BuiltinForeign::ChanClose => {
+                return Err(KernelError::new(format!(
+                    "native execution does not support the channel builtin {name}; compile to executable JavaScript"
+                )));
+            }
             BuiltinForeign::Print | BuiltinForeign::Write | BuiltinForeign::PrintErr => {}
         }
         let [text] = arguments else {
@@ -264,5 +272,56 @@ impl Machine<'_> {
         writer
             .flush()
             .map_err(|error| KernelError::new(format!("cannot flush {stream}: {error}")))
+    }
+}
+
+#[cfg(test)]
+mod channel_tests {
+    use super::BuiltinForeign;
+    use super::ForeignDefinition;
+    use super::Machine;
+    use super::Program;
+    use std::collections::BTreeMap;
+    use std::collections::BTreeSet;
+    use std::rc::Rc;
+
+    #[test]
+    fn every_channel_dispatch_refuses_before_argument_decoding() {
+        for (name, builtin) in [
+            ("Chan.new", BuiltinForeign::ChanNew),
+            ("Chan.send", BuiltinForeign::ChanSend),
+            ("Chan.recv", BuiltinForeign::ChanRecv),
+            ("Chan.close", BuiltinForeign::ChanClose),
+        ] {
+            let foreign = BTreeMap::from([(
+                name.into(),
+                ForeignDefinition {
+                    imports: vec![],
+                    local_symbol: String::new(),
+                    declared_arity: 0,
+                    parameters: vec![],
+                    builtin: Some(builtin),
+                },
+            )]);
+            let program = Program::from_executable(
+                &Rc::new(BTreeMap::new()),
+                &Rc::new(BTreeMap::new()),
+                &foreign,
+                &BTreeMap::new(),
+                &BTreeSet::new(),
+            );
+            let mut machine = Machine::new(&program);
+            let mut stdout = Vec::new();
+            let mut stderr = Vec::new();
+            let error = machine
+                .console_request(name, &[], &mut stdout, &mut stderr)
+                .expect_err("native channels are not implemented")
+                .to_string();
+            assert!(
+                error.contains(&format!("channel builtin {name}")),
+                "{error}"
+            );
+            assert!(stdout.is_empty() && stderr.is_empty());
+        }
     }
 }

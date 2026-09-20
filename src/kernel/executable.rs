@@ -17,6 +17,7 @@ use crate::syntax::ExecutableSource;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::ForeignTarget;
 use crate::syntax::executable::NumericIntrinsic;
+use crate::syntax::executable::OpaqueType;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::io::Write;
@@ -60,6 +61,7 @@ pub struct ExecutableBook {
     runtime: crate::runtime::Program,
     foreign: BTreeMap<String, ForeignDefinition>,
     numeric: BTreeMap<String, NumericIntrinsic>,
+    opaque: BTreeMap<String, OpaqueType>,
     constructor_tags: BTreeMap<String, String>,
     base_names: BTreeSet<String>,
 }
@@ -72,6 +74,7 @@ impl ExecutableBook {
             &self.engine,
             &self.foreign,
             &self.numeric,
+            &self.opaque,
             &self.constructor_tags,
             &self.base_names,
             self.entry_kind()?,
@@ -97,6 +100,11 @@ impl ExecutableBook {
     /// Names of opaque numeric runtime contracts; these are not checked proofs.
     pub fn numeric_names(&self) -> impl Iterator<Item = &str> {
         self.numeric.keys().map(String::as_str)
+    }
+
+    /// Names of sealed execution-only type families, with no constructors or body.
+    pub fn opaque_names(&self) -> impl Iterator<Item = &str> {
+        self.opaque.keys().map(String::as_str)
     }
 
     /// The host-language symbol used for a foreign contract, before namespacing.
@@ -256,6 +264,51 @@ fn foreign_contract(
     Ok(())
 }
 
+fn opaque_contract(
+    source: &ExecutableSource,
+    definition: &DefDecl,
+    opaque: OpaqueType,
+) -> Result<(), KernelError> {
+    if !source.base_names.contains(&definition.name)
+        || OpaqueType::bundled(&definition.name) != Some(opaque)
+        || definition.body.is_some()
+        || definition.foreign
+        || definition.unsafe_
+        || definition.parameters.len() != 1
+    {
+        return Err(KernelError::new("invalid bundled opaque type metadata"));
+    }
+    let Term::All {
+        quant,
+        id,
+        domain,
+        body,
+        ..
+    } = strip_annotations(&definition.ty).as_ref()
+    else {
+        return Err(KernelError::new(
+            "opaque Chan requires exactly one erased type parameter",
+        ));
+    };
+    let parameter = &definition.parameters[0];
+    let is_kind = |value: &TermRef, expected| {
+        matches!(strip_annotations(value).as_ref(), Term::Typ(quantity)
+            if matches!(quantity.as_ref(), Term::Qua(actual) if *actual == expected))
+    };
+    if *quant != Quant::None
+        || parameter.quant != Quant::None
+        || *id != parameter.id
+        || !is_kind(domain, Quant::Lone)
+        || !is_kind(&parameter.ty, Quant::Lone)
+        || !is_kind(body, Quant::Many)
+    {
+        return Err(KernelError::new(
+            "opaque Chan signature must be exactly @-A:Type -> Data",
+        ));
+    }
+    Ok(())
+}
+
 fn numeric_contract(
     source: &ExecutableSource,
     engine: &Engine,
@@ -340,6 +393,9 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
                     Err(KernelError::new(
                         "unsafe executable definitions are not supported yet",
                     ))
+                } else if let Some(opaque) = source.opaque.get(&definition.name) {
+                    opaque_contract(source, definition, *opaque)
+                        .and_then(|()| engine.validate_opaque_definition(definition))
                 } else if definition.foreign {
                     foreign_contract(source, &engine, definition)
                         .and_then(|()| engine.validate_foreign_definition(definition))
@@ -361,6 +417,7 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
             definition.body.is_none()
                 && !engine.foreign_contracts.contains(&definition.name)
                 && !engine.numeric_contracts.contains(&definition.name)
+                && !engine.opaque_contracts.contains(&definition.name)
         })
         .map(|definition| definition.name.as_str())
         .collect::<Vec<_>>();
@@ -388,6 +445,15 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
             "numeric metadata has no corresponding declaration",
         ));
     }
+    if source
+        .opaque
+        .keys()
+        .any(|name| !engine.opaque_contracts.contains(name))
+    {
+        return Err(KernelError::new(
+            "opaque metadata has no corresponding declaration",
+        ));
+    }
     let runtime = crate::runtime::Program::from_executable(
         &engine.defs,
         &engine.adts,
@@ -400,6 +466,7 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
         runtime,
         foreign: source.foreign.clone(),
         numeric: source.numeric.clone(),
+        opaque: source.opaque.clone(),
         constructor_tags: source.constructor_tags.clone(),
         base_names: source.base_names.clone(),
     })

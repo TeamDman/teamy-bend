@@ -6,12 +6,13 @@ A Rust rewrite of the Bend 2 proof language, started from
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Native console IO and executable JavaScript use a separate contract checker.
-Generated JavaScript supports foreign calls, callbacks, cooperative tasks and timers.
+Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
+and channels with fork/join.
 All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 350 selected pure source declarations, including
-17 templates. GPU, effects and complete library compatibility remain unfinished.
+The bundled Base contains 361 selected pure source declarations, including
+18 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).
@@ -34,6 +35,8 @@ cargo run -- compile --executable examples/console.bend --output target/console.
 node target/console.cjs
 cargo run -- compile --executable examples/tasks.bend --output target/tasks.cjs
 node target/tasks.cjs
+cargo run -- compile --executable examples/channels.bend --output target/channels.cjs
+node target/channels.cjs
 ```
 
 `check` requires complete proofs for every ordinary law and checks ordinary
@@ -60,7 +63,8 @@ curried callbacks and a shared scope for imported sources. Spawned tasks remain
 live after main completes; timers and saved continuations use a FIFO scheduler.
 Compilation embeds
 foreign source; running the generated program executes it with Node's host
-permissions. Channels, host readiness and executable C remain unfinished.
+permissions. Channel values preserve the reference foreign interface; fork/join
+helpers use the same scheduler. Host readiness and executable C remain unfinished.
 See [executable JavaScript](docs/executable-javascript.md).
 
 `compile --target c` emits portable C11 with the same output format, lazy

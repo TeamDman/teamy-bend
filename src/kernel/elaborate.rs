@@ -23,6 +23,7 @@ use super::substitute;
 use super::term;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::NumericIntrinsic;
+use crate::syntax::executable::OpaqueType;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::rc::Rc;
@@ -63,6 +64,7 @@ pub(crate) enum DefinitionBody {
     Ordinary(Expression),
     Foreign(ForeignDefinition),
     Numeric(NumericIntrinsic),
+    OpaqueType(OpaqueType),
 }
 
 #[derive(Clone, Debug)]
@@ -124,6 +126,7 @@ pub(super) fn lower(
     engine: &Engine,
     foreign: &BTreeMap<String, ForeignDefinition>,
     numeric: &BTreeMap<String, NumericIntrinsic>,
+    opaque: &BTreeMap<String, OpaqueType>,
     constructor_tags: &BTreeMap<String, String>,
     base_names: &BTreeSet<String>,
     entry: ExecutableEntry,
@@ -146,7 +149,9 @@ pub(super) fn lower(
             .get(&name)
             .ok_or_else(|| error(format!("undefined reachable definition {name}")))?;
         let parameters = lowerer.parameters(&definition.ty, &definition.parameters)?;
-        let body = if let Some(intrinsic) = numeric.get(&name) {
+        let body = if let Some(opaque) = opaque.get(&name) {
+            DefinitionBody::OpaqueType(*opaque)
+        } else if let Some(intrinsic) = numeric.get(&name) {
             DefinitionBody::Numeric(*intrinsic)
         } else if let Some(metadata) = foreign.get(&name) {
             DefinitionBody::Foreign(metadata.clone())

@@ -229,6 +229,8 @@ pub(crate) struct Engine {
     pub(super) foreign_contracts: BTreeSet<String>,
     // Numeric contracts are separately sealed and remain opaque to reduction.
     pub(super) numeric_contracts: BTreeSet<String>,
+    // Only executable checking can seal opaque type families; never proof books.
+    pub(super) opaque_contracts: BTreeSet<String>,
     fresh_id: usize,
     fuel: usize,
     pub(crate) depth: usize,
@@ -388,6 +390,7 @@ pub(super) fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
         aliases: BTreeMap::new(),
         foreign_contracts: BTreeSet::new(),
         numeric_contracts: BTreeSet::new(),
+        opaque_contracts: BTreeSet::new(),
         fresh_id: highest
             .checked_add(1)
             .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
@@ -430,6 +433,18 @@ impl Engine {
         Ok(())
     }
 
+    pub(super) fn validate_opaque_definition(
+        &mut self,
+        definition: &DefDecl,
+    ) -> Result<(), KernelError> {
+        if definition.unsafe_ || definition.foreign || definition.body.is_some() {
+            return Err(KernelError::new("invalid opaque executable declaration"));
+        }
+        self.validate_definition(definition, false)?;
+        self.opaque_contracts.insert(definition.name.clone());
+        Ok(())
+    }
+
     fn validate_definition(
         &mut self,
         definition: &DefDecl,
@@ -442,6 +457,7 @@ impl Engine {
             if previous.body.is_some()
                 || self.foreign_contracts.contains(&definition.name)
                 || self.numeric_contracts.contains(&definition.name)
+                || self.opaque_contracts.contains(&definition.name)
                 || definition.body.is_none() && !foreign_completion
             {
                 return Err(KernelError::new("duplicate declaration"));
@@ -656,7 +672,7 @@ impl Engine {
                             if order != std::cmp::Ordering::Equal {
                                 break;
                             }
-                            order = descend(*quant, arg, col);
+                            order = self.descend(*quant, arg, col)?;
                         }
                         if order != std::cmp::Ordering::Less {
                             return Err(KernelError::new(
@@ -666,6 +682,7 @@ impl Engine {
                     } else if def.body.is_none()
                         && !self.foreign_contracts.contains(name)
                         && !self.numeric_contracts.contains(name)
+                        && !self.opaque_contracts.contains(name)
                     {
                         return Err(KernelError::new(format!(
                             "unfilled law {name} cannot be used as live evidence"
@@ -1132,55 +1149,87 @@ impl Engine {
     }
 }
 
-fn strip(value: &TermRef) -> &TermRef {
-    if let Term::Ann(x, _) = value.as_ref() {
-        strip(x)
-    } else {
-        value
-    }
-}
-fn descend(quant: Quant, arg: &TermRef, column: &TermRef) -> std::cmp::Ordering {
-    use std::cmp::Ordering::Equal;
-    use std::cmp::Ordering::Greater;
-    use std::cmp::Ordering::Less;
-    if quant == Quant::None {
-        return Equal;
-    }
-    let a = strip(arg);
-    let p = strip(column);
-    match p.as_ref() {
-        Term::Var { id: pi, .. } => {
-            if matches!(a.as_ref(),Term::Var{id:ai,..}if ai==pi) {
-                Equal
-            } else {
-                Greater
-            }
+impl Engine {
+    // Upstream term_strip follows only annotations and the original RHS of a
+    // let-bound Var. Do not unfold functions or normalize computed arguments:
+    // structural descent must remain visible after these transparent aliases.
+    fn strip_descent_aliases(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
+        let mut value = Rc::clone(value);
+        loop {
+            self.step()?;
+            value = match value.as_ref() {
+                Term::Ann(inner, _) => Rc::clone(inner),
+                Term::Var { id, .. } => match self.aliases.get(id) {
+                    Some(inner) => Rc::clone(inner),
+                    None => return Ok(value),
+                },
+                _ => return Ok(value),
+            };
         }
-        Term::Ctr { name: pn, args: px } => {
-            if let Term::Ctr { name: an, args: ax } = a.as_ref()
-                && an == pn
-                && ax.len() == px.len()
-            {
-                let mut order = Equal;
-                for (x, y) in ax.iter().zip(px) {
-                    let field = descend(Quant::Lone, x, y);
-                    if field != Equal {
-                        order = field;
+    }
+
+    fn descend(
+        &mut self,
+        quant: Quant,
+        arg: &TermRef,
+        column: &TermRef,
+    ) -> Result<std::cmp::Ordering, KernelError> {
+        self.step()?;
+        self.enter()?;
+        let result = self.descend_inner(quant, arg, column);
+        self.depth -= 1;
+        result
+    }
+
+    fn descend_inner(
+        &mut self,
+        quant: Quant,
+        arg: &TermRef,
+        column: &TermRef,
+    ) -> Result<std::cmp::Ordering, KernelError> {
+        use std::cmp::Ordering::Equal;
+        use std::cmp::Ordering::Greater;
+        use std::cmp::Ordering::Less;
+        if quant == Quant::None {
+            return Ok(Equal);
+        }
+        let a = self.strip_descent_aliases(arg)?;
+        let p = self.strip_descent_aliases(column)?;
+        Ok(match p.as_ref() {
+            Term::Var { id: pi, .. } => {
+                if matches!(a.as_ref(),Term::Var{id:ai,..}if ai==pi) {
+                    Equal
+                } else {
+                    Greater
+                }
+            }
+            Term::Ctr { name: pn, args: px } => {
+                if let Term::Ctr { name: an, args: ax } = a.as_ref()
+                    && an == pn
+                    && ax.len() == px.len()
+                {
+                    let mut order = Equal;
+                    for (x, y) in ax.iter().zip(px) {
+                        let field = self.descend(Quant::Lone, x, y)?;
+                        if field != Equal {
+                            order = field;
+                        }
+                        if order == Greater {
+                            break;
+                        }
                     }
-                    if order == Greater {
-                        break;
+                    if order != Greater {
+                        return Ok(order);
                     }
                 }
-                if order != Greater {
-                    return order;
+                for field in px {
+                    if self.descend(Quant::Lone, &a, field)? != Greater {
+                        return Ok(Less);
+                    }
                 }
-            }
-            if px.iter().any(|p| descend(Quant::Lone, a, p) != Greater) {
-                Less
-            } else {
                 Greater
             }
-        }
-        _ => Greater,
+            _ => Greater,
+        })
     }
 }

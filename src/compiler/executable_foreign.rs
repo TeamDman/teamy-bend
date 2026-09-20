@@ -42,6 +42,10 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
                 BuiltinForeign::Spawn => ("$tbSpawn", "undefined"),
                 BuiltinForeign::Sleep => ("$tbSleep", "$tbSleepNeed"),
                 BuiltinForeign::Now => ("$tbNow", "undefined"),
+                BuiltinForeign::ChanNew => ("$tbChanNew", "undefined"),
+                BuiltinForeign::ChanSend => ("$tbChanSend", "undefined"),
+                BuiltinForeign::ChanRecv => ("$tbChanRecv", "undefined"),
+                BuiltinForeign::ChanClose => ("$tbChanClose", "undefined"),
             };
             // Resolve these outside the foreign lexical scope: a companion
             // file declaring the same name cannot replace bundled contracts.
