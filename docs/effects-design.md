@@ -132,7 +132,7 @@ The complete foreign Base inventory has 34 functions:
 | Audio | Audio.open, Audio.write, Audio.close |
 
 The scheduler, opaque handle ownership, ordinary IO.fork/join and App helpers,
-and 37 unfilled numeric Base primitives remain required. Preserve asynchronous
+and the remaining 21 of 37 numeric Base primitives are still required. Preserve asynchronous
 suspension, channel close wakeups and tasks that outlive main.
 
 Start actual-output regression testing with upstream `tests/io/hello_print`,

@@ -508,7 +508,12 @@ controls; 67 requests in 339 ms). Its executable BLAKE3 is
 Original Poche model bytes and all 13 compiled conformance fingerprints remain
 unchanged. The earlier exhaustive receipt retains its original attribution.
 
-### [~] 5.6 Publish synchronous executable JavaScript
+### [x] 5.6 Publish synchronous executable JavaScript
+
+Completion: `06f08086c61bcc53a479d9b08b10ece17db113a9` is verified on
+public `main`. The retained executable reports that revision and a clean
+worktree; all 71 compiled source fingerprints match the audited candidate.
+The clean release also passes the 34-program upstream JavaScript comparison.
 
 Implementation: typed emission and the generated IO driver are connected to
 `compile --executable`. Separate checked products preserve the strict proof
@@ -535,10 +540,19 @@ The fixed candidate also passes the complete 1,302-fixture strict audit:
 360 accepted positives, 493 rejected positives and 449 rejected negatives,
 with zero abnormal exits or accepted negatives. Acceptance is unchanged from
 `9da68e5`; all compiled source fingerprints still match the audited snapshot.
-Poche proof/scalar/trajectory regressions against a retained clean release and
-publication verification remain in progress.
-Full scheduling, executable C,
-remaining library/CLI and GPU behavior still keep the goal active.
+The retained clean release passes all seven Poche symbolic privacy laws and
+the well-typed wrong-viewer control, all 15,503 scalar comparisons with seven
+equalities and two controls, and the micro trajectory: 22 states, 21 transitions,
+44 observations, all 300 chance partitions and eight controls. Its 67 requests
+complete in 312 ms. The executable BLAKE3 is
+`2cc22a65de57f922f112de728bbf3dd15a7ca0c6d1f54c38103c1da7292de30a`.
+The original models, privacy proof/runner and all 13 compiled conformance-source
+fingerprints remain unchanged. Poche changes remain local; the exhaustive graph
+receipt retains its original `6802c1e` attribution.
+
+Full scheduling, executable C, remaining library/CLI and GPU behavior still
+keep the goal active. The next implementation work remains in 3.2 and 3.3;
+completion of this publication milestone does not complete U6.
 
 ## Completion and risks
 

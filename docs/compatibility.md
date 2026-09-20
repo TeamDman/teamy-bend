@@ -209,3 +209,10 @@ not establish protocol, trace or full-deck confidentiality.
 The clean `9da68e5` release checks those laws and passes the scalar and trajectory
 regressions. The micro model and all 13 compiled conformance-source fingerprints
 remain unchanged. The exhaustive graph evidence is still attributed to `6802c1e`.
+
+The subsequent clean `06f0808` release also passes all seven privacy laws and
+the mutant, 15,503 scalar comparisons and the complete diagnostic trajectory
+(22 states, 21 transitions, 44 observations, 300 partitions and eight controls).
+The trajectory uses 67 requests in 312 ms. All 13 compiled source fingerprints,
+model bytes and privacy proof/runner bytes are unchanged; the exhaustive graph
+was not rerun or reattributed to this release.
