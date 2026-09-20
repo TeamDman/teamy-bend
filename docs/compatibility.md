@@ -260,10 +260,17 @@ timer release. The retained executable BLAKE3 is
 The exhaustive graph remains attributed solely to `6802c1e`; Poche edits remain
 local.
 
-The latest clean Image/App release, `39f3dc5`, also passes all seven privacy laws,
+The clean Image/App release, `39f3dc5`, also passes all seven privacy laws,
 15,503 scalar comparisons and the micro trajectory, with their negative controls.
 Its 67 trajectory requests complete in 300 ms. All 13 compiled conformance
 fingerprints and 17 source fingerprints are unchanged from the channel release.
 Its executable BLAKE3 is
 `1a413d37286879e272957003f4c004c3f5e107460a9d7baf764bda92e6786507`.
 This regression does not rerun or reattribute the exhaustive graph.
+
+The latest clean compact-word release, `a7ddfcc`, passes those same privacy,
+scalar and trajectory gates, including all negative controls. Its 67 trajectory
+requests complete in 482 ms. All 13 compiled conformance fingerprints and 17
+source fingerprints remain unchanged from the Image/App release. Its executable
+BLAKE3 is `5e2acc14b82e2335fc07fcb180dc9452d2dd373d7c8b7b4f215311eabf057f90`.
+Poche changes remain local. The exhaustive graph retains its original attribution.

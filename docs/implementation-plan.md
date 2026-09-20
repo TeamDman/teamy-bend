@@ -785,6 +785,18 @@ The complete 1,302-fixture strict audit remains 362 accepted positives, 491
 rejected positives and 449 rejected negatives, with no crashes or changed
 compiled source fingerprints.
 
+Compact-word implementation: `a7ddfcc79c509890b119b76daf41f54b9147895a`.
+Its retained release reports that revision with a clean worktree; all 73 compiled
+source fingerprints match the audited candidate. Executable BLAKE3 is
+`5e2acc14b82e2335fc07fcb180dc9452d2dd373d7c8b7b4f215311eabf057f90`.
+It passes all seven Poche privacy laws and the typed wrong-viewer control, 15,503
+scalar comparisons with seven equalities and two controls, and the micro
+trajectory: 22 states, 21 transitions, 44 observations, 300 chance partitions
+and eight controls. The 67 requests complete in 482 ms. All 13 compiled
+conformance fingerprints and 17 source fingerprints are unchanged from the
+Image/App release. Poche changes remain local, and exhaustive graph evidence
+remains attributed solely to `6802c1e`.
+
 Next: establish explicit roots before adding nonmoving reclamation of both
 arenas. Collect only at committed force-loop safe points, never inside allocate.
 Roots must cover current/continuation IDs, Update blackholes, all numeric argument
