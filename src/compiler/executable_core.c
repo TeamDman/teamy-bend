@@ -26,6 +26,7 @@
 #include <process.h>
 #include <io.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #ifdef _MSC_VER
 #pragma comment(lib, "ws2_32.lib")
 #endif
@@ -126,6 +127,12 @@
 #ifndef CID_CHR
 #define CID_CHR BEND_CID_COUNT
 #endif
+#ifndef CID_NIL
+#define CID_NIL BEND_CID_COUNT
+#endif
+#ifndef CID_CON
+#define CID_CON BEND_CID_COUNT
+#endif
 typedef uint64_t u64;
 typedef uint32_t u32;
 typedef uint8_t u8;
@@ -172,6 +179,7 @@ INLINE void tb_unlock(TBMutex *mutex) { (void)pthread_mutex_unlock(mutex); }
 
 typedef struct TBAllocation TBAllocation;
 typedef struct TBHost TBHost;
+typedef struct TBFile TBFile;
 #ifdef _MSC_VER
 struct __declspec(align(16)) TBAllocation { TBAllocation *next; size_t size; };
 #else
@@ -180,6 +188,9 @@ struct TBAllocation { TBAllocation *next; size_t size; max_align_t alignment; };
 struct TBHost {
   TBMutex mutex;
   TBAllocation *allocations;
+  TBFile *files;
+  TBFile *idle_files;
+  u32 file_count;
   u64 bytes;
   u32 references;
   bool stopped;
@@ -196,6 +207,7 @@ static Loc tb_capacity;
 static u64 tb_steps;
 static u32 tb_depth;
 static u32 tb_frames;
+static void tb_files_release(TBHost *host);
 
 OUTLINE TB_NORETURN void err_fail(const char *message) {
   if (tb_host_current != NULL) {
@@ -280,6 +292,7 @@ OUTLINE void tb_host_release(TBHost *host) {
   final = --host->references == 0;
   tb_unlock(&host->mutex);
   if (!final) return;
+  tb_files_release(host);
   while ((allocation = host->allocations) != NULL) {
     host->allocations = allocation->next;
     free(allocation);

@@ -79,8 +79,8 @@ a stopped invocation do not resume its VM.
 
 ## Effects and limits
 
-The implemented bundled effects cover console output, tasks, timers, channels
-and environment lookup. File and TCP/UDP builtins are explicitly refused until
+The implemented bundled effects cover console output, tasks, timers, channels,
+environment lookup and files. TCP/UDP builtins are explicitly refused until
 their C host adapters are implemented. Window/audio, GPU and the optimized
 parallel C engine remain unfinished.
 
@@ -107,6 +107,53 @@ frames (including conversion and printing calls), a
 131,072 live actions and 64 active worker calls. Queued work remains bounded by
 the action limit. Pure printing additionally bounds bytes, nodes and depth.
 These are component budgets, not a total-process memory limit.
+
+## Files and environment
+
+`File.open` accepts exactly `r`, `w` and `a`. Invalid modes and NUL-containing
+paths fail synchronously; path NUL takes precedence over an invalid mode.
+Valid open, read and write requests use host workers. Reads issue one syscall,
+preserve short results and the cursor, and clamp the U32 count to INT32_MAX
+before checking the 8 MiB request budget. A larger request fails explicitly;
+it is not silently shortened to fit. Returned data and strings remain subject
+to the separate VM allocation and evaluation budgets.
+
+Writes preserve raw UTF-8, embedded NUL and newlines. Partial writes continue
+from the remaining bytes; the first syscall error ends the request, including
+EINTR. An empty write performs no syscall and succeeds even for an invalid or
+read-only descriptor. Zero-progress writes fail explicitly instead of repeating
+forever. Reads and writes return the descriptor on both success and failure;
+close is synchronous and ignores the syscall error, as upstream does.
+
+The native C decoder deliberately preserves upstream's reverse byte scan,
+including its handling of malformed UTF-8 and split sequences. It does not
+substitute JavaScript's replacement decoder. `File.read_bytes` returns the raw
+octets. Windows opens convert validated UTF-8 paths to UTF-16 and select binary
+CRT mode, preserving CRLF, NUL and 0x1A. Error codes are CRT errno values. Invalid
+foreign descriptors use a thread-local CRT error handler; the process-wide
+handler is untouched. Out-of-int-range descriptors produce EBADF instead of
+being truncated into a different descriptor.
+
+Handles retain the upstream raw descriptor ABI. The runtime owns descriptors
+created by bundled `File.open`; explicit close, normal completion and Halt
+release them. In-flight workers retain their allocation owner and a descriptor
+lease until their syscall finishes. Shutdown cancels queued requests, closes
+idle owned files and discards late completions without resuming released VM
+state. It does not interrupt an OS syscall already in progress. Closing an
+owned handle with a concurrent trusted foreign alias defers the close until its
+worker leases end. Row storage is reused and bounded by the action limit.
+
+Trusted C effects can supply other raw descriptors, which read/write/close
+accept without automatic ownership adoption. Foreign code that bypasses these
+helpers is responsible for its own descriptors and aliases. This runtime does
+not claim to clean up arbitrary native resources created by an import.
+
+Environment lookup distinguishes missing and existing empty variables; NUL or
+`=` in a name returns ENOENT. Windows uses the Unicode process environment,
+independent of the active ANSI code page, with a bounded retry for concurrent
+value resizing. Invalid UTF-16 values return EILSEQ. This is an explicit host
+adapter to upstream's narrow `getenv`;
+Unix retains native `getenv` and the C byte decoder.
 
 ## Validation boundary
 

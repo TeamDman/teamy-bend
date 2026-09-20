@@ -1323,16 +1323,50 @@ paths remain unchanged. Receipts are retained under target/verified-4b3f78f.
 No Poche source or application changes were made. The earlier exhaustive graph
 remains attributed to 6802c1e and was not rerun for this milestone.
 
+The next file-effects slice implements open/read/read_bytes/write/close in
+`executable_files.c`. Windows uses strict UTF-8 paths, binary CRT descriptors and
+Unicode environment lookup with invalid UTF-16 rejection. Handles preserve the
+raw native ABI. Owned rows are reusable and bounded; worker leases preserve
+active files after Halt, queued work is cancelled, and late results never resume
+released VM state. Trusted foreign descriptors remain usable without automatic
+ownership adoption. The C text decoder preserves upstream malformed-byte
+behavior, while read/write failures return the original handle. Read requests
+clamp to INT32_MAX before the explicit 8 MiB limit; zero-progress writes fail
+instead of repeating forever.
+
+File-slice validation: ./check-all.ps1 passes 569 tests with two optional
+profilers ignored, and strict workspace library/test Clippy passes. Twenty new
+MSVC-compiled file/environment tests cover modes, NUL precedence, native errno,
+Unicode paths, binary and malformed text, cursor/EOF, failed-operation ownership,
+buffer limits, raw foreign handles, scheduler yielding and normal/Halt cleanup.
+Windows tests use a real blocked named-pipe read to prove its handle survives
+Halt until worker completion. With one worker, a queued file write is cancelled
+and its idle handle closed before releasing that blocked read. Invalid in-range
+foreign descriptors exercise the thread-local CRT handler, and a lone UTF-16
+surrogate in the Windows environment returns EILSEQ.
+
+An independent MSVC probe compiles verbatim upstream file/environment effects
+and codec helpers, recording 28 observations with source hashes. Its explicit
+Windows adapter, synchronous worker staging and substituted large-allocation
+clamp probe are qualified in the receipt; it is not whole-runtime scheduling
+evidence. The frozen release candidate records 116 unchanged compiled-source
+fingerprints, retains the 362/491/449 strict checker audit decisions with no
+new rejections or crashes, and matches all twelve retained whole-program
+upstream-JavaScript comparisons. File-specific expectations are informed by the
+separate C oracle rather than assuming JavaScript's decoder and errno match C.
+Ignored evidence: target/executable-c-files-oracle,
+target/audit-executable-c-files and target/executable-c-files-release-comparison.
+
 Remaining work within this milestone includes reference-count reclamation,
-file/network host adapters and their complete effect suites, higher-order erased
+network host adapters and their complete effect suites, higher-order erased
 type specialization, tail-call/task lowering, worker wake notification, and broader native-value/platform
 qualification. Unresolved Array element layouts fail during compilation instead
 of silently choosing an incompatible representation. The current retained arena
 and bounded worker polling are explicit foundations, not optimized CPU parity.
 Keep this task in progress until its full acceptance scope is met.
-The next implementation step is C file effects, carrying forward owned handles,
-worker completion/cancellation and the existing upstream file contract tests.
-Continue with network adapters and reclamation before claiming C runtime parity;
+The next implementation step is C network adapters, carrying forward descriptor
+readiness, worker completion/cancellation and the existing TCP/UDP contract tests.
+Continue with reclamation before claiming C runtime parity;
 Poche model expansion stays deferred.
 
 ## Completion and risks

@@ -33,6 +33,7 @@ struct IoAct {
   intptr_t descriptor;
   IoAct *next;
   TBIOState *owner;
+  TBFile *file;
   u32 parked;
 };
 struct TBIOState {
@@ -47,6 +48,10 @@ static IoQue io_jobs;
 static u32 io_live;
 static u32 io_busy;
 static TBIOState *tb_io;
+static void tb_file_job_finished(IoAct *action);
+static void tb_files_shutdown(TBHost *host);
+static void tb_register_files(void);
+static Term tb_get_env_run(Env e, Term *fields, IoWork *work);
 #ifdef _WIN32
 static int tb_stdout_mode = -1;
 static int tb_stderr_mode = -1;
@@ -203,6 +208,7 @@ static void *tb_worker(void *opaque)
   tb_host_current = host; tb_failure_guard = &guard;
   if (setjmp(guard) == 0) action->work.call(&action->work);
   tb_failure_guard = NULL;
+  tb_file_job_finished(action);
   tb_lock(&host->mutex);
   --owner->active;
   if (!host->stopped) io_push(&owner->completed, action);
@@ -232,6 +238,7 @@ static void tb_start_jobs(void) {
     pthread_t thread;
     if (pthread_create(&thread, NULL, tb_worker, action) == 0) { (void)pthread_detach(thread); continue; }
 #endif
+    tb_file_job_finished(action);
     tb_lock(&tb_io->host->mutex); --tb_io->active; --tb_io->host->references; tb_unlock(&tb_io->host->mutex);
     err_fail("worker creation failed");
   }
@@ -440,19 +447,6 @@ static Term tb_print_err_run(Env e, Term *fields, IoWork *work) {
 static Term tb_spawn_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; io_spawn(fields[0]); return term_pak(CID_UNIT, 0); }
 static Term tb_sleep_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return term_pak(CID_UNIT, 0); }
 static Term tb_now_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return io_tick() / 1000000; }
-static Term tb_get_env_run(Env e, Term *fields, IoWork *work) {
-  u64 length; char *name = io_cstr(e, fields[0], &length); const char *value; Term result; (void)work;
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4996) /* Match the upstream native narrow getenv ABI. */
-#endif
-  value = io_nul(name, length) ? NULL : getenv(name);
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-  result = value == NULL ? io_fail(e, ENOENT, NULL) : io_done(e, io_str(e, value, strlen(value)));
-  tb_host_free(name); return result;
-}
 static Term tb_chan_new_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; return chan_open((u32)fields[0]); }
 static Term tb_chan_send_run(Env e, Term *fields, IoWork *work) {
   ChanRow *row = chan_at(fields[0]);
@@ -471,6 +465,7 @@ static Term tb_chan_recv_run(Env e, Term *fields, IoWork *work) {
 }
 static Term tb_chan_close_run(Env e, Term *fields, IoWork *work) { ChanRow *row = chan_at(fields[0]); (void)work; if (row != NULL) chan_shut(e, row); return term_pak(CID_UNIT, 0); }
 OUTLINE void tb_register_builtins(void) {
+  tb_register_files();
 #ifdef CID_IO_PRINT
   io_eff(CID_IO_PRINT, tb_print_run, 0);
 #endif
@@ -523,6 +518,9 @@ static void tb_io_initialize(void) {
 static void tb_io_shutdown(void) {
   if (tb_host_current != NULL) {
     tb_lock(&tb_host_current->mutex); tb_host_current->stopped = true; tb_unlock(&tb_host_current->mutex);
+    /* Queued jobs hold file leases but will never start after cancellation. */
+    while (io_jobs.head != NULL) tb_file_job_finished(io_pop(&io_jobs));
+    tb_files_shutdown(tb_host_current);
   }
   tb_io = NULL;
 #ifdef _WIN32

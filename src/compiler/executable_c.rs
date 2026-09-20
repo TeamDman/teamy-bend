@@ -78,6 +78,7 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
     source.push_str(&generator.table.declarations());
     source.push_str(include_str!("executable_core.c"));
     source.push_str(include_str!("executable_io.c"));
+    source.push_str(include_str!("executable_files.c"));
     source.push_str(include_str!("executable_c_numeric.c"));
     source.push_str(include_str!("executable_c_bridge.c"));
     source.push_str(&foreign.source);

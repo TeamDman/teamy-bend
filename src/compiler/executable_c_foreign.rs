@@ -127,7 +127,12 @@ fn require_builtin(builtin: BuiltinForeign, name: &str) -> Result<(), CompileErr
         | BuiltinForeign::ChanSend
         | BuiltinForeign::ChanRecv
         | BuiltinForeign::ChanClose
-        | BuiltinForeign::GetEnv => Ok(()),
+        | BuiltinForeign::GetEnv
+        | BuiltinForeign::FileOpen
+        | BuiltinForeign::FileRead
+        | BuiltinForeign::FileReadBytes
+        | BuiltinForeign::FileWrite
+        | BuiltinForeign::FileClose => Ok(()),
         _ => Err(CompileError::new(format!(
             "executable C effect {name} is not implemented"
         ))),

@@ -85,7 +85,7 @@ backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The separate
 [executable C compiler](executable-c.md) provides packed native values,
-foreign registration/callbacks and a bounded CPU effect runtime. Its file/network
+foreign registration/callbacks, file effects and a bounded CPU effect runtime. Its network
 adapters, reclamation and optimized execution, plus window/audio Base effects and unsafe execution, remain
 required work in [the design](effects-design.md).
 
@@ -213,14 +213,17 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The executable-C foundation passes 549 tests, including 5 compile-fail API
+The executable-C file milestone passes 569 tests, including 5 compile-fail API
 boundary examples, with 2 optional
 local profilers ignored. Strict Clippy checking covers the library and
 integration tests across both workspace crates. Direct Node provider tests are
-also part of the quality gate. Its frozen candidate records 115 compiled-source
+also part of the quality gate. Its frozen candidate records 116 compiled-source
 fingerprints and preserves the previous checker audit decisions. Twenty C
-integration tests and seven C runtime tests compile emitted programs with strict
-MSVC warnings; twelve whole programs match actual upstream-generated JavaScript.
+integration tests, seven C runtime tests and twenty file/environment tests
+compile emitted programs with strict MSVC warnings; twelve whole programs match
+actual upstream-generated JavaScript. File tests include blocked-worker retention
+and queued-request cleanup at Halt. Separate verbatim upstream file-effect probes
+qualify errno, codecs and syscall behavior under an explicit Windows adapter.
 Separate upstream C helper probes qualify specific ABI and scheduling behavior;
 the full upstream C runtime has not run on this host. See
 [executable C](executable-c.md) for remaining work and limits.
