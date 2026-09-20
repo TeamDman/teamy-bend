@@ -33,7 +33,9 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
 GPU calls, hub fetch/publish, arbitrary foreign execution, non-console effects,
 the complete numeric library, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
-does not establish arithmetic or floating-point proof support.
+does not establish floating-point proof support. Native IO execution additionally
+supports [16 sealed numeric contracts](numeric-execution.md); strict checking and
+the pure compilers do not admit their opaque implementation assumptions.
 
 ## Executable checking and native console IO
 
@@ -71,6 +73,13 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. Generated C/JavaScript effect
 drivers, general marshalling/callbacks, scheduler, file/network/window/audio
 effects and unsafe execution remain required work in [the design](effects-design.md).
+
+Imported standalone models may use Nat literals and default Nat operators for
+their own locally declared Nat type. The loader resolves the generated names in
+the same module scope as explicit constructors; separate modules' types remain
+distinct. This is a deliberate extension: the reference rejects a namespaced
+custom Nat's `0n` even where its equivalent explicit `Zero{}` checks. Modules
+using the global bundled Base retain global literal and operator identities.
 
 ## Deliberate resource limits
 
@@ -111,6 +120,9 @@ The native console slice preserves every acceptance/rejection from the Array
 slice. Its full quality gate passes 168 tests, including three compile-fail
 API boundary examples, with two optional local profilers ignored. An independent
 review also passed 17 provenance, source-order and direct-console scalar probes.
+The subsequent numeric/import/typed-lowering gate passes 190 tests, including
+four compile-fail API examples, with two optional profilers ignored. Ten focused
+tests cover typed lowering; its JavaScript emitter remains unfinished.
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

@@ -91,6 +91,30 @@ faithful adapter on Windows. Rust-generated JavaScript may run in a JavaScript
 engine; compilation must remain implemented in Rust. Neither target can be
 declared complete from the bundled native console handlers.
 
+The executable JavaScript backend requires typed lowering before emission.
+Its checked expression tree retains binder quantities, instantiated constructor
+field types and names, match scrutinee types, simultaneous lets, and explicit
+proof/type erasure. Loader metadata also preserves original constructor tags
+before module qualification. This is compiler input from an executable contract,
+not a strict proof certificate. The existing pure compiler remains separate.
+Match field IDs describe the fresh expected-type telescope; an emitter must
+consume them positionally with the lowered arm's actual lambda binders, rather
+than assuming both sets of IDs coincide.
+
+The emitter must use upstream's native JavaScript values throughout: BigInt Nat,
+numeric U32/F32, Boolean, JS strings and arrays, ordinary objects with local
+constructor tags and named fields, null live proof/type values, and omitted
+erased parameters. A conversion wrapper around the existing lazy constructor
+JSON format would incorrectly validate permissive raw foreign returns.
+
+Reachable foreign declarations select their first JS import; canonical source
+files execute once in an isolated shared scope. Foreign wrappers use the actual
+declared live telescope and the continuation. The driver must keep pending
+requests out of ordinary matches, preserve raw callbacks and treat undefined
+as a suspended action. Timers, channels and host-specific readiness need a
+portable implementation: upstream's Bun/POSIX runtime alone does not establish
+Windows/Node support.
+
 ## Remaining inventory and validation
 
 The complete foreign Base inventory has 34 functions:

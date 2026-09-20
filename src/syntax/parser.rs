@@ -6,6 +6,7 @@ use super::executable::ExecutableSource;
 use super::executable::ForeignDefinition;
 use super::executable::ForeignImport;
 use super::executable::ForeignTarget;
+use super::executable::NumericIntrinsic;
 use super::surface::Body;
 use super::surface::Pattern;
 use super::surface::Row;
@@ -266,6 +267,7 @@ struct Parser<'a> {
     instance_arguments: VecDeque<TermRef>,
     compile_bindings: BTreeMap<usize, TermRef>,
     foreign: Option<&'a mut BTreeMap<String, ForeignDefinition>>,
+    constructor_tags: Option<&'a mut BTreeMap<String, String>>,
     origin: SourceOrigin,
 }
 
@@ -501,6 +503,9 @@ impl Parser<'_> {
         while !self.is("") && !["type", "law", "def", "@"].contains(&self.current().text.as_str()) {
             let raw = self.name()?;
             let constructor = self.qualify(&raw);
+            if let Some(tags) = self.constructor_tags.as_deref_mut() {
+                tags.insert(constructor.clone(), raw);
+            }
             if self.book.declarations.iter().any(|d|matches!(d,Declaration::Adt(a) if a.constructors.iter().any(|c|c.name==constructor))) || constructors.iter().any(|c:&ConstructorDecl|c.name==constructor) {return Err(self.error(format!("duplicate constructor: {constructor}")));}
             self.expect("{")?;
             let old = self.scope.len();
@@ -591,7 +596,7 @@ impl Parser<'_> {
         self.book.declarations.push(Declaration::Def(DefDecl {
             name,
             parameters,
-            ty: qualify_operators(&ty, "Nat"),
+            ty: qualify_operators(&ty, &self.resolve("Nat")),
             body: None,
             unsafe_: false,
             foreign: false,
@@ -695,8 +700,8 @@ impl Parser<'_> {
             self.book.declarations.push(Declaration::Def(DefDecl {
                 name,
                 parameters,
-                ty: qualify_operators(&ty, "Nat"),
-                body: Some(qualify_operators(&value, "Nat")),
+                ty: qualify_operators(&ty, &self.resolve("Nat")),
+                body: Some(qualify_operators(&value, &self.resolve("Nat"))),
                 unsafe_,
                 foreign: false,
             }));
@@ -788,7 +793,7 @@ impl Parser<'_> {
         self.book.declarations.push(Declaration::Def(DefDecl {
             name,
             parameters,
-            ty: qualify_operators(ty, "Nat"),
+            ty: qualify_operators(ty, &self.resolve("Nat")),
             body: None,
             unsafe_,
             foreign: true,
@@ -862,7 +867,7 @@ impl Parser<'_> {
                 // Operators in a compile argument are fixed at that argument's
                 // boundary, before an enclosing caller annotation can name them.
                 let argument = self.expression(0)?;
-                compile_arguments.push(qualify_operators(&argument, "Nat"));
+                compile_arguments.push(qualify_operators(&argument, &self.resolve("Nat")));
                 self.take(",");
             }
         }
@@ -936,6 +941,7 @@ impl Parser<'_> {
             instance_arguments: arguments.iter().map(Rc::clone).collect(),
             compile_bindings: BTreeMap::new(),
             foreign: self.foreign.as_deref_mut(),
+            constructor_tags: self.constructor_tags.as_deref_mut(),
             origin: snapshot.origin,
         }
         .definition(snapshot.unsafe_);
@@ -1615,13 +1621,13 @@ impl Parser<'_> {
                 self.expression(0)?
             } else {
                 term(Term::Ctr {
-                    name: "Zero".into(),
+                    name: self.resolve("Zero"),
                     args: Vec::new(),
                 })
             };
             for _ in 0..count {
                 value = term(Term::Ctr {
-                    name: "Succ".into(),
+                    name: self.resolve("Succ"),
                     args: vec![value],
                 });
             }
@@ -2275,6 +2281,7 @@ pub fn parse(source: &str) -> Result<Book, ParseError> {
         &mut fresh,
         &mut Templates::default(),
         None,
+        None,
     )?;
     Ok(book)
 }
@@ -2304,6 +2311,7 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
         instance_arguments: VecDeque::new(),
         compile_bindings: BTreeMap::new(),
         foreign: None,
+        constructor_tags: None,
         origin: SourceOrigin::Standalone,
     };
     let value = p.expression(0)?;
@@ -2319,6 +2327,7 @@ fn parse_into(
     fresh: &mut usize,
     templates: &mut Templates,
     foreign: Option<&mut BTreeMap<String, ForeignDefinition>>,
+    constructor_tags: Option<&mut BTreeMap<String, String>>,
 ) -> Result<(), ParseError> {
     Parser {
         tokens: lex(input.source, input.label)?,
@@ -2337,6 +2346,7 @@ fn parse_into(
         instance_arguments: VecDeque::new(),
         compile_bindings: BTreeMap::new(),
         foreign,
+        constructor_tags,
         origin: input.origin,
     }
     .declarations()
@@ -2352,6 +2362,8 @@ struct Loader {
     templates: Templates,
     executable: bool,
     foreign: BTreeMap<String, ForeignDefinition>,
+    numeric: BTreeMap<String, NumericIntrinsic>,
+    constructor_tags: BTreeMap<String, String>,
     base_names: BTreeSet<String>,
 }
 
@@ -2473,6 +2485,7 @@ impl Loader {
             &mut self.fresh,
             &mut self.templates,
             self.executable.then_some(&mut self.foreign),
+            self.executable.then_some(&mut self.constructor_tags),
         )?;
         self.active.remove(&real);
         self.seen.insert(real, namespace.into());
@@ -2493,6 +2506,7 @@ impl Loader {
             &mut self.fresh,
             &mut self.templates,
             None,
+            self.executable.then_some(&mut self.constructor_tags),
         )?;
         if self.executable {
             parse_into(
@@ -2507,6 +2521,7 @@ impl Loader {
                 &mut self.fresh,
                 &mut self.templates,
                 Some(&mut self.foreign),
+                Some(&mut self.constructor_tags),
             )?;
             for declaration in &self.book.declarations[start..] {
                 let name = match declaration {
@@ -2514,6 +2529,9 @@ impl Loader {
                     Declaration::Adt(datatype) => &datatype.name,
                 };
                 self.base_names.insert(name.clone());
+                if let Some(intrinsic) = NumericIntrinsic::bundled(name) {
+                    self.numeric.insert(name.clone(), intrinsic);
+                }
             }
         }
         Ok(())
@@ -2583,6 +2601,8 @@ pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, Parse
     Ok(ExecutableSource {
         book: loader.book,
         foreign: loader.foreign,
+        numeric: loader.numeric,
+        constructor_tags: loader.constructor_tags,
         base_names: loader.base_names,
     })
 }

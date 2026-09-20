@@ -415,3 +415,64 @@ fn structural_word_patterns_fail_cleanly_when_compilation_is_too_deep() {
             .contains("pattern compilation exceeds")
     );
 }
+
+#[test]
+fn imported_nat_literals_resolve_like_explicit_local_constructors() {
+    for literal in ["Zero{}", "0n", "Succ{Zero{}}", "1n"] {
+        let fixture = Fixture::new();
+        fixture.write("nat.bend", &format!("{NAT}def value() -> Nat: {literal}\n"));
+        let entry = fixture.write(
+            "main.bend",
+            "import nat.bend as N\ndef main() -> N.Nat: N.value\n",
+        );
+        let book = load(entry).expect("local Nat literal loads");
+        let checked = check_book(&book).expect("local literal uses its declared constructors");
+        let expected = if literal == "Zero{}" || literal == "0n" {
+            "nat.Zero{}"
+        } else {
+            "nat.Succ{nat.Zero{}}"
+        };
+        assert_eq!(checked.evaluate("main", &[]).unwrap().to_string(), expected);
+    }
+}
+
+#[test]
+fn imported_nat_patterns_and_default_operators_use_the_local_type() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "nat.bend",
+        &format!(
+            "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case 0n: b\n    case 1n+p: 1n+Nat.add(p,b)\ndef value() -> Nat: 1n + 2n\n"
+        ),
+    );
+    let entry = fixture.write(
+        "main.bend",
+        "import nat.bend as N\ndef main() -> N.Nat: N.value\n",
+    );
+    let checked = check_book(&load(entry).unwrap()).expect("local Nat patterns and operators");
+    assert_eq!(
+        checked.evaluate("main", &[]).unwrap().to_string(),
+        "nat.Succ{nat.Succ{nat.Succ{nat.Zero{}}}}"
+    );
+}
+
+#[test]
+fn imported_base_literals_stay_global_and_distinct_local_nats_do_not_unify() {
+    let fixture = Fixture::new();
+    fixture.write("library.bend", "import Base\ndef value() -> Nat: 1n + 2n\n");
+    let entry = fixture.write(
+        "main.bend",
+        "import library.bend as L\ndef main() -> Nat: L.value\n",
+    );
+    let checked = check_book(&load(entry).unwrap()).expect("imported Base remains global");
+    assert_eq!(
+        checked.evaluate("main", &[]).unwrap().to_string(),
+        "Succ{Succ{Succ{Zero{}}}}"
+    );
+    fixture.write("nat.bend", NAT);
+    let wrong = fixture.write(
+        "wrong.bend",
+        &format!("import nat.bend as N\n{NAT}def wrong() -> N.Nat: 0n\n"),
+    );
+    check_book(&load(wrong).unwrap()).expect_err("local and imported Nat remain distinct");
+}

@@ -12,6 +12,7 @@ use crate::kernel::DefDecl;
 use crate::kernel::KernelError;
 use crate::syntax::executable::BuiltinForeign;
 use crate::syntax::executable::ForeignDefinition;
+use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
 use std::io::ErrorKind;
 use std::io::Write;
@@ -24,11 +25,13 @@ impl Program {
         definitions: &Rc<BTreeMap<String, DefDecl>>,
         datatypes: &Rc<BTreeMap<String, AdtDecl>>,
         foreign: &BTreeMap<String, ForeignDefinition>,
+        numeric: &BTreeMap<String, NumericIntrinsic>,
     ) -> Self {
         Self {
             definitions: Rc::clone(definitions),
             datatypes: Rc::clone(datatypes),
             foreign: Rc::new(foreign.clone()),
+            numeric: Rc::new(numeric.clone()),
         }
     }
 

@@ -1,18 +1,90 @@
 // SPDX-License-Identifier: MPL-2.0
 use super::executable::BuiltinForeign;
 use super::executable::ForeignTarget;
+use super::executable::NumericIntrinsic;
 use super::load;
 use super::load_executable;
 use super::parse;
 use crate::kernel::Declaration;
 use crate::kernel::Quant;
 use crate::kernel::check_book;
+use crate::kernel::check_executable;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 
 static NEXT: AtomicUsize = AtomicUsize::new(0);
+
+#[test]
+fn numeric_metadata_is_sealed_and_independent_from_foreign_contracts() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let mut source = load_executable(&path).expect("load numeric contracts");
+    assert_eq!(source.numeric.len(), 16);
+    assert_eq!(source.numeric["F32.add"], NumericIntrinsic::Add);
+    assert!(!source.foreign.contains_key("F32.add"));
+    source
+        .numeric
+        .insert("F32.add".into(), NumericIntrinsic::Sub);
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("numeric contract metadata")
+    );
+
+    let mut source = load_executable(&path).unwrap();
+    source.base_names.remove("F32");
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("actual Base datatypes")
+    );
+
+    let mut source = load_executable(&path).unwrap();
+    source.numeric.remove("F32.add");
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("unfilled laws: F32.add")
+    );
+
+    let mut source = load_executable(&path).unwrap();
+    let definition = source
+        .book
+        .declarations
+        .iter_mut()
+        .find_map(|declaration| match declaration {
+            Declaration::Def(definition) if definition.name == "F32.add" => Some(definition),
+            _ => None,
+        })
+        .unwrap();
+    definition.parameters[0].quant = Quant::Many;
+    if let crate::kernel::Term::All { quant, .. } = std::rc::Rc::make_mut(&mut definition.ty) {
+        *quant = Quant::Many;
+    }
+    assert!(
+        check_executable(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("invalid parameter")
+    );
+}
+
+#[test]
+fn constructor_tags_retain_original_spelling_before_qualification() {
+    let fixture = Fixture::new();
+    fixture.write("library.bend", "type Value is Data: Local.Tag{}\n");
+    let path = fixture.write("main.bend", "import library.bend as L\n");
+    let source = load_executable(path).expect("import dotted local constructor");
+    assert_eq!(source.constructor_tags["library.Local.Tag"], "Local.Tag");
+    assert!(source.numeric.is_empty());
+    assert!(source.base_names.is_empty());
+    check_executable(&source).expect("constructor metadata does not change proof rules");
+}
 
 struct Fixture(PathBuf);
 
@@ -67,10 +139,10 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     }
     check_book(&source.book).expect_err("foreign contracts cannot become a strict proof token");
     source.book.declarations.retain(
-        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign),
+        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign || source.numeric.contains_key(&definition.name)),
     );
     check_book(&source.book)
-        .expect("ordinary IO continuation helpers are checked without foreign assumptions");
+        .expect("ordinary IO continuation helpers are checked without runtime assumptions");
     let strict = load(&path).expect("strict loading retains the pure Base");
     assert!(!strict.declarations.iter().any(
         |declaration| matches!(declaration, Declaration::Def(definition) if definition.name == "IO")

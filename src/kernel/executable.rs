@@ -6,6 +6,7 @@
 use super::Declaration;
 use super::DefDecl;
 use super::KernelError;
+use super::Quant;
 use super::Term;
 use super::TermRef;
 use super::check::Engine;
@@ -15,6 +16,7 @@ use super::term;
 use crate::syntax::ExecutableSource;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::ForeignTarget;
+use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::io::Write;
@@ -57,10 +59,32 @@ pub struct ExecutableBook {
     engine: Engine,
     runtime: crate::runtime::Program,
     foreign: BTreeMap<String, ForeignDefinition>,
+    numeric: BTreeMap<String, NumericIntrinsic>,
+    constructor_tags: BTreeMap<String, String>,
     base_names: BTreeSet<String>,
 }
 
 impl ExecutableBook {
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "Typed executable lowering is introduced before its JavaScript emitter."
+        )
+    )]
+    pub(crate) fn lower_for_javascript(
+        &self,
+    ) -> Result<super::elaborate::ExecutableProgram, KernelError> {
+        super::elaborate::lower(
+            &self.engine,
+            &self.foreign,
+            &self.numeric,
+            &self.constructor_tags,
+            &self.base_names,
+            self.entry_kind()?,
+        )
+    }
+
     /// Look up a checked signature; foreign signatures are runtime assumptions.
     #[must_use]
     pub fn definition_type(&self, name: &str) -> Option<&TermRef> {
@@ -75,6 +99,11 @@ impl ExecutableBook {
     /// Names of the foreign contracts assumed by this executable program.
     pub fn foreign_names(&self) -> impl Iterator<Item = &str> {
         self.foreign.keys().map(String::as_str)
+    }
+
+    /// Names of opaque numeric runtime contracts; these are not checked proofs.
+    pub fn numeric_names(&self) -> impl Iterator<Item = &str> {
+        self.numeric.keys().map(String::as_str)
     }
 
     /// The host-language symbol used for a foreign contract, before namespacing.
@@ -234,6 +263,61 @@ fn foreign_contract(
     Ok(())
 }
 
+fn numeric_contract(
+    source: &ExecutableSource,
+    engine: &Engine,
+    definition: &DefDecl,
+    intrinsic: NumericIntrinsic,
+) -> Result<(), KernelError> {
+    if !source.base_names.contains(&definition.name)
+        || NumericIntrinsic::bundled(&definition.name) != Some(intrinsic)
+        || definition.parameters.len() != intrinsic.arity()
+    {
+        return Err(KernelError::new(
+            "invalid bundled numeric contract metadata",
+        ));
+    }
+    for name in [intrinsic.input_type(), intrinsic.output_type()] {
+        if !source.base_names.contains(name) || !engine.adts.contains_key(name) {
+            return Err(KernelError::new(
+                "numeric signatures require actual Base datatypes",
+            ));
+        }
+    }
+    let mut result = strip_annotations(&definition.ty);
+    for parameter in &definition.parameters {
+        let Term::All {
+            quant,
+            id,
+            domain,
+            body,
+            ..
+        } = result.as_ref()
+        else {
+            return Err(KernelError::new(
+                "numeric contract has an invalid function telescope",
+            ));
+        };
+        if *quant != Quant::Lone
+            || parameter.quant != Quant::Lone
+            || *id != parameter.id
+            || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
+            || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
+        {
+            return Err(KernelError::new(
+                "numeric contract has an invalid parameter",
+            ));
+        }
+        result = strip_annotations(body);
+    }
+    if !matches!(result.as_ref(), Term::Ref(name) if name == intrinsic.output_type()) {
+        return Err(KernelError::new(
+            "numeric contract has an invalid result type",
+        ));
+    }
+    Ok(())
+}
+
 /// Check ordinary definitions and executable foreign IO contracts in source order.
 ///
 /// The loader alone constructs [`ExecutableSource`] and identifies actual Base
@@ -257,6 +341,9 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
                 } else if definition.foreign {
                     foreign_contract(source, &engine, definition)
                         .and_then(|()| engine.validate_foreign_definition(definition))
+                } else if let Some(intrinsic) = source.numeric.get(&definition.name) {
+                    numeric_contract(source, &engine, definition, *intrinsic)
+                        .and_then(|()| engine.validate_numeric_definition(definition))
                 } else {
                     engine.validate_def(definition)
                 };
@@ -269,7 +356,9 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
         .defs
         .values()
         .filter(|definition| {
-            definition.body.is_none() && !engine.foreign_contracts.contains(&definition.name)
+            definition.body.is_none()
+                && !engine.foreign_contracts.contains(&definition.name)
+                && !engine.numeric_contracts.contains(&definition.name)
         })
         .map(|definition| definition.name.as_str())
         .collect::<Vec<_>>();
@@ -288,12 +377,27 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
             "foreign metadata has no corresponding declaration",
         ));
     }
-    let runtime =
-        crate::runtime::Program::from_executable(&engine.defs, &engine.adts, &source.foreign);
+    if source
+        .numeric
+        .keys()
+        .any(|name| !engine.numeric_contracts.contains(name))
+    {
+        return Err(KernelError::new(
+            "numeric metadata has no corresponding declaration",
+        ));
+    }
+    let runtime = crate::runtime::Program::from_executable(
+        &engine.defs,
+        &engine.adts,
+        &source.foreign,
+        &source.numeric,
+    );
     Ok(ExecutableBook {
         engine,
         runtime,
         foreign: source.foreign.clone(),
+        numeric: source.numeric.clone(),
+        constructor_tags: source.constructor_tags.clone(),
         base_names: source.base_names.clone(),
     })
 }

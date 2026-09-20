@@ -6,6 +6,8 @@ A Rust rewrite of the Bend 2 proof language, started from
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Native console IO runs through a separate executable-contract checker.
+Sixteen core F32 operations execute within native IO actions; their contracts
+remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
 The bundled Base contains 323 selected pure source declarations, including
 17 templates. GPU, effects and complete library compatibility remain unfinished.

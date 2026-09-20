@@ -251,6 +251,13 @@ Remaining library work includes complete numeric behavior, effects and foreign
 implementation contracts. Representation or
 syntax support alone does not establish an operation's implementation.
 
+The first 16 execution-only F32 contracts are now implemented in a separate
+sealed registry, with bounded native IO evaluation. Strict proof normalization
+keeps them opaque. Thirty cases match actual upstream JavaScript and a raw
+signaling-NaN case records the target difference. Pure-main numeric dispatch,
+the remaining 21 contracts and generated numeric targets remain unfinished;
+see [numeric execution](numeric-execution.md).
+
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
 record unavailable hardware and platform-specific validations accurately.
 Validation: compatibility matrix with observed results, not assumed parity.
@@ -267,6 +274,10 @@ output and Halt exit codes. The full gate passes 168 tests including three
 compile-fail API boundaries. Eight positive upstream fixtures match actual
 upstream JavaScript stdout/stderr/status; two refusals match stdout/status and
 absence of unintended effects, with different diagnostic wording.
+Typed executable lowering now retains code-generation types, quantities,
+constructor owners/fields, local tags, matches, lets and erasure. Its first
+consumer will be a distinct executable JavaScript emitter; the current pure
+compiler and proof-check result remain separate.
 General JavaScript/C interfaces, generated-target effect drivers, scheduling,
 handles and the other 31 Base foreign effects remain required.
 Upstream foreign return contracts can contain false equality payloads; they
@@ -364,6 +375,21 @@ counterexamples; preserve normative rules and conventional authority.
 Completion: reviewed scope/evidence accurately separates kernel laws, bounded
 state checking and unproved full-deck/network/UI behavior.
 
+### [x] 4.4 Prove symbolic observation privacy
+
+Seven separate laws in Poche's `models/bend/privacy.bend` quantify over arbitrary
+well-typed observations and states. For either viewer, equal-size changes to
+the opponent's hidden hand cannot affect the observation when own/public fields
+are fixed. Bidding/Playing corollaries also allow arbitrary hidden stock and
+captured identities; Scoring has no hand-count premise. A well-typed wrong-viewer
+mutation fails the unchanged privacy proof. This is symbolic equality checking,
+not enumeration or a claim about protocol/trace/full-deck confidentiality.
+
+The proof imports the existing micro model without changing its bytes. It
+requires the new module-scoped Nat sugar resolution; the earlier `f12096c`
+release cannot check the separate imported proof. The original exhaustive
+model receipt remains intact and attributable to its retained executable.
+
 ## 5. Validation and publication
 
 ### [x] 5.1 Publish the first verified implementation and evidence
@@ -446,6 +472,22 @@ upstream JavaScript runtime's eager scalar validation. Arbitrary foreign code,
 generated JavaScript/C effect drivers, remaining Base effects and full numeric,
 GPU, hub and CLI behavior remain open. This is a publication milestone, not
 completion of U6 or the broad goal.
+
+### [~] 5.5 Publish executable numerics, import scope and typed lowering
+
+The complete quality gate passes 190 tests, including four compile-fail API
+examples, with two optional profilers ignored. Ten focused typed-lowering tests
+and an independent erasure/dependency/identity review pass. The imported Nat
+literal defect was reproduced from the unchanged Poche model and reduced to
+literal-versus-explicit-constructor module fixtures; three regressions cover
+scope, operators, Base identity and distinct datatype rejection.
+
+An intermediate frozen-build audit covers all 1,302 reference fixtures with
+360 accepted positives, 493 rejected positives, 449 rejected negatives and zero
+abnormal exits. Native numeric comparisons include 30 exact generated boundary
+cases, two unchanged upstream programs and one recorded signaling-NaN target
+difference. The longer upstream float comparison program still exhausts the
+native arena; the existing limits remain unchanged.
 
 ## Completion and risks
 

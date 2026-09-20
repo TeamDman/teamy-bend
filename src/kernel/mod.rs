@@ -8,6 +8,7 @@
 //! check; they never turn an incomplete calculation into evidence.
 
 mod check;
+pub(crate) mod elaborate;
 mod executable;
 mod fresh;
 mod reduce;

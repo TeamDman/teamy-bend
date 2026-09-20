@@ -3,6 +3,82 @@
 # Rust translation and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
 # Execution-only Base declarations. The pure bundled Base is checked first.
 
+# Primitive laws are opaque during checking and implemented only by execution.
+law U32.to_f32:
+  for a: U32
+  F32
+
+law F32.to_u32:
+  for a: F32
+  U32
+
+law F32.add:
+  for a: F32
+  for b: F32
+  F32
+
+law F32.sub:
+  for a: F32
+  for b: F32
+  F32
+
+law F32.mul:
+  for a: F32
+  for b: F32
+  F32
+
+law F32.div:
+  for a: F32
+  for b: F32
+  F32
+
+law F32.mod:
+  for a: F32
+  for b: F32
+  F32
+
+law F32.neg:
+  for a: F32
+  F32
+
+law F32.abs:
+  for a: F32
+  F32
+
+law F32.bits:
+  for a: F32
+  U32
+
+law F32.is_eq:
+  for a: F32
+  for b: F32
+  Bool
+
+law F32.is_ne:
+  for a: F32
+  for b: F32
+  Bool
+
+law F32.is_lt:
+  for a: F32
+  for b: F32
+  Bool
+
+law F32.is_le:
+  for a: F32
+  for b: F32
+  Bool
+
+law F32.is_gt:
+  for a: F32
+  for b: F32
+  Bool
+
+law F32.is_ge:
+  for a: F32
+  for b: F32
+  Bool
+
 type IO.OP<-R: Type> is Type:
   Emit{value: R}
   Halt{code: U32, message: String}

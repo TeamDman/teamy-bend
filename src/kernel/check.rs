@@ -227,6 +227,8 @@ pub(crate) struct Engine {
     // Populated only by executable checking after source provenance and the
     // direct Base IO return contract are verified. Strict proof books keep it empty.
     pub(super) foreign_contracts: BTreeSet<String>,
+    // Numeric contracts are separately sealed and remain opaque to reduction.
+    pub(super) numeric_contracts: BTreeSet<String>,
     fresh_id: usize,
     fuel: usize,
     pub(crate) depth: usize,
@@ -385,6 +387,7 @@ pub(super) fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
         adts: Rc::new(BTreeMap::new()),
         aliases: BTreeMap::new(),
         foreign_contracts: BTreeSet::new(),
+        numeric_contracts: BTreeSet::new(),
         fresh_id: highest
             .checked_add(1)
             .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
@@ -415,6 +418,18 @@ impl Engine {
         Ok(())
     }
 
+    pub(super) fn validate_numeric_definition(
+        &mut self,
+        definition: &DefDecl,
+    ) -> Result<(), KernelError> {
+        if definition.unsafe_ || definition.foreign || definition.body.is_some() {
+            return Err(KernelError::new("invalid numeric executable declaration"));
+        }
+        self.validate_definition(definition, false)?;
+        self.numeric_contracts.insert(definition.name.clone());
+        Ok(())
+    }
+
     fn validate_definition(
         &mut self,
         definition: &DefDecl,
@@ -426,6 +441,7 @@ impl Engine {
         if let Some(previous) = self.defs.get(&definition.name).cloned() {
             if previous.body.is_some()
                 || self.foreign_contracts.contains(&definition.name)
+                || self.numeric_contracts.contains(&definition.name)
                 || definition.body.is_none() && !foreign_completion
             {
                 return Err(KernelError::new("duplicate declaration"));
@@ -647,7 +663,10 @@ impl Engine {
                                 "recursive self-call must decrease structurally, left to right",
                             ));
                         }
-                    } else if def.body.is_none() && !self.foreign_contracts.contains(name) {
+                    } else if def.body.is_none()
+                        && !self.foreign_contracts.contains(name)
+                        && !self.numeric_contracts.contains(name)
+                    {
                         return Err(KernelError::new(format!(
                             "unfilled law {name} cannot be used as live evidence"
                         )));

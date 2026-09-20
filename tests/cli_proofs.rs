@@ -46,6 +46,11 @@ fn invoke(command: &str, source: &Path, args: &[&str]) -> Output {
 
 #[test]
 fn checked_example_evaluates_and_batch_preserves_row_order() {
+    #[derive(facet::Facet)]
+    struct Report {
+        results: Vec<u64>,
+    }
+
     let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("examples/laws.bend");
     let checked = invoke("check", &source, &[]);
     assert!(
@@ -72,10 +77,6 @@ fn checked_example_evaluates_and_batch_preserves_row_order() {
         "{}",
         String::from_utf8_lossy(&output.stderr)
     );
-    #[derive(facet::Facet)]
-    struct Report {
-        results: Vec<u64>,
-    }
     let report: Report = facet_json::from_slice(&output.stdout).expect("valid JSON report");
     assert_eq!(report.results, vec![3, 0, 8, 1]);
 }

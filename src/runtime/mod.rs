@@ -10,10 +10,12 @@ use crate::kernel::Term;
 use crate::kernel::TermRef;
 use crate::kernel::term;
 use crate::syntax::executable::ForeignDefinition;
+use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
 mod executable;
+mod numeric;
 
 type ThunkId = usize;
 type EnvId = usize;
@@ -29,6 +31,7 @@ pub(crate) struct Program {
     definitions: Rc<BTreeMap<String, DefDecl>>,
     datatypes: Rc<BTreeMap<String, AdtDecl>>,
     foreign: Rc<BTreeMap<String, ForeignDefinition>>,
+    numeric: Rc<BTreeMap<String, NumericIntrinsic>>,
 }
 
 #[cfg(test)]
@@ -70,6 +73,7 @@ impl Program {
             definitions: Rc::clone(definitions),
             datatypes: Rc::clone(datatypes),
             foreign: Rc::new(BTreeMap::new()),
+            numeric: Rc::new(BTreeMap::new()),
         }
     }
 
@@ -104,6 +108,10 @@ enum Value {
         name: String,
         arguments: Vec<ThunkId>,
     },
+    Numeric {
+        intrinsic: NumericIntrinsic,
+        arguments: Vec<ThunkId>,
+    },
     Request {
         name: String,
         arguments: Vec<ThunkId>,
@@ -130,6 +138,7 @@ struct Environment {
 enum Frame {
     Update(ThunkId),
     Apply(ThunkId),
+    Numeric(numeric::NumericFrame),
     Match {
         constructor: String,
         arm: ThunkId,
@@ -196,7 +205,12 @@ impl<'program> Machine<'program> {
         if let Some(id) = self.globals.get(name) {
             return Ok(*id);
         }
-        let id = if self.program.foreign.contains_key(name) {
+        let id = if let Some(intrinsic) = self.program.numeric.get(name) {
+            self.allocate(Thunk::Ready(Value::Numeric {
+                intrinsic: *intrinsic,
+                arguments: Vec::new(),
+            }))?
+        } else if self.program.foreign.contains_key(name) {
             self.allocate(Thunk::Ready(Value::Foreign {
                 name: name.into(),
                 arguments: Vec::new(),
@@ -360,6 +374,10 @@ impl<'program> Machine<'program> {
                 match frames.pop() {
                     None => return Ok(value),
                     Some(Frame::Update(id)) => self.arena[id] = Thunk::Ready(value.clone()),
+                    Some(Frame::Numeric(frame)) => {
+                        current = self.numeric_step(frame, value, &mut frames)?;
+                        continue 'evaluate;
+                    }
                     Some(Frame::Apply(argument)) => match value {
                         Value::Closure {
                             binder,
@@ -395,6 +413,14 @@ impl<'program> Machine<'program> {
                         }
                         Value::Foreign { name, arguments } => {
                             current = self.apply_foreign(name, arguments, argument)?;
+                            continue 'evaluate;
+                        }
+                        Value::Numeric {
+                            intrinsic,
+                            arguments,
+                        } => {
+                            current =
+                                self.apply_numeric(intrinsic, arguments, argument, &mut frames)?;
                             continue 'evaluate;
                         }
                         Value::EmitContinuation => {
@@ -462,6 +488,7 @@ impl<'program> Machine<'program> {
             Value::Closure { .. }
             | Value::Match { .. }
             | Value::Foreign { .. }
+            | Value::Numeric { .. }
             | Value::EmitContinuation
             | Value::Impossible => Err(KernelError::new("data runtime result contains a function")),
         }
