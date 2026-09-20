@@ -473,7 +473,11 @@ generated JavaScript/C effect drivers, remaining Base effects and full numeric,
 GPU, hub and CLI behavior remain open. This is a publication milestone, not
 completion of U6 or the broad goal.
 
-### [~] 5.5 Publish executable numerics, import scope and typed lowering
+### [x] 5.5 Publish executable numerics, import scope and typed lowering
+
+Completion: `9da68e5af881d9f473e77353d7811eedcb013412` is verified on
+the public `main` branch. The retained executable reports that revision and a
+clean worktree. Poche proof and adapter changes remain locally reviewable.
 
 The complete quality gate passes 190 tests, including four compile-fail API
 examples, with two optional profilers ignored. Ten focused typed-lowering tests
@@ -488,6 +492,16 @@ abnormal exits. Native numeric comparisons include 30 exact generated boundary
 cases, two unchanged upstream programs and one recorded signaling-NaN target
 difference. The longer upstream float comparison program still exhausts the
 native arena; the existing limits remain unchanged.
+
+The clean `9da68e5af881d9f473e77353d7811eedcb013412` release passes
+the final full strict audit with the same 360/493/449 acceptance counts and
+zero crashes or accepted negatives. It also passes all seven symbolic Poche
+privacy laws and the wrong-viewer control, all 15,503 scalar comparisons and
+the micro trajectory (22 states, 21 transitions, 300 partitions and eight
+controls; 67 requests in 339 ms). Its executable BLAKE3 is
+`2dc33071205ebcde7d1165bd1e8286350be8656140501dc3680441895e23bf20`.
+Original Poche model bytes and all 13 compiled conformance fingerprints remain
+unchanged. The earlier exhaustive receipt retains its original attribution.
 
 ## Completion and risks
 

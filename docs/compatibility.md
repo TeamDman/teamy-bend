@@ -186,3 +186,15 @@ the transcript BLAKE3 is
 `a273a13c52d7e36f956c30b0675cfefeb60ace620dece023b0beb361b0bbed39`.
 The Poche integration remains in its local checkout; these results do not
 imply that its changes have been published.
+
+A separate imported privacy file now proves seven symbolic observation laws.
+With the viewer's own hand, public fields and opponent hand count fixed,
+changing hidden opponent cards leaves that observation equal. Phase corollaries
+also hide undealt/captured identities as specified in Poche's privacy document.
+A well-typed mutation selecting the other player's hand is rejected by the
+unchanged theorem. These laws quantify over typed micro-model values; they do
+not establish protocol, trace or full-deck confidentiality.
+
+The clean `9da68e5` release checks those laws and passes the scalar and trajectory
+regressions. The micro model and all 13 compiled conformance-source fingerprints
+remain unchanged. The exhaustive graph evidence is still attributed to `6802c1e`.
