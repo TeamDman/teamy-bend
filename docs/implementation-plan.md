@@ -15,8 +15,8 @@
 - Historical parallel ownership is not a list of currently running agents.
   Native tasks, timers and channels are complete for this bounded native slice
   (5.12), as are environment and file effects (5.13). Native descriptor readiness
-  and TCP/UDP are implemented; the next engine focus is the generated JavaScript
-  readiness provider and network scheduler (5.14). Keep existing Poche
+  and TCP/UDP now pass native and generated JavaScript validation on Windows
+  (5.14); executable C is the next engine implementation (5.15). Keep existing Poche
   checks as regressions and defer model expansion.
 
 ## Goal wording and scope
@@ -55,7 +55,7 @@ in the ignored `.local/gpu-port-references.md` file at the repository root.
 | U7 | Then use the rewrite to formalize the user's Poche4 repo. | 4.1–4.3 |
 | U8 | Locate Poche4 at the approximate older games-repository path. | 1.1 |
 | U9 | Set an active goal for this work. | Goal tool, done |
-| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12–5.14; existing Poche regression coverage |
+| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12–5.15; existing Poche regression coverage |
 | U11 | Makepad strategies identified by the user as Rik Arends's work may help the later Bend GPU port. | GPU port references; 3.4, evaluation deferred to GPU phase |
 | U12 | The user reports those strategies improved teamy-tts; retain it as a second implementation reference. | GPU port references; user-reported provenance distinguished from inspected source |
 | U13 | Persist both local reference paths and their purpose across compaction; assess current goal wording. | Ignored local reference note; portable GPU reference document; accepted wording above |
@@ -315,8 +315,8 @@ now finds six ordinary definitions, seven foreign functions and two opaque laws
 absent from the union of pure and executable Base after native network support.
 The six file/environment contracts and sealed affine File type execute natively
 and in generated JavaScript; see 5.13 and [native files](native-files.md).
-The eleven network contracts and affine Socket/Listener types are native; their
-JavaScript provider remains unfinished under 5.14. Name coverage is not backend
+The eleven network contracts and affine Socket/Listener types execute natively
+and in generated JavaScript through its synchronous provider (5.14). Name coverage is not backend
 parity.
 Completing that inventory alone does not establish target, runtime or language
 parity.
@@ -1066,13 +1066,14 @@ This completes the bounded environment/file milestone. Descriptor readiness,
 other platform effects, arbitrary native FFI, executable C and GPU remain
 unfinished engine work. The overall goal stays active.
 
-### [~] 5.14 Add native descriptor readiness and TCP/UDP
+### [x] 5.14 Add descriptor readiness and TCP/UDP
 
 Native implementation: 7887746. Exact executable contracts, native owned sockets and the
 mixed timer/readiness scheduler. Network waits use the VM poller rather than file
 workers; a lazily installed notification socket wakes that poller on file-job
-completion. Generated JavaScript readiness remains a required subsequent part
-of this milestone and rejects reachable network effects until implemented.
+completion. Generated JavaScript now has the corresponding effects, mixed
+readiness scheduler and Rust Node-API provider. This bounded milestone is
+validated on Windows; Unix implementations still need platform qualification.
 
 Work: extend the existing native scheduler with bounded readiness registrations,
 sealed affine Socket/Listener contracts and all eleven TCP/UDP/close effects.
@@ -1095,21 +1096,31 @@ Reference entry points: upstream comp.ts io_sys_addr, io_wait_on, io_wait and
 IO_READ dispatch; effs/tcp_*.c, udp_*.c, socket_close.c and listener_close.c;
 tests/io/tcp_* and udp_*. In this port, start from runtime/executable.rs,
 runtime/scheduler.rs, runtime/runtime_clock.rs and the file-job completion/GC
-integration. Generated JavaScript then needs a synchronous syscall/readiness
+integration. Generated JavaScript uses a synchronous syscall/readiness
 provider preserving the raw-descriptor and callback ABI. Keep supplied BEND_SYS
 authoritative. Do not resume VM continuations from asynchronous host callbacks.
 
-Next implementation: maintain bounded descriptor waits alongside timers, poll
+JavaScript implementation: maintain bounded descriptor waits alongside timers, poll
 only after runnable work is drained, and preserve their common registration
 order. Error/hangup readiness must resume the operation; EAGAIN reparks it.
 Preserve upstream's distinction between explicit write parking and the initial
 foreign `need.read` request, which does not park solely for `need.write`.
-Decide the default host provider explicitly: a native addon can serve the current
-Node host, while a supported FFI host is another possible target. A worker using
-virtual handles does not establish compatibility with raw-descriptor foreign
-calls. Preserve full Windows SOCKET width and WSAPOLLFD layout separately from
-POSIX pollfd. Validate deterministic descriptor/timer traces and actual upstream
-JavaScript loopback programs through the selected provider before closing 5.14.
+The selected default Node provider is a Rust Node-API addon in native/node-sys.
+A minimal napi-rs prototype loads on the current Node host without a Node import
+library, using maintained dynamic-symbol bindings. The provider owns sockets it
+creates while exposing actual OS descriptor values to foreign code. Its portable
+syscall interface uses Linux-style constants; a full-width poll_descriptors
+extension preserves Windows SOCKET values, and legacy POSIX pollfd remains
+available for compatible supplied providers and upstream comparison programs.
+The generated loader keeps supplied BEND_SYS authoritative and can load an
+explicit TEAMY_BEND_SYS_MODULE. The CLI packages a built sibling provider beside
+generated programs without embedding machine paths or silently replacing a
+different existing provider. Normal builds include both workspace crates.
+Deterministic descriptor/timer traces and actual upstream JavaScript loopback
+programs pass through this provider. Source entry points:
+compiler/executable_io.js, executable_host.js, executable_network.js and
+cli/compile/compile_cli.rs. Native-addon execution is validated on Windows with
+Node 24; Unix execution remains unverified.
 
 Native validation: ./check-all.ps1 passes 487 tests, including five compile-fail
 examples, with two optional profilers ignored; strict library/test Clippy passes.
@@ -1146,9 +1157,36 @@ Poche HEAD and dirty paths remain unchanged. Receipts are retained under
 target/verified-7887746. This does not rerun or reattribute the prior exhaustive
 graph from 6802c1e. No Poche source or application changes were made.
 
-This completes the bounded native slice. Generated JavaScript networking remains
-required under 5.14; Unix runtime behavior remains unverified. Preserve the
-engine-first next step above and defer Poche model expansion.
+JavaScript validation: the workspace quality gate passes 513 tests, including
+five compile-fail API examples, with two optional profilers ignored. Strict
+workspace library/test Clippy and the direct Node provider test pass. New
+integration coverage comprises eleven networking, nine readiness and five
+ownership tests, plus the provider's descriptor-conversion unit test. These
+cover real TCP/UDP peers, raw descriptor exchange, truncation and zero-byte
+datagrams, mixed timers/duplicate waits/re-parking, frozen provider receivers,
+managed raw-close aliases, provider changes, bounds and CLI packaging.
+
+The frozen JavaScript candidate matches 17 actual upstream checked programs:
+three deterministic syscall scripts, five real peer/refusal/raw-descriptor
+groups and nine upstream networking fixtures with ephemeral-port adaptation.
+Seven actual upstream scheduler traces match observable event ordering,
+including the final timer-only wait after descriptor work drains. These do not
+claim upstream Bun/FFI or Linux/macOS validation. Descriptor-only waits use
+bounded 1,000 ms polls instead of upstream's indefinite -1. The stable managed
+io_sys view intentionally differs in object identity from BEND_SYS; callers
+bypassing that view also bypass invocation cleanup bookkeeping.
+
+All 106 compiled-source fingerprints remain unchanged during the frozen audit.
+The 1,302 strict fixtures retain 362 accepted positives / 491 rejected positives
+/ 449 rejected negatives, with zero accepted negatives, abnormal exits or new
+rejections. Ignored receipts: target/audit-js-network,
+target/js-network-release-comparison, target/js-readiness-release-comparison
+and target/js-network-release-provider.log. Previous native integer/Image/file
+evidence remains attributed to its prior retained release, verified-a5c0c6c.
+Clean release and Poche regression retention follow these candidate checks.
+
+This completes the bounded native and JavaScript networking slice. Continue
+with executable C (5.15) and keep Poche model expansion deferred.
 
 Completion: supported network effects preserve results, readiness ordering,
 ownership, cancellation and bounded resources on validated targets. Then advance
@@ -1157,6 +1195,54 @@ native representations, import deduplication and portable initialization remain
 required. Pure C compilation does not establish that interface. Window/audio and
 GPU remain later engine work; consult the saved GPU references when that phase
 begins.
+
+### [ ] 5.15 Implement executable C and its foreign/runtime ABI
+
+The current compiler/c.rs path lowers a strict Book into the separate lazy
+Value/Thunk constructor runtime in c_runtime.c and prints JSON. The CLI rejects
+executable C. Extending its console dispatch would not provide the upstream
+foreign ABI. Start a separate executable_c backend over the existing typed
+ExecutableProgram; expose the target-neutral lowering currently named
+lower_for_javascript instead of duplicating checking.
+
+First coherent deliverable: native-value layout and constructor-ID assignment,
+C foreign-source assembly, and the Effect/IoWork continuation/activation runtime.
+Preserve the packed Term/Env heap interface used by actual upstream C imports,
+including native words, float bits, characters, Nat, strings, tuples, Result,
+Maybe, Bool, Unit, closures and arrays. Sharing pure front-end logic does not
+make the existing Value-pointer C representation compatible with that ABI.
+
+Share live-reference discovery and canonical import deduplication with the
+JavaScript assembler. Select the first C import, include each canonical source
+once in reference order, and scope constructor aliases around each import.
+Validate constructor IDs, field/parameter arities and mangled-name collisions.
+Reference: upstream comp.ts compile_reqs/compile_tables, the Term layout around
+3332, native representations around 3766, and Effect/IoWork around 5171.
+
+Implement request ownership before specializing bundled effects: the final
+request field is the continuation, an effect returns a Term or IO_PARK, and
+worker call functions must not access VM memory. Packing/resumption and read/time
+parking belong on the event loop. Carry forward bounded buffers, registration
+order, re-parking, cancellation and resource cleanup. Upstream's io_hand has a
+56-bit payload; explicitly reject an unrepresentable host handle or provide a
+qualified bridge instead of truncating it.
+
+Plan Windows host adaptation explicitly: upstream assumes pthread, poll, pipe
+and POSIX sockets. The Node addon establishes relevant syscall contracts but is
+not a standalone C runtime dependency. Preserve effect registration: upstream
+sources use constructor attributes to call io_eff. Qualify a supported C
+toolchain or implement a reviewed explicit initializer path; stripping the
+attribute without invoking those functions is not equivalent.
+
+Validation: compile and run actual emitted C using the existing compiler_c.rs
+toolchain harness. Compare native values, closures/arrays and effects against
+upstream C, generated JavaScript and the Rust VM as applicable. Custom imports
+must exercise constructor aliases, shared-file deduplication, initializer order,
+callback-produced data, raw handles and readiness re-parking. Then carry the
+channel, file and TCP/UDP suites across, including more than 64 waits, partial
+sends and cleanup, with malformed-layout/registration negatives. Console output
+is an early smoke test, not completion of this milestone. Poche model expansion
+remains deferred; window/audio and GPU remain subsequent engine work.
 
 ## Completion and risks
 

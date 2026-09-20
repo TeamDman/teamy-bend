@@ -168,7 +168,7 @@ fn unresumed_suspension_reports_deadlock_without_calling_the_continuation() {
 }
 
 #[test]
-fn promise_readiness_and_unbranded_request_values_fail_before_following_effects() {
+fn promise_and_invalid_readiness_requests_fail_before_following_effects() {
     let fixture = Fixture::new();
     let source = "import Base\ndef effect() -> IO(Unit): import \"effect.js\"\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    Unit <- effect()\n    IO.print(\"AFTER\")\n";
     for (foreign, diagnostic) in [
@@ -181,7 +181,7 @@ fn promise_readiness_and_unbranded_request_values_fail_before_following_effects(
             "readiness scheduling",
         ),
         (
-            "function effect(){io_park_on(0,false,()=>0,()=>0);}",
+            "function effect(){io_park_on(NaN,false,()=>0,()=>0);}",
             "readiness scheduling",
         ),
     ] {

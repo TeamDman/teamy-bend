@@ -2,6 +2,8 @@
 use super::DRIVER;
 use super::FILES;
 use super::ForeignAssembly;
+use super::HOST;
+use super::NETWORK;
 use super::assemble;
 use crate::kernel::check_executable;
 use crate::syntax::load_executable;
@@ -55,7 +57,7 @@ impl Drop for Fixture {
 }
 
 fn driver(foreign: &str, main: &str) -> Output {
-    Fixture::new().run(&format!("{CORE}\n{DRIVER}\n{FILES}\nconst $tbForeign={foreign};\nprocess.exitCode=$tbRunMain({main},true,null);\n"))
+    Fixture::new().run(&format!("{CORE}\n{DRIVER}\n{FILES}\n{HOST}\n{NETWORK}\nconst $tbForeign={foreign};\nprocess.exitCode=$tbRunMain({main},true,null);\n"))
 }
 
 #[test]
@@ -162,7 +164,7 @@ fn unsupported_scheduling_fails_explicitly() {
         ),
         (
             "[{run:()=>{process.stdout.write('BAD');return 1},need:()=>({read:true})}]",
-            "readiness scheduling is not supported",
+            "readiness scheduling requires a lossless descriptor",
         ),
         ("[{}]", "foreign implementation is missing"),
     ] {

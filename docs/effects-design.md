@@ -7,8 +7,9 @@ The existing strict checker and Poche constructor protocol remain the proof path
 Native execution and generated JavaScript implement console effects, tasks,
 timers, channels, environment lookup and files through separate execution
 contracts. JavaScript also supports synchronous foreign code and callbacks.
-Native TCP/UDP uses the VM descriptor poller. Arbitrary native foreign calls,
-JavaScript readiness/networking, window/audio, executable C and GPU work remain
+Native TCP/UDP uses the VM descriptor poller; generated JavaScript uses a
+synchronous Rust Node-API provider. Arbitrary native foreign calls,
+window/audio, executable C and GPU work remain
 unfinished. Engine parity remains the priority;
 existing Poche checks provide regressions without changing its application
 architecture.
@@ -119,15 +120,16 @@ files execute once in an isolated shared scope. Foreign wrappers use the actual
 declared live telescope and the continuation. The driver must keep pending
 requests out of ordinary matches, preserve raw callbacks and treat undefined
 as a suspended action. Timers, channels and file effects have Node adapters.
-Descriptor readiness and the full Bun/POSIX system interface still require
-implementation and validation.
+Descriptor readiness and network syscalls use the adapter described in
+[JavaScript networking](executable-network.md). This does not establish the full
+Bun/POSIX FFI surface.
 
 ## Effect inventory and validation
 
 The complete foreign Base inventory has 34 functions. Both native execution and
-generated JavaScript implement the first 16, covering console, environment/tasks,
-channels and files. Native execution also implements the eleven network effects,
-bringing its total to 27; the seven window/audio effects remain unfinished:
+generated JavaScript implement 27, covering console, environment/tasks,
+channels, files and the eleven network effects. The seven window/audio effects
+remain unfinished:
 
 | Group | Functions |
 | --- | --- |
@@ -146,8 +148,8 @@ suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
 remaining work. The Node timer adapter retains the synchronous polling model.
 Generated JavaScript also supports the sealed opaque Chan family and four
 channel operations, with ordinary IO.fork/join and sequential List.for_each.
-The channel family remains absent from strict Base. JavaScript readiness,
-window/audio opaque handle families and window-backed App helpers are
+The channel family remains absent from strict Base. Window/audio opaque handle
+families and window-backed App helpers are
 still required.
 
 The six environment/file effects are IO.get_env and
@@ -182,9 +184,9 @@ order and direct pending-continuation GC roots. File workers notify the poller
 through a lazy socket wake pair. These operations remain separate from arbitrary
 native foreign callbacks. [Native networking](native-network.md) records syscall
 boundaries, Windows error policy, cancellation and resource limits. Generated
-JavaScript requires a real syscall/readiness provider preserving its foreign
-descriptor interface; its compile path rejects reachable network effects until
-that provider exists.
+JavaScript uses a synchronous Node-API socket provider, with supplied BEND_SYS
+providers retained as an explicit alternative. Its mixed timer/descriptor
+scheduler preserves raw descriptor exchange and saved callbacks.
 
 Native Rust scheduling now uses Machine-owned FIFO tasks and timer queues whose
 continuations are traced by the collector. Synchronous effects run until a task
@@ -238,8 +240,9 @@ The synchronous JavaScript slice is implemented in
 embeds reachable foreign sources without executing them during compilation,
 preserves native representations and callbacks, and supplies a console driver.
 Undefined returns can suspend and saved continuations can resume through io_push.
-Time hooks park on the bounded timer scheduler. Promises and descriptor readiness
-remain unsupported; this driver does not pump JavaScript event-loop callbacks.
+Time/readiness hooks park on the bounded mixed scheduler described in
+[JavaScript networking](executable-network.md). Promises remain unsupported;
+this driver does not pump JavaScript event-loop callbacks.
 All 37 numeric contracts now execute in native IO and generated JavaScript;
 their proof signatures remain opaque, with target-specific text and math
 behavior recorded in [numeric execution](numeric-execution.md).

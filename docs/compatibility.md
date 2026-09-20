@@ -34,7 +34,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   18 templates, 25 laws and 20 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, JavaScript readiness/networking, window/audio effects,
+GPU calls, hub fetch/publish, window/audio effects,
 general large native Nat computation, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
@@ -84,7 +84,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-JavaScript network, window/audio Base effects and unsafe execution remain
+window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -95,7 +95,8 @@ synchronous waits; JavaScript event-loop callbacks and promises are not pumped.
 Channels support buffered and zero-capacity transfer, closure and ordinary
 fork/join. A separately sealed opaque Chan family grants executable handle
 types; strict checking still rejects that unfilled law. List.for_each executes
-callbacks sequentially. Descriptor readiness remains unsupported.
+callbacks sequentially. Descriptor readiness and TCP/UDP use the synchronous
+[network provider](executable-network.md), with mixed timer/descriptor ordering.
 
 Native `run` supports IO.spawn, IO.sleep and IO.now with cooperative FIFO tasks.
 Spawn continues its parent; sleeping yields even for zero milliseconds; ready
@@ -132,8 +133,10 @@ VM readiness poller, leaving file workers available. Ready descriptors and due
 timers follow their common registration order after worker completions. Pending
 continuations are collector roots; all live and parked sockets close on driver
 exit. See [native networking](native-network.md) for error/handle behavior,
-partial sends, datagrams, cancellation and bounds. Generated JavaScript still
-rejects reachable network calls until its host readiness provider is implemented.
+partial sends, datagrams, cancellation and bounds. Generated JavaScript implements
+the same eleven effects through its Rust Node-API provider or a supplied BEND_SYS;
+its raw-descriptor ABI, managed provider views and target differences are described
+in [JavaScript networking](executable-network.md).
 
 Native IO.now retains the OS monotonic clock origin: Windows performance-counter
 nanoseconds or Unix CLOCK_MONOTONIC, floored to milliseconds. It is not rebased
@@ -199,7 +202,7 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The completed native-network candidate audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
+The completed JavaScript-network candidate audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
 checked, 491 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
@@ -208,10 +211,12 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The native-network implementation passes 487 tests, including 5 compile-fail API
+The JavaScript-network implementation passes 513 tests, including 5 compile-fail API
 boundary examples, with 2 optional
 local profilers ignored. Strict Clippy checking covers the library and
-integration tests. Its frozen candidate records 97 compiled-source fingerprints.
+integration tests across both workspace crates. Direct Node provider tests are
+also part of the quality gate. Its frozen candidate records 106 compiled-source
+fingerprints and preserves the previous native-network audit decisions.
 [Native networking](native-network.md) distinguishes real loopback, forced-GC
 and adapted upstream C evidence. The [implementation plan](implementation-plan.md)
 tracks publication validation and retained comparison receipts.
@@ -225,8 +230,9 @@ virtual-clock/collection tests, and 13 complete programs matched against actual
 upstream generated JavaScript. The upstream comparison runs each program with
 two clock origins, including one above U32. All 256 integer comparisons and 21
 Image workloads continue to pass. Native channels have separate validation
-in [native channels](native-channels.md). Arbitrary native FFI and readiness
-remain unsupported.
+in [native channels](native-channels.md). Descriptor readiness now has separate
+native and [JavaScript networking](executable-network.md) validation. Arbitrary
+native FFI remains unsupported.
 
 The latest pure-library comparison matches 19 complete programs against upstream.
 The unchanged `base/string_kit.bend` and `base/num_kit.bend` still hit the kernel

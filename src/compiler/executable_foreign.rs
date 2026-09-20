@@ -16,6 +16,8 @@ use std::fs;
 
 const DRIVER: &str = include_str!("executable_io.js");
 const FILES: &str = include_str!("executable_files.js");
+const HOST: &str = include_str!("executable_host.js");
+const NETWORK: &str = include_str!("executable_network.js");
 
 pub(super) struct ForeignAssembly {
     pub(super) source: String,
@@ -36,7 +38,7 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
         };
         indices.insert(name.to_owned(), entries.len());
         if let Some(builtin) = foreign.builtin {
-            let function = builtin_function(name, builtin)?;
+            let function = builtin_function(builtin);
             // Resolve these outside the foreign lexical scope: a companion
             // file declaring the same name cannot replace bundled contracts.
             entries.push((Some(function), String::new()));
@@ -80,6 +82,8 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
     }
     let mut source = String::from(DRIVER);
     source.push_str(FILES);
+    source.push_str(HOST);
+    source.push_str(NETWORK);
     source.push_str("\nconst $tbForeign = (() => {\n");
     source.push_str(&imports);
     source.push_str("return [\n");
@@ -108,11 +112,8 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
     Ok(ForeignAssembly { source, indices })
 }
 
-fn builtin_function(
-    name: &str,
-    builtin: BuiltinForeign,
-) -> Result<(&'static str, &'static str), CompileError> {
-    Ok(match builtin {
+fn builtin_function(builtin: BuiltinForeign) -> (&'static str, &'static str) {
+    match builtin {
         BuiltinForeign::Print => ("$tbPrint", "undefined"),
         BuiltinForeign::Write => ("$tbWrite", "undefined"),
         BuiltinForeign::PrintErr => ("$tbPrintErr", "undefined"),
@@ -129,22 +130,19 @@ fn builtin_function(
         BuiltinForeign::FileReadBytes => ("$tbFileReadBytes", "undefined"),
         BuiltinForeign::FileWrite => ("$tbFileWrite", "undefined"),
         BuiltinForeign::FileClose => ("$tbFileClose", "undefined"),
-        BuiltinForeign::TcpListen
-        | BuiltinForeign::TcpAccept
-        | BuiltinForeign::TcpConnect
-        | BuiltinForeign::TcpSend
-        | BuiltinForeign::TcpRecv
-        | BuiltinForeign::UdpBind
-        | BuiltinForeign::UdpSendTo
-        | BuiltinForeign::UdpRecvFrom
-        | BuiltinForeign::UdpPoll
-        | BuiltinForeign::SocketClose
-        | BuiltinForeign::ListenerClose => {
-            return Err(CompileError::new(format!(
-                "executable JavaScript descriptor readiness is not implemented for {name}"
-            )));
+        BuiltinForeign::TcpListen => ("$tbTcpListen", "undefined"),
+        BuiltinForeign::TcpAccept => ("$tbTcpAccept", "$tbNetworkReadNeed"),
+        BuiltinForeign::TcpConnect => ("$tbTcpConnect", "undefined"),
+        BuiltinForeign::TcpSend => ("$tbTcpSend", "undefined"),
+        BuiltinForeign::TcpRecv => ("$tbTcpRecv", "$tbNetworkReadNeed"),
+        BuiltinForeign::UdpBind => ("$tbUdpBind", "undefined"),
+        BuiltinForeign::UdpSendTo => ("$tbUdpSendTo", "undefined"),
+        BuiltinForeign::UdpRecvFrom => ("$tbUdpRecvFrom", "$tbNetworkReadNeed"),
+        BuiltinForeign::UdpPoll => ("$tbUdpPoll", "undefined"),
+        BuiltinForeign::SocketClose | BuiltinForeign::ListenerClose => {
+            ("$tbSocketClose", "undefined")
         }
-    })
+    }
 }
 /// Upstream assembles foreign files in breadth-first live-reference order from
 /// main. File initialization can depend on earlier files, so sorting definition

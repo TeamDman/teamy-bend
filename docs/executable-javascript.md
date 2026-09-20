@@ -69,12 +69,12 @@ Atomics waits, preserving upstream's synchronous polling model. It does not
 pump event-loop callbacks or await promises; promises still reject explicitly.
 Companion helpers `io_bytes`, `io_text`, `io_out`, `io_errs`, `io_done`, `io_tup`
 and `io_fail` are provided. `io_sys` honors a supplied globalThis.BEND_SYS.
-Otherwise it supplies the bounded Node file-read/error adapter described below.
-It does not implement the full Bun/POSIX system interface. Descriptor readiness,
-network and window/audio effects remain unfinished.
-Native `run` implements TCP/UDP through its own descriptor poller; that does not
-establish this JavaScript backend's readiness support. Reachable network contracts
-currently fail compilation without overwriting output files.
+Otherwise it combines the bounded Node file-read/error adapter with a lazily
+loaded Rust Node-API socket provider. TCP/UDP and descriptor readiness preserve
+raw handles, callback suspension and mixed timer/socket ordering. See
+[JavaScript networking](executable-network.md) for packaging, ownership and
+provider adaptation. This does not implement the full Bun/POSIX system interface;
+window/audio effects remain unfinished.
 
 ## Environment and files
 
@@ -153,7 +153,7 @@ use a trampoline. Pure output limits are 96 levels, 16,384 visited nodes and
 8 MiB of text; string construction and each console write also have an 8 MiB
 byte limit. These are fail-closed execution limits, not upstream performance
 parity. The scheduler shares the transition budget and permits at most 131,072
-live tasks and 131,072 queued tasks/timers/channel waiters in total. Channel
+live tasks and 131,072 queued tasks/timers/descriptors/channel waiters in total. Channel
 accounting also caps retained handles and buffered payload slots at 131,072 each.
 File reads first clamp to INT32_MAX, then reject requests above the 8 MiB
 buffer limit. File writes and decoded text have the same byte limit, and tracked
@@ -205,7 +205,7 @@ overdue together. The upstream program reproduced this variation, and both
 implementations produce the same order with identical injected oversleep.
 These comparisons cover timer behavior without claiming wall-clock determinism.
 
-The full rewrite still requires host readiness, arbitrary native foreign calls,
-network/window/audio effects, executable C, remaining library contracts, GPU
+The full rewrite still requires arbitrary native foreign calls,
+window/audio effects, executable C, remaining library contracts, GPU
 support and the rest of the upstream
 CLI. See the [implementation plan](implementation-plan.md).

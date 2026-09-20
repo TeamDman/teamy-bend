@@ -48,6 +48,18 @@ Invoke-Step -Label "build" -Action {
 	cargo build --all-features --quiet
 }
 
+Invoke-Step -Label "Node socket provider" -Action {
+	$providerLibrary = if ($IsWindows) {
+		"target/debug/teamy_bend_sys.dll"
+	} elseif ($IsMacOS) {
+		"target/debug/libteamy_bend_sys.dylib"
+	} else {
+		"target/debug/libteamy_bend_sys.so"
+	}
+	$nodeExecutable = if ($env:TEAMY_BEND_NODE) { $env:TEAMY_BEND_NODE } else { "node" }
+	& $nodeExecutable native/node-sys/tests/provider.cjs $providerLibrary
+}
+
 Invoke-Step -Label "tests" -Action {
 	$featuresArg = Get-NonTracyTestFeatureArgs
 	cargo test @featuresArg --quiet

@@ -52,6 +52,7 @@ struct CompileReport {
     output: String,
     target: String,
     bytes: usize,
+    socket_provider: Option<String>,
 }
 
 impl CompileArgs {
@@ -85,6 +86,16 @@ impl CompileArgs {
         };
         let program = program.map_err(|error| eyre!("{error}"))?;
         cancellation.bail_if_cancelled()?;
+        if !self.force && std::path::Path::new(&self.output).exists() {
+            return Err(eyre!(
+                "cannot create compiled output (use --force to replace an existing file)"
+            ));
+        }
+        let socket_provider = if self.executable {
+            install_socket_provider(std::path::Path::new(&self.output))?
+        } else {
+            None
+        };
         let mut options = std::fs::OpenOptions::new();
         options.write(true);
         if self.force {
@@ -102,6 +113,58 @@ impl CompileArgs {
             output: self.output,
             target: target.to_owned(),
             bytes: program.len(),
+            socket_provider,
         }))
     }
+}
+
+/// Package a built provider without putting this machine's location into source.
+/// A different existing provider may be shared by other generated programs, so
+/// replacing the requested source file does not silently replace that library.
+fn install_socket_provider(output: &std::path::Path) -> Result<Option<String>> {
+    if output
+        .file_name()
+        .and_then(|name| name.to_str())
+        .is_some_and(|name| name.eq_ignore_ascii_case("teamy-bend-sys.node"))
+    {
+        return Err(eyre!("compiled source cannot replace the socket provider"));
+    }
+    let executable = std::env::current_exe().wrap_err("cannot locate compiler executable")?;
+    let directory = executable
+        .parent()
+        .ok_or_else(|| eyre!("compiler has no directory"))?;
+    let library = if cfg!(windows) {
+        "teamy_bend_sys.dll"
+    } else if cfg!(target_os = "macos") {
+        "libteamy_bend_sys.dylib"
+    } else {
+        "libteamy_bend_sys.so"
+    };
+    let source = directory.join(library);
+    if !source.is_file() {
+        // Custom BEND_SYS providers and explicit runtime module paths remain
+        // valid. Compiling source never loads or executes a host provider.
+        return Ok(None);
+    }
+    let destination = output
+        .parent()
+        .unwrap_or_else(|| std::path::Path::new("."))
+        .join("teamy-bend-sys.node");
+    let bytes = std::fs::read(source).wrap_err("cannot read socket provider")?;
+    if destination.exists() {
+        if std::fs::read(&destination).wrap_err("cannot read existing socket provider")? != bytes {
+            return Err(eyre!(
+                "existing socket provider differs; choose another output directory or replace the provider explicitly"
+            ));
+        }
+    } else {
+        let mut file = std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&destination)
+            .wrap_err("cannot create socket provider")?;
+        file.write_all(&bytes)
+            .wrap_err("cannot write socket provider")?;
+    }
+    Ok(Some(destination.to_string_lossy().into_owned()))
 }

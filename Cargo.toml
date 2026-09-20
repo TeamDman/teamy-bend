@@ -11,6 +11,11 @@ keywords = ["bend", "proof", "verification", "language", "cli"]
 categories = ["command-line-utilities"]
 documentation = "https://github.com/TeamDman/teamy-bend"
 
+[workspace]
+members = ["native/node-sys"]
+default-members = [".", "native/node-sys"]
+resolver = "3"
+
 [dependencies]
 arbitrary = { version = "1.4.1", features = ["derive"] }
 chrono = "0.4"

@@ -4,9 +4,9 @@ The native engine implements TCP.listen/accept/connect/send/recv,
 UDP.bind/send_to/recv_from/poll and Socket.close/Listener.close. These use the
 separate executable contract checker. Socket and Listener are loader-sealed,
 nullary affine Types; host results cannot become strict proof evidence.
-The native slice is validated on Windows. Task 5.14 of the
-[implementation plan](implementation-plan.md) remains open for generated
-JavaScript networking and its host readiness provider.
+The native slice is validated on Windows. Generated JavaScript has a separate
+[network provider and scheduler](executable-network.md); task 5.14 of the
+[implementation plan](implementation-plan.md) tracks its validation.
 
 ## Ownership and results
 
@@ -78,16 +78,14 @@ share a 131,072-entry bound. Decoding temporaries, socket kernel buffers and the
 file-worker budget are additional; these limits are not a total-process memory
 cap. The existing evaluation and arena limits also apply.
 
-Generated JavaScript networking still requires a real synchronous syscall and
-readiness provider preserving the upstream foreign descriptor/callback interface.
-Until that layer is implemented, reachable network effects produce a compile
-error and leave existing output files unchanged. Unused network Base declarations
-do not prevent compilation. Executable C, window/audio and GPU remain separate
-unfinished engine work.
+Generated JavaScript networking uses a separate synchronous syscall and readiness
+provider preserving raw descriptors and callbacks. See its documentation for
+Node-API packaging and the supplied BEND_SYS interface. Executable C, window/audio
+and GPU remain separate unfinished engine work.
 
 ## Validation boundary
 
-The quality gate passes 487 tests, including five compile-fail API boundary
+The retained native milestone's quality gate passed 487 tests, including five compile-fail API boundary
 examples, with two optional local profilers ignored. Strict library/test Clippy
 passes. Nine public networking tests exercise checked source programs and
 same-process cancellation; eight CLI cases also pass with the frozen release.

@@ -8,13 +8,13 @@ checking, pure evaluation, persistent typed calls and JavaScript/C generation wo
 Native console IO, tasks, timers, channels, environment lookup, files and TCP/UDP
 use a separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
-and channels with fork/join, plus the same environment and file contracts.
+and channels with fork/join, plus environment, file and TCP/UDP contracts.
 All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
 The bundled Base contains 367 selected pure source declarations, including
 18 templates, Image quadtrees and Event values. Finite App playback runs through
-native IO and generated JavaScript. JavaScript networking, window/audio effects,
+native IO and generated JavaScript. Window/audio effects,
 executable C, GPU and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
@@ -70,7 +70,10 @@ live after main completes; timers and saved continuations use a FIFO scheduler.
 Compilation embeds
 foreign source; running the generated program executes it with Node's host
 permissions. Channel values preserve the reference foreign interface; fork/join
-helpers use the same scheduler. Host readiness and executable C remain unfinished.
+helpers use the same scheduler. TCP/UDP uses the synchronous Rust Node-API
+provider built alongside the CLI and packaged beside generated programs. See
+[JavaScript networking](docs/executable-network.md) for provider setup, raw
+descriptors and limits. Executable C remains unfinished.
 Environment and file effects use synchronous Node calls. The sealed affine File
 type prevents source code from copying handles; reads and writes return the
 handle on both success and failure. See

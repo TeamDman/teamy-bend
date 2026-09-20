@@ -255,20 +255,16 @@ fn network_opaque_laws_cannot_enter_the_strict_proof_checker() {
 }
 
 #[test]
-fn reachable_network_contracts_refuse_javascript_before_output_is_changed() {
+fn reachable_network_contracts_compile_to_the_host_provider_interface() {
     use std::process::Command;
 
     let source =
         "import Base\ndef main() -> IO(Result<&1, &1, U32 & String, Listener>): TCP.listen(0)\n";
     let fixture = Fixture::new(source);
     let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
-    let error = compile_executable_javascript(&checked)
-        .unwrap_err()
-        .to_string();
-    assert!(
-        error.contains("descriptor readiness") && error.contains("TCP.listen"),
-        "{error}"
-    );
+    let javascript = compile_executable_javascript(&checked).unwrap();
+    assert!(javascript.contains("run:$tbTcpListen"));
+    assert!(javascript.contains("TEAMY_BEND_SYS_MODULE"));
     let output_path = fixture.0.join("main.cjs");
     for existing in [false, true] {
         if existing {
@@ -281,16 +277,12 @@ fn reachable_network_contracts_refuse_javascript_before_output_is_changed() {
             .arg(&output_path)
             .output()
             .unwrap();
-        assert!(!output.status.success());
-        assert!(String::from_utf8_lossy(&output.stderr).contains("descriptor readiness"));
-        if existing {
-            assert_eq!(
-                fs::read_to_string(&output_path).unwrap(),
-                "preserve this output"
-            );
-        } else {
-            assert!(!output_path.exists());
-        }
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(fs::read_to_string(&output_path).unwrap(), javascript);
     }
 }
 

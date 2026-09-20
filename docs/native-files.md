@@ -101,5 +101,6 @@ in isolated copied fixture directories and state target differences explicitly.
 The implementation plan records publication-specific counts and retained receipts.
 
 Native descriptor readiness and sockets are covered by
-[native networking](native-network.md). JavaScript networking, interactive
-window/audio effects, executable C and GPU execution remain unfinished.
+[native networking](native-network.md) and
+[JavaScript networking](executable-network.md). Interactive window/audio effects,
+executable C and GPU execution remain unfinished.

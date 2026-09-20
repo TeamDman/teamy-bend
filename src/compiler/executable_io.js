@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Cooperative scheduling derived from Bend 2.0.5, Copyright 2026 HigherOrderCO.
-// Bounded Node timer adapter and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
+// Bounded Node timer/readiness adapter and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
 // Execution-only IO driver. Foreign JavaScript is trusted host code;
 // its returned values are not proof certificates or validated Bend constructors.
 const $tbRequests = new WeakSet();
 const $tbChannelRows = new WeakMap();
+const $tbManagedProviders = new WeakMap();
 let $tbIo = null;
 const $tbPendingLimit = 131072;
 const $tbWaitWord = new Int32Array(new SharedArrayBuffer(4));
@@ -210,22 +211,102 @@ function $tbWake(wait) {
   return value === undefined ? undefined : $tbForceCall(wait.k, [value]);
 }
 
+function $tbDescriptor(fd) {
+  if ((typeof fd === 'number' && Number.isSafeInteger(fd))
+      || (typeof fd === 'bigint' && fd >= 0n && fd <= 0xffffffffffffffffn)) return fd;
+  throw new Error('IO readiness scheduling requires a lossless descriptor');
+}
+
+function $tbPark(fd, out, k, more) {
+  const io = $tbIo;
+  if (io === null) throw new Error('IO readiness scheduling requires an active scheduler');
+  fd = $tbDescriptor(fd);
+  if (typeof k !== 'function' || typeof more !== 'function') {
+    throw new Error('IO readiness scheduling requires continuation functions');
+  }
+  $tbPending(io, 1);
+  io.waits.push({ fd, out, k, more });
+}
+
+function $tbPoll(descriptors, milliseconds) {
+  const sys = io_sys();
+  if (typeof sys?.poll_descriptors === 'function') {
+    // This extension keeps a Windows SOCKET intact instead of truncating it
+    // through POSIX's signed-i32 pollfd field. Masks retain the upstream ABI.
+    const ready = $tbSuspendable(sys.poll_descriptors(descriptors, milliseconds));
+    if ((!Array.isArray(ready) && !(ArrayBuffer.isView(ready) && !(ready instanceof DataView)))
+        || ready.length !== descriptors.length) {
+      throw new Error('IO readiness provider returned an invalid result count');
+    }
+    for (const mask of ready) {
+      $tbTick();
+      if (!Number.isInteger(mask) || mask < 0 || mask > 65535) {
+        throw new Error('IO readiness provider returned an invalid event mask');
+      }
+    }
+    return ready;
+  }
+  if (sys?.poll_descriptors !== undefined
+      || typeof sys?.poll !== 'function'
+      || (descriptors.length > 0 && typeof sys?.ptr !== 'function')) {
+    throw new Error('IO readiness scheduling requires a synchronous poll provider');
+  }
+  const buffer = new Int32Array(descriptors.length * 2);
+  for (let i = 0; i < descriptors.length; i++) {
+    $tbTick();
+    const { fd, events } = descriptors[i];
+    if (fd < -2147483648 || fd > 2147483647) {
+      throw new Error('IO readiness provider needs poll_descriptors for a full-width handle');
+    }
+    buffer[2 * i] = Number(fd);
+    buffer[2 * i + 1] = events;
+  }
+  const pointer = descriptors.length > 0 ? sys.ptr(buffer) : null;
+  const count = $tbSuspendable(sys.poll(pointer, descriptors.length, milliseconds));
+  if (!Number.isInteger(count) || count < 0 || count > descriptors.length) {
+    throw new Error('IO readiness provider returned an invalid poll count');
+  }
+  const ready = [];
+  let observed = 0;
+  for (let i = 0; i < descriptors.length; i++) {
+    $tbTick();
+    const mask = buffer[2 * i + 1] >>> 16;
+    ready.push(mask);
+    if (mask !== 0) observed++;
+  }
+  if (observed !== count) throw new Error('IO readiness provider returned inconsistent poll events');
+  return ready;
+}
+
 function $tbWait(io) {
   let soon = Infinity;
-  for (const wait of io.waits) { $tbTick(); soon = Math.min(soon, wait.at); }
-  const delay = Math.ceil(soon - performance.now());
+  const descriptors = [];
+  for (const wait of io.waits) {
+    $tbTick();
+    if (wait.at !== undefined) soon = Math.min(soon, wait.at);
+    if (wait.fd !== undefined) descriptors.push({ fd: wait.fd, events: wait.out ? 4 : 1 });
+  }
+  const delay = Math.min(Math.max(0, Math.ceil(soon - performance.now())), 1000);
   $tbTick();
-  // Poll even for overdue timers, matching upstream's scheduling point.
-  // Timer-only Node waits are synchronous: promises and ordinary event-loop
-  // callbacks are not pumped. Long sleeps recheck the shared budget each second.
-  Atomics.wait($tbWaitWord, 0, 0, Math.min(Math.max(0, delay), 1000));
+  // Poll even for overdue timers. Both adapters are synchronous; ordinary Node
+  // event-loop callbacks are not pumped. Recheck the shared budget each second.
+  const supplied = globalThis.BEND_SYS;
+  const poll = descriptors.length > 0 || (supplied != null
+    && (supplied.poll_descriptors !== undefined || supplied.poll !== undefined));
+  // A supplied poller also owns zero-descriptor waits, just like upstream.
+  // Default timer-only programs never need to load the native network addon.
+  const ready = poll ? $tbPoll(descriptors, delay) : [];
+  if (!poll) Atomics.wait($tbWaitWord, 0, 0, delay);
   const now = performance.now();
   const waiting = io.waits;
   io.waits = [];
-  // If several deadlines are overdue, upstream resumes registration order.
+  let index = 0;
+  // Preserve the common registration order, including duplicate descriptors.
+  // Any returned event (including ERR/HUP/NVAL) retries the original operation.
   for (const wait of waiting) {
     $tbTick();
-    if (wait.at <= now) $tbPush($tbWake, wait, false);
+    const mask = wait.fd === undefined ? 0 : ready[index++];
+    if (mask !== 0 || wait.at <= now) $tbPush($tbWake, wait, false);
     else io.waits.push(wait);
   }
 }
@@ -242,7 +323,7 @@ function $tbRunTasks(main) {
         io.runs.length = 0;
         io.head = 0;
         if (io.live === 0) return 0;
-        if (io.waits.length === 0) throw new Error('IO deadlock: no runnable task or timer');
+        if (io.waits.length === 0) throw new Error('IO deadlock: no runnable task, timer or descriptor');
         $tbWait(io);
         continue;
       }
@@ -263,14 +344,20 @@ function $tbRunTasks(main) {
           }
           // The hook receives no arguments, with the request as its receiver.
           const need = operation.need?.() ?? {};
-          if (need.read || need.write) throw new Error('IO readiness scheduling is not supported');
-          if (need.time) {
-            const at = performance.now() + Number(operation.args[0]);
-            if (!Number.isFinite(at)) throw new Error('IO timer deadline must be finite');
-            $tbPending(io, 1);
+          // Upstream ignores write-only hooks; writes explicitly call
+          // io_park_on after their first nonblocking syscall would block.
+          const fd = need.read ? operation.args[0] : null;
+          if (need.time || fd !== null) {
             const request = operation;
-            io.waits.push({ at, k: request.continuation,
-              more: () => request.run(...request.args, request.continuation) });
+            const more = () => request.run(...request.args, request.continuation);
+            if (fd !== null) {
+              $tbPark(fd, false, request.continuation, more);
+            } else {
+              const at = performance.now() + Number(request.args[0]);
+              if (!Number.isFinite(at)) throw new Error('IO timer deadline must be finite');
+              $tbPending(io, 1);
+              io.waits.push({ at, k: request.continuation, more });
+            }
             break;
           }
           const value = $tbSuspendable(operation.run(...operation.args, operation.continuation));
@@ -301,6 +388,10 @@ function $tbRunTasks(main) {
     io.waits.length = 0;
     io.live = 0;
     $tbIo = null;
+    // Only the network companion owns/cleans its handles. Foreign providers
+    // remain authoritative; cleanup must never replace the original failure.
+    try { if (typeof $tbCloseNetwork === 'function') $tbCloseNetwork(); }
+    catch (_) { /* Closing an owned descriptor is best effort on every exit. */ }
   }
 }
 
@@ -319,12 +410,50 @@ function io_done(value) { return { $: 'Done', value }; }
 function io_tup(...values) {
   return values.reduceRight((snd, fst) => ({ $: 'Tuple', fst, snd }));
 }
-function io_sys() { return globalThis.BEND_SYS ?? $tbFileSys(); }
+function $tbManagedSys(provider) {
+  if (provider === null || (typeof provider !== 'object' && typeof provider !== 'function')) return provider;
+  let view = $tbManagedProviders.get(provider);
+  if (view !== undefined) return view;
+  const methods = new Map();
+  // Use a separate proxy target: a frozen provider may have nonconfigurable
+  // methods, whose identity a proxy directly over that object could not change.
+  view = new Proxy({}, {
+    get(_target, key) {
+      const method = Reflect.get(provider, key, provider);
+      if (typeof method !== 'function') return method;
+      const cached = methods.get(key);
+      if (cached?.method === method) return cached.call;
+      const call = (...args) => {
+        if (key !== 'close') return Reflect.apply(method, provider, args);
+        try { return Reflect.apply(method, provider, args); }
+        finally {
+          // The original provider and raw descriptor remain authoritative.
+          // Forget only its tracked ownership, including on a close failure.
+          if (typeof $tbForgetSocket === 'function') $tbForgetSocket(view, args[0]);
+        }
+      };
+      methods.set(key, { method, call });
+      return call;
+    },
+    has(_target, key) { return Reflect.has(provider, key); },
+    set(_target, key, value) { return Reflect.set(provider, key, value, provider); },
+    deleteProperty(_target, key) { return Reflect.deleteProperty(provider, key); },
+    ownKeys() { return Reflect.ownKeys(provider); },
+    getOwnPropertyDescriptor(_target, key) {
+      const descriptor = Reflect.getOwnPropertyDescriptor(provider, key);
+      return descriptor === undefined ? undefined : { ...descriptor, configurable: true };
+    }
+  });
+  $tbManagedProviders.set(provider, view);
+  $tbManagedProviders.set(view, view);
+  return view;
+}
+function io_sys() { return $tbManagedSys(globalThis.BEND_SYS ?? $tbHostSys()); }
 function io_fail(code) {
   return { $: 'Fail', error: io_tup(code >>> 0, String(io_sys().strerror(code))) };
 }
 function io_push(fun, arg, fresh) { $tbPush(fun, arg, fresh); }
-function io_park_on() { throw new Error('IO readiness scheduling is not supported'); }
+function io_park_on(fd, out, k, more) { $tbPark(fd, out, k, more); }
 function chan_wake(row, value) { return $tbChanWake($tbChannel(row), value); }
 function chan_take(row) { return $tbChanTake($tbChannel(row)); }
 function chan_shut(row) { $tbChanShut($tbChannel(row)); }
