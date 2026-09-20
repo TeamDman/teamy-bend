@@ -7,6 +7,7 @@ use super::Machine;
 use super::Thunk;
 use super::ThunkId;
 use super::Value;
+use super::packed::Wrapper;
 use crate::kernel::DefDecl;
 use crate::kernel::KernelError;
 use crate::kernel::Quant;
@@ -26,13 +27,24 @@ mod tests;
 /// An optimization of a checked ordinary body, never an opaque assumption.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum PureOptimization {
-    U32Add,
+    Add,
+    Mul,
+    Shl,
 }
 
 impl PureOptimization {
     pub(super) const fn name(self) -> &'static str {
         match self {
-            Self::U32Add => "U32.add",
+            Self::Add => "U32.add",
+            Self::Mul => "U32.mul",
+            Self::Shl => "U32.shl",
+        }
+    }
+
+    const fn arity(self) -> usize {
+        match self {
+            Self::Add | Self::Mul => 2,
+            Self::Shl => 1,
         }
     }
 }
@@ -47,21 +59,21 @@ impl NumericOperation {
     const fn arity(self) -> usize {
         match self {
             Self::Intrinsic(intrinsic) => intrinsic.arity(),
-            Self::Optimized(PureOptimization::U32Add) => 2,
+            Self::Optimized(operation) => operation.arity(),
         }
     }
 
     const fn input_type(self) -> &'static str {
         match self {
             Self::Intrinsic(intrinsic) => intrinsic.input_type(),
-            Self::Optimized(PureOptimization::U32Add) => "U32",
+            Self::Optimized(_) => "U32",
         }
     }
 
     const fn output_type(self) -> &'static str {
         match self {
             Self::Intrinsic(intrinsic) => intrinsic.output_type(),
-            Self::Optimized(PureOptimization::U32Add) => "U32",
+            Self::Optimized(_) => "U32",
         }
     }
 }
@@ -73,11 +85,20 @@ pub(super) fn checked_optimizations(
     base_names: &BTreeSet<String>,
 ) -> BTreeSet<PureOptimization> {
     let mut result = BTreeSet::new();
-    if base_names.contains("U32.add")
-        && base_names.contains("U32")
-        && definitions.get("U32.add").is_some_and(is_checked_add)
-    {
-        result.insert(PureOptimization::U32Add);
+    for operation in [
+        PureOptimization::Add,
+        PureOptimization::Mul,
+        PureOptimization::Shl,
+    ] {
+        if base_names.contains(operation.name())
+            && base_names.contains("U32")
+            && definitions.get(operation.name()).is_some_and(|definition| {
+                definition.name == operation.name()
+                    && is_checked_word_operation(definition, operation.arity())
+            })
+        {
+            result.insert(operation);
+        }
     }
     result
 }
@@ -89,11 +110,11 @@ fn strip_annotations(mut value: &TermRef) -> &TermRef {
     value
 }
 
-fn is_checked_add(definition: &DefDecl) -> bool {
+fn is_checked_word_operation(definition: &DefDecl, arity: usize) -> bool {
     if definition.body.is_none()
         || definition.foreign
         || definition.unsafe_
-        || definition.parameters.len() != 2
+        || definition.parameters.len() != arity
     {
         return false;
     }
@@ -129,6 +150,7 @@ pub(super) struct NumericArguments {
 }
 
 pub(super) enum NumericFrame {
+    Ordinary(OrdinaryArguments),
     Unwrap(WordTarget),
     Word(WordTarget, u32, u32),
     Bit(WordTarget, u32, u32, ThunkId),
@@ -136,9 +158,24 @@ pub(super) enum NumericFrame {
     Character(String, ThunkId),
 }
 
+pub(super) struct OrdinaryArguments {
+    operation: PureOptimization,
+    arguments: Vec<ThunkId>,
+    words: Vec<u32>,
+}
+
 pub(super) enum WordTarget {
     Arguments(NumericArguments),
     Character(String, ThunkId),
+}
+
+impl WordTarget {
+    fn wrapper(&self) -> &'static str {
+        match self {
+            Self::Arguments(arguments) => arguments.operation.input_type(),
+            Self::Character(..) => "U32",
+        }
+    }
 }
 
 impl Machine<'_> {
@@ -159,6 +196,21 @@ impl Machine<'_> {
         if arguments.len() != operation.arity() {
             return Err(KernelError::new("numeric intrinsic has an invalid arity"));
         }
+        if let NumericOperation::Optimized(ordinary) = operation {
+            // These checked Base bodies match their outer U32 arguments in
+            // declaration order. Demand only those wrappers; forcing their
+            // Word fields here would change the bodies' lazy behavior.
+            let first = arguments[0];
+            Self::push(
+                frames,
+                Frame::Numeric(NumericFrame::Ordinary(OrdinaryArguments {
+                    operation: ordinary,
+                    arguments,
+                    words: Vec::new(),
+                })),
+            )?;
+            return Ok(first);
+        }
         let first = arguments[0];
         let frame = if matches!(
             operation,
@@ -176,22 +228,97 @@ impl Machine<'_> {
         Ok(first)
     }
 
+    // A checked ordinary function may ignore parts of a Word. Once an outer
+    // value is ordinary, its fields must retain the checked body's demand.
+    // Enter its stored body directly so reference lookup cannot select this fast
+    // path again, and preserve every original lazy argument thunk.
+    fn ordinary_numeric(
+        &mut self,
+        operation: PureOptimization,
+        arguments: &[ThunkId],
+    ) -> Result<ThunkId, KernelError> {
+        let body = self
+            .program
+            .definitions
+            .get(operation.name())
+            .and_then(|definition| definition.body.as_ref())
+            .cloned()
+            .ok_or_else(|| KernelError::new("ordinary numeric optimization has no checked body"))?;
+        let mut function = self.expression(body, 0)?;
+        for argument in arguments {
+            function = self.allocate(Thunk::Application(function, *argument))?;
+        }
+        Ok(function)
+    }
+
     pub(super) fn numeric_step(
         &mut self,
         frame: NumericFrame,
         value: Value,
         frames: &mut Vec<Frame>,
     ) -> Result<ThunkId, KernelError> {
-        let Value::Constructor { name, fields } = value else {
-            return Err(KernelError::new("numeric argument is not constructor data"));
-        };
-        match frame {
-            NumericFrame::Unwrap(state) => {
-                let wrapper = match &state {
-                    WordTarget::Arguments(arguments) => arguments.operation.input_type(),
-                    WordTarget::Character(..) => "U32",
+        match (frame, value) {
+            (
+                NumericFrame::Ordinary(mut state),
+                Value::PackedWord {
+                    wrapper: Wrapper::U32,
+                    bits,
+                },
+            ) => {
+                state.words.push(bits);
+                if state.words.len() == state.arguments.len() {
+                    self.numeric_result(NumericOperation::Optimized(state.operation), &state.words)
+                } else {
+                    let next = state.arguments[state.words.len()];
+                    Self::push(frames, Frame::Numeric(NumericFrame::Ordinary(state)))?;
+                    Ok(next)
+                }
+            }
+            (NumericFrame::Ordinary(state), _) => {
+                self.ordinary_numeric(state.operation, &state.arguments)
+            }
+            (NumericFrame::Unwrap(state), Value::PackedWord { wrapper, bits }) => {
+                if wrapper.name() != state.wrapper() {
+                    return Err(KernelError::new("numeric argument has an invalid wrapper"));
+                }
+                self.numeric_word(state, bits, frames)
+            }
+            (NumericFrame::Word(state, bit, word), Value::PackedBits { bits, width }) => {
+                if bit > 32
+                    || u32::from(width) != 32 - bit
+                    || !super::packed::valid_bits(bits, width)
+                {
+                    return Err(KernelError::new(
+                        "numeric argument needs exactly 32 Word bits",
+                    ));
+                }
+                let result = if bit == 32 {
+                    word
+                } else {
+                    word | (bits << bit)
                 };
-                if name != wrapper || fields.len() != 1 {
+                self.numeric_word(state, result, frames)
+            }
+            (frame, Value::Constructor { name, fields }) => {
+                self.numeric_constructor_step(frame, &name, &fields, frames)
+            }
+            _ => Err(KernelError::new("numeric argument is not constructor data")),
+        }
+    }
+
+    fn numeric_constructor_step(
+        &mut self,
+        frame: NumericFrame,
+        name: &str,
+        fields: &[ThunkId],
+        frames: &mut Vec<Frame>,
+    ) -> Result<ThunkId, KernelError> {
+        match frame {
+            NumericFrame::Ordinary(state) => {
+                self.ordinary_numeric(state.operation, &state.arguments)
+            }
+            NumericFrame::Unwrap(state) => {
+                if name != state.wrapper() || fields.len() != 1 {
                     return Err(KernelError::new("numeric argument has an invalid wrapper"));
                 }
                 Self::push(frames, Frame::Numeric(NumericFrame::Word(state, 0, 0)))?;
@@ -221,7 +348,7 @@ impl Machine<'_> {
                         "numeric argument has an invalid Boolean bit",
                     ));
                 }
-                match name.as_str() {
+                match name {
                     "True" => word |= 1 << bit,
                     "False" => {}
                     _ => {
@@ -236,7 +363,7 @@ impl Machine<'_> {
                 )?;
                 Ok(tail)
             }
-            NumericFrame::Text(text) => match (name.as_str(), fields.as_slice()) {
+            NumericFrame::Text(text) => match (name, fields) {
                 ("SNil", []) => match text::read(&text) {
                     Some(bits) => {
                         let value = self.numeric_word_value("F32", bits)?;
@@ -317,9 +444,9 @@ impl Machine<'_> {
         }
         let result = match operation {
             NumericOperation::Intrinsic(intrinsic) => intrinsic_result(intrinsic, words),
-            NumericOperation::Optimized(PureOptimization::U32Add) => {
-                words[0].wrapping_add(words[1])
-            }
+            NumericOperation::Optimized(PureOptimization::Add) => words[0].wrapping_add(words[1]),
+            NumericOperation::Optimized(PureOptimization::Mul) => words[0].wrapping_mul(words[1]),
+            NumericOperation::Optimized(PureOptimization::Shl) => words[0].wrapping_shl(1),
         };
         if operation.output_type() == "Bool" {
             return self.ready_constructor(if result == 0 { "False" } else { "True" }, vec![]);
@@ -328,6 +455,14 @@ impl Machine<'_> {
     }
 
     fn numeric_word_value(&mut self, wrapper: &str, result: u32) -> Result<ThunkId, KernelError> {
+        if self.program.packed {
+            let wrapper = Wrapper::from_name(wrapper)
+                .ok_or_else(|| KernelError::new("numeric result has an invalid wrapper"))?;
+            return self.allocate(Thunk::Ready(Value::PackedWord {
+                wrapper,
+                bits: result,
+            }));
+        }
         let mut word = self.ready_constructor("WNil", vec![])?;
         for bit in (0..32).rev() {
             let head = self.ready_constructor(

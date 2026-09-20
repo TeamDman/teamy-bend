@@ -98,15 +98,16 @@ Halt and skips the view callback. App and its helpers live in executable Base;
 Image and Event are also available to strict checking and the pure compilers.
 The window-dependent App.next/turn/draw/step/loop/run helpers remain unfinished.
 
-Image workloads still expose native runtime limits. Using the exact pure build
-and fold definitions from upstream's window fixture, summing pixel colors
-passes depths zero through two but exhausts the 131,072-thunk arena from depth
-three (64 pixels). Generated executable JavaScript completes the full depth-six
-case (4,096 pixels). Counting leaves while discarding colors passes native depth
-four but fails at five; following one path and forcing Image.free both pass
-through depth six. These results distinguish cumulative evaluation cost from
-tree depth. No limits were raised, and the full native workload remains a
-compatibility gap.
+Image workloads still expose native runtime limits. Compact executable words
+and lazy ordinary arithmetic optimizations improve the exact upstream build/fold
+comparison from 15 to 19 of 21 probes, with four improvements and no regressions.
+Summing pixel colors now passes depths zero through five, including 1,031,680
+at depth five. Counting leaves while discarding colors also passes through five;
+both operations still exhaust the 131,072-thunk arena at depth six. Following
+one path and forcing Image.free pass through six. Generated executable JavaScript
+completes the full depth-six sum of 8,386,560 over 4,096 pixels. No limits were
+raised. The two native resource refusals remain failures, and the unchanged full
+native Image workload remains a compatibility gap.
 
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in
@@ -154,8 +155,8 @@ The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
-The Image/App slice preserves all of those acceptance decisions.
-The current full quality gate passes 313 tests, including five compile-fail
+The Image/App and compact-word slices preserve all of those acceptance decisions.
+The current full quality gate passes 332 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has

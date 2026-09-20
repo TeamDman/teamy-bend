@@ -17,6 +17,7 @@ use std::rc::Rc;
 
 mod executable;
 mod numeric;
+mod packed;
 
 type ThunkId = usize;
 type EnvId = usize;
@@ -34,6 +35,7 @@ pub(crate) struct Program {
     foreign: Rc<BTreeMap<String, ForeignDefinition>>,
     numeric: Rc<BTreeMap<String, NumericIntrinsic>>,
     optimizations: Rc<BTreeSet<numeric::PureOptimization>>,
+    packed: bool,
 }
 
 #[cfg(test)]
@@ -77,6 +79,7 @@ impl Program {
             foreign: Rc::new(BTreeMap::new()),
             numeric: Rc::new(BTreeMap::new()),
             optimizations: Rc::new(BTreeSet::new()),
+            packed: false,
         }
     }
 
@@ -93,6 +96,14 @@ impl Program {
 
 #[derive(Clone)]
 enum Value {
+    PackedWord {
+        wrapper: packed::Wrapper,
+        bits: u32,
+    },
+    PackedBits {
+        bits: u32,
+        width: u8,
+    },
     Constructor {
         name: String,
         fields: Vec<ThunkId>,
@@ -330,13 +341,22 @@ impl<'program> Machine<'program> {
                             continue;
                         }
                         Term::Ctr { name, args } => {
-                            let fields = args
-                                .iter()
-                                .map(|arg| self.expression(Rc::clone(arg), environment))
-                                .collect::<Result<_, _>>()?;
-                            Value::Constructor {
-                                name: name.clone(),
-                                fields,
+                            if let Some(value) = self
+                                .program
+                                .packed
+                                .then(|| packed::literal(name, args))
+                                .flatten()
+                            {
+                                value
+                            } else {
+                                let fields = args
+                                    .iter()
+                                    .map(|arg| self.expression(Rc::clone(arg), environment))
+                                    .collect::<Result<_, _>>()?;
+                                Value::Constructor {
+                                    name: name.clone(),
+                                    fields,
+                                }
                             }
                         }
                         Term::Mat {
@@ -456,11 +476,7 @@ impl<'program> Machine<'program> {
                                 "runtime fail-stop: a foreign effect request cannot be matched as constructor data",
                             ));
                         }
-                        let Value::Constructor { name, fields } = value else {
-                            return Err(KernelError::new(
-                                "runtime match expected constructor data",
-                            ));
-                        };
+                        let (name, fields) = self.constructor_value(value)?;
                         if name == constructor {
                             current = arm;
                             for field in fields {
@@ -485,7 +501,10 @@ impl<'program> Machine<'program> {
         }
         self.output_nodes += 1;
         match self.force(thunk)? {
-            Value::Constructor { name, fields } => {
+            value @ (Value::Constructor { .. }
+            | Value::PackedWord { .. }
+            | Value::PackedBits { .. }) => {
+                let (name, fields) = self.constructor_value(value)?;
                 let args = fields
                     .into_iter()
                     .map(|field| self.materialize(field, depth + 1))

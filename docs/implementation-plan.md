@@ -744,34 +744,66 @@ original `6802c1e` attribution. Native Image limits, window-dependent App helper
 opaque handles, remaining platform effects and all other unfinished U6 work
 remain required.
 
-### [ ] 5.11 Reduce native word allocation and complete the Image workload
+### [~] 5.11 Reduce native word allocation and complete the Image workload
 
-The measured Image failures require runtime work, not higher limits. Each native
-numeric word result currently allocates 66 thunks. A depth-six shape count uses
-4,095 additions, requiring 270,270 result thunks alone in an append-only arena
-limited to 131,072. Even interning Boolean bits and WNil would leave 135,135
-result thunks. Ordinary arithmetic acceleration alone cannot remove that lower
-bound.
+The previous native numeric result allocated 66 thunks. A depth-six shape count
+uses 4,095 additions, requiring 270,270 result thunks alone in an append-only
+arena limited to 131,072. Even interning Boolean bits and WNil would leave
+135,135 result thunks. Ordinary arithmetic acceleration alone could not remove
+that lower bound.
 
-Next implementation: store execution-only U32/F32 words as raw bits, decode
-them directly for numeric/console operations, and expose bounded lazy Word
-views for ordinary pattern matching. Preserve exact float payloads, sealed Base
-provenance, user-defined lookalikes, lazy unused fields and strict proof behavior.
-Only recognize closed literal shapes without forcing arbitrary constructor
-fields. Add checked ordinary multiplication and one-bit shift optimizations;
-retain the ordinary recursive shln helper initially.
+Compact words are implemented: execution-only U32/F32 literals and numeric
+results retain raw bits, decode directly for numeric/console operations, and
+expose bounded lazy Word views for pattern matching. Exact float payloads,
+sealed Base provenance, user lookalikes and strict proof behavior are preserved.
+Only complete closed literal trees pack automatically; arbitrary constructor
+fields stay lazy. Checked ordinary multiplication and one-bit shift join the
+addition optimization; recursive shln remains ordinary. Optimizations demand
+outer wrappers in source order and fall back to checked bodies for ordinary
+fields. Regression tests also fixed an older eager-addition bug.
 
-Validate packed/ordinary conversions, wrapping and float bits, partial
-applications, shadowing/origin controls, request rejection and unchanged
-cancellation/limits. Rerun the exact Image depth-zero-through-six observations,
-including sums 14,560 at depth three and 8,386,560 at depth six. If compact words
-still exhaust generic closure/environment allocation, keep this workload open
-and establish explicit roots before adding reclamation of both arenas. Collector
-roots must cover frames, numeric continuation state, globals, closures and IO
-temporaries; collecting inside allocate without these roots would be unsound.
-Reclamation also changes cumulative allocation limits into live-value limits
-and needs explicit documentation and adversarial tests. Complete the full gate,
-strict audit and retained-release Poche regressions before publication.
+The complete quality gate passes 332 tests, including five compile-fail API
+examples, with two optional profilers ignored. Strict library/test Clippy and
+independent representation/boundary reviews pass. Six private representation
+tests and eight integration tests cover conversion, wrapping, float payloads,
+partial application, origins, unused fields, request rejection and unchanged
+cancellation/limits. Actual upstream normalization confirms the lazy arithmetic
+controls. All 186 float-oracle cases and 14 unchanged upstream numeric programs
+still match their respective native and JavaScript expectations.
+
+The frozen 256-case integer comparison matches 253 native outputs against
+actual upstream JavaScript and independent modulo arithmetic. Three reconstructed
+multiplications exhaust the arena in both this candidate and the previous
+retained release. These are compatibility failures, not matching successes.
+Image probes improve from 15/21 to 19/21 with no regressions: exact sums pass
+through depth five, including 14,560 at depth three and 1,031,680 at five;
+shape-only counting passes through five. Exact fold and shape count at six
+still fail, with required outputs 8,386,560 and 4,096. All six full JavaScript
+programs match upstream; native still passes four of five applicable programs,
+with the original full Image failure retained. No limits or workloads changed.
+The complete 1,302-fixture strict audit remains 362 accepted positives, 491
+rejected positives and 449 rejected negatives, with no crashes or changed
+compiled source fingerprints.
+
+Next: establish explicit roots before adding nonmoving reclamation of both
+arenas. Collect only at committed force-loop safe points, never inside allocate.
+Roots must cover current/continuation IDs, Update blackholes, all numeric argument
+vectors and saved tails, globals, closures/environments, pending IO requests and
+Halt fields. Scoped caller roots must retain siblings and temporary packed
+constructor views across nested decoding/materialization calls; those view
+fields are not reachable from the original packed value. Trace metadata only,
+without forcing terms or running effects. Use stable IDs, vacant slots and free
+lists, bound marker storage and charge collection work to the existing budget.
+Keep each arena capped at 131,072 slots and reject a genuinely full live graph.
+
+Reclamation changes cumulative allocation limits into live-value limits and
+needs explicit documentation. Test collection at every safe point against
+collection-disabled evaluation, shared closures/lets, numeric continuations,
+packed views, IO order, cancellation, request rejection and live-state exhaustion.
+Measure retained globals/environments before promising depth-six success.
+Rerun the unchanged Image workload and the three integer refusals, then the
+full gate, strict audit and retained-release Poche regressions. This plan item
+and the broad goal remain open until the full workload succeeds.
 
 ## Completion and risks
 

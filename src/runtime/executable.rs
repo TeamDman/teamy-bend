@@ -7,6 +7,7 @@ use super::Program;
 use super::Thunk;
 use super::ThunkId;
 use super::Value;
+use super::packed::Wrapper;
 use crate::kernel::AdtDecl;
 use crate::kernel::DefDecl;
 use crate::kernel::KernelError;
@@ -38,6 +39,7 @@ impl Program {
                 definitions,
                 base_names,
             )),
+            packed: super::packed::checked_layouts(datatypes, base_names),
         }
     }
 
@@ -175,8 +177,14 @@ impl Machine<'_> {
     }
 
     fn constructor(&mut self, thunk: ThunkId) -> Result<(String, Vec<ThunkId>), KernelError> {
-        match self.force(thunk)? {
+        let value = self.force(thunk)?;
+        self.console_constructor(value)
+    }
+
+    fn console_constructor(&mut self, value: Value) -> Result<(String, Vec<ThunkId>), KernelError> {
+        match value {
             Value::Constructor { name, fields } => Ok((name, fields)),
+            Value::PackedWord { .. } | Value::PackedBits { .. } => self.constructor_value(value),
             Value::Request { .. } => Err(KernelError::new(
                 "runtime fail-stop: a foreign effect request escaped the IO driver",
             )),
@@ -185,7 +193,15 @@ impl Machine<'_> {
     }
 
     fn read_u32(&mut self, thunk: ThunkId) -> Result<u32, KernelError> {
-        let (name, fields) = self.constructor(thunk)?;
+        let value = self.force(thunk)?;
+        if let Value::PackedWord { wrapper, bits } = value {
+            return if wrapper == Wrapper::U32 {
+                Ok(bits)
+            } else {
+                Err(KernelError::new("expected a U32 value"))
+            };
+        }
+        let (name, fields) = self.console_constructor(value)?;
         let [word] = fields.as_slice() else {
             return Err(KernelError::new("expected a U32 value"));
         };
@@ -195,7 +211,14 @@ impl Machine<'_> {
         }
         let mut result = 0;
         for bit in 0..32 {
-            let (name, fields) = self.constructor(word)?;
+            let value = self.force(word)?;
+            if let Value::PackedBits { bits, width } = value {
+                if u32::from(width) != 32 - bit || !super::packed::valid_bits(bits, width) {
+                    return Err(KernelError::new("expected exactly 32 Word bits"));
+                }
+                return Ok(result | (bits << bit));
+            }
+            let (name, fields) = self.console_constructor(value)?;
             let [head, tail] = fields.as_slice() else {
                 return Err(KernelError::new("expected a 32-bit Word"));
             };
@@ -322,6 +345,140 @@ mod channel_tests {
                 "{error}"
             );
             assert!(stdout.is_empty() && stderr.is_empty());
+        }
+    }
+}
+
+#[cfg(test)]
+mod word_tests {
+    use super::*;
+    use crate::syntax::parse_term;
+
+    fn ready(machine: &mut Machine<'_>, value: Value) -> ThunkId {
+        machine.allocate(Thunk::Ready(value)).unwrap()
+    }
+
+    fn constructor(machine: &mut Machine<'_>, name: &str, fields: Vec<ThunkId>) -> ThunkId {
+        ready(
+            machine,
+            Value::Constructor {
+                name: name.into(),
+                fields,
+            },
+        )
+    }
+
+    #[test]
+    fn console_reads_packed_mixed_and_ordinary_words_without_expanding_packed_tails() {
+        let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
+        let mut machine = Machine::new(&program);
+        for bits in [0, 1, 0x8000_0000, u32::MAX] {
+            let word = ready(
+                &mut machine,
+                Value::PackedWord {
+                    wrapper: Wrapper::U32,
+                    bits,
+                },
+            );
+            let allocated = machine.arena.len();
+            assert_eq!(machine.read_u32(word).unwrap(), bits);
+            assert_eq!(machine.arena.len(), allocated);
+        }
+
+        let tail = ready(
+            &mut machine,
+            Value::PackedBits {
+                bits: 0x4000_0000,
+                width: 31,
+            },
+        );
+        let head = constructor(&mut machine, "True", vec![]);
+        let word = constructor(&mut machine, "WCon", vec![head, tail]);
+        let wrapper = constructor(&mut machine, "U32", vec![word]);
+        let allocated = machine.arena.len();
+        assert_eq!(machine.read_u32(wrapper).unwrap(), 0x8000_0001);
+        assert_eq!(machine.arena.len(), allocated);
+
+        let tail = ready(
+            &mut machine,
+            Value::PackedBits {
+                bits: u32::MAX,
+                width: 32,
+            },
+        );
+        let wrapper = constructor(&mut machine, "U32", vec![tail]);
+        assert_eq!(machine.read_u32(wrapper).unwrap(), u32::MAX);
+
+        let ordinary = machine
+            .expression(parse_term("305419896").unwrap(), 0)
+            .unwrap();
+        assert_eq!(machine.read_u32(ordinary).unwrap(), 0x1234_5678);
+    }
+
+    #[test]
+    fn console_word_decoding_rejects_wrong_wrappers_invalid_tails_and_effect_requests() {
+        let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
+        let mut machine = Machine::new(&program);
+        let wrong = ready(
+            &mut machine,
+            Value::PackedWord {
+                wrapper: Wrapper::F32,
+                bits: 0,
+            },
+        );
+        assert!(
+            machine
+                .read_u32(wrong)
+                .unwrap_err()
+                .to_string()
+                .contains("expected a U32")
+        );
+        for (bits, width) in [(0, 31), (0, 33)] {
+            let tail = ready(&mut machine, Value::PackedBits { bits, width });
+            let wrapper = constructor(&mut machine, "U32", vec![tail]);
+            assert!(
+                machine
+                    .read_u32(wrapper)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("exactly 32 Word bits")
+            );
+        }
+        let tail = ready(
+            &mut machine,
+            Value::PackedBits {
+                bits: 0x8000_0000,
+                width: 31,
+            },
+        );
+        let head = constructor(&mut machine, "False", vec![]);
+        let word = constructor(&mut machine, "WCon", vec![head, tail]);
+        let wrapper = constructor(&mut machine, "U32", vec![word]);
+        assert!(
+            machine
+                .read_u32(wrapper)
+                .unwrap_err()
+                .to_string()
+                .contains("exactly 32 Word bits")
+        );
+
+        let request = ready(
+            &mut machine,
+            Value::Request {
+                name: "blocked".into(),
+                arguments: vec![],
+                continuation: 0,
+            },
+        );
+        let wrapper = constructor(&mut machine, "U32", vec![request]);
+        for value in [request, wrapper] {
+            assert!(
+                machine
+                    .read_u32(value)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("foreign effect request escaped")
+            );
         }
     }
 }

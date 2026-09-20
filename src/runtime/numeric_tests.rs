@@ -34,57 +34,239 @@ fn checked_program(source: &str, origins: &[&str]) -> Program {
 
 #[test]
 fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
-    let source = "type U32 is Data: Left{} Right{}\ndef U32.add(a: U32, b: U32) -> U32: a\n";
-    for origins in [&[][..], &["U32"][..], &["U32.add"][..]] {
-        let program = checked_program(source, origins);
-        assert!(program.optimizations.is_empty());
-        let result = program
-            .evaluate(
-                "U32.add",
-                &[
-                    parse_term("Left{}").unwrap(),
-                    parse_term("Right{}").unwrap(),
-                ],
-            )
-            .unwrap();
-        assert_eq!(result.to_string(), "Left{}");
+    for operation in [
+        PureOptimization::Add,
+        PureOptimization::Mul,
+        PureOptimization::Shl,
+    ] {
+        let parameters = if operation.arity() == 1 {
+            "a: U32"
+        } else {
+            "a: U32, b: U32"
+        };
+        let source = format!(
+            "type U32 is Data: Left{{}} Right{{}}\ndef {}({parameters}) -> U32: a\n",
+            operation.name()
+        );
+        for origins in [&[][..], &["U32"][..], &[operation.name()][..]] {
+            let program = checked_program(&source, origins);
+            assert!(program.optimizations.is_empty());
+            let mut arguments = vec![parse_term("Left{}").unwrap()];
+            if operation.arity() == 2 {
+                arguments.push(parse_term("Right{}").unwrap());
+            }
+            let result = program.evaluate(operation.name(), &arguments).unwrap();
+            assert_eq!(result.to_string(), "Left{}");
+        }
     }
 }
 
 #[test]
 fn optimization_requires_a_filled_ordinary_body_and_exact_affine_signature() {
-    let program = checked_program(include_str!("../syntax/base.bend"), &["U32", "U32.add"]);
-    assert_eq!(program.optimizations.len(), 1);
+    let program = checked_program(
+        include_str!("../syntax/base.bend"),
+        &["U32", "U32.add", "U32.mul", "U32.shl"],
+    );
+    assert_eq!(program.optimizations.len(), 3);
     assert!(program.numeric.is_empty());
     assert!(program.foreign.is_empty());
-    assert!(program.definitions["U32.add"].body.is_some());
     let strict = Program::from_checked(&program.definitions, &program.datatypes);
     assert!(strict.optimizations.is_empty());
-    let original = &program.definitions["U32.add"];
-    let origins = BTreeSet::from(["U32".into(), "U32.add".into()]);
-    for variant in 0..6 {
-        let mut invalid = original.clone();
-        match variant {
-            0 => invalid.body = None,
-            1 => invalid.foreign = true,
-            2 => invalid.unsafe_ = true,
-            3 => {
-                invalid.parameters.pop();
+    for operation in [
+        PureOptimization::Add,
+        PureOptimization::Mul,
+        PureOptimization::Shl,
+    ] {
+        let original = &program.definitions[operation.name()];
+        assert!(original.body.is_some());
+        let origins = BTreeSet::from(["U32".into(), operation.name().into()]);
+        for variant in 0..11 {
+            let mut invalid = original.clone();
+            match variant {
+                0 => invalid.body = None,
+                1 => invalid.foreign = true,
+                2 => invalid.unsafe_ = true,
+                3 => {
+                    invalid.parameters.pop();
+                }
+                4 => invalid.parameters[0].quant = Quant::Many,
+                5 => {
+                    let Term::All { domain, .. } = Rc::make_mut(&mut invalid.ty) else {
+                        panic!("function")
+                    };
+                    *domain = term(Term::Ref("F32".into()));
+                }
+                6 => {
+                    let Term::All { quant, .. } = Rc::make_mut(&mut invalid.ty) else {
+                        panic!("function")
+                    };
+                    *quant = Quant::Many;
+                }
+                7 => invalid.parameters[0].id += 1,
+                8 => invalid.parameters[0].ty = term(Term::Ref("F32".into())),
+                9 => {
+                    let Term::All { body, .. } = Rc::make_mut(&mut invalid.ty) else {
+                        panic!("function")
+                    };
+                    if operation.arity() == 2 {
+                        let Term::All { body, .. } = Rc::make_mut(body) else {
+                            panic!("second argument")
+                        };
+                        *body = term(Term::Ref("F32".into()));
+                    } else {
+                        *body = term(Term::Ref("F32".into()));
+                    }
+                }
+                10 => invalid.name = "user.other".into(),
+                _ => unreachable!(),
             }
-            4 => invalid.parameters[0].quant = Quant::Many,
-            5 => {
-                let Term::All { domain, .. } = Rc::make_mut(&mut invalid.ty) else {
-                    panic!("function")
-                };
-                *domain = term(Term::Ref("F32".into()));
-            }
-            _ => unreachable!(),
+            let definitions = BTreeMap::from([(operation.name().into(), invalid)]);
+            assert!(
+                checked_optimizations(&definitions, &origins).is_empty(),
+                "{} variant {variant}",
+                operation.name()
+            );
         }
-        let definitions = BTreeMap::from([("U32.add".into(), invalid)]);
+    }
+}
+
+fn packed_program() -> Program {
+    checked_program(
+        include_str!("../syntax/base.bend"),
+        &[
+            "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.add", "U32.mul",
+            "U32.shl",
+        ],
+    )
+}
+
+#[test]
+fn ordinary_word_optimizations_wrap_at_the_declared_width() {
+    let program = packed_program();
+    assert!(program.packed);
+    for (name, arguments, expected) in [
+        ("U32.add", vec![u32::MAX, 1], 0),
+        ("U32.mul", vec![0, u32::MAX], 0),
+        ("U32.mul", vec![3, 7], 21),
+        ("U32.mul", vec![65_535, 65_537], u32::MAX),
+        ("U32.mul", vec![u32::MAX, u32::MAX], 1),
+        ("U32.mul", vec![0x8000_0000, 2], 0),
+        ("U32.shl", vec![0], 0),
+        ("U32.shl", vec![1], 2),
+        ("U32.shl", vec![0x7fff_ffff], 0xffff_fffe),
+        ("U32.shl", vec![0x8000_0000], 0),
+        ("U32.shl", vec![u32::MAX], 0xffff_fffe),
+    ] {
+        let arguments = arguments
+            .iter()
+            .map(|value| parse_term(&value.to_string()).unwrap())
+            .collect::<Vec<_>>();
+        let actual = program.evaluate(name, &arguments).unwrap();
+        let expected = parse_term(&expected.to_string()).unwrap();
+        assert_eq!(actual.to_string(), expected.to_string(), "{name}");
+    }
+}
+
+fn raw_bits_target() -> WordTarget {
+    WordTarget::Arguments(NumericArguments {
+        operation: NumericOperation::Intrinsic(NumericIntrinsic::Bits),
+        arguments: vec![0],
+        words: vec![],
+    })
+}
+
+#[test]
+fn packed_numeric_results_and_decoding_keep_exact_nan_payloads_without_word_expansion() {
+    let program = packed_program();
+    let mut machine = Machine::new(&program);
+    for bits in [0, 0x8000_0000, 1, 0x7f80_0001, 0xffc0_4321, u32::MAX] {
+        let before = machine.arena.len();
+        let input = machine.numeric_word_value("F32", bits).unwrap();
+        assert_eq!(machine.arena.len(), before + 1);
+        let value = machine.force(input).unwrap();
+        let result = machine
+            .numeric_step(NumericFrame::Unwrap(raw_bits_target()), value, &mut vec![])
+            .unwrap();
+        assert_eq!(machine.arena.len(), before + 2);
         assert!(
-            checked_optimizations(&definitions, &origins).is_empty(),
-            "variant {variant}"
+            matches!(machine.force(result).unwrap(), Value::PackedWord { wrapper: Wrapper::U32, bits: result } if result == bits)
         );
+    }
+    let strict = Program::from_checked(&program.definitions, &program.datatypes);
+    let mut ordinary = Machine::new(&strict);
+    ordinary.numeric_word_value("U32", 7).unwrap();
+    assert_eq!(
+        ordinary.arena.len(),
+        66,
+        "ordinary fallback representation remains available"
+    );
+}
+
+#[test]
+fn packed_tail_decoder_combines_prefix_bits_and_rejects_invalid_widths_or_wrappers() {
+    let program = packed_program();
+    for (consumed, prefix, bits, width, expected) in [
+        (0, 0, 0xffff_ffff, 32, 0xffff_ffff),
+        (1, 1, 0x4000_0000, 31, 0x8000_0001),
+        (31, 3, 1, 1, 0x8000_0003),
+        (32, 0x7f80_0001, 0, 0, 0x7f80_0001),
+    ] {
+        let mut machine = Machine::new(&program);
+        let result = machine
+            .numeric_step(
+                NumericFrame::Word(raw_bits_target(), consumed, prefix),
+                Value::PackedBits { bits, width },
+                &mut vec![],
+            )
+            .unwrap();
+        assert!(
+            matches!(machine.force(result).unwrap(), Value::PackedWord { wrapper: Wrapper::U32, bits } if bits == expected)
+        );
+    }
+    for (consumed, bits, width) in [
+        (0, 0, 31),
+        (0, 0, 33),
+        (1, 0x8000_0000, 31),
+        (32, 1, 0),
+        (33, 0, 0),
+    ] {
+        let mut machine = Machine::new(&program);
+        let error = machine
+            .numeric_step(
+                NumericFrame::Word(raw_bits_target(), consumed, 0),
+                Value::PackedBits { bits, width },
+                &mut vec![],
+            )
+            .unwrap_err()
+            .to_string();
+        assert!(error.contains("exactly 32 Word bits"), "{error}");
+    }
+    let mut machine = Machine::new(&program);
+    let error = machine
+        .numeric_step(
+            NumericFrame::Unwrap(raw_bits_target()),
+            Value::PackedWord {
+                wrapper: Wrapper::U32,
+                bits: 0,
+            },
+            &mut vec![],
+        )
+        .unwrap_err()
+        .to_string();
+    assert!(error.contains("invalid wrapper"), "{error}");
+    for value in [
+        Value::PackedBits { bits: 0, width: 32 },
+        Value::Request {
+            name: "blocked".into(),
+            arguments: vec![],
+            continuation: 0,
+        },
+    ] {
+        let error = machine
+            .numeric_step(NumericFrame::Unwrap(raw_bits_target()), value, &mut vec![])
+            .unwrap_err()
+            .to_string();
+        assert!(error.contains("not constructor data"), "{error}");
     }
 }
 
@@ -112,7 +294,7 @@ fn raw_word(wrapper: &str, bits: usize, head: &str) -> TermRef {
 }
 
 #[test]
-fn optimized_word_decoder_rejects_wrong_wrappers_lengths_and_bit_values() {
+fn numeric_word_decoder_rejects_wrong_wrappers_lengths_and_bit_values() {
     let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
     for (argument, diagnostic) in [
         (raw_word("F32", 32, "False"), "invalid wrapper"),
@@ -123,17 +305,13 @@ fn optimized_word_decoder_rejects_wrong_wrappers_lengths_and_bit_values() {
         let mut machine = Machine::new(&program);
         let function = machine
             .allocate(Thunk::Ready(Value::Numeric {
-                operation: NumericOperation::Optimized(PureOptimization::U32Add),
+                operation: NumericOperation::Intrinsic(NumericIntrinsic::U32ToF32),
                 arguments: vec![],
             }))
             .unwrap();
         let first = machine.expression(argument, 0).unwrap();
-        let second = machine.expression(parse_term("1").unwrap(), 0).unwrap();
-        let partial = machine
-            .allocate(Thunk::Application(function, first))
-            .unwrap();
         let call = machine
-            .allocate(Thunk::Application(partial, second))
+            .allocate(Thunk::Application(function, first))
             .unwrap();
         let error = machine
             .force(call)

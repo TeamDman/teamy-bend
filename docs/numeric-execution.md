@@ -15,7 +15,12 @@ opaque to proof normalization. Strict `CheckedBook` checking still rejects
 unfilled laws, including these execution-only contracts.
 
 Native IO actions evaluate the operations through bounded continuation frames.
-Their arguments and results retain the structural `U32`/`F32` Word encodings.
+Closed literal words and numeric results use compact raw bits internally, with
+lazy constructor views preserving the structural `U32`/`F32` Word interface.
+Packing requires the exact checked, loader-sealed Base layouts. Ordinary
+constructor fields remain lazy, and strict proof/data programs keep their
+original representation. Float packing preserves all 32 bits, including NaN
+payloads; it does not convert through a host floating-point value.
 Arithmetic rounds to binary32; comparisons follow IEEE behavior, including
 false equality and ordering comparisons with NaN. `F32.to_u32` truncates finite
 values in the unsigned range and returns zero for negative, NaN, infinite or
@@ -33,12 +38,24 @@ this target difference explicitly.
 The unchanged upstream `run/float_specials.bend`, `base/float_roundtrip.bend`
 and `compile/float_compare.bend` now match. Allocation ablations localized
 the last fixture's arena exhaustion to repeated ordinary U32 addition. The
-native runtime now optimizes sealed, checked Base `U32.add` with wrapping
-addition after bounded Word decoding. Its source body still checks normally,
-proof reduction uses that body, and it is absent from the assumption inventory.
-Boundary, partial-application, forged-origin and malformed-Word tests cover
-this separate optimization; runtime limits remain unchanged. These results
+native runtime optimizes sealed, checked Base `U32.add`, `U32.mul` and `U32.shl`
+when their operands are compact words. It demands outer wrappers in the same
+order as their source definitions. An ordinary Word field causes fallback to
+the checked body without decoding unused bits. This also fixes an older eager
+addition path: observing only the low result bit no longer forces an unused
+input tail. Source bodies still check normally, proof reduction uses those
+bodies, and these optimizations add no assumptions.
+Boundary, partial-application, forged-origin, lazy-field and malformed-Word tests
+cover this separate optimization; runtime limits remain unchanged. These results
 establish the stated cases, not complete numeric program compatibility.
+
+A 256-case integer comparison checks full/partial multiplication, constructor
+round trips and shifts against actual upstream JavaScript and independent
+modulo-2^32 arithmetic. Native execution matches 253 cases. Three reconstructed
+multiplications still exhaust the thunk arena; all three also fail in the
+previous retained release. They remain compatibility failures. Independent
+upstream normalization verifies the lazy shift, zero-product and low-addition
+observations, where eager generated JavaScript is not a laziness oracle.
 
 Pure `run` normalizes without executing opaque numeric contracts, matching the
 reference interpreter. Its surface printer remains incomplete: numeric literals
