@@ -420,7 +420,17 @@ budgets or affine collection behavior. `base` source/name/type output and
 invalid selectors passed native CLI smoke checks. All 1,302 upstream fixtures
 were audited against a fixed executable while development continued separately.
 
-### [~] 5.4 Publish native console execution
+### [x] 5.4 Publish native console execution
+
+Completion: `f12096c709bd225aabaadbf07b09ae46c184c16f` is verified on
+public `main`. A retained release executable reports revision `f12096c` and a
+clean worktree. Poche regressions against the frozen audited build passed all
+15,503 scalar comparisons, seven equalities, two scalar negative controls,
+22 trajectory states, 21 transitions, all 300 chance partitions and eight
+invalid-state/action controls. The older exhaustive receipt remains unchanged.
+Both gates also pass against the clean `f12096c` release; its 67-request
+trajectory run completed in 333 ms. The release executable BLAKE3 is
+`ca0811356fdb54db30154766c067d107c16071882a35121fb40bfbc96bfdb074`.
 
 The console slice adds `run`, distinct executable contracts, private IO requests,
 three sealed console handlers and checked decimal U32 text. Its standard gate
