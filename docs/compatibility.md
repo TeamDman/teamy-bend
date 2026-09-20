@@ -269,9 +269,17 @@ Its executable BLAKE3 is
 `1a413d37286879e272957003f4c004c3f5e107460a9d7baf764bda92e6786507`.
 This regression does not rerun or reattribute the exhaustive graph.
 
-The latest clean compact-word release, `a7ddfcc`, passes those same privacy,
+The clean compact-word release, `a7ddfcc`, passes those same privacy,
 scalar and trajectory gates, including all negative controls. Its 67 trajectory
 requests complete in 482 ms. All 13 compiled conformance fingerprints and 17
 source fingerprints remain unchanged from the Image/App release. Its executable
 BLAKE3 is `5e2acc14b82e2335fc07fcb180dc9452d2dd373d7c8b7b4f215311eabf057f90`.
 Poche changes remain local. The exhaustive graph retains its original attribution.
+
+The latest clean reclamation release, `6356963`, passes the same seven privacy
+laws, 15,503 scalar comparisons and micro trajectory, including all negative
+controls. Its 67 trajectory requests complete in 319 ms. All 13 compiled
+conformance fingerprints and 17 source fingerprints are unchanged from the
+compact-word release. Executable BLAKE3 is
+`24f13a9421a18f51892e4402d0ddf1cc55462a3dc4082876f86c6d7ea676dd1c`.
+The original exhaustive graph was neither rerun nor reattributed.

@@ -744,7 +744,7 @@ original `6802c1e` attribution. Native Image limits, window-dependent App helper
 opaque handles, remaining platform effects and all other unfinished U6 work
 remain required.
 
-### [~] 5.11 Reduce native word allocation and complete the Image workload
+### [x] 5.11 Reduce native word allocation and complete the Image workload
 
 The previous native numeric result allocated 66 thunks. A depth-six shape count
 uses 4,095 additions, requiring 270,270 result thunks alone in an append-only
@@ -771,17 +771,17 @@ cancellation/limits. Actual upstream normalization confirms the lazy arithmetic
 controls. All 186 float-oracle cases and 14 unchanged upstream numeric programs
 still match their respective native and JavaScript expectations.
 
-At that stage, the frozen 256-case integer comparison matched 253 native outputs against
-actual upstream JavaScript and independent modulo arithmetic. Three reconstructed
-multiplications exhaust the arena in both this candidate and the previous
-retained release. These are compatibility failures, not matching successes.
-Image probes improve from 15/21 to 19/21 with no regressions: exact sums pass
+At that stage, the frozen integer comparison matched 253 of 256 native outputs
+against actual upstream JavaScript and independent modulo arithmetic. Three
+reconstructed multiplications exhausted the arena in both that candidate and
+the previous retained release. Those were compatibility failures.
+Image probes improved from 15/21 to 19/21 with no regressions: exact sums passed
 through depth five, including 14,560 at depth three and 1,031,680 at five;
-shape-only counting passes through five. Exact fold and shape count at six
-still fail, with required outputs 8,386,560 and 4,096. All six full JavaScript
-programs match upstream; native still passes four of five applicable programs,
+shape-only counting passed through five. Exact fold and shape count at six
+still failed, with required outputs 8,386,560 and 4,096. All six full JavaScript
+programs matched upstream; native passed four of five applicable programs,
 with the original full Image failure retained. No limits or workloads changed.
-The complete 1,302-fixture strict audit remains 362 accepted positives, 491
+The complete 1,302-fixture strict audit remained 362 accepted positives, 491
 rejected positives and 449 rejected negatives, with no crashes or changed
 compiled source fingerprints.
 
@@ -843,8 +843,18 @@ datatype folds at depths 12 and 13 now succeed, with five values confirmed by
 actual upstream normalization. Complete 12,287-node materialization is checked
 path by path; larger output still fails at the original node budget.
 
-Retained-release Poche validation and publication remain before closing this
-item. Full Bend parity remains separate required work.
+Reclamation implementation: `6356963d02e4c099075c4cb33edf3c8d52081ab4`.
+Its retained release reports that revision with a clean worktree; all 74 compiled
+source fingerprints match the audited candidate. Executable BLAKE3 is
+`24f13a9421a18f51892e4402d0ddf1cc55462a3dc4082876f86c6d7ea676dd1c`.
+It passes all seven Poche privacy laws and the typed wrong-viewer control, 15,503
+scalar comparisons with seven equalities and two controls, and the micro
+trajectory: 22 states, 21 transitions, 44 observations, 300 chance partitions
+and eight controls. Its 67 requests complete in 319 ms. All 13 compiled
+conformance fingerprints and 17 source fingerprints are unchanged from the
+compact-word release. Poche changes remain local; exhaustive graph evidence
+retains its original `6802c1e` attribution. The Image workload milestone is
+complete; full Bend parity remains required and the broad goal stays active.
 
 ### [ ] 5.12 Add native cooperative tasks, timers and channels
 
