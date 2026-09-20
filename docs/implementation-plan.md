@@ -102,6 +102,8 @@ Completion notes: identity/env names, CLI commands, profiler default and README
 adapted. Logging, structured output, cancellation, Windows resources and CLI
 fuzzing retained. The latest `check-all.ps1` passes 100 tests, formatting,
 Clippy and all-feature compilation; two opt-in local profilers are ignored.
+The template/library slice increases the gate to 124 passing tests and adds
+native `base`, `base NAME` and `base --types` source browsing.
 Help/version and native command checks passed.
 
 Work: replace identity, CLI commands, env names, examples and profiler defaults;
@@ -134,10 +136,21 @@ unsafe or incomplete proof can produce a successful check report.
 ### [~] 2.2 Port parsing and module loading
 
 Completion notes: source declarations, nested patterns, quantities, literals,
-operators, do/array sugar and local imports implemented; 17 parser tests pass.
+operators, do/array sugar and local imports implemented; 18 parser tests pass.
 Empty datatypes, reusable parallel lets and implicit array-write rebinding are
-covered. Templates, foreign bodies, GPU calls and hub packages remain open.
+covered. Foreign bodies, GPU calls and hub packages remain open.
 Exact supported surface/limits: `docs/compatibility.md`.
+
+Closed compile-time template specialization now passes 13 focused tests:
+capture rejection, erased argument checking, inlined lambda resource use,
+declaration/import scope, alpha-canonical structural cache keys and bounded
+instance growth. Typed local matcher lambdas now lower with their own binders.
+No kernel acceptance rule changed. A combined recursive/shadowing/duplication
+fixture agrees with independent expected values in the normalizer, lazy native
+runtime, JavaScript and compiled C. Both upstream and this port reject
+unannotated constructor arguments exposed by macro beta-reduction; annotated
+or typed-parameter forms work. Unused template bodies are parsed, while
+their type/resource checks run when instantiated, matching upstream.
 
 Work: parse Bend syntax and declarations, namespace imports and desugaring
 against upstream sources. Keep diagnostics useful on native Windows.
@@ -161,6 +174,14 @@ newly exposed `run/fuel_loops.bend` debug stack overflow was reduced to a
 Nat128 body and repaired with a bounded 16 MiB CLI worker stack. Nat128 now
 returns the existing nesting error; nearby Nat120 passes. Proof limits did
 not change. The complete audit was rerun after the repair.
+
+Template/library audit: 349 positives checked, 504 positives rejected, all
+449 negatives rejected, zero accepted negatives and zero abnormal exits across
+all 1,302 fixtures. The five new positives are three nullary-ADT display
+fixtures and `stuck/fold` / `stuck/map`. Upstream comptime positives still
+require IO, GPU offload or unsafe execution; dedicated pure template tests
+provide that supported feature's execution evidence. The audit's compiled
+source fingerprints match the implementation being published.
 
 Work: use upstream `#|` fixture expectations in a local test harness. Do not run
 upstream cluster scripts. There are 1,302 fixtures; enumerate and classify all
@@ -194,13 +215,27 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 173 selected pure upstream declaration events are bundled
-with Apache attribution (150 definitions, six laws, 17 datatypes). Six Base
+Completion notes: 290 selected pure upstream source declarations are bundled
+with Apache attribution (254 definition forms including 14 templates, 18 laws,
+18 datatypes). Template instances enter the checked book at their call sites;
+source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
 equality transport, lists, division, Word/U32 helpers and false claims. The
 Word full-adder formula has an exhaustive checked Boolean law. A targeted
 audit accepts 23 more of 133 previously rejected positive fixtures without
 crashes. Full Base and target coverage remain required.
+
+The next pure library slice is implemented: Patricia Map, Char/String operations,
+and List templates including map, filter, folds and stable sorting. Ten new
+collection tests cover boundaries, duplicate preservation, lookup/update/delete
+lifecycles and affine values. All 20 Base/numeric/collection tests pass.
+Upstream's seeded Base can skip ordinary source-order validation; this port
+checks its bundled pure Base. Rewrite forward helper cycles into equivalent
+structural definitions rather than allowing unchecked live forward laws.
+
+Remaining library work includes the pure Array operations, complete numeric
+behavior, effects and foreign implementation contracts. Representation or
+syntax support alone does not establish an operation's implementation.
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
 record unavailable hardware and platform-specific validations accurately.
@@ -239,7 +274,7 @@ discriminating negative controls for each kernel.
 Completion: actual production/oracle results agree with the independent Bend
 program over stated domains; mismatches show inputs and outputs.
 
-### [~] 4.3 Extend the independent model to state transitions
+### [x] 4.3 Extend the independent model to bounded state transitions
 
 Design handoff: `docs/poche-state-model-design.md` specifies exact public-getter
 adapters, typed constructor protocol, state/action schema, deterministic replay,
@@ -259,11 +294,25 @@ independent. The same sample passes in 10.520 seconds, with backend evaluation
 about 6.3 times faster (roughly 44 minutes projected for the complete graph).
 Profiling found runtime computation, rather than JSON or argument validation,
 dominates the remaining work, so the existing codec is retained. Run the
-complete graph using a clean, fingerprinted release executable.
-Poche's compiled
-21-transition witness also succeeds, and well-typed wrong-leader/wrong-scoring
+complete graph using the published `6802c1e` clean release executable.
+Poche's compiled 21-transition witness also succeeds, and well-typed wrong-leader/wrong-scoring
 source mutants produce the precise expected mismatches. Scalar or sample
 success does not mark this task complete.
+
+Completion: the complete run finished successfully using the clean `6802c1e`
+release after fresh scalar and trajectory preflights. Every one of the
+431,800 reachable states, 549,896 labeled transitions and 863,600 observations
+matched; all 300 chance partitions and eight rejection controls passed.
+The 981,720 requests took 1,658.848 seconds. The receipt records model BLAKE3
+`3798ecaad4f3bff64d9648452c0f7f2090bde1294a5beb8c505d8bce4fedf226`
+and transcript BLAKE3
+`a273a13c52d7e36f956c30b0675cfefeb60ace620dece023b0beb361b0bbed39`.
+Its source snapshot includes only rule-ID comments added after the earlier
+samples; normalized semantic source is unchanged. A dedicated Poche coverage
+document maps all 61 normative rules with explicit bounds and unmodeled cases.
+This completes the bounded transition comparison specified here; full-deck,
+network, UI and money-transfer correctness and an inductive invariant proof
+remain separate work and are not established by enumeration.
 
 Work: phases, exact card partition, immutable bids, trick progression, winner
 leads, score/pot separation, absorbing finish and decreasing progress. Compare
@@ -294,7 +343,26 @@ publication scan, remote visibility and clean commit verification.
 Completion: public repository contains the verified implementation and honest
 limitations; Poche integration is runnable and evidence is reproducible.
 
+### [x] 5.2 Publish typed execution and portable C generation
+
+Completion: commit `6802c1ec78686c8804d873394aad580bcb71854d` is verified on
+public `main`. The full quality gate passes 100 tests with two opt-in local
+profilers ignored. The full 1,302-fixture audit has zero crashes or accepted
+negative fixtures. A clean release binary was copied before further source
+edits and reports revision `6802c1e` with a clean worktree. Poche receipts
+fingerprint the actual executable, the served model snapshot, and the compiled
+Rust rules/explorer/adapter sources. The complete micro comparison will use
+that fixed release while broader library work continues independently.
+
 ## Completion and risks
+
+The template/library publication slice passes the complete quality gate
+(124 tests and two ignored local profilers), plus the subsequently added
+deferred-template regression (13 template tests pass). Independent review
+found no new defect in specialization keys, closure checks, declaration order,
+budgets or affine collection behavior. `base` source/name/type output and
+invalid selectors passed native CLI smoke checks. All 1,302 upstream fixtures
+were audited against a fixed executable while development continued separately.
 
 The goal is complete only when U1–U9 are delivered and no required rewrite or
 formalization work remains. A scaffold or supported language subset is progress.

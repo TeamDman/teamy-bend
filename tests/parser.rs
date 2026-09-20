@@ -106,7 +106,7 @@ fn literals_and_operator_namespaces_are_structural() {
 
 #[test]
 fn unsupported_forms_fail_without_silently_accepting_a_proof() {
-    parse("def template(~x: Type) -> Type: x").expect_err("templates unsupported");
+    parse("def template(~x) -> Type: x").expect_err("template arguments need explicit types");
     parse("def effect() -> Type: import \"file.c\"").expect_err("foreign definitions unsupported");
     parse_term("do M<>: return").expect_err("return needs a value");
     parse_term("{==} garbage").expect_err("trailing input rejected");
@@ -309,6 +309,38 @@ fn local_import_aliases_share_canonical_definitions() {
 }
 
 #[test]
+fn imported_templates_preserve_definition_aliases_and_share_instances() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "nat.bend",
+        &format!("{NAT}def inc(n: Nat) -> Nat: Succ{{n}}\n"),
+    );
+    fixture.write("other.bend", "type Marker is Data:\n  Marker{}\n");
+    fixture.write(
+        "library.bend",
+        "import nat.bend as D\ndef app(~f: D.Nat -> D.Nat, n: D.Nat) -> D.Nat: f(n)\n",
+    );
+    let entry = fixture.write("main.bend", "import nat.bend as N\nimport other.bend as D\nimport library.bend as A\nimport ./library.bend as B\ndef first() -> N.Nat: A.app(~N.inc, N.Zero{})\ndef second() -> N.Nat: B.app(~N.inc, N.Succ{N.Zero{}})\n");
+    let book = load(entry).expect("aliased templates load");
+    assert_eq!(book.declarations.iter().filter(|declaration| matches!(declaration, Declaration::Def(definition) if definition.name.starts_with("library.app~"))).count(), 1);
+    let checked = check_book(&book).expect("definition aliases survive a caller alias collision");
+    assert_eq!(
+        checked
+            .evaluate_data("first", &[])
+            .expect("first instance")
+            .to_string(),
+        "nat.Succ{nat.Zero{}}"
+    );
+    assert_eq!(
+        checked
+            .evaluate_data("second", &[])
+            .expect("cached instance")
+            .to_string(),
+        "nat.Succ{nat.Succ{nat.Zero{}}}"
+    );
+}
+
+#[test]
 fn import_cycles_are_rejected() {
     let fixture = Fixture::new();
     let entry = fixture.write("a.bend", "import b.bend as B\n");
@@ -328,9 +360,9 @@ fn unsupported_features_and_bad_imports_have_specific_locations() {
     assert!(failure.message.contains("GPU offload"));
     assert!(
         parse_term("f(~Type)")
-            .expect_err("template unsupported")
+            .expect_err("template head must be declared")
             .message
-            .contains("template arguments")
+            .contains("previously declared template")
     );
     let fixture = Fixture::new();
     let entry = fixture.write("bad-import.bend", "# heading\n\n  import nope.txt as Foo\n");

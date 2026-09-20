@@ -19,6 +19,7 @@ use crate::kernel::arrows;
 use crate::kernel::term;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
+use std::collections::VecDeque;
 use std::fmt;
 use std::fs;
 use std::path::Component;
@@ -204,6 +205,28 @@ const KEYWORDS: &[&str] = &[
     "Type", "Data", "Kind", "Quant",
 ];
 
+const MAX_SPECIALIZATIONS: usize = 256;
+const MAX_SPECIALIZATION_DEPTH: usize = 16;
+const MAX_TEMPLATE_KEY_BYTES: usize = 2048;
+
+#[derive(Clone)]
+struct Template {
+    tokens: Rc<[Token]>,
+    at: usize,
+    label: String,
+    namespace: String,
+    aliases: BTreeMap<String, String>,
+    unsafe_: bool,
+    instances: BTreeMap<String, String>,
+}
+
+#[derive(Default)]
+struct Templates {
+    declarations: BTreeMap<String, Template>,
+    instances: usize,
+    active: usize,
+}
+
 struct Parser<'a> {
     tokens: Vec<Token>,
     at: usize,
@@ -216,6 +239,10 @@ struct Parser<'a> {
     depth: usize,
     reusable: Vec<(Variable, TermRef)>,
     reusable_markers: BTreeSet<usize>,
+    templates: &'a mut Templates,
+    instance_name: Option<String>,
+    instance_arguments: VecDeque<TermRef>,
+    compile_bindings: BTreeMap<usize, TermRef>,
 }
 
 impl Parser<'_> {
@@ -307,10 +334,13 @@ impl Parser<'_> {
         matches!(value.as_ref(), Term::Var { id, .. } if self.reusable_markers.contains(id))
     }
     fn known(&self, name: &str) -> bool {
-        self.book.declarations.iter().any(|d| match d {
-            Declaration::Def(d) => d.name == name,
-            Declaration::Adt(d) => d.name == name || d.constructors.iter().any(|c| c.name == name),
-        })
+        self.templates.declarations.contains_key(name)
+            || self.book.declarations.iter().any(|d| match d {
+                Declaration::Def(d) => d.name == name,
+                Declaration::Adt(d) => {
+                    d.name == name || d.constructors.iter().any(|c| c.name == name)
+                }
+            })
     }
     fn resolve(&self, name: &str) -> String {
         if let Some((head, tail)) = name.split_once('.')
@@ -326,7 +356,19 @@ impl Parser<'_> {
             .iter()
             .rev()
             .find(|v| v.name == name)
-            .map_or_else(|| term(Term::Ref(self.resolve(name))), Variable::term)
+            .map_or_else(
+                || term(Term::Ref(self.resolve(name))),
+                |variable| {
+                    self.compile_bindings
+                        .get(&variable.id)
+                        .map_or_else(|| variable.term(), Rc::clone)
+                },
+            )
+    }
+    fn is_compile_binding(&self, value: &TermRef) -> bool {
+        self.compile_bindings
+            .values()
+            .any(|bound| Rc::ptr_eq(bound, value))
     }
     fn quant(&mut self) -> Quant {
         if self.take("-") {
@@ -343,12 +385,12 @@ impl Parser<'_> {
             if binders.len() >= 128 {
                 return Err(self.error("binder telescope exceeds the parser resource limit of 128"));
             }
-            if self.is("~") {
-                return Err(self.error(
-                    "template binders (~) are not supported by this Rust implementation yet",
-                ));
-            }
-            let quant = self.quant();
+            let compile_time = close == ")" && self.take("~");
+            let quant = if compile_time {
+                Quant::None
+            } else {
+                self.quant()
+            };
             let name = self.name()?;
             let (quant, ty) = if self.take(":") {
                 (quant, self.expression(0)?)
@@ -358,6 +400,9 @@ impl Parser<'_> {
                 return Err(self.error("expected a type after a quantified binder"));
             };
             let variable = self.open(name.clone());
+            if compile_time && let Some(argument) = self.instance_arguments.pop_front() {
+                self.compile_bindings.insert(variable.id, argument);
+            }
             binders.push(Binder {
                 quant,
                 name,
@@ -371,6 +416,7 @@ impl Parser<'_> {
     fn declarations(&mut self) -> Result<(), ParseError> {
         while !self.is("") {
             self.scope.clear();
+            self.compile_bindings.clear();
             if self.take("type") {
                 self.datatype()?;
             } else if self.take("law") {
@@ -388,10 +434,12 @@ impl Parser<'_> {
         Ok(())
     }
     fn require_fresh(&self, name: &str) -> Result<(), ParseError> {
-        if self.book.declarations.iter().any(|d| match d {
-            Declaration::Adt(d) => d.name == name,
-            Declaration::Def(d) => d.name == name,
-        }) {
+        if self.templates.declarations.contains_key(name)
+            || self.book.declarations.iter().any(|d| match d {
+                Declaration::Adt(d) => d.name == name,
+                Declaration::Def(d) => d.name == name,
+            })
+        {
             Err(self.error(format!("duplicate declaration: {name}")))
         } else {
             Ok(())
@@ -527,18 +575,24 @@ impl Parser<'_> {
         Ok(())
     }
     fn definition(&mut self, unsafe_: bool) -> Result<(), ParseError> {
+        let declaration_at = self.at;
         let raw = self.name()?;
         let resolved = self.resolve(&raw);
         let prior = self.book.declarations.iter().rev().find_map(|d| match d {
-            Declaration::Def(d) if d.name == resolved => Some(d.clone()),
+            Declaration::Def(d) if d.name == resolved && self.instance_name.is_none() => {
+                Some(d.clone())
+            }
             _ => None,
         });
-        let name = if prior.is_some() {
+        let name = if let Some(instance) = &self.instance_name {
+            instance.clone()
+        } else if prior.is_some() {
             resolved
         } else {
             self.qualify(&raw)
         };
         self.expect("(")?;
+        let template = prior.is_none() && self.instance_name.is_none() && self.is("~");
         let (parameters, ty, vars) = if let Some(prior) = prior {
             if prior.body.is_some() || prior.foreign {
                 return Err(self.error(format!("duplicate definition: {name}")));
@@ -557,6 +611,20 @@ impl Parser<'_> {
             (prior.parameters, prior.ty, vars)
         } else {
             self.require_fresh(&name)?;
+            if template {
+                self.templates.declarations.insert(
+                    name.clone(),
+                    Template {
+                        tokens: self.tokens.clone().into(),
+                        at: declaration_at,
+                        label: self.label.clone(),
+                        namespace: self.namespace.clone(),
+                        aliases: self.aliases.clone(),
+                        unsafe_,
+                        instances: BTreeMap::new(),
+                    },
+                );
+            }
             let parameters = self.telescope(")")?;
             self.expect("->")?;
             let result = self.expression(0)?;
@@ -588,16 +656,133 @@ impl Parser<'_> {
         }));
         let body = self.body(0)?;
         let value = flatten(&body, &vars, self.fresh).map_err(|e| self.error(e))?;
-        self.book.declarations.truncate(temporary);
-        self.book.declarations.push(Declaration::Def(DefDecl {
-            name,
-            parameters,
-            ty: qualify_operators(&ty, "Nat"),
-            body: Some(qualify_operators(&value, "Nat")),
-            unsafe_,
-            foreign: false,
-        }));
+        // Specializations minted in the body precede their caller. Removing
+        // only the temporary event preserves those separately checked defs.
+        self.book.declarations.remove(temporary);
+        if template {
+            self.retain_template_source(&name, declaration_at);
+        } else {
+            self.book.declarations.push(Declaration::Def(DefDecl {
+                name,
+                parameters,
+                ty: qualify_operators(&ty, "Nat"),
+                body: Some(qualify_operators(&value, "Nat")),
+                unsafe_,
+                foreign: false,
+            }));
+        }
         Ok(())
+    }
+
+    fn retain_template_source(&mut self, name: &str, declaration_at: usize) {
+        // Retain only this declaration, not another copy of its full file.
+        let mut tokens = self.tokens[declaration_at..self.at].to_vec();
+        let mut end = self.current().clone();
+        end.text.clear();
+        tokens.push(end);
+        let saved = self
+            .templates
+            .declarations
+            .get_mut(name)
+            .expect("registered template");
+        saved.tokens = tokens.into();
+        saved.at = 0;
+    }
+
+    fn call(&mut self, mut function: TermRef) -> Result<TermRef, ParseError> {
+        let template = match function.as_ref() {
+            Term::Ref(name) if self.templates.declarations.contains_key(name) => Some(name.clone()),
+            _ => None,
+        };
+        let mut compile_arguments = Vec::new();
+        if template.is_some() {
+            while self.take("~") {
+                if compile_arguments.len() >= 128 {
+                    return Err(
+                        self.error("template argument list exceeds the resource limit of 128")
+                    );
+                }
+                // Operators in a compile argument are fixed at that argument's
+                // boundary, before an enclosing caller annotation can name them.
+                let argument = self.expression(0)?;
+                compile_arguments.push(qualify_operators(&argument, "Nat"));
+                self.take(",");
+            }
+        }
+        let runtime_arguments = self.arguments(")")?;
+        if let Some(name) = template
+            && let Some(instance) = self.specialize(&name, &compile_arguments)?
+        {
+            function = term(Term::Ref(instance));
+        }
+        for argument in compile_arguments.into_iter().chain(runtime_arguments) {
+            function = if let Term::Lam { id, body, .. } = function.as_ref()
+                && self.is_compile_binding(&function)
+            {
+                // Upstream Sub is resolved before live checking: duplicating a
+                // macro parameter duplicates caller syntax, not an affine Lam.
+                crate::kernel::substitute(body, *id, &argument)
+            } else {
+                term(Term::App(function, argument))
+            };
+        }
+        Ok(function)
+    }
+
+    fn specialize(
+        &mut self,
+        name: &str,
+        arguments: &[TermRef],
+    ) -> Result<Option<String>, ParseError> {
+        let Some(key) = template_key(arguments).map_err(|error| self.error(error))? else {
+            // Open arguments must keep the undefined template name. In
+            // particular a caller-local variable never becomes a global Ref.
+            return Ok(None);
+        };
+        let template = self
+            .templates
+            .declarations
+            .get(name)
+            .expect("known template");
+        if let Some(instance) = template.instances.get(&key) {
+            return Ok(Some(instance.clone()));
+        }
+        if self.templates.instances >= MAX_SPECIALIZATIONS
+            || self.templates.active >= MAX_SPECIALIZATION_DEPTH
+        {
+            return Err(self.error("template specialization count or nesting budget exhausted"));
+        }
+        let instance = format!("{name}~{}", template.instances.len());
+        let snapshot = template.clone();
+        self.templates
+            .declarations
+            .get_mut(name)
+            .expect("known template")
+            .instances
+            .insert(key, instance.clone());
+        self.templates.instances += 1;
+        self.templates.active += 1;
+        let result = Parser {
+            tokens: snapshot.tokens.to_vec(),
+            at: snapshot.at,
+            label: snapshot.label,
+            namespace: snapshot.namespace,
+            aliases: snapshot.aliases,
+            scope: Vec::new(),
+            fresh: self.fresh,
+            book: self.book,
+            depth: 0,
+            reusable: Vec::new(),
+            reusable_markers: BTreeSet::new(),
+            templates: self.templates,
+            instance_name: Some(instance.clone()),
+            instance_arguments: arguments.iter().map(Rc::clone).collect(),
+            compile_bindings: BTreeMap::new(),
+        }
+        .definition(snapshot.unsafe_);
+        self.templates.active -= 1;
+        result?;
+        Ok(Some(instance))
     }
     fn expression(&mut self, min: u8) -> Result<TermRef, ParseError> {
         if self.depth >= 64 {
@@ -633,8 +818,7 @@ impl Parser<'_> {
             }
             if self.is("(") && same_line {
                 self.bump();
-                let args = self.arguments(")")?;
-                out = apply(out, args);
+                out = self.call(out)?;
                 continue;
             }
             if self.is("[") && same_line {
@@ -700,6 +884,11 @@ impl Parser<'_> {
                 continue;
             }
             if min == 0 && self.take("=>") {
+                if self.is_compile_binding(&out) {
+                    return Err(
+                        self.error("a template argument cannot be rebound as a lambda binder")
+                    );
+                }
                 let name = match out.as_ref() {
                     Term::Ref(n) | Term::Var { name: n, .. } => n.clone(),
                     _ => return Err(self.error("a lambda binder must be one name")),
@@ -708,13 +897,8 @@ impl Parser<'_> {
                 let reusable = self.is_reusable(&out);
                 let v = self.bind_variable(name.clone(), reusable);
                 let body = self.body(self.current().column.saturating_sub(1))?;
-                let body = flatten(&body, &[], self.fresh).map_err(|e| self.error(e))?;
+                out = flatten(&body, &[v], self.fresh).map_err(|e| self.error(e))?;
                 self.scope.truncate(old);
-                out = term(Term::Lam {
-                    name,
-                    id: v.id,
-                    body,
-                });
                 continue;
             }
             if min == 0 && self.take("->") {
@@ -789,7 +973,7 @@ impl Parser<'_> {
     fn atom(&mut self) -> Result<TermRef, ParseError> {
         if self.is("~") {
             return Err(self.error(
-                "template arguments (~) are not supported by this Rust implementation yet",
+                "~ arguments require a previously declared template head and leading argument position",
             ));
         }
         if self.take("Type") {
@@ -1301,6 +1485,9 @@ impl Parser<'_> {
         }
     }
     fn pattern(&mut self, value: &TermRef) -> Result<Pattern, ParseError> {
+        if self.is_compile_binding(value) {
+            return Err(self.error("a template argument cannot be rebound as a pattern"));
+        }
         match value.as_ref() {
             Term::Ref(name) | Term::Var { name, .. } => {
                 if self.book.declarations.iter().any(|d|matches!(d,Declaration::Adt(a) if a.constructors.iter().any(|c|c.name==self.resolve(name)))) {return Err(self.error(format!("constructor pattern {name} requires braces")));}
@@ -1722,6 +1909,194 @@ fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
     }
 }
 
+// Structural keys distinguish references from variables and constructor names
+// from syntax. Bound IDs are represented by lexical positions, so independently
+// parsed copies of a closed lambda share an instance without capturing locals.
+#[derive(Default)]
+struct TemplateKey {
+    text: String,
+    nodes: usize,
+}
+
+impl TemplateKey {
+    fn write(&mut self, text: &str) -> Result<(), &'static str> {
+        if self.text.len() + text.len() > MAX_TEMPLATE_KEY_BYTES {
+            return Err("template argument key exceeds the resource limit of 2048 bytes");
+        }
+        self.text.push_str(text);
+        Ok(())
+    }
+    fn name(&mut self, tag: &str, name: &str) -> Result<(), &'static str> {
+        self.write(tag)?;
+        self.write(&name.len().to_string())?;
+        self.write(":")?;
+        self.write(name)
+    }
+    fn terms(
+        &mut self,
+        values: &[TermRef],
+        scope: &[usize],
+        depth: usize,
+    ) -> Result<bool, &'static str> {
+        self.write("[")?;
+        for value in values {
+            if !self.term(value, scope, depth + 1)? {
+                return Ok(false);
+            }
+        }
+        self.write("]")?;
+        Ok(true)
+    }
+    #[expect(
+        clippy::too_many_lines,
+        reason = "an explicit key variant for every kernel term prevents accidental cache collisions"
+    )]
+    fn term(
+        &mut self,
+        value: &TermRef,
+        scope: &[usize],
+        depth: usize,
+    ) -> Result<bool, &'static str> {
+        if depth > 128 || self.nodes >= 4096 {
+            return Err("template argument structure exceeds the key resource limit");
+        }
+        self.nodes += 1;
+        self.write("(")?;
+        match value.as_ref() {
+            Term::Var { id, .. } => {
+                let Some(index) = scope.iter().rev().position(|binder| binder == id) else {
+                    return Ok(false);
+                };
+                self.name("v", &index.to_string())?;
+            }
+            Term::Ref(name) => self.name("r", name)?,
+            Term::Typ(grade) => {
+                self.write("t")?;
+                if !self.term(grade, scope, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+            Term::Qnt => self.write("q")?,
+            Term::Qua(quant) => self.name("g", &quant.to_string())?,
+            Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => {
+                self.write(match value.as_ref() {
+                    Term::Min(_, _) => "m",
+                    Term::App(_, _) => "a",
+                    _ => "n",
+                })?;
+                if !self.term(a, scope, depth + 1)? || !self.term(b, scope, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+            Term::All {
+                quant,
+                id,
+                domain,
+                body,
+                ..
+            } => {
+                self.name("f", &quant.to_string())?;
+                if !self.term(domain, scope, depth + 1)? {
+                    return Ok(false);
+                }
+                let mut nested = scope.to_vec();
+                nested.push(*id);
+                if !self.term(body, &nested, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+            Term::Lam { id, body, .. } => {
+                self.write("l")?;
+                let mut nested = scope.to_vec();
+                nested.push(*id);
+                if !self.term(body, &nested, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+            Term::Adt {
+                name,
+                args,
+                excluded,
+            } => {
+                self.name("d", name)?;
+                if !self.terms(args, scope, depth)? {
+                    return Ok(false);
+                }
+                for name in excluded {
+                    self.name("x", name)?;
+                }
+            }
+            Term::Ctr { name, args } => {
+                self.name("c", name)?;
+                if !self.terms(args, scope, depth)? {
+                    return Ok(false);
+                }
+            }
+            Term::Mat {
+                constructor,
+                arm,
+                fallback,
+            } => {
+                self.name("b", constructor)?;
+                if !self.term(arm, scope, depth + 1)? || !self.term(fallback, scope, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+            Term::Efq => self.write("e")?,
+            Term::Eql { left, right, ty } => {
+                self.write("=")?;
+                if !self.term(left, scope, depth + 1)?
+                    || !self.term(right, scope, depth + 1)?
+                    || !self.term(ty, scope, depth + 1)?
+                {
+                    return Ok(false);
+                }
+            }
+            Term::Rfl => self.write("p")?,
+            Term::Rwt {
+                evidence,
+                motive,
+                body,
+            } => {
+                self.write("w")?;
+                if !self.term(evidence, scope, depth + 1)?
+                    || !self.term(motive, scope, depth + 1)?
+                    || !self.term(body, scope, depth + 1)?
+                {
+                    return Ok(false);
+                }
+            }
+            Term::Hole(name) => self.name("h", name)?,
+            Term::Let { bindings, body } => {
+                self.write("s[")?;
+                for binding in bindings {
+                    self.name("g", &binding.quant.to_string())?;
+                    if !self.term(&binding.value, scope, depth + 1)? {
+                        return Ok(false);
+                    }
+                }
+                self.write("]")?;
+                let mut nested = scope.to_vec();
+                nested.extend(bindings.iter().map(|binding| binding.id));
+                if !self.term(body, &nested, depth + 1)? {
+                    return Ok(false);
+                }
+            }
+        }
+        self.write(")")?;
+        Ok(true)
+    }
+}
+
+fn template_key(arguments: &[TermRef]) -> Result<Option<String>, &'static str> {
+    let mut key = TemplateKey::default();
+    if key.terms(arguments, &[], 0)? {
+        Ok(Some(key.text))
+    } else {
+        Ok(None)
+    }
+}
+
 /// Parse a self-contained Bend source book. Local imports require [`load`].
 ///
 /// # Errors
@@ -1736,6 +2111,7 @@ pub fn parse(source: &str) -> Result<Book, ParseError> {
         BTreeMap::new(),
         &mut book,
         &mut fresh,
+        &mut Templates::default(),
     )?;
     Ok(book)
 }
@@ -1747,6 +2123,7 @@ pub fn parse(source: &str) -> Result<Book, ParseError> {
 pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
     let mut book = Book::default();
     let mut fresh = 0;
+    let mut templates = Templates::default();
     let mut p = Parser {
         tokens: lex(source, "<expression>")?,
         at: 0,
@@ -1759,6 +2136,10 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
         depth: 0,
         reusable: Vec::new(),
         reusable_markers: BTreeSet::new(),
+        templates: &mut templates,
+        instance_name: None,
+        instance_arguments: VecDeque::new(),
+        compile_bindings: BTreeMap::new(),
     };
     let value = p.expression(0)?;
     if !p.is("") {
@@ -1774,6 +2155,7 @@ fn parse_into(
     aliases: BTreeMap<String, String>,
     book: &mut Book,
     fresh: &mut usize,
+    templates: &mut Templates,
 ) -> Result<(), ParseError> {
     Parser {
         tokens: lex(source, label)?,
@@ -1787,6 +2169,10 @@ fn parse_into(
         depth: 0,
         reusable: Vec::new(),
         reusable_markers: BTreeSet::new(),
+        templates,
+        instance_name: None,
+        instance_arguments: VecDeque::new(),
+        compile_bindings: BTreeMap::new(),
     }
     .declarations()
 }
@@ -1798,6 +2184,7 @@ struct Loader {
     seen: BTreeMap<PathBuf, String>,
     active: BTreeSet<PathBuf>,
     base: bool,
+    templates: Templates,
 }
 
 impl Loader {
@@ -1857,6 +2244,7 @@ impl Loader {
                             BTreeMap::new(),
                             &mut self.book,
                             &mut self.fresh,
+                            &mut self.templates,
                         )?;
                     }
                 } else if let ["import", relative, "as", alias] = parts.as_slice() {
@@ -1918,6 +2306,7 @@ impl Loader {
             aliases,
             &mut self.book,
             &mut self.fresh,
+            &mut self.templates,
         )?;
         self.active.remove(&real);
         self.seen.insert(real, namespace.into());

@@ -1,3 +1,4 @@
+pub mod base;
 pub mod batch;
 pub mod cache;
 pub mod check;
@@ -9,6 +10,7 @@ pub mod home;
 pub mod output;
 pub mod serve;
 
+use crate::cli::base::BaseArgs;
 use crate::cli::batch::BatchArgs;
 use crate::cli::cache::CacheArgs;
 use crate::cli::check::CheckArgs;
@@ -73,6 +75,8 @@ impl Cli {
 #[derive(Facet, Arbitrary, Debug, PartialEq)]
 #[repr(u8)]
 pub enum Command {
+    /// Print the bundled Base source, its types, or a named namespace.
+    Base(BaseArgs),
     /// Cache-related commands.
     Cache(CacheArgs),
     /// Home-related commands.
@@ -96,6 +100,7 @@ impl Command {
     pub async fn invoke(self, cancellation_token: CancellationToken) -> eyre::Result<CliOutput> {
         cancellation_token.bail_if_cancelled()?;
         match self {
+            Command::Base(args) => args.invoke(&cancellation_token),
             Command::Cache(args) => args.invoke().await,
             Command::Home(args) => args.invoke().await,
             Command::Check(args) => args.invoke(&cancellation_token),

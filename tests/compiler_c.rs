@@ -414,3 +414,40 @@ fn c_runtime_budgets_fail_cleanly_and_deterministically() {
         assert!(String::from_utf8_lossy(&output.stderr).contains(message));
     }
 }
+
+#[test]
+fn compiled_templates_preserve_recursion_shadowing_and_reusable_arguments() {
+    let book = parse(&format!(
+        "{NAT}{ADD}{}",
+        r"
+type Nats is Data:
+  Nil{}
+  Con{head: Nat, tail: Nats}
+type Report is Data:
+  Report{mapped: Nats, outer: Nat, inner: Nat, duplicated: Nat}
+def map(~f: Nat -> Nat, xs: Nats) -> Nats:
+  match xs:
+    case Nil{}: Nil{}
+    case Con{head, tail}: Con{f(head), map(~f, tail)}
+def run(~f: Nat -> Nat -> Nat, a: Nat, b: Nat) -> Nat: f(a, b)
+def outer(~f: Nat -> Nat -> Nat, a: Nat, b: Nat) -> Nat: run(~(x => f(x)), a, b)
+def twice(~f: Nat -> Nat, +x: Nat) -> Nat: f(x)
+def main() -> Report:
+  Report{
+    map(~(n => Succ{n}), Con{1n, Con{2n, Nil{}}}),
+    outer(~(y => x => y), 1n, 2n),
+    run(~(x => x => x), 1n, 2n),
+    twice(~(y => add(y, y)), 3n)
+  }
+"
+    ))
+    .expect("closed template program parses");
+    let checked = check_book(&book).expect("template instances remain checked");
+    let expected = "Report{Con{Succ{Succ{Zero{}}}, Con{Succ{Succ{Succ{Zero{}}}}, Nil{}}}, Succ{Zero{}}, Succ{Succ{Zero{}}}, Succ{Succ{Succ{Succ{Succ{Succ{Zero{}}}}}}}}";
+    assert_eq!(checked.evaluate("main", &[]).unwrap().to_string(), expected);
+    assert_eq!(
+        checked.evaluate_data("main", &[]).unwrap().to_string(),
+        expected
+    );
+    assert_matches(&book, "main");
+}

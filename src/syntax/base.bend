@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Derived from Bend 2.0.5, Copyright 2026 HigherOrderCO.
 # Selected pure definitions from upstream base.bend; Rust implementation changes: TeamDman.
-# See NOTICE and licenses/Apache-2.0.txt. Foreign effects and templates remain unsupported.
+# See NOTICE and licenses/Apache-2.0.txt. Foreign effects remain unsupported.
+# Pure templates specialize into ordinary checked definitions when called.
 
 type Empty is Data:
 
@@ -1092,3 +1093,908 @@ def U32.is_even(a: U32) -> Bool:
 
 # F32
 # ---
+
+# Pure List helpers, string ordering and Patricia maps from upstream Base.
+# Upstream pre-seeds Base instead of checking these helper cycles in source order.
+# Here recursive decisions are inlined as typed matcher lambdas, and the original
+# helper APIs follow their checked parent definitions. Live forward laws remain
+# rejected; all declarations below pass the ordinary strict checker.
+# Pure template combinators specialize into ordinary checked declarations.
+
+type Map<a, -V: Kind(a)> is Kind(a):
+  MTip{}
+  MLeaf{key: String, val: V}
+  MNode{pos: Nat, lo: Map<a, V>, hi: Map<a, V>}
+
+def List.find.put(-A: Data, h: A, r: Maybe<&2, A>, hit: Bool) -> Maybe<&2, A>:
+  match hit:
+    case False{}:
+      r
+    case True{}:
+      Some{h}
+
+def List.merge.step(
+  -A: Data, acc: List<&2, A>, x: A, xt: List<&2, A>, y: A, yt: List<&2, A>,
+  le: Bool
+) -> List<&2, A> & List<&2, A> & List<&2, A>:
+  match le:
+    case False{}:
+      (y <> acc, x <> xt, yt)
+    case True{}:
+      (x <> acc, xt, y <> yt)
+
+# The fuel bounds the steps: a sort passes its length, enough for any merge.
+
+def List.sort.runs(-A: Data, xs: List<&2, A>) -> List<&2, List<&2, A>>:
+  match xs:
+    case Nil{}:
+      Nil{}
+    case h <> t:
+      [h] <> List.sort.runs(A, t)
+
+def Char.cmp(a: Char, b: Char) -> (Char & Char) & Cmp:
+  match a b:
+    case Chr{+x} Chr{+y}:
+      ((Chr{x}, Chr{y}), U32.cmp(x, y))
+
+def Char.is_eq(a: Char, b: Char) -> Bool:
+  match a b:
+    case Chr{x} Chr{y}:
+      U32.is_eq(x, y)
+
+def String.cmp.rec(h1b: Char, h2b: Char, rr: (String & String) & Cmp) ->
+  (String & String) & Cmp:
+  ((t1b, t2b), r) = rr
+  ((SCon{h1b, t1b}, SCon{h2b, t2b}), r)
+
+law String.cmp:
+  for a: String
+  for b: String
+  (String & String) & Cmp
+
+def String.cmp(a, b):
+  match a b:
+    case SNil{} SNil{}:
+      ((SNil{}, SNil{}), EQ{})
+    case SNil{} SCon{h, t}:
+      ((SNil{}, SCon{h, t}), LT{})
+    case SCon{h, t} SNil{}:
+      ((SCon{h, t}, SNil{}), GT{})
+    case SCon{h1, t1} SCon{h2, t2}:
+      {(hc =>
+        ((h1b, h2b), c) = hc
+        match c:
+          case LT{}:
+            ((SCon{h1b, t1}, SCon{h2b, t2}), LT{})
+          case EQ{}:
+            String.cmp.rec(h1b, h2b, String.cmp(t1, t2))
+          case GT{}:
+            ((SCon{h1b, t1}, SCon{h2b, t2}), GT{})
+      ) : ((Char & Char) & Cmp) -> ((String & String) & Cmp)}(Char.cmp(h1, h2))
+
+def String.cmp.fin(t1: String, t2: String, hc: (Char & Char) & Cmp) ->
+  (String & String) & Cmp:
+  ((h1b, h2b), c) = hc
+  match c:
+    case LT{}:
+      ((SCon{h1b, t1}, SCon{h2b, t2}), LT{})
+    case EQ{}:
+      String.cmp.rec(h1b, h2b, String.cmp(t1, t2))
+    case GT{}:
+      ((SCon{h1b, t1}, SCon{h2b, t2}), GT{})
+
+def String.eq.fin(r: (String & String) & Cmp) -> Bool:
+  ((a2, b2), c) = r
+  Cmp.is_eq(c)
+
+def String.eq(a: String, b: String) -> Bool:
+  String.eq.fin(String.cmp(a, b))
+
+def String.order.fin(r: (String & String) & Cmp) -> Cmp:
+  (ab, c) = r
+  c
+
+def String.order(a: String, b: String) -> Cmp:
+  String.order.fin(String.cmp(a, b))
+
+def String.is_lt(a: String, b: String) -> Bool:
+  Cmp.is_lt(String.order(a, b))
+
+def String.is_le(a: String, b: String) -> Bool:
+  Cmp.is_le(String.order(a, b))
+
+def String.is_gt(a: String, b: String) -> Bool:
+  Cmp.is_gt(String.order(a, b))
+
+def String.is_ge(a: String, b: String) -> Bool:
+  Cmp.is_ge(String.order(a, b))
+
+def Map.bit.u(x: U32, k: Nat) -> Bool:
+  U32.is_ne(U32.and(U32.shrn(x, k), 1), 0)
+
+def Map.bit.chr(c: Char, off: Nat) -> Char & Bool:
+  match c off:
+    case Chr{x} 0n:
+      (Chr{x}, True{})
+    case Chr{+x} 1n+b:
+      (Chr{x}, Map.bit.u(x, Nat.sub(31n, b)))
+
+def Map.bit.go.chr(t: String, r: Char & Bool) -> String & Bool:
+  (c2, b) = r
+  (SCon{c2, t}, b)
+
+def Map.bit.go.rec(c: Char, r: String & Bool) -> String & Bool:
+  (t2, b) = r
+  (SCon{c, t2}, b)
+
+def Map.bit.go(key: String, ci: Nat, off: Nat) -> String & Bool:
+  match key:
+    case SNil{}:
+      (SNil{}, False{})
+    case SCon{c, t}:
+      match ci:
+        case 0n:
+          Map.bit.go.chr(t, Map.bit.chr(c, off))
+        case 1n+j:
+          Map.bit.go.rec(c, Map.bit.go(t, j, off))
+
+def Map.bit.at(key: String, co: Nat & Nat) -> String & Bool:
+  (ci, off) = co
+  Map.bit.go(key, ci, off)
+
+def Map.bit(key: String, pos: Nat) -> String & Bool:
+  Map.bit.at(key, Nat.divmod(pos, 33n))
+
+law Map.msb.u:
+  for n: Nat
+  for +x: U32
+  Nat
+
+def Map.msb.u(n, x):
+  match n:
+    case 0n:
+      0n
+    case 1n+p:
+      {(z =>
+        match z:
+          case True{}:
+            0n
+          case False{}:
+            Nat.add(1n, Map.msb.u(p, U32.shr(x)))
+      ) : Bool -> Nat}(U32.is_zero(x))
+
+def Map.msb.u.if(p: Nat, x2: U32, z: Bool) -> Nat:
+  match z:
+    case True{}:
+      0n
+    case False{}:
+      Nat.add(1n, Map.msb.u(p, U32.shr(x2)))
+
+def Map.diff.chr(x: U32) -> Nat:
+  Nat.sub(33n, Map.msb.u(32n, x))
+
+def Map.diff.step(x: Char, y: Char) -> Nat & Bool:
+  match x y:
+    case Chr{+cx} Chr{+cy}:
+      (Map.diff.chr(U32.xor(cx, cy)), U32.is_eq(cx, cy))
+
+law Map.diff:
+  for a: String
+  for b: String
+  Nat
+
+def Map.diff(a, b):
+  match a b:
+    case SNil{} SNil{}:
+      0n
+    case SNil{} SCon{h, t}:
+      0n
+    case SCon{h, t} SNil{}:
+      0n
+    case SCon{x, xt} SCon{y, yt}:
+      {(rc =>
+        (r, c) = rc
+        match c:
+          case True{}:
+            Nat.add(33n, Map.diff(xt, yt))
+          case False{}:
+            r
+      ) : (Nat & Bool) -> Nat}(Map.diff.step(x, y))
+
+def Map.diff.fin(xt: String, yt: String, rc: Nat & Bool) -> Nat:
+  (r, c) = rc
+  match c:
+    case True{}:
+      Nat.add(33n, Map.diff(xt, yt))
+    case False{}:
+      r
+
+def Map.new(a, -V: Kind(a)) -> Map<a, V>:
+  MTip{}
+
+law Map.put:
+  for -a  : Quant
+  for -V  : Kind(a)
+  for m   : Map<a, V>
+  for key : String
+  for x   : V
+  Map<a, V>
+
+def Map.put(a, V, m, key, x):
+  match m:
+    case MTip{}:
+      MLeaf{key, x}
+    case MLeaf{k, v}:
+      MLeaf{k, x}
+    case MNode{+pos, lo, hi}:
+      {(kb =>
+        (key2, b) = kb
+        match b:
+          case False{}:
+            MNode{pos, Map.put(a, V, lo, key2, x), hi}
+          case True{}:
+            MNode{pos, lo, Map.put(a, V, hi, key2, x)}
+      ) : (String & Bool) -> Map<a, V>}(Map.bit(key, pos))
+
+def Map.put.bit(
+  a, -V: Kind(a), x: V, p2: Nat, lo: Map<a, V>, hi: Map<a, V>, kb: String & Bool
+) -> Map<a, V>:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      MNode{p2, Map.put(a, V, lo, key2, x), hi}
+    case True{}:
+      MNode{p2, lo, Map.put(a, V, hi, key2, x)}
+
+def Map.ins.splice.bit(
+  a, -V: Kind(a), x: V, rest: Map<a, V>, pb: Nat, kb: String & Bool
+) -> Map<a, V>:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      MNode{pb, MLeaf{key2, x}, rest}
+    case True{}:
+      MNode{pb, rest, MLeaf{key2, x}}
+
+def Map.ins.splice(
+  a, -V: Kind(a), +p: Nat, key: String, x: V, rest: Map<a, V>
+) -> Map<a, V>:
+  Map.ins.splice.bit(a, V, x, rest, p, Map.bit(key, p))
+
+law Map.ins:
+  for -a  : Quant
+  for -V  : Kind(a)
+  for m   : Map<a, V>
+  for key : String
+  for x   : V
+  for +p  : Nat
+  Map<a, V>
+
+def Map.ins(a, V, m, key, x, p):
+  match m:
+    case MTip{}:
+      MLeaf{key, x}
+    case MLeaf{k, v}:
+      Map.ins.splice(a, V, p, key, x, MLeaf{k, v})
+    case MNode{+pos, lo, hi}:
+      {(t =>
+        match t:
+          case False{}:
+            Map.ins.splice(a, V, p, key, x, MNode{pos, lo, hi})
+          case True{}:
+            {(kb =>
+              (key2, b) = kb
+              match b:
+                case False{}:
+                  MNode{pos, Map.ins(a, V, lo, key2, x, p), hi}
+                case True{}:
+                  MNode{pos, lo, Map.ins(a, V, hi, key2, x, p)}
+            ) : (String & Bool) -> Map<a, V>}(Map.bit(key, pos))
+      ) : Bool -> Map<a, V>}(Nat.is_lt(pos, p))
+
+def Map.ins.deep(
+  a, -V: Kind(a), x: V, lo: Map<a, V>, hi: Map<a, V>, pb: Nat, qb: Nat,
+  kb: String & Bool
+) -> Map<a, V>:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      MNode{qb, Map.ins(a, V, lo, key2, x, pb), hi}
+    case True{}:
+      MNode{qb, lo, Map.ins(a, V, hi, key2, x, pb)}
+
+def Map.ins.if(
+  a, -V: Kind(a), key: String, x: V, lo: Map<a, V>, hi: Map<a, V>, +p2: Nat,
+  pb: Nat, t: Bool
+) -> Map<a, V>:
+  match t:
+    case False{}:
+      Map.ins.splice(a, V, pb, key, x, MNode{p2, lo, hi})
+    case True{}:
+      Map.ins.deep(a, V, x, lo, hi, pb, p2, Map.bit(key, p2))
+
+def Map.lo(
+  a, -V: Kind(a), -R: Type, p2: Nat, hi: Map<a, V>, r0: Map<a, V> & R
+) -> Map<a, V> & R:
+  (lo2, r) = r0
+  (MNode{p2, lo2, hi}, r)
+
+def Map.hi(
+  a, -V: Kind(a), -R: Type, p2: Nat, lo: Map<a, V>, r0: Map<a, V> & R
+) -> Map<a, V> & R:
+  (hi2, r) = r0
+  (MNode{p2, lo, hi2}, r)
+
+law Map.seek:
+  for -a  : Quant
+  for -V  : Kind(a)
+  for m   : Map<a, V>
+  for key : String
+  Map<a, V> & String & Maybe<&2, String>
+
+def Map.seek(a, V, m, key):
+  match m:
+    case MTip{}:
+      (MTip{}, key, None{})
+    case MLeaf{+k, v}:
+      (MLeaf{k, v}, key, Some{k})
+    case MNode{+pos, lo, hi}:
+      {(kb =>
+        (key2, b) = kb
+        match b:
+          case False{}:
+            Map.lo(a, V, String & Maybe<&2, String>, pos, hi, Map.seek(a, V, lo, key2))
+          case True{}:
+            Map.hi(a, V, String & Maybe<&2, String>, pos, lo, Map.seek(a, V, hi, key2))
+      ) : (String & Bool) -> (Map<a, V> & String & Maybe<&2, String>)}(Map.bit(key, pos))
+
+def Map.seek.bit(
+  a, -V: Kind(a), lo: Map<a, V>, hi: Map<a, V>, p2: Nat, kb: String & Bool
+) -> Map<a, V> & String & Maybe<&2, String>:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      Map.lo(a, V, String & Maybe<&2, String>, p2, hi, Map.seek(a, V, lo, key2))
+    case True{}:
+      Map.hi(a, V, String & Maybe<&2, String>, p2, lo, Map.seek(a, V, hi, key2))
+
+def Map.set.fin.go(
+  a, -V: Kind(a), m: Map<a, V>, key: String, x: V, r: (String & String) & Cmp
+) -> Map<a, V>:
+  ((keyb2, k2), c) = r
+  match c:
+    case LT{}:
+      Map.ins(a, V, m, key, x, Map.diff(keyb2, k2))
+    case EQ{}:
+      Map.put(a, V, m, key, x)
+    case GT{}:
+      Map.ins(a, V, m, key, x, Map.diff(keyb2, k2))
+
+def Map.set.fin(
+  a, -V: Kind(a), m: Map<a, V>, key: String, x: V, keyb: String, k: String
+) -> Map<a, V>:
+  Map.set.fin.go(a, V, m, key, x, String.cmp(keyb, k))
+
+def Map.set.go(
+  a, -V: Kind(a), x: V, r: Map<a, V> & String & Maybe<&2, String>
+) -> Map<a, V>:
+  (m2, key2, found) = r
+  match found:
+    case None{}:
+      MLeaf{key2, x}
+    case Some{k}:
+      +ka = {key2 : String}
+      Map.set.fin(a, V, m2, ka, x, ka, k)
+
+def Map.set(a, -V: Kind(a), m: Map<a, V>, key: String, x: V) -> Map<a, V>:
+  Map.set.go(a, V, x, Map.seek(a, V, m, key))
+
+def Map.has.leaf(a, -V: Kind(a), v: V, r: (String & String) & Cmp) ->
+  Map<a, V> & Bool:
+  ((key2, k2), c) = r
+  (MLeaf{k2, v}, Cmp.is_eq(c))
+
+law Map.has:
+  for -a  : Quant
+  for -V  : Kind(a)
+  for m   : Map<a, V>
+  for key : String
+  Map<a, V> & Bool
+
+def Map.has(a, V, m, key):
+  match m:
+    case MTip{}:
+      (MTip{}, False{})
+    case MLeaf{k, v}:
+      Map.has.leaf(a, V, v, String.cmp(key, k))
+    case MNode{+pos, lo, hi}:
+      {(kb =>
+        (key2, b) = kb
+        match b:
+          case False{}:
+            Map.lo(a, V, Bool, pos, hi, Map.has(a, V, lo, key2))
+          case True{}:
+            Map.hi(a, V, Bool, pos, lo, Map.has(a, V, hi, key2))
+      ) : (String & Bool) -> (Map<a, V> & Bool)}(Map.bit(key, pos))
+
+def Map.has.bit(
+  a, -V: Kind(a), lo: Map<a, V>, hi: Map<a, V>, p2: Nat, kb: String & Bool
+) -> Map<a, V> & Bool:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      Map.lo(a, V, Bool, p2, hi, Map.has(a, V, lo, key2))
+    case True{}:
+      Map.hi(a, V, Bool, p2, lo, Map.has(a, V, hi, key2))
+
+def Map.get.leaf(-V: Data, d: V, +v: V, r: (String & String) & Cmp) ->
+  Map<&2, V> & V:
+  ((key2, k2), c) = r
+  match c:
+    case LT{}:
+      (MLeaf{k2, v}, d)
+    case EQ{}:
+      (MLeaf{k2, v}, v)
+    case GT{}:
+      (MLeaf{k2, v}, d)
+
+law Map.get:
+  for -V  : Data
+  for d   : V
+  for m   : Map<&2, V>
+  for key : String
+  Map<&2, V> & V
+
+def Map.get(V, d, m, key):
+  match m:
+    case MTip{}:
+      (MTip{}, d)
+    case MLeaf{k, v}:
+      Map.get.leaf(V, d, v, String.cmp(key, k))
+    case MNode{+pos, lo, hi}:
+      {(kb =>
+        (key2, b) = kb
+        match b:
+          case False{}:
+            Map.lo(&2, V, V, pos, hi, Map.get(V, d, lo, key2))
+          case True{}:
+            Map.hi(&2, V, V, pos, lo, Map.get(V, d, hi, key2))
+      ) : (String & Bool) -> (Map<&2, V> & V)}(Map.bit(key, pos))
+
+def Map.get.bit(
+  -V: Data, d: V, lo: Map<&2, V>, hi: Map<&2, V>, p2: Nat, kb: String & Bool
+) -> Map<&2, V> & V:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      Map.lo(&2, V, V, p2, hi, Map.get(V, d, lo, key2))
+    case True{}:
+      Map.hi(&2, V, V, p2, lo, Map.get(V, d, hi, key2))
+
+def Map.pop.lo(
+  a, -V: Kind(a), pos: Nat, hi: Map<a, V>, r0: Map<a, V> & Maybe<a, V>
+) -> Map<a, V> & Maybe<a, V>:
+  (lo, r) = r0
+  match lo:
+    case MTip{}:
+      (hi, r)
+    case lo2:
+      (MNode{pos, lo2, hi}, r)
+
+def Map.pop.hi(
+  a, -V: Kind(a), pos: Nat, lo: Map<a, V>, r0: Map<a, V> & Maybe<a, V>
+) -> Map<a, V> & Maybe<a, V>:
+  (hi, r) = r0
+  match hi:
+    case MTip{}:
+      (lo, r)
+    case hi2:
+      (MNode{pos, lo, hi2}, r)
+
+def Map.pop.leaf(a, -V: Kind(a), v: V, r: (String & String) & Cmp) ->
+  Map<a, V> & Maybe<a, V>:
+  ((key2, k2), c) = r
+  match c:
+    case LT{}:
+      (MLeaf{k2, v}, None{})
+    case EQ{}:
+      (MTip{}, Some{v})
+    case GT{}:
+      (MLeaf{k2, v}, None{})
+
+law Map.pop:
+  for -a  : Quant
+  for -V  : Kind(a)
+  for m   : Map<a, V>
+  for key : String
+  Map<a, V> & Maybe<a, V>
+
+def Map.pop(a, V, m, key):
+  match m:
+    case MTip{}:
+      (MTip{}, None{})
+    case MLeaf{k, v}:
+      Map.pop.leaf(a, V, v, String.cmp(key, k))
+    case MNode{+pos, lo, hi}:
+      {(kb =>
+        (key2, b) = kb
+        match b:
+          case False{}:
+            Map.pop.lo(a, V, pos, hi, Map.pop(a, V, lo, key2))
+          case True{}:
+            Map.pop.hi(a, V, pos, lo, Map.pop(a, V, hi, key2))
+      ) : (String & Bool) -> (Map<a, V> & Maybe<a, V>)}(Map.bit(key, pos))
+
+def Map.pop.bit(
+  a, -V: Kind(a), lo: Map<a, V>, hi: Map<a, V>, p2: Nat, kb: String & Bool
+) -> Map<a, V> & Maybe<a, V>:
+  (key2, b) = kb
+  match b:
+    case False{}:
+      Map.pop.lo(a, V, p2, hi, Map.pop(a, V, lo, key2))
+    case True{}:
+      Map.pop.hi(a, V, p2, lo, Map.pop(a, V, hi, key2))
+
+def Map.del.fin(a, -V: Kind(a), r: Map<a, V> & Maybe<a, V>) -> Map<a, V>:
+  (m2, x) = r
+  m2
+
+def Map.del(a, -V: Kind(a), m: Map<a, V>, key: String) -> Map<a, V>:
+  Map.del.fin(a, V, Map.pop(a, V, m, key))
+
+def Map.to_list.go(
+  a, -V: Kind(a), m: Map<a, V>, acc: List<a, Sigma<&2, a, String, _ => V>>
+) -> List<a, Sigma<&2, a, String, _ => V>>:
+  match m:
+    case MTip{}:
+      acc
+    case MLeaf{k, v}:
+      (k, v) <> acc
+    case MNode{pos, lo, hi}:
+      Map.to_list.go(a, V, lo, Map.to_list.go(a, V, hi, acc))
+
+def Map.to_list(a, -V: Kind(a), m: Map<a, V>) ->
+  List<a, Sigma<&2, a, String, _ => V>>:
+  Map.to_list.go(a, V, m, Nil{})
+
+def Map.keys.go(a, -V: Kind(a), m: Map<a, V>, acc: List<&2, String>) ->
+  List<&2, String>:
+  match m:
+    case MTip{}:
+      acc
+    case MLeaf{k, v}:
+      k <> acc
+    case MNode{pos, lo, hi}:
+      Map.keys.go(a, V, lo, Map.keys.go(a, V, hi, acc))
+
+def Map.keys(a, -V: Kind(a), m: Map<a, V>) -> List<&2, String>:
+  Map.keys.go(a, V, m, Nil{})
+
+def Map.from_list.go(
+  a, -V: Kind(a), kvs: List<a, Sigma<&2, a, String, _ => V>>, m: Map<a, V>
+) -> Map<a, V>:
+  match kvs:
+    case Nil{}:
+      m
+    case (k, v) <> t:
+      Map.from_list.go(a, V, t, Map.set(a, V, m, k, v))
+
+def Map.from_list(a, -V: Kind(a), kvs: List<a, Sigma<&2, a, String, _ => V>>) ->
+  Map<a, V>:
+  Map.from_list.go(a, V, kvs, MTip{})
+
+def Map.union(a, -V: Kind(a), m: Map<a, V>, n: Map<a, V>) -> Map<a, V>:
+  Map.from_list.go(a, V, Map.to_list(a, V, n), m)
+
+def Map.size(a, -V: Kind(a), m: Map<a, V>) -> Nat:
+  match m:
+    case MTip{}:
+      0n
+    case MLeaf{k, v}:
+      1n
+    case MNode{pos, lo, hi}:
+      Nat.add(Map.size(a, V, lo), Map.size(a, V, hi))
+
+def Map.values.go(a, -V: Kind(a), m: Map<a, V>, acc: List<a, V>) -> List<a, V>:
+  match m:
+    case MTip{}:
+      acc
+    case MLeaf{k, v}:
+      v <> acc
+    case MNode{pos, lo, hi}:
+      Map.values.go(a, V, lo, Map.values.go(a, V, hi, acc))
+
+def Map.values(a, -V: Kind(a), m: Map<a, V>) -> List<a, V>:
+  Map.values.go(a, V, m, Nil{})
+
+# Remaining pure character and string operations
+# --------------------------------------------
+
+def Char.is_digit(c: Char) -> Bool:
+  match c:
+    case Chr{+x}:
+      Bool.and(U32.is_ge(x, 48), U32.is_le(x, 57))
+
+def Char.is_upper(c: Char) -> Bool:
+  match c:
+    case Chr{+x}:
+      Bool.and(U32.is_ge(x, 65), U32.is_le(x, 90))
+
+def Char.is_lower(c: Char) -> Bool:
+  match c:
+    case Chr{+x}:
+      Bool.and(U32.is_ge(x, 97), U32.is_le(x, 122))
+
+def Char.is_alpha(+c: Char) -> Bool:
+  Bool.or(Char.is_upper(c), Char.is_lower(c))
+
+def Char.is_space(c: Char) -> Bool:
+  match c:
+    case Chr{+x}:
+      Bool.or(U32.is_eq(x, 32), Bool.and(U32.is_ge(x, 9), U32.is_le(x, 13)))
+
+def Char.to_upper(+c: Char) -> Char:
+  Bool.pick(Char, Char.is_lower(c), Chr{U32.sub(Char.to_u32(c), 32)}, c)
+
+def Char.to_lower(+c: Char) -> Char:
+  Bool.pick(Char, Char.is_upper(c), Chr{U32.add(Char.to_u32(c), 32)}, c)
+
+def String.split.push(c: Char, ps: List<&2, String>) -> List<&2, String>:
+  match ps:
+    case Nil{}:
+      [SCon{c, SNil{}}]
+    case h <> t:
+      SCon{c, h} <> t
+
+def String.split.fin(c: Char, r: List<&2, String>, cut: Bool) ->
+  List<&2, String>:
+  match cut:
+    case False{}:
+      String.split.push(c, r)
+    case True{}:
+      SNil{} <> r
+
+def String.split(s: String, +sep: Char) -> List<&2, String>:
+  match s:
+    case SNil{}:
+      [SNil{}]
+    case SCon{+h, t}:
+      String.split.fin(h, String.split(t, sep), Char.is_eq(h, sep))
+
+def String.lines(s: String) -> List<&2, String>:
+  String.split(s, '\n')
+
+def String.to_upper(s: String) -> String:
+  match s:
+    case SNil{}:
+      SNil{}
+    case SCon{h, t}:
+      SCon{Char.to_upper(h), String.to_upper(t)}
+
+def String.to_lower(s: String) -> String:
+  match s:
+    case SNil{}:
+      SNil{}
+    case SCon{h, t}:
+      SCon{Char.to_lower(h), String.to_lower(t)}
+
+law String.starts_with:
+  for s: String
+  for p: String
+  Bool
+
+def String.starts_with(s, p):
+  match s p:
+    case SNil{} SNil{}:
+      True{}
+    case SNil{} SCon{h, t}:
+      False{}
+    case SCon{h, t} SNil{}:
+      True{}
+    case SCon{x, xt} SCon{y, yt}:
+      {(same =>
+        match same:
+          case False{}:
+            False{}
+          case True{}:
+            String.starts_with(xt, yt)
+      ) : Bool -> Bool}(Char.is_eq(x, y))
+
+def String.starts_with.if(t: String, pt: String, same: Bool) -> Bool:
+  match same:
+    case False{}:
+      False{}
+    case True{}:
+      String.starts_with(t, pt)
+
+def String.ends_with(s: String, p: String) -> Bool:
+  String.starts_with(String.reverse(s), String.reverse(p))
+
+law String.contains:
+  for +s: String
+  for +p: String
+  Bool
+
+def String.contains(s, p):
+  match s:
+    case SNil{}:
+      String.is_empty(p)
+    case SCon{h, t}:
+      {(here =>
+        match here:
+          case False{}:
+            String.contains(t, p)
+          case True{}:
+            True{}
+      ) : Bool -> Bool}(String.starts_with(SCon{h, t}, p))
+
+def String.contains.if(t: String, p: String, here: Bool) -> Bool:
+  match here:
+    case False{}:
+      String.contains(t, p)
+    case True{}:
+      True{}
+
+law String.trim_start:
+  for s: String
+  String
+
+def String.trim_start(s):
+  match s:
+    case SNil{}:
+      SNil{}
+    case SCon{+h, t}:
+      {(space =>
+        match space:
+          case False{}:
+            SCon{h, t}
+          case True{}:
+            String.trim_start(t)
+      ) : Bool -> String}(Char.is_space(h))
+
+def String.trim_start.if(h: Char, t: String, space: Bool) -> String:
+  match space:
+    case False{}:
+      SCon{h, t}
+    case True{}:
+      String.trim_start(t)
+
+def String.trim_end(s: String) -> String:
+  String.reverse(String.trim_start(String.reverse(s)))
+
+def String.trim(s: String) -> String:
+  String.trim_end(String.trim_start(s))
+
+# List templates
+# --------------
+
+def List.map(~A: Type, ~B: Type, ~f: A -> B, xs: List<A>) -> List<B>:
+  match xs:
+    case Nil{}:
+      Nil{}
+    case h <> t:
+      f(h) <> List.map(~A, ~B, ~f, t)
+
+def List.filter(~A: Data, ~f: A -> Bool, xs: List<&2, A>) -> List<&2, A>:
+  match xs:
+    case Nil{}:
+      Nil{}
+    case +h <> t:
+      List.filter.put(A, h, List.filter(~A, ~f, t), f(h))
+
+def List.foldl(
+  ~a: Quant, ~A: Kind(a), ~B: Type, ~f: B -> A -> B, xs: List<a, A>, acc: B
+) -> B:
+  match xs:
+    case Nil{}:
+      acc
+    case h <> t:
+      List.foldl(~a, ~A, ~B, ~f, t, f(acc, h))
+
+def List.foldr(
+  ~a: Quant, ~A: Kind(a), ~B: Type, ~f: A -> B -> B, xs: List<a, A>, z: B
+) -> B:
+  match xs:
+    case Nil{}:
+      z
+    case h <> t:
+      f(h, List.foldr(~a, ~A, ~B, ~f, t, z))
+
+def List.any(~a: Quant, ~A: Kind(a), ~f: A -> Bool, xs: List<a, A>) -> Bool:
+  match xs:
+    case Nil{}:
+      False{}
+    case h <> t:
+      Bool.or(f(h), List.any(~a, ~A, ~f, t))
+
+def List.all(~a: Quant, ~A: Kind(a), ~f: A -> Bool, xs: List<a, A>) -> Bool:
+  match xs:
+    case Nil{}:
+      True{}
+    case h <> t:
+      Bool.and(f(h), List.all(~a, ~A, ~f, t))
+
+def List.find(~A: Data, ~f: A -> Bool, xs: List<&2, A>) -> Maybe<&2, A>:
+  match xs:
+    case Nil{}:
+      None{}
+    case +h <> t:
+      List.find.put(A, h, List.find(~A, ~f, t), f(h))
+
+def List.contains(
+  ~A: Data, ~eq: A -> A -> Bool, xs: List<&2, A>, +x: A
+) -> Bool:
+  match xs:
+    case Nil{}:
+      False{}
+    case h <> t:
+      Bool.or(eq(h, x), List.contains(~A, ~eq, t, x))
+
+def List.merge.go(
+  ~A: Data, ~le: A -> A -> Bool, fuel: Nat,
+  st: List<&2, A> & List<&2, A> & List<&2, A>
+) -> List<&2, A>:
+  match fuel:
+    case 0n:
+      (acc, xs, ys) = st
+      List.reverse.go(&2, A, acc, List.append(&2, A, xs, ys))
+    case 1n+f:
+      (acc, xs, ys) = st
+      match xs ys:
+        case Nil{} Nil{}:
+          List.reverse.go(&2, A, acc, Nil{})
+        case Nil{} y <> yt:
+          List.reverse.go(&2, A, acc, y <> yt)
+        case x <> xt Nil{}:
+          List.reverse.go(&2, A, acc, x <> xt)
+        case +x <> xt +y <> yt:
+          List.merge.go(~A, ~le, f,
+            List.merge.step(A, acc, x, xt, y, yt, le(x, y)))
+
+def List.sort.pass(
+  ~A: Data, ~le: A -> A -> Bool, +n: Nat, runs: List<&2, List<&2, A>>
+) -> List<&2, List<&2, A>>:
+  match runs:
+    case Nil{}:
+      Nil{}
+    case r <> Nil{}:
+      [r]
+    case r1 <> r2 <> rest:
+      List.merge.go(~A, ~le, n, (Nil{}, r1, r2))
+        <> List.sort.pass(~A, ~le, n, rest)
+
+def List.sort.go(
+  ~A: Data, ~le: A -> A -> Bool, fuel: Nat, +n: Nat, runs: List<&2, List<&2, A>>
+) -> List<&2, A>:
+  match fuel:
+    case 0n:
+      List.concat(&2, A, runs)
+    case 1n+f:
+      match runs:
+        case Nil{}:
+          Nil{}
+        case r <> Nil{}:
+          r
+        case r1 <> r2 <> rest:
+          List.sort.go(~A, ~le, f, n,
+            List.sort.pass(~A, ~le, n, r1 <> r2 <> rest))
+
+def List.sort(~A: Data, ~le: A -> A -> Bool, +xs: List<&2, A>) -> List<&2, A>:
+  +n = List.length(&2, A, xs)
+  List.sort.go(~A, ~le, n, n, List.sort.runs(A, xs))
+
+def List.show.go(~a: Quant, ~A: Kind(a), ~f: A -> String, xs: List<a, A>) ->
+  String:
+  match xs:
+    case Nil{}:
+      "]"
+    case h <> t:
+      ", " ++ f(h) ++ List.show.go(~a, ~A, ~f, t)
+
+def List.show(~a: Quant, ~A: Kind(a), ~f: A -> String, xs: List<a, A>) ->
+  String:
+  match xs:
+    case Nil{}:
+      "[]"
+    case h <> t:
+      "[" ++ f(h) ++ List.show.go(~a, ~A, ~f, t)

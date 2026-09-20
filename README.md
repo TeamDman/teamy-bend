@@ -5,8 +5,9 @@ A Rust rewrite of the Bend 2 proof language, started from
 
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
-The bundled Base contains 173 selected pure upstream declaration events. GPU,
-effects, templates and complete library compatibility remain unfinished.
+Closed compile-time templates and their specialized instances are supported.
+The bundled Base contains 290 selected pure source declarations, including
+14 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).
@@ -16,6 +17,8 @@ and Poche integration remain tracked in the
 ```powershell
 cargo run -- check examples/laws.bend
 cargo run -- check examples/induction.bend
+cargo run -- base List
+cargo run -- base --types
 cargo run -- eval examples/laws.bend --entry main
 cargo run -- --output-format json batch examples/laws.bend --entry identity --args-json examples/arguments.json
 cargo run -- serve examples/laws.bend
@@ -24,10 +27,12 @@ node target/induction.cjs
 cargo run -- compile examples/induction.bend --target c --output target/induction.c
 ```
 
-`check` requires definitions and complete proofs for every law in the loaded
-program. Unsupported syntax, unsafe definitions, holes, unfilled laws and failed
-proof checks return errors. `eval` checks the program before normalizing an
-entry point. Successful checking is relative to the implemented kernel; the
+`check` requires complete proofs for every ordinary law and checks ordinary
+definitions and instantiated templates. Template bodies are parsed at their
+declaration and type-checked when specialized with closed `~` arguments.
+Unsupported syntax, unsafe executable definitions, holes in checked terms,
+unfilled laws and failed proof checks return errors. `eval` checks the program
+before normalizing an entry point. Successful checking is relative to the implemented kernel; the
 rewrite has not itself been formally proved sound. The induction example proves
 `Nat.add(n, 0n) == n` for arbitrary `n` using structural induction and equality
 rewriting, rather than enumerating a finite set of naturals.
@@ -55,6 +60,10 @@ below the transport ceiling can still receive a resource-limit error.
 The command rejects negative/fractional inputs, wrong argument types and
 non-natural results. This supports independent finite-domain conformance tests
 without implementing domain rules in the host application.
+
+`base` prints the exact bundled library source. `base List` selects that name
+and its subnames; `base --types` selects datatype declarations and kind laws.
+It always emits source text, including when output is redirected.
 
 `serve` checks once and reads newline-delimited JSON calls from standard input.
 It returns a flushed JSON response for each request, allowing a client to pass
