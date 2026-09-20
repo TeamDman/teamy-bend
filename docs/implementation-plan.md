@@ -694,7 +694,7 @@ fingerprints and 17 source fingerprints are unchanged from the timer release.
 Poche source changes remain local; the exhaustive graph is still attributed
 solely to `6802c1e`. Remaining U6 target/runtime/CLI work keeps the goal active.
 
-### [~] 5.10 Add Image/Event values and finite App playback
+### [x] 5.10 Add Image/Event values and finite App playback
 
 Implementation is complete: exact Image/Event datatypes and Image.sink,
 drop.join/free/drop in strict Base; exact App and more/fold/play in executable
@@ -730,9 +730,48 @@ budgets. Completing the library names does not resolve this runtime work.
 The frozen candidate's complete 1,302-fixture strict audit has unchanged
 362 accepted positives, 491 rejected positives and 449 rejected negatives,
 with no accepted negatives, abnormal exits or changed source fingerprints.
-Publication and retained-release Poche regressions are pending.
-Window-dependent App helpers, opaque handles, remaining platform effects and
-all other unfinished U6 work remain required.
+Completion: `39f3dc5731ffa86c7017f179d11511fdf5fca964` is verified on
+public main. Its retained release reports the clean revision and all 72 compiled
+source fingerprints match the audited candidate. Executable BLAKE3 is
+`1a413d37286879e272957003f4c004c3f5e107460a9d7baf764bda92e6786507`.
+It passes all seven Poche privacy laws and the typed wrong-viewer control, 15,503
+scalar comparisons with seven equalities and two controls, and the micro
+trajectory: 22 states, 21 transitions, 44 observations, 300 chance partitions
+and eight controls. The 67 requests complete in 300 ms. All 13 compiled
+conformance fingerprints and 17 source fingerprints remain unchanged from the
+channel release. Poche edits remain local; the exhaustive graph retains its
+original `6802c1e` attribution. Native Image limits, window-dependent App helpers,
+opaque handles, remaining platform effects and all other unfinished U6 work
+remain required.
+
+### [ ] 5.11 Reduce native word allocation and complete the Image workload
+
+The measured Image failures require runtime work, not higher limits. Each native
+numeric word result currently allocates 66 thunks. A depth-six shape count uses
+4,095 additions, requiring 270,270 result thunks alone in an append-only arena
+limited to 131,072. Even interning Boolean bits and WNil would leave 135,135
+result thunks. Ordinary arithmetic acceleration alone cannot remove that lower
+bound.
+
+Next implementation: store execution-only U32/F32 words as raw bits, decode
+them directly for numeric/console operations, and expose bounded lazy Word
+views for ordinary pattern matching. Preserve exact float payloads, sealed Base
+provenance, user-defined lookalikes, lazy unused fields and strict proof behavior.
+Only recognize closed literal shapes without forcing arbitrary constructor
+fields. Add checked ordinary multiplication and one-bit shift optimizations;
+retain the ordinary recursive shln helper initially.
+
+Validate packed/ordinary conversions, wrapping and float bits, partial
+applications, shadowing/origin controls, request rejection and unchanged
+cancellation/limits. Rerun the exact Image depth-zero-through-six observations,
+including sums 14,560 at depth three and 8,386,560 at depth six. If compact words
+still exhaust generic closure/environment allocation, keep this workload open
+and establish explicit roots before adding reclamation of both arenas. Collector
+roots must cover frames, numeric continuation state, globals, closures and IO
+temporaries; collecting inside allocate without these roots would be unsound.
+Reclamation also changes cumulative allocation limits into live-value limits
+and needs explicit documentation and adversarial tests. Complete the full gate,
+strict audit and retained-release Poche regressions before publication.
 
 ## Completion and risks
 
