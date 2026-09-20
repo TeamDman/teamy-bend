@@ -65,8 +65,8 @@ complete arbitrary foreign execution or the remaining effects.
 The native runtime is lazy. Its console decoder rejects invalid Unicode scalar
 values, but a discarded `IO.pure(Char, Chr{55296})` result is never decoded and
 currently succeeds. Upstream JavaScript validates that constructor eagerly and
-fails. Preserve this as an open execution-semantics difference when implementing
-the generated JavaScript driver; do not conflate source Char validation with
+fails. The generated executable JavaScript backend also validates eagerly;
+the native difference remains open. Do not conflate source Char validation with
 the separate raw foreign-string contract below.
 
 ## Arbitrary foreign interfaces
@@ -148,3 +148,11 @@ Reference implementation areas: `bend2/bend.ts` foreign checking/loading;
 `bend2/main.ts` entry dispatch; `bend2/comp.ts` IO detection, marshalling and
 drivers; `bend2/base.bend` declarations; `bend2/effs/` target implementations.
 The strict proof and typed-session regressions must continue passing throughout.
+
+The synchronous JavaScript slice is implemented in
+[executable JavaScript](executable-javascript.md). It consumes the typed IR,
+embeds reachable foreign sources without executing them during compilation,
+preserves native representations and callbacks, and supplies a console driver.
+Undefined returns, promises and readiness hooks reject pending scheduler work.
+The first 16 numeric contracts execute in native IO and generated JavaScript;
+the other 21 of the reference's 37 numeric contracts remain unfinished.

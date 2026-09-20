@@ -222,8 +222,8 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 323 selected pure upstream source declarations are bundled
-with Apache attribution (284 definition forms including 17 templates, 21 laws,
+Completion notes: 327 selected pure upstream source declarations are bundled
+with Apache attribution (288 definition forms including 17 templates, 21 laws,
 18 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
@@ -254,8 +254,9 @@ syntax support alone does not establish an operation's implementation.
 The first 16 execution-only F32 contracts are now implemented in a separate
 sealed registry, with bounded native IO evaluation. Strict proof normalization
 keeps them opaque. Thirty cases match actual upstream JavaScript and a raw
-signaling-NaN case records the target difference. Pure-main numeric dispatch,
-the remaining 21 contracts and generated numeric targets remain unfinished;
+signaling-NaN case records the target difference. Executable JavaScript now
+implements those 16 contracts, including printable pure main entries. Native
+pure-main numeric dispatch, the remaining 21 contracts and executable C remain unfinished;
 see [numeric execution](numeric-execution.md).
 
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
@@ -276,10 +277,14 @@ upstream JavaScript stdout/stderr/status; two refusals match stdout/status and
 absence of unintended effects, with different diagnostic wording.
 Typed executable lowering now retains code-generation types, quantities,
 constructor owners/fields, local tags, matches, lets and erasure. Its first
-consumer will be a distinct executable JavaScript emitter; the current pure
-compiler and proof-check result remain separate.
-General JavaScript/C interfaces, generated-target effect drivers, scheduling,
-handles and the other 31 Base foreign effects remain required.
+consumer is a distinct executable JavaScript emitter; the strict pure compiler
+and proof-check result remain separate. `compile --executable` supports native
+JavaScript representations, synchronous foreign imports, curried callbacks and
+the console driver. Foreign source is embedded without running it at compile
+time. Undefined results, promises and readiness hooks fail explicitly while
+scheduler support remains unfinished.
+The C interface and effect driver, scheduling, handles and the other 31 Base
+foreign effects remain required.
 Upstream foreign return contracts can contain false equality payloads; they
 are runtime assumptions and must never mint strict proof evidence. This is
 required remaining rewrite work, not optional replacement scope.
@@ -502,6 +507,38 @@ controls; 67 requests in 339 ms). Its executable BLAKE3 is
 `2dc33071205ebcde7d1165bd1e8286350be8656140501dc3680441895e23bf20`.
 Original Poche model bytes and all 13 compiled conformance fingerprints remain
 unchanged. The earlier exhaustive receipt retains its original attribution.
+
+### [~] 5.6 Publish synchronous executable JavaScript
+
+Implementation: typed emission and the generated IO driver are connected to
+`compile --executable`. Separate checked products preserve the strict proof
+boundary. Ordinary Nat decimal text supplies the upstream native-value fixture;
+a sealed native U32.add optimization removes the observed float-example arena
+failure without changing proof reduction or budgets.
+
+The complete quality gate passes 236 tests, including four compile-fail API
+examples, with two optional profilers ignored. Strict library/test Clippy and
+independent reviews of code generation, FFI isolation, erasure, native
+optimization and publication provenance pass. The relative-import defect was
+reduced to operator qualification of parent/dot-directory names and has four
+parser regressions. NaN payload loss was reduced to V8 array-spread behavior
+in argument accumulation; both signs and quiet/signaling inputs have regressions.
+
+Fixed-release-candidate comparisons pass 34 upstream programs (31 exact
+stdout/stderr/status matches and three expected failures with distinct wording)
+and a separate 34-case numeric matrix, whose three upstream programs overlap
+the first set. Native execution passes 33 numeric cases exactly and preserves
+the documented signaling-NaN target difference. The original longer float
+program now prints 1999985 under unchanged native limits.
+
+The fixed candidate also passes the complete 1,302-fixture strict audit:
+360 accepted positives, 493 rejected positives and 449 rejected negatives,
+with zero abnormal exits or accepted negatives. Acceptance is unchanged from
+`9da68e5`; all compiled source fingerprints still match the audited snapshot.
+Poche proof/scalar/trajectory regressions against a retained clean release and
+publication verification remain in progress.
+Full scheduling, executable C,
+remaining library/CLI and GPU behavior still keep the goal active.
 
 ## Completion and risks
 

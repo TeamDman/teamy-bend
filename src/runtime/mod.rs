@@ -12,6 +12,7 @@ use crate::kernel::term;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::rc::Rc;
 
 mod executable;
@@ -32,6 +33,7 @@ pub(crate) struct Program {
     datatypes: Rc<BTreeMap<String, AdtDecl>>,
     foreign: Rc<BTreeMap<String, ForeignDefinition>>,
     numeric: Rc<BTreeMap<String, NumericIntrinsic>>,
+    optimizations: Rc<BTreeSet<numeric::PureOptimization>>,
 }
 
 #[cfg(test)]
@@ -74,6 +76,7 @@ impl Program {
             datatypes: Rc::clone(datatypes),
             foreign: Rc::new(BTreeMap::new()),
             numeric: Rc::new(BTreeMap::new()),
+            optimizations: Rc::new(BTreeSet::new()),
         }
     }
 
@@ -109,7 +112,7 @@ enum Value {
         arguments: Vec<ThunkId>,
     },
     Numeric {
-        intrinsic: NumericIntrinsic,
+        operation: numeric::NumericOperation,
         arguments: Vec<ThunkId>,
     },
     Request {
@@ -207,7 +210,17 @@ impl<'program> Machine<'program> {
         }
         let id = if let Some(intrinsic) = self.program.numeric.get(name) {
             self.allocate(Thunk::Ready(Value::Numeric {
-                intrinsic: *intrinsic,
+                operation: numeric::NumericOperation::Intrinsic(*intrinsic),
+                arguments: Vec::new(),
+            }))?
+        } else if let Some(optimization) = self
+            .program
+            .optimizations
+            .iter()
+            .find(|operation| operation.name() == name)
+        {
+            self.allocate(Thunk::Ready(Value::Numeric {
+                operation: numeric::NumericOperation::Optimized(*optimization),
                 arguments: Vec::new(),
             }))?
         } else if self.program.foreign.contains_key(name) {
@@ -416,11 +429,11 @@ impl<'program> Machine<'program> {
                             continue 'evaluate;
                         }
                         Value::Numeric {
-                            intrinsic,
+                            operation,
                             arguments,
                         } => {
                             current =
-                                self.apply_numeric(intrinsic, arguments, argument, &mut frames)?;
+                                self.apply_numeric(operation, arguments, argument, &mut frames)?;
                             continue 'evaluate;
                         }
                         Value::EmitContinuation => {

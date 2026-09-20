@@ -5,11 +5,12 @@ A Rust rewrite of the Bend 2 proof language, started from
 
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
-Native console IO runs through a separate executable-contract checker.
-Sixteen core F32 operations execute within native IO actions; their contracts
-remain opaque to strict proof checking.
+Native console IO and executable JavaScript use a separate contract checker.
+Generated JavaScript supports synchronous foreign calls and callbacks.
+Sixteen core F32 operations execute in native IO and generated JavaScript;
+their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 323 selected pure source declarations, including
+The bundled Base contains 327 selected pure source declarations, including
 17 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
@@ -29,6 +30,8 @@ cargo run -- serve examples/laws.bend
 cargo run -- compile examples/induction.bend --output target/induction.cjs
 node target/induction.cjs
 cargo run -- compile examples/induction.bend --target c --output target/induction.c
+cargo run -- compile --executable examples/console.bend --output target/console.cjs
+node target/console.cjs
 ```
 
 `check` requires complete proofs for every ordinary law and checks ordinary
@@ -47,6 +50,14 @@ objects; erased proofs/types use an explicit `erased` marker. Functions work
 internally, but function-valued final results are unsupported. Existing output
 files require `--force`. Node.js is required to run generated programs and
 compiler integration tests, or configure `TEAMY_BEND_NODE` for the tests.
+
+`compile --executable` emits a standalone Node.js program from executable
+contracts. IO entries preserve raw console output and exit status; printable
+pure entries use Bend text. Synchronous foreign JavaScript uses native values,
+curried callbacks and a shared scope for imported sources. Compilation embeds
+foreign source; running the generated program executes it with Node's host
+permissions. Scheduling, asynchronous suspension and executable C remain
+unfinished. See [executable JavaScript](docs/executable-javascript.md).
 
 `compile --target c` emits portable C11 with the same output format, lazy
 closures and checked proof erasure. Build the emitted file with a C11 compiler.
@@ -75,9 +86,9 @@ Console output stays raw even with `--output-format json`. `Emit` discards its
 payload and exits successfully; `Halt` writes its message to stderr and sets
 the exit status. The console example prints `The answer is 42` and exits 0.
 Foreign signatures are runtime assumptions, separate from strict proof evidence.
-Arbitrary foreign source is retained by the loader, but native execution of it
-currently fails explicitly. Generated C/JavaScript still support pure programs;
-their effect drivers and general foreign interfaces remain unfinished.
+Arbitrary foreign source is retained by the loader; the native `run` command
+rejects its execution. Use executable JavaScript for synchronous foreign code.
+Generated C supports pure programs; its effect driver remains unfinished.
 
 `serve` checks once and reads newline-delimited JSON calls from standard input.
 It returns a flushed JSON response for each request, allowing a client to pass

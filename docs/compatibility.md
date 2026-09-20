@@ -21,20 +21,21 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 323 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 327 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
   and Map, Char/String operations, List templates, Array operations and pure
-  Word/U32 helpers and decimal U32 text. Array creation uses a power-of-two depth, indexing wraps,
+  Word/U32 helpers and decimal U32/Nat text. Array creation uses a power-of-two depth, indexing wraps,
   and clone/get require reusable elements; swap/set/map retain affine ownership.
-  `src/syntax/base.bend` is the exact inventory (284 definition forms including
+  `src/syntax/base.bend` is the exact inventory (288 definition forms including
   17 templates, 21 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, arbitrary foreign execution, non-console effects,
+GPU calls, hub fetch/publish, asynchronous foreign execution, non-console Base effects,
 the complete numeric library, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
-supports [16 sealed numeric contracts](numeric-execution.md); strict checking and
+supports [16 sealed numeric contracts](numeric-execution.md), also implemented
+by executable JavaScript. Strict checking and
 the pure compilers do not admit their opaque implementation assumptions.
 
 ## Executable checking and native console IO
@@ -70,9 +71,11 @@ that arena; its upstream helper names retain truncation/accumulator behavior.
 Boundary/sample and helper tests cover zero, every bit boundary and u32::MAX.
 
 Arbitrary C/JS import descriptors are retained and deduplicated, but this native
-backend rejects their execution explicitly. Generated C/JavaScript effect
-drivers, general marshalling/callbacks, scheduler, file/network/window/audio
-effects and unsafe execution remain required work in [the design](effects-design.md).
+backend rejects their execution explicitly. The separate
+[executable JavaScript compiler](executable-javascript.md) supports synchronous
+foreign imports, native representations and callbacks. The C effect driver,
+scheduler, file/network/window/audio Base effects and unsafe execution remain
+required work in [the design](effects-design.md).
 
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in
@@ -122,7 +125,15 @@ API boundary examples, with two optional local profilers ignored. An independent
 review also passed 17 provenance, source-order and direct-console scalar probes.
 The subsequent numeric/import/typed-lowering gate passes 190 tests, including
 four compile-fail API examples, with two optional profilers ignored. Ten focused
-tests cover typed lowering; its JavaScript emitter remains unfinished.
+tests cover typed lowering, now consumed by executable JavaScript emission.
+The synchronous executable-JavaScript slice passes 236 tests, including four
+compile-fail API examples, with two optional profilers ignored. Additional
+strict Clippy checking covers the library and integration tests.
+Its fixed candidate retains the same 360/493/449 strict audit counts across all
+1,302 fixtures, with zero abnormal exits, accepted negatives or changed
+acceptance decisions. The audited source fingerprints match the publication
+sources. Generated executable behavior has its separate 34-program and
+34-case numeric comparisons in [executable JavaScript](executable-javascript.md).
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

@@ -6,8 +6,11 @@
 //! erased types and proofs with an explicit erased marker.
 
 mod c;
+mod executable_foreign;
+mod executable_javascript;
 mod javascript;
 
 pub use c::compile_c;
+pub use executable_javascript::compile_executable_javascript;
 pub use javascript::CompileError;
 pub use javascript::compile_javascript;

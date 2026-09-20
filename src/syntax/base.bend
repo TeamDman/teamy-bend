@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Derived from Bend 2.0.5, Copyright 2026 HigherOrderCO.
 # Selected pure definitions from upstream base.bend; Rust implementation changes: TeamDman.
-# See NOTICE and licenses/Apache-2.0.txt. Foreign effects remain unsupported.
+# See NOTICE and licenses/Apache-2.0.txt. Effects have a separate execution-only Base.
 # Pure templates specialize into ordinary checked definitions when called.
 
 type Empty is Data:
@@ -2227,3 +2227,31 @@ def U32.show.if(a: U32, z: Bool) -> String:
   match z:
     case True{}: "0"
     case False{}: U32.show.go(10n, a, SNil{})
+
+# The local quotient matcher removes the upstream forward helper cycle while
+# retaining structural descent on the digit fuel and the public helper types.
+def Nat.show.put(qr: Nat & Nat) -> Char & Nat:
+  (q, r) = qr
+  (Chr{U32.from_nat(Nat.add(48n, r))}, q)
+
+def Nat.show.go(f: Nat, n: Nat, acc: String) -> String:
+  match f:
+    case 0n: acc
+    case 1n+g:
+      {(dq =>
+        match dq:
+          case Tuple{d, q}:
+            match q:
+              case 0n: SCon{d, acc}
+              case 1n+p: Nat.show.go(g, 1n+p, SCon{d, acc})
+      ) : (Char & Nat) -> String}(Nat.show.put(Nat.divmod(n, 10n)))
+
+def Nat.show.fin(g: Nat, acc: String, dq: Char & Nat) -> String:
+  (d, q) = dq
+  match q:
+    case 0n: SCon{d, acc}
+    case 1n+p: Nat.show.go(g, 1n+p, SCon{d, acc})
+
+def Nat.show(n: Nat) -> String:
+  +m = n
+  Nat.show.fin(m, SNil{}, Nat.show.put(Nat.divmod(m, 10n)))

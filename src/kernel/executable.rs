@@ -65,13 +65,6 @@ pub struct ExecutableBook {
 }
 
 impl ExecutableBook {
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "Typed executable lowering is introduced before its JavaScript emitter."
-        )
-    )]
     pub(crate) fn lower_for_javascript(
         &self,
     ) -> Result<super::elaborate::ExecutableProgram, KernelError> {
@@ -391,6 +384,7 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
         &engine.adts,
         &source.foreign,
         &source.numeric,
+        &source.base_names,
     );
     Ok(ExecutableBook {
         engine,

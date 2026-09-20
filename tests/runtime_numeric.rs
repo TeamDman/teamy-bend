@@ -242,3 +242,60 @@ fn nested_numeric_calls_use_bounded_continuations_and_observe_cancellation() {
         .to_string();
     assert!(error.contains("cancelled"), "{error}");
 }
+
+#[test]
+fn ordinary_u32_add_wrapping_matches_checked_reduction_at_boundaries() {
+    for (left, right, expected) in [
+        (0_u32, 0_u32, 0_u32),
+        (4_294_967_295_u32, 1, 0),
+        (4_294_967_295, 4_294_967_295, 4_294_967_294),
+        (2_147_483_647, 1, 2_147_483_648),
+        (2_147_483_648, 2_147_483_648, 0),
+        (65_535, 1, 65_536),
+        (2_863_311_530, 1_431_655_765, 4_294_967_295),
+        (20, 22, 42),
+    ] {
+        let proof = Fixture::new(&format!(
+            "import Base\n law witness: {{U32.add({left}, {right}) == {expected} : U32}}\ndef witness(): {{==}}\n"
+        ));
+        check_book(&load(&proof.0).expect("strict wrapping fixture parses"))
+            .expect("ordinary checked U32.add reduction verifies the expected bits");
+        assert_eq!(
+            output(&format!(
+                "import Base\ndef main() -> IO(Unit): IO.print(U32.show(U32.add({left}, {right})))\n"
+            )),
+            format!("{expected}\n")
+        );
+    }
+}
+
+#[test]
+fn optimized_add_retains_partial_application_and_is_not_a_numeric_assumption() {
+    let fixture = Fixture::new(
+        r"import Base
+def apply(f: U32 -> U32, x: U32) -> U32: f(x)
+def main() -> IO(Unit): IO.print(U32.show(apply(U32.add(4294967295), 2)))
+",
+    );
+    let checked = fixture.checked();
+    assert!(!checked.numeric_names().any(|name| name == "U32.add"));
+    assert!(!checked.foreign_names().any(|name| name == "U32.add"));
+    let mut stdout = Vec::new();
+    assert_eq!(
+        checked
+            .run_main(&mut stdout, &mut Vec::new(), &|| false)
+            .unwrap(),
+        0
+    );
+    assert_eq!(stdout, b"1\n");
+}
+
+#[test]
+fn upstream_float_comparison_digest_and_decimal_formatting_fit_existing_budgets() {
+    // This exact upstream workload used to exhaust the unchanged thunk arena
+    // when its repeated ordinary U32 additions were followed by U32.show.
+    assert_eq!(
+        output(include_str!("fixtures/float_compare.bend")),
+        "1999985\n"
+    );
+}

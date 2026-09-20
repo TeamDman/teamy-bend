@@ -6,7 +6,9 @@ use std::sync::atomic::Ordering;
 use teamy_bend::kernel::Declaration;
 use teamy_bend::kernel::Term;
 use teamy_bend::kernel::check_book;
+use teamy_bend::kernel::check_executable;
 use teamy_bend::syntax::load;
+use teamy_bend::syntax::load_executable;
 use teamy_bend::syntax::parse;
 use teamy_bend::syntax::parse_term;
 
@@ -288,6 +290,7 @@ impl Fixture {
     }
     fn write(&self, name: &str, source: &str) -> PathBuf {
         let path = self.0.join(name);
+        fs::create_dir_all(path.parent().expect("fixture parent")).expect("create fixture parent");
         fs::write(&path, source).expect("write fixture");
         path
     }
@@ -475,4 +478,111 @@ fn imported_base_literals_stay_global_and_distinct_local_nats_do_not_unify() {
         &format!("import nat.bend as N\n{NAT}def wrong() -> N.Nat: 0n\n"),
     );
     check_book(&load(wrong).unwrap()).expect_err("local and imported Nat remain distinct");
+}
+
+#[test]
+fn relative_and_dot_directory_names_preserve_type_signatures_and_value_references() {
+    for (library, entry, import, namespace) in [
+        (
+            "shared/types.bend",
+            "nested/main.bend",
+            "../shared/types.bend",
+            "../shared/types",
+        ),
+        (
+            "shared/types.bend",
+            "main.bend",
+            "shared/types.bend",
+            "shared/types",
+        ),
+        (
+            ".hidden/types.bend",
+            "main.bend",
+            ".hidden/types.bend",
+            ".hidden/types",
+        ),
+    ] {
+        let fixture = Fixture::new();
+        fixture.write(
+            library,
+            "type Value is Data: Value{}\ndef identity(x: Value) -> Value: x\n",
+        );
+        let path = fixture.write(
+            entry,
+            &format!("import {import} as F\ndef main() -> F.Value: F.identity(F.Value{{}})\n"),
+        );
+        let checked =
+            check_book(&load(path).unwrap()).expect("module names are not operator placeholders");
+        assert_eq!(
+            checked.evaluate("main", &[]).unwrap().to_string(),
+            format!("{namespace}.Value{{}}")
+        );
+    }
+}
+
+#[test]
+fn relative_module_function_references_do_not_acquire_a_nat_prefix() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "shared/constant.bend",
+        "import Base\ndef value() -> Nat: 1n\n",
+    );
+    let path = fixture.write(
+        "nested/main.bend",
+        "import ../shared/constant.bend as F\ndef main() -> Nat: F.value\n",
+    );
+    let checked = check_book(&load(path).unwrap()).expect("relative function reference checks");
+    assert_eq!(
+        checked.evaluate("main", &[]).unwrap().to_string(),
+        "Succ{Zero{}}"
+    );
+}
+
+#[test]
+fn relative_module_operators_resolve_once_and_distinct_types_stay_distinct() {
+    let fixture = Fixture::new();
+    fixture.write("shared/nat.bend", &format!(
+        "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case Zero{{}}: b\n    case Succ{{p}}: Succ{{Nat.add(p, b)}}\ndef value() -> Nat: 1n + 2n\n"
+    ));
+    let path = fixture.write(
+        "nested/main.bend",
+        "import ../shared/nat.bend as F\ndef main() -> F.Nat: (F.value + F.Zero{} : F.Nat)\n",
+    );
+    let checked = check_book(&load(path).unwrap())
+        .expect("relative operator namespace survives default qualification");
+    assert_eq!(
+        checked.evaluate("main", &[]).unwrap().to_string(),
+        "../shared/nat.Succ{../shared/nat.Succ{../shared/nat.Succ{../shared/nat.Zero{}}}}"
+    );
+
+    let wrong = fixture.write(
+        "nested/wrong.bend",
+        &format!("import ../shared/nat.bend as F\n{NAT}def wrong() -> Nat: F.value\n"),
+    );
+    check_book(&load(wrong).unwrap())
+        .expect_err("qualification does not identify unrelated local and imported types");
+}
+
+#[test]
+fn relative_foreign_signature_retains_its_own_datatype_and_source_identity() {
+    let fixture = Fixture::new();
+    fixture.write("io/far_types.bend", "import Base\ntype Far is Data: Near{value: U32}\nlaw far.make: U32 -> IO(Far)\ndef far.make(depth): import \"far_types.js\"\n");
+    let path = fixture.write(
+        "reg/main.bend",
+        "import Base\nimport ../io/far_types.bend as F\ndef main() -> IO(F.Far): F.far.make(3)\n",
+    );
+    let source = load_executable(path).expect("relative foreign source parses");
+    let checked = check_executable(&source)
+        .expect("relative foreign result type retains module qualification");
+    assert_eq!(
+        checked.foreign_symbol("../io/far_types.far.make"),
+        Some("far_make")
+    );
+    assert!(
+        checked
+            .definition_type("../io/far_types.far.make")
+            .unwrap()
+            .to_string()
+            .contains("../io/far_types.Far")
+    );
 }

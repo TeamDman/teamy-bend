@@ -91,7 +91,7 @@ pub enum Command {
     Run(RunArgs),
     /// Evaluate rows of natural-number arguments against one checked program.
     Batch(BatchArgs),
-    /// Compile a checked pure Bend program to standalone JavaScript or C.
+    /// Compile checked pure data or executable contracts to a standalone program.
     Compile(CompileArgs),
     /// Serve typed constructor calls over persistent newline-delimited JSON.
     Serve(ServeArgs),

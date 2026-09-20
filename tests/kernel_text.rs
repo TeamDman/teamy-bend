@@ -62,3 +62,38 @@ fn decimal_helper_apis_preserve_truncation_accumulator_and_explicit_conditions()
         assert_eq!(actual.to_string(), expected.to_string(), "case {index}");
     }
 }
+
+#[test]
+fn natural_decimal_text_and_helpers_preserve_zero_carries_and_digit_fuel() {
+    let cases = [
+        ("Nat.show(0n)", "0"),
+        ("Nat.show(1n)", "1"),
+        ("Nat.show(9n)", "9"),
+        ("Nat.show(10n)", "10"),
+        ("Nat.show(11n)", "11"),
+        ("Nat.show(14n)", "14"),
+        ("Nat.show(19n)", "19"),
+        ("Nat.show(20n)", "20"),
+        ("Nat.show(42n)", "42"),
+        ("Nat.show(64n)", "64"),
+        ("Nat.show.go(0n, 58n, \"q\")", "q"),
+        ("Nat.show.go(1n, 58n, \"q\")", "8q"),
+        ("Nat.show.go(2n, 58n, \"q\")", "58q"),
+        ("Nat.show.go(1n, 0n, \"q\")", "0q"),
+        ("Nat.show.fin(0n, \"x\", ('7', 0n))", "7x"),
+        ("Nat.show.fin(1n, \"x\", ('7', 24n))", "47x"),
+    ];
+    let mut source = include_str!("../src/syntax/base.bend").to_owned();
+    for (index, (body, _)) in cases.iter().enumerate() {
+        writeln!(source, "\ndef value{index}() -> String: {body}").unwrap();
+    }
+    let book = parse(&source).expect("natural decimal witnesses parse");
+    let checked = check_book(&book).expect("natural decimal definitions use ordinary checking");
+    for (index, (_, expected)) in cases.iter().enumerate() {
+        let actual = checked
+            .evaluate_data(&format!("value{index}"), &[])
+            .unwrap();
+        let expected = parse_term(&format!("\"{expected}\"")).unwrap();
+        assert_eq!(actual.to_string(), expected.to_string(), "case {index}");
+    }
+}

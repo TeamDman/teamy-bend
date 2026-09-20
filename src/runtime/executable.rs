@@ -14,6 +14,7 @@ use crate::syntax::executable::BuiltinForeign;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::NumericIntrinsic;
 use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::io::ErrorKind;
 use std::io::Write;
 use std::rc::Rc;
@@ -26,12 +27,17 @@ impl Program {
         datatypes: &Rc<BTreeMap<String, AdtDecl>>,
         foreign: &BTreeMap<String, ForeignDefinition>,
         numeric: &BTreeMap<String, NumericIntrinsic>,
+        base_names: &BTreeSet<String>,
     ) -> Self {
         Self {
             definitions: Rc::clone(definitions),
             datatypes: Rc::clone(datatypes),
             foreign: Rc::new(foreign.clone()),
             numeric: Rc::new(numeric.clone()),
+            optimizations: Rc::new(super::numeric::checked_optimizations(
+                definitions,
+                base_names,
+            )),
         }
     }
 

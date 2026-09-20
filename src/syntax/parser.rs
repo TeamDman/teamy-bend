@@ -1999,7 +1999,29 @@ fn within_term_depth(value: &TermRef, limit: usize) -> bool {
 fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
     let go = |t: &TermRef| qualify_operators(t, namespace);
     match value.as_ref() {
-        Term::Ref(name) if name.starts_with('.') => term(Term::Ref(format!("{namespace}{name}"))),
+        // Relative module identities may begin with ../ or a dot-directory.
+        // Only parser-generated operator placeholders need a type namespace.
+        Term::Ref(name)
+            if matches!(
+                name.as_str(),
+                ".add"
+                    | ".sub"
+                    | ".mul"
+                    | ".div"
+                    | ".mod"
+                    | ".is_lt"
+                    | ".is_le"
+                    | ".is_gt"
+                    | ".is_ge"
+                    | ".or"
+                    | ".xor"
+                    | ".and"
+                    | ".shln"
+                    | ".shrn"
+            ) =>
+        {
+            term(Term::Ref(format!("{namespace}{name}")))
+        }
         Term::Typ(t) => term(Term::Typ(go(t))),
         Term::Min(a, b) => term(Term::Min(go(a), go(b))),
         Term::All {

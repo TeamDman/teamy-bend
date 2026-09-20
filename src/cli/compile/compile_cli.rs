@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
 use crate::compiler::compile_c;
+use crate::compiler::compile_executable_javascript;
 use crate::compiler::compile_javascript;
+use crate::kernel::check_executable;
 use crate::syntax;
 use arbitrary::Arbitrary;
 use eyre::Context;
@@ -22,18 +24,21 @@ pub enum CompileTarget {
     C,
 }
 
-/// Compile checked pure Bend source into a standalone program.
+/// Compile checked Bend source into a standalone program.
 #[derive(Facet, Arbitrary, Debug, PartialEq)]
 pub struct CompileArgs {
     /// Bend source file.
     #[facet(args::positional)]
     pub file: String,
-    /// Closed data entry point, defaulting to main.
+    /// Closed data entry point; executable mode requires main.
     #[facet(args::named)]
     pub entry: Option<String>,
     /// Output source language: javascript (default) or c.
     #[facet(args::named, default)]
     pub target: CompileTarget,
+    /// Compile executable contracts and IO to JavaScript instead of pure data.
+    #[facet(args::named, default)]
+    pub executable: bool,
     /// Output source file to create.
     #[facet(args::named)]
     pub output: String,
@@ -56,12 +61,27 @@ impl CompileArgs {
     /// Returns source, proof, compilation, output or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let book =
-            syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
         let entry = self.entry.as_deref().unwrap_or("main");
-        let (target, program) = match self.target {
-            CompileTarget::Javascript => ("javascript", compile_javascript(&book, entry)),
-            CompileTarget::C => ("c", compile_c(&book, entry)),
+        let (target, program) = if self.executable {
+            if entry != "main" {
+                return Err(eyre!("executable compilation requires the main entry"));
+            }
+            if self.target != CompileTarget::Javascript {
+                return Err(eyre!(
+                    "executable compilation currently supports JavaScript only"
+                ));
+            }
+            let source = syntax::load_executable(std::path::Path::new(&self.file))
+                .map_err(|error| eyre!("{error}"))?;
+            let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
+            ("javascript", compile_executable_javascript(&checked))
+        } else {
+            let book =
+                syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
+            match self.target {
+                CompileTarget::Javascript => ("javascript", compile_javascript(&book, entry)),
+                CompileTarget::C => ("c", compile_c(&book, entry)),
+            }
         };
         let program = program.map_err(|error| eyre!("{error}"))?;
         cancellation.bail_if_cancelled()?;

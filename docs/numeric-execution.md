@@ -29,18 +29,30 @@ claimed. Thirty finite, signed-zero, infinity, conversion and comparison cases
 match actual upstream JavaScript output; the separate signaling-NaN case records
 this target difference explicitly.
 
-The unchanged upstream `run/float_specials.bend` and
-`base/float_roundtrip.bend` also match. The longer
-`compile/float_compare.bend` program still exhausts the native thunk arena;
-the resource limit was retained. These results establish the stated cases,
-not complete numeric program compatibility.
+The unchanged upstream `run/float_specials.bend`, `base/float_roundtrip.bend`
+and `compile/float_compare.bend` now match. Allocation ablations localized
+the last fixture's arena exhaustion to repeated ordinary U32 addition. The
+native runtime now optimizes sealed, checked Base `U32.add` with wrapping
+addition after bounded Word decoding. Its source body still checks normally,
+proof reduction uses that body, and it is absent from the assumption inventory.
+Boundary, partial-application, forged-origin and malformed-Word tests cover
+this separate optimization; runtime limits remain unchanged. These results
+establish the stated cases, not complete numeric program compatibility.
 
 The current pure `run` entry still prints proof-normalizer output, so an opaque
 numeric application there remains unevaluated. Use an IO action to execute
 these primitives. Pure evaluation, strict data calls and the existing pure
 JavaScript/C compilers do not acquire numeric assumptions through this feature.
 
-Remaining work includes executable generated targets, all transcendental and
+Executable JavaScript implements the same 16 contracts with native Number
+values and binary32 rounding. Its signaling-NaN round trip matches the upstream
+JavaScript target. All 31 generated numeric boundary cases and the three
+unchanged upstream programs agree exactly on stdout, stderr and status.
+Native execution agrees on 33 of those cases and retains the documented
+signaling-NaN difference. Printable JavaScript pure entries also execute those
+operations.
+
+Remaining work includes executable C, all transcendental and
 rounding functions, F32 text parsing/formatting, the rest of the Nat/U32 library,
 large Nat representation, and structural word-pattern limits. There is no
 separate signed integer language family in this reference revision.

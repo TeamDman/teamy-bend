@@ -8,11 +8,6 @@
 //! needed by code generation; it grants no proof or evaluation capability and
 //! never changes affine, descent, or foreign-contract checking.
 
-#![expect(
-    dead_code,
-    reason = "The typed executable compiler input is introduced before its JavaScript emitter."
-)]
-
 use super::AdtDecl;
 use super::Binder;
 use super::ConstructorDecl;
@@ -42,6 +37,16 @@ pub(crate) struct ExecutableProgram {
     pub(crate) datatypes: BTreeMap<String, AdtDecl>,
     pub(crate) constructor_tags: BTreeMap<String, String>,
     pub(crate) base_names: BTreeSet<String>,
+    types: Engine,
+}
+
+impl ExecutableProgram {
+    /// Compiler-only weak-head type inspection; this grants no proof token.
+    pub(crate) fn expose_type(&self, ty: &TermRef) -> Result<TermRef, KernelError> {
+        let mut engine = self.types.clone();
+        engine.reset();
+        engine.whnf(ty)
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -171,6 +176,7 @@ pub(super) fn lower(
         datatypes: engine.adts.as_ref().clone(),
         constructor_tags: constructor_tags.clone(),
         base_names: base_names.clone(),
+        types: engine.clone(),
     })
 }
 
