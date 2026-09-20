@@ -51,10 +51,10 @@ establish the stated cases, not complete numeric program compatibility.
 
 A 256-case integer comparison checks full/partial multiplication, constructor
 round trips and shifts against actual upstream JavaScript and independent
-modulo-2^32 arithmetic. Native execution matches 253 cases. Three reconstructed
-multiplications still exhaust the thunk arena; all three also fail in the
-previous retained release. They remain compatibility failures. Independent
-upstream normalization verifies the lazy shift, zero-product and low-addition
+modulo-2^32 arithmetic. Native execution now matches all 256 cases. Bounded
+reclamation resolves the three reconstructed multiplications that exhausted
+the previous append-only arena. Independent upstream normalization verifies
+the lazy shift, zero-product and low-addition
 observations, where eager generated JavaScript is not a laziness oracle.
 
 Pure `run` normalizes without executing opaque numeric contracts, matching the

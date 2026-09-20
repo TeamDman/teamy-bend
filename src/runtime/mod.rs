@@ -16,6 +16,7 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 
 mod executable;
+mod gc;
 mod numeric;
 mod packed;
 
@@ -50,16 +51,16 @@ mod tests {
         machine.tick().expect_err("step budget is enforced");
         machine
             .arena
-            .resize(ARENA_LIMIT, Thunk::Ready(Value::Erased));
+            .resize(ARENA_LIMIT, Some(Thunk::Ready(Value::Erased)));
         machine
             .allocate(Thunk::Ready(Value::Erased))
             .expect_err("thunk arena is bounded");
-        machine
-            .environments
-            .resize_with(ARENA_LIMIT, || Environment {
+        machine.environments.resize_with(ARENA_LIMIT, || {
+            Some(Environment {
                 parent: None,
                 bindings: Vec::new(),
-            });
+            })
+        });
         machine
             .environment(0, Vec::new())
             .expect_err("environment arena is bounded");
@@ -163,8 +164,11 @@ enum Frame {
 
 struct Machine<'program> {
     program: &'program Program,
-    arena: Vec<Thunk>,
-    environments: Vec<Environment>,
+    arena: Vec<Option<Thunk>>,
+    environments: Vec<Option<Environment>>,
+    gc: gc::State,
+    #[cfg(test)]
+    gc_mode: gc::Mode,
     globals: BTreeMap<String, ThunkId>,
     remaining: usize,
     output_nodes: usize,
@@ -176,10 +180,13 @@ impl<'program> Machine<'program> {
         Self {
             program,
             arena: Vec::new(),
-            environments: vec![Environment {
+            environments: vec![Some(Environment {
                 parent: None,
                 bindings: Vec::new(),
-            }],
+            })],
+            gc: gc::State::default(),
+            #[cfg(test)]
+            gc_mode: gc::Mode::Automatic,
             globals: BTreeMap::new(),
             remaining: STEPS,
             output_nodes: 0,
@@ -188,22 +195,21 @@ impl<'program> Machine<'program> {
     }
 
     fn tick(&mut self) -> Result<(), KernelError> {
-        if self.cancelled.is_some_and(|cancelled| cancelled()) {
-            return Err(KernelError::new("execution cancelled"));
-        }
-        self.remaining = self
-            .remaining
-            .checked_sub(1)
-            .ok_or_else(|| KernelError::new("data runtime step budget exhausted"))?;
-        Ok(())
+        gc::charge(&mut self.remaining, self.cancelled)
     }
 
     fn allocate(&mut self, thunk: Thunk) -> Result<ThunkId, KernelError> {
+        if let Some(id) = self.gc.free_thunks.pop() {
+            self.arena[id] = Some(thunk);
+            self.gc.allocated();
+            return Ok(id);
+        }
         if self.arena.len() >= ARENA_LIMIT {
             return Err(KernelError::new("data runtime thunk budget exhausted"));
         }
         let id = self.arena.len();
-        self.arena.push(thunk);
+        self.arena.push(Some(thunk));
+        self.gc.allocated();
         Ok(id)
     }
 
@@ -261,23 +267,34 @@ impl<'program> Machine<'program> {
         parent: EnvId,
         bindings: Vec<(usize, ThunkId)>,
     ) -> Result<EnvId, KernelError> {
+        let environment = Some(Environment {
+            parent: Some(parent),
+            bindings,
+        });
+        if let Some(id) = self.gc.free_environments.pop() {
+            self.environments[id] = environment;
+            self.gc.allocated();
+            return Ok(id);
+        }
         if self.environments.len() >= ARENA_LIMIT {
             return Err(KernelError::new(
                 "data runtime environment budget exhausted",
             ));
         }
         let id = self.environments.len();
-        self.environments.push(Environment {
-            parent: Some(parent),
-            bindings,
-        });
+        self.environments.push(environment);
+        self.gc.allocated();
         Ok(id)
     }
 
     fn variable(&mut self, mut environment: EnvId, binder: usize) -> Result<ThunkId, KernelError> {
         loop {
             self.tick()?;
-            let current = &self.environments[environment];
+            let current = self
+                .environments
+                .get(environment)
+                .and_then(Option::as_ref)
+                .ok_or_else(|| KernelError::new("invalid runtime environment reference"))?;
             if let Some((_, thunk)) = current.bindings.iter().find(|(id, _)| *id == binder) {
                 return Ok(*thunk);
             }
@@ -304,21 +321,27 @@ impl<'program> Machine<'program> {
     fn force(&mut self, mut current: ThunkId) -> Result<Value, KernelError> {
         let mut frames = Vec::new();
         'evaluate: loop {
+            self.collection_safe_point(current, &frames)?;
             self.tick()?;
-            let value = match self.arena[current].clone() {
+            let value = match self
+                .arena
+                .get(current)
+                .and_then(Clone::clone)
+                .ok_or_else(|| KernelError::new("invalid runtime thunk reference"))?
+            {
                 Thunk::Ready(value) => value,
                 Thunk::Evaluating => {
                     return Err(KernelError::new("cyclic data runtime evaluation"));
                 }
                 Thunk::Application(function, argument) => {
-                    self.arena[current] = Thunk::Evaluating;
+                    self.arena[current] = Some(Thunk::Evaluating);
                     Self::push(&mut frames, Frame::Update(current))?;
                     Self::push(&mut frames, Frame::Apply(argument))?;
                     current = function;
                     continue;
                 }
                 Thunk::Expression(expression, environment) => {
-                    self.arena[current] = Thunk::Evaluating;
+                    self.arena[current] = Some(Thunk::Evaluating);
                     Self::push(&mut frames, Frame::Update(current))?;
                     match expression.as_ref() {
                         Term::Var { id, .. } => {
@@ -406,7 +429,7 @@ impl<'program> Machine<'program> {
                 self.tick()?;
                 match frames.pop() {
                     None => return Ok(value),
-                    Some(Frame::Update(id)) => self.arena[id] = Thunk::Ready(value.clone()),
+                    Some(Frame::Update(id)) => self.arena[id] = Some(Thunk::Ready(value.clone())),
                     Some(Frame::Numeric(frame)) => {
                         current = self.numeric_step(frame, value, &mut frames)?;
                         continue 'evaluate;
@@ -505,10 +528,14 @@ impl<'program> Machine<'program> {
             | Value::PackedWord { .. }
             | Value::PackedBits { .. }) => {
                 let (name, fields) = self.constructor_value(value)?;
-                let args = fields
-                    .into_iter()
-                    .map(|field| self.materialize(field, depth + 1))
-                    .collect::<Result<_, _>>()?;
+                // Packed views allocate fresh fields which are not children of
+                // the original thunk. Keep every sibling across nested force.
+                let args = self.with_roots(&fields, |machine| {
+                    fields
+                        .iter()
+                        .map(|field| machine.materialize(*field, depth + 1))
+                        .collect::<Result<_, _>>()
+                })?;
                 Ok(term(Term::Ctr { name, args }))
             }
             Value::Erased => Err(KernelError::new(

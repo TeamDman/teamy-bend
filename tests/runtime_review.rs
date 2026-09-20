@@ -125,7 +125,7 @@ def grow(n: Nat) -> Tree:
 }
 
 #[test]
-fn exponential_work_stops_at_bounded_arena_without_poisoning_next_call() {
+fn exponential_work_stops_at_step_budget_without_poisoning_next_call() {
     use std::fmt::Write;
 
     let mut source = String::from(
@@ -148,9 +148,9 @@ def work0(n: Nat) -> Nat: n
     let book = checked(&source);
     assert!(
         book.evaluate_data("work17", &[parse_term("0n").expect("natural")])
-            .expect_err("exponential but total work exceeds the bounded arena")
+            .expect_err("reclamation permits more allocation, but total work remains bounded")
             .to_string()
-            .contains("thunk budget exhausted")
+            .contains("step budget exhausted")
     );
     assert_eq!(
         book.evaluate_data("work1", &[parse_term("0n").expect("natural")])

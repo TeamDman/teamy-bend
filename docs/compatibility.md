@@ -68,8 +68,11 @@ and the C foreign interface have separate contracts and are not covered by
 these comparisons.
 
 Execution uses the existing 2,000,000-step, 131,072-thunk/environment and
-4,096-frame limits, with an 8 MiB ceiling per decoded console string. It does
-not yet collect unreachable thunks during a long-running action. U32.show uses
+4,096-frame limits, with an 8 MiB ceiling per decoded console string. Unreachable
+thunks and environments are reclaimed at evaluator safe points using stable IDs
+and explicitly retained caller values. Collection consumes the same step budget;
+the arena caps now bound retained slots rather than cumulative allocation.
+A full live graph still fails. U32.show uses
 ordinary checked decimal doubling over bits to avoid repeated division exhausting
 that arena; its upstream helper names retain truncation/accumulator behavior.
 Boundary/sample and helper tests cover zero, every bit boundary and u32::MAX.
@@ -98,16 +101,14 @@ Halt and skips the view callback. App and its helpers live in executable Base;
 Image and Event are also available to strict checking and the pure compilers.
 The window-dependent App.next/turn/draw/step/loop/run helpers remain unfinished.
 
-Image workloads still expose native runtime limits. Compact executable words
-and lazy ordinary arithmetic optimizations improve the exact upstream build/fold
-comparison from 15 to 19 of 21 probes, with four improvements and no regressions.
-Summing pixel colors now passes depths zero through five, including 1,031,680
-at depth five. Counting leaves while discarding colors also passes through five;
-both operations still exhaust the 131,072-thunk arena at depth six. Following
-one path and forcing Image.free pass through six. Generated executable JavaScript
-completes the full depth-six sum of 8,386,560 over 4,096 pixels. No limits were
-raised. The two native resource refusals remain failures, and the unchanged full
-native Image workload remains a compatibility gap.
+Compact executable words and bounded reclamation now pass all 21 Image probes
+using the exact upstream build/fold definitions. Native execution completes
+the depth-six sum of 8,386,560 over 4,096 pixels and the corresponding leaf
+count of 4,096. Following one path and forcing Image.free also pass through six.
+The original full Image observation program matches upstream on native and
+generated JavaScript execution. No workload was reduced or limit raised.
+These are CPU data-runtime results; window effects and GPU execution remain
+unfinished.
 
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in
@@ -155,8 +156,8 @@ The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
-The Image/App and compact-word slices preserve all of those acceptance decisions.
-The current full quality gate passes 332 tests, including five compile-fail
+The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
+The current full quality gate passes 357 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has

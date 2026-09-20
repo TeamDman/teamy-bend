@@ -140,7 +140,9 @@ fn large_native_nat_results_fail_closed_at_existing_representation_limits() {
         .expect_err("the bounded unary runtime cannot materialize a 48-bit maximum Nat");
     let message = error.to_string();
     assert!(
-        message.contains("budget") || message.contains("limit"),
+        message.contains("budget")
+            || message.contains("limit")
+            || message.contains("continuation depth exhausted"),
         "{message}"
     );
 }

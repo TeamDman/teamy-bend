@@ -60,22 +60,36 @@ impl Program {
         let result_type = machine.allocate(Thunk::Ready(Value::Erased))?;
         let continuation = machine.allocate(Thunk::Ready(Value::EmitContinuation))?;
         let action = machine.allocate(Thunk::Application(entry, result_type))?;
-        let mut current = machine.allocate(Thunk::Application(action, continuation))?;
+        let current = machine.allocate(Thunk::Application(action, continuation))?;
+        machine.drive_io(current, stdout, stderr)
+    }
+}
+
+impl Machine<'_> {
+    fn drive_io(
+        &mut self,
+        mut current: ThunkId,
+        stdout: &mut dyn Write,
+        stderr: &mut dyn Write,
+    ) -> Result<u32, KernelError> {
         loop {
-            machine.tick()?;
-            match machine.force(current)? {
+            self.tick()?;
+            match self.force(current)? {
                 Value::Constructor { name, fields } if name == "Emit" && fields.len() == 1 => {
                     // Successful IO discards its result, including IO(U32).
-                    machine.flush(stdout, "stdout")?;
+                    self.flush(stdout, "stdout")?;
                     return Ok(0);
                 }
                 Value::Constructor { name, fields } if name == "Halt" && fields.len() == 2 => {
-                    let code = machine.read_u32(fields[0])?;
-                    let message = machine.read_text(fields[1])?;
-                    machine.flush(stdout, "stdout")?;
-                    machine.write_bytes(stderr, &message, "stderr")?;
-                    machine.write_bytes(stderr, b"\n", "stderr")?;
-                    machine.flush(stderr, "stderr")?;
+                    let (code, message) = self.with_roots(&fields, |machine| {
+                        let code = machine.read_u32(fields[0])?;
+                        let message = machine.read_text(fields[1])?;
+                        Ok((code, message))
+                    })?;
+                    self.flush(stdout, "stdout")?;
+                    self.write_bytes(stderr, &message, "stderr")?;
+                    self.write_bytes(stderr, b"\n", "stderr")?;
+                    self.flush(stderr, "stderr")?;
                     return Ok(code);
                 }
                 Value::Request {
@@ -83,16 +97,18 @@ impl Program {
                     arguments,
                     continuation,
                 } => {
-                    let answer = machine.console_request(&name, &arguments, stdout, stderr)?;
-                    current = machine.allocate(Thunk::Application(continuation, answer))?;
+                    let mut roots = arguments.clone();
+                    roots.push(continuation);
+                    current = self.with_roots(&roots, |machine| {
+                        let answer = machine.console_request(&name, &arguments, stdout, stderr)?;
+                        machine.allocate(Thunk::Application(continuation, answer))
+                    })?;
                 }
                 _ => return Err(KernelError::new("main did not produce an IO operation")),
             }
         }
     }
-}
 
-impl Machine<'_> {
     pub(super) fn apply_foreign(
         &mut self,
         name: String,
@@ -225,7 +241,7 @@ impl Machine<'_> {
             if name != "WCon" {
                 return Err(KernelError::new("expected a 32-bit Word"));
             }
-            let (name, fields) = self.constructor(*head)?;
+            let (name, fields) = self.with_roots(&[*tail], |machine| machine.constructor(*head))?;
             match (name.as_str(), fields.is_empty()) {
                 ("False", true) => {}
                 ("True", true) => result |= 1 << bit,
@@ -247,15 +263,17 @@ impl Machine<'_> {
             match (name.as_str(), fields.as_slice()) {
                 ("SNil", []) => return Ok(result),
                 ("SCon", [head, tail]) => {
-                    let (name, fields) = self.constructor(*head)?;
-                    let [code] = fields.as_slice() else {
-                        return Err(KernelError::new("expected a Char value"));
-                    };
-                    if name != "Chr" {
-                        return Err(KernelError::new("expected a Char value"));
-                    }
-                    let scalar = char::from_u32(self.read_u32(*code)?).ok_or_else(|| {
-                        KernelError::new("console text contains an invalid Unicode scalar")
+                    let scalar = self.with_roots(&[*tail], |machine| {
+                        let (name, fields) = machine.constructor(*head)?;
+                        let [code] = fields.as_slice() else {
+                            return Err(KernelError::new("expected a Char value"));
+                        };
+                        if name != "Chr" {
+                            return Err(KernelError::new("expected a Char value"));
+                        }
+                        char::from_u32(machine.read_u32(*code)?).ok_or_else(|| {
+                            KernelError::new("console text contains an invalid Unicode scalar")
+                        })
                     })?;
                     let mut bytes = [0; 4];
                     let encoded = scalar.encode_utf8(&mut bytes).as_bytes();
@@ -480,5 +498,196 @@ mod word_tests {
                     .contains("foreign effect request escaped")
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod collection_tests {
+    use super::*;
+    use crate::kernel::Term;
+    use crate::kernel::term;
+    use crate::syntax::parse_term;
+    use std::cell::Cell;
+    use std::cell::RefCell;
+
+    type Events = Rc<RefCell<Vec<(&'static str, Vec<u8>)>>>;
+
+    struct Writer {
+        stream: &'static str,
+        events: Events,
+    }
+
+    impl Write for Writer {
+        fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+            self.events.borrow_mut().push((self.stream, buf.to_vec()));
+            Ok(buf.len())
+        }
+
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+
+    fn program() -> Program {
+        let foreign = [
+            ("IO.print", BuiltinForeign::Print),
+            ("IO.write", BuiltinForeign::Write),
+            ("IO.print_err", BuiltinForeign::PrintErr),
+        ]
+        .into_iter()
+        .map(|(name, builtin)| {
+            (
+                name.into(),
+                ForeignDefinition {
+                    imports: vec![],
+                    local_symbol: name.into(),
+                    declared_arity: 1,
+                    parameters: vec!["text".into()],
+                    builtin: Some(builtin),
+                },
+            )
+        })
+        .collect();
+        Program::from_executable(
+            &Rc::new(BTreeMap::new()),
+            &Rc::new(BTreeMap::new()),
+            &foreign,
+            &BTreeMap::new(),
+            &BTreeSet::new(),
+        )
+    }
+
+    fn request(machine: &mut Machine<'_>, name: &str, text: &str, next: ThunkId) -> ThunkId {
+        let argument = machine
+            .expression(parse_term(&format!("{text:?}")).unwrap(), 0)
+            .unwrap();
+        let environment = machine.environment(0, vec![(1, next)]).unwrap();
+        let continuation = machine
+            .allocate(Thunk::Ready(Value::Closure {
+                binder: 0,
+                body: term(Term::Var {
+                    id: 1,
+                    name: "next".into(),
+                }),
+                environment,
+            }))
+            .unwrap();
+        machine
+            .allocate(Thunk::Ready(Value::Request {
+                name: name.into(),
+                arguments: vec![argument],
+                continuation,
+            }))
+            .unwrap()
+    }
+
+    #[test]
+    fn collection_preserves_console_order_request_continuations_and_halt_fields() {
+        let program = program();
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        // Ordinary Word and String syntax exercises both saved-tail scopes.
+        let code = machine
+            .expression(parse_term("4294967295").unwrap(), 0)
+            .unwrap();
+        let message = machine
+            .expression(parse_term("\"halt\"").unwrap(), 0)
+            .unwrap();
+        let halt = machine
+            .allocate(Thunk::Ready(Value::Constructor {
+                name: "Halt".into(),
+                fields: vec![code, message],
+            }))
+            .unwrap();
+        let last = request(&mut machine, "IO.print", "last", halt);
+        let middle = request(&mut machine, "IO.print_err", "middle", last);
+        let first = request(&mut machine, "IO.write", "first", middle);
+        let events = Events::default();
+        let mut stdout = Writer {
+            stream: "stdout",
+            events: Rc::clone(&events),
+        };
+        let mut stderr = Writer {
+            stream: "stderr",
+            events: Rc::clone(&events),
+        };
+        assert_eq!(
+            machine.drive_io(first, &mut stdout, &mut stderr).unwrap(),
+            u32::MAX
+        );
+        assert_eq!(
+            *events.borrow(),
+            vec![
+                ("stdout", b"first".to_vec()),
+                ("stderr", b"middle".to_vec()),
+                ("stderr", b"\n".to_vec()),
+                ("stdout", b"last".to_vec()),
+                ("stdout", b"\n".to_vec()),
+                ("stderr", b"halt".to_vec()),
+                ("stderr", b"\n".to_vec()),
+            ]
+        );
+        assert!(machine.gc.collections > 1);
+    }
+
+    #[test]
+    fn cancellation_during_collected_request_decoding_precedes_console_output() {
+        let program = program();
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let terminal = machine
+            .expression(parse_term("Emit{Unit{}}").unwrap(), 0)
+            .unwrap();
+        let request = request(&mut machine, "IO.print", "pending output", terminal);
+        let checks = Cell::new(0);
+        let cancelled = || {
+            let checks_now = checks.get() + 1;
+            checks.set(checks_now);
+            checks_now >= 200
+        };
+        machine.cancelled = Some(&cancelled);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = machine
+            .drive_io(request, &mut stdout, &mut stderr)
+            .unwrap_err()
+            .to_string();
+        assert!(error.contains("execution cancelled"), "{error}");
+        assert!(stdout.is_empty() && stderr.is_empty());
+        assert!(machine.gc.collections > 0);
+    }
+
+    #[test]
+    fn collection_does_not_make_a_private_request_matchable_as_constructor_data() {
+        let program = program();
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let terminal = machine
+            .expression(parse_term("Emit{Unit{}}").unwrap(), 0)
+            .unwrap();
+        let request = request(&mut machine, "IO.print", "must not execute", terminal);
+        let impossible = machine.allocate(Thunk::Ready(Value::Impossible)).unwrap();
+        let matcher = machine
+            .allocate(Thunk::Ready(Value::Match {
+                constructor: "Emit".into(),
+                arm: impossible,
+                fallback: impossible,
+            }))
+            .unwrap();
+        let call = machine
+            .allocate(Thunk::Application(matcher, request))
+            .unwrap();
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = machine
+            .drive_io(call, &mut stdout, &mut stderr)
+            .unwrap_err()
+            .to_string();
+        assert!(
+            error.contains("foreign effect request cannot be matched"),
+            "{error}"
+        );
+        assert!(stdout.is_empty() && stderr.is_empty());
+        assert!(machine.gc.collections > 0);
     }
 }

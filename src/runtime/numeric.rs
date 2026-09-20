@@ -158,6 +158,29 @@ pub(super) enum NumericFrame {
     Character(String, ThunkId),
 }
 
+impl NumericFrame {
+    pub(super) fn visit_roots(
+        &self,
+        mut visit: impl FnMut(ThunkId) -> Result<(), KernelError>,
+    ) -> Result<(), KernelError> {
+        match self {
+            Self::Ordinary(state) => {
+                for argument in &state.arguments {
+                    visit(*argument)?;
+                }
+                Ok(())
+            }
+            Self::Unwrap(target) | Self::Word(target, ..) => target.visit_roots(visit),
+            Self::Bit(target, _, _, tail) => {
+                target.visit_roots(&mut visit)?;
+                visit(*tail)
+            }
+            Self::Character(_, tail) => visit(*tail),
+            Self::Text(_) => Ok(()),
+        }
+    }
+}
+
 pub(super) struct OrdinaryArguments {
     operation: PureOptimization,
     arguments: Vec<ThunkId>,
@@ -170,6 +193,21 @@ pub(super) enum WordTarget {
 }
 
 impl WordTarget {
+    fn visit_roots(
+        &self,
+        mut visit: impl FnMut(ThunkId) -> Result<(), KernelError>,
+    ) -> Result<(), KernelError> {
+        match self {
+            Self::Arguments(state) => {
+                for argument in &state.arguments {
+                    visit(*argument)?;
+                }
+                Ok(())
+            }
+            Self::Character(_, tail) => visit(*tail),
+        }
+    }
+
     fn wrapper(&self) -> &'static str {
         match self {
             Self::Arguments(arguments) => arguments.operation.input_type(),

@@ -53,9 +53,17 @@ declarations are shared immutably between calls. After argument validation,
 data calls use a native lazy runtime that shares evaluated values within that
 call. Proof checking and ordinary `eval` retain their separate normalizer.
 
-The data runtime allows at most 2,000,000 steps, 131,072 thunks, 131,072
-environments and 4,096 pending continuation frames. Output keeps the depth and
-node limits above. Each failed call discards its arena, so a resource-limit
-error does not poison later calls. The CLI uses a bounded worker stack on
-Windows and a bounded stdin queue so cancellation remains responsive while
-input is idle.
+The data runtime allows at most 2,000,000 steps, 131,072 retained thunk slots,
+131,072 retained environment slots and 4,096 pending continuation frames.
+Unreachable values are reclaimed at evaluator safe points; live IDs never move.
+Collection traces pending frames, globals, environments and scoped caller roots
+without evaluating terms. Its work consumes the same step budget and checks
+cancellation. Caller roots are also bounded at 131,072 entries. A full live
+graph still fails, and a large transition can exhaust the remaining space before
+the next safe point. These caps now bound retained slots rather than cumulative
+allocation over the whole call.
+
+Output keeps the depth and node limits above. Each failed call discards its
+arena, so a resource-limit error does not poison later calls. The CLI uses a
+bounded worker stack on Windows and a bounded stdin queue so cancellation
+remains responsive while input is idle.

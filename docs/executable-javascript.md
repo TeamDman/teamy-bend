@@ -114,9 +114,9 @@ unfinished.
 Six upstream-generated JavaScript comparisons agree on stdout/stderr/status:
 the unchanged App.play fixture, the public example, affine state, foreign
 callback order, Image observations and every Event field. Native execution
-matches the four playback/event programs; the foreign callback program is
-outside its supported contracts, and the large Image fold reaches its arena
-limit. These exclusions and failures remain explicit in
+matches all five applicable playback/event/Image programs after bounded arena
+reclamation. The foreign callback program remains outside its supported native
+contracts. Scope and remaining limitations are recorded in
 [compatibility](compatibility.md).
 
 ## Limits and verification

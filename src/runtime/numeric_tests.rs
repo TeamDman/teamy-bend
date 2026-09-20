@@ -465,3 +465,110 @@ fn numeric_string_decoder_rejects_malformed_data_and_enforces_text_budget() {
         .to_string();
     assert!(error.contains("text byte budget exhausted"), "{error}");
 }
+
+fn float_literal(bits: u32) -> TermRef {
+    let value = parse_term(&bits.to_string()).unwrap();
+    let Term::Ctr { args, .. } = value.as_ref() else {
+        panic!("numeric literal")
+    };
+    term(Term::Ctr {
+        name: "F32".into(),
+        args: args.clone(),
+    })
+}
+
+#[test]
+fn collection_preserves_partial_numeric_arguments_and_decoder_continuations() {
+    let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
+    let mut machine = Machine::new(&program);
+    machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+    let function = machine
+        .allocate(Thunk::Ready(Value::Numeric {
+            operation: NumericOperation::Intrinsic(NumericIntrinsic::Add),
+            arguments: vec![],
+        }))
+        .unwrap();
+    let first = machine.expression(float_literal(0x3f80_0000), 0).unwrap();
+    let partial = machine
+        .allocate(Thunk::Application(function, first))
+        .unwrap();
+    assert!(matches!(
+        machine.force(partial).unwrap(),
+        Value::Numeric { .. }
+    ));
+    let second = machine.expression(float_literal(0x4000_0000), 0).unwrap();
+    let call = machine
+        .allocate(Thunk::Application(partial, second))
+        .unwrap();
+    assert_eq!(
+        machine.materialize(call, 0).unwrap().to_string(),
+        float_literal(0x4040_0000).to_string()
+    );
+    assert!(machine.gc.collections > 1);
+}
+
+#[test]
+fn collection_preserves_numeric_text_tails_through_character_and_word_decoding() {
+    let program = Program::from_checked(&Rc::new(BTreeMap::new()), &Rc::new(BTreeMap::new()));
+    let mut machine = Machine::new(&program);
+    machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+    let function = machine
+        .allocate(Thunk::Ready(Value::Numeric {
+            operation: NumericOperation::Intrinsic(NumericIntrinsic::Read),
+            arguments: vec![],
+        }))
+        .unwrap();
+    let input = machine
+        .expression(parse_term("\"1.5\"").unwrap(), 0)
+        .unwrap();
+    let call = machine
+        .allocate(Thunk::Application(function, input))
+        .unwrap();
+    let expected = term(Term::Ctr {
+        name: "Some".into(),
+        args: vec![float_literal(0x3fc0_0000)],
+    });
+    assert_eq!(
+        machine.materialize(call, 0).unwrap().to_string(),
+        expected.to_string()
+    );
+    assert!(machine.gc.collections > 1);
+}
+
+#[test]
+fn collection_preserves_original_arguments_when_ordinary_optimization_falls_back() {
+    let program = packed_program();
+    let mut machine = Machine::new(&program);
+    machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+    let function = machine.reference("U32.add").unwrap();
+    let first = machine.expression(parse_term("1").unwrap(), 0).unwrap();
+    let second_literal = parse_term("2").unwrap();
+    let Term::Ctr { args, .. } = second_literal.as_ref() else {
+        panic!("U32 literal")
+    };
+    // The annotation preserves an ordinary outer wrapper; the Word remains
+    // lazy and requires the checked source fallback after the first argument.
+    let second = machine
+        .expression(
+            term(Term::Ctr {
+                name: "U32".into(),
+                args: vec![term(Term::Ann(
+                    Rc::clone(&args[0]),
+                    parse_term("Word(32n)").unwrap(),
+                ))],
+            }),
+            0,
+        )
+        .unwrap();
+    let partial = machine
+        .allocate(Thunk::Application(function, first))
+        .unwrap();
+    let call = machine
+        .allocate(Thunk::Application(partial, second))
+        .unwrap();
+    assert_eq!(
+        machine.materialize(call, 0).unwrap().to_string(),
+        parse_term("3").unwrap().to_string()
+    );
+    assert!(machine.gc.collections > 1);
+}

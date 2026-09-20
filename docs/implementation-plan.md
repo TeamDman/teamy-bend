@@ -762,7 +762,7 @@ addition optimization; recursive shln remains ordinary. Optimizations demand
 outer wrappers in source order and fall back to checked bodies for ordinary
 fields. Regression tests also fixed an older eager-addition bug.
 
-The complete quality gate passes 332 tests, including five compile-fail API
+The compact-word quality gate passed 332 tests, including five compile-fail API
 examples, with two optional profilers ignored. Strict library/test Clippy and
 independent representation/boundary reviews pass. Six private representation
 tests and eight integration tests cover conversion, wrapping, float payloads,
@@ -771,7 +771,7 @@ cancellation/limits. Actual upstream normalization confirms the lazy arithmetic
 controls. All 186 float-oracle cases and 14 unchanged upstream numeric programs
 still match their respective native and JavaScript expectations.
 
-The frozen 256-case integer comparison matches 253 native outputs against
+At that stage, the frozen 256-case integer comparison matched 253 native outputs against
 actual upstream JavaScript and independent modulo arithmetic. Three reconstructed
 multiplications exhaust the arena in both this candidate and the previous
 retained release. These are compatibility failures, not matching successes.
@@ -797,25 +797,81 @@ conformance fingerprints and 17 source fingerprints are unchanged from the
 Image/App release. Poche changes remain local, and exhaustive graph evidence
 remains attributed solely to `6802c1e`.
 
-Next: establish explicit roots before adding nonmoving reclamation of both
-arenas. Collect only at committed force-loop safe points, never inside allocate.
-Roots must cover current/continuation IDs, Update blackholes, all numeric argument
-vectors and saved tails, globals, closures/environments, pending IO requests and
-Halt fields. Scoped caller roots must retain siblings and temporary packed
-constructor views across nested decoding/materialization calls; those view
-fields are not reachable from the original packed value. Trace metadata only,
-without forcing terms or running effects. Use stable IDs, vacant slots and free
-lists, bound marker storage and charge collection work to the existing budget.
-Keep each arena capped at 131,072 slots and reject a genuinely full live graph.
+Nonmoving reclamation of both arenas is now implemented. Collection occurs only
+at committed force-loop safe points, never inside allocate. Roots cover current
+and continuation IDs, Update blackholes, numeric argument vectors and saved
+tails, globals, closures/environments, pending IO requests and Halt fields.
+Scoped caller roots retain siblings and temporary packed constructor views
+across nested decoding/materialization calls. Marking traces metadata without
+forcing terms or running effects. Stable IDs, vacant slots and free lists permit
+reuse. Marker storage is bounded; traversal and sweeping consume the existing
+step budget and check cancellation. An 8,192-slot reserve and allocation-debt
+threshold avoid repeated futile collection.
 
-Reclamation changes cumulative allocation limits into live-value limits and
-needs explicit documentation. Test collection at every safe point against
-collection-disabled evaluation, shared closures/lets, numeric continuations,
-packed views, IO order, cancellation, request rejection and live-state exhaustion.
-Measure retained globals/environments before promising depth-six success.
-Rerun the unchanged Image workload and the three integer refusals, then the
-full gate, strict audit and retained-release Poche regressions. This plan item
-and the broad goal remain open until the full workload succeeds.
+Each arena remains capped at 131,072 retained slots; caller roots have a
+separate 131,072-entry cap. This changes the arena constraint from cumulative
+allocation to live retention. A full live graph still fails, and an individual
+transition may run out of room before the next safe point. These semantics are
+documented in the data protocol. No evaluation, continuation or output limit
+was raised.
+
+Seven private collector tests cover every graph edge, forced collection versus
+disabled collection, slot reuse, full live arenas, scoped roots and 80 interruption
+scenarios spanning marking and both sweeps. Six numeric/IO tests force collection
+at every safe point, including partial arguments, decoder tails, ordinary
+fallback, output order, Halt, cancellation and request rejection. Nine public
+executable tests and three strict-data tests cover large discarded work, captured
+closures, simultaneous lets, packed tails, effect boundaries and failed-call
+isolation. A retained wide graph stops at the step budget; that result is kept
+distinct from the private tests that fill both live arenas exactly. Two older
+resource assertions now recognize the step/continuation limits reached after
+their former allocation failure is removed.
+
+The frozen collector candidate passes the full gate: 357 tests, including five
+compile-fail examples, with two optional profilers ignored. Strict library/test
+Clippy and independent root/sweep/boundary reviews pass. The complete strict
+audit remains 362 accepted positives, 491 rejected positives and all 449 negative
+fixtures rejected, with no crashes or changed compiled fingerprints.
+
+All 21 unchanged Image probes now match actual upstream output, including the
+depth-six sum 8,386,560 and shape count 4,096. All six full JavaScript programs
+and all five applicable native programs match, including the original complete
+Image observation. The 256 integer cases all match upstream and independent
+modulo arithmetic, resolving the three earlier multiplication failures. All 186
+float-oracle cases and 14 unchanged numeric programs also match. Strict custom
+datatype folds at depths 12 and 13 now succeed, with five values confirmed by
+actual upstream normalization. Complete 12,287-node materialization is checked
+path by path; larger output still fails at the original node budget.
+
+Retained-release Poche validation and publication remain before closing this
+item. Full Bend parity remains separate required work.
+
+### [ ] 5.12 Add native cooperative tasks, timers and channels
+
+Start with FIFO spawn/timer scheduling. Preserve run-until-suspension behavior,
+children outliving main, ready tasks before zero timers, registration order for
+overdue timers, any-task Halt cancellation and deadlock reporting. Keep scheduler
+queues and waits on the Machine and trace their roots directly; a caller-root
+snapshot can become stale when a spawned task is added.
+
+Inject a monotonic clock/wait adapter for deterministic tests and oversleep
+comparisons. Production waits must periodically check cancellation. IO.now
+returns Nat milliseconds: upstream JavaScript uses performance.now and native C
+uses CLOCK_MONOTONIC. Resolve and document the native clock origin/representation
+before implementation; do not truncate into U32 or silently claim unbounded
+unary Nat support. Compact Nat may require a separate representation slice.
+
+Then add sealed native Chan handles, FIFO buffering/rendezvous, suspended
+senders/receivers, close/drain semantics and stale-handle protection. Trace
+buffered payloads and waiter continuations; keep ordinary fork/join unchanged.
+Verify target-specific erased-payload behavior: the reference JavaScript null
+sentinel collision differs from native C's distinct sentinel.
+
+Reuse the 209 scheduler and 509 channel reference scenarios with shared clocks,
+plus unchanged spawn/sleep/now/channel fixtures and forced-GC queue/wait tests.
+Descriptor readiness, arbitrary native foreign callbacks, other platform effects,
+executable C and the remaining CLI/kernel scope stay open. Complete the full
+quality gate, strict audit and retained-release Poche checks for each publication.
 
 ## Completion and risks
 
