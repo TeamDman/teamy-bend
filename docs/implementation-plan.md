@@ -1068,7 +1068,7 @@ unfinished engine work. The overall goal stays active.
 
 ### [~] 5.14 Add native descriptor readiness and TCP/UDP
 
-Native implementation: exact executable contracts, native owned sockets and the
+Native implementation: 7887746. Exact executable contracts, native owned sockets and the
 mixed timer/readiness scheduler. Network waits use the VM poller rather than file
 workers; a lazily installed notification socket wakes that poller on file-job
 completion. Generated JavaScript readiness remains a required subsequent part
@@ -1134,9 +1134,21 @@ strict 1,302-fixture audit remains 362 accepted positives / 491 rejected positiv
 rejections. Ignored evidence: target/audit-native-network,
 target/native-network-address-oracle, target/native-network-c-effects,
 target/native-network-release-comparison, target/packed-word-native-network,
-target/image-native-network and target/native-network-file-regression. Retain
-a clean release and rerun the short existing Poche regressions before publication.
-Unix runtime behavior remains unverified.
+target/image-native-network and target/native-network-file-regression.
+
+The retained clean 7887746 release matches all 97 candidate source fingerprints.
+Its existing Poche regression gates pass: seven symbolic privacy theorems, three
+imported equalities and a well-typed privacy mutant; 15,503 scalar comparisons,
+seven equalities and two controls; a 22-state trajectory with 44 observations,
+21 transitions, 300 chance partitions, eight controls and 67 requests. The exact
+trajectory transcript, all 17 source hashes, 13 compiled conformance fingerprints,
+Poche HEAD and dirty paths remain unchanged. Receipts are retained under
+target/verified-7887746. This does not rerun or reattribute the prior exhaustive
+graph from 6802c1e. No Poche source or application changes were made.
+
+This completes the bounded native slice. Generated JavaScript networking remains
+required under 5.14; Unix runtime behavior remains unverified. Preserve the
+engine-first next step above and defer Poche model expansion.
 
 Completion: supported network effects preserve results, readiness ordering,
 ownership, cancellation and bounded resources on validated targets. Then advance
