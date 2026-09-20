@@ -692,6 +692,21 @@ fingerprints and 17 source fingerprints are unchanged from the timer release.
 Poche source changes remain local; the exhaustive graph is still attributed
 solely to `6802c1e`. Remaining U6 target/runtime/CLI work keeps the goal active.
 
+### [ ] 5.10 Add Image/Event values and finite App playback
+
+Next scope: add the exact Image and Event datatypes with Image.sink, drop.join,
+free and drop to strict Base. These depend on existing Unit/Nat/U32/Bool and do
+not require a platform window driver. Add App and its more/fold/play helpers
+to executable Base, preserving affine state and closed template specialization.
+Read-only reconnaissance checks the Image subset and compiles an extracted
+App.play program; runtime compatibility remains to be implemented and verified.
+
+Validation: strict finite Image equalities and resource-negative controls;
+actual-output comparisons for finite App.play and affine-state examples;
+empty-frame and early-stop behavior; complete quality gate, strict audit and
+retained-release Poche regressions. Window-dependent App helpers, opaque handles,
+remaining platform effects and all other unfinished U6 work remain separate.
+
 ## Completion and risks
 
 The goal is complete only when U1–U9 are delivered and no required rewrite or
