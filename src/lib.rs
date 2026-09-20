@@ -51,7 +51,7 @@ fn version() -> String {
 /// This function will return an error if the worker cannot start or panics,
 /// or if `color_eyre` installation, CLI parsing, logging initialization,
 /// command execution, or command output rendering fails.
-pub fn main() -> eyre::Result<()> {
+pub fn main() -> eyre::Result<u32> {
     // The Windows main stack is too small for the kernel's bounded recursion
     // in debug builds. Keep source checking and output on a fixed worker stack
     // so the existing AST, nesting and fuel limits can reject input normally.
@@ -65,7 +65,7 @@ pub fn main() -> eyre::Result<()> {
         .map_err(|_panic_payload| eyre::eyre!("CLI worker panicked"))?
 }
 
-fn run() -> eyre::Result<()> {
+fn run() -> eyre::Result<u32> {
     // Install color_eyre for better error reports
     color_eyre::install()?;
     let cancellation_token = CtrlCHandler::default().install()?;
@@ -111,8 +111,9 @@ fn run() -> eyre::Result<()> {
     // Invoke whatever command was requested and render its output once at the top level
     let requested_output_format = cli.global_args.output_format;
     let output = cli.invoke(cancellation_token.clone())?;
+    let exit_code = output.exit_code();
     cancellation_token.bail_if_cancelled()?;
     output.emit(requested_output_format)?;
     cancellation_token.bail_if_cancelled()?;
-    Ok(())
+    Ok(exit_code)
 }

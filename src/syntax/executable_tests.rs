@@ -1,0 +1,235 @@
+// SPDX-License-Identifier: MPL-2.0
+use super::executable::BuiltinForeign;
+use super::executable::ForeignTarget;
+use super::load;
+use super::load_executable;
+use super::parse;
+use crate::kernel::Declaration;
+use crate::kernel::Quant;
+use crate::kernel::check_book;
+use std::fs;
+use std::path::PathBuf;
+use std::sync::atomic::AtomicUsize;
+use std::sync::atomic::Ordering;
+
+static NEXT: AtomicUsize = AtomicUsize::new(0);
+
+struct Fixture(PathBuf);
+
+impl Fixture {
+    fn new() -> Self {
+        let path = std::env::temp_dir().join(format!(
+            "teamy-bend-executable-loader-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir_all(&path).expect("create fixture");
+        Self(path)
+    }
+
+    fn write(&self, name: &str, source: &str) -> PathBuf {
+        let path = self.0.join(name);
+        fs::write(&path, source).expect("write fixture");
+        path
+    }
+}
+
+impl Drop for Fixture {
+    fn drop(&mut self) {
+        let _result = fs::remove_dir_all(&self.0);
+    }
+}
+
+#[test]
+fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
+    let fixture = Fixture::new();
+    let path = fixture.write(
+        "main.bend",
+        "import Base\ndef main() -> IO(Unit): IO.pure(Unit, Unit{})\n",
+    );
+    let mut source = load_executable(&path).expect("execution Base loads");
+    assert!(source.base_names.contains("IO"));
+    assert!(source.base_names.contains("IO.OP"));
+    assert!(!source.base_names.contains("main"));
+    assert_eq!(source.foreign.len(), 3);
+    for (name, builtin) in [
+        ("IO.print", BuiltinForeign::Print),
+        ("IO.write", BuiltinForeign::Write),
+        ("IO.print_err", BuiltinForeign::PrintErr),
+    ] {
+        let definition = &source.foreign[name];
+        assert_eq!(definition.builtin, Some(builtin));
+        assert_eq!(definition.declared_arity, 1);
+        assert_eq!(definition.parameters, ["text"]);
+        assert_eq!(definition.imports.len(), 2);
+        assert_eq!(definition.imports[0].target, ForeignTarget::C);
+        assert_eq!(definition.imports[1].target, ForeignTarget::JavaScript);
+    }
+    check_book(&source.book).expect_err("foreign contracts cannot become a strict proof token");
+    source.book.declarations.retain(
+        |declaration| !matches!(declaration, Declaration::Def(definition) if definition.foreign),
+    );
+    check_book(&source.book)
+        .expect("ordinary IO continuation helpers are checked without foreign assumptions");
+    let strict = load(&path).expect("strict loading retains the pure Base");
+    assert!(!strict.declarations.iter().any(
+        |declaration| matches!(declaration, Declaration::Def(definition) if definition.name == "IO")
+    ));
+    check_book(&strict).expect_err("strict Base does not provide execution-only IO");
+}
+
+#[test]
+fn foreign_paths_are_resolved_deduplicated_and_keep_source_local_symbols() {
+    let fixture = Fixture::new();
+    let js = fixture.write(
+        "shared.js",
+        "// retained foreign source; never executed by the loader\n",
+    );
+    let c = fixture.write("shared.c", "/* retained foreign source */\n");
+    fixture.write("library.bend", "import Base\ndef Module.Echo(-A: Type, text: String) -> IO(Unit):\n  import \"./shared.js\"\n  import \"shared.js\"\n  import \"./shared.c\"\ndef Another(text: String) -> IO(Unit):\n  import \"shared.js\"\n");
+    let path = fixture.write("main.bend", "import library.bend as L\n");
+    let source = load_executable(path).expect("module with foreign imports");
+    let definition = &source.foreign["library.Module.Echo"];
+    assert_eq!(definition.local_symbol, "module_echo");
+    assert_eq!(definition.declared_arity, 2);
+    assert_eq!(definition.parameters, ["A", "text"]);
+    assert_eq!(definition.builtin, None);
+    assert_eq!(definition.imports.len(), 2);
+    assert_eq!(
+        definition.imports[0].path,
+        fs::canonicalize(js).expect("canonical JS")
+    );
+    assert_eq!(
+        definition.imports[1].path,
+        fs::canonicalize(c).expect("canonical C")
+    );
+    assert_eq!(
+        source.foreign["library.Another"].imports[0].path,
+        definition.imports[0].path
+    );
+    assert!(!source.base_names.contains("library.Module.Echo"));
+    let declaration = source
+        .book
+        .declarations
+        .iter()
+        .find_map(|declaration| match declaration {
+            Declaration::Def(definition) if definition.name == "library.Module.Echo" => {
+                Some(definition)
+            }
+            _ => None,
+        })
+        .expect("foreign definition event");
+    assert!(declaration.foreign && declaration.body.is_none());
+    assert_eq!(declaration.parameters[0].quant, Quant::None);
+    assert_eq!(declaration.parameters[1].quant, Quant::Lone);
+}
+
+#[test]
+fn a_foreign_law_fill_uses_its_actual_parameter_list() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\nlaw effect: @-A: Type -> @text: String -> IO(Unit)\ndef effect(A, text): import \"not-installed.js\"\n");
+    let source = load_executable(path).expect("arrow signature and foreign fill");
+    assert_eq!(source.foreign["effect"].declared_arity, 2);
+    let event = source
+        .book
+        .declarations
+        .iter()
+        .rev()
+        .find_map(|declaration| match declaration {
+            Declaration::Def(definition) if definition.name == "effect" => Some(definition),
+            _ => None,
+        })
+        .expect("foreign fill event");
+    assert!(event.foreign);
+    assert_eq!(event.parameters.len(), 2);
+    assert_eq!(event.parameters[0].quant, Quant::None);
+    assert_eq!(event.parameters[1].quant, Quant::Lone);
+    assert!(source.foreign["effect"].imports[0].path.is_absolute());
+}
+
+#[test]
+fn user_names_cannot_mint_base_origin_or_console_intrinsics() {
+    let fixture = Fixture::new();
+    let path = fixture.write(
+        "main.bend",
+        "type IO is Data:\n  Pretend{}\ndef IO.print() -> IO: import \"print.js\"\n",
+    );
+    let source =
+        load_executable(path).expect("syntax alone does not validate foreign return types");
+    assert!(source.base_names.is_empty());
+    assert_eq!(source.foreign["IO.print"].builtin, None);
+}
+
+#[test]
+fn foreign_bodies_keep_strict_rejection_and_cannot_be_refilled() {
+    let fixture = Fixture::new();
+    let foreign = "def effect() -> Type: import \"effect.js\"\n";
+    parse(foreign).expect_err("standalone proof parsing rejects foreign bodies");
+    let path = fixture.write("strict.bend", foreign);
+    load(path).expect_err("proof module loading rejects foreign bodies");
+    for body in [
+        "def effect() -> Type: import effect.js\n",
+        "def effect() -> Type: import \"effect.txt\"\n",
+        "def effect() -> Type: import \"effect.js\"\ndef effect() -> Type: Type\n",
+        "law effect: Type\ndef effect(): import \"effect.js\"\ndef effect(): Type\n",
+        "def effect() -> Type: import \"bad\0name.js\"\n",
+    ] {
+        let path = fixture.write("invalid.bend", body);
+        load_executable(path).expect_err("malformed foreign contract or duplicate fill");
+    }
+}
+
+#[test]
+fn foreign_import_limits_apply_before_deduplication_and_paths_are_raw() {
+    let fixture = Fixture::new();
+    let imports = "import \"effect.js\"\n".repeat(128);
+    let path = fixture.write("main.bend", &format!("def effect() -> Type:\n{imports}"));
+    let source = load_executable(&path).expect("exact foreign import limit");
+    assert_eq!(source.foreign["effect"].imports.len(), 1);
+    fixture.write(
+        "main.bend",
+        &format!("def effect() -> Type:\n{imports}import \"effect.js\"\n"),
+    );
+    let error = load_executable(path).expect_err("duplicate paths still consume parsing budget");
+    assert!(error.message.contains("resource limit"), "{error}");
+
+    #[cfg(windows)]
+    {
+        fs::create_dir(fixture.0.join("nested")).expect("effect directory");
+        let effect = fixture.write("nested/effect.js", "// raw foreign path\n");
+        let path = fixture.write(
+            "raw.bend",
+            "def effect() -> Type: import \"nested\\effect.js\"\n",
+        );
+        let source = load_executable(path).expect("backslash is a path separator, not an escape");
+        assert_eq!(
+            source.foreign["effect"].imports[0].path,
+            fs::canonicalize(effect).expect("effect path")
+        );
+    }
+}
+
+#[test]
+fn foreign_template_instances_retain_the_declaring_module_and_actual_arity() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "library.bend",
+        "import Base\ndef effect(~A: Type, x: A) -> IO(A): import \"effect.js\"\n",
+    );
+    let path = fixture.write(
+        "main.bend",
+        "import Base\nimport library.bend as L\ndef main() -> IO(Unit): L.effect(~Unit, Unit{})\n",
+    );
+    let source = load_executable(path).expect("closed foreign template");
+    assert!(!source.foreign.contains_key("library.effect"));
+    let instance = &source.foreign["library.effect~0"];
+    assert_eq!(instance.declared_arity, 2);
+    assert_eq!(instance.local_symbol, "effect");
+    assert_eq!(instance.builtin, None);
+    assert_eq!(
+        instance.imports[0].path,
+        fs::canonicalize(&fixture.0)
+            .expect("fixture directory")
+            .join("effect.js")
+    );
+}

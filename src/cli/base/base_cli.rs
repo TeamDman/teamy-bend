@@ -9,7 +9,7 @@ use figue as args;
 use std::io::Write;
 use teamy_cancellation::CancellationToken;
 
-const SOURCE: &str = include_str!("../syntax/base.bend");
+const SOURCE: &str = include_str!("../../syntax/base.bend");
 
 /// Print the bundled Base source, its types, or a declaration and its subnames.
 #[derive(Facet, Arbitrary, Debug, PartialEq)]

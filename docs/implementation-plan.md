@@ -222,8 +222,8 @@ Completion: the Rust tool can compile and run the advertised target set.
 
 ### [~] 3.2 Finish language/library and target coverage
 
-Completion notes: 312 selected pure upstream source declarations are bundled
-with Apache attribution (274 definition forms including 17 templates, 20 laws,
+Completion notes: 323 selected pure upstream source declarations are bundled
+with Apache attribution (284 definition forms including 17 templates, 21 laws,
 18 datatypes). Template instances enter the checked book at their call sites;
 source and checker-event counts differ. Six Base
 regressions and four numeric regressions cover witnesses, Boolean proofs,
@@ -260,13 +260,24 @@ remaining unsupported areas keep the broad rewrite goal active.
 ### [~] 3.3 Implement effects and foreign execution contracts
 
 Reference reconnaissance is complete in [the effects design](effects-design.md).
-The next implementation needs a separate executable-check result, retained
-foreign source/origin metadata, exact IO continuations and a native effect
-driver. Begin with ordinary IO helpers and console execution, then preserve
-arbitrary JavaScript/C interfaces, scheduling, handles and all 34 Base effects.
+The native console implementation now has a separate executable-check result,
+retained foreign source/origin metadata, exact IO continuations and requests,
+ordinary IO helpers and three native console effects. `run` preserves raw
+output and Halt exit codes. The full gate passes 168 tests including three
+compile-fail API boundaries. Eight positive upstream fixtures match actual
+upstream JavaScript stdout/stderr/status; two refusals match stdout/status and
+absence of unintended effects, with different diagnostic wording.
+General JavaScript/C interfaces, generated-target effect drivers, scheduling,
+handles and the other 31 Base foreign effects remain required.
 Upstream foreign return contracts can contain false equality payloads; they
 are runtime assumptions and must never mint strict proof evidence. This is
 required remaining rewrite work, not optional replacement scope.
+
+The direct ordinary U32.show port exhausted the native arena even for 42.
+It now uses checked decimal doubling over bits, preserving upstream show helper
+truncation/accumulator behavior. Boundary/sample tests cover u32::MAX, every
+power-of-two boundary, decimal carries and 48 deterministic sample words.
+No host intrinsic or proof-checking exception implements that conversion.
 
 Validation: actual stdout/stderr/status and effect ordering against upstream
 fixtures, request-versus-constructor rejection, forged-origin tests, marshalling
@@ -395,10 +406,11 @@ equalities and two negative controls; its trajectory gate passed 22 states,
 The exhaustive graph receipt remains tied to the separately retained
 `6802c1e` binary, without attributing that run to the newer release.
 
-Next work: complete pure Array operations against the current strict kernel,
-then implement effects/foreign execution with an explicit separation between
-ordinary proofs and external implementation contracts. Local reference review
-is in progress; no new trust assumption has been introduced.
+Subsequent progress: pure Array operations were published in `abf373e` with
+131 passing tests, 14 upstream value comparisons and unchanged negative-proof
+acceptance. Native console execution now uses separate loader/checker products
+for external contracts, preserving the strict proof path. Generated effect
+drivers and the remaining foreign inventory are the next implementation work.
 
 The template/library publication slice passes the complete quality gate
 (124 tests and two ignored local profilers), plus the subsequently added
@@ -407,6 +419,23 @@ found no new defect in specialization keys, closure checks, declaration order,
 budgets or affine collection behavior. `base` source/name/type output and
 invalid selectors passed native CLI smoke checks. All 1,302 upstream fixtures
 were audited against a fixed executable while development continued separately.
+
+### [~] 5.4 Publish native console execution
+
+The console slice adds `run`, distinct executable contracts, private IO requests,
+three sealed console handlers and checked decimal U32 text. Its standard gate
+passes 168 tests with two optional local profilers ignored. Ten real upstream
+IO comparisons agree on output/status within their stated diagnostic scope;
+17 independent provenance, source-order and Unicode-boundary probes pass.
+The full 1,302-fixture strict audit retains 360 accepted positives, 493 rejected
+positives and 449 rejected negatives, with no abnormal exits. The source change
+after the audit was removal of an extra trailing blank line from pure Base.
+
+Native evaluation remains lazy, so a discarded invalid Char differs from the
+upstream JavaScript runtime's eager scalar validation. Arbitrary foreign code,
+generated JavaScript/C effect drivers, remaining Base effects and full numeric,
+GPU, hub and CLI behavior remain open. This is a publication milestone, not
+completion of U6 or the broad goal.
 
 ## Completion and risks
 

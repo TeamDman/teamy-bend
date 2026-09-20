@@ -21,19 +21,56 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   pattern matches and simultaneous let scope. Persistent calls use a separate
   lazy native data runtime after checking their arguments. No TypeScript
   interpreter implements these operations.
-- 312 selected pure Base source declarations: dependent pairs/existentials, sums,
+- 323 selected pure Base source declarations: dependent pairs/existentials, sums,
   equality helpers, Bool/Cmp, Nat arithmetic, Maybe/Result/List, word structure
   and Map, Char/String operations, List templates, Array operations and pure
-  Word/U32 helpers. Array creation uses a power-of-two depth, indexing wraps,
+  Word/U32 helpers and decimal U32 text. Array creation uses a power-of-two depth, indexing wraps,
   and clone/get require reusable elements; swap/set/map retain affine ownership.
-  `src/syntax/base.bend` is the exact inventory (274 definition forms including
-  17 templates, 20 laws and 18 datatypes). Templates enter the checked book only
+  `src/syntax/base.bend` is the exact inventory (284 definition forms including
+  17 templates, 21 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-Foreign C/JS bodies, GPU calls, hub fetch/publish,
-effects, the complete numeric library, optimized C and GPU
+GPU calls, hub fetch/publish, arbitrary foreign execution, non-console effects,
+the complete numeric library, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish arithmetic or floating-point proof support.
+
+## Executable checking and native console IO
+
+`run` loads a separate execution-only Base and checks ordinary terms with the
+same proof/resource rules. Foreign declarations need loader-owned origin and a
+direct return reference to actual Base IO. `ExecutableBook` is a distinct API
+with no conversion to `CheckedBook` and no proof-evaluation method. Its foreign
+signature metadata describes runtime assumptions. Unsafe definitions remain
+unsupported even on this executable path.
+
+Native execution supports IO.pure/bind/die/pass/try and the three bundled console
+effects. Requests are private runtime values: matching them as ordinary IO.OP
+constructors fails without executing the requested effect. UTF-8, NUL, output
+ordering, cancellation, write failures, discarded Emit payloads and Halt exit
+codes have executable regressions. IO aliases select the driver; a user-defined
+type named IO does not. Pure main output still uses canonical core syntax.
+
+Ten unchanged upstream IO fixtures were compared to actual upstream-generated
+JavaScript. Eight matched stdout, stderr and exit status exactly. The two
+expected refusals matched stdout/status and absence of unintended effects;
+diagnostic wording differs. Direct console arguments reject invalid Unicode
+scalars, matching upstream JavaScript. The lazy native runtime does not validate
+a discarded Char payload, while upstream JavaScript does. Raw foreign strings
+and the C foreign interface have separate contracts and are not covered by
+these comparisons.
+
+Execution uses the existing 2,000,000-step, 131,072-thunk/environment and
+4,096-frame limits, with an 8 MiB ceiling per decoded console string. It does
+not yet collect unreachable thunks during a long-running action. U32.show uses
+ordinary checked decimal doubling over bits to avoid repeated division exhausting
+that arena; its upstream helper names retain truncation/accumulator behavior.
+Boundary/sample and helper tests cover zero, every bit boundary and u32::MAX.
+
+Arbitrary C/JS import descriptors are retained and deduplicated, but this native
+backend rejects their execution explicitly. Generated C/JavaScript effect
+drivers, general marshalling/callbacks, scheduler, file/network/window/audio
+effects and unsafe execution remain required work in [the design](effects-design.md).
 
 ## Deliberate resource limits
 
@@ -70,6 +107,10 @@ The 2026-09-19 audit covered all 1,302 fixtures: 360 expected-positive programs
 checked, 493 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
+The native console slice preserves every acceptance/rejection from the Array
+slice. Its full quality gate passes 168 tests, including three compile-fail
+API boundary examples, with two optional local profilers ignored. An independent
+review also passed 17 provenance, source-order and direct-console scalar probes.
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

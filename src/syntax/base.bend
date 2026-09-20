@@ -2144,3 +2144,86 @@ def Array.map(~T: Type, ~U: Type, ~f: T -> U, a: Array<T>) -> Array<U>:
     case ANode{xs, ys}:
       l r = Array.map(~T, ~U, ~f, xs) Array.map(~T, ~U, ~f, ys)
       ANode{l, r}
+
+# Decimal text
+# ------------
+# Decimal doubling over the 32 input bits avoids repeated whole-word division.
+# Digits are least-significant first; every digit is 0..9 and each carry is 0..1.
+# The upstream show.go/fin/if APIs retain their truncation and accumulator rules.
+def U32.show.decimal(ds: List<&2, Nat>, c: Nat) -> List<&2, Nat>:
+  match ds:
+    case Nil{}:
+      match c:
+        case 0n: Nil{}
+        case 1n+p: Con{1n+p, Nil{}}
+    case Con{h, t}:
+      +d = Nat.add(Nat.double(h), c)
+      {(small =>
+        match small:
+          case True{}: Con{d, U32.show.decimal(t, 0n)}
+          case False{}: Con{Nat.sub(d, 10n), U32.show.decimal(t, 1n)}
+      ) : Bool -> List<&2, Nat>}(Nat.is_lt(d, 10n))
+
+def U32.show.bits(n: Nat, w: Word(n)) -> List<&2, Nat>:
+  match n:
+    case 0n: Nil{}
+    case 1n+p:
+      match w:
+        case WCon{False{}, t}: U32.show.decimal(U32.show.bits(p, t), 0n)
+        case WCon{True{}, t}: U32.show.decimal(U32.show.bits(p, t), 1n)
+
+def U32.show.character(d: Nat) -> Char:
+  match d:
+    case 0n: '0'
+    case 1n: '1'
+    case 2n: '2'
+    case 3n: '3'
+    case 4n: '4'
+    case 5n: '5'
+    case 6n: '6'
+    case 7n: '7'
+    case 8n: '8'
+    case 9n+p: '9'
+
+def U32.show.text(ds: List<&2, Nat>, acc: String) -> String:
+  match ds:
+    case Nil{}: acc
+    case Con{h, t}: U32.show.text(t, SCon{U32.show.character(h), acc})
+
+def U32.show.nonzero(ds: List<&2, Nat>) -> String:
+  match ds:
+    case Nil{}: "0"
+    case Con{h, t}: U32.show.text(Con{h, t}, SNil{})
+
+def U32.show(a: U32) -> String:
+  match a:
+    case U32{w}: U32.show.nonzero(U32.show.bits(32n, w))
+
+law U32.show.go:
+  for f   : Nat
+  for +n  : U32
+  for acc : String
+  String
+
+def U32.show.go(f, n, acc):
+  match n:
+    case U32{w}:
+      U32.show.text(List.take(&2, Nat, U32.show.bits(32n, w), f), acc)
+
+def U32.show.fin_digits(ds: List<&2, Nat>, g: Nat, acc: String) -> String:
+  match ds:
+    case Nil{}: SCon{'0', acc}
+    case Con{h, t}:
+      U32.show.text(List.take(&2, Nat, t, g), SCon{U32.show.character(h), acc})
+
+def U32.show.fin(g: Nat, acc: String, +n: U32, z: Bool) -> String:
+  match n:
+    case U32{w}:
+      match z:
+        case True{}: acc
+        case False{}: U32.show.fin_digits(U32.show.bits(32n, w), g, acc)
+
+def U32.show.if(a: U32, z: Bool) -> String:
+  match z:
+    case True{}: "0"
+    case False{}: U32.show.go(10n, a, SNil{})

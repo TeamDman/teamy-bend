@@ -19,6 +19,7 @@ use super::substitute;
 use super::term;
 use super::term::inspect;
 use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::error::Error;
 use std::fmt;
 use std::rc::Rc;
@@ -223,13 +224,16 @@ pub(crate) struct Engine {
     pub(crate) defs: Rc<BTreeMap<String, DefDecl>>,
     pub(crate) adts: Rc<BTreeMap<String, AdtDecl>>,
     pub(crate) aliases: BTreeMap<usize, TermRef>,
+    // Populated only by executable checking after source provenance and the
+    // direct Base IO return contract are verified. Strict proof books keep it empty.
+    pub(super) foreign_contracts: BTreeSet<String>,
     fresh_id: usize,
     fuel: usize,
     pub(crate) depth: usize,
 }
 
 impl Engine {
-    fn reset(&mut self) {
+    pub(super) fn reset(&mut self) {
         self.fuel = 2_000_000;
         self.depth = 0;
         self.aliases.clear();
@@ -323,37 +327,7 @@ fn mismatch(expected: &TermRef, observed: &TermRef) -> KernelError {
 /// Rejects ill-typed programs, incomplete laws, holes, unsafe/foreign assumptions,
 /// invalid resource use or recursion, and exhausted checking limits.
 pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
-    let mut highest = 0;
-    for declaration in &book.declarations {
-        match declaration {
-            Declaration::Def(d) => {
-                highest = highest.max(inspect(&d.ty)?);
-                if let Some(b) = &d.body {
-                    highest = highest.max(inspect(b)?);
-                }
-            }
-            Declaration::Adt(d) => {
-                highest = highest.max(inspect(&d.kind)?);
-                for b in d
-                    .parameters
-                    .iter()
-                    .chain(d.constructors.iter().flat_map(|c| &c.fields))
-                {
-                    highest = highest.max(b.id).max(inspect(&b.ty)?);
-                }
-            }
-        }
-    }
-    let mut engine = Engine {
-        defs: Rc::new(BTreeMap::new()),
-        adts: Rc::new(BTreeMap::new()),
-        aliases: BTreeMap::new(),
-        fresh_id: highest
-            .checked_add(1)
-            .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
-        fuel: 2_000_000,
-        depth: 0,
-    };
+    let mut engine = empty_engine(book)?;
     for declaration in &book.declarations {
         engine.fuel = 2_000_000;
         let result = match declaration {
@@ -384,21 +358,79 @@ pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
     Ok(CheckedBook { engine, runtime })
 }
 
+pub(super) fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
+    let mut highest = 0;
+    for declaration in &book.declarations {
+        match declaration {
+            Declaration::Def(d) => {
+                highest = highest.max(inspect(&d.ty)?);
+                if let Some(b) = &d.body {
+                    highest = highest.max(inspect(b)?);
+                }
+            }
+            Declaration::Adt(d) => {
+                highest = highest.max(inspect(&d.kind)?);
+                for b in d
+                    .parameters
+                    .iter()
+                    .chain(d.constructors.iter().flat_map(|c| &c.fields))
+                {
+                    highest = highest.max(b.id).max(inspect(&b.ty)?);
+                }
+            }
+        }
+    }
+    Ok(Engine {
+        defs: Rc::new(BTreeMap::new()),
+        adts: Rc::new(BTreeMap::new()),
+        aliases: BTreeMap::new(),
+        foreign_contracts: BTreeSet::new(),
+        fresh_id: highest
+            .checked_add(1)
+            .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
+        fuel: 2_000_000,
+        depth: 0,
+    })
+}
+
 impl Engine {
-    fn validate_def(&mut self, definition: &DefDecl) -> Result<(), KernelError> {
+    pub(super) fn validate_def(&mut self, definition: &DefDecl) -> Result<(), KernelError> {
         if definition.unsafe_ || definition.foreign {
             return Err(KernelError::new(
                 "strict proof checking rejects unsafe and foreign definitions",
             ));
         }
+        self.validate_definition(definition, false)
+    }
+
+    pub(super) fn validate_foreign_definition(
+        &mut self,
+        definition: &DefDecl,
+    ) -> Result<(), KernelError> {
+        if definition.unsafe_ || !definition.foreign || definition.body.is_some() {
+            return Err(KernelError::new("invalid foreign executable declaration"));
+        }
+        self.validate_definition(definition, true)?;
+        self.foreign_contracts.insert(definition.name.clone());
+        Ok(())
+    }
+
+    fn validate_definition(
+        &mut self,
+        definition: &DefDecl,
+        foreign_completion: bool,
+    ) -> Result<(), KernelError> {
         if self.adts.contains_key(&definition.name) {
             return Err(KernelError::new("definition collides with a datatype"));
         }
         if let Some(previous) = self.defs.get(&definition.name).cloned() {
-            if previous.body.is_some() || definition.body.is_none() {
+            if previous.body.is_some()
+                || self.foreign_contracts.contains(&definition.name)
+                || definition.body.is_none() && !foreign_completion
+            {
                 return Err(KernelError::new("duplicate declaration"));
             }
-            if previous.parameters.len() != definition.parameters.len()
+            if !foreign_completion && previous.parameters.len() != definition.parameters.len()
                 || !self.compare(Comparison::Equal, &previous.ty, &definition.ty)?
             {
                 return Err(KernelError::new("proof does not preserve its law's type"));
@@ -444,7 +476,7 @@ impl Engine {
         Ok(())
     }
 
-    fn validate_adt(&mut self, declaration: &AdtDecl) -> Result<(), KernelError> {
+    pub(super) fn validate_adt(&mut self, declaration: &AdtDecl) -> Result<(), KernelError> {
         if self.adts.contains_key(&declaration.name) || self.defs.contains_key(&declaration.name) {
             return Err(KernelError::new("duplicate datatype"));
         }
@@ -615,7 +647,7 @@ impl Engine {
                                 "recursive self-call must decrease structurally, left to right",
                             ));
                         }
-                    } else if def.body.is_none() {
+                    } else if def.body.is_none() && !self.foreign_contracts.contains(name) {
                         return Err(KernelError::new(format!(
                             "unfilled law {name} cannot be used as live evidence"
                         )));

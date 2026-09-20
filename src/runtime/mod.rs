@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Call-by-need execution of completely checked definitions. Proof checking
-//! never uses this runtime. An explicit continuation stack bounds evaluation
+//! Call-by-need execution of checked bodies and execution contracts. Proof
+//! checking never uses this runtime. An explicit continuation stack bounds evaluation
 //! without recursive host calls, and each invocation owns its complete arena.
 
 use crate::kernel::AdtDecl;
@@ -9,8 +9,11 @@ use crate::kernel::KernelError;
 use crate::kernel::Term;
 use crate::kernel::TermRef;
 use crate::kernel::term;
+use crate::syntax::executable::ForeignDefinition;
 use std::collections::BTreeMap;
 use std::rc::Rc;
+
+mod executable;
 
 type ThunkId = usize;
 type EnvId = usize;
@@ -20,11 +23,12 @@ const FRAME_LIMIT: usize = 4_096;
 const OUTPUT_DEPTH: usize = 96;
 const OUTPUT_NODES: usize = 16_384;
 
-/// Only constructed after complete checking; all stored syntax is immutable.
+/// Only constructed by a proof or execution checker; stored syntax is immutable.
 #[derive(Clone, Debug)]
 pub(crate) struct Program {
     definitions: Rc<BTreeMap<String, DefDecl>>,
     datatypes: Rc<BTreeMap<String, AdtDecl>>,
+    foreign: Rc<BTreeMap<String, ForeignDefinition>>,
 }
 
 #[cfg(test)]
@@ -65,6 +69,7 @@ impl Program {
         Self {
             definitions: Rc::clone(definitions),
             datatypes: Rc::clone(datatypes),
+            foreign: Rc::new(BTreeMap::new()),
         }
     }
 
@@ -95,6 +100,16 @@ enum Value {
         arm: ThunkId,
         fallback: ThunkId,
     },
+    Foreign {
+        name: String,
+        arguments: Vec<ThunkId>,
+    },
+    Request {
+        name: String,
+        arguments: Vec<ThunkId>,
+        continuation: ThunkId,
+    },
+    EmitContinuation,
     Impossible,
     Erased,
 }
@@ -130,6 +145,7 @@ struct Machine<'program> {
     globals: BTreeMap<String, ThunkId>,
     remaining: usize,
     output_nodes: usize,
+    cancelled: Option<&'program dyn Fn() -> bool>,
 }
 
 impl<'program> Machine<'program> {
@@ -144,10 +160,14 @@ impl<'program> Machine<'program> {
             globals: BTreeMap::new(),
             remaining: STEPS,
             output_nodes: 0,
+            cancelled: None,
         }
     }
 
     fn tick(&mut self) -> Result<(), KernelError> {
+        if self.cancelled.is_some_and(|cancelled| cancelled()) {
+            return Err(KernelError::new("execution cancelled"));
+        }
         self.remaining = self
             .remaining
             .checked_sub(1)
@@ -176,7 +196,12 @@ impl<'program> Machine<'program> {
         if let Some(id) = self.globals.get(name) {
             return Ok(*id);
         }
-        let id = if let Some(definition) = self.program.definitions.get(name) {
+        let id = if self.program.foreign.contains_key(name) {
+            self.allocate(Thunk::Ready(Value::Foreign {
+                name: name.into(),
+                arguments: Vec::new(),
+            }))?
+        } else if let Some(definition) = self.program.definitions.get(name) {
             let body = definition
                 .body
                 .as_ref()
@@ -368,6 +393,17 @@ impl<'program> Machine<'program> {
                                 "entered an impossible runtime match branch",
                             ));
                         }
+                        Value::Foreign { name, arguments } => {
+                            current = self.apply_foreign(name, arguments, argument)?;
+                            continue 'evaluate;
+                        }
+                        Value::EmitContinuation => {
+                            current = self.allocate(Thunk::Ready(Value::Constructor {
+                                name: "Emit".into(),
+                                fields: vec![argument],
+                            }))?;
+                            continue 'evaluate;
+                        }
                         _ => return Err(KernelError::new("runtime application of a non-function")),
                     },
                     Some(Frame::Match {
@@ -376,6 +412,11 @@ impl<'program> Machine<'program> {
                         fallback,
                         argument,
                     }) => {
+                        if matches!(value, Value::Request { .. }) {
+                            return Err(KernelError::new(
+                                "runtime fail-stop: a foreign effect request cannot be matched as constructor data",
+                            ));
+                        }
                         let Value::Constructor { name, fields } = value else {
                             return Err(KernelError::new(
                                 "runtime match expected constructor data",
@@ -415,9 +456,14 @@ impl<'program> Machine<'program> {
             Value::Erased => Err(KernelError::new(
                 "data runtime result contains an erased type or proof",
             )),
-            Value::Closure { .. } | Value::Match { .. } | Value::Impossible => {
-                Err(KernelError::new("data runtime result contains a function"))
-            }
+            Value::Request { .. } => Err(KernelError::new(
+                "data runtime cannot materialize a foreign effect request",
+            )),
+            Value::Closure { .. }
+            | Value::Match { .. }
+            | Value::Foreign { .. }
+            | Value::EmitContinuation
+            | Value::Impossible => Err(KernelError::new("data runtime result contains a function")),
         }
     }
 }

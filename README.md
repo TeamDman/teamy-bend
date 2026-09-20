@@ -5,8 +5,9 @@ A Rust rewrite of the Bend 2 proof language, started from
 
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
+Native console IO runs through a separate executable-contract checker.
 Closed compile-time templates and their specialized instances are supported.
-The bundled Base contains 312 selected pure source declarations, including
+The bundled Base contains 323 selected pure source declarations, including
 17 templates. GPU, effects and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
@@ -20,6 +21,7 @@ cargo run -- check examples/induction.bend
 cargo run -- base List
 cargo run -- base --types
 cargo run -- eval examples/laws.bend --entry main
+cargo run -- run examples/console.bend
 cargo run -- --output-format json batch examples/laws.bend --entry identity --args-json examples/arguments.json
 cargo run -- serve examples/laws.bend
 cargo run -- compile examples/induction.bend --output target/induction.cjs
@@ -64,6 +66,16 @@ without implementing domain rules in the host application.
 `base` prints the exact bundled library source. `base List` selects that name
 and its subnames; `base --types` selects datatype declarations and kind laws.
 It always emits source text, including when output is redirected.
+
+`run` checks executable contracts and runs `main`. Its execution-only Base adds
+IO continuations, pure/bind/die/pass/try, and native print/write/print_err.
+Console output stays raw even with `--output-format json`. `Emit` discards its
+payload and exits successfully; `Halt` writes its message to stderr and sets
+the exit status. The console example prints `The answer is 42` and exits 0.
+Foreign signatures are runtime assumptions, separate from strict proof evidence.
+Arbitrary foreign source is retained by the loader, but native execution of it
+currently fails explicitly. Generated C/JavaScript still support pure programs;
+their effect drivers and general foreign interfaces remain unfinished.
 
 `serve` checks once and reads newline-delimited JSON calls from standard input.
 It returns a flushed JSON response for each request, allowing a client to pass

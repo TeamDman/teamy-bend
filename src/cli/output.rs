@@ -17,12 +17,13 @@ pub enum OutputFormat {
     Csv,
 }
 
-pub struct CliOutput(Option<Box<dyn CliOutputValue>>);
+pub struct CliOutput(Option<Box<dyn CliOutputValue>>, u32);
 
 impl core::fmt::Debug for CliOutput {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.debug_struct("CliOutput")
             .field("has_value", &self.0.is_some())
+            .field("exit_code", &self.1)
             .finish()
     }
 }
@@ -42,7 +43,18 @@ struct FacetCliOutput<T> {
 impl CliOutput {
     #[must_use]
     pub const fn none() -> Self {
-        Self(None)
+        Self(None, 0)
+    }
+
+    /// Preserve an executed program's status without adding structured output.
+    #[must_use]
+    pub const fn exit_status(code: u32) -> Self {
+        Self(None, code)
+    }
+
+    #[must_use]
+    pub const fn exit_code(&self) -> u32 {
+        self.1
     }
 
     #[must_use]
@@ -50,7 +62,7 @@ impl CliOutput {
     where
         T: Facet<'static> + 'static,
     {
-        Self(Some(Box::new(FacetCliOutput { value })))
+        Self(Some(Box::new(FacetCliOutput { value })), 0)
     }
 
     /// # Errors

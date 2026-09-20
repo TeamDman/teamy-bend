@@ -8,6 +8,7 @@
 //! check; they never turn an incomplete calculation into evidence.
 
 mod check;
+mod executable;
 mod fresh;
 mod reduce;
 mod term;
@@ -15,6 +16,9 @@ mod term;
 pub use check::CheckedBook;
 pub use check::KernelError;
 pub use check::check_book;
+pub use executable::ExecutableBook;
+pub use executable::ExecutableEntry;
+pub use executable::check_executable;
 pub use term::AdtDecl;
 pub use term::Binder;
 pub use term::Book;

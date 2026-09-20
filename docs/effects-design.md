@@ -1,8 +1,14 @@
 # Effects and foreign execution
 
-This is the next implementation contract, not a statement of supported features.
+This records the full implementation contract and the remaining work.
 It follows Bend 2.0.5 revision `e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`.
 The existing strict checker and Poche constructor protocol remain the proof path.
+
+The first native console slice is implemented: separate loader/check products,
+exact IO continuations and request values, ordinary IO helpers and three console
+handlers. Ten upstream output/status comparisons and strict boundary regressions
+pass. The arbitrary foreign interfaces, generated-target effect drivers and the
+remaining inventory below are still incomplete.
 
 ## Checking contracts
 
@@ -55,6 +61,13 @@ The first implementation stage adds native `run` and bundled console handlers:
 print, write and print_err. Preserve UTF-8 bytes, embedded NUL, newline rules,
 stdout/stderr ordering, cancellation and bounded resources. This stage does not
 complete arbitrary foreign execution or the remaining effects.
+
+The native runtime is lazy. Its console decoder rejects invalid Unicode scalar
+values, but a discarded `IO.pure(Char, Chr{55296})` result is never decoded and
+currently succeeds. Upstream JavaScript validates that constructor eagerly and
+fails. Preserve this as an open execution-semantics difference when implementing
+the generated JavaScript driver; do not conflate source Char validation with
+the separate raw foreign-string contract below.
 
 ## Arbitrary foreign interfaces
 

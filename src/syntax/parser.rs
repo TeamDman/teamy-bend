@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Derived from Bend 2.0.5, Copyright 2026 HigherOrderCO.
 // Rust translation and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
+use super::executable::BuiltinForeign;
+use super::executable::ExecutableSource;
+use super::executable::ForeignDefinition;
+use super::executable::ForeignImport;
+use super::executable::ForeignTarget;
 use super::surface::Body;
 use super::surface::Pattern;
 use super::surface::Row;
@@ -216,6 +221,7 @@ struct Template {
     label: String,
     namespace: String,
     aliases: BTreeMap<String, String>,
+    origin: SourceOrigin,
     unsafe_: bool,
     instances: BTreeMap<String, String>,
 }
@@ -225,6 +231,22 @@ struct Templates {
     declarations: BTreeMap<String, Template>,
     instances: usize,
     active: usize,
+}
+
+#[derive(Clone, Default)]
+enum SourceOrigin {
+    #[default]
+    Standalone,
+    Local(PathBuf),
+    Bundled,
+}
+
+struct ParseInput<'a> {
+    source: &'a str,
+    label: &'a str,
+    namespace: &'a str,
+    aliases: BTreeMap<String, String>,
+    origin: SourceOrigin,
 }
 
 struct Parser<'a> {
@@ -243,6 +265,8 @@ struct Parser<'a> {
     instance_name: Option<String>,
     instance_arguments: VecDeque<TermRef>,
     compile_bindings: BTreeMap<usize, TermRef>,
+    foreign: Option<&'a mut BTreeMap<String, ForeignDefinition>>,
+    origin: SourceOrigin,
 }
 
 impl Parser<'_> {
@@ -620,6 +644,7 @@ impl Parser<'_> {
                         label: self.label.clone(),
                         namespace: self.namespace.clone(),
                         aliases: self.aliases.clone(),
+                        origin: self.origin.clone(),
                         unsafe_,
                         instances: BTreeMap::new(),
                     },
@@ -640,9 +665,14 @@ impl Parser<'_> {
         };
         self.expect(":")?;
         if self.is("import") {
-            return Err(self.error(
-                "foreign C/JavaScript definitions are not supported by the Rust proof checker",
-            ));
+            return self.foreign_definition(
+                name,
+                &raw,
+                &vars,
+                &ty,
+                unsafe_,
+                template.then_some(declaration_at),
+            );
         }
         // Make recursive names visible while parsing the body, then retain one event.
         let temporary = self.book.declarations.len();
@@ -687,6 +717,133 @@ impl Parser<'_> {
             .expect("registered template");
         saved.tokens = tokens.into();
         saved.at = 0;
+    }
+
+    fn foreign_definition(
+        &mut self,
+        name: String,
+        local_name: &str,
+        vars: &[Variable],
+        ty: &TermRef,
+        unsafe_: bool,
+        template_at: Option<usize>,
+    ) -> Result<(), ParseError> {
+        if self.foreign.is_none() {
+            return Err(self.error(
+                "foreign C/JavaScript definitions are not supported by the Rust proof checker",
+            ));
+        }
+        let imports = self.foreign_imports()?;
+        if let Some(declaration_at) = template_at {
+            self.retain_template_source(&name, declaration_at);
+            return Ok(());
+        }
+        let mut cursor = Rc::clone(ty);
+        let mut parameters = Vec::with_capacity(vars.len());
+        for variable in vars {
+            while let Term::Ann(value, _) = cursor.as_ref() {
+                cursor = Rc::clone(value);
+            }
+            let Term::All {
+                quant,
+                id,
+                domain,
+                body,
+                ..
+            } = cursor.as_ref()
+            else {
+                return Err(
+                    self.error("foreign parameter list exceeds its declared function telescope")
+                );
+            };
+            parameters.push(Binder {
+                quant: *quant,
+                name: variable.name.clone(),
+                id: *id,
+                ty: Rc::clone(domain),
+            });
+            cursor = Rc::clone(body);
+        }
+        let builtin = if matches!(self.origin, SourceOrigin::Bundled) {
+            match local_name {
+                "IO.print" => Some(BuiltinForeign::Print),
+                "IO.write" => Some(BuiltinForeign::Write),
+                "IO.print_err" => Some(BuiltinForeign::PrintErr),
+                _ => None,
+            }
+        } else {
+            None
+        };
+        let descriptor = ForeignDefinition {
+            imports,
+            local_symbol: local_name.to_lowercase().replace(['.', '/'], "_"),
+            declared_arity: vars.len(),
+            parameters: vars.iter().map(|variable| variable.name.clone()).collect(),
+            builtin,
+        };
+        self.foreign
+            .as_deref_mut()
+            .expect("execution parser")
+            .insert(name.clone(), descriptor);
+        self.book.declarations.push(Declaration::Def(DefDecl {
+            name,
+            parameters,
+            ty: qualify_operators(ty, "Nat"),
+            body: None,
+            unsafe_,
+            foreign: true,
+        }));
+        Ok(())
+    }
+
+    fn foreign_imports(&mut self) -> Result<Vec<ForeignImport>, ParseError> {
+        let mut imports = Vec::new();
+        let mut seen = BTreeSet::new();
+        let mut count = 0;
+        while self.take("import") {
+            if count >= 128 {
+                return Err(self.error("foreign import list exceeds the resource limit of 128"));
+            }
+            count += 1;
+            let token = self.bump();
+            if !token.starts_with('"') {
+                return Err(self.error("foreign imports require a quoted .c or .js path"));
+            }
+            // Foreign paths are raw quoted text upstream, not Bend string
+            // values: a Windows backslash must not become a string escape.
+            let relative = &token[1..token.len() - 1];
+            let target = match Path::new(&relative)
+                .extension()
+                .and_then(|extension| extension.to_str())
+            {
+                Some("c") => ForeignTarget::C,
+                Some("js") => ForeignTarget::JavaScript,
+                _ => return Err(self.error("foreign imports require a .c or .js path")),
+            };
+            if relative.contains('\0') {
+                return Err(self.error("foreign import paths cannot contain NUL"));
+            }
+            let path = match &self.origin {
+                SourceOrigin::Local(directory) => {
+                    let path = directory.join(relative);
+                    match fs::canonicalize(&path) {
+                        Ok(real) => real,
+                        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                            lexical_path(&path)
+                        }
+                        Err(error) => return Err(self.error(error.to_string())),
+                    }
+                }
+                SourceOrigin::Bundled => lexical_path(Path::new(&relative)),
+                SourceOrigin::Standalone => {
+                    return Err(self.error("foreign imports need a declaring source file"));
+                }
+            };
+            if seen.insert((target, path.clone())) {
+                imports.push(ForeignImport { target, path });
+            }
+        }
+        Ok(imports)
     }
 
     fn call(&mut self, mut function: TermRef) -> Result<TermRef, ParseError> {
@@ -778,6 +935,8 @@ impl Parser<'_> {
             instance_name: Some(instance.clone()),
             instance_arguments: arguments.iter().map(Rc::clone).collect(),
             compile_bindings: BTreeMap::new(),
+            foreign: self.foreign.as_deref_mut(),
+            origin: snapshot.origin,
         }
         .definition(snapshot.unsafe_);
         self.templates.active -= 1;
@@ -2105,13 +2264,17 @@ pub fn parse(source: &str) -> Result<Book, ParseError> {
     let mut book = Book::default();
     let mut fresh = 0;
     parse_into(
-        source,
-        "<input>",
-        "",
-        BTreeMap::new(),
+        ParseInput {
+            source,
+            label: "<input>",
+            namespace: "",
+            aliases: BTreeMap::new(),
+            origin: SourceOrigin::Standalone,
+        },
         &mut book,
         &mut fresh,
         &mut Templates::default(),
+        None,
     )?;
     Ok(book)
 }
@@ -2140,6 +2303,8 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
         instance_name: None,
         instance_arguments: VecDeque::new(),
         compile_bindings: BTreeMap::new(),
+        foreign: None,
+        origin: SourceOrigin::Standalone,
     };
     let value = p.expression(0)?;
     if !p.is("") {
@@ -2149,20 +2314,18 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
 }
 
 fn parse_into(
-    source: &str,
-    label: &str,
-    namespace: &str,
-    aliases: BTreeMap<String, String>,
+    input: ParseInput<'_>,
     book: &mut Book,
     fresh: &mut usize,
     templates: &mut Templates,
+    foreign: Option<&mut BTreeMap<String, ForeignDefinition>>,
 ) -> Result<(), ParseError> {
     Parser {
-        tokens: lex(source, label)?,
+        tokens: lex(input.source, input.label)?,
         at: 0,
-        label: label.into(),
-        namespace: namespace.into(),
-        aliases,
+        label: input.label.into(),
+        namespace: input.namespace.into(),
+        aliases: input.aliases,
         scope: Vec::new(),
         fresh,
         book,
@@ -2173,6 +2336,8 @@ fn parse_into(
         instance_name: None,
         instance_arguments: VecDeque::new(),
         compile_bindings: BTreeMap::new(),
+        foreign,
+        origin: input.origin,
     }
     .declarations()
 }
@@ -2185,6 +2350,9 @@ struct Loader {
     active: BTreeSet<PathBuf>,
     base: bool,
     templates: Templates,
+    executable: bool,
+    foreign: BTreeMap<String, ForeignDefinition>,
+    base_names: BTreeSet<String>,
 }
 
 impl Loader {
@@ -2237,15 +2405,7 @@ impl Loader {
                 if parts == ["import", "Base"] {
                     if !self.base {
                         self.base = true;
-                        parse_into(
-                            include_str!("base.bend"),
-                            "<Base>",
-                            "",
-                            BTreeMap::new(),
-                            &mut self.book,
-                            &mut self.fresh,
-                            &mut self.templates,
-                        )?;
+                        self.embedded_base()?;
                     }
                 } else if let ["import", relative, "as", alias] = parts.as_slice() {
                     if Path::new(relative)
@@ -2300,18 +2460,80 @@ impl Loader {
             }
         }
         parse_into(
-            &cleaned,
-            &path.display().to_string(),
-            namespace,
-            aliases,
+            ParseInput {
+                source: &cleaned,
+                label: &path.display().to_string(),
+                namespace,
+                aliases,
+                origin: SourceOrigin::Local(
+                    real.parent().unwrap_or_else(|| Path::new(".")).to_owned(),
+                ),
+            },
             &mut self.book,
             &mut self.fresh,
             &mut self.templates,
+            self.executable.then_some(&mut self.foreign),
         )?;
         self.active.remove(&real);
         self.seen.insert(real, namespace.into());
         Ok(())
     }
+
+    fn embedded_base(&mut self) -> Result<(), ParseError> {
+        let start = self.book.declarations.len();
+        parse_into(
+            ParseInput {
+                source: include_str!("base.bend"),
+                label: "<Base>",
+                namespace: "",
+                aliases: BTreeMap::new(),
+                origin: SourceOrigin::Bundled,
+            },
+            &mut self.book,
+            &mut self.fresh,
+            &mut self.templates,
+            None,
+        )?;
+        if self.executable {
+            parse_into(
+                ParseInput {
+                    source: include_str!("executable-base.bend"),
+                    label: "<Base effects>",
+                    namespace: "",
+                    aliases: BTreeMap::new(),
+                    origin: SourceOrigin::Bundled,
+                },
+                &mut self.book,
+                &mut self.fresh,
+                &mut self.templates,
+                Some(&mut self.foreign),
+            )?;
+            for declaration in &self.book.declarations[start..] {
+                let name = match declaration {
+                    Declaration::Def(definition) => &definition.name,
+                    Declaration::Adt(datatype) => &datatype.name,
+                };
+                self.base_names.insert(name.clone());
+            }
+        }
+        Ok(())
+    }
+}
+
+fn lexical_path(path: &Path) -> PathBuf {
+    let mut result = PathBuf::new();
+    for component in path.components() {
+        match component {
+            Component::CurDir => {}
+            Component::ParentDir
+                if matches!(result.components().next_back(), Some(Component::Normal(_))) =>
+            {
+                result.pop();
+            }
+            _ => result.push(component.as_os_str()),
+        }
+    }
+    result
 }
 
 fn normalize_namespace(path: &str) -> String {
@@ -2343,4 +2565,24 @@ pub fn load(path: impl AsRef<Path>) -> Result<Book, ParseError> {
     let mut loader = Loader::default();
     loader.file(path.as_ref(), "")?;
     Ok(loader.book)
+}
+
+/// Read a local program with execution-only Base and retained foreign contracts.
+///
+/// The result is not a checked proof book. Foreign files are recorded but never
+/// executed by loading; an execution checker must validate every signature.
+///
+/// # Errors
+/// Returns a located error on Bend file access, import resolution or parsing failure.
+pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, ParseError> {
+    let mut loader = Loader {
+        executable: true,
+        ..Loader::default()
+    };
+    loader.file(path.as_ref(), "")?;
+    Ok(ExecutableSource {
+        book: loader.book,
+        foreign: loader.foreign,
+        base_names: loader.base_names,
+    })
 }

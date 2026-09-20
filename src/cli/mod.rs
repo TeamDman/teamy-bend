@@ -8,6 +8,7 @@ pub mod facet_shape;
 pub mod global_args;
 pub mod home;
 pub mod output;
+pub mod run;
 pub mod serve;
 
 use crate::cli::base::BaseArgs;
@@ -19,6 +20,7 @@ use crate::cli::eval::EvalArgs;
 use crate::cli::global_args::GlobalArgs;
 use crate::cli::home::HomeArgs;
 use crate::cli::output::CliOutput;
+use crate::cli::run::RunArgs;
 use crate::cli::serve::ServeArgs;
 use arbitrary::Arbitrary;
 use eyre::Context;
@@ -85,6 +87,8 @@ pub enum Command {
     Check(CheckArgs),
     /// Evaluate a closed definition from a checked Bend source file.
     Eval(EvalArgs),
+    /// Run main with executable foreign contracts and native console effects.
+    Run(RunArgs),
     /// Evaluate rows of natural-number arguments against one checked program.
     Batch(BatchArgs),
     /// Compile a checked pure Bend program to standalone JavaScript or C.
@@ -105,6 +109,7 @@ impl Command {
             Command::Home(args) => args.invoke().await,
             Command::Check(args) => args.invoke(&cancellation_token),
             Command::Eval(args) => args.invoke(&cancellation_token),
+            Command::Run(args) => args.invoke(&cancellation_token),
             Command::Batch(args) => args.invoke(&cancellation_token),
             Command::Compile(args) => args.invoke(&cancellation_token),
             Command::Serve(args) => args.invoke(&cancellation_token),
