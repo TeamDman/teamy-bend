@@ -13,9 +13,9 @@
 - Preserve the requirements ledger. Do not convert a first supported subset
   into a claim that the entire requested rewrite is complete.
 - Historical parallel ownership is not a list of currently running agents.
-  The current implementation focus is native runtime scheduling
-  (5.12). Keep existing Poche checks as regression coverage; defer model
-  expansion while engine compatibility is the priority.
+  Native tasks, timers and channels are complete for this bounded native slice
+  (5.12). The next engine focus is environment and file effects (5.13). Keep
+  existing Poche checks as regressions and defer model expansion.
 
 ## Goal wording and scope
 
@@ -339,8 +339,8 @@ the console driver. Foreign source is embedded without running it at compile
 time. Undefined results now suspend in the cooperative JavaScript scheduler;
 saved continuations, spawned tasks and time hooks are supported. Promises and
 descriptor readiness remain explicit failures. The C interface and effect driver,
-native scheduling, channels, handles and the other 28 Base
-foreign effects remain required.
+the remaining opaque handles and Base effects remain required. Native tasks,
+timers and channels now have their own implementation and evidence in 5.12.
 Upstream foreign return contracts can contain false equality payloads; they
 are runtime assumptions and must never mint strict proof evidence. This is
 required remaining rewrite work, not optional replacement scope.
@@ -925,63 +925,103 @@ compact-word release. Poche changes remain local; exhaustive graph evidence
 retains its original `6802c1e` attribution. The Image workload milestone is
 complete; full Bend parity remains required and the broad goal stays active.
 
-### [~] 5.12 Add native cooperative tasks, timers and channels
+### [x] 5.12 Add native cooperative tasks, timers and channels
 
-Native FIFO tasks and timers are implemented and validated on Windows.
+Native FIFO tasks, timers and sealed channels are implemented and validated on
+Windows. Spawn continues its parent; sleep suspends even at zero milliseconds;
+ready work precedes timers, and overdue timers preserve registration order.
+Children outlive main. Any-task Halt preserves the full u32 API status. A driver
+exit clears all tasks, timers, channel payloads and pending continuations.
+
 The clock uses OS monotonic nanoseconds (Windows performance counter; Unix
-CLOCK_MONOTONIC), retaining its origin across invocations. IO.now returns elapsed
+CLOCK_MONOTONIC), retaining its origin across invocations. IO.now floors to
 milliseconds as executable-only compact Nat, with the upstream native 48-bit
-Nat bound and lazy constructor views. Queues/timers are owned and traced by the
-Machine; host waits are capped at 100 ms between cancellation checks without
+bound and lazy constructor views. Waits check cancellation within 100 ms without
 charging idle time against the evaluation budget. Unix clock code remains
-unverified on Unix hardware. Native channels are the next implementation slice;
-5.12 stays in progress until that work and its acceptance are complete.
+unverified on Unix hardware.
 
-Validation: the full quality gate passes 391 tests including five compile-fail
+Chan.new/send/recv/close preserve FIFO buffering, zero-capacity rendezvous,
+suspended senders/receivers, close wakeups and post-close buffer draining.
+Generation-checked private handles prevent stale handles from addressing reused
+slots; exhausted generations retire. Logical capacity accepts full U32 without
+preallocation, while table entries, retained payloads and waiters have separate
+aggregate bounds. Buffered payloads, pending send payloads and continuations are
+traced directly by the Machine's collector. Wakes resume existing live tasks
+without yielding the current task. Ordinary IO.fork/join are unchanged. See
+[native channels](native-channels.md) for behavior, limits and target differences.
+
+Native C has a distinct receiver sentinel, so erased proof/type payloads work in
+both rendezvous directions. JavaScript's null collision differs for sender-first
+unbuffered sends. Both backends retain their respective upstream behavior; this
+is tested and documented rather than hidden by a cross-target equality claim.
+
+Validation: the full quality gate passes 417 tests including five compile-fail
 examples, with two optional local profilers ignored. Strict Clippy covers the
-library and tests. Eleven Nat tests cover exact dependency guards, alpha-renaming,
-48-bit bounds, source-order/lazy fallback, output limits and collection. Nine
-checked-program scheduler tests and nine private clock/collection tests cover
-ordering, large clock origins, sub-millisecond flooring, cross-invocation clock
-continuity, output flushing, cancellation and a 10,000-poll idle wait.
+library and tests. The new slice adds nine channel-state tests, twelve checked
+source tests and five forced-collection/cleanup tests. A final strengthened
+cancellation assertion was separately rerun with all twelve source tests after
+the full gate; formatting still passes. Existing clock/Nat/task tests remain.
 
-The frozen release candidate matches all 13 scheduler programs (including five
-unchanged upstream fixtures), with 26 actual upstream JavaScript runs across two
-clock origins as the independent comparison. All 256 integer arithmetic cases
-and 21 original Image workloads still pass. The complete 1,302-fixture strict
-audit remains 362 accepted positives / 491 rejected positives / 449 rejected
-negatives, with zero accepted negatives, abnormal exits or new rejections.
-Candidate sources are fingerprinted under ignored `target/audit-native-scheduler/`;
-comparison receipts are in `target/native-scheduler-release-comparison/`,
-`target/native-scheduler-integer-comparison/` and `target/image-native-scheduler/`.
-Retained clean builds and short Poche regression receipts belong under the
-existing `target/verified-<commit>/` convention; the earlier exhaustive graph
-retains its original attribution. The broad rewrite remains incomplete.
+The production Rust channel module matches verbatim upstream native C transition
+functions across 509 scenarios and 45,307 operations, checking immediate results
+and ordered wakes after every operation. The frozen release candidate passes
+22 complete program cases: nine unchanged upstream fixtures, seven exact checked
+test sources and six erased-payload probes. Nineteen match actual upstream
+JavaScript stdout/stderr/status exactly, one deadlock matches status/stdout with
+diagnostic wording differences, and two erased sender-first probes intentionally
+follow native C semantics. Actual generated C confirms erased values lower to
+zero distinct from TERM_HOLE. Complete generated C programs were retained but
+not executed; the native transition oracle executes the extracted C functions.
 
-The implemented scheduler preserves run-until-suspension behavior,
-children outliving main, ready tasks before zero timers, registration order for
-overdue timers, any-task Halt cancellation and deadlock reporting. Keep scheduler
-queues and waits on the Machine and trace their roots directly; a caller-root
-snapshot can become stale when a spawned task is added.
+All 256 integer comparisons and 21 original Image workloads pass. The full
+1,302-fixture strict audit remains 362 accepted positives / 491 rejected positives
+/ 449 rejected negatives, with zero accepted negatives, abnormal exits, changed
+source fingerprints or new rejections. All 83 compiled-source fingerprints match
+the frozen candidate. This strict audit does not measure whole-engine completeness.
 
-Inject a monotonic clock/wait adapter for deterministic tests and oversleep
-comparisons. Production waits must periodically check cancellation. IO.now
-returns Nat milliseconds: upstream JavaScript uses performance.now and native C
-uses CLOCK_MONOTONIC. Resolve and document the native clock origin/representation
-before implementation; do not truncate into U32 or silently claim unbounded
-unary Nat support. Compact Nat may require a separate representation slice.
+Ignored evidence: target/audit-native-channels, target/native-channels-c-oracle,
+target/native-channels-release-comparison, target/native-channels-integer-comparison
+and target/image-native-channels. Retained clean releases and short Poche receipts
+use target/verified-<commit>. The earlier task/timer release c293299 passed 391
+tests and 13 actual-upstream program comparisons across two clock origins; its
+separate receipts remain under the native-scheduler names. The prior exhaustive
+Poche graph retains its original attribution and is not rerun for this slice.
 
-Then add sealed native Chan handles, FIFO buffering/rendezvous, suspended
-senders/receivers, close/drain semantics and stale-handle protection. Trace
-buffered payloads and waiter continuations; keep ordinary fork/join unchanged.
-Verify target-specific erased-payload behavior: the reference JavaScript null
-sentinel collision differs from native C's distinct sentinel.
+Descriptor readiness, arbitrary native foreign callbacks, remaining platform
+effects, executable C and the remaining CLI/kernel/GPU scope stay open. This
+finishes the native task/timer/channel milestone, not the overall rewrite.
 
-Reuse the 209 scheduler and 509 channel reference scenarios with shared clocks,
-plus unchanged spawn/sleep/now/channel fixtures and forced-GC queue/wait tests.
-Descriptor readiness, arbitrary native foreign callbacks, other platform effects,
-executable C and the remaining CLI/kernel scope stay open. Complete the full
-quality gate, strict audit and retained-release Poche checks for each publication.
+### [ ] 5.13 Add native environment and file effects
+
+Next engine slice: IO.get_env, File.open/read/read_bytes/write/close and the
+sealed affine File type. Keep Poche model expansion deferred and use its existing
+checks as regressions. Executable C, descriptor readiness and GPU remain later
+engine milestones; consult the saved GPU references when that phase begins.
+
+Start with shared Result/error/text conversion and IO.get_env. Preserve the
+missing-versus-empty distinction and embedded-NUL behavior; define and test the
+Windows/POSIX error policy explicitly. Then add exact File origin validation to
+the executable opaque checker without admitting arbitrary unfilled laws. Unlike
+reusable Chan(A): Data, File: Type is affine; read/write retain the handle outside
+Result even when the operation fails. Open accepts exactly r/w/a, byte reads
+produce List<&2, U32>, and close returns Unit even on a host close failure.
+
+Upstream file open/read/write suspend through io_work. Worker threads perform
+host calls, then the scheduler packages results and resumes continuations. Port
+that scheduling boundary with bounded pending work, ownership and completion
+roots; a blocking filesystem call on the scheduler would be incomplete parity.
+Test progress of other tasks while host work is pending, and define cleanup on
+Halt/cancellation. Native io_str malformed-UTF-8 decoding differs from JavaScript
+TextDecoder; inspect and test it instead of silently using lossy Rust decoding.
+
+Reference entry points: base.bend File and environment declarations;
+effs/get_env.c and effs/file_*.c; comp.ts io_str and worker dispatch/completion.
+Compare actual upstream get_env/get_env_own/stderr_failure, file_open_mode,
+file_roundtrip/fail_keeps_handle/read_bytes/text_utf8/path_utf8 fixtures. Isolate
+applicable file/environment cases from mixed nul_bytes coverage. Include short
+reads/writes, zero-length/EOF reads, append, failure-retains-handle, forced GC and
+terminal cleanup. Retain strict proof refusals, the full quality gate, upstream
+audit, frozen-source evidence and short Poche regressions before publication.
 
 ## Completion and risks
 

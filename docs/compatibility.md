@@ -81,7 +81,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-native Rust channels, file/network/window/audio Base effects and unsafe execution remain
+file/network/window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -99,7 +99,11 @@ Spawn continues its parent; sleeping yields even for zero milliseconds; ready
 tasks run before timers and all overdue timers resume in registration order.
 Children outlive main. Halt, cancellation and errors discard remaining tasks.
 Task/timer roots participate directly in the native garbage collector. Native
-channels and arbitrary foreign callbacks remain unfinished.
+channels add sealed handles, buffered and zero-capacity transfer, FIFO waiters,
+close/drain behavior and ordinary fork/join. Buffered payloads and waiting
+continuations are traced directly; all channel state is discarded on driver exit.
+See [native channels](native-channels.md) for target differences and limits.
+Arbitrary native foreign callbacks remain unfinished.
 
 Native IO.now retains the OS monotonic clock origin: Windows performance-counter
 nanoseconds or Unix CLOCK_MONOTONIC, floored to milliseconds. It is not rebased
@@ -174,7 +178,7 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The current full quality gate passes 391 tests, including five compile-fail
+The current full quality gate passes 417 tests, including five compile-fail
 API boundary examples, with two optional local profilers ignored. Strict Clippy
 checking covers the library and integration tests. Audited compiled source
 fingerprints match the publication sources. Generated executable behavior has
@@ -186,8 +190,9 @@ Native scheduler validation includes nine checked-program tests, nine private
 virtual-clock/collection tests, and 13 complete programs matched against actual
 upstream generated JavaScript. The upstream comparison runs each program with
 two clock origins, including one above U32. All 256 integer comparisons and 21
-Image workloads continue to pass. Native arbitrary FFI, channels and readiness
-remain unsupported; this evidence does not establish those features.
+Image workloads continue to pass. Native channels have separate validation
+in [native channels](native-channels.md). Arbitrary native FFI and readiness
+remain unsupported.
 
 The latest pure-library comparison matches 19 complete programs against upstream.
 The unchanged `base/string_kit.bend` and `base/num_kit.bend` still hit the kernel

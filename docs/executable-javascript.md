@@ -99,7 +99,7 @@ IO.fork/join are ordinary checked helpers: fork creates a capacity-one channel
 and spawns the action; join receives and closes it. Joining the copied handle
 again halts with the reference closed-channel message. List.for_each is an
 ordinary template that preserves sequential callback order and stops at Halt.
-Native Rust channel execution remains unsupported.
+Native Rust also supports channels and fork/join; its sealed handles and native C erased-payload behavior are described in [native channels](native-channels.md).
 
 ## Finite App playback
 
@@ -167,6 +167,6 @@ overdue together. The upstream program reproduced this variation, and both
 implementations produce the same order with identical injected oversleep.
 These comparisons cover timer behavior without claiming wall-clock determinism.
 
-The full rewrite still requires host readiness, native Rust scheduling/channels,
+The full rewrite still requires host readiness, arbitrary native foreign calls,
 executable C, remaining library contracts, GPU support and the rest of the upstream
 CLI. See the [implementation plan](implementation-plan.md).

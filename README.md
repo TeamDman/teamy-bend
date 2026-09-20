@@ -5,7 +5,7 @@ A Rust rewrite of the Bend 2 proof language, started from
 
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
-Native console IO, tasks and timers use a separate execution contract checker.
+Native console IO, tasks, timers and channels use a separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
 and channels with fork/join.
 All 37 numeric primitives execute in native IO and generated JavaScript;
@@ -29,6 +29,7 @@ cargo run -- base --types
 cargo run -- eval examples/laws.bend --entry main
 cargo run -- run examples/console.bend
 cargo run -- run examples/tasks.bend
+cargo run -- run examples/channels.bend
 cargo run -- --output-format json batch examples/laws.bend --entry identity --args-json examples/arguments.json
 cargo run -- serve examples/laws.bend
 cargo run -- compile examples/induction.bend --output target/induction.cjs

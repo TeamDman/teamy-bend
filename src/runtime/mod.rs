@@ -15,6 +15,7 @@ use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::rc::Rc;
 
+mod channels;
 mod executable;
 mod gc;
 mod nat;
@@ -102,6 +103,7 @@ impl Program {
 
 #[derive(Clone)]
 enum Value {
+    Channel(channels::Handle),
     PackedNat(u64),
     PackedWord {
         wrapper: packed::Wrapper,
@@ -179,6 +181,7 @@ struct Machine<'program> {
     environments: Vec<Option<Environment>>,
     gc: gc::State,
     scheduler: scheduler::State,
+    channels: channels::State,
     #[cfg(test)]
     gc_mode: gc::Mode,
     globals: BTreeMap<String, ThunkId>,
@@ -198,6 +201,7 @@ impl<'program> Machine<'program> {
             })],
             gc: gc::State::default(),
             scheduler: scheduler::State::default(),
+            channels: channels::State::default(),
             #[cfg(test)]
             gc_mode: gc::Mode::Automatic,
             globals: BTreeMap::new(),
@@ -581,6 +585,9 @@ impl<'program> Machine<'program> {
             )),
             Value::Request { .. } => Err(KernelError::new(
                 "data runtime cannot materialize a foreign effect request",
+            )),
+            Value::Channel(_) => Err(KernelError::new(
+                "data runtime cannot materialize an opaque channel handle",
             )),
             Value::Closure { .. }
             | Value::Match { .. }

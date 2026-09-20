@@ -26,6 +26,9 @@ use std::rc::Rc;
 
 pub(super) const TEXT_BYTES: usize = 8 * 1024 * 1024;
 
+mod channel_io;
+#[cfg(test)]
+mod channel_tests;
 #[cfg(test)]
 mod scheduler_tests;
 
@@ -105,8 +108,9 @@ impl Machine<'_> {
     ) -> Result<u32, KernelError> {
         self.scheduler.spawn(current)?;
         let result = self.drive_tasks(stdout, stderr, clock);
-        // Halt, cancellation and failures discard every remaining task/timer.
+        // Every exit discards pending tasks, timers, channel values and waits.
         self.scheduler = super::scheduler::State::default();
+        self.channels = super::channels::State::default();
         result
     }
 
@@ -230,6 +234,12 @@ impl Machine<'_> {
             .get(name)
             .and_then(|foreign| foreign.builtin);
         let answer = match builtin {
+            Some(
+                builtin @ (BuiltinForeign::ChanNew
+                | BuiltinForeign::ChanSend
+                | BuiltinForeign::ChanRecv
+                | BuiltinForeign::ChanClose),
+            ) => return self.channel_request(builtin, arguments, continuation),
             Some(BuiltinForeign::Spawn) => {
                 let [_, action] = arguments else {
                     return Err(KernelError::new("spawn request has an invalid arity"));
@@ -322,7 +332,7 @@ impl Machine<'_> {
             | BuiltinForeign::ChanRecv
             | BuiltinForeign::ChanClose => {
                 return Err(KernelError::new(format!(
-                    "native execution does not support the channel builtin {name}; compile to executable JavaScript"
+                    "channel builtin {name} reached console-only dispatch"
                 )));
             }
             BuiltinForeign::Print | BuiltinForeign::Write | BuiltinForeign::PrintErr => {}
@@ -475,7 +485,7 @@ impl Machine<'_> {
 }
 
 #[cfg(test)]
-mod channel_tests {
+mod dispatch_tests {
     use super::BuiltinForeign;
     use super::ForeignDefinition;
     use super::Machine;
@@ -485,7 +495,7 @@ mod channel_tests {
     use std::rc::Rc;
 
     #[test]
-    fn every_channel_dispatch_refuses_before_argument_decoding() {
+    fn console_only_dispatch_rejects_misrouted_channels_before_argument_decoding() {
         for (name, builtin) in [
             ("Chan.new", BuiltinForeign::ChanNew),
             ("Chan.send", BuiltinForeign::ChanSend),
@@ -514,7 +524,7 @@ mod channel_tests {
             let mut stderr = Vec::new();
             let error = machine
                 .console_request(name, &[], &mut stdout, &mut stderr)
-                .expect_err("native channels are not implemented")
+                .expect_err("channels must use the scheduler-aware dispatcher")
                 .to_string();
             assert!(
                 error.contains(&format!("channel builtin {name}")),

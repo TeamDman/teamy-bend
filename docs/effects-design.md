@@ -136,8 +136,8 @@ suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
 remaining work. The Node timer adapter retains the synchronous polling model.
 Generated JavaScript also supports the sealed opaque Chan family and four
 channel operations, with ordinary IO.fork/join and sequential List.for_each.
-The channel family remains absent from strict Base. Native Rust channels,
-descriptor readiness, remaining opaque handle families and window-backed App helpers are
+The channel family remains absent from strict Base. Descriptor readiness,
+remaining opaque handle families and window-backed App helpers are
 still required.
 
 Native Rust scheduling now uses Machine-owned FIFO tasks and timer queues whose
@@ -155,7 +155,16 @@ Private virtual clocks cover oversleep and out-of-order deadlines without
 flaky wall-time assertions. Forced-collection tests retain both spawned and
 sleeping continuations. Additional integration programs exercise the checked
 source path and compare with actual upstream generated JavaScript. These do not
-establish arbitrary native FFI, descriptor readiness or channel support.
+establish arbitrary native FFI or descriptor readiness.
+
+Native channels now use a separate bounded table with generation-checked opaque
+handles. Pure state transitions retain FIFO ordering and native C's distinct
+receiver marker; payloads stay lazy. Channel waits keep their existing task count,
+and wakes enqueue continuations without yielding the current task. The collector
+traces buffered values, pending sender values and all waiting continuations.
+Close rejects pending sends, wakes receivers with None and retains buffered
+values until drained. Driver exit clears the table. See
+[native channels](native-channels.md) for comparison evidence and limits.
 
 Finite App.more/fold/play and its App datatype are now ordinary executable
 Base definitions. They run scripted Event frames through tick with affine state

@@ -160,17 +160,17 @@ fn pure_result_printer_does_not_invent_a_channel_handle_representation() {
 }
 
 #[test]
-fn native_channel_creation_refuses_before_its_continuation_runs() {
+fn native_channel_creation_runs_its_checked_continuation() {
     let fixture = Fixture::new(
         "import Base\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    channel : Chan(U32) <- Chan.new(U32, 1)\n    IO.print(\"AFTER\")\n",
     );
     let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
-    let error = checked
+    let code = checked
         .run_main(&mut stdout, &mut stderr, &|| false)
-        .unwrap_err()
-        .to_string();
-    assert!(error.contains("channel builtin Chan.new"), "{error}");
-    assert!(stdout.is_empty() && stderr.is_empty());
+        .unwrap();
+    assert_eq!(code, 0);
+    assert_eq!(stdout, b"AFTER\n");
+    assert!(stderr.is_empty());
 }

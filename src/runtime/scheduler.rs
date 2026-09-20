@@ -34,6 +34,15 @@ impl State {
         self.ready.pop_front()
     }
 
+    /// A channel wake resumes an existing task without creating another one.
+    pub(super) fn resume(&mut self, action: ThunkId) -> Result<(), KernelError> {
+        if self.ready.len() + self.timers.len() >= self.live {
+            return Err(KernelError::new("invalid native scheduler wake count"));
+        }
+        self.ready.push_back(action);
+        Ok(())
+    }
+
     pub(super) fn complete(&mut self) -> Result<(), KernelError> {
         self.live = self
             .live

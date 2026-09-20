@@ -1,8 +1,8 @@
 # References for the future Bend2 GPU port
 
 Recorded 2026-09-20 for guidance U11-U13 in the implementation plan. Read this
-when GPU work becomes the active phase; native scheduling remains the next
-engine milestone.
+when GPU work becomes the active phase; current and next engine milestones are
+tracked in the implementation plan.
 
 ## User guidance and provenance
 

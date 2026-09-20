@@ -130,7 +130,8 @@ impl Marks<'_> {
                 }
                 self.thunk(*continuation)?;
             }
-            Value::PackedNat(_)
+            Value::Channel(_)
+            | Value::PackedNat(_)
             | Value::PackedWord { .. }
             | Value::PackedBits { .. }
             | Value::EmitContinuation
@@ -221,6 +222,7 @@ impl Machine<'_> {
             marks.thunk(*id)?;
         }
         self.scheduler.visit_roots(|id| marks.thunk(id))?;
+        self.channels.visit_roots(|id| marks.thunk(id))?;
         while let Some(node) = marks.pending.pop() {
             marks.charge()?;
             match node {
