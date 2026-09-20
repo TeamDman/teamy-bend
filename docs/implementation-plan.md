@@ -1068,7 +1068,7 @@ unfinished engine work. The overall goal stays active.
 
 ### [x] 5.14 Add descriptor readiness and TCP/UDP
 
-Native implementation: 7887746. Exact executable contracts, native owned sockets and the
+Native implementation: 7887746; JavaScript implementation: 0c350a5. Exact executable contracts, native owned sockets and the
 mixed timer/readiness scheduler. Network waits use the VM poller rather than file
 workers; a lazily installed notification socket wakes that poller on file-job
 completion. Generated JavaScript now has the corresponding effects, mixed
@@ -1183,7 +1183,16 @@ rejections. Ignored receipts: target/audit-js-network,
 target/js-network-release-comparison, target/js-readiness-release-comparison
 and target/js-network-release-provider.log. Previous native integer/Image/file
 evidence remains attributed to its prior retained release, verified-a5c0c6c.
-Clean release and Poche regression retention follow these candidate checks.
+The retained clean 0c350a5 release matches all 106 candidate source fingerprints
+and the exact tested provider binary. Its existing Poche regression gates pass:
+seven symbolic privacy theorems, three imported equalities and a well-typed
+privacy mutant; 15,503 scalar comparisons, seven equalities and two controls;
+and the 22-state/44-observation/21-transition trajectory with 300 chance
+partitions, eight controls and 67 requests. The exact transcript, 17 source
+hashes, 13 compiled conformance fingerprints, Poche HEAD and dirty paths remain
+unchanged against verified-a5c0c6c. Receipts are retained under
+target/verified-0c350a5. This does not rerun or reattribute the prior exhaustive
+graph from 6802c1e. No Poche source or application changes were made.
 
 This completes the bounded native and JavaScript networking slice. Continue
 with executable C (5.15) and keep Poche model expansion deferred.
