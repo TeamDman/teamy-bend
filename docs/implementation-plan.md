@@ -1312,6 +1312,17 @@ rejections. Its frozen evidence is retained under target/audit-executable-c.
 Previous JavaScript networking and native runtime comparisons stay attributed to
 their earlier retained releases; these tests do not reattribute those runs.
 
+The retained clean 4b3f78f release matches all 115 candidate source fingerprints
+and the exact tested provider binary. Its existing Poche regression gates pass:
+seven symbolic privacy theorems, three imported equalities and a well-typed
+privacy mutant; 15,503 scalar comparisons, seven equalities and two controls;
+and the 22-state/44-observation/21-transition trajectory, all 300 chance
+partitions, eight controls and 67 requests. The exact trajectory transcript,
+17 source hashes, 13 compiled conformance fingerprints, Poche HEAD and dirty
+paths remain unchanged. Receipts are retained under target/verified-4b3f78f.
+No Poche source or application changes were made. The earlier exhaustive graph
+remains attributed to 6802c1e and was not rerun for this milestone.
+
 Remaining work within this milestone includes reference-count reclamation,
 file/network host adapters and their complete effect suites, higher-order erased
 type specialization, tail-call/task lowering, worker wake notification, and broader native-value/platform
@@ -1319,6 +1330,10 @@ qualification. Unresolved Array element layouts fail during compilation instead
 of silently choosing an incompatible representation. The current retained arena
 and bounded worker polling are explicit foundations, not optimized CPU parity.
 Keep this task in progress until its full acceptance scope is met.
+The next implementation step is C file effects, carrying forward owned handles,
+worker completion/cancellation and the existing upstream file contract tests.
+Continue with network adapters and reclamation before claiming C runtime parity;
+Poche model expansion stays deferred.
 
 ## Completion and risks
 
