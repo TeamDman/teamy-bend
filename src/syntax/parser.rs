@@ -774,6 +774,9 @@ impl Parser<'_> {
                 "IO.print" => Some(BuiltinForeign::Print),
                 "IO.write" => Some(BuiltinForeign::Write),
                 "IO.print_err" => Some(BuiltinForeign::PrintErr),
+                "IO.spawn" => Some(BuiltinForeign::Spawn),
+                "IO.sleep" => Some(BuiltinForeign::Sleep),
+                "IO.now" => Some(BuiltinForeign::Now),
                 _ => None,
             }
         } else {

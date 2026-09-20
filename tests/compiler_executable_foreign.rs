@@ -109,12 +109,12 @@ fn matching_a_request_fails_before_its_foreign_implementation_runs() {
 }
 
 #[test]
-fn undefined_foreign_return_cannot_become_a_bend_value() {
+fn undefined_foreign_return_without_a_resumer_reports_deadlock() {
     let output = Fixture::new(
         "import Base\ndef missing() -> IO(U32):\n  import \"./effect.js\"\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    value : U32 <- missing()\n    IO.print(\"AFTER\")\n",
         "function missing(){}",
     ).run();
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("suspension is not supported"));
+    assert!(String::from_utf8_lossy(&output.stderr).contains("deadlock"));
 }

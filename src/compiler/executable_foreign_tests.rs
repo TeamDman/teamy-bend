@@ -154,14 +154,14 @@ fn halt_preserves_order_status_and_stops_following_effects() {
 #[test]
 fn unsupported_scheduling_fails_explicitly() {
     for (foreign, message) in [
-        ("[{run:()=>undefined}]", "suspension is not supported"),
+        ("[{run:()=>undefined}]", "deadlock"),
         (
             "[{run:()=>Promise.resolve(7)}]",
             "asynchronous foreign results",
         ),
         (
-            "[{run:()=>{process.stdout.write('BAD');return 1},need:()=>{throw Error('CALLED')}}]",
-            "_need scheduling is not supported",
+            "[{run:()=>{process.stdout.write('BAD');return 1},need:()=>({read:true})}]",
+            "readiness scheduling is not supported",
         ),
         ("[{}]", "foreign implementation is missing"),
     ] {

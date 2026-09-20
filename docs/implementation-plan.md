@@ -281,9 +281,10 @@ consumer is a distinct executable JavaScript emitter; the strict pure compiler
 and proof-check result remain separate. `compile --executable` supports native
 JavaScript representations, synchronous foreign imports, curried callbacks and
 the console driver. Foreign source is embedded without running it at compile
-time. Undefined results, promises and readiness hooks fail explicitly while
-scheduler support remains unfinished.
-The C interface and effect driver, scheduling, handles and the other 31 Base
+time. Undefined results now suspend in the cooperative JavaScript scheduler;
+saved continuations, spawned tasks and time hooks are supported. Promises and
+descriptor readiness remain explicit failures. The C interface and effect driver,
+native scheduling, channels, handles and the other 28 Base
 foreign effects remain required.
 Upstream foreign return contracts can contain false equality payloads; they
 are runtime assumptions and must never mint strict proof evidence. This is
@@ -596,19 +597,31 @@ Native surface printing, scheduler, executable C and remaining U6 scope stay ope
 
 ### [~] 5.8 Add cooperative JavaScript tasks and timers
 
-Work: implement the reference FIFO continuation scheduler, undefined suspension,
-saved continuation resumption, tasks that outlive main, terminal Halt and
-deadlock reporting. Add sealed IO.spawn, IO.sleep and IO.now contracts. Preserve
-the synchronous generated-program interface with a portable Node timer wait;
-promises, descriptor readiness and native Rust scheduling remain unsupported.
-Queue order, overdue timers and resource bounds need explicit coverage. The
-strict proof result and foreign request identity must remain separate.
+Implementation is complete: the reference FIFO continuation scheduler supports
+undefined suspension, saved continuation resumption, tasks that outlive main,
+terminal Halt and deadlock reporting. Sealed IO.spawn, IO.sleep and IO.now retain
+their exact source signatures. The portable Node timer wait preserves the
+synchronous generated-program interface; promises, descriptor readiness and
+native Rust scheduling remain unsupported. Queue, live-task and transition
+budgets fail explicitly. Strict proof results and private request identity
+remain separate.
 
-Validation: compare the actual upstream scheduler with a deterministic timer-only
-host adapter and run the five existing spawn/sleep/clock fixtures. Retain the
-console/foreign and strict proof regressions, inspect sealed origins and erased
-arguments independently, then run the full gate and Poche release checks.
-Channels and ordinary fork/join helpers remain the following scheduler work.
+Validation: 209 deterministic traces match the actual upstream scheduler with
+an explicit timer-only host adapter. This comparison exposed a missing host
+wait for zero/overdue deadlines; the corrected adapter preserves that scheduling
+point. The five upstream spawn/sleep/clock fixtures match stdout/stderr/status.
+All 34 prior executable fixtures still pass: 31 exact matches and three expected
+failures with distinct diagnostics. Nine new scheduler tests and independent
+origin, erasure, request, lifetime and resource-limit reviews pass. The complete
+quality gate passes 266 tests, including four compile-fail API examples, with
+two optional profilers ignored. Strict library/test Clippy also passes.
+
+The frozen candidate passes the complete 1,302-fixture strict audit with unchanged
+361 accepted positives, 492 rejected positives and 449 rejected negatives;
+there are no accepted negatives, crashes or changed compiled source fingerprints.
+The task example compiles and prints main completion before its delayed child.
+Clean-release Poche regressions and publication remain pending. Channels and
+ordinary fork/join helpers remain the following scheduler work.
 
 ## Completion and risks
 

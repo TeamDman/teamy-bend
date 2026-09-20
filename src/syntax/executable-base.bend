@@ -238,3 +238,15 @@ def IO.pass(-A: Type, r: Result<&1, &1, U32 & String, A>) -> IO(A):
 
 def IO.try(-A: Type, act: IO(Result<&1, &1, U32 & String, A>)) -> IO(A):
   IO.bind(Result<&1, &1, U32 & String, A>, A, act, IO.pass(A))
+
+def IO.spawn(-A: Type, act: IO(A)) -> IO(Unit):
+  import "./effs/spawn.c"
+  import "./effs/spawn.js"
+
+def IO.sleep(ms: U32) -> IO(Unit):
+  import "./effs/sleep.c"
+  import "./effs/sleep.js"
+
+def IO.now() -> IO(Nat):
+  import "./effs/now.c"
+  import "./effs/now.js"

@@ -6,7 +6,7 @@ A Rust rewrite of the Bend 2 proof language, started from
 **Status: working proof-language subset; full rewrite in progress.** Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Native console IO and executable JavaScript use a separate contract checker.
-Generated JavaScript supports synchronous foreign calls and callbacks.
+Generated JavaScript supports foreign calls, callbacks, cooperative tasks and timers.
 All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
@@ -32,6 +32,8 @@ node target/induction.cjs
 cargo run -- compile examples/induction.bend --target c --output target/induction.c
 cargo run -- compile --executable examples/console.bend --output target/console.cjs
 node target/console.cjs
+cargo run -- compile --executable examples/tasks.bend --output target/tasks.cjs
+node target/tasks.cjs
 ```
 
 `check` requires complete proofs for every ordinary law and checks ordinary
@@ -54,10 +56,12 @@ compiler integration tests, or configure `TEAMY_BEND_NODE` for the tests.
 `compile --executable` emits a standalone Node.js program from executable
 contracts. IO entries preserve raw console output and exit status; printable
 pure entries use Bend text. Synchronous foreign JavaScript uses native values,
-curried callbacks and a shared scope for imported sources. Compilation embeds
+curried callbacks and a shared scope for imported sources. Spawned tasks remain
+live after main completes; timers and saved continuations use a FIFO scheduler.
+Compilation embeds
 foreign source; running the generated program executes it with Node's host
-permissions. Scheduling, asynchronous suspension and executable C remain
-unfinished. See [executable JavaScript](docs/executable-javascript.md).
+permissions. Channels, host readiness and executable C remain unfinished.
+See [executable JavaScript](docs/executable-javascript.md).
 
 `compile --target c` emits portable C11 with the same output format, lazy
 closures and checked proof erasure. Build the emitted file with a C11 compiler.

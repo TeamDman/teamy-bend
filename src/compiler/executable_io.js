@@ -1,7 +1,12 @@
-// SPDX-License-Identifier: MPL-2.0
-// Execution-only synchronous IO driver. Foreign JavaScript is trusted host code;
+// SPDX-License-Identifier: Apache-2.0
+// Cooperative scheduling derived from Bend 2.0.5, Copyright 2026 HigherOrderCO.
+// Bounded Node timer adapter and changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
+// Execution-only IO driver. Foreign JavaScript is trusted host code;
 // its returned values are not proof certificates or validated Bend constructors.
 const $tbRequests = new WeakSet();
+let $tbIo = null;
+const $tbPendingLimit = 131072;
+const $tbWaitWord = new Int32Array(new SharedArrayBuffer(4));
 
 function $tbMakeRequest(index, args, continuation) {
   const foreign = $tbForeign[index];
@@ -70,6 +75,123 @@ function $tbPrintErr(text) {
   return { $: 'Unit' };
 }
 
+function $tbSpawn(action) {
+  $tbPush(action, value => ({ $: 'Emit', value }), true);
+  return { $: 'Unit' };
+}
+function $tbSleep() { return { $: 'Unit' }; }
+function $tbSleepNeed() { return { time: true }; }
+function $tbNow() { return BigInt(Math.floor(performance.now())); }
+
+function $tbPending(io, extra) {
+  if (io.runs.length - io.head + io.waits.length + extra > $tbPendingLimit) {
+    throw new Error('IO pending task budget exhausted');
+  }
+}
+
+function $tbPush(fun, arg, fresh) {
+  $tbTick();
+  const io = $tbIo;
+  if (io === null || typeof fun !== 'function') {
+    throw new Error('IO task scheduling requires an active scheduler and a function');
+  }
+  $tbPending(io, 1);
+  if (fresh && io.live >= $tbPendingLimit) throw new Error('IO live task budget exhausted');
+  io.runs.push({ fun, arg });
+  if (fresh) io.live++;
+}
+
+function $tbWake(wait) {
+  const value = $tbSuspendable(wait.more());
+  return value === undefined ? undefined : $tbForceCall(wait.k, [value]);
+}
+
+function $tbWait(io) {
+  let soon = Infinity;
+  for (const wait of io.waits) { $tbTick(); soon = Math.min(soon, wait.at); }
+  const delay = Math.ceil(soon - performance.now());
+  $tbTick();
+  // Poll even for overdue timers, matching upstream's scheduling point.
+  // Timer-only Node waits are synchronous: promises and ordinary event-loop
+  // callbacks are not pumped. Long sleeps recheck the shared budget each second.
+  Atomics.wait($tbWaitWord, 0, 0, Math.min(Math.max(0, delay), 1000));
+  const now = performance.now();
+  const waiting = io.waits;
+  io.waits = [];
+  // If several deadlines are overdue, upstream resumes registration order.
+  for (const wait of waiting) {
+    $tbTick();
+    if (wait.at <= now) $tbPush($tbWake, wait, false);
+    else io.waits.push(wait);
+  }
+}
+
+function $tbRunTasks(main) {
+  if ($tbIo !== null) throw new Error('IO scheduler is already active');
+  const io = { runs: [], head: 0, live: 0, waits: [] };
+  $tbIo = io;
+  try {
+    $tbPush(main, value => ({ $: 'Emit', value }), true);
+    while (true) {
+      $tbTick();
+      if (io.head === io.runs.length) {
+        io.runs.length = 0;
+        io.head = 0;
+        if (io.live === 0) return 0;
+        if (io.waits.length === 0) throw new Error('IO deadlock: no runnable task or timer');
+        $tbWait(io);
+        continue;
+      }
+      const task = io.runs[io.head];
+      io.runs[io.head++] = undefined;
+      if (io.head >= 4096 && io.head * 2 >= io.runs.length) {
+        io.runs = io.runs.slice(io.head);
+        io.head = 0;
+      }
+      let operation = $tbForceCall(task.fun, [task.arg]);
+      while (true) {
+        $tbTick();
+        operation = $tbSuspendable(operation);
+        if (operation === undefined) break;
+        if ($tbIsRequest(operation)) {
+          if (typeof operation.run !== 'function') {
+            throw new Error('JavaScript foreign implementation is missing');
+          }
+          // The hook receives no arguments, with the request as its receiver.
+          const need = operation.need?.() ?? {};
+          if (need.read || need.write) throw new Error('IO readiness scheduling is not supported');
+          if (need.time) {
+            const at = performance.now() + Number(operation.args[0]);
+            if (!Number.isFinite(at)) throw new Error('IO timer deadline must be finite');
+            $tbPending(io, 1);
+            const request = operation;
+            io.waits.push({ at, k: request.continuation,
+              more: () => request.run(...request.args, request.continuation) });
+            break;
+          }
+          const value = $tbSuspendable(operation.run(...operation.args, operation.continuation));
+          if (value === undefined) break;
+          operation = $tbForceCall(operation.continuation, [value]);
+        } else if (operation && operation.$ === 'Emit') {
+          if (io.live <= 0) throw new Error('IO completion has no live task');
+          io.live--;
+          break;
+        } else if (operation && operation.$ === 'Halt') {
+          $tbOutput(2, operation.message + '\n');
+          return operation.code >>> 0;
+        } else {
+          throw new Error('IO action returned neither an operation nor a foreign request');
+        }
+      }
+    }
+  } finally {
+    io.runs.length = 0;
+    io.waits.length = 0;
+    io.live = 0;
+    $tbIo = null;
+  }
+}
+
 // Companion modules use these upstream runtime helper names. The driver calls
 // its private-prefixed helpers, so companion-local declarations cannot replace
 // bundled console behavior. These are runtime utilities, not foreign contracts.
@@ -89,16 +211,20 @@ function io_sys() { throw new Error('native system FFI is not supported by this 
 function io_fail(code) {
   return { $: 'Fail', error: io_tup(code >>> 0, String(io_sys().strerror(code))) };
 }
-function io_push() { throw new Error('IO task scheduling is not supported'); }
+function io_push(fun, arg, fresh) { $tbPush(fun, arg, fresh); }
 function io_park_on() { throw new Error('IO readiness scheduling is not supported'); }
 
-function $tbSynchronous(value) {
-  if (value === undefined) throw new Error('asynchronous IO suspension is not supported');
+function $tbSuspendable(value) {
   if (value !== null && (typeof value === 'object' || typeof value === 'function')
       && typeof value.then === 'function') {
     throw new Error('asynchronous foreign results are not supported');
   }
   return value;
+}
+
+function $tbSynchronous(value) {
+  if (value === undefined) throw new Error('asynchronous IO suspension is not supported');
+  return $tbSuspendable(value);
 }
 
 function $tbRunMain(mainThunk, isIo, purePrinter) {
@@ -113,30 +239,7 @@ function $tbRunMain(mainThunk, isIo, purePrinter) {
       $tbOutput(1, purePrinter(main) + '\n');
       return 0;
     }
-    let operation = $tbForceCall(main, [value => ({ $: 'Emit', value })]);
-    while (true) {
-      $tbTick();
-      operation = $tbSynchronous(operation);
-      if ($tbIsRequest(operation)) {
-        if (typeof operation.run !== 'function') {
-          throw new Error('JavaScript foreign implementation is missing');
-        }
-        if (typeof operation.need === 'function') {
-          throw new Error('foreign _need scheduling is not supported');
-        }
-        // Preserve the upstream calling convention, including the trailing
-        // continuation argument. Synchronous callbacks are ordinary closures.
-        const value = $tbSynchronous(operation.run(...operation.args, operation.continuation));
-        operation = $tbForceCall(operation.continuation, [value]);
-      } else if (operation && operation.$ === 'Emit') {
-        return 0;
-      } else if (operation && operation.$ === 'Halt') {
-        $tbOutput(2, operation.message + '\n');
-        return operation.code >>> 0;
-      } else {
-        throw new Error('IO action returned neither an operation nor a foreign request');
-      }
-    }
+    return $tbRunTasks(main);
   } catch (error) {
     const message = $tbIsRequest(error)
       ? 'foreign request inspected outside the IO driver'

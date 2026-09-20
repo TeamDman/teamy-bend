@@ -31,7 +31,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   17 templates, 25 laws and 18 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, asynchronous foreign execution, non-console Base effects,
+GPU calls, hub fetch/publish, host readiness, most non-console Base effects,
 large native Nat values, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
@@ -75,8 +75,16 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-scheduler, file/network/window/audio Base effects and unsafe execution remain
+channels, native Rust scheduling, file/network/window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
+
+Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
+a cooperative FIFO scheduler. Undefined foreign returns suspend; saved
+continuations can resume through io_push. Main completion waits for spawned
+tasks, while Halt stops all pending work. Timers use a monotonic Node clock and
+synchronous waits; JavaScript event-loop callbacks and promises are not pumped.
+Descriptor readiness and channels remain unsupported. Native `run` explicitly
+rejects these scheduler contracts before invoking their arguments.
 
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in

@@ -177,7 +177,7 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     assert!(source.base_names.contains("IO"));
     assert!(source.base_names.contains("IO.OP"));
     assert!(!source.base_names.contains("main"));
-    assert_eq!(source.foreign.len(), 3);
+    assert_eq!(source.foreign.len(), 6);
     for (name, builtin) in [
         ("IO.print", BuiltinForeign::Print),
         ("IO.write", BuiltinForeign::Write),
@@ -284,6 +284,155 @@ fn user_names_cannot_mint_base_origin_or_console_intrinsics() {
         load_executable(path).expect("syntax alone does not validate foreign return types");
     assert!(source.base_names.is_empty());
     assert_eq!(source.foreign["IO.print"].builtin, None);
+}
+
+#[test]
+fn bundled_scheduler_contracts_keep_source_order_exact_types_and_erased_arity() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(&path).expect("scheduler contracts load without executing them");
+    let checked =
+        check_executable(&source).expect("scheduler contracts use ordinary foreign checking");
+    let mut previous = source.book.declarations.iter().position(|declaration| {
+        matches!(declaration, Declaration::Def(definition) if definition.name == "IO.try")
+    }).expect("IO.try precedes the upstream scheduler declarations");
+    for (name, builtin, parameters, quantities, expected_type) in [
+        (
+            "IO.spawn",
+            BuiltinForeign::Spawn,
+            &["A", "act"][..],
+            &[Quant::None, Quant::Lone][..],
+            "@-A:Type -> @act:IO(A) -> IO(Unit)",
+        ),
+        (
+            "IO.sleep",
+            BuiltinForeign::Sleep,
+            &["ms"][..],
+            &[Quant::Lone][..],
+            "@ms:U32 -> IO(Unit)",
+        ),
+        ("IO.now", BuiltinForeign::Now, &[][..], &[][..], "IO(Nat)"),
+    ] {
+        let metadata = &source.foreign[name];
+        assert!(source.base_names.contains(name));
+        assert_eq!(metadata.builtin, Some(builtin));
+        assert_eq!(metadata.declared_arity, parameters.len());
+        assert_eq!(metadata.parameters, parameters);
+        assert_eq!(metadata.local_symbol, name.to_lowercase().replace('.', "_"));
+        assert_eq!(metadata.imports.len(), 2);
+        assert_eq!(metadata.imports[0].target, ForeignTarget::C);
+        assert_eq!(metadata.imports[1].target, ForeignTarget::JavaScript);
+        let position = source.book.declarations.iter().position(|declaration| {
+            matches!(declaration, Declaration::Def(definition) if definition.name == name)
+        }).unwrap();
+        assert!(
+            position > previous,
+            "{name} keeps upstream declaration order"
+        );
+        previous = position;
+        let Declaration::Def(definition) = &source.book.declarations[position] else {
+            unreachable!()
+        };
+        assert!(definition.foreign && definition.body.is_none());
+        assert_eq!(
+            definition
+                .parameters
+                .iter()
+                .map(|parameter| parameter.quant)
+                .collect::<Vec<_>>(),
+            quantities
+        );
+        assert_eq!(definition.ty.to_string(), expected_type);
+        assert_eq!(
+            checked.definition_type(name).unwrap().to_string(),
+            expected_type
+        );
+    }
+    check_book(&source.book).expect_err("scheduler contracts cannot mint a strict proof token");
+    let strict = load(&path).expect("strict Base remains separate");
+    check_book(&strict).expect("the pure bundled library remains strictly checked");
+    for name in ["IO.spawn", "IO.sleep", "IO.now"] {
+        assert!(!strict.declarations.iter().any(|declaration| {
+            matches!(declaration, Declaration::Def(definition) if definition.name == name)
+        }));
+    }
+}
+
+#[test]
+fn scheduler_spelling_and_user_foreign_symbols_do_not_mint_builtin_origin() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "library.bend",
+        r#"import Base
+def IO.spawn(-A: Type, act: IO(A)) -> IO(Unit): import "spawn.js"
+def IO.sleep(ms: U32) -> IO(Unit): import "sleep.js"
+def IO.now() -> IO(Nat): import "now.js"
+"#,
+    );
+    let path = fixture.write("main.bend", "import library.bend as L\n");
+    let duplicate =
+        load_executable(&path).expect_err("importing Base reserves its exact scheduler names");
+    assert!(
+        duplicate.message.contains("duplicate definition: IO.spawn"),
+        "{duplicate}"
+    );
+    fixture.write(
+        "library.bend",
+        r#"import Base
+def io_spawn(-A: Type, act: IO(A)) -> IO(Unit): import "spawn.js"
+def io_sleep(ms: U32) -> IO(Unit): import "sleep.js"
+def io_now() -> IO(Nat): import "now.js"
+"#,
+    );
+    let source = load_executable(path).expect("matching host symbols in an ordinary module load");
+    for name in ["library.io_spawn", "library.io_sleep", "library.io_now"] {
+        assert_eq!(source.foreign[name].builtin, None, "{name}");
+        assert!(!source.base_names.contains(name), "{name}");
+    }
+    check_executable(&source).expect("user imports remain ordinary foreign assumptions");
+    let path = fixture.write("forged.bend", "type IO is Data: Pretend{}\ndef IO.spawn() -> IO: import \"spawn.js\"\ndef IO.sleep() -> IO: import \"sleep.js\"\ndef IO.now() -> IO: import \"now.js\"\n");
+    let forged = load_executable(path).expect("foreign gate is checked separately from parsing");
+    assert!(forged.base_names.is_empty());
+    assert!(
+        forged
+            .foreign
+            .values()
+            .all(|metadata| metadata.builtin.is_none())
+    );
+    assert!(
+        check_executable(&forged)
+            .unwrap_err()
+            .to_string()
+            .contains("actual Base IO")
+    );
+}
+
+#[test]
+fn native_scheduler_refusal_precedes_arity_and_console_payload_decoding() {
+    for (name, body) in [
+        (
+            "IO.spawn",
+            r#"def main() -> IO(Unit): IO.spawn(Unit, IO.print("child must not run"))"#,
+        ),
+        ("IO.sleep", "def main() -> IO(Unit): IO.sleep(1)"),
+        ("IO.now", "def main() -> IO(Nat): IO.now()"),
+    ] {
+        let fixture = Fixture::new();
+        let path = fixture.write("main.bend", &format!("import Base\n{body}\n"));
+        let checked =
+            check_executable(&load_executable(path).unwrap()).expect("scheduler action checks");
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| false)
+            .expect_err("native scheduling remains explicitly unavailable")
+            .to_string();
+        assert!(
+            error.contains(&format!("scheduler builtin {name}")),
+            "{error}"
+        );
+        assert!(stdout.is_empty() && stderr.is_empty());
+    }
 }
 
 #[test]

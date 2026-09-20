@@ -131,9 +131,12 @@ The complete foreign Base inventory has 34 functions:
 | Windows | Window.open, Window.frame, Window.set_title, Window.close |
 | Audio | Audio.open, Audio.write, Audio.close |
 
-The scheduler, opaque handle ownership, ordinary IO.fork/join and App helpers
-are still required. Preserve asynchronous
-suspension, channel close wakeups and tasks that outlive main.
+Generated JavaScript now has the FIFO continuation scheduler, undefined
+suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
+remaining work. The Node timer adapter retains the synchronous polling model.
+Native Rust scheduling, descriptor readiness, opaque handle ownership,
+channels, ordinary IO.fork/join and App helpers are still required. Preserve
+channel close wakeups and task lifetime when adding them.
 
 Start actual-output regression testing with upstream `tests/io/hello_print`,
 `hello_end_to_end`, `print_write`, `print_utf8_law`, `halt_utf8_law`,
@@ -153,7 +156,9 @@ The synchronous JavaScript slice is implemented in
 [executable JavaScript](executable-javascript.md). It consumes the typed IR,
 embeds reachable foreign sources without executing them during compilation,
 preserves native representations and callbacks, and supplies a console driver.
-Undefined returns, promises and readiness hooks reject pending scheduler work.
+Undefined returns can suspend and saved continuations can resume through io_push.
+Time hooks park on the bounded timer scheduler. Promises and descriptor readiness
+remain unsupported; this driver does not pump JavaScript event-loop callbacks.
 All 37 numeric contracts now execute in native IO and generated JavaScript;
 their proof signatures remain opaque, with target-specific text and math
 behavior recorded in [numeric execution](numeric-execution.md).

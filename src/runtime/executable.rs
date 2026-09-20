@@ -137,21 +137,27 @@ impl Machine<'_> {
                 "native execution does not support the foreign implementation of {name}"
             ))
         })?;
+        match builtin {
+            BuiltinForeign::Spawn | BuiltinForeign::Sleep | BuiltinForeign::Now => {
+                return Err(KernelError::new(format!(
+                    "native execution does not support the scheduler builtin {name}; compile to executable JavaScript"
+                )));
+            }
+            BuiltinForeign::Print | BuiltinForeign::Write | BuiltinForeign::PrintErr => {}
+        }
         let [text] = arguments else {
             return Err(KernelError::new("console request has an invalid arity"));
         };
         let bytes = self.read_text(*text)?;
-        match builtin {
-            BuiltinForeign::Print => {
-                self.write_bytes(stdout, &bytes, "stdout")?;
+        if builtin == BuiltinForeign::PrintErr {
+            self.flush(stdout, "stdout")?;
+            self.write_bytes(stderr, &bytes, "stderr")?;
+            self.write_bytes(stderr, b"\n", "stderr")?;
+            self.flush(stderr, "stderr")?;
+        } else {
+            self.write_bytes(stdout, &bytes, "stdout")?;
+            if builtin == BuiltinForeign::Print {
                 self.write_bytes(stdout, b"\n", "stdout")?;
-            }
-            BuiltinForeign::Write => self.write_bytes(stdout, &bytes, "stdout")?,
-            BuiltinForeign::PrintErr => {
-                self.flush(stdout, "stdout")?;
-                self.write_bytes(stderr, &bytes, "stderr")?;
-                self.write_bytes(stderr, b"\n", "stderr")?;
-                self.flush(stderr, "stderr")?;
             }
         }
         self.allocate(Thunk::Ready(Value::Constructor {

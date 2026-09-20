@@ -170,6 +170,9 @@ pub(crate) enum BuiltinForeign {
     Print,
     Write,
     PrintErr,
+    Spawn,
+    Sleep,
+    Now,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]

@@ -21,7 +21,7 @@ Ordinary matching, including a fallback arm, rejects a request before its effect
 runs. Source Char constructors validate Unicode scalars eagerly; this also
 catches a discarded invalid Char, unlike the current lazy native `run` backend.
 
-## Synchronous foreign calls
+## Foreign calls and cooperative scheduling
 
 The backend selects the first JavaScript import for each reachable foreign
 declaration. It deduplicates canonical paths and embeds sources in one shared
@@ -50,12 +50,25 @@ cases such as truthy numeric Bool values, negative BigInt Nat values and lone
 surrogate strings. It does not apply the typed data protocol's validation to
 these values. Runtime assumptions about foreign results do not establish proofs.
 
-The synchronous driver passes live arguments and the trailing continuation.
-An undefined return, promise or `_need` readiness hook fails explicitly.
-Resuming saved continuations, timers, channels, host scheduling and the remaining
-Base effects require further work. Synchronous companion helpers `io_bytes`,
+The driver passes live arguments and the trailing continuation. An undefined
+foreign return suspends the current task. A saved continuation resumes through
+`io_push(function, argument, fresh)`: `fresh` starts an additional live task,
+while false resumes an existing task. Runnable tasks execute in FIFO order.
+Main completion waits for every live task; Halt stops the entire scheduler.
+If all tasks suspend without a runnable continuation or timer, execution reports
+deadlock. Pending requests retain their private identity throughout scheduling.
+
+Bundled IO.spawn, IO.sleep and IO.now implement task creation, timer suspension
+and monotonic millisecond time. A foreign `_need()` hook with `time: true` parks
+the request until its first argument's millisecond delay expires, then invokes
+its implementation. Runnable work precedes timer checks, and multiple overdue
+timers resume in registration order. The Node adapter uses bounded synchronous
+Atomics waits, preserving upstream's synchronous polling model. It does not
+pump event-loop callbacks or await promises; promises still reject explicitly.
+Descriptor readiness, channels and the remaining Base effects require further
+work. Companion helpers `io_bytes`,
 `io_text`, `io_out`, `io_errs`, `io_done` and `io_tup` are provided. Native
-system FFI and scheduling helpers reject explicitly pending the platform layer.
+system FFI and descriptor readiness helpers reject explicitly pending the platform layer.
 Foreign sources depending on upstream's Bun/POSIX system driver still require
 that missing compatibility layer.
 
@@ -66,7 +79,10 @@ nested non-tail calls and limits native arrays to 131,072 elements. Tail calls
 use a trampoline. Pure output limits are 96 levels, 16,384 visited nodes and
 8 MiB of text; string construction and each console write also have an 8 MiB
 byte limit. These are fail-closed execution limits, not upstream performance
-parity. Arbitrary host JavaScript runs outside Bend's evaluation budget.
+parity. The scheduler shares the transition budget and permits at most 131,072
+live tasks and 131,072 queued tasks/timers. Each individual timer wait is capped
+at one second before rechecking the clock; this does not shorten its deadline.
+Arbitrary host JavaScript runs outside Bend's evaluation budget.
 
 Regressions cover compile-time non-execution, unchanged output files after
 failed checks, UTF-8/NUL, exit handling, callbacks, erased arguments and fields,
@@ -78,11 +94,20 @@ conformance checks remain separate gates.
 A fixed release candidate passes 34 unchanged upstream console, foreign,
 marshalling, import and numeric programs: 31 agree exactly on stdout, stderr
 and status; three expected failures agree on stdout/status with different
-diagnostic wording. A separate 34-case numeric matrix passes exactly, covering
+diagnostic wording. The earlier synchronous release also passed a separate
+34-case numeric matrix exactly, covering
 31 generated boundary cases and the three upstream numeric programs already
-included above. This includes quiet and signaling NaN payloads. Eleven focused
-emitter tests and 18 foreign/driver tests supplement these comparisons.
+included above. This includes quiet and signaling NaN payloads. Fourteen focused
+emitter tests, 18 foreign/driver tests and nine scheduler tests supplement these
+comparisons.
 
-The full rewrite still requires asynchronous scheduling, executable C, the
-remaining numeric/library contracts, GPU support and the rest of the upstream
+Scheduler comparisons cover 209 deterministic traces against the actual upstream
+queue/wait/run implementation, including overdue timers, saved continuations,
+task lifetime, deadlock and Halt. Five unchanged upstream spawn/sleep/clock
+programs also match stdout, stderr and status. These timer comparisons replace
+only upstream's Bun/POSIX host polling with an explicitly identified Node
+timer-only adapter; they do not establish descriptor-readiness compatibility.
+
+The full rewrite still requires channels, host readiness, native Rust scheduling,
+executable C, remaining library contracts, GPU support and the rest of the upstream
 CLI. See the [implementation plan](implementation-plan.md).

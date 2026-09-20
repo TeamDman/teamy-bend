@@ -36,9 +36,12 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
         indices.insert(name.to_owned(), entries.len());
         if let Some(builtin) = foreign.builtin {
             let function = match builtin {
-                BuiltinForeign::Print => "$tbPrint",
-                BuiltinForeign::Write => "$tbWrite",
-                BuiltinForeign::PrintErr => "$tbPrintErr",
+                BuiltinForeign::Print => ("$tbPrint", "undefined"),
+                BuiltinForeign::Write => ("$tbWrite", "undefined"),
+                BuiltinForeign::PrintErr => ("$tbPrintErr", "undefined"),
+                BuiltinForeign::Spawn => ("$tbSpawn", "undefined"),
+                BuiltinForeign::Sleep => ("$tbSleep", "$tbSleepNeed"),
+                BuiltinForeign::Now => ("$tbNow", "undefined"),
             };
             // Resolve these outside the foreign lexical scope: a companion
             // file declaring the same name cannot replace bundled contracts.
@@ -99,10 +102,10 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
     }
     source.push_str("];\n})();\n");
     for (index, (builtin, _)) in entries.iter().enumerate() {
-        if let Some(function) = builtin {
+        if let Some((function, need)) = builtin {
             writeln!(
                 source,
-                "$tbForeign[{index}] = {{run:{function},need:undefined}};"
+                "$tbForeign[{index}] = {{run:{function},need:{need}}};"
             )
             .unwrap();
         }
