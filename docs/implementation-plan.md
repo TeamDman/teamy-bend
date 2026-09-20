@@ -642,7 +642,7 @@ compiled conformance fingerprints and original model/privacy bytes are unchanged
 Poche changes remain local; exhaustive evidence remains attributed to `6802c1e`.
 Channels and ordinary fork/join helpers remain the following scheduler work.
 
-### [~] 5.9 Add checked Set helpers and executable channels
+### [x] 5.9 Add checked Set helpers and executable channels
 
 Implementation is complete: eleven ordinary Bool/Maybe formatting and Set
 definitions, sequential List.for_each, an exact loader-sealed executable-only
@@ -680,8 +680,17 @@ upstream. Two unchanged long IO programs still reach the existing nesting limit;
 all 67 print expressions match in nine shorter chunks. This does not count as
 whole-program equivalence. No resource budget was raised.
 
-Publication and retained-clean-release Poche regressions are pending. The full
-U6 target/runtime/CLI work remains active.
+Completion: `f27f7ba6c4531d12c4bb33fcf2414238903593b3` is verified on
+public main. Its retained release reports that revision and a clean worktree;
+all 72 compiled source fingerprints match the audited candidate. Executable
+BLAKE3 is `0e535bb8516581f31fd16788f52879abe7056992af9c1ad29d83b5ef03413b3a`.
+It passes all seven Poche privacy laws and the wrong-viewer control, 15,503 scalar
+comparisons with seven equalities and two controls, and the micro trajectory:
+22 states, 21 transitions, 44 observations, 300 chance partitions and eight
+controls. Its 67 requests complete in 301 ms. All 13 compiled conformance
+fingerprints and 17 source fingerprints are unchanged from the timer release.
+Poche source changes remain local; the exhaustive graph is still attributed
+solely to `6802c1e`. Remaining U6 target/runtime/CLI work keeps the goal active.
 
 ## Completion and risks
 

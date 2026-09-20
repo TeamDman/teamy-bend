@@ -230,3 +230,11 @@ the mutant, 15,503 scalar comparisons and the complete diagnostic trajectory
 The trajectory uses 67 requests in 312 ms. All 13 compiled source fingerprints,
 model bytes and privacy proof/runner bytes are unchanged; the exhaustive graph
 was not rerun or reattributed to this release.
+
+The latest clean channel release, `f27f7ba`, passes the same privacy, scalar and
+trajectory gates. Its 67 trajectory requests complete in 301 ms. All 13 compiled
+conformance fingerprints and 17 source fingerprints remain unchanged from the
+timer release. The retained executable BLAKE3 is
+`0e535bb8516581f31fd16788f52879abe7056992af9c1ad29d83b5ef03413b3a`.
+The exhaustive graph remains attributed solely to `6802c1e`; Poche edits remain
+local.
