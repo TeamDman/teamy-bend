@@ -124,25 +124,19 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The 2026-09-19 audit covered all 1,302 fixtures: 360 expected-positive programs
-checked, 493 expected-positive programs were rejected, and all 449 expected
+The latest 2026-09-19 audit covered all 1,302 fixtures: 361 expected-positive programs
+checked, 492 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
-The native console slice preserves every acceptance/rejection from the Array
-slice. Its full quality gate passes 168 tests, including three compile-fail
-API boundary examples, with two optional local profilers ignored. An independent
-review also passed 17 provenance, source-order and direct-console scalar probes.
-The subsequent numeric/import/typed-lowering gate passes 190 tests, including
-four compile-fail API examples, with two optional profilers ignored. Ten focused
-tests cover typed lowering, now consumed by executable JavaScript emission.
-The synchronous executable-JavaScript slice passes 236 tests, including four
-compile-fail API examples, with two optional profilers ignored. Additional
-strict Clippy checking covers the library and integration tests.
-Its fixed candidate retains the same 360/493/449 strict audit counts across all
-1,302 fixtures, with zero abnormal exits, accepted negatives or changed
-acceptance decisions. The audited source fingerprints match the publication
-sources. Generated executable behavior has its separate 34-program and
-34-case numeric comparisons in [executable JavaScript](executable-javascript.md).
+The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
+accepted positives; the scheduler slice preserves those acceptance decisions.
+The current full quality gate passes 266 tests, including four compile-fail
+API boundary examples, with two optional local profilers ignored. Strict Clippy
+checking covers the library and integration tests. Audited compiled source
+fingerprints match the publication sources. Generated executable behavior has
+separate actual-output comparisons in
+[executable JavaScript](executable-javascript.md) and
+[numeric execution](numeric-execution.md); the strict audit does not test it.
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

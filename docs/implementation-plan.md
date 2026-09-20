@@ -259,6 +259,14 @@ ordinary numeric helper inventory identified in this slice. Native surface
 printing, large native Nat representation and executable C remain unfinished;
 see [numeric execution](numeric-execution.md).
 
+The next ordinary library group is Bool.show, Maybe.show, the nine Set helpers
+and sequential List.for_each. Channels need a separate sealed executable-only
+opaque Chan contract, four foreign operations and the four ordinary IO.fork/join
+helpers. A declaration-name inventory still finds 29 ordinary definitions, 28
+foreign functions, six opaque laws and three datatypes absent from the union of
+pure and executable Base after the timer slice. Completing that inventory alone
+does not establish target, runtime or language parity.
+
 Work: base library, templates, effects, packaging and supported CPU/GPU targets;
 record unavailable hardware and platform-specific validations accurately.
 Validation: compatibility matrix with observed results, not assumed parity.
@@ -595,7 +603,7 @@ unchanged; Poche edits remain local. The exhaustive graph receipt retains its
 original `6802c1e` attribution.
 Native surface printing, scheduler, executable C and remaining U6 scope stay open.
 
-### [~] 5.8 Add cooperative JavaScript tasks and timers
+### [x] 5.8 Add cooperative JavaScript tasks and timers
 
 Implementation is complete: the reference FIFO continuation scheduler supports
 undefined suspension, saved continuation resumption, tasks that outlive main,
@@ -620,8 +628,19 @@ The frozen candidate passes the complete 1,302-fixture strict audit with unchang
 361 accepted positives, 492 rejected positives and 449 rejected negatives;
 there are no accepted negatives, crashes or changed compiled source fingerprints.
 The task example compiles and prints main completion before its delayed child.
-Clean-release Poche regressions and publication remain pending. Channels and
-ordinary fork/join helpers remain the following scheduler work.
+
+Completion: the published implementation is
+`23f42e38b17e03ed7972cad4eb9a8359a84a66b7`. Its retained release reports
+that revision and a clean worktree; all 72 compiled fingerprints match the
+audited candidate. Executable BLAKE3 is
+`6c4a4e5c06415eaf6de8d2fb31cb6b2c55ffca3e3c982cdac8c3d555758a0051`.
+It passes all seven Poche privacy laws and the wrong-viewer control, 15,503
+scalar comparisons with seven equalities and two controls, and the micro
+trajectory: 22 states, 21 transitions, 44 observations, 300 chance partitions
+and eight controls. The 67 trajectory requests complete in 304 ms. All 13
+compiled conformance fingerprints and original model/privacy bytes are unchanged.
+Poche changes remain local; exhaustive evidence remains attributed to `6802c1e`.
+Channels and ordinary fork/join helpers remain the following scheduler work.
 
 ## Completion and risks
 
