@@ -554,7 +554,7 @@ Full scheduling, executable C, remaining library/CLI and GPU behavior still
 keep the goal active. The next implementation work remains in 3.2 and 3.3;
 completion of this publication milestone does not complete U6.
 
-### [~] 5.7 Complete numeric execution and ordinary readers
+### [x] 5.7 Complete numeric execution and ordinary readers
 
 Implementation is complete: all 37 upstream numeric primitive contracts preserve
 exact quantities and the `Maybe<&2, F32>` read result. The 19 remaining scalar
@@ -579,8 +579,36 @@ The frozen candidate's complete strict audit covers 1,302 fixtures: 361 accepted
 positives, 492 rejected positives and 449 rejected negatives, with no accepted
 negatives, crashes or newly rejected positives. The additional accepted fixture
 is `proof/word_add_comm.bend`. All compiled source fingerprints remain unchanged
-after the audit. Clean-release Poche regressions and publication remain pending.
+after the audit.
+
+Completion: `02aab0fae923828328d7b873a959ad84c3de3910` is verified on
+public `main`. The retained release reports that revision and a clean worktree;
+all 72 compiled source fingerprints match the audited candidate. Its executable
+BLAKE3 is `f539c5602723ede9e363285181da09548e9d952de8041f6d1817bd5c410bdff0`.
+It passes all seven Poche privacy laws and the wrong-viewer control, all 15,503
+scalar comparisons with seven equalities and two controls, and the micro
+trajectory: 22 states, 21 transitions, 44 observations, 300 chance partitions
+and eight controls. Its 67 trajectory requests complete in 364 ms. All 13
+compiled conformance fingerprints and original model/privacy source bytes are
+unchanged; Poche edits remain local. The exhaustive graph receipt retains its
+original `6802c1e` attribution.
 Native surface printing, scheduler, executable C and remaining U6 scope stay open.
+
+### [~] 5.8 Add cooperative JavaScript tasks and timers
+
+Work: implement the reference FIFO continuation scheduler, undefined suspension,
+saved continuation resumption, tasks that outlive main, terminal Halt and
+deadlock reporting. Add sealed IO.spawn, IO.sleep and IO.now contracts. Preserve
+the synchronous generated-program interface with a portable Node timer wait;
+promises, descriptor readiness and native Rust scheduling remain unsupported.
+Queue order, overdue timers and resource bounds need explicit coverage. The
+strict proof result and foreign request identity must remain separate.
+
+Validation: compare the actual upstream scheduler with a deterministic timer-only
+host adapter and run the five existing spawn/sleep/clock fixtures. Retain the
+console/foreign and strict proof regressions, inspect sealed origins and erased
+arguments independently, then run the full gate and Poche release checks.
+Channels and ordinary fork/join helpers remain the following scheduler work.
 
 ## Completion and risks
 
