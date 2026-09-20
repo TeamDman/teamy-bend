@@ -26,7 +26,7 @@ fn opaque_chan_metadata_requires_exact_origin_signature_and_declaration() {
     let fixture = Fixture::new();
     let path = fixture.write("main.bend", "import Base\n");
     let source = load_executable(&path).unwrap();
-    assert_eq!(source.opaque.len(), 1);
+    assert_eq!(source.opaque.len(), 2);
     assert_eq!(source.opaque["Chan"], OpaqueType::Chan);
     assert!(!source.foreign.contains_key("Chan") && !source.numeric.contains_key("Chan"));
     assert!(!source.book.declarations.iter().any(|declaration| {
@@ -357,7 +357,7 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     assert!(source.base_names.contains("IO"));
     assert!(source.base_names.contains("IO.OP"));
     assert!(!source.base_names.contains("main"));
-    assert_eq!(source.foreign.len(), 10);
+    assert_eq!(source.foreign.len(), 16);
     for (name, builtin) in [
         ("IO.print", BuiltinForeign::Print),
         ("IO.write", BuiltinForeign::Write),
@@ -684,4 +684,139 @@ fn foreign_template_instances_retain_the_declaring_module_and_actual_arity() {
             .expect("fixture directory")
             .join("effect.js")
     );
+}
+
+#[test]
+fn opaque_file_metadata_requires_exact_affine_kind_and_origin() {
+    use crate::kernel::Term;
+    use crate::kernel::term;
+
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(&path).unwrap();
+    assert_eq!(source.opaque["File"], OpaqueType::File);
+    let checked = check_executable(&source).unwrap();
+    assert_eq!(checked.definition_type("File").unwrap().to_string(), "Type");
+    for mutation in [
+        "origin",
+        "missing",
+        "wrong-type",
+        "kind",
+        "body",
+        "foreign",
+        "unsafe",
+        "arity",
+    ] {
+        let mut source = load_executable(&path).unwrap();
+        match mutation {
+            "origin" => {
+                source.base_names.remove("File");
+            }
+            "missing" => {
+                source.opaque.remove("File");
+            }
+            "wrong-type" => {
+                source.opaque.insert("File".into(), OpaqueType::Chan);
+            }
+            _ => {
+                let file = source
+                    .book
+                    .declarations
+                    .iter_mut()
+                    .find_map(|declaration| match declaration {
+                        Declaration::Def(definition) if definition.name == "File" => {
+                            Some(definition)
+                        }
+                        _ => None,
+                    })
+                    .unwrap();
+                match mutation {
+                    "kind" => file.ty = term(Term::Typ(term(Term::Qua(Quant::Many)))),
+                    "body" => file.body = Some(term(Term::Ref("U32".into()))),
+                    "foreign" => file.foreign = true,
+                    "unsafe" => file.unsafe_ = true,
+                    "arity" => file.parameters.push(crate::kernel::Binder {
+                        quant: Quant::None,
+                        name: "A".into(),
+                        id: 9000,
+                        ty: term(Term::Typ(term(Term::Qua(Quant::Lone)))),
+                    }),
+                    _ => unreachable!(),
+                }
+            }
+        }
+        check_executable(&source).expect_err(mutation);
+    }
+}
+
+#[test]
+fn file_contracts_keep_affine_handles_outside_error_results() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(path).unwrap();
+    let checked = check_executable(&source).unwrap();
+    for (name, builtin, arity, expected) in [
+        (
+            "IO.get_env",
+            BuiltinForeign::GetEnv,
+            1,
+            "@name:String -> IO(Result<&1, &1, Pair(U32)(String), String>)",
+        ),
+        (
+            "File.open",
+            BuiltinForeign::FileOpen,
+            2,
+            "@path:String -> @mode:String -> IO(Result<&1, &1, Pair(U32)(String), File>)",
+        ),
+        (
+            "File.read",
+            BuiltinForeign::FileRead,
+            2,
+            "@file:File -> @max:U32 -> IO(Pair(File)(Result<&1, &1, Pair(U32)(String), String>))",
+        ),
+        (
+            "File.read_bytes",
+            BuiltinForeign::FileReadBytes,
+            2,
+            "@file:File -> @max:U32 -> IO(Pair(File)(Result<&1, &1, Pair(U32)(String), List<&2, U32>>))",
+        ),
+        (
+            "File.write",
+            BuiltinForeign::FileWrite,
+            2,
+            "@file:File -> @data:String -> IO(Pair(File)(Result<&1, &1, Pair(U32)(String), Unit>))",
+        ),
+        (
+            "File.close",
+            BuiltinForeign::FileClose,
+            1,
+            "@file:File -> IO(Unit)",
+        ),
+    ] {
+        assert_eq!(source.foreign[name].builtin, Some(builtin));
+        assert_eq!(source.foreign[name].declared_arity, arity);
+        assert_eq!(checked.definition_type(name).unwrap().to_string(), expected);
+        let definition = source
+            .book
+            .declarations
+            .iter()
+            .find_map(|declaration| match declaration {
+                Declaration::Def(definition) if definition.name == name => Some(definition),
+                _ => None,
+            })
+            .unwrap();
+        assert!(
+            definition
+                .parameters
+                .iter()
+                .all(|parameter| parameter.quant == Quant::Lone)
+        );
+    }
+    let path = fixture.write("local.bend", "law File: Type\n");
+    let local = load_executable(path).unwrap();
+    assert!(local.opaque.is_empty());
+    check_executable(&local).expect_err("ordinary laws remain unfilled");
+    let path = fixture.write("foreign-file.bend", "import Base\ndef file_open(path: String, mode: String) -> IO(Result<&1, &1, Pair(U32)(String), File>): import \"custom.js\"\n");
+    let local = load_executable(path).unwrap();
+    assert_eq!(local.foreign["file_open"].builtin, None);
 }

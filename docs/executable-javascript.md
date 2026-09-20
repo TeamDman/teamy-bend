@@ -18,8 +18,10 @@ compilation. Default strict `compile` retains its constructor JSON interface.
 Console output uses synchronous UTF-8 writes, preserves embedded NUL and retries
 partial/interrupted writes. Pending foreign requests have a private identity.
 Ordinary matching, including a fallback arm, rejects a request before its effect
-runs. Source Char constructors validate Unicode scalars eagerly; this also
-catches a discarded invalid Char, unlike the current lazy native `run` backend.
+runs. Source Char constructors validate Unicode scalars eagerly, including
+discarded values. Native `run` remains lazy and uses C's raw Char encoding for
+effect text. The [target differences](native-files.md#target-differences) describe
+these separate contracts.
 
 ## Foreign calls and cooperative scheduling
 
@@ -65,12 +67,33 @@ its implementation. Runnable work precedes timer checks, and multiple overdue
 timers resume in registration order. The Node adapter uses bounded synchronous
 Atomics waits, preserving upstream's synchronous polling model. It does not
 pump event-loop callbacks or await promises; promises still reject explicitly.
-Descriptor readiness and the remaining Base effects require further
-work. Companion helpers `io_bytes`,
-`io_text`, `io_out`, `io_errs`, `io_done` and `io_tup` are provided. Native
-system FFI and descriptor readiness helpers reject explicitly pending the platform layer.
-Foreign sources depending on upstream's Bun/POSIX system driver still require
-that missing compatibility layer.
+Companion helpers `io_bytes`, `io_text`, `io_out`, `io_errs`, `io_done`, `io_tup`
+and `io_fail` are provided. `io_sys` honors a supplied globalThis.BEND_SYS.
+Otherwise it supplies the bounded Node file-read/error adapter described below.
+It does not implement the full Bun/POSIX system interface. Descriptor readiness,
+network and window/audio effects remain unfinished.
+
+## Environment and files
+
+IO.get_env and File.open/read/read_bytes/write/close use sealed executable
+contracts. File is an opaque affine Type: source code cannot construct or copy
+a handle. Strict proof Base excludes it. Generated JavaScript retains the
+upstream raw descriptor representation for trusted foreign code.
+
+Open accepts r/w/a. Reads perform one synchronous host read at the current
+cursor; text reads use a fresh TextDecoder and byte reads return List<&2, U32>.
+Writes finish successive short writes. Read/write return the handle outside
+Result even on failure, and close ignores host close failures. These calls are
+synchronous, matching upstream JavaScript. They do not use the native Rust
+worker pool or pump the JavaScript event loop.
+
+The default Node adapter supplies common file-error messages with a libuv
+fallback. It does not promise arbitrary libc locale equivalence. A supplied
+BEND_SYS remains authoritative for descriptor reads and strerror. JavaScript
+retains upstream's environment lookup and numeric error policy, including
+Windows differences from native execution. See
+[environment and file effects](native-files.md) for NUL names/paths, text decoding,
+errno and resource bounds.
 
 ## Channels and ordinary helpers
 
@@ -129,6 +152,10 @@ byte limit. These are fail-closed execution limits, not upstream performance
 parity. The scheduler shares the transition budget and permits at most 131,072
 live tasks and 131,072 queued tasks/timers/channel waiters in total. Channel
 accounting also caps retained handles and buffered payload slots at 131,072 each.
+File reads first clamp to INT32_MAX, then reject requests above the 8 MiB
+buffer limit. File writes and decoded text have the same byte limit, and tracked
+open file handles are capped at 131,072. A write making zero progress fails
+instead of looping. These limits do not bound arbitrary foreign host code.
 Each individual timer wait is capped
 at one second before rechecking the clock; this does not shorten its deadline.
 Arbitrary host JavaScript runs outside Bend's evaluation budget.
@@ -139,6 +166,14 @@ live proof/type nulls, shared source state, import order and request rejection.
 Actual-output comparisons use separately generated upstream JavaScript and
 capture stdout, stderr and exit status. Strict proof rejection and Poche
 conformance checks remain separate gates.
+
+Environment/file regressions cover missing and empty variables, exact sealed
+contracts, affine handles, cursor/EOF behavior, raw bytes and TextDecoder
+behavior. They also cover failed-operation handle retention, short writes,
+zero-progress refusal, byte limits and supplied BEND_SYS adapters. Publication
+comparisons and their target differences are recorded in the
+[implementation plan](implementation-plan.md); earlier evidence below retains
+its original scope.
 
 A fixed release candidate passes 34 unchanged upstream console, foreign,
 marshalling, import and numeric programs: 31 agree exactly on stdout, stderr
@@ -168,5 +203,6 @@ implementations produce the same order with identical injected oversleep.
 These comparisons cover timer behavior without claiming wall-clock determinism.
 
 The full rewrite still requires host readiness, arbitrary native foreign calls,
-executable C, remaining library contracts, GPU support and the rest of the upstream
+network/window/audio effects, executable C, remaining library contracts, GPU
+support and the rest of the upstream
 CLI. See the [implementation plan](implementation-plan.md).

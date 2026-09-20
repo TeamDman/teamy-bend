@@ -14,8 +14,9 @@
   into a claim that the entire requested rewrite is complete.
 - Historical parallel ownership is not a list of currently running agents.
   Native tasks, timers and channels are complete for this bounded native slice
-  (5.12). The next engine focus is environment and file effects (5.13). Keep
-  existing Poche checks as regressions and defer model expansion.
+  (5.12). Environment and file effects (5.13) are in final validation. The next
+  engine focus is descriptor readiness and TCP/UDP (5.14). Keep existing Poche
+  checks as regressions and defer model expansion.
 
 ## Goal wording and scope
 
@@ -53,7 +54,7 @@ in the ignored `.local/gpu-port-references.md` file at the repository root.
 | U7 | Then use the rewrite to formalize the user's Poche4 repo. | 4.1–4.3 |
 | U8 | Locate Poche4 at the approximate older games-repository path. | 1.1 |
 | U9 | Set an active goal for this work. | Goal tool, done |
-| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12; existing Poche regression coverage |
+| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12–5.14; existing Poche regression coverage |
 | U11 | Makepad strategies identified by the user as Rik Arends's work may help the later Bend GPU port. | GPU port references; 3.4, evaluation deferred to GPU phase |
 | U12 | The user reports those strategies improved teamy-tts; retain it as a second implementation reference. | GPU port references; user-reported provenance distinguished from inspected source |
 | U13 | Persist both local reference paths and their purpose across compaction; assess current goal wording. | Ignored local reference note; portable GPU reference document; accepted wording above |
@@ -309,8 +310,10 @@ are implemented. Channels have a separate sealed executable-only opaque Chan
 contract, four JavaScript foreign operations and four ordinary IO.fork/join
 helpers. Image/Event and four ordinary Image helpers are implemented; executable
 Base adds App and finite more/fold/play helpers. A declaration-name inventory
-still finds six ordinary definitions, 24 foreign functions and five opaque laws
-absent from the union of pure and executable Base after the playback slice.
+now finds six ordinary definitions, 18 foreign functions and four opaque laws
+absent from the union of pure and executable Base after environment/file support.
+The six file/environment contracts and sealed affine File type execute natively
+and in generated JavaScript; see 5.13 and [native files](native-files.md).
 Completing that inventory alone does not establish target, runtime or language
 parity.
 
@@ -340,7 +343,8 @@ time. Undefined results now suspend in the cooperative JavaScript scheduler;
 saved continuations, spawned tasks and time hooks are supported. Promises and
 descriptor readiness remain explicit failures. The C interface and effect driver,
 the remaining opaque handles and Base effects remain required. Native tasks,
-timers and channels now have their own implementation and evidence in 5.12.
+timers and channels now have their own implementation and evidence in 5.12;
+environment and file effects follow in 5.13.
 Upstream foreign return contracts can contain false equality payloads; they
 are runtime assumptions and must never mint strict proof evidence. This is
 required remaining rewrite work, not optional replacement scope.
@@ -991,37 +995,98 @@ Descriptor readiness, arbitrary native foreign callbacks, remaining platform
 effects, executable C and the remaining CLI/kernel/GPU scope stay open. This
 finishes the native task/timer/channel milestone, not the overall rewrite.
 
-### [ ] 5.13 Add native environment and file effects
+### [~] 5.13 Add native environment and file effects
 
-Next engine slice: IO.get_env, File.open/read/read_bytes/write/close and the
-sealed affine File type. Keep Poche model expansion deferred and use its existing
-checks as regressions. Executable C, descriptor readiness and GPU remain later
-engine milestones; consult the saved GPU references when that phase begins.
+IO.get_env and File.open/read/read_bytes/write/close are implemented in native
+Rust and generated executable JavaScript. Exact signatures and loader origin
+seal the affine File: Type contract; none of these host assumptions enters the
+strict proof Base. Read/write return the live handle outside Result on failure.
+Open accepts exactly r/w/a, byte reads return octets, text reads decode each
+chunk independently, and close consumes its handle while ignoring close errors.
 
-Start with shared Result/error/text conversion and IO.get_env. Preserve the
-missing-versus-empty distinction and embedded-NUL behavior; define and test the
-Windows/POSIX error policy explicitly. Then add exact File origin validation to
-the executable opaque checker without admitting arbitrary unfilled laws. Unlike
-reusable Chan(A): Data, File: Type is affine; read/write retain the handle outside
-Result even when the operation fails. Open accepts exactly r/w/a, byte reads
-produce List<&2, U32>, and close returns Unit even on a host close failure.
+Valid native open/read/write park through an owned-data worker pool. Workers
+never receive VM values or continuations; the VM packs results and resumes tasks.
+Pending continuations are direct GC roots. Runnable tasks precede collected host
+completions, which precede due timers. Environment lookup, invalid open arguments
+and close complete synchronously. Exit removes queued work and closes owned
+files. Already-running OS calls cannot be undone; their eventual replies and
+resources are dropped without resuming the abandoned VM.
 
-Upstream file open/read/write suspend through io_work. Worker threads perform
-host calls, then the scheduler packages results and resumes continuations. Port
-that scheduling boundary with bounded pending work, ownership and completion
-roots; a blocking filesystem call on the scheduler would be incomplete parity.
-Test progress of other tasks while host work is pending, and define cleanup on
-Halt/cancellation. Native io_str malformed-UTF-8 decoding differs from JavaScript
-TextDecoder; inspect and test it instead of silently using lossy Rust decoding.
+The process-wide pool grows to at most 64 workers, with 131,072 pending jobs,
+64 MiB of retained byte buffers and an 8 MiB per-transfer ceiling. Temporary text
+decoding and worker stacks are additional bounded allocations. This is not a
+total-process memory cap. Windows errors use an explicit CRT-style mapping;
+Unix native-byte/error handling is implemented but not runtime-validated here.
+The native codec follows upstream C io_str/io_utf8 even for malformed bytes and
+raw U32 character codes. Generated JavaScript retains synchronous host work,
+TextDecoder behavior and the upstream raw-descriptor foreign interface. A default
+Node host adapter provides file operations; supplied BEND_SYS remains authoritative.
+See [native files](native-files.md) for target differences and resource limits.
 
-Reference entry points: base.bend File and environment declarations;
-effs/get_env.c and effs/file_*.c; comp.ts io_str and worker dispatch/completion.
-Compare actual upstream get_env/get_env_own/stderr_failure, file_open_mode,
-file_roundtrip/fail_keeps_handle/read_bytes/text_utf8/path_utf8 fixtures. Isolate
-applicable file/environment cases from mixed nul_bytes coverage. Include short
-reads/writes, zero-length/EOF reads, append, failure-retains-handle, forced GC and
-terminal cleanup. Retain strict proof refusals, the full quality gate, upstream
-audit, frozen-source evidence and short Poche regressions before publication.
+Validation: ./check-all.ps1 passes 454 tests, including five compile-fail
+examples, with two optional profilers ignored. Strict library/test Clippy passes.
+The frozen candidate passes 18 whole-program cases through actual upstream
+checking/compilation/JavaScript execution and the native executable: nine original
+fixtures (temporary paths relocated where required) and nine exact checked test
+programs. Thirteen have exact cross-target results; five explicitly differ in
+Windows environment NUL handling, errno, malformed text or worker ordering.
+An independent oracle compares the production Rust codec with verbatim upstream
+C across 3,268 decoder cases and 3,017 full-U32 encoder cases: all 6,285 match.
+An actual Windows CRT probe confirms the tested errno and zero-byte read behavior.
+Complete generated C programs remain outside this validation.
+
+All 256 integer comparisons and 21 original Image workloads pass. The strict
+1,302-fixture audit remains 362 accepted positives / 491 rejected positives /
+449 rejected negatives, with no accepted negatives, crashes, changed source
+fingerprints or new rejections. This audit does not measure whole-engine
+completeness. Clean release and short Poche regressions remain the publication
+gate. Candidate source fingerprinting covers 91 files. Ignored
+evidence lives under target/audit-native-files, target/native-files-c-oracle,
+target/native-files-release-comparison, target/packed-word-native-files and
+target/image-native-files. Retained clean releases use target/verified-<commit>.
+
+Completion: publish the validated engine slice with an unchanged Poche source
+snapshot. Descriptor readiness, other platform effects, arbitrary native FFI,
+executable C and GPU remain unfinished engine work.
+
+### [ ] 5.14 Add native descriptor readiness and TCP/UDP
+
+Work: extend the existing native scheduler with bounded readiness registrations,
+sealed affine Socket/Listener contracts and all eleven TCP/UDP/close effects.
+Keep Poche model expansion deferred. Socket waits must not occupy file workers:
+the upstream slow-peer fixture parks 70 senders while timers and file work remain
+responsive, exceeding the 64-worker pool. Retain handles and pending continuations
+as GC roots, and release registrations/resources on close, Halt and cancellation.
+
+Preserve upstream ordering: TCP.accept, TCP.recv and UDP.recv_from register and
+park before their first syscall. Connect/send attempt immediately and park only
+when necessary; UDP.poll returns immediately. Preserve strict numeric IPv4
+addresses, ports at most 65535, rejected leading zeros/NUL, handles outside
+Result, partial TCP sends, short receives/EOF, datagram truncation and sender
+address/port. Use Winsock ownership/errors on Windows rather than treating
+sockets as CRT file descriptors. Decide and document platform adaptation before
+claiming support; apply owned Windows socket patterns where needed.
+
+Reference entry points: upstream comp.ts io_sys_addr, io_wait_on, io_wait and
+IO_READ dispatch; effs/tcp_*.c, udp_*.c, socket_close.c and listener_close.c;
+tests/io/tcp_* and udp_*. In this port, start from runtime/executable.rs,
+runtime/scheduler.rs, runtime/runtime_clock.rs and the file-job completion/GC
+integration. Generated JavaScript then needs a real readiness adapter and a
+driver that pumps Node callbacks; the current synchronous driver does not.
+
+Validation: run ./check-all.ps1 and strict library/test Clippy; compare real
+upstream loopback, refused/pending connection, slow-peer starvation, poll-empty,
+datagram truncation, close/error and forced-GC cases. Freeze source and executable
+fingerprints, rerun the strict audit and short existing Poche regressions before
+publication. Treat unavailable platforms as unverified.
+
+Completion: supported network effects preserve results, readiness ordering,
+ownership, cancellation and bounded resources on validated targets. Then advance
+to executable C: its foreign registration/callback ABI, constructor IDs/aliases,
+native representations, import deduplication and portable initialization remain
+required. Pure C compilation does not establish that interface. Window/audio and
+GPU remain later engine work; consult the saved GPU references when that phase
+begins.
 
 ## Completion and risks
 

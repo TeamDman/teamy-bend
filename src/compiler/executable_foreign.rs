@@ -15,6 +15,7 @@ use std::fmt::Write;
 use std::fs;
 
 const DRIVER: &str = include_str!("executable_io.js");
+const FILES: &str = include_str!("executable_files.js");
 
 pub(super) struct ForeignAssembly {
     pub(super) source: String,
@@ -46,6 +47,12 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
                 BuiltinForeign::ChanSend => ("$tbChanSend", "undefined"),
                 BuiltinForeign::ChanRecv => ("$tbChanRecv", "undefined"),
                 BuiltinForeign::ChanClose => ("$tbChanClose", "undefined"),
+                BuiltinForeign::GetEnv => ("$tbGetEnv", "undefined"),
+                BuiltinForeign::FileOpen => ("$tbFileOpen", "undefined"),
+                BuiltinForeign::FileRead => ("$tbFileRead", "undefined"),
+                BuiltinForeign::FileReadBytes => ("$tbFileReadBytes", "undefined"),
+                BuiltinForeign::FileWrite => ("$tbFileWrite", "undefined"),
+                BuiltinForeign::FileClose => ("$tbFileClose", "undefined"),
             };
             // Resolve these outside the foreign lexical scope: a companion
             // file declaring the same name cannot replace bundled contracts.
@@ -89,6 +96,7 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
         )));
     }
     let mut source = String::from(DRIVER);
+    source.push_str(FILES);
     source.push_str("\nconst $tbForeign = (() => {\n");
     source.push_str(&imports);
     source.push_str("return [\n");

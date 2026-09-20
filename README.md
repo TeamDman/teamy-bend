@@ -3,18 +3,19 @@
 A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).
 
-**Status: working proof-language subset; full rewrite in progress.** Native
+Status: working proof-language subset; full rewrite in progress. Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
-Native console IO, tasks, timers and channels use a separate execution contract checker.
+Native console IO, tasks, timers, channels, environment lookup and files use a
+separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
-and channels with fork/join.
+and channels with fork/join, plus the same environment and file contracts.
 All 37 numeric primitives execute in native IO and generated JavaScript;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
 The bundled Base contains 367 selected pure source declarations, including
 18 templates, Image quadtrees and Event values. Finite App playback runs through
-native console IO and generated JavaScript. GPU, effects and complete library
-compatibility remain unfinished.
+native IO and generated JavaScript. Host readiness, network/window/audio effects,
+executable C, GPU and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).
@@ -70,6 +71,10 @@ Compilation embeds
 foreign source; running the generated program executes it with Node's host
 permissions. Channel values preserve the reference foreign interface; fork/join
 helpers use the same scheduler. Host readiness and executable C remain unfinished.
+Environment and file effects use synchronous Node calls. The sealed affine File
+type prevents source code from copying handles; reads and writes return the
+handle on both success and failure. See
+[environment and file effects](docs/native-files.md) for target differences.
 See [executable JavaScript](docs/executable-javascript.md).
 
 `App.play` feeds finite lists of events through an App's tick callback and
@@ -100,11 +105,17 @@ and its subnames; `base --types` selects datatype declarations and kind laws.
 It always emits source text, including when output is redirected.
 
 `run` checks executable contracts and runs `main`. Its execution-only Base adds
-IO continuations, pure/bind/die/pass/try, and native print/write/print_err.
+IO continuations, pure/bind/die/pass/try, console effects, tasks, timers,
+channels, IO.get_env and File.open/read/read_bytes/write/close.
 Console output stays raw even with `--output-format json`. `Emit` discards its
 payload and exits successfully; `Halt` writes its message to stderr and sets
 the exit status. The console example prints `The answer is 42` and exits 0.
 Foreign signatures are runtime assumptions, separate from strict proof evidence.
+Valid native file open/read/write requests suspend through bounded host workers while other
+tasks can run. The collector retains their pending continuations. Halt and
+cancellation discard queued work and release owned files; an OS call already
+running may finish later without resuming the program. See
+[environment and file effects](docs/native-files.md) for ownership and limits.
 Arbitrary foreign source is retained by the loader; the native `run` command
 rejects its execution. Use executable JavaScript for synchronous foreign code.
 Generated C supports pure programs; its effect driver remains unfinished.
@@ -125,6 +136,9 @@ application directories. `RUST_LOG` or `--log-filter` configures diagnostics.
 
 See [compatibility and resource limits](docs/compatibility.md) for the supported
 surface and remaining work. Unsupported features return errors.
+Current work prioritizes the Bend2 engine and uses existing Poche models for
+regression checks. Full Poche formalization remains open, with its application
+architecture preserved.
 
 ## Development
 

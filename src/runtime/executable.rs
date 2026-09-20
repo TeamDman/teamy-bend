@@ -29,6 +29,9 @@ pub(super) const TEXT_BYTES: usize = 8 * 1024 * 1024;
 mod channel_io;
 #[cfg(test)]
 mod channel_tests;
+mod file_io;
+#[cfg(test)]
+mod file_tests;
 #[cfg(test)]
 mod scheduler_tests;
 
@@ -111,6 +114,8 @@ impl Machine<'_> {
         // Every exit discards pending tasks, timers, channel values and waits.
         self.scheduler = super::scheduler::State::default();
         self.channels = super::channels::State::default();
+        self.jobs = super::host_jobs::State::default();
+        self.files = super::file_handles::State::default();
         result
     }
 
@@ -153,15 +158,27 @@ impl Machine<'_> {
             if self.cancelled.is_some_and(|cancelled| cancelled()) {
                 return Err(KernelError::new("execution cancelled"));
             }
+            // Upstream takes completed host jobs before waking due timers,
+            // only after the runnable queue has drained.
+            self.resume_host_jobs()?;
             let now = clock.now()?;
             self.scheduler.wake(now);
             if self.scheduler.has_ready() {
                 return Ok(());
             }
-            let deadline = self.scheduler.next_deadline().ok_or_else(|| {
-                KernelError::new("native IO scheduler deadlock: no runnable task or timer")
-            })?;
-            clock.wait(deadline.saturating_sub(now).min(MAX_WAIT_NANOS))?;
+            let wait = self
+                .scheduler
+                .next_deadline()
+                .map(|deadline| deadline.saturating_sub(now).min(MAX_WAIT_NANOS));
+            if self.jobs.has_pending() {
+                clock.wait_for_work(&mut self.jobs, wait.unwrap_or(MAX_WAIT_NANOS))?;
+            } else if let Some(wait) = wait {
+                clock.wait(wait)?;
+            } else {
+                return Err(KernelError::new(
+                    "native IO scheduler deadlock: no runnable task, timer or host job",
+                ));
+            }
         }
     }
 
@@ -234,6 +251,14 @@ impl Machine<'_> {
             .get(name)
             .and_then(|foreign| foreign.builtin);
         let answer = match builtin {
+            Some(
+                builtin @ (BuiltinForeign::GetEnv
+                | BuiltinForeign::FileOpen
+                | BuiltinForeign::FileRead
+                | BuiltinForeign::FileReadBytes
+                | BuiltinForeign::FileWrite
+                | BuiltinForeign::FileClose),
+            ) => return self.file_request(builtin, arguments, continuation),
             Some(
                 builtin @ (BuiltinForeign::ChanNew
                 | BuiltinForeign::ChanSend
@@ -322,6 +347,16 @@ impl Machine<'_> {
             ))
         })?;
         match builtin {
+            BuiltinForeign::GetEnv
+            | BuiltinForeign::FileOpen
+            | BuiltinForeign::FileRead
+            | BuiltinForeign::FileReadBytes
+            | BuiltinForeign::FileWrite
+            | BuiltinForeign::FileClose => {
+                return Err(KernelError::new(format!(
+                    "file/environment builtin {name} reached console-only dispatch"
+                )));
+            }
             BuiltinForeign::Spawn | BuiltinForeign::Sleep | BuiltinForeign::Now => {
                 return Err(KernelError::new(format!(
                     "scheduler builtin {name} reached console-only dispatch"
@@ -439,12 +474,10 @@ impl Machine<'_> {
                         if name != "Chr" {
                             return Err(KernelError::new("expected a Char value"));
                         }
-                        char::from_u32(machine.read_u32(*code)?).ok_or_else(|| {
-                            KernelError::new("console text contains an invalid Unicode scalar")
-                        })
+                        machine.read_u32(*code)
                     })?;
-                    let mut bytes = [0; 4];
-                    let encoded = scalar.encode_utf8(&mut bytes).as_bytes();
+                    let (bytes, length) = super::host_files::encode_native_char(scalar);
+                    let encoded = &bytes[..length];
                     if result.len() + encoded.len() > TEXT_BYTES {
                         return Err(KernelError::new("console text byte budget exhausted"));
                     }

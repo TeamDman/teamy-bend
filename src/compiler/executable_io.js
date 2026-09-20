@@ -319,7 +319,7 @@ function io_done(value) { return { $: 'Done', value }; }
 function io_tup(...values) {
   return values.reduceRight((snd, fst) => ({ $: 'Tuple', fst, snd }));
 }
-function io_sys() { throw new Error('native system FFI is not supported by this JavaScript runtime'); }
+function io_sys() { return globalThis.BEND_SYS ?? $tbFileSys(); }
 function io_fail(code) {
   return { $: 'Fail', error: io_tup(code >>> 0, String(io_sys().strerror(code))) };
 }

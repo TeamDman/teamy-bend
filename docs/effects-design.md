@@ -4,11 +4,13 @@ This records the full implementation contract and the remaining work.
 It follows Bend 2.0.5 revision `e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`.
 The existing strict checker and Poche constructor protocol remain the proof path.
 
-The first native console slice is implemented: separate loader/check products,
-exact IO continuations and request values, ordinary IO helpers and three console
-handlers. Ten upstream output/status comparisons and strict boundary regressions
-pass. The arbitrary foreign interfaces, generated-target effect drivers and the
-remaining inventory below are still incomplete.
+Native execution and generated JavaScript implement console effects, tasks,
+timers, channels, environment lookup and files through separate execution
+contracts. JavaScript also supports synchronous foreign code and callbacks.
+Arbitrary native foreign calls, descriptor readiness, network/window/audio,
+executable C and GPU work remain unfinished. Engine parity remains the priority;
+existing Poche checks provide regressions without changing its application
+architecture.
 
 ## Checking contracts
 
@@ -57,17 +59,21 @@ writes its message and a newline to stderr, supplies the exit code and prevents
 subsequent effects. A foreign main is rejected. A user datatype called `IO`
 does not select this driver. Preserve separate pure-main behavior.
 
-The first implementation stage adds native `run` and bundled console handlers:
-print, write and print_err. Preserve UTF-8 bytes, embedded NUL, newline rules,
-stdout/stderr ordering, cancellation and bounded resources. This stage does not
-complete arbitrary foreign execution or the remaining effects.
+Native `run` implements print, write and print_err, preserving encoded bytes,
+embedded NUL, newline rules and stdout/stderr ordering. The initial console
+milestone passed ten upstream output/status comparisons and strict boundary
+regressions. Later scheduler and file work extends that implementation; these
+earlier comparisons retain their original scope.
 
-The native runtime is lazy. Its console decoder rejects invalid Unicode scalar
-values, but a discarded `IO.pure(Char, Chr{55296})` result is never decoded and
-currently succeeds. Upstream JavaScript validates that constructor eagerly and
-fails. The generated executable JavaScript backend also validates eagerly;
-the native difference remains open. Do not conflate source Char validation with
-the separate raw foreign-string contract below.
+Native effect text follows C's io_utf8 encoding for every U32 Char code,
+including surrogates and codes outside the Unicode scalar range. Native file
+text follows C's io_str decoding, preserving its raw Char results. The evaluator
+is lazy, so a discarded `IO.pure(Char, Chr{55296})` is never decoded.
+Upstream and generated JavaScript validate source Char constructors eagerly
+and reject that value. JavaScript file reads instead use TextDecoder's
+replacement and BOM behavior. Numeric parsing has separate scalar validation.
+See [environment and file effects](native-files.md#target-differences) for these
+target contracts; raw foreign strings have the separate interface below.
 
 ## Arbitrary foreign interfaces
 
@@ -111,13 +117,15 @@ Reachable foreign declarations select their first JS import; canonical source
 files execute once in an isolated shared scope. Foreign wrappers use the actual
 declared live telescope and the continuation. The driver must keep pending
 requests out of ordinary matches, preserve raw callbacks and treat undefined
-as a suspended action. Timers, channels and host-specific readiness need a
-portable implementation: upstream's Bun/POSIX runtime alone does not establish
-Windows/Node support.
+as a suspended action. Timers, channels and file effects have Node adapters.
+Descriptor readiness and the full Bun/POSIX system interface still require
+implementation and validation.
 
-## Remaining inventory and validation
+## Effect inventory and validation
 
-The complete foreign Base inventory has 34 functions:
+The complete foreign Base inventory has 34 functions. Both native execution and
+generated JavaScript implement the first 16, covering console, environment/tasks,
+channels and files:
 
 | Group | Functions |
 | --- | --- |
@@ -140,14 +148,39 @@ The channel family remains absent from strict Base. Descriptor readiness,
 remaining opaque handle families and window-backed App helpers are
 still required.
 
+The six environment/file effects are IO.get_env and
+File.open/read/read_bytes/write/close. File is a loader-sealed opaque affine
+Type; its exact signature and origin are checked before ordinary definitions.
+It remains absent from strict Base. Open accepts r/w/a, byte reads return
+List<&2, U32>, and read/write keep the handle outside Result on failure.
+Close consumes it and discards host close errors. Missing environment names
+remain distinct from existing empty values.
+
+Native valid open/read/write requests park through a shared bounded worker pool.
+Workers own host data and handles, never Bend values or continuations. The
+collector traces pending continuations, and the VM thread packs replies.
+Ready tasks precede host completions; collected completions precede due timers.
+Halt/cancellation remove queued jobs and close Machine-owned files. Already-running
+OS calls can finish later; their replies are dropped without resuming the VM.
+Cleanup does not join a blocked host call. These operations retain shared pool
+reservations until they finish or are discarded.
+
+JavaScript file work remains synchronous, matching upstream JS. Its io_sys
+helper honors a supplied BEND_SYS, with a bounded Node file adapter otherwise.
+Default messages cover common file errors and use a libuv fallback for others.
+The [environment/file contract](native-files.md) records worker limits,
+cancellation boundaries and native/JavaScript text, errno and NUL differences.
+Unix host code still needs runtime validation on Unix.
+
 Native Rust scheduling now uses Machine-owned FIFO tasks and timer queues whose
 continuations are traced by the collector. Synchronous effects run until a task
 parks or completes. Ready tasks precede timers; overdue timers preserve their
 registration order. Any Halt ends the invocation with its full u32 API status.
 The clock adapter uses OS monotonic nanoseconds and does not reset its origin
 between invocations. IO.now exposes integer milliseconds through compact Nat.
-The 100 ms cancellation polling interval bounds each host wait; idle polls do
-not consume evaluation steps. Flush stdout before waiting, including sleep(0).
+Scheduler waits check cancellation at intervals of at most 100 ms; idle polls
+do not consume evaluation steps. Worker OS calls can remain blocked. Flush
+stdout before waiting, including sleep(0).
 Windows uses QueryPerformanceCounter; Unix uses CLOCK_MONOTONIC. The latter is
 source-implemented but awaits runtime validation on Unix.
 

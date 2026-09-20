@@ -274,9 +274,26 @@ fn opaque_contract(
         || definition.body.is_some()
         || definition.foreign
         || definition.unsafe_
-        || definition.parameters.len() != 1
     {
         return Err(KernelError::new("invalid bundled opaque type metadata"));
+    }
+    let is_kind = |value: &TermRef, expected| {
+        matches!(strip_annotations(value).as_ref(), Term::Typ(quantity)
+            if matches!(quantity.as_ref(), Term::Qua(actual) if *actual == expected))
+    };
+    if opaque == OpaqueType::File {
+        return if definition.parameters.is_empty() && is_kind(&definition.ty, Quant::Lone) {
+            Ok(())
+        } else {
+            Err(KernelError::new(
+                "opaque File signature must be exactly Type",
+            ))
+        };
+    }
+    if definition.parameters.len() != 1 {
+        return Err(KernelError::new(
+            "opaque Chan requires exactly one erased type parameter",
+        ));
     }
     let Term::All {
         quant,
@@ -291,10 +308,6 @@ fn opaque_contract(
         ));
     };
     let parameter = &definition.parameters[0];
-    let is_kind = |value: &TermRef, expected| {
-        matches!(strip_annotations(value).as_ref(), Term::Typ(quantity)
-            if matches!(quantity.as_ref(), Term::Qua(actual) if *actual == expected))
-    };
     if *quant != Quant::None
         || parameter.quant != Quant::None
         || *id != parameter.id

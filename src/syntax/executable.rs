@@ -47,12 +47,14 @@ pub struct ExecutableSource {
 #[repr(u8)]
 pub(crate) enum OpaqueType {
     Chan,
+    File,
 }
 
 impl OpaqueType {
     pub(crate) fn bundled(name: &str) -> Option<Self> {
         match name {
             "Chan" => Some(Self::Chan),
+            "File" => Some(Self::File),
             _ => None,
         }
     }
@@ -201,6 +203,12 @@ pub(crate) enum BuiltinForeign {
     ChanSend,
     ChanRecv,
     ChanClose,
+    GetEnv,
+    FileOpen,
+    FileRead,
+    FileReadBytes,
+    FileWrite,
+    FileClose,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]

@@ -782,6 +782,12 @@ impl Parser<'_> {
                 "Chan.send" => Some(BuiltinForeign::ChanSend),
                 "Chan.recv" => Some(BuiltinForeign::ChanRecv),
                 "Chan.close" => Some(BuiltinForeign::ChanClose),
+                "IO.get_env" => Some(BuiltinForeign::GetEnv),
+                "File.open" => Some(BuiltinForeign::FileOpen),
+                "File.read" => Some(BuiltinForeign::FileRead),
+                "File.read_bytes" => Some(BuiltinForeign::FileReadBytes),
+                "File.write" => Some(BuiltinForeign::FileWrite),
+                "File.close" => Some(BuiltinForeign::FileClose),
                 _ => None,
             }
         } else {

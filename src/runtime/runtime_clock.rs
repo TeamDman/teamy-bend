@@ -11,6 +11,14 @@ pub(super) const MAX_WAIT_NANOS: u64 = 100_000_000;
 pub(super) trait Clock {
     fn now(&mut self) -> Result<u64, KernelError>;
     fn wait(&mut self, nanoseconds: u64) -> Result<(), KernelError>;
+
+    fn wait_for_work(
+        &mut self,
+        _work: &mut super::host_jobs::State,
+        nanoseconds: u64,
+    ) -> Result<(), KernelError> {
+        self.wait(nanoseconds)
+    }
 }
 
 pub(super) struct SystemClock;
@@ -24,6 +32,14 @@ impl Clock for SystemClock {
         // The driver checks cancellation before and after each bounded wait.
         std::thread::sleep(Duration::from_nanos(nanoseconds.min(MAX_WAIT_NANOS)));
         Ok(())
+    }
+
+    fn wait_for_work(
+        &mut self,
+        work: &mut super::host_jobs::State,
+        nanoseconds: u64,
+    ) -> Result<(), KernelError> {
+        work.wait(nanoseconds.min(MAX_WAIT_NANOS))
     }
 }
 

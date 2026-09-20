@@ -17,7 +17,10 @@ use std::rc::Rc;
 
 mod channels;
 mod executable;
+mod file_handles;
 mod gc;
+mod host_files;
+mod host_jobs;
 mod nat;
 mod numeric;
 mod packed;
@@ -104,6 +107,7 @@ impl Program {
 #[derive(Clone)]
 enum Value {
     Channel(channels::Handle),
+    File(file_handles::Handle),
     PackedNat(u64),
     PackedWord {
         wrapper: packed::Wrapper,
@@ -182,6 +186,8 @@ struct Machine<'program> {
     gc: gc::State,
     scheduler: scheduler::State,
     channels: channels::State,
+    files: file_handles::State,
+    jobs: host_jobs::State,
     #[cfg(test)]
     gc_mode: gc::Mode,
     globals: BTreeMap<String, ThunkId>,
@@ -202,6 +208,8 @@ impl<'program> Machine<'program> {
             gc: gc::State::default(),
             scheduler: scheduler::State::default(),
             channels: channels::State::default(),
+            files: file_handles::State::default(),
+            jobs: host_jobs::State::default(),
             #[cfg(test)]
             gc_mode: gc::Mode::Automatic,
             globals: BTreeMap::new(),
@@ -588,6 +596,9 @@ impl<'program> Machine<'program> {
             )),
             Value::Channel(_) => Err(KernelError::new(
                 "data runtime cannot materialize an opaque channel handle",
+            )),
+            Value::File(_) => Err(KernelError::new(
+                "data runtime cannot materialize an opaque file handle",
             )),
             Value::Closure { .. }
             | Value::Match { .. }

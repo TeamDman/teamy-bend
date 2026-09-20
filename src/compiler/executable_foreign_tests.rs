@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 use super::DRIVER;
+use super::FILES;
 use super::ForeignAssembly;
 use super::assemble;
 use crate::kernel::check_executable;
@@ -54,7 +55,7 @@ impl Drop for Fixture {
 }
 
 fn driver(foreign: &str, main: &str) -> Output {
-    Fixture::new().run(&format!("{CORE}\n{DRIVER}\nconst $tbForeign={foreign};\nprocess.exitCode=$tbRunMain({main},true,null);\n"))
+    Fixture::new().run(&format!("{CORE}\n{DRIVER}\n{FILES}\nconst $tbForeign={foreign};\nprocess.exitCode=$tbRunMain({main},true,null);\n"))
 }
 
 #[test]
@@ -259,8 +260,6 @@ fn synchronous_companion_helpers_preserve_bytes_and_native_records() {
     assert_eq!(output.stdout, "é\0🙂{\"$\":\"Done\",\"value\":{\"$\":\"Tuple\",\"fst\":1,\"snd\":{\"$\":\"Tuple\",\"fst\":2,\"snd\":3}}}\n".as_bytes());
     assert_eq!(output.stderr, "é\0🙂\n".as_bytes());
     for (call, expected) in [
-        ("io_sys()", "native system FFI"),
-        ("io_fail(2)", "native system FFI"),
         ("io_push()", "task scheduling"),
         ("io_park_on()", "readiness scheduling"),
     ] {

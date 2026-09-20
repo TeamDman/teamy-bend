@@ -201,6 +201,10 @@ law Chan:
   for -A: Type
   Data
 
+# File handles cannot be constructed or copied by Bend code.
+law File:
+  Type
+
 type IO.OP<-R: Type> is Type:
   Emit{value: R}
   Halt{code: U32, message: String}
@@ -231,6 +235,10 @@ def IO.write(text: String) -> IO(Unit):
 def IO.print_err(text: String) -> IO(Unit):
   import "./effs/print_err.c"
   import "./effs/print_err.js"
+
+def IO.get_env(name: String) -> IO(Result<&1, &1, U32 & String, String>):
+  import "./effs/get_env.c"
+  import "./effs/get_env.js"
 
 def IO.die(-A: Type, code: U32, msg: String) -> IO(A):
   R => k => Halt{code, msg}
@@ -290,6 +298,30 @@ def IO.join.go(-A: Type, chan: Chan(A), got: Maybe<&1, A>) -> IO(A):
 
 def IO.join(-A: Type, +chan: Chan(A)) -> IO(A):
   IO.bind(Maybe<&1, A>, A, Chan.recv(A, chan), IO.join.go(A, chan))
+
+def File.open(path: String, mode: String) ->
+  IO(Result<&1, &1, U32 & String, File>):
+  import "./effs/file_open.c"
+  import "./effs/file_open.js"
+
+def File.read(file: File, max: U32) ->
+  IO(File & Result<&1, &1, U32 & String, String>):
+  import "./effs/file_read.c"
+  import "./effs/file_read.js"
+
+def File.read_bytes(file: File, max: U32) ->
+  IO(File & Result<&1, &1, U32 & String, List<&2, U32>>):
+  import "./effs/file_read_bytes.c"
+  import "./effs/file_read_bytes.js"
+
+def File.write(file: File, data: String) ->
+  IO(File & Result<&1, &1, U32 & String, Unit>):
+  import "./effs/file_write.c"
+  import "./effs/file_write.js"
+
+def File.close(file: File) -> IO(Unit):
+  import "./effs/file_close.c"
+  import "./effs/file_close.js"
 
 def List.for_each(
   ~a: Quant, ~A: Kind(a), ~f: A -> IO(Unit), xs: List<a, A>

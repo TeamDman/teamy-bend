@@ -57,7 +57,7 @@ pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, Co
             .filter(|p| p.quant != Quant::None)
             .count();
         let body = match &definition.body {
-            DefinitionBody::OpaqueType(OpaqueType::Chan) => "null".into(),
+            DefinitionBody::OpaqueType(OpaqueType::Chan | OpaqueType::File) => "null".into(),
             DefinitionBody::Numeric(intrinsic) => native_function(numeric_name(*intrinsic), arity),
             DefinitionBody::Foreign(_) => {
                 let index = foreign

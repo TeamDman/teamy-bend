@@ -34,7 +34,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   18 templates, 25 laws and 20 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, host readiness, most non-console Base effects,
+GPU calls, hub fetch/publish, host readiness, network/window/audio Base effects,
 general large native Nat computation, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
@@ -42,7 +42,7 @@ supports [all 37 numeric primitive contracts](numeric-execution.md), also implem
 by executable JavaScript. Strict checking and
 the pure compilers do not admit their opaque implementation assumptions.
 
-## Executable checking and native console IO
+## Executable checking and native IO
 
 `run` loads a separate execution-only Base and checks ordinary terms with the
 same proof/resource rules. Foreign declarations need loader-owned origin and a
@@ -51,21 +51,24 @@ with no conversion to `CheckedBook` and no proof-evaluation method. Its foreign
 signature metadata describes runtime assumptions. Unsafe definitions remain
 unsupported even on this executable path.
 
-Native execution supports IO.pure/bind/die/pass/try and the three bundled console
-effects. Requests are private runtime values: matching them as ordinary IO.OP
+Native execution supports IO.pure/bind/die/pass/try, console effects, tasks,
+timers, channels, environment lookup and files. Requests are private runtime
+values: matching them as ordinary IO.OP
 constructors fails without executing the requested effect. UTF-8, NUL, output
 ordering, cancellation, write failures, discarded Emit payloads and Halt exit
 codes have executable regressions. IO aliases select the driver; a user-defined
 type named IO does not. Pure main output still uses canonical core syntax.
 
-Ten unchanged upstream IO fixtures were compared to actual upstream-generated
+At the initial console milestone, ten unchanged upstream IO fixtures were compared to actual upstream-generated
 JavaScript. Eight matched stdout, stderr and exit status exactly. The two
 expected refusals matched stdout/status and absence of unintended effects;
-diagnostic wording differs. Direct console arguments reject invalid Unicode
-scalars, matching upstream JavaScript. The lazy native runtime does not validate
-a discarded Char payload, while upstream JavaScript does. Raw foreign strings
-and the C foreign interface have separate contracts and are not covered by
-these comparisons.
+diagnostic wording differed. Those results describe that milestone's behavior.
+Native effect text now follows C's io_utf8 encoding for all U32 Char codes,
+including surrogates and values outside the Unicode scalar range. JavaScript
+still validates source Char constructors eagerly, including discarded values;
+native evaluation remains lazy. Numeric parsing has separate scalar validation.
+See [environment and file effects](native-files.md) for the current text and
+error contracts. The earlier console comparison does not certify arbitrary C FFI.
 
 Execution uses the existing 2,000,000-step, 131,072-thunk/environment and
 4,096-frame limits, with an 8 MiB ceiling per decoded console string. Unreachable
@@ -81,7 +84,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-file/network/window/audio Base effects and unsafe execution remain
+network/window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -104,6 +107,23 @@ close/drain behavior and ordinary fork/join. Buffered payloads and waiting
 continuations are traced directly; all channel state is discarded on driver exit.
 See [native channels](native-channels.md) for target differences and limits.
 Arbitrary native foreign callbacks remain unfinished.
+
+Both targets implement IO.get_env and File.open/read/read_bytes/write/close.
+File is a loader-sealed opaque affine Type, absent from strict proof Base.
+Open accepts exactly r/w/a. Reads and writes return the handle outside Result,
+including on failure; close consumes it. Byte reads return List<&2, U32> octets.
+Environment lookup distinguishes missing names from existing empty values.
+
+Native open/read/write park through bounded host workers. The collector traces
+pending continuations, and only the VM thread packs replies into Bend values.
+Halt and cancellation remove queued work and close owned files. Already-running
+OS calls may finish later; their results are discarded without resuming the VM.
+JavaScript file calls remain synchronous, matching upstream JS. The Node adapter
+honors a supplied BEND_SYS and otherwise provides bounded descriptor reads and
+common error messages with a libuv fallback. See
+[environment and file effects](native-files.md) for text, errno, NUL behavior,
+resource bounds and the limits of cancellation. Unix host code still needs
+runtime validation on Unix.
 
 Native IO.now retains the OS monotonic clock origin: Windows performance-counter
 nanoseconds or Unix CLOCK_MONOTONIC, floored to milliseconds. It is not rebased
@@ -169,7 +189,7 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The latest 2026-09-20 audit covered all 1,302 fixtures: 362 expected-positive programs
+The completed channel-release audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
 checked, 491 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
@@ -178,10 +198,13 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The current full quality gate passes 417 tests, including five compile-fail
-API boundary examples, with two optional local profilers ignored. Strict Clippy
-checking covers the library and integration tests. Audited compiled source
-fingerprints match the publication sources. Generated executable behavior has
+That release passed 417 tests and matched its audited compiled source
+fingerprints to the publication sources. The environment/file implementation
+passes 454 tests, including 5 compile-fail API boundary examples, with 2 optional
+local profilers ignored. Strict Clippy checking covers the library and
+integration tests. The [implementation plan](implementation-plan.md) tracks
+its publication audit and retained comparison receipts.
+Generated executable behavior has
 separate actual-output comparisons in
 [executable JavaScript](executable-javascript.md) and
 [numeric execution](numeric-execution.md); the strict audit does not test it.
@@ -230,6 +253,10 @@ raw diagnostics containing local paths. A snapshot executable may be supplied
 as the second argument to keep development builds free during a long audit.
 
 ## Poche integration
+
+Engine work remains the current priority. Existing Poche checks provide
+regression coverage while full formalization remains open; this work preserves
+the application's existing architecture.
 
 The Poche integration is maintained in that project's `models/bend/`,
 `crates/poche-conformance/src/bend.rs` and `docs/bend-conformance.md`. The native

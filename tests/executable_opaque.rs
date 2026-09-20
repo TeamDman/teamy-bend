@@ -41,7 +41,7 @@ impl Drop for Fixture {
 fn channel_family_is_an_opaque_executable_contract_and_helpers_are_checked() {
     let fixture = Fixture::new("import Base\n");
     let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
-    assert_eq!(checked.opaque_names().collect::<Vec<_>>(), ["Chan"]);
+    assert_eq!(checked.opaque_names().collect::<Vec<_>>(), ["Chan", "File"]);
     assert_eq!(
         checked.definition_type("Chan").unwrap().to_string(),
         "@-A:Type -> Data"
@@ -173,4 +173,30 @@ fn native_channel_creation_runs_its_checked_continuation() {
     assert_eq!(code, 0);
     assert_eq!(stdout, b"AFTER\n");
     assert!(stderr.is_empty());
+}
+
+#[test]
+fn file_handles_are_affine_and_cannot_be_forged_or_promoted_to_data() {
+    for body in [
+        "def duplicate(file: File) -> File & File: (file, file)\n",
+        "def duplicate(+file: File) -> File & File: (file, file)\n",
+        "def fake() -> File: Unit{}\n",
+        "def File(): U32\n",
+        "def promote(file: File) -> List<&2, File>: [file]\n",
+    ] {
+        let fixture = Fixture::new(&format!("import Base\n{body}"));
+        if let Ok(source) = load_executable(fixture.path()) {
+            check_executable(&source).expect_err(body);
+        }
+    }
+    let fixture = Fixture::new("import Base\ndef relay(file: File) -> File: file\n");
+    check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
+    if let Ok(strict) = load(fixture.path()) {
+        check_book(&strict).expect_err("execution-only File does not enter strict Base");
+    }
+    let fixture = Fixture::new(
+        "import Base\ndef ignore(value: Type) -> IO(Unit): IO.pure(Unit, Unit{})\ndef main() -> IO(Unit): ignore(File)\n",
+    );
+    let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
+    compile_executable_javascript(&checked).unwrap();
 }
