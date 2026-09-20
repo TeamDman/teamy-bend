@@ -86,6 +86,7 @@ fn cancellation_removes_only_its_queued_jobs_and_releases_reservations() {
             sender: sender.clone(),
             cancelled: Arc::clone(token),
             lease: pool.budget.reserve(10).unwrap(),
+            notifier: Arc::new(Notifier::default()),
         });
     }
     assert_eq!(pool.budget.jobs.load(Ordering::Acquire), 2);

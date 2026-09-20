@@ -281,14 +281,18 @@ fn opaque_contract(
         matches!(strip_annotations(value).as_ref(), Term::Typ(quantity)
             if matches!(quantity.as_ref(), Term::Qua(actual) if *actual == expected))
     };
-    if opaque == OpaqueType::File {
-        return if definition.parameters.is_empty() && is_kind(&definition.ty, Quant::Lone) {
-            Ok(())
-        } else {
-            Err(KernelError::new(
-                "opaque File signature must be exactly Type",
-            ))
-        };
+    match opaque {
+        OpaqueType::File | OpaqueType::Socket | OpaqueType::Listener => {
+            return if definition.parameters.is_empty() && is_kind(&definition.ty, Quant::Lone) {
+                Ok(())
+            } else {
+                Err(KernelError::new(format!(
+                    "opaque {} signature must be exactly Type",
+                    definition.name
+                )))
+            };
+        }
+        OpaqueType::Chan => {}
     }
     if definition.parameters.len() != 1 {
         return Err(KernelError::new(

@@ -9,6 +9,7 @@ use crate::kernel::KernelError;
 use std::collections::VecDeque;
 
 struct Timer {
+    order: u64,
     deadline: u64,
     action: ThunkId,
 }
@@ -18,6 +19,7 @@ pub(super) struct State {
     ready: VecDeque<ThunkId>,
     timers: Vec<Timer>,
     live: usize,
+    next_wait: u64,
 }
 
 impl State {
@@ -59,15 +61,33 @@ impl State {
         if self.timers.len() >= self.live || self.ready.len() + self.timers.len() >= ARENA_LIMIT {
             return Err(KernelError::new("IO pending task budget exhausted"));
         }
-        self.timers.push(Timer { deadline, action });
+        let order = self.reserve_wait()?;
+        self.timers.push(Timer {
+            order,
+            deadline,
+            action,
+        });
         Ok(())
+    }
+
+    /// Timers and descriptors share the upstream parked-registration order.
+    pub(super) fn reserve_wait(&mut self) -> Result<u64, KernelError> {
+        let order = self.next_wait;
+        self.next_wait = order
+            .checked_add(1)
+            .ok_or_else(|| KernelError::new("native wait identity exhausted"))?;
+        Ok(order)
     }
 
     /// Only called when ready is empty. Preserve registration order among all
     /// overdue timers, even if their deadlines were registered out of order.
     pub(super) fn wake(&mut self, now: u64) {
+        self.wake_before(now, u64::MAX);
+    }
+
+    pub(super) fn wake_before(&mut self, now: u64, order: u64) {
         self.timers.retain(|timer| {
-            if timer.deadline <= now {
+            if timer.deadline <= now && timer.order < order {
                 self.ready.push_back(timer.action);
                 false
             } else {

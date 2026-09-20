@@ -72,6 +72,9 @@ and `io_fail` are provided. `io_sys` honors a supplied globalThis.BEND_SYS.
 Otherwise it supplies the bounded Node file-read/error adapter described below.
 It does not implement the full Bun/POSIX system interface. Descriptor readiness,
 network and window/audio effects remain unfinished.
+Native `run` implements TCP/UDP through its own descriptor poller; that does not
+establish this JavaScript backend's readiness support. Reachable network contracts
+currently fail compilation without overwriting output files.
 
 ## Environment and files
 

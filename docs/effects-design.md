@@ -7,8 +7,9 @@ The existing strict checker and Poche constructor protocol remain the proof path
 Native execution and generated JavaScript implement console effects, tasks,
 timers, channels, environment lookup and files through separate execution
 contracts. JavaScript also supports synchronous foreign code and callbacks.
-Arbitrary native foreign calls, descriptor readiness, network/window/audio,
-executable C and GPU work remain unfinished. Engine parity remains the priority;
+Native TCP/UDP uses the VM descriptor poller. Arbitrary native foreign calls,
+JavaScript readiness/networking, window/audio, executable C and GPU work remain
+unfinished. Engine parity remains the priority;
 existing Poche checks provide regressions without changing its application
 architecture.
 
@@ -125,7 +126,8 @@ implementation and validation.
 
 The complete foreign Base inventory has 34 functions. Both native execution and
 generated JavaScript implement the first 16, covering console, environment/tasks,
-channels and files:
+channels and files. Native execution also implements the eleven network effects,
+bringing its total to 27; the seven window/audio effects remain unfinished:
 
 | Group | Functions |
 | --- | --- |
@@ -144,8 +146,8 @@ suspension, IO.spawn, IO.sleep and IO.now. Tasks outlive main; Halt cancels
 remaining work. The Node timer adapter retains the synchronous polling model.
 Generated JavaScript also supports the sealed opaque Chan family and four
 channel operations, with ordinary IO.fork/join and sequential List.for_each.
-The channel family remains absent from strict Base. Descriptor readiness,
-remaining opaque handle families and window-backed App helpers are
+The channel family remains absent from strict Base. JavaScript readiness,
+window/audio opaque handle families and window-backed App helpers are
 still required.
 
 The six environment/file effects are IO.get_env and
@@ -159,7 +161,9 @@ remain distinct from existing empty values.
 Native valid open/read/write requests park through a shared bounded worker pool.
 Workers own host data and handles, never Bend values or continuations. The
 collector traces pending continuations, and the VM thread packs replies.
-Ready tasks precede host completions; collected completions precede due timers.
+Completed workers append after ready tasks every 64 driver turns during sustained
+work. When ready work drains, collected completions precede the mixed
+timer/descriptor readiness wakes.
 Halt/cancellation remove queued jobs and close Machine-owned files. Already-running
 OS calls can finish later; their replies are dropped without resuming the VM.
 Cleanup does not join a blocked host call. These operations retain shared pool
@@ -171,6 +175,16 @@ Default messages cover common file errors and use a libuv fallback for others.
 The [environment/file contract](native-files.md) records worker limits,
 cancellation boundaries and native/JavaScript text, errno and NUL differences.
 Unix host code still needs runtime validation on Unix.
+
+Native Socket and Listener contracts are sealed affine Types. The eleven network
+effects use owned nonblocking sockets, a shared timer/descriptor registration
+order and direct pending-continuation GC roots. File workers notify the poller
+through a lazy socket wake pair. These operations remain separate from arbitrary
+native foreign callbacks. [Native networking](native-network.md) records syscall
+boundaries, Windows error policy, cancellation and resource limits. Generated
+JavaScript requires a real syscall/readiness provider preserving its foreign
+descriptor interface; its compile path rejects reachable network effects until
+that provider exists.
 
 Native Rust scheduling now uses Machine-owned FIFO tasks and timer queues whose
 continuations are traced by the collector. Synchronous effects run until a task

@@ -19,6 +19,16 @@ pub(super) trait Clock {
     ) -> Result<(), KernelError> {
         self.wait(nanoseconds)
     }
+
+    fn wait_for_network(
+        &mut self,
+        _network: &super::network::State,
+        _work: &super::host_jobs::State,
+        nanoseconds: u64,
+    ) -> Result<Vec<u64>, KernelError> {
+        self.wait(nanoseconds)?;
+        Ok(Vec::new())
+    }
 }
 
 pub(super) struct SystemClock;
@@ -40,6 +50,17 @@ impl Clock for SystemClock {
         nanoseconds: u64,
     ) -> Result<(), KernelError> {
         work.wait(nanoseconds.min(MAX_WAIT_NANOS))
+    }
+
+    fn wait_for_network(
+        &mut self,
+        network: &super::network::State,
+        work: &super::host_jobs::State,
+        nanoseconds: u64,
+    ) -> Result<Vec<u64>, KernelError> {
+        let millis = u32::try_from(nanoseconds.min(MAX_WAIT_NANOS).div_ceil(NANOS_PER_MILLI))
+            .map_err(|_error| KernelError::new("native poll timeout overflow"))?;
+        network.poll(work.wake_source(), millis)
     }
 }
 

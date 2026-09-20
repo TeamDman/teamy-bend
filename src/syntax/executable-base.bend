@@ -205,6 +205,12 @@ law Chan:
 law File:
   Type
 
+law Socket:
+  Type
+
+law Listener:
+  Type
+
 type IO.OP<-R: Type> is Type:
   Emit{value: R}
   Halt{code: U32, message: String}
@@ -322,6 +328,57 @@ def File.write(file: File, data: String) ->
 def File.close(file: File) -> IO(Unit):
   import "./effs/file_close.c"
   import "./effs/file_close.js"
+
+def TCP.listen(port: U32) -> IO(Result<&1, &1, U32 & String, Listener>):
+  import "./effs/tcp_listen.c"
+  import "./effs/tcp_listen.js"
+
+def TCP.accept(listener: Listener) ->
+  IO(Listener & Result<&1, &1, U32 & String, Socket>):
+  import "./effs/tcp_accept.c"
+  import "./effs/tcp_accept.js"
+
+def TCP.connect(host: String, port: U32) ->
+  IO(Result<&1, &1, U32 & String, Socket>):
+  import "./effs/tcp_connect.c"
+  import "./effs/tcp_connect.js"
+
+def TCP.send(sock: Socket, data: String) ->
+  IO(Socket & Result<&1, &1, U32 & String, Unit>):
+  import "./effs/tcp_send.c"
+  import "./effs/tcp_send.js"
+
+def TCP.recv(sock: Socket, max: U32) ->
+  IO(Socket & Result<&1, &1, U32 & String, String>):
+  import "./effs/tcp_recv.c"
+  import "./effs/tcp_recv.js"
+
+def UDP.bind(port: U32) -> IO(Result<&1, &1, U32 & String, Socket>):
+  import "./effs/udp_bind.c"
+  import "./effs/udp_bind.js"
+
+def UDP.send_to(sock: Socket, host: String, port: U32, data: String) ->
+  IO(Socket & Result<&1, &1, U32 & String, Unit>):
+  import "./effs/udp_send_to.c"
+  import "./effs/udp_send_to.js"
+
+def UDP.recv_from(sock: Socket, max: U32) ->
+  IO(Socket & Result<&1, &1, U32 & String, String & U32 & String>):
+  import "./effs/udp_recv_from.c"
+  import "./effs/udp_recv_from.js"
+
+def UDP.poll(sock: Socket, max: U32) ->
+  IO(Socket & Result<&1, &1, U32 & String, Maybe<&1, String & U32 & String>>):
+  import "./effs/udp_poll.c"
+  import "./effs/udp_poll.js"
+
+def Socket.close(socket: Socket) -> IO(Unit):
+  import "./effs/socket_close.c"
+  import "./effs/socket_close.js"
+
+def Listener.close(listener: Listener) -> IO(Unit):
+  import "./effs/listener_close.c"
+  import "./effs/listener_close.js"
 
 def List.for_each(
   ~a: Quant, ~A: Kind(a), ~f: A -> IO(Unit), xs: List<a, A>

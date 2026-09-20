@@ -36,24 +36,7 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
         };
         indices.insert(name.to_owned(), entries.len());
         if let Some(builtin) = foreign.builtin {
-            let function = match builtin {
-                BuiltinForeign::Print => ("$tbPrint", "undefined"),
-                BuiltinForeign::Write => ("$tbWrite", "undefined"),
-                BuiltinForeign::PrintErr => ("$tbPrintErr", "undefined"),
-                BuiltinForeign::Spawn => ("$tbSpawn", "undefined"),
-                BuiltinForeign::Sleep => ("$tbSleep", "$tbSleepNeed"),
-                BuiltinForeign::Now => ("$tbNow", "undefined"),
-                BuiltinForeign::ChanNew => ("$tbChanNew", "undefined"),
-                BuiltinForeign::ChanSend => ("$tbChanSend", "undefined"),
-                BuiltinForeign::ChanRecv => ("$tbChanRecv", "undefined"),
-                BuiltinForeign::ChanClose => ("$tbChanClose", "undefined"),
-                BuiltinForeign::GetEnv => ("$tbGetEnv", "undefined"),
-                BuiltinForeign::FileOpen => ("$tbFileOpen", "undefined"),
-                BuiltinForeign::FileRead => ("$tbFileRead", "undefined"),
-                BuiltinForeign::FileReadBytes => ("$tbFileReadBytes", "undefined"),
-                BuiltinForeign::FileWrite => ("$tbFileWrite", "undefined"),
-                BuiltinForeign::FileClose => ("$tbFileClose", "undefined"),
-            };
+            let function = builtin_function(name, builtin)?;
             // Resolve these outside the foreign lexical scope: a companion
             // file declaring the same name cannot replace bundled contracts.
             entries.push((Some(function), String::new()));
@@ -125,6 +108,44 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
     Ok(ForeignAssembly { source, indices })
 }
 
+fn builtin_function(
+    name: &str,
+    builtin: BuiltinForeign,
+) -> Result<(&'static str, &'static str), CompileError> {
+    Ok(match builtin {
+        BuiltinForeign::Print => ("$tbPrint", "undefined"),
+        BuiltinForeign::Write => ("$tbWrite", "undefined"),
+        BuiltinForeign::PrintErr => ("$tbPrintErr", "undefined"),
+        BuiltinForeign::Spawn => ("$tbSpawn", "undefined"),
+        BuiltinForeign::Sleep => ("$tbSleep", "$tbSleepNeed"),
+        BuiltinForeign::Now => ("$tbNow", "undefined"),
+        BuiltinForeign::ChanNew => ("$tbChanNew", "undefined"),
+        BuiltinForeign::ChanSend => ("$tbChanSend", "undefined"),
+        BuiltinForeign::ChanRecv => ("$tbChanRecv", "undefined"),
+        BuiltinForeign::ChanClose => ("$tbChanClose", "undefined"),
+        BuiltinForeign::GetEnv => ("$tbGetEnv", "undefined"),
+        BuiltinForeign::FileOpen => ("$tbFileOpen", "undefined"),
+        BuiltinForeign::FileRead => ("$tbFileRead", "undefined"),
+        BuiltinForeign::FileReadBytes => ("$tbFileReadBytes", "undefined"),
+        BuiltinForeign::FileWrite => ("$tbFileWrite", "undefined"),
+        BuiltinForeign::FileClose => ("$tbFileClose", "undefined"),
+        BuiltinForeign::TcpListen
+        | BuiltinForeign::TcpAccept
+        | BuiltinForeign::TcpConnect
+        | BuiltinForeign::TcpSend
+        | BuiltinForeign::TcpRecv
+        | BuiltinForeign::UdpBind
+        | BuiltinForeign::UdpSendTo
+        | BuiltinForeign::UdpRecvFrom
+        | BuiltinForeign::UdpPoll
+        | BuiltinForeign::SocketClose
+        | BuiltinForeign::ListenerClose => {
+            return Err(CompileError::new(format!(
+                "executable JavaScript descriptor readiness is not implemented for {name}"
+            )));
+        }
+    })
+}
 /// Upstream assembles foreign files in breadth-first live-reference order from
 /// main. File initialization can depend on earlier files, so sorting definition
 /// names would change program behavior even though canonical dedup still works.

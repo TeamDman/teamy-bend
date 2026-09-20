@@ -1477,6 +1477,7 @@ dependencies = [
  "figue",
  "libc",
  "open",
+ "socket2",
  "teamy-cancellation",
  "tokio",
  "tracing",

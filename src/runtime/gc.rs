@@ -132,6 +132,8 @@ impl Marks<'_> {
             }
             Value::Channel(_)
             | Value::File(_)
+            | Value::Socket(_)
+            | Value::Listener(_)
             | Value::PackedNat(_)
             | Value::PackedWord { .. }
             | Value::PackedBits { .. }
@@ -225,6 +227,7 @@ impl Machine<'_> {
         self.scheduler.visit_roots(|id| marks.thunk(id))?;
         self.channels.visit_roots(|id| marks.thunk(id))?;
         self.jobs.visit_roots(|id| marks.thunk(id))?;
+        self.network.visit_roots(|id| marks.thunk(id))?;
         while let Some(node) = marks.pending.pop() {
             marks.charge()?;
             match node {

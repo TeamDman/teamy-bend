@@ -34,7 +34,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   18 templates, 25 laws and 20 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, host readiness, network/window/audio Base effects,
+GPU calls, hub fetch/publish, JavaScript readiness/networking, window/audio effects,
 general large native Nat computation, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
@@ -52,7 +52,7 @@ signature metadata describes runtime assumptions. Unsafe definitions remain
 unsupported even on this executable path.
 
 Native execution supports IO.pure/bind/die/pass/try, console effects, tasks,
-timers, channels, environment lookup and files. Requests are private runtime
+timers, channels, environment lookup, files and TCP/UDP. Requests are private runtime
 values: matching them as ordinary IO.OP
 constructors fails without executing the requested effect. UTF-8, NUL, output
 ordering, cancellation, write failures, discarded Emit payloads and Halt exit
@@ -84,7 +84,7 @@ Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The C effect driver,
-network/window/audio Base effects and unsafe execution remain
+JavaScript network, window/audio Base effects and unsafe execution remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -124,6 +124,16 @@ common error messages with a libuv fallback. See
 [environment and file effects](native-files.md) for text, errno, NUL behavior,
 resource bounds and the limits of cancellation. Unix host code still needs
 runtime validation on Unix.
+
+Native execution also implements all eleven TCP/UDP/close effects with sealed
+affine Socket and Listener types. Accept and receive park before their first
+syscall; connect and send attempt immediately. Nonblocking sockets share the
+VM readiness poller, leaving file workers available. Ready descriptors and due
+timers follow their common registration order after worker completions. Pending
+continuations are collector roots; all live and parked sockets close on driver
+exit. See [native networking](native-network.md) for error/handle behavior,
+partial sends, datagrams, cancellation and bounds. Generated JavaScript still
+rejects reachable network calls until its host readiness provider is implemented.
 
 Native IO.now retains the OS monotonic clock origin: Windows performance-counter
 nanoseconds or Unix CLOCK_MONOTONIC, floored to milliseconds. It is not rebased
@@ -189,7 +199,7 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The completed channel-release audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
+The completed native-network candidate audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
 checked, 491 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
@@ -198,12 +208,13 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-That release passed 417 tests and matched its audited compiled source
-fingerprints to the publication sources. The environment/file implementation
-passes 454 tests, including 5 compile-fail API boundary examples, with 2 optional
+The native-network implementation passes 487 tests, including 5 compile-fail API
+boundary examples, with 2 optional
 local profilers ignored. Strict Clippy checking covers the library and
-integration tests. The [implementation plan](implementation-plan.md) tracks
-its publication audit and retained comparison receipts.
+integration tests. Its frozen candidate records 97 compiled-source fingerprints.
+[Native networking](native-network.md) distinguishes real loopback, forced-GC
+and adapted upstream C evidence. The [implementation plan](implementation-plan.md)
+tracks publication validation and retained comparison receipts.
 Generated executable behavior has
 separate actual-output comparisons in
 [executable JavaScript](executable-javascript.md) and

@@ -26,7 +26,7 @@ fn opaque_chan_metadata_requires_exact_origin_signature_and_declaration() {
     let fixture = Fixture::new();
     let path = fixture.write("main.bend", "import Base\n");
     let source = load_executable(&path).unwrap();
-    assert_eq!(source.opaque.len(), 2);
+    assert_eq!(source.opaque.len(), 4);
     assert_eq!(source.opaque["Chan"], OpaqueType::Chan);
     assert!(!source.foreign.contains_key("Chan") && !source.numeric.contains_key("Chan"));
     assert!(!source.book.declarations.iter().any(|declaration| {
@@ -357,7 +357,7 @@ fn executable_base_has_sealed_console_origins_and_checked_ordinary_helpers() {
     assert!(source.base_names.contains("IO"));
     assert!(source.base_names.contains("IO.OP"));
     assert!(!source.base_names.contains("main"));
-    assert_eq!(source.foreign.len(), 16);
+    assert_eq!(source.foreign.len(), 27);
     for (name, builtin) in [
         ("IO.print", BuiltinForeign::Print),
         ("IO.write", BuiltinForeign::Write),
@@ -688,15 +688,25 @@ fn foreign_template_instances_retain_the_declaring_module_and_actual_arity() {
 
 #[test]
 fn opaque_file_metadata_requires_exact_affine_kind_and_origin() {
+    assert_affine_opaque_metadata("File", OpaqueType::File);
+}
+
+#[test]
+fn opaque_network_metadata_requires_exact_affine_kind_and_origin() {
+    assert_affine_opaque_metadata("Socket", OpaqueType::Socket);
+    assert_affine_opaque_metadata("Listener", OpaqueType::Listener);
+}
+
+fn assert_affine_opaque_metadata(name: &str, expected: OpaqueType) {
     use crate::kernel::Term;
     use crate::kernel::term;
 
     let fixture = Fixture::new();
     let path = fixture.write("main.bend", "import Base\n");
     let source = load_executable(&path).unwrap();
-    assert_eq!(source.opaque["File"], OpaqueType::File);
+    assert_eq!(source.opaque[name], expected);
     let checked = check_executable(&source).unwrap();
-    assert_eq!(checked.definition_type("File").unwrap().to_string(), "Type");
+    assert_eq!(checked.definition_type(name).unwrap().to_string(), "Type");
     for mutation in [
         "origin",
         "missing",
@@ -710,32 +720,30 @@ fn opaque_file_metadata_requires_exact_affine_kind_and_origin() {
         let mut source = load_executable(&path).unwrap();
         match mutation {
             "origin" => {
-                source.base_names.remove("File");
+                source.base_names.remove(name);
             }
             "missing" => {
-                source.opaque.remove("File");
+                source.opaque.remove(name);
             }
             "wrong-type" => {
-                source.opaque.insert("File".into(), OpaqueType::Chan);
+                source.opaque.insert(name.into(), OpaqueType::Chan);
             }
             _ => {
-                let file = source
+                let definition = source
                     .book
                     .declarations
                     .iter_mut()
                     .find_map(|declaration| match declaration {
-                        Declaration::Def(definition) if definition.name == "File" => {
-                            Some(definition)
-                        }
+                        Declaration::Def(definition) if definition.name == name => Some(definition),
                         _ => None,
                     })
                     .unwrap();
                 match mutation {
-                    "kind" => file.ty = term(Term::Typ(term(Term::Qua(Quant::Many)))),
-                    "body" => file.body = Some(term(Term::Ref("U32".into()))),
-                    "foreign" => file.foreign = true,
-                    "unsafe" => file.unsafe_ = true,
-                    "arity" => file.parameters.push(crate::kernel::Binder {
+                    "kind" => definition.ty = term(Term::Typ(term(Term::Qua(Quant::Many)))),
+                    "body" => definition.body = Some(term(Term::Ref("U32".into()))),
+                    "foreign" => definition.foreign = true,
+                    "unsafe" => definition.unsafe_ = true,
+                    "arity" => definition.parameters.push(crate::kernel::Binder {
                         quant: Quant::None,
                         name: "A".into(),
                         id: 9000,
@@ -819,4 +827,155 @@ fn file_contracts_keep_affine_handles_outside_error_results() {
     let path = fixture.write("foreign-file.bend", "import Base\ndef file_open(path: String, mode: String) -> IO(Result<&1, &1, Pair(U32)(String), File>): import \"custom.js\"\n");
     let local = load_executable(path).unwrap();
     assert_eq!(local.foreign["file_open"].builtin, None);
+}
+
+const NETWORK_CONTRACTS: [(&str, BuiltinForeign, &[&str], &str); 11] = [
+    (
+        "TCP.listen",
+        BuiltinForeign::TcpListen,
+        &["port"],
+        "@port:U32 -> IO(Result<&1, &1, Pair(U32)(String), Listener>)",
+    ),
+    (
+        "TCP.accept",
+        BuiltinForeign::TcpAccept,
+        &["listener"],
+        "@listener:Listener -> IO(Pair(Listener)(Result<&1, &1, Pair(U32)(String), Socket>))",
+    ),
+    (
+        "TCP.connect",
+        BuiltinForeign::TcpConnect,
+        &["host", "port"],
+        "@host:String -> @port:U32 -> IO(Result<&1, &1, Pair(U32)(String), Socket>)",
+    ),
+    (
+        "TCP.send",
+        BuiltinForeign::TcpSend,
+        &["sock", "data"],
+        "@sock:Socket -> @data:String -> IO(Pair(Socket)(Result<&1, &1, Pair(U32)(String), Unit>))",
+    ),
+    (
+        "TCP.recv",
+        BuiltinForeign::TcpRecv,
+        &["sock", "max"],
+        "@sock:Socket -> @max:U32 -> IO(Pair(Socket)(Result<&1, &1, Pair(U32)(String), String>))",
+    ),
+    (
+        "UDP.bind",
+        BuiltinForeign::UdpBind,
+        &["port"],
+        "@port:U32 -> IO(Result<&1, &1, Pair(U32)(String), Socket>)",
+    ),
+    (
+        "UDP.send_to",
+        BuiltinForeign::UdpSendTo,
+        &["sock", "host", "port", "data"],
+        "@sock:Socket -> @host:String -> @port:U32 -> @data:String -> IO(Pair(Socket)(Result<&1, &1, Pair(U32)(String), Unit>))",
+    ),
+    (
+        "UDP.recv_from",
+        BuiltinForeign::UdpRecvFrom,
+        &["sock", "max"],
+        "@sock:Socket -> @max:U32 -> IO(Pair(Socket)(Result<&1, &1, Pair(U32)(String), Pair(String)(Pair(U32)(String))>))",
+    ),
+    (
+        "UDP.poll",
+        BuiltinForeign::UdpPoll,
+        &["sock", "max"],
+        "@sock:Socket -> @max:U32 -> IO(Pair(Socket)(Result<&1, &1, Pair(U32)(String), Maybe<&1, Pair(String)(Pair(U32)(String))>>))",
+    ),
+    (
+        "Socket.close",
+        BuiltinForeign::SocketClose,
+        &["socket"],
+        "@socket:Socket -> IO(Unit)",
+    ),
+    (
+        "Listener.close",
+        BuiltinForeign::ListenerClose,
+        &["listener"],
+        "@listener:Listener -> IO(Unit)",
+    ),
+];
+
+#[test]
+fn network_contracts_keep_exact_affine_tuples_quantities_and_source_arity() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    let source = load_executable(path).unwrap();
+    let checked = check_executable(&source).unwrap();
+    for (name, builtin, parameters, expected) in NETWORK_CONTRACTS {
+        let metadata = &source.foreign[name];
+        assert_eq!(metadata.builtin, Some(builtin));
+        assert_eq!(metadata.declared_arity, parameters.len());
+        assert_eq!(metadata.parameters, parameters);
+        assert_eq!(metadata.imports.len(), 2);
+        assert_eq!(metadata.imports[0].target, ForeignTarget::C);
+        assert_eq!(metadata.imports[1].target, ForeignTarget::JavaScript);
+        let symbol = name.to_lowercase().replace('.', "_");
+        assert_eq!(metadata.local_symbol, symbol);
+        assert_eq!(
+            metadata.imports[0]
+                .path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            format!("{symbol}.c")
+        );
+        assert_eq!(
+            metadata.imports[1]
+                .path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            format!("{symbol}.js")
+        );
+        assert_eq!(checked.definition_type(name).unwrap().to_string(), expected);
+        let definition = source
+            .book
+            .declarations
+            .iter()
+            .find_map(|declaration| match declaration {
+                Declaration::Def(definition) if definition.name == name => Some(definition),
+                _ => None,
+            })
+            .unwrap();
+        assert!(
+            definition
+                .parameters
+                .iter()
+                .all(|parameter| parameter.quant == Quant::Lone)
+        );
+        let path = fixture.write(
+            "local.bend",
+            &format!("import Base\ndef {symbol}() -> IO(Unit): import \"custom.js\"\n"),
+        );
+        let local = load_executable(path).unwrap();
+        assert_eq!(local.foreign[&symbol].builtin, None);
+    }
+}
+
+#[test]
+fn local_network_type_names_never_acquire_opaque_origin() {
+    for name in ["Socket", "Listener"] {
+        let fixture = Fixture::new();
+        let path = fixture.write("main.bend", &format!("law {name}: Type\n"));
+        let source = load_executable(path).unwrap();
+        assert!(source.opaque.is_empty());
+        check_executable(&source).expect_err("an ordinary open law cannot mint a handle type");
+        fixture.write("other.bend", &format!("law {name}: Type\n"));
+        let path = fixture.write("main.bend", "import other.bend as O\n");
+        let source = load_executable(path).unwrap();
+        assert!(source.opaque.is_empty());
+        check_executable(&source).expect_err("an imported open law cannot mint a handle type");
+        let path = fixture.write(
+            "ordinary.bend",
+            &format!("type {name} is Data: Local{{}}\n"),
+        );
+        let source = load_executable(path).unwrap();
+        assert!(source.opaque.is_empty());
+        check_executable(&source).expect("ordinary local datatypes remain ordinary");
+    }
 }

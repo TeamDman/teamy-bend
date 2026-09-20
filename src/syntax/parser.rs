@@ -788,6 +788,17 @@ impl Parser<'_> {
                 "File.read_bytes" => Some(BuiltinForeign::FileReadBytes),
                 "File.write" => Some(BuiltinForeign::FileWrite),
                 "File.close" => Some(BuiltinForeign::FileClose),
+                "TCP.listen" => Some(BuiltinForeign::TcpListen),
+                "TCP.accept" => Some(BuiltinForeign::TcpAccept),
+                "TCP.connect" => Some(BuiltinForeign::TcpConnect),
+                "TCP.send" => Some(BuiltinForeign::TcpSend),
+                "TCP.recv" => Some(BuiltinForeign::TcpRecv),
+                "UDP.bind" => Some(BuiltinForeign::UdpBind),
+                "UDP.send_to" => Some(BuiltinForeign::UdpSendTo),
+                "UDP.recv_from" => Some(BuiltinForeign::UdpRecvFrom),
+                "UDP.poll" => Some(BuiltinForeign::UdpPoll),
+                "Socket.close" => Some(BuiltinForeign::SocketClose),
+                "Listener.close" => Some(BuiltinForeign::ListenerClose),
                 _ => None,
             }
         } else {

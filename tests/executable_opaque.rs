@@ -41,7 +41,10 @@ impl Drop for Fixture {
 fn channel_family_is_an_opaque_executable_contract_and_helpers_are_checked() {
     let fixture = Fixture::new("import Base\n");
     let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
-    assert_eq!(checked.opaque_names().collect::<Vec<_>>(), ["Chan", "File"]);
+    assert_eq!(
+        checked.opaque_names().collect::<Vec<_>>(),
+        ["Chan", "File", "Listener", "Socket"]
+    );
     assert_eq!(
         checked.definition_type("Chan").unwrap().to_string(),
         "@-A:Type -> Data"
@@ -199,4 +202,108 @@ fn file_handles_are_affine_and_cannot_be_forged_or_promoted_to_data() {
     );
     let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
     compile_executable_javascript(&checked).unwrap();
+}
+
+#[test]
+fn network_handles_are_affine_distinct_and_cannot_be_refilled() {
+    for name in ["Socket", "Listener"] {
+        for body in [
+            format!("def duplicate(handle: {name}) -> {name} & {name}: (handle, handle)\n"),
+            format!("def duplicate(+handle: {name}) -> {name} & {name}: (handle, handle)\n"),
+            format!("def fake() -> {name}: Unit{{}}\n"),
+            format!("def {name}(): U32\n"),
+            format!("def promote(handle: {name}) -> List<&2, {name}>: [handle]\n"),
+            format!("def data() -> Data: {name}\n"),
+        ] {
+            let fixture = Fixture::new(&format!("import Base\n{body}"));
+            if let Ok(source) = load_executable(fixture.path()) {
+                check_executable(&source).expect_err(&body);
+            }
+        }
+        let fixture = Fixture::new(&format!(
+            "import Base\ndef relay(handle: {name}) -> {name}: handle\n"
+        ));
+        check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
+        if let Ok(strict) = load(fixture.path()) {
+            check_book(&strict).expect_err("network opaque types are absent from strict Base");
+        }
+    }
+    for body in [
+        "def change(handle: Socket) -> Listener: handle\n",
+        "def change(handle: Listener) -> Socket: handle\n",
+        "def change(handle: File) -> Socket: handle\n",
+        "def change(handle: Socket) -> File: handle\n",
+        "def close(handle: Listener) -> IO(Unit): Socket.close(handle)\n",
+    ] {
+        let fixture = Fixture::new(&format!("import Base\n{body}"));
+        check_executable(&load_executable(fixture.path()).unwrap()).expect_err(body);
+    }
+}
+
+#[test]
+fn network_opaque_laws_cannot_enter_the_strict_proof_checker() {
+    let fixture = Fixture::new("import Base\n");
+    let strict = load(fixture.path()).unwrap();
+    check_book(&strict).unwrap();
+    for name in ["Socket", "Listener"] {
+        assert!(!strict.declarations.iter().any(|declaration| {
+            matches!(declaration, teamy_bend::kernel::Declaration::Def(definition) if definition.name == name)
+        }));
+        check_book(&parse(&format!("law {name}: Type\n")).unwrap())
+            .expect_err("strict laws require bodies");
+    }
+}
+
+#[test]
+fn reachable_network_contracts_refuse_javascript_before_output_is_changed() {
+    use std::process::Command;
+
+    let source =
+        "import Base\ndef main() -> IO(Result<&1, &1, U32 & String, Listener>): TCP.listen(0)\n";
+    let fixture = Fixture::new(source);
+    let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
+    let error = compile_executable_javascript(&checked)
+        .unwrap_err()
+        .to_string();
+    assert!(
+        error.contains("descriptor readiness") && error.contains("TCP.listen"),
+        "{error}"
+    );
+    let output_path = fixture.0.join("main.cjs");
+    for existing in [false, true] {
+        if existing {
+            fs::write(&output_path, "preserve this output").unwrap();
+        }
+        let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+            .args(["compile", "--executable", "--force"])
+            .arg(fixture.path())
+            .arg("--output")
+            .arg(&output_path)
+            .output()
+            .unwrap();
+        assert!(!output.status.success());
+        assert!(String::from_utf8_lossy(&output.stderr).contains("descriptor readiness"));
+        if existing {
+            assert_eq!(
+                fs::read_to_string(&output_path).unwrap(),
+                "preserve this output"
+            );
+        } else {
+            assert!(!output_path.exists());
+        }
+    }
+}
+
+#[test]
+fn unused_network_contracts_and_erased_handle_types_still_compile_to_javascript() {
+    for source in [
+        "import Base\ndef main() -> IO(Unit): IO.print(\"ready\")\n",
+        "import Base\ndef ignore(value: Type) -> IO(Unit): IO.pure(Unit, Unit{})\ndef main() -> IO(Unit): ignore(Socket)\n",
+        "import Base\ndef ignore(value: Type) -> IO(Unit): IO.pure(Unit, Unit{})\ndef main() -> IO(Unit): ignore(Listener)\n",
+    ] {
+        let fixture = Fixture::new(source);
+        let checked = check_executable(&load_executable(fixture.path()).unwrap()).unwrap();
+        compile_executable_javascript(&checked)
+            .expect("unreachable network calls do not need a JS implementation");
+    }
 }

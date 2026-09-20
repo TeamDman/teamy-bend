@@ -8,6 +8,9 @@ use super::file_handles::Handle;
 use super::host_files;
 use super::host_files::Failure;
 use super::host_files::NativeFile;
+use super::host_network::NativeSocket;
+use super::host_network::WakePair;
+use super::host_network::WakeSender;
 use crate::kernel::KernelError;
 use std::collections::BTreeMap;
 use std::collections::VecDeque;
@@ -128,6 +131,22 @@ struct Job {
     sender: mpsc::Sender<Finished>,
     cancelled: Arc<AtomicBool>,
     lease: Lease,
+    notifier: Arc<Notifier>,
+}
+
+#[derive(Default)]
+struct Notifier {
+    sender: Mutex<Option<Arc<WakeSender>>>,
+}
+
+impl Notifier {
+    fn notify(&self) {
+        if let Ok(sender) = self.sender.lock()
+            && let Some(sender) = sender.as_ref()
+        {
+            sender.notify();
+        }
+    }
 }
 
 struct Finished {
@@ -200,12 +219,17 @@ impl Pool {
                     .unwrap_or(Reply::Panicked);
                 // On cancellation, dropping this answer closes any returned
                 // file. A worker never accesses a VM arena or resumes a task.
-                if !job.cancelled.load(Ordering::Acquire) {
-                    let _receiver_gone = job.sender.send(Finished {
-                        id: job.id,
-                        reply,
-                        lease: job.lease,
-                    });
+                if !job.cancelled.load(Ordering::Acquire)
+                    && job
+                        .sender
+                        .send(Finished {
+                            id: job.id,
+                            reply,
+                            lease: job.lease,
+                        })
+                        .is_ok()
+                {
+                    job.notifier.notify();
                 }
             }
             let Ok(mut queue) = self.queue.lock() else {
@@ -228,6 +252,8 @@ struct Portal {
     sender: mpsc::Sender<Finished>,
     receiver: mpsc::Receiver<Finished>,
     cancelled: Arc<AtomicBool>,
+    notifier: Arc<Notifier>,
+    wake: Option<WakePair>,
 }
 
 impl Default for Portal {
@@ -237,6 +263,8 @@ impl Default for Portal {
             sender,
             receiver,
             cancelled: Arc::new(AtomicBool::new(false)),
+            notifier: Arc::new(Notifier::default()),
+            wake: None,
         }
     }
 }
@@ -286,6 +314,7 @@ impl State {
             sender: portal.sender.clone(),
             cancelled: Arc::clone(&portal.cancelled),
             lease,
+            notifier: Arc::clone(&portal.notifier),
         })?;
         self.pending.insert(
             id,
@@ -348,6 +377,36 @@ impl State {
                     "native host completion channel disconnected",
                 ));
             }
+        }
+        Ok(())
+    }
+
+    /// Install before collecting completed jobs and entering the descriptor
+    /// poller. Already-running workers share this notifier, so no wake is lost.
+    pub(super) fn enable_network_wake(&mut self) -> Result<(), KernelError> {
+        let Some(portal) = &mut self.portal else {
+            return Ok(());
+        };
+        if portal.wake.is_none() {
+            let wake = WakePair::new().map_err(super::network::host_error)?;
+            *portal
+                .notifier
+                .sender
+                .lock()
+                .map_err(|_error| KernelError::new("native worker notifier poisoned"))? =
+                Some(Arc::clone(&wake.sender));
+            portal.wake = Some(wake);
+        }
+        Ok(())
+    }
+
+    pub(super) fn wake_source(&self) -> Option<&NativeSocket> {
+        self.portal.as_ref()?.wake.as_ref().map(|wake| &wake.reader)
+    }
+
+    pub(super) fn drain_network_wake(&self) -> Result<(), KernelError> {
+        if let Some(wake) = self.portal.as_ref().and_then(|portal| portal.wake.as_ref()) {
+            wake.drain().map_err(super::network::host_error)?;
         }
         Ok(())
     }

@@ -146,7 +146,7 @@ def erased_symbol(): {==}
     );
     let checked = fixture.checked();
     assert_eq!(checked.numeric_names().count(), 37);
-    assert_eq!(checked.foreign_names().count(), 16);
+    assert_eq!(checked.foreign_names().count(), 27);
     let mut stdout = Vec::new();
     checked
         .run_main(&mut stdout, &mut Vec::new(), &|| false)

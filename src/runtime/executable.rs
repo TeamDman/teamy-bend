@@ -32,6 +32,7 @@ mod channel_tests;
 mod file_io;
 #[cfg(test)]
 mod file_tests;
+mod network_io;
 #[cfg(test)]
 mod scheduler_tests;
 
@@ -116,6 +117,7 @@ impl Machine<'_> {
         self.channels = super::channels::State::default();
         self.jobs = super::host_jobs::State::default();
         self.files = super::file_handles::State::default();
+        self.network = super::network::State::default();
         result
     }
 
@@ -125,8 +127,16 @@ impl Machine<'_> {
         stderr: &mut dyn Write,
         clock: &mut dyn Clock,
     ) -> Result<u32, KernelError> {
+        let mut turns = 0_u8;
         loop {
             self.tick()?;
+            let collect_workers = turns.is_multiple_of(64);
+            turns = turns.wrapping_add(1);
+            if self.scheduler.has_ready() && collect_workers && self.jobs.has_pending() {
+                // Native upstream also collects workers every 64 driver turns
+                // during sustained runnable work, appending their continuations.
+                self.resume_host_jobs()?;
+            }
             if let Some(current) = self.scheduler.next() {
                 match self.run_task(current, stdout, stderr, clock)? {
                     TaskOutcome::Complete => self.scheduler.complete()?,
@@ -151,6 +161,7 @@ impl Machine<'_> {
         // Upstream flushes before entering its poller, including zero-time
         // waits. Buffered output must be visible while every task is parked.
         self.flush(stdout, "stdout")?;
+        let mut polled = None;
         loop {
             // Waiting does not consume evaluation steps. In particular, the
             // full U32 sleep range must not exhaust the budget merely because
@@ -158,11 +169,22 @@ impl Machine<'_> {
             if self.cancelled.is_some_and(|cancelled| cancelled()) {
                 return Err(KernelError::new("execution cancelled"));
             }
-            // Upstream takes completed host jobs before waking due timers,
-            // only after the runnable queue has drained.
+            // Install worker notification before inspecting completion state.
+            // Network and timer wakes follow one common registration order.
+            if self.network.has_pending() {
+                self.jobs.enable_network_wake()?;
+            }
+            let ready = if let Some(ready) = polled.take() {
+                ready
+            } else if self.network.has_pending() {
+                self.network.poll(self.jobs.wake_source(), 0)?
+            } else {
+                Vec::new()
+            };
+            self.jobs.drain_network_wake()?;
             self.resume_host_jobs()?;
             let now = clock.now()?;
-            self.scheduler.wake(now);
+            self.resume_network(&ready, now)?;
             if self.scheduler.has_ready() {
                 return Ok(());
             }
@@ -170,7 +192,13 @@ impl Machine<'_> {
                 .scheduler
                 .next_deadline()
                 .map(|deadline| deadline.saturating_sub(now).min(MAX_WAIT_NANOS));
-            if self.jobs.has_pending() {
+            if self.network.has_pending() {
+                polled = Some(clock.wait_for_network(
+                    &self.network,
+                    &self.jobs,
+                    wait.unwrap_or(MAX_WAIT_NANOS),
+                )?);
+            } else if self.jobs.has_pending() {
                 clock.wait_for_work(&mut self.jobs, wait.unwrap_or(MAX_WAIT_NANOS))?;
             } else if let Some(wait) = wait {
                 clock.wait(wait)?;
@@ -251,6 +279,19 @@ impl Machine<'_> {
             .get(name)
             .and_then(|foreign| foreign.builtin);
         let answer = match builtin {
+            Some(
+                builtin @ (BuiltinForeign::TcpListen
+                | BuiltinForeign::TcpAccept
+                | BuiltinForeign::TcpConnect
+                | BuiltinForeign::TcpSend
+                | BuiltinForeign::TcpRecv
+                | BuiltinForeign::UdpBind
+                | BuiltinForeign::UdpSendTo
+                | BuiltinForeign::UdpRecvFrom
+                | BuiltinForeign::UdpPoll
+                | BuiltinForeign::SocketClose
+                | BuiltinForeign::ListenerClose),
+            ) => return self.network_request(builtin, arguments, continuation),
             Some(
                 builtin @ (BuiltinForeign::GetEnv
                 | BuiltinForeign::FileOpen
@@ -347,6 +388,21 @@ impl Machine<'_> {
             ))
         })?;
         match builtin {
+            BuiltinForeign::TcpListen
+            | BuiltinForeign::TcpAccept
+            | BuiltinForeign::TcpConnect
+            | BuiltinForeign::TcpSend
+            | BuiltinForeign::TcpRecv
+            | BuiltinForeign::UdpBind
+            | BuiltinForeign::UdpSendTo
+            | BuiltinForeign::UdpRecvFrom
+            | BuiltinForeign::UdpPoll
+            | BuiltinForeign::SocketClose
+            | BuiltinForeign::ListenerClose => {
+                return Err(KernelError::new(format!(
+                    "network builtin {name} reached console-only dispatch"
+                )));
+            }
             BuiltinForeign::GetEnv
             | BuiltinForeign::FileOpen
             | BuiltinForeign::FileRead

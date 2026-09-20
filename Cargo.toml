@@ -34,10 +34,12 @@ facet-json = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0",
 facet-pretty = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "facet-pretty" }
 figue = { git = "https://github.com/TeamDman/facet.git", rev = "23ad4dcd0", package = "figue", features = ["arbitrary"] }
 open = "5"
+socket2 = "0.6.4"
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.62.2", features = [
     "Win32_Globalization",
+    "Win32_Networking_WinSock",
     "Win32_System_Console",
     "Win32_System_Performance",
 ] }

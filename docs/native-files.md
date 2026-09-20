@@ -36,8 +36,10 @@ finish synchronously, matching the upstream C effect boundary. Workers do not
 receive Bend values, arena pointers, continuations or output writers. Completed
 host answers are packed and continuations resumed on the VM thread.
 
-Ready tasks run before host completions are collected. When the ready queue is
-empty, available host completions are enqueued before due timers. The collector
+During sustained runnable work, completed host jobs are collected every 64 driver
+turns and appended after ready tasks, matching native upstream. When the ready
+queue is empty, available host completions are enqueued before the mixed
+timer/descriptor readiness wakes. The collector
 traces pending continuations directly. Waiting for host work wakes on completion
 and checks cancellation at intervals no longer than 100 ms; idle wait time does
 not consume evaluation steps. Child work remains live after main completes.
@@ -98,5 +100,6 @@ Whole-program comparisons execute the actual upstream checker/compiler/JS runtim
 in isolated copied fixture directories and state target differences explicitly.
 The implementation plan records publication-specific counts and retained receipts.
 
-Descriptor readiness, sockets, interactive window/audio effects, executable C
-and GPU execution remain separate unfinished engine work.
+Native descriptor readiness and sockets are covered by
+[native networking](native-network.md). JavaScript networking, interactive
+window/audio effects, executable C and GPU execution remain unfinished.

@@ -288,8 +288,11 @@ fn app_is_checked_ordinary_executable_base_without_new_runtime_assumptions() {
         assert!(checked.definition_type(name).is_some());
         assert!(!checked.foreign_names().any(|foreign| foreign == name));
     }
-    assert_eq!(checked.foreign_names().count(), 16);
-    assert_eq!(checked.opaque_names().collect::<Vec<_>>(), ["Chan", "File"]);
+    assert_eq!(checked.foreign_names().count(), 27);
+    assert_eq!(
+        checked.opaque_names().collect::<Vec<_>>(),
+        ["Chan", "File", "Listener", "Socket"]
+    );
     let strict = load(fixture.0.join("main.bend")).unwrap();
     check_book(&strict).unwrap();
     assert!(!strict.declarations.iter().any(|declaration| {

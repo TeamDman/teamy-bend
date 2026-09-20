@@ -163,7 +163,7 @@ impl Machine<'_> {
         self.host_constructor("Tuple", vec![file, result])
     }
 
-    fn host_failure(&mut self, error: Failure) -> Result<ThunkId, KernelError> {
+    pub(super) fn host_failure(&mut self, error: Failure) -> Result<ThunkId, KernelError> {
         let error = match error {
             Failure::Io(error) => error,
             Failure::Limit(message) => return Err(KernelError::new(message)),
@@ -176,14 +176,14 @@ impl Machine<'_> {
         self.host_constructor("Fail", vec![pair])
     }
 
-    fn host_word(&mut self, bits: u32) -> Result<ThunkId, KernelError> {
+    pub(super) fn host_word(&mut self, bits: u32) -> Result<ThunkId, KernelError> {
         self.allocate(Thunk::Ready(Value::PackedWord {
             wrapper: Wrapper::U32,
             bits,
         }))
     }
 
-    fn host_text(&mut self, points: &[u32]) -> Result<ThunkId, KernelError> {
+    pub(super) fn host_text(&mut self, points: &[u32]) -> Result<ThunkId, KernelError> {
         let mut text = self.host_constructor("SNil", vec![])?;
         for point in points.iter().rev() {
             self.tick()?;
@@ -204,7 +204,7 @@ impl Machine<'_> {
         Ok(list)
     }
 
-    fn host_constructor(
+    pub(super) fn host_constructor(
         &mut self,
         name: &str,
         fields: Vec<ThunkId>,

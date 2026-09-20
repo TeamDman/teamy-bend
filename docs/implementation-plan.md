@@ -14,8 +14,9 @@
   into a claim that the entire requested rewrite is complete.
 - Historical parallel ownership is not a list of currently running agents.
   Native tasks, timers and channels are complete for this bounded native slice
-  (5.12), as are environment and file effects (5.13). The next engine focus is
-  descriptor readiness and TCP/UDP (5.14). Keep existing Poche
+  (5.12), as are environment and file effects (5.13). Native descriptor readiness
+  and TCP/UDP are implemented; the next engine focus is the generated JavaScript
+  readiness provider and network scheduler (5.14). Keep existing Poche
   checks as regressions and defer model expansion.
 
 ## Goal wording and scope
@@ -310,10 +311,13 @@ are implemented. Channels have a separate sealed executable-only opaque Chan
 contract, four JavaScript foreign operations and four ordinary IO.fork/join
 helpers. Image/Event and four ordinary Image helpers are implemented; executable
 Base adds App and finite more/fold/play helpers. A declaration-name inventory
-now finds six ordinary definitions, 18 foreign functions and four opaque laws
-absent from the union of pure and executable Base after environment/file support.
+now finds six ordinary definitions, seven foreign functions and two opaque laws
+absent from the union of pure and executable Base after native network support.
 The six file/environment contracts and sealed affine File type execute natively
 and in generated JavaScript; see 5.13 and [native files](native-files.md).
+The eleven network contracts and affine Socket/Listener types are native; their
+JavaScript provider remains unfinished under 5.14. Name coverage is not backend
+parity.
 Completing that inventory alone does not establish target, runtime or language
 parity.
 
@@ -1062,14 +1066,21 @@ This completes the bounded environment/file milestone. Descriptor readiness,
 other platform effects, arbitrary native FFI, executable C and GPU remain
 unfinished engine work. The overall goal stays active.
 
-### [ ] 5.14 Add native descriptor readiness and TCP/UDP
+### [~] 5.14 Add native descriptor readiness and TCP/UDP
+
+Native implementation: exact executable contracts, native owned sockets and the
+mixed timer/readiness scheduler. Network waits use the VM poller rather than file
+workers; a lazily installed notification socket wakes that poller on file-job
+completion. Generated JavaScript readiness remains a required subsequent part
+of this milestone and rejects reachable network effects until implemented.
 
 Work: extend the existing native scheduler with bounded readiness registrations,
 sealed affine Socket/Listener contracts and all eleven TCP/UDP/close effects.
 Keep Poche model expansion deferred. Socket waits must not occupy file workers:
 the upstream slow-peer fixture parks 70 senders while timers and file work remain
-responsive, exceeding the 64-worker pool. Retain handles and pending continuations
-as GC roots, and release registrations/resources on close, Halt and cancellation.
+responsive, exceeding the 64-worker pool. Retain ownership of handles/resources
+and root pending continuations; release registrations/resources on close, Halt
+and cancellation.
 
 Preserve upstream ordering: TCP.accept, TCP.recv and UDP.recv_from register and
 park before their first syscall. Connect/send attempt immediately and park only
@@ -1084,14 +1095,48 @@ Reference entry points: upstream comp.ts io_sys_addr, io_wait_on, io_wait and
 IO_READ dispatch; effs/tcp_*.c, udp_*.c, socket_close.c and listener_close.c;
 tests/io/tcp_* and udp_*. In this port, start from runtime/executable.rs,
 runtime/scheduler.rs, runtime/runtime_clock.rs and the file-job completion/GC
-integration. Generated JavaScript then needs a real readiness adapter and a
-driver that pumps Node callbacks; the current synchronous driver does not.
+integration. Generated JavaScript then needs a synchronous syscall/readiness
+provider preserving the raw-descriptor and callback ABI. Keep supplied BEND_SYS
+authoritative. Do not resume VM continuations from asynchronous host callbacks.
 
-Validation: run ./check-all.ps1 and strict library/test Clippy; compare real
-upstream loopback, refused/pending connection, slow-peer starvation, poll-empty,
-datagram truncation, close/error and forced-GC cases. Freeze source and executable
-fingerprints, rerun the strict audit and short existing Poche regressions before
-publication. Treat unavailable platforms as unverified.
+Next implementation: maintain bounded descriptor waits alongside timers, poll
+only after runnable work is drained, and preserve their common registration
+order. Error/hangup readiness must resume the operation; EAGAIN reparks it.
+Preserve upstream's distinction between explicit write parking and the initial
+foreign `need.read` request, which does not park solely for `need.write`.
+Decide the default host provider explicitly: a native addon can serve the current
+Node host, while a supported FFI host is another possible target. A worker using
+virtual handles does not establish compatibility with raw-descriptor foreign
+calls. Preserve full Windows SOCKET width and WSAPOLLFD layout separately from
+POSIX pollfd. Validate deterministic descriptor/timer traces and actual upstream
+JavaScript loopback programs through the selected provider before closing 5.14.
+
+Native validation: ./check-all.ps1 passes 487 tests, including five compile-fail
+examples, with two optional profilers ignored; strict library/test Clippy passes.
+Nine public networking tests, ten host tests and seven private VM tests cover
+the new path. Six private tests force GC. Actual OS backpressure is covered by
+70 parked sends plus a worker canary and a separate 512 KiB send that completes
+with exact bytes. A checked source fixture covers 70 receivers, real file work,
+a timer and Halt cleanup. See [native networking](native-network.md) for the
+test boundaries, including the distinction between initial parking and a
+deterministically observed partial-send retry sequence.
+
+The frozen candidate passes all eight CLI networking cases, 256 integer
+comparisons, 21 Image workloads and 18 environment/file cases with their existing
+target qualifications. The production IPv4 parser matches 3,090 upstream C
+address cases. Six actual-loopback host groups match the adapted upstream C
+effects; three additional scripted C send-transition groups and adapter cleanup
+pass separately. This is not whole generated-C runtime equivalence.
+
+All 97 compiled-source fingerprints remain unchanged during validation. The
+strict 1,302-fixture audit remains 362 accepted positives / 491 rejected positives
+/ 449 rejected negatives, with zero accepted negatives, abnormal exits or new
+rejections. Ignored evidence: target/audit-native-network,
+target/native-network-address-oracle, target/native-network-c-effects,
+target/native-network-release-comparison, target/packed-word-native-network,
+target/image-native-network and target/native-network-file-regression. Retain
+a clean release and rerun the short existing Poche regressions before publication.
+Unix runtime behavior remains unverified.
 
 Completion: supported network effects preserve results, readiness ordering,
 ownership, cancellation and bounded resources on validated targets. Then advance

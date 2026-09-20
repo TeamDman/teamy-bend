@@ -48,6 +48,8 @@ pub struct ExecutableSource {
 pub(crate) enum OpaqueType {
     Chan,
     File,
+    Socket,
+    Listener,
 }
 
 impl OpaqueType {
@@ -55,6 +57,8 @@ impl OpaqueType {
         match name {
             "Chan" => Some(Self::Chan),
             "File" => Some(Self::File),
+            "Socket" => Some(Self::Socket),
+            "Listener" => Some(Self::Listener),
             _ => None,
         }
     }
@@ -209,6 +213,17 @@ pub(crate) enum BuiltinForeign {
     FileReadBytes,
     FileWrite,
     FileClose,
+    TcpListen,
+    TcpAccept,
+    TcpConnect,
+    TcpSend,
+    TcpRecv,
+    UdpBind,
+    UdpSendTo,
+    UdpRecvFrom,
+    UdpPoll,
+    SocketClose,
+    ListenerClose,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]

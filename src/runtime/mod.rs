@@ -21,7 +21,9 @@ mod file_handles;
 mod gc;
 mod host_files;
 mod host_jobs;
+mod host_network;
 mod nat;
+mod network;
 mod numeric;
 mod packed;
 mod runtime_clock;
@@ -108,6 +110,8 @@ impl Program {
 enum Value {
     Channel(channels::Handle),
     File(file_handles::Handle),
+    Socket(network::Handle),
+    Listener(network::Handle),
     PackedNat(u64),
     PackedWord {
         wrapper: packed::Wrapper,
@@ -188,6 +192,7 @@ struct Machine<'program> {
     channels: channels::State,
     files: file_handles::State,
     jobs: host_jobs::State,
+    network: network::State,
     #[cfg(test)]
     gc_mode: gc::Mode,
     globals: BTreeMap<String, ThunkId>,
@@ -210,6 +215,7 @@ impl<'program> Machine<'program> {
             channels: channels::State::default(),
             files: file_handles::State::default(),
             jobs: host_jobs::State::default(),
+            network: network::State::default(),
             #[cfg(test)]
             gc_mode: gc::Mode::Automatic,
             globals: BTreeMap::new(),
@@ -599,6 +605,9 @@ impl<'program> Machine<'program> {
             )),
             Value::File(_) => Err(KernelError::new(
                 "data runtime cannot materialize an opaque file handle",
+            )),
+            Value::Socket(_) | Value::Listener(_) => Err(KernelError::new(
+                "data runtime cannot materialize an opaque network handle",
             )),
             Value::Closure { .. }
             | Value::Match { .. }

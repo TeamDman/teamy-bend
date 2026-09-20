@@ -5,8 +5,8 @@ A Rust rewrite of the Bend 2 proof language, started from
 
 Status: working proof-language subset; full rewrite in progress. Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
-Native console IO, tasks, timers, channels, environment lookup and files use a
-separate execution contract checker.
+Native console IO, tasks, timers, channels, environment lookup, files and TCP/UDP
+use a separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
 and channels with fork/join, plus the same environment and file contracts.
 All 37 numeric primitives execute in native IO and generated JavaScript;
@@ -14,7 +14,7 @@ their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
 The bundled Base contains 367 selected pure source declarations, including
 18 templates, Image quadtrees and Event values. Finite App playback runs through
-native IO and generated JavaScript. Host readiness, network/window/audio effects,
+native IO and generated JavaScript. JavaScript networking, window/audio effects,
 executable C, GPU and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
@@ -106,7 +106,8 @@ It always emits source text, including when output is redirected.
 
 `run` checks executable contracts and runs `main`. Its execution-only Base adds
 IO continuations, pure/bind/die/pass/try, console effects, tasks, timers,
-channels, IO.get_env and File.open/read/read_bytes/write/close.
+channels, IO.get_env, File.open/read/read_bytes/write/close and the eleven
+TCP/UDP/socket effects.
 Console output stays raw even with `--output-format json`. `Emit` discards its
 payload and exits successfully; `Halt` writes its message to stderr and sets
 the exit status. The console example prints `The answer is 42` and exits 0.
@@ -116,6 +117,10 @@ tasks can run. The collector retains their pending continuations. Halt and
 cancellation discard queued work and release owned files; an OS call already
 running may finish later without resuming the program. See
 [environment and file effects](docs/native-files.md) for ownership and limits.
+Native networking uses nonblocking sockets and descriptor readiness on the VM
+scheduler. Socket waits leave file workers available, and timers share socket
+registration order. See [native networking](docs/native-network.md) for results,
+resource bounds and Windows/Unix differences.
 Arbitrary foreign source is retained by the loader; the native `run` command
 rejects its execution. Use executable JavaScript for synchronous foreign code.
 Generated C supports pure programs; its effect driver remains unfinished.
