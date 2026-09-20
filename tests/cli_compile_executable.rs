@@ -109,18 +109,10 @@ fn executable_options_do_not_change_the_default_strict_compiler() {
         "pure compilation cannot assume IO contracts"
     );
     assert!(!fixture.0.join("main.cjs").exists());
-    for (options, diagnostic) in [
-        (vec!["--executable", "--target", "c"], "JavaScript only"),
-        (
-            vec!["--executable", "--entry", "other"],
-            "requires the main entry",
-        ),
-    ] {
-        let output = fixture.compile(&options);
-        assert!(!output.status.success());
-        assert!(String::from_utf8_lossy(&output.stderr).contains(diagnostic));
-        assert!(!fixture.0.join("main.cjs").exists());
-    }
+    let output = fixture.compile(&["--executable", "--entry", "other"]);
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("requires the main entry"));
+    assert!(!fixture.0.join("main.cjs").exists());
 }
 
 #[test]

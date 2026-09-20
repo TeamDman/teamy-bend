@@ -16,7 +16,7 @@
   Native tasks, timers and channels are complete for this bounded native slice
   (5.12), as are environment and file effects (5.13). Native descriptor readiness
   and TCP/UDP now pass native and generated JavaScript validation on Windows
-  (5.14); executable C is the next engine implementation (5.15). Keep existing Poche
+  (5.14); executable C is the active engine implementation (5.15). Keep existing Poche
   checks as regressions and defer model expansion.
 
 ## Goal wording and scope
@@ -1205,17 +1205,25 @@ required. Pure C compilation does not establish that interface. Window/audio and
 GPU remain later engine work; consult the saved GPU references when that phase
 begins.
 
-### [ ] 5.15 Implement executable C and its foreign/runtime ABI
+### [~] 5.15 Implement executable C and its foreign/runtime ABI
 
-The current compiler/c.rs path lowers a strict Book into the separate lazy
-Value/Thunk constructor runtime in c_runtime.c and prints JSON. The CLI rejects
-executable C. Extending its console dispatch would not provide the upstream
-foreign ABI. Start a separate executable_c backend over the existing typed
-ExecutableProgram; expose the target-neutral lowering currently named
-lower_for_javascript instead of duplicating checking.
+Implementation has started after the published 3f9da11 JavaScript milestone.
+Parallel ownership for this slice: packed value/effect runtime, Rust layout and
+foreign-source assembly, independent compiled-C tests, and the Rust emitter/CLI.
+The first integration uses bounded retained storage to preserve aliases while
+bringing up the native ABI; reclamation and the complete scheduler/effect suite
+remain requirements of this milestone, not grounds to mark it complete early.
 
-First coherent deliverable: native-value layout and constructor-ID assignment,
-C foreign-source assembly, and the Effect/IoWork continuation/activation runtime.
+The strict compiler/c.rs path continues to lower a proof-checked Book into the
+separate lazy Value/Thunk constructor runtime in c_runtime.c and print JSON.
+The new executable_c backend consumes the existing typed ExecutableProgram
+through target-neutral lower_for_compilation. The CLI now accepts
+`compile --executable --target c`; it emits standalone C without the Node addon.
+The two backends retain their distinct checking and representation boundaries.
+See [executable C](executable-c.md) for the implementation and current limits.
+
+The first coherent deliverable implements native-value layout and constructor-ID
+assignment, C foreign-source assembly, and the Effect/IoWork continuation runtime.
 Preserve the packed Term/Env heap interface used by actual upstream C imports,
 including native words, float bits, characters, Nat, strings, tuples, Result,
 Maybe, Bool, Unit, closures and arrays. Sharing pure front-end logic does not
@@ -1243,8 +1251,8 @@ sources use constructor attributes to call io_eff. Qualify a supported C
 toolchain or implement a reviewed explicit initializer path; stripping the
 attribute without invoking those functions is not equivalent.
 
-Validation: compile and run actual emitted C using the existing compiler_c.rs
-toolchain harness. Compare native values, closures/arrays and effects against
+Validation: compile and run actual emitted C using the strict host compiler
+harness in tests/support/executable_c_compiler.rs. Compare values and effects against
 upstream C, generated JavaScript and the Rust VM as applicable. Custom imports
 must exercise constructor aliases, shared-file deduplication, initializer order,
 callback-produced data, raw handles and readiness re-parking. Then carry the
@@ -1252,6 +1260,65 @@ channel, file and TCP/UDP suites across, including more than 64 waits, partial
 sends and cleanup, with malformed-layout/registration negatives. Console output
 is an early smoke test, not completion of this milestone. Poche model expansion
 remains deferred; window/audio and GPU remain subsequent engine work.
+
+Foundation implementation: native U32/F32 bits, immediate 48-bit Nat, boxed and
+inline datatype layouts, closures, arrays, pure surface printing, canonical C
+imports and numeric constructor aliases now lower from Rust. Supported C
+constructor attributes become explicit initializer calls under the runtime
+failure guard. Console, task, timer, channel and environment effects use the
+standalone C driver. Workers retain allocation ownership after Halt and never
+pack a cancelled result into released VM memory.
+
+Review identified two target-specific scheduling corrections: C invokes ready
+callbacks while traversing the original wait queue, and collects workers at
+outer activation boundaries. The JavaScript policy is not substituted for C.
+A verbatim upstream C wait-loop probe with a fixed-clock harness confirms the
+discriminating retry trace. Worker-created waits are excluded from the current
+poll snapshot to prevent indexing past its descriptor array.
+
+A checked wide-constructor recursion exposed native C stack overflow before
+the call-depth limit. Generated scalar/array temporaries now use bounded heap
+frames with small, non-inlined wrappers around bodies, including conversion and
+printer functions. Normal returns release the frame; guarded failures release
+its allocation owner. Internal pointer-Env calls and fixed native bridges also
+remove the input-sized set of argument copies emitted by unoptimized MSVC while
+preserving the public foreign ABI. The underlying retained VM arena still requires proper
+reclamation. Full tail-call/task lowering remains follow-up work.
+
+Foundation validation: ./check-all.ps1 passes 549 tests, including five compile-fail
+API examples, with two optional profilers ignored. Strict workspace library/test
+Clippy passes. Twenty executable-C tests and seven runtime tests compile actual
+emitted programs with MSVC C11 /W4 /WX. They cover native representations,
+callbacks, erased slots, imports/aliases, CLI packaging, worker/VM boundaries,
+Halt retention, channel lifecycle, C scheduling order, invalid registrations and
+allocation/depth limits. The former stack-crash input now produces a controlled
+frame-limit diagnostic; shallow wide values succeed. The measured MSVC /Od body
+frame falls from 13,048 bytes to 56 bytes with heap temporaries and pointer-Env
+bridges.
+
+The frozen release candidate matches twelve complete programs against actual
+upstream-generated JavaScript, with the Nat overflow diagnostic qualified by
+target. Actual upstream C output is generated and retained but its complete
+POSIX/Clang runtime has not run on this Windows host. Separate verbatim C value,
+registration and wait-loop probes use documented host adapters; they establish
+only those helper/ABI portions. Unix execution remains unverified. Ignored
+evidence: target/executable-c-release-comparison, target/executable-c-abi-oracle,
+target/executable-c-toolchain, target/upstream-c-repark and target/c-codegen-review.
+
+All 115 compiled-source fingerprints remain unchanged during validation. The
+strict 1,302-fixture audit retains 362 accepted positives / 491 rejected positives
+/ 449 rejected negatives, with zero accepted negatives, abnormal exits or new
+rejections. Its frozen evidence is retained under target/audit-executable-c.
+Previous JavaScript networking and native runtime comparisons stay attributed to
+their earlier retained releases; these tests do not reattribute those runs.
+
+Remaining work within this milestone includes reference-count reclamation,
+file/network host adapters and their complete effect suites, higher-order erased
+type specialization, tail-call/task lowering, worker wake notification, and broader native-value/platform
+qualification. Unresolved Array element layouts fail during compilation instead
+of silently choosing an incompatible representation. The current retained arena
+and bounded worker polling are explicit foundations, not optimized CPU parity.
+Keep this task in progress until its full acceptance scope is met.
 
 ## Completion and risks
 

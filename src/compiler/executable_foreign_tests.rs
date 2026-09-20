@@ -38,7 +38,7 @@ impl Fixture {
         self.write("main.bend", source);
         let source = load_executable(self.0.join("main.bend")).expect("load fixture");
         let book = check_executable(&source).expect("check fixture");
-        assemble(&book.lower_for_javascript().expect("lower fixture"))
+        assemble(&book.lower_for_compilation().expect("lower fixture"))
     }
 
     fn run(&self, source: &str) -> Output {

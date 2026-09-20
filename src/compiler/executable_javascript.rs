@@ -34,7 +34,7 @@ use std::rc::Rc;
 /// unsupported code generation and exhausted type-lowering resource limits.
 pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, CompileError> {
     let program = book
-        .lower_for_javascript()
+        .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
     let foreign = executable_foreign::assemble(&program)?;
     let indices = program

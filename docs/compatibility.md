@@ -39,7 +39,7 @@ general large native Nat computation, optimized C and GPU
 backends, and upstream CLI parity remain unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
 supports [all 37 numeric primitive contracts](numeric-execution.md), also implemented
-by executable JavaScript. Strict checking and
+by executable JavaScript and executable C. Strict checking and
 the pure compilers do not admit their opaque implementation assumptions.
 
 ## Executable checking and native IO
@@ -83,8 +83,10 @@ Boundary/sample and helper tests cover zero, every bit boundary and u32::MAX.
 Arbitrary C/JS import descriptors are retained and deduplicated, but this native
 backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
-foreign imports, native representations and callbacks. The C effect driver,
-window/audio Base effects and unsafe execution remain
+foreign imports, native representations and callbacks. The separate
+[executable C compiler](executable-c.md) provides packed native values,
+foreign registration/callbacks and a bounded CPU effect runtime. Its file/network
+adapters, reclamation and optimized execution, plus window/audio Base effects and unsafe execution, remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
@@ -211,12 +213,17 @@ accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows
 only aliases and annotations, without unfolding computed recursive arguments.
 The Image/App, compact-word and reclamation slices preserve those acceptance decisions.
-The JavaScript-network implementation passes 513 tests, including 5 compile-fail API
+The executable-C foundation passes 549 tests, including 5 compile-fail API
 boundary examples, with 2 optional
 local profilers ignored. Strict Clippy checking covers the library and
 integration tests across both workspace crates. Direct Node provider tests are
-also part of the quality gate. Its frozen candidate records 106 compiled-source
-fingerprints and preserves the previous native-network audit decisions.
+also part of the quality gate. Its frozen candidate records 115 compiled-source
+fingerprints and preserves the previous checker audit decisions. Twenty C
+integration tests and seven C runtime tests compile emitted programs with strict
+MSVC warnings; twelve whole programs match actual upstream-generated JavaScript.
+Separate upstream C helper probes qualify specific ABI and scheduling behavior;
+the full upstream C runtime has not run on this host. See
+[executable C](executable-c.md) for remaining work and limits.
 [Native networking](native-network.md) distinguishes real loopback, forced-GC
 and adapted upstream C evidence. The [implementation plan](implementation-plan.md)
 tracks publication validation and retained comparison receipts.

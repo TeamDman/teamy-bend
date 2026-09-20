@@ -9,8 +9,10 @@ timers, channels, environment lookup and files through separate execution
 contracts. JavaScript also supports synchronous foreign code and callbacks.
 Native TCP/UDP uses the VM descriptor poller; generated JavaScript uses a
 synchronous Rust Node-API provider. Arbitrary native foreign calls,
-window/audio, executable C and GPU work remain
-unfinished. Engine parity remains the priority;
+window/audio, full executable C and GPU work remain unfinished.
+The [executable C foundation](executable-c.md) now provides packed values,
+foreign callbacks and a console/task/timer/channel/environment driver.
+Engine parity remains the priority;
 existing Poche checks provide regressions without changing its application
 architecture.
 

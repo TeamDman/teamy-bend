@@ -1,0 +1,32 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Native ABI derived from Bend 2.0.5 comp.ts, Copyright 2026 HigherOrderCO.
+ * Pointer-Env bridges: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
+ * Keep generated bodies on pointer arguments. In unoptimized MSVC, passing
+ * the 16-byte Env by value creates a distinct stack temporary at every call
+ * site. These fixed-size non-inlined bridges preserve the foreign ABI without
+ * allowing a generated body's native frame to grow with its source length. */
+OUTLINE TB_NOINLINE Term tb_c_construct(const Env *e, u32 cid, u32 count, const Term *fields, bool packed) {
+  return tb_construct(*e, cid, count, fields, packed);
+}
+OUTLINE TB_NOINLINE void tb_c_fields(const Env *e, Term value, u32 cid, u32 count, bool packed, Term *out) {
+  tb_fields(*e, value, cid, count, packed, out);
+}
+OUTLINE TB_NOINLINE Term tb_c_apply(const Env *e, Term closure, Term argument) {
+  return tb_apply(*e, closure, argument);
+}
+OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {
+  return tb_closure(*e, fid, count, captures);
+}
+OUTLINE TB_NOINLINE Term tb_c_word(const Env *e, u32 value) { return tb_word(*e, value); }
+OUTLINE TB_NOINLINE Term tb_c_term_word(const Env *e, Term value) { return term_word(*e, value); }
+OUTLINE TB_NOINLINE Term tb_c_nat_chk(const Env *e, Nat value) { return nat_chk(*e, value); }
+OUTLINE TB_NOINLINE Term tb_c_nat_mul(const Env *e, Nat left, Nat right) { return nat_mul(*e, left, right); }
+OUTLINE TB_NOINLINE Term tb_c_blk_node(const Env *e, Term left, Term right) { return blk_node(*e, left, right); }
+OUTLINE TB_NOINLINE Term tb_c_blk_new(const Env *e, bool array, Nat depth, u32 lgs, u32 count, Term *values) {
+  return blk_new(*e, array, depth, lgs, count, values);
+}
+OUTLINE TB_NOINLINE Term tb_c_blk_half(const Env *e, Term value, u32 high) { return blk_half(*e, value, high); }
+OUTLINE TB_NOINLINE Term tb_c_blk_copy(const Env *e, Term value) { return blk_copy(*e, value); }
+OUTLINE TB_NOINLINE Term tb_c_f32_show(const Env *e, Term value) { return tb_f32_show(*e, value); }
+OUTLINE TB_NOINLINE Term tb_c_f32_read(const Env *e, Term value) { return tb_f32_read(*e, value); }
+OUTLINE TB_NOINLINE void tb_c_show_native(const Env *e, Term value, unsigned kind) { tb_show_native(*e, value, kind); }

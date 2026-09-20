@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
 use crate::compiler::compile_c;
+use crate::compiler::compile_executable_c;
 use crate::compiler::compile_executable_javascript;
 use crate::compiler::compile_javascript;
 use crate::kernel::check_executable;
@@ -36,7 +37,7 @@ pub struct CompileArgs {
     /// Output source language: javascript (default) or c.
     #[facet(args::named, default)]
     pub target: CompileTarget,
-    /// Compile executable contracts and IO to JavaScript instead of pure data.
+    /// Compile executable contracts and IO instead of pure data.
     #[facet(args::named, default)]
     pub executable: bool,
     /// Output source file to create.
@@ -67,15 +68,15 @@ impl CompileArgs {
             if entry != "main" {
                 return Err(eyre!("executable compilation requires the main entry"));
             }
-            if self.target != CompileTarget::Javascript {
-                return Err(eyre!(
-                    "executable compilation currently supports JavaScript only"
-                ));
-            }
             let source = syntax::load_executable(std::path::Path::new(&self.file))
                 .map_err(|error| eyre!("{error}"))?;
             let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
-            ("javascript", compile_executable_javascript(&checked))
+            match self.target {
+                CompileTarget::Javascript => {
+                    ("javascript", compile_executable_javascript(&checked))
+                }
+                CompileTarget::C => ("c", compile_executable_c(&checked)),
+            }
         } else {
             let book =
                 syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
@@ -91,7 +92,7 @@ impl CompileArgs {
                 "cannot create compiled output (use --force to replace an existing file)"
             ));
         }
-        let socket_provider = if self.executable {
+        let socket_provider = if self.executable && self.target == CompileTarget::Javascript {
             install_socket_provider(std::path::Path::new(&self.output))?
         } else {
             None

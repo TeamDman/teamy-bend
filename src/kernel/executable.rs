@@ -67,7 +67,7 @@ pub struct ExecutableBook {
 }
 
 impl ExecutableBook {
-    pub(crate) fn lower_for_javascript(
+    pub(crate) fn lower_for_compilation(
         &self,
     ) -> Result<super::elaborate::ExecutableProgram, KernelError> {
         super::elaborate::lower(

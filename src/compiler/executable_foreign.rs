@@ -7,12 +7,14 @@ use crate::kernel::elaborate::ExecutableProgram;
 use crate::kernel::elaborate::Expression;
 use crate::kernel::elaborate::ExpressionKind;
 use crate::syntax::executable::BuiltinForeign;
+use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::ForeignTarget;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::collections::VecDeque;
 use std::fmt::Write;
 use std::fs;
+use std::path::PathBuf;
 
 const DRIVER: &str = include_str!("executable_io.js");
 const FILES: &str = include_str!("executable_files.js");
@@ -44,24 +46,8 @@ pub(super) fn assemble(program: &ExecutableProgram) -> Result<ForeignAssembly, C
             entries.push((Some(function), String::new()));
             continue;
         }
-        let import = foreign
-            .imports
-            .iter()
-            .find(|import| import.target == ForeignTarget::JavaScript)
-            .ok_or_else(|| {
-                CompileError::new(format!(
-                    "foreign definition {name} has no JavaScript import"
-                ))
-            })?;
-        let path = fs::canonicalize(&import.path).map_err(|error| {
-            CompileError::new(format!(
-                "cannot resolve JavaScript import for {name}: {error}"
-            ))
-        })?;
-        if seen.insert(path.clone()) {
-            let source = fs::read_to_string(&path).map_err(|error| {
-                CompileError::new(format!("cannot read JavaScript import for {name}: {error}"))
-            })?;
+        if let Some(source) = canonical_source(name, foreign, ForeignTarget::JavaScript, &mut seen)?
+        {
             imports.push_str(&source);
             // A final line comment in one file cannot swallow the next file.
             imports.push('\n');
@@ -147,7 +133,7 @@ fn builtin_function(builtin: BuiltinForeign) -> (&'static str, &'static str) {
 /// Upstream assembles foreign files in breadth-first live-reference order from
 /// main. File initialization can depend on earlier files, so sorting definition
 /// names would change program behavior even though canonical dedup still works.
-fn reference_order(program: &ExecutableProgram) -> Vec<&str> {
+pub(super) fn reference_order(program: &ExecutableProgram) -> Vec<&str> {
     let mut queue = VecDeque::from(["main"]);
     let mut seen = BTreeSet::new();
     let mut ordered = Vec::new();
@@ -167,6 +153,36 @@ fn reference_order(program: &ExecutableProgram) -> Vec<&str> {
         }
     }
     ordered
+}
+
+/// Select the first target import and include each canonical file once. Both
+/// executable backends use the same selection and error policy.
+pub(super) fn canonical_source(
+    name: &str,
+    foreign: &ForeignDefinition,
+    target: ForeignTarget,
+    seen: &mut BTreeSet<PathBuf>,
+) -> Result<Option<String>, CompileError> {
+    let label = match target {
+        ForeignTarget::JavaScript => "JavaScript",
+        ForeignTarget::C => "C",
+    };
+    let import = foreign
+        .imports
+        .iter()
+        .find(|import| import.target == target)
+        .ok_or_else(|| {
+            CompileError::new(format!("foreign definition {name} has no {label} import"))
+        })?;
+    let path = fs::canonicalize(&import.path).map_err(|error| {
+        CompileError::new(format!("cannot resolve {label} import for {name}: {error}"))
+    })?;
+    if !seen.insert(path.clone()) {
+        return Ok(None);
+    }
+    fs::read_to_string(path).map(Some).map_err(|error| {
+        CompileError::new(format!("cannot read {label} import for {name}: {error}"))
+    })
 }
 
 fn push_references<'a>(

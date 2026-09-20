@@ -9,13 +9,15 @@ Native console IO, tasks, timers, channels, environment lookup, files and TCP/UD
 use a separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
 and channels with fork/join, plus environment, file and TCP/UDP contracts.
-All 37 numeric primitives execute in native IO and generated JavaScript;
+Executable C supports native values, foreign callbacks and console/task/timer/
+channel/environment effects. All 37 numeric primitives are implemented in native
+IO and both executable compilers;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
 The bundled Base contains 367 selected pure source declarations, including
 18 templates, Image quadtrees and Event values. Finite App playback runs through
 native IO and generated JavaScript. Window/audio effects,
-executable C, GPU and complete library compatibility remain unfinished.
+full C runtime parity, GPU and complete library compatibility remain unfinished.
 This is an independent project, not an official Bend release. The full rewrite
 and Poche integration remain tracked in the
 [implementation plan](docs/implementation-plan.md).
@@ -38,6 +40,7 @@ node target/induction.cjs
 cargo run -- compile examples/induction.bend --target c --output target/induction.c
 cargo run -- compile --executable examples/console.bend --output target/console.cjs
 node target/console.cjs
+cargo run -- compile --executable examples/console.bend --target c --output target/console.c
 cargo run -- compile --executable examples/tasks.bend --output target/tasks.cjs
 node target/tasks.cjs
 cargo run -- compile --executable examples/channels.bend --output target/channels.cjs
@@ -73,7 +76,9 @@ permissions. Channel values preserve the reference foreign interface; fork/join
 helpers use the same scheduler. TCP/UDP uses the synchronous Rust Node-API
 provider built alongside the CLI and packaged beside generated programs. See
 [JavaScript networking](docs/executable-network.md) for provider setup, raw
-descriptors and limits. Executable C remains unfinished.
+descriptors and limits. [Executable C](docs/executable-c.md) now has a packed
+native ABI, foreign callbacks and a bounded CPU effect runtime; its remaining
+host effects, reclamation and optimized execution are unfinished.
 Environment and file effects use synchronous Node calls. The sealed affine File
 type prevents source code from copying handles; reads and writes return the
 handle on both success and failure. See
@@ -125,8 +130,10 @@ scheduler. Socket waits leave file workers available, and timers share socket
 registration order. See [native networking](docs/native-network.md) for results,
 resource bounds and Windows/Unix differences.
 Arbitrary foreign source is retained by the loader; the native `run` command
-rejects its execution. Use executable JavaScript for synchronous foreign code.
-Generated C supports pure programs; its effect driver remains unfinished.
+rejects its execution. Executable JavaScript and executable C support foreign
+companions for their respective targets. The C effect driver currently covers
+console output, tasks, timers, channels and environment lookup; see
+[executable C](docs/executable-c.md) for remaining effects and runtime limits.
 
 `serve` checks once and reads newline-delimited JSON calls from standard input.
 It returns a flushed JSON response for each request, allowing a client to pass

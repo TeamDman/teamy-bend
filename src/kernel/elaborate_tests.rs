@@ -125,7 +125,7 @@ fn assert_scope(expression: &Expression, scope: &BTreeSet<usize>) {
 fn lowered(source: &str) -> ExecutableProgram {
     let fixture = Fixture::new();
     let checked = fixture.checked(source);
-    let program = checked.lower_for_javascript().unwrap();
+    let program = checked.lower_for_compilation().unwrap();
     for definition in program.definitions.values() {
         if let DefinitionBody::Ordinary(body) = &definition.body {
             assert_scope(body, &BTreeSet::new());
@@ -295,7 +295,7 @@ def main() -> IO(Nat):
     return 0n
 ",
     );
-    let program = checked.lower_for_javascript().unwrap();
+    let program = checked.lower_for_compilation().unwrap();
     assert_eq!(program.constructor_tags["far.Local.Tag"], "Local.Tag");
     let DefinitionBody::Foreign(metadata) = &program.definitions["far.make"].body else {
         panic!("expected imported foreign body")
@@ -318,8 +318,8 @@ def main() -> Nat:
   Nat.add(twice(~(n => Nat.add(n, n)), a), callback()(0n, b))
 ",
     );
-    let first = checked.lower_for_javascript().unwrap();
-    let second = checked.lower_for_javascript().unwrap();
+    let first = checked.lower_for_compilation().unwrap();
+    let second = checked.lower_for_compilation().unwrap();
     assert_eq!(format!("{first:?}"), format!("{second:?}"));
     for definition in first.definitions.values() {
         if let DefinitionBody::Ordinary(body) = &definition.body {

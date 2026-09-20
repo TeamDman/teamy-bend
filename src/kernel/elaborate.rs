@@ -70,6 +70,9 @@ pub(crate) enum DefinitionBody {
 #[derive(Clone, Debug)]
 pub(crate) struct Expression {
     pub(crate) ty: TermRef,
+    /// Checked source retained for target-specific specialization of erased
+    /// type arguments. It is compiler metadata, never an execution/proof token.
+    pub(crate) source: TermRef,
     pub(crate) kind: ExpressionKind,
 }
 
@@ -359,6 +362,7 @@ impl Lowerer {
         self.engine.depth -= 1;
         result.map(|kind| Expression {
             ty: Rc::clone(ty),
+            source: Rc::clone(value),
             kind,
         })
     }
