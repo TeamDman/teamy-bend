@@ -67,11 +67,13 @@ static int tb_stderr_mode = -1;
 #endif
 
 INLINE void io_eff(u32 cid, Effect run, u32 need) {
+  tb_vm_acquire(); tb_registry_guard();
   if (cid >= BEND_CID_COUNT || run == NULL || (need & ~(IO_READ | IO_TIME)) != 0 || need == (IO_READ | IO_TIME))
     err_fail("invalid foreign effect registration");
   if (io_eff_rows[cid].run != NULL && io_eff_rows[cid].run != run) err_fail("duplicate foreign effect registration");
   io_eff_rows[cid].run = run;
   io_eff_rows[cid].ask = need;
+  tb_vm_release();
 }
 INLINE void tb_require_effect(u32 cid) {
   if (cid >= BEND_CID_COUNT || io_eff_rows[cid].run == NULL) err_fail("unregistered foreign effect");

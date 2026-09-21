@@ -79,13 +79,13 @@ captures and final argument. `FID_IO_EMIT` preserves its single payload in an
 Emit constructor. Task destruction releases payload owners without following
 the weak continuation link. Canonical roots use `TERM_HOLE` and index zero.
 
-The bounded FIFO executor validates returned fork graphs before running them,
+The coordinator validates returned fork graphs before running them,
 detaches embedded children and delivers each result exactly once. A ready
 non-root task can also enter through a closed chain of one-child continuations.
 Missing external siblings, cycles, duplicate nodes, invalid destinations and
 dependency counts fail explicitly. Nested foreign evaluations have separate
-root results. This executor runs on one VM thread; multicore scheduling remains
-unfinished. Registered boxed callbacks return one Term; generated word segments
+root results. Generated sibling bodies can execute concurrently on CPU workers.
+Registered boxed callbacks return one Term; generated word segments
 return an explicit vector outcome. Raw word bits cannot become task controls.
 Argument and result vectors carry exact ownership masks, including finite sums
 whose active variant changes a slot between a reference and a raw word. Graph
@@ -95,6 +95,43 @@ callers resume into checked vector destinations. `corpus_eval_words` exposes
 multiword results to trusted C with an explicit output capacity and ownership
 buffer; `corpus_eval` retains its one-word result contract. Broader callable
 specialization, upstream optimization parity and bang/GPU calls remain open.
+
+## CPU workers
+
+The runtime creates persistent workers when a generated fork has ready siblings.
+By default, it uses the detected CPU count, capped at 128, and creates only as
+many threads as the ready work needs. Set `BEND_CPU_WORKERS` when compiling the
+C output to select a limit, for example `/DBEND_CPU_WORKERS=4` with MSVC or
+`-DBEND_CPU_WORKERS=4` with a Unix compiler. A value of one executes on the
+coordinator without creating CPU workers; zero selects the default.
+
+Each worker exclusively owns a run and its saved callers. Workers return
+completed words, a new graph or a request to enter foreign code. The coordinator
+adopts graphs, writes complete result spans and activates each join once. Child
+completion order may differ while each child's sequential evaluation order is
+preserved. CPU workers are separate from the existing blocking file workers.
+
+Only compiler-generated registrations opt into worker execution. The dispatcher
+checks that property again at every call boundary. Plain foreign closure,
+resume and segment callbacks run on the coordinator after outstanding CPU jobs
+finish. Effects, packing callbacks and pure-result printing also remain on the
+coordinator. Foreign reentry retains its independent root, and registrations
+require an idle CPU pool.
+
+Before a value becomes shared, its owned descendants are sealed so retaining a
+child never rewrites a published payload. Reference counts, allocation metadata
+and global budgets use short mutex-protected operations; generated bodies run
+outside those locks. Unique extraction and array updates preserve exact raw-word
+masks. Additional count cells use the existing memory budget. Workers have local
+failure guards and native-depth counters. Failure cancels pending work and joins
+all CPU workers before freeing the VM, including partially created pools.
+
+This implements concurrent execution, with a shared allocator and serialized
+foreign boundaries. It does not establish a speedup or match upstream's optimized
+worker-local allocation and scheduling. See the
+[CPU parallel design](cpu-parallel-design.md) for ownership and acceptance details.
+
+## Specialization
 
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned

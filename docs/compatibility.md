@@ -95,7 +95,11 @@ foreign imports, native representations and callbacks. The separate
 [executable C compiler](executable-c.md) provides packed native values,
 foreign registration/callbacks, file and TCP/UDP effects and a bounded CPU runtime.
 CPU reclamation uses reference counts and free lists to reuse released storage.
-Optimized parallel C execution, window/audio Base effects and GPU execution
+Generated C sibling tasks now execute on a bounded CPU pool with a coordinator
+for graph delivery and foreign effects. Shared payloads are sealed before
+publication; allocation and count operations are synchronized. Compiler-generated
+entries opt in individually, and dynamic calls recheck eligibility. Worker-local
+allocator optimization, window/audio Base effects and GPU execution
 remain required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with

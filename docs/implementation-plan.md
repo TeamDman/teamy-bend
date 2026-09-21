@@ -17,8 +17,9 @@
   (5.12), as are environment and file effects (5.13). Native descriptor readiness
   and TCP/UDP now pass native and generated JavaScript validation on Windows
   (5.14); execution-only unsafe checking is implemented (5.16). Executable C
-  remains in progress (5.15), with actual multicore CPU execution the next
-  runtime priority. Keep existing Poche checks as regressions and defer model
+  remains in progress (5.15), with actual multicore CPU execution implemented
+  (5.15.2). Compiler specialization, runtime optimization and GPU work remain.
+  Keep existing Poche checks as regressions and defer model
   expansion.
 
 ## Goal wording and scope
@@ -1818,6 +1819,77 @@ that milestone and was not rerun or counted as new behavior coverage.
 Retain the clean release and run the existing Poche gates before publication.
 Existing Poche sources remain unchanged. General dynamic specialization and the
 remaining CPU/GPU/runtime work keep task 5.15 active.
+
+#### [x] 5.15.2 Execute generated sibling tasks on multiple CPU workers
+
+Work: run existing simultaneous-let graphs on a bounded persistent pool, with
+one coordinator retaining graph adoption, complete result delivery and effect
+ordering. Shared constructors, arrays and closure captures must have immutable
+payloads before publication. Synchronize reference counts, allocation metadata
+and global budgets; keep native call depth and failure guards local to each
+thread. This is the actual CPU runtime port, independent of existing file IO
+workers and the later GPU phase.
+
+Compiler-emitted entries explicitly opt into parallel execution. Recheck that
+permission at every dynamic, resumed and tail-call boundary; ordinary foreign
+registration grants none. Drain CPU jobs before invoking foreign callbacks,
+while allowing nested evaluations to use their own roots. Cancel and join all
+CPU workers before releasing VM storage, including partial creation failure.
+The [CPU parallel design](cpu-parallel-design.md) records these contracts.
+
+Acceptance: observe two generated sibling bodies overlapping on different
+worker threads in one process. Compare exact outputs and final ownership at
+one, two and four workers for nested joins, flattened result spans, captured
+closures, shared arrays/constructors and scalar tail adapters. Exercise plain
+foreign closure/resume/segment routing, nested reentry, registration, bounded
+failure and partial pool startup. Complete the affected C regression suites,
+standard quality gate, upstream output comparisons and exact-release Poche
+regressions before publication. Measure performance separately; correctness
+and overlap do not establish a speedup or complete upstream scheduling parity.
+
+Completion: generated sibling tasks execute on a lazily grown, persistent CPU
+pool. The default limit is the detected CPU count capped at 128;
+`BEND_CPU_WORKERS=1` retains coordinator-only execution. Each run keeps its
+private saved callers. Workers return graph, completion or foreign-boundary
+events; the coordinator retains dependency and result-span ownership.
+
+Shared descendants are sealed iteratively before count-cell publication.
+Retaining a shared field does not rewrite its word, and final-owner extraction
+is synchronized. Short VM mutex transactions protect allocation metadata,
+reference counts and global budgets. Depth, generated frame counts and failure
+guards are thread-local. Plain callback and effect registrations require a
+quiescent pool, and only compiler-generated entries explicitly opt into workers.
+Eligibility is rechecked after every dynamic or tail-call transition.
+
+Eight grouped regressions prove generated-body overlap on distinct OS threads,
+one/two/four-worker results, shared Data reclamation, raw-word masks, nested
+forks, foreign closure/resume/segment routing, nested reentry and callback-time
+registration, bounded failure, partial pool startup and repeated initialization.
+Review found and fixed stale pool state before a later invocation's initializer;
+its regression evaluates an actual generated fork before pool initialization.
+Successful runs retain zero VM/task/frame owners; all exits join every CPU
+worker before storage teardown. The standard gate passes 667 tests, including
+five compile-fail examples, with two optional profilers ignored. Strict
+workspace library/test Clippy also passes.
+
+Five source programs compile with strict MSVC and match their expected outputs
+at one, two and four workers: fifteen uninstrumented native executions.
+Four of the sources supply twelve exact comparisons with freshly executed
+upstream JavaScript. The fifth is an explicitly unsafe affine-array/closure
+ownership stress with a different upstream JavaScript result; it establishes
+only this runtime's worker-count consistency. All five pass upstream checking
+and generate upstream C. Three separate literal upstream helper probes explain
+the unsafe case's array and captured-closure boundary without claiming whole-C
+equivalence. Receipts are retained under target/cpu-parallel-programs.
+
+The frozen candidate records 120 compiled-source fingerprints. Exactly four
+compiler/runtime files differ from the preceding unsafe-execution release;
+all 116 others, including the parser, checker and Base, are byte-identical.
+The 1,302-fixture strict audit remains attributed to that prior release and was
+not rerun. Retain the clean release and run existing Poche regressions against
+that exact binary before publication. Whole upstream C and Unix execution,
+measured speedup, worker-local allocator optimization, remaining specialization
+and GPU/window/audio remain unverified or unfinished; task 5.15 stays active.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

@@ -78,10 +78,11 @@ provider built alongside the CLI and packaged beside generated programs. See
 [JavaScript networking](docs/executable-network.md) for provider setup, raw
 descriptors and limits. [Executable C](docs/executable-c.md) now has a packed
 native ABI, foreign callbacks and a bounded CPU effect runtime. It uses reference
-counts and reuses freed allocation blocks. Optimized parallel C execution,
-window/audio effects and GPU execution remain unfinished.
+counts and reuses freed allocation blocks. Generated sibling tasks can run on
+multiple CPU workers, with foreign callbacks coordinated between jobs. Further
+CPU optimization, window/audio effects and GPU execution remain unfinished.
 Environment and file effects use synchronous Node calls. The sealed affine File
-type prevents source code from copying handles; reads and writes return the
+type prevents ordinary checked code from copying handles; reads and writes return the
 handle on both success and failure. See
 [environment and file effects](docs/native-files.md) for target differences.
 See [executable JavaScript](docs/executable-javascript.md).

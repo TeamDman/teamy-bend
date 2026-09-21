@@ -296,6 +296,7 @@ impl Generator<'_> {
                 )
                 .unwrap();
             }
+            writeln!(source, "  tb_register_parallel({});", index + 2).unwrap();
         }
     }
 

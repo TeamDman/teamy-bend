@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: Apache-2.0
  * Task layout and delivery derived from Bend 2.0.5 comp.ts, Copyright 2026
- * HigherOrderCO. Bounded sequential executor: TeamDman. See NOTICE and
+ * HigherOrderCO. Bounded CPU executor: TeamDman. See NOTICE and
  * licenses/Apache-2.0.txt. Boxed closure callbacks and flat word segments
  * share the dispatcher without interpreting raw words as task controls. */
 typedef struct TBTaskRun TBTaskRun;
@@ -20,7 +20,7 @@ struct TBTaskRun {
   Term closure, argument;
   TBOutcome result;
   Term *captures;
-  u32 fid, state, expected, tail_result;
+  u32 fid, state, expected, tail_result, event;
 };
 struct TBTaskContext {
   TBTaskContext *previous;
@@ -31,9 +31,16 @@ struct TBTaskContext {
   u32 root_count, records;
   bool done;
 };
-static TBTaskContext *tb_task_current;
+static TB_THREAD_LOCAL TBTaskContext *tb_task_current;
 static void tb_task_context_reset(void) { tb_task_current = NULL; }
 enum { TB_TASK_APPLY, TB_TASK_VALUE, TB_TASK_DIRECT };
+enum { TB_CPU_FINISH, TB_CPU_GRAPH, TB_CPU_COORDINATOR };
+#ifndef TB_CPU_RESUME_ENTER
+#define TB_CPU_RESUME_ENTER(fid, frame) ((void)0)
+#endif
+#ifndef TB_CPU_RESUME_LEAVE
+#define TB_CPU_RESUME_LEAVE(fid, frame) ((void)0)
+#endif
 
 /* A completed packet owns its words. Its metadata shares the same tracked
  * allocation, and moving the packet never duplicates the contained owners. */
@@ -157,8 +164,7 @@ OUTLINE void tb_task_segment_start(Env e, Fid fid, Loc at, TBTaskRun *run) {
   Term *payload = count == 0 ? NULL : (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
   if (count != 0) memcpy(payload, e.mem + at, count * sizeof(Term));
   run->current = tb_call_frame_owned(fid, payload, 0);
-  if (tb_segment_calls == UINT64_MAX) err_fail("segment call counter exhausted");
-  ++tb_segment_calls;
+  tb_counter_add(&tb_segment_calls, 1, "segment call counter exhausted");
 }
 /* Starting a node transfers all boxed arguments into a run before releasing
  * its shell. Unindex first: the allocator may immediately reuse that address. */
@@ -303,27 +309,27 @@ OUTLINE void tb_task_finish(Env e, TBTaskContext *context, TBTaskRun *run, TBOut
   if (record != NULL) tb_task_record_free(record);
   tb_host_free(run);
 }
-/* Task controls and private generated continuations share one iterative
- * dispatcher. A fork parks its existing run behind a private root boundary;
- * each child has an independent pending-frame stack and completion target. */
-OUTLINE TBOutcome tb_task_execute(Env e, Term closure, Term argument, Term input, bool task_entry) {
-  TBTaskContext *context;
-  TBOutcome answer;
-  if (++tb_depth > BEND_MAX_DEPTH) err_fail("call depth budget exhausted");
-  context = (TBTaskContext *)io_mem(tb_host_calloc(1, sizeof(*context)));
-  context->memory = e.mem; context->previous = tb_task_current; tb_task_current = context;
-  if (task_entry) tb_task_adopt(e, context, input, NULL, true);
+/* Only the compiler opts generated entries into worker execution. Public
+ * foreign registration alone never certifies a callback as parallel-safe. */
+INLINE bool tb_task_worker_safe(const TBTaskRun *run) {
+  u32 fid;
+  if (run->state == TB_TASK_VALUE) return true;
+  if (run->current != NULL) fid = run->current->fid;
+  else if (run->state == TB_TASK_DIRECT) fid = run->fid;
   else {
-    TBTaskRun *run = (TBTaskRun *)io_mem(tb_host_calloc(1, sizeof(*run)));
-    run->closure = closure; run->argument = argument; run->expected = 1;
-    tb_task_enqueue(context, run);
+    if (term_tag(run->closure) != TAG_CLO) return false;
+    fid = (u32)term_aux(run->closure);
+    if (fid == FID_IO_EMIT) return true;
   }
-  while (context->head != NULL) {
-    TBTaskRun *run = context->head;
-    context->head = run->next;
-    if (context->head == NULL) context->tail = NULL;
+  return fid < 65536 && tb_parallel_functions[fid];
+}
+/* Advance one exclusively owned run. Graph adoption and result delivery are
+ * coordinator operations; neither happens inside a worker. Recheck safety at
+ * every call boundary, including dynamic closures and ready tail calls. */
+OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
     for (;;) {
       TBOutcome outcome;
+      if (worker && !tb_task_worker_safe(run)) return TB_CPU_COORDINATOR;
       tb_tick();
       if (run->state == TB_TASK_VALUE) {
         outcome = run->result; run->result.words = NULL; run->state = TB_TASK_APPLY;
@@ -333,19 +339,21 @@ OUTLINE TBOutcome tb_task_execute(Env e, Term closure, Term argument, Term input
             || (tb_resume_functions[current->fid] == NULL && tb_segment_functions[current->fid] == NULL))
           err_fail("invalid generated continuation state");
         if (tb_segment_functions[current->fid] != NULL) {
+          if (worker) TB_CPU_RESUME_ENTER(current->fid, current);
           outcome = tb_segment_functions[current->fid](&e, current);
+          if (worker) TB_CPU_RESUME_LEAVE(current->fid, current);
           if (!outcome.pending) {
             if (outcome.count != fid_result_width(current->fid)) err_fail("task result width mismatch");
-            if (tb_segment_result_words > UINT64_MAX - outcome.count) err_fail("segment result counter exhausted");
-            tb_segment_result_words += outcome.count;
+            tb_counter_add(&tb_segment_result_words, outcome.count, "segment result counter exhausted");
             outcome = tb_task_packet(outcome.words, outcome.owned, outcome.count);
             if (outcome.count > 1) {
-              if (tb_segment_multiword_results == UINT64_MAX) err_fail("segment result counter exhausted");
-              ++tb_segment_multiword_results;
+              tb_counter_add(&tb_segment_multiword_results, 1, "segment result counter exhausted");
             }
           }
         } else {
+          if (worker) TB_CPU_RESUME_ENTER(current->fid, current);
           Term result = tb_resume_functions[current->fid](&e, current);
+          if (worker) TB_CPU_RESUME_LEAVE(current->fid, current);
           outcome = term_tag(result) == TAG_TSK ? tb_segment_task(result) : tb_task_packet(&result, NULL, 1);
         }
         if (current->tail_result != TB_RESULT_NONE) {
@@ -417,8 +425,8 @@ OUTLINE TBOutcome tb_task_execute(Env e, Term closure, Term argument, Term input
           if (run->expected != 1) err_fail("task result width mismatch");
           tb_task_take(e, task, &run->closure, &run->argument); continue;
         }
-        tb_task_adopt(e, context, task, run, false);
-        break;
+        run->result = outcome;
+        return TB_CPU_GRAPH;
       }
       if (outcome.count != run->expected) err_fail("task result width mismatch");
       if (run->tail_result != TB_RESULT_NONE) {
@@ -442,8 +450,241 @@ OUTLINE TBOutcome tb_task_execute(Env e, Term closure, Term argument, Term input
         tb_task_packet_free(outcome);
         run->current = current; continue;
       }
-      tb_task_finish(e, context, run, outcome);
-      break;
+      run->result = outcome;
+      return TB_CPU_FINISH;
+    }
+}
+/* The persistent CPU pool moves uniquely owned runs through mutex-published
+ * queues. Only the coordinator changes graph records or starts foreign code.
+ * Threads are created lazily to match the ready frontier, up to the selected
+ * CPU count. A single worker selection uses the coordinator without a pool. */
+#ifndef BEND_CPU_WORKERS
+#define BEND_CPU_WORKERS 0u
+#endif
+#ifndef BEND_CPU_TEST_SPAWN_FAIL_AFTER
+#define BEND_CPU_TEST_SPAWN_FAIL_AFTER UINT32_MAX
+#endif
+#define TB_CPU_LIMIT 128u
+typedef struct {
+  TBHost *host;
+  TBTaskRun *head, *tail, *completed_head, *completed_tail;
+  u32 desired, created;
+  bool stop, failed;
+  char error[256];
+#ifdef _WIN32
+  HANDLE threads[TB_CPU_LIMIT];
+#else
+  pthread_t threads[TB_CPU_LIMIT];
+#endif
+} TBCpuPool;
+static TBCpuPool tb_cpu;
+static TBMutex tb_cpu_mutex = TB_MUTEX_INIT;
+static u32 tb_cpu_pending; /* Coordinator-owned; workers publish only queues. */
+static u32 tb_cpu_live_workers; /* Protected by tb_cpu_mutex until joined. */
+static TB_NORETURN void tb_cpu_cancel_error(void) {
+  char error[256];
+  if (tb_worker_failure_capture) err_fail("CPU execution cancelled");
+  tb_lock(&tb_cpu_mutex);
+  (void)snprintf(error, sizeof(error), "%s", tb_cpu.failed ? tb_cpu.error : "CPU execution cancelled");
+  tb_unlock(&tb_cpu_mutex);
+  err_fail(error);
+}
+#ifdef _WIN32
+static CONDITION_VARIABLE tb_cpu_changed = CONDITION_VARIABLE_INIT;
+INLINE bool tb_cpu_wait_locked(void) {
+  return SleepConditionVariableSRW(&tb_cpu_changed, &tb_cpu_mutex, INFINITE, 0) != 0;
+}
+INLINE void tb_cpu_notify_locked(void) { WakeAllConditionVariable(&tb_cpu_changed); }
+#else
+static pthread_cond_t tb_cpu_changed = PTHREAD_COND_INITIALIZER;
+INLINE bool tb_cpu_wait_locked(void) {
+  return pthread_cond_wait(&tb_cpu_changed, &tb_cpu_mutex) == 0;
+}
+INLINE void tb_cpu_notify_locked(void) { (void)pthread_cond_broadcast(&tb_cpu_changed); }
+#endif
+INLINE void tb_cpu_set_active(bool active) {
+  tb_vm_acquire(); tb_cpu_active = active; tb_vm_release();
+}
+static void tb_cpu_initialize(void) {
+  u32 desired = BEND_CPU_WORKERS;
+  if (tb_cpu.created != 0 || tb_cpu_live_workers != 0) err_fail("CPU pool is already running");
+  memset(&tb_cpu, 0, sizeof(tb_cpu)); tb_cpu_pending = 0;
+  tb_cpu.host = tb_host_current;
+  if (desired == 0) {
+#ifdef _WIN32
+    desired = GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
+#else
+    long available = sysconf(_SC_NPROCESSORS_ONLN);
+    desired = available < 1 ? 1 : available > TB_CPU_LIMIT ? TB_CPU_LIMIT : (u32)available;
+#endif
+    if (desired == 0) desired = 1;
+    if (desired > TB_CPU_LIMIT) desired = TB_CPU_LIMIT;
+  }
+  if (desired > TB_CPU_LIMIT) err_fail("CPU worker count exceeds 128");
+  tb_cpu.desired = desired;
+  tb_cpu_set_active(false);
+}
+#ifdef _WIN32
+static unsigned __stdcall tb_cpu_worker(void *opaque)
+#else
+static void *tb_cpu_worker(void *opaque)
+#endif
+{
+  TBHost *host = (TBHost *)opaque;
+  jmp_buf guard;
+  tb_host_current = host; tb_failure_guard = &guard;
+  tb_worker_failure_capture = true; tb_failure_message[0] = '\0';
+  tb_lock(&tb_cpu_mutex); ++tb_cpu_live_workers; tb_unlock(&tb_cpu_mutex);
+  if (setjmp(guard) == 0) {
+    for (;;) {
+      TBTaskRun *run;
+      tb_lock(&tb_cpu_mutex);
+      while (tb_cpu.head == NULL && !tb_cpu.stop) {
+        if (!tb_cpu_wait_locked()) {
+          tb_unlock(&tb_cpu_mutex); err_fail("CPU worker wait failed");
+        }
+      }
+      if (tb_cpu.stop) { tb_unlock(&tb_cpu_mutex); break; }
+      run = tb_cpu.head; tb_cpu.head = run->next;
+      if (tb_cpu.head == NULL) tb_cpu.tail = NULL;
+      tb_unlock(&tb_cpu_mutex);
+      Env e = {tb_memory, NULL};
+      run->event = tb_task_advance(e, run, true);
+      run->next = NULL;
+      tb_lock(&tb_cpu_mutex);
+      if (tb_cpu.completed_tail != NULL) tb_cpu.completed_tail->next = run;
+      else tb_cpu.completed_head = run;
+      tb_cpu.completed_tail = run;
+      tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
+    }
+  } else {
+    tb_lock(&tb_cpu_mutex);
+    if (!tb_cpu.failed) {
+      tb_cpu.failed = true;
+      (void)snprintf(tb_cpu.error, sizeof(tb_cpu.error), "%s", tb_failure_message);
+    }
+    tb_cpu.stop = true; tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
+    tb_vm_cancel();
+  }
+  tb_lock(&tb_cpu_mutex); --tb_cpu_live_workers;
+  tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
+  tb_failure_guard = NULL; tb_host_current = NULL; tb_worker_failure_capture = false;
+#ifdef _WIN32
+  return 0;
+#else
+  return NULL;
+#endif
+}
+OUTLINE void tb_cpu_grow(u32 frontier) {
+  if (frontier > tb_cpu.desired) frontier = tb_cpu.desired;
+  while (tb_cpu.created < frontier) {
+    if (tb_cpu.created >= BEND_CPU_TEST_SPAWN_FAIL_AFTER) err_fail("CPU worker creation failed");
+#ifdef _WIN32
+    uintptr_t thread = _beginthreadex(NULL, 0, tb_cpu_worker, tb_cpu.host, 0, NULL);
+    if (thread == 0) err_fail("CPU worker creation failed");
+    tb_cpu.threads[tb_cpu.created] = (HANDLE)thread;
+#else
+    if (pthread_create(&tb_cpu.threads[tb_cpu.created], NULL, tb_cpu_worker, tb_cpu.host) != 0)
+      err_fail("CPU worker creation failed");
+#endif
+    ++tb_cpu.created;
+  }
+}
+OUTLINE void tb_cpu_submit(TBTaskRun *run, u32 frontier) {
+  tb_cpu_grow(frontier);
+  if (tb_cpu_pending == UINT32_MAX) err_fail("CPU pending count exhausted");
+  ++tb_cpu_pending; tb_cpu_set_active(true);
+  run->next = NULL;
+  tb_lock(&tb_cpu_mutex);
+  if (tb_cpu.tail != NULL) tb_cpu.tail->next = run; else tb_cpu.head = run;
+  tb_cpu.tail = run;
+  tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
+}
+OUTLINE TBTaskRun *tb_cpu_complete(void) {
+  TBTaskRun *run;
+  char error[256];
+  tb_lock(&tb_cpu_mutex);
+  while (tb_cpu.completed_head == NULL && !tb_cpu.failed) {
+    if (!tb_cpu_wait_locked()) {
+      tb_unlock(&tb_cpu_mutex); err_fail("CPU coordinator wait failed");
+    }
+  }
+  if (tb_cpu.failed) {
+    (void)snprintf(error, sizeof(error), "%s", tb_cpu.error);
+    tb_unlock(&tb_cpu_mutex); err_fail(error);
+  }
+  run = tb_cpu.completed_head; tb_cpu.completed_head = run->next;
+  if (tb_cpu.completed_head == NULL) tb_cpu.completed_tail = NULL;
+  tb_unlock(&tb_cpu_mutex);
+  if (tb_cpu_pending == 0) err_fail("unbalanced CPU completion");
+  --tb_cpu_pending;
+  if (tb_cpu_pending == 0) tb_cpu_set_active(false);
+  return run;
+}
+static void tb_cpu_shutdown(void) {
+  tb_lock(&tb_cpu_mutex); tb_cpu.stop = true;
+  tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
+  if (tb_cpu_pending != 0) tb_vm_cancel();
+  for (u32 index = 0; index < tb_cpu.created; ++index) {
+#ifdef _WIN32
+    if (WaitForSingleObject(tb_cpu.threads[index], INFINITE) != WAIT_OBJECT_0) {
+      (void)fputs("teamy-bend executable C: CPU worker join failed\n", stderr); exit(1);
+    }
+    (void)CloseHandle(tb_cpu.threads[index]);
+#else
+    if (pthread_join(tb_cpu.threads[index], NULL) != 0) {
+      (void)fputs("teamy-bend executable C: CPU worker join failed\n", stderr); exit(1);
+    }
+#endif
+  }
+  tb_cpu.created = 0; tb_cpu_pending = 0; tb_cpu_set_active(false);
+  /* Trusted initializers may evaluate before the next pool initialization.
+   * Keep those evaluations sequential; no stale host or stopped pool survives. */
+  tb_cpu.desired = 0; tb_cpu.host = NULL;
+}
+OUTLINE void tb_task_accept_event(Env e, TBTaskContext *context, TBTaskRun *run) {
+  switch (run->event) {
+    case TB_CPU_FINISH: tb_task_finish(e, context, run, run->result); return;
+    case TB_CPU_GRAPH: tb_task_adopt(e, context, run->result.task, run, false); return;
+    case TB_CPU_COORDINATOR: tb_task_enqueue(context, run); return;
+    default: err_fail("invalid CPU task event");
+  }
+}
+/* Every nested foreign reentry starts with an idle pool. Its private root and
+ * graph registry can therefore run to completion without waiting on a caller
+ * occupying a worker. Foreign callbacks never race generated worker bodies. */
+OUTLINE TBOutcome tb_task_execute(Env e, Term closure, Term argument, Term input, bool task_entry) {
+  TBTaskContext *context;
+  TBOutcome answer;
+  if (tb_worker_failure_capture) err_fail("CPU worker entered a foreign dispatcher");
+  if (++tb_depth > BEND_MAX_DEPTH) err_fail("call depth budget exhausted");
+  context = (TBTaskContext *)io_mem(tb_host_calloc(1, sizeof(*context)));
+  context->memory = e.mem; context->previous = tb_task_current; tb_task_current = context;
+  if (task_entry) tb_task_adopt(e, context, input, NULL, true);
+  else {
+    TBTaskRun *run = (TBTaskRun *)io_mem(tb_host_calloc(1, sizeof(*run)));
+    run->closure = closure; run->argument = argument; run->expected = 1;
+    tb_task_enqueue(context, run);
+  }
+  while (context->head != NULL || tb_cpu_pending != 0) {
+    if (context->head == NULL) {
+      tb_task_accept_event(e, context, tb_cpu_complete());
+      continue;
+    }
+    TBTaskRun *run = context->head;
+    bool parallel = tb_cpu.desired > 1 && (tb_cpu_pending != 0 || run->next != NULL)
+        && tb_task_worker_safe(run);
+    context->head = run->next;
+    if (context->head == NULL) context->tail = NULL;
+    if (parallel) {
+      u32 frontier = tb_cpu_pending + 1;
+      for (TBTaskRun *ready = context->head; ready != NULL && frontier < tb_cpu.desired; ready = ready->next)
+        ++frontier;
+      tb_cpu_submit(run, frontier);
+    } else {
+      while (tb_cpu_pending != 0) tb_task_accept_event(e, context, tb_cpu_complete());
+      run->event = tb_task_advance(e, run, false);
+      tb_task_accept_event(e, context, run);
     }
   }
   if (!context->done || context->records != 0) err_fail("incomplete task graph");
