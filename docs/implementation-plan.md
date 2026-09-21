@@ -1779,6 +1779,44 @@ binary before publication. Task 5.15 and the broad goal remain active: general
 dynamic specialization, further compiler optimization, multicore and GPU work
 remain required. Poche remains a regression target.
 
+#### [x] 5.15.1 Preserve stable Array layouts through higher-order calls
+
+Completion notes: replaced the blanket closed-element restriction with a layout
+analysis that follows the existing native representation rules. Erased type
+arguments behind recursive or native boxed boundaries do not change Array cell
+storage. Every live field of a finite datatype must have a stable layout,
+including variant offsets and ownership; unresolved live fields and stuck type
+applications must still fail before C emission. This changes compiler acceptance,
+not proof checking or the runtime Array ABI.
+
+Constructor-local existential binders stay abstract across call sites and keep
+their boxed field layout. The compiler retains upstream's outer-datatype Array
+restriction; function fields inside a finite wrapper are supported. No runtime
+type descriptors or new proof assumptions were introduced.
+
+The standard quality gate passes 651 tests, including five compile-fail examples,
+with two optional profilers ignored. Strict workspace library/test Clippy with
+all features passes. Seven generated C programs run with a 4 KiB VM heap and
+zero remaining VM/task/frame owners: recursive list cells, shared strings,
+multiword finite products, raw/reference sum variants, phantom/erased fields,
+affine inner arrays and wrapped closures. Five checked compiler-negative cases
+retain refusal for unknown element types, `Maybe<A>`, mixed products, unused
+unstable sum arms and stuck type applications. A separate unit regression checks
+full existential layout equality across concrete outer instantiations.
+
+The frozen candidate matches all seven programs against freshly executed actual
+upstream JavaScript; all seven also pass upstream checking and C generation.
+Whole upstream C remains unexecuted. Evidence is retained in
+target/c-stable-arrays-programs and target/audit-c-stable-arrays. Source
+fingerprints verify that only the two compiler layout files changed among 120
+compiled sources. The parser, checker, Base and runtime remain byte-identical
+to the previous milestone; the 1,302-fixture strict audit remains attributed to
+that milestone and was not rerun or counted as new behavior coverage.
+
+Retain the clean release and run the existing Poche gates before publication.
+Existing Poche sources remain unchanged. General dynamic specialization and the
+remaining CPU/GPU/runtime work keep task 5.15 active.
+
 ## Completion and risks
 
 The goal is complete only when U1–U13 are delivered and no required rewrite or

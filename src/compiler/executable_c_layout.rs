@@ -101,16 +101,36 @@ impl<'a> Layouts<'a> {
     }
 
     pub(super) fn layout(&mut self, ty: &TermRef) -> Result<Layout, CompileError> {
-        self.layout_at(ty, 0)
+        self.layout_at(ty, 0, None)
     }
 
-    fn layout_at(&mut self, ty: &TermRef, depth: usize) -> Result<Layout, CompileError> {
+    /// Array cells must have the same representation before and after erased
+    /// type arguments are instantiated. Open types behind a boxed boundary do
+    /// not affect the cell layout; open live fields of finite datatypes do.
+    pub(super) fn stable_layout(&mut self, ty: &TermRef) -> Result<Layout, CompileError> {
+        self.layout_at(ty, 0, Some(&BTreeSet::new()))
+    }
+
+    fn layout_at(
+        &mut self,
+        ty: &TermRef,
+        depth: usize,
+        fixed: Option<&BTreeSet<usize>>,
+    ) -> Result<Layout, CompileError> {
         check_depth(depth)?;
         let ty = self
             .program
             .expose_type(ty)
             .map_err(|error| CompileError::new(error.to_string()))?;
         let Term::Adt { name, args, .. } = ty.as_ref() else {
+            if let Some(fixed) = fixed
+                && !rigid_box(&ty)
+                && !closed_over(&ty, fixed)
+            {
+                return Err(CompileError::new(
+                    "C Array has an unspecialized element type",
+                ));
+            }
             return Ok(Layout::word(Kind::Box));
         };
         if let Some(word) = native_word(self.program, name) {
@@ -131,6 +151,14 @@ impl<'a> Layouts<'a> {
         }
         let mut arms = Vec::new();
         for constructor in &datatype.constructors {
+            // Existential constructor binders remain abstract even at a
+            // concrete call site. Their default boxed fields do not become
+            // inline words when outer datatype arguments are substituted.
+            // Checked field telescopes can reference only preceding binders.
+            let mut constructor_fixed = fixed.cloned();
+            if let Some(fixed) = &mut constructor_fixed {
+                fixed.extend(constructor.fields.iter().map(|field| field.id));
+            }
             let types = constructor
                 .fields
                 .iter()
@@ -145,17 +173,22 @@ impl<'a> Layouts<'a> {
                 .collect::<Vec<_>>();
             arms.push(Arm {
                 name: constructor.name.clone(),
-                fields: self.fields(&types, depth + 1)?,
+                fields: self.fields(&types, depth + 1, constructor_fixed.as_ref())?,
             });
         }
         Ok(Layout::pack(arms))
     }
 
-    fn fields(&mut self, types: &[TermRef], depth: usize) -> Result<Vec<Field>, CompileError> {
+    fn fields(
+        &mut self,
+        types: &[TermRef],
+        depth: usize,
+        fixed: Option<&BTreeSet<usize>>,
+    ) -> Result<Vec<Field>, CompileError> {
         let mut offset = 0;
         let mut fields = Vec::new();
         for ty in types {
-            let layout = self.layout_at(ty, depth)?;
+            let layout = self.layout_at(ty, depth, fixed)?;
             fields.push(Field { offset, layout });
             offset += fields.last().expect("just inserted").layout.words.len();
             // Heap node arities and foreign parameter counts are u8 upstream.
@@ -187,7 +220,7 @@ impl<'a> Layouts<'a> {
             .collect::<Vec<_>>();
         let layout = Layout::pack(vec![Arm {
             name: name.to_owned(),
-            fields: self.fields(&types, 0)?,
+            fields: self.fields(&types, 0, None)?,
         }]);
         self.nodes.insert(name.to_owned(), layout.clone());
         Ok(layout)
@@ -255,6 +288,63 @@ impl<'a> Layouts<'a> {
             }
         }
         Ok(seen.insert(name.clone()) && self.walk_cycle(root, name, seen, depth + 1)?)
+    }
+}
+
+/// These exposed heads cannot become finite datatypes after substitution.
+/// A stuck application or a free type variable can, so its default boxed
+/// calling convention alone is not evidence of a stable Array cell layout.
+fn rigid_box(ty: &TermRef) -> bool {
+    matches!(
+        ty.as_ref(),
+        Term::All { .. } | Term::Typ(_) | Term::Qnt | Term::Eql { .. }
+    )
+}
+
+/// A neutral type closed over existential binders cannot be specialized by an
+/// outer caller. Free erased parameters, including ones in stuck type families,
+/// must instead be resolved before choosing their Array field representation.
+fn closed_over(term: &TermRef, fixed: &BTreeSet<usize>) -> bool {
+    match term.as_ref() {
+        Term::Var { id, .. } => fixed.contains(id),
+        Term::Typ(value) => closed_over(value, fixed),
+        Term::Min(left, right) | Term::App(left, right) | Term::Ann(left, right) => {
+            closed_over(left, fixed) && closed_over(right, fixed)
+        }
+        Term::All {
+            id, domain, body, ..
+        } => {
+            let mut inner = fixed.clone();
+            inner.insert(*id);
+            closed_over(domain, fixed) && closed_over(body, &inner)
+        }
+        Term::Lam { id, body, .. } => {
+            let mut inner = fixed.clone();
+            inner.insert(*id);
+            closed_over(body, &inner)
+        }
+        Term::Adt { args, .. } | Term::Ctr { args, .. } => {
+            args.iter().all(|arg| closed_over(arg, fixed))
+        }
+        Term::Mat { arm, fallback, .. } => closed_over(arm, fixed) && closed_over(fallback, fixed),
+        Term::Eql { left, right, ty } => {
+            closed_over(left, fixed) && closed_over(right, fixed) && closed_over(ty, fixed)
+        }
+        Term::Rwt {
+            evidence,
+            motive,
+            body,
+        } => closed_over(evidence, fixed) && closed_over(motive, fixed) && closed_over(body, fixed),
+        Term::Let { bindings, body } => {
+            let mut inner = fixed.clone();
+            inner.extend(bindings.iter().map(|binding| binding.id));
+            bindings
+                .iter()
+                .all(|binding| closed_over(&binding.value, fixed))
+                && closed_over(body, &inner)
+        }
+        Term::Hole(_) => false,
+        Term::Ref(_) | Term::Qnt | Term::Qua(_) | Term::Efq | Term::Rfl => true,
     }
 }
 
@@ -585,6 +675,49 @@ mod tests {
         let arms = layout.arms.unwrap();
         assert_eq!(arms[0].fields[0].offset, 1);
         assert_eq!(arms[1].fields[1].offset, 2);
+    }
+
+    #[test]
+    fn stable_layout_keeps_existential_fields_boxed_and_checks_unused_sum_arms() {
+        let program = program(
+            "import Base\ntype Hidden<-Outer: Data> is Type:\n  Hidden{-Inner: Data, value: Inner}\ntype Choice<-Outer: Data> is Type:\n  Stable{value: List<&2, Outer>}\n  Unstable{value: Outer}\ndef main() -> U32: 0\n",
+        );
+        let parameter = Rc::new(Term::Var {
+            name: "Open".into(),
+            id: usize::MAX,
+        });
+        let mut layouts = Layouts::new(&program);
+        let hidden = Rc::new(Term::Adt {
+            name: "Hidden".into(),
+            args: vec![Rc::clone(&parameter)],
+            excluded: vec![],
+        });
+        let open = layouts.stable_layout(&hidden).unwrap();
+        assert_eq!(open.words, [Kind::Box]);
+        for name in ["U32", "Nat", "String"] {
+            let concrete = substitute(
+                &hidden,
+                usize::MAX,
+                &Rc::new(Term::Adt {
+                    name: name.into(),
+                    args: vec![],
+                    excluded: vec![],
+                }),
+            );
+            assert_eq!(open, layouts.layout(&concrete).unwrap());
+        }
+        let choice = Rc::new(Term::Adt {
+            name: "Choice".into(),
+            args: vec![parameter],
+            excluded: vec![],
+        });
+        assert!(
+            layouts
+                .stable_layout(&choice)
+                .unwrap_err()
+                .to_string()
+                .contains("unspecialized")
+        );
     }
 
     #[test]

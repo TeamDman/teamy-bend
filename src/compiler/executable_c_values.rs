@@ -15,7 +15,6 @@ use super::Term;
 use super::TermRef;
 use super::c_string;
 use super::substitute;
-use std::collections::BTreeSet;
 use std::fmt::Write;
 use std::rc::Rc;
 
@@ -246,13 +245,14 @@ impl Generator<'_> {
             .program
             .expose_type(&args[0])
             .map_err(|error| CompileError::new(error.to_string()))?;
-        if !matches!(element.as_ref(), Term::Adt { .. }) || !closed_type(&element, &BTreeSet::new())
-        {
+        // Preserve upstream arr_open: the outer element must be a datatype.
+        // Function fields inside that datatype can still be stably boxed.
+        if !matches!(element.as_ref(), Term::Adt { .. }) {
             return Err(CompileError::new(
                 "C Array has an unspecialized element type",
             ));
         }
-        let layout = self.layouts.layout(&element)?;
+        let layout = self.layouts.stable_layout(&element)?;
         let words = layout.words.len().max(1).next_power_of_two();
         let lgs = words.trailing_zeros() as usize;
         let arr = layout.words.iter().any(|word| *word != Kind::W32);
@@ -588,55 +588,6 @@ fn fill_ownership_mask(layout: &Layout, input: &str, mask: &str, offset: usize, 
                 writeln!(output, "  {mask}[{}] = 1;", offset + index).unwrap();
             }
         }
-    }
-}
-
-// An open type nested inside a finite ADT can change a native Array's word
-// width or BUF/ARR storage tag after instantiation. Refuse that case before
-// emitting a program; an outer ADT name alone does not establish its layout.
-fn closed_type(term: &TermRef, bound: &BTreeSet<usize>) -> bool {
-    match term.as_ref() {
-        Term::Var { id, .. } => bound.contains(id),
-        Term::Typ(value) => closed_type(value, bound),
-        Term::Min(left, right) | Term::App(left, right) | Term::Ann(left, right) => {
-            closed_type(left, bound) && closed_type(right, bound)
-        }
-        Term::All {
-            id, domain, body, ..
-        } => {
-            let mut inner = bound.clone();
-            inner.insert(*id);
-            closed_type(domain, bound) && closed_type(body, &inner)
-        }
-        Term::Lam { id, body, .. } => {
-            let mut inner = bound.clone();
-            inner.insert(*id);
-            closed_type(body, &inner)
-        }
-        Term::Adt { args, .. } | Term::Ctr { args, .. } => {
-            args.iter().all(|arg| closed_type(arg, bound))
-        }
-        Term::Mat { arm, fallback, .. } => closed_type(arm, bound) && closed_type(fallback, bound),
-        Term::Eql { left, right, ty } => {
-            closed_type(left, bound) && closed_type(right, bound) && closed_type(ty, bound)
-        }
-        Term::Rwt {
-            evidence,
-            motive,
-            body,
-        } => closed_type(evidence, bound) && closed_type(motive, bound) && closed_type(body, bound),
-        Term::Let { bindings, body } => {
-            let mut inner = bound.clone();
-            for binding in bindings {
-                inner.insert(binding.id);
-            }
-            bindings
-                .iter()
-                .all(|binding| closed_type(&binding.value, bound))
-                && closed_type(body, &inner)
-        }
-        Term::Hole(_) => false,
-        Term::Ref(_) | Term::Qnt | Term::Qua(_) | Term::Efq | Term::Rfl => true,
     }
 }
 

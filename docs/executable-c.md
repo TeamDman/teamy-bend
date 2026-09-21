@@ -100,10 +100,17 @@ closures and those following live parameters. Local erased or type-valued aliase
 resolve in their lexical scope; simultaneous right-hand sides see only the outer
 scope. Live captures and argument evaluation retain their ordinary ownership.
 Erased arguments are absent from runtime foreign slots; live type/proof arguments
-have zero-valued slots. Dynamic higher-order polymorphic arrays whose element
-layout still contains free type variables are refused: choosing a layout from
-the outer datatype alone can disagree with a concrete caller. Broader callable
-specialization remains part of task 5.15.
+have zero-valued slots. Higher-order Array elements can retain erased parameters
+when their complete cell layout is stable: recursive lists and native inner
+arrays remain boxed, and finite datatypes recursively check every live field.
+Phantom parameters and erased fields do not affect storage. Constructor-local
+existential types remain abstract at all call sites; their fields stay boxed.
+This preserves field conversions, variant offsets and active ownership masks,
+not just total cell width. As upstream does, Array operations require an outer
+datatype; functions can occur inside its fields. An unresolved live field such
+as `Maybe<A>` can change between raw and owned storage when instantiated, so it
+still fails before C emission. Broader callable specialization remains part of
+task 5.15.
 
 Constructor discovery follows Array element types, including types in unselected
 datatype variants that a generated printer still handles. It also inspects the
