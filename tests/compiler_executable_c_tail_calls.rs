@@ -18,6 +18,7 @@ static NEXT: AtomicUsize = AtomicUsize::new(0);
 const SMALL_STACK: &[&str] = &[
     "BEND_MAX_DEPTH=32",
     "BEND_MAX_FRAMES=32",
+    "BEND_MAX_CONTINUATIONS=32",
     "BEND_MAX_ALLOC=4096",
 ];
 
@@ -264,10 +265,21 @@ static void __attribute__((constructor)) spin_use(void) {
 ";
 
 #[test]
-fn non_tail_recursion_keeps_the_depth_limit_and_tail_spins_keep_the_step_limit() {
-    failure(
-        &Fixture::new().run(NON_TAIL, "", false, SMALL_STACK),
-        "call depth budget exhausted",
+fn generated_non_tail_recursion_completes_and_tail_spins_keep_the_step_limit() {
+    // Non-tail calls retain pending addition closures until their children
+    // return, so their live heap grows while the native stack remains bounded.
+    success(
+        &Fixture::new().run(
+            NON_TAIL,
+            "",
+            true,
+            &[
+                "BEND_MAX_DEPTH=32",
+                "BEND_MAX_FRAMES=32",
+                "BEND_MAX_ALLOC=65536",
+            ],
+        ),
+        "2000\n",
     );
     failure(
         &Fixture::new().run(

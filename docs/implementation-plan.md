@@ -1464,7 +1464,7 @@ must pass the existing Poche regression script, with source hashes and checkout
 state preserved, before publication; its exact release receipt stays local.
 
 Remaining work within this milestone includes dynamic higher-order erased type
-specialization, non-tail continuation/fork lowering, full channel coverage and broader
+specialization, general foreign continuation/fork lowering, full channel coverage and broader
 native-value/platform qualification. Unresolved Array element layouts fail
 during compilation instead of choosing an incompatible representation. Keep
 this task in progress until its full acceptance scope is met. Optimized parallel
@@ -1589,6 +1589,55 @@ All 117 frozen compiled-source fingerprints remain unchanged. The strict
 449 rejected negatives, with zero accepted negatives, crashes or new rejections.
 Evidence: target/audit-executable-c-tail and
 target/executable-c-tail-{programs,release-comparison,network-programs,reclamation-programs}.
+
+Non-tail generated applications now use resumable handlers with saved program
+counters, result slots, captures, arguments and scratch values. An iterative
+dispatcher evaluates each child before resuming its caller, preserving strict
+order and existing emitted ownership transfers. Resume labels bypass previous
+initialization and branch selection. Scratch slots include stale aliases and
+raw words; frame destruction releases storage without dropping every cell.
+Nested foreign evaluations use independent pending stacks. Conversion and
+printer helpers stay synchronous and bounded. Generated wrappers preserve the
+legacy foreign closure ABI, including direct calls through its function table.
+
+Persistent generated frames have a separate 65,536-entry default limit and use
+the existing tracked host-allocation budgets. Native helper/callback stack
+limits remain unchanged. The standard quality gate passes 618 tests, including
+five compile-fail examples, with two optional profilers ignored. Strict workspace
+library/test Clippy with all features passes. Eight new strict-MSVC tests cover
+2,000 pending scalar calls, shared strings, captured closures, owned arrays,
+both branch results, constructor siblings, simultaneous let scope, returned
+closures and three foreign callback modes. Those modes exercise synchronous
+reentry, a returned tail task and the registered generated callback ABI.
+Successful cases require exact output and zero live VM values, generated frames,
+helper frames and dispatcher depth. Continuation and host limits reject deep
+programs after accepting shallow controls; true foreign C recursion still hits
+the native call-depth guard. Existing tail tests also pass with only 32 generated
+frames and a 4 KiB VM heap. The former non-tail refusal now succeeds with the
+same native stack bounds and a 64 KiB VM heap for its retained addition closures.
+
+Independent upstream preparation checks nine pure continuation variants and
+matches all nine against actual generated JavaScript. They also generate upstream
+C, which is retained but not executed. The previous retained release reaches its
+native call/frame limits on the same programs. A source-hash bridge verifies all
+nine final fixture bodies, outputs and resource settings are byte-identical to
+the original oracle inputs after test-only cleanup and ABI additions. Evidence:
+target/c-continuations-probe, target/executable-c-continuation-programs,
+target/check-executable-c-continuation.log and
+target/clippy-executable-c-continuation.log. The frozen candidate matches fresh
+upstream JavaScript execution for all nine continuation variants, twelve existing
+foundation programs, nine networking programs and eight reclamation programs.
+Reclamation uses a 4 KiB VM heap. Existing timer/Windows provider adapters and
+the target-specific Nat overflow diagnostic retain their qualifications. All
+117 compiled-source fingerprints remain unchanged. The strict 1,302-fixture
+audit still accepts 362 positives, rejects 491 positives and all 449 negatives,
+with zero accepted negatives, crashes or new rejections. Evidence is retained in
+target/audit-executable-c-continuation and
+target/executable-c-continuation-{programs,release-comparison,network-programs,reclamation-programs}.
+Retain a clean release and rerun existing Poche checks against its exact binary
+before publication, preserving the Poche checkout and source hashes. Sequential generated
+continuations do not complete general foreign continuation tasks, fork/join,
+optimized parallel CPU or GPU execution; task 5.15 and the broad goal stay active.
 
 ## Completion and risks
 

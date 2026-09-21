@@ -117,9 +117,10 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
     for (index, closure) in generator.closures.iter().enumerate() {
         writeln!(
             source,
-            "  tb_register_closure({}, tb_function_{index}, {});",
+            "  tb_register_generated({}, tb_function_{index}, tb_resume_{index}, {}, {});",
             index + 2,
-            closure.captures
+            closure.captures,
+            closure.slots
         )
         .unwrap();
     }
@@ -162,14 +163,16 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
 struct Closure {
     source: String,
     captures: usize,
+    slots: usize,
 }
 
-/// Generated values live in a tracked scratch frame, never in a C array whose
-/// size grows with the input program. The wrapper stays small even when a body
-/// has thousands of temporaries, and owns cleanup across every body return.
+/// Generated values live in tracked heap frames, never in a C array whose size
+/// grows with the input program. Application bodies can suspend and resume;
+/// synchronous conversion and printer wrappers release scratch on every return.
 struct Body {
     text: String,
     slots: usize,
+    resumes: usize,
 }
 
 #[derive(Clone, Copy)]
@@ -183,6 +186,7 @@ impl Body {
         Self {
             text: text.to_owned(),
             slots: 0,
+            resumes: 0,
         }
     }
 
@@ -196,6 +200,22 @@ impl Body {
         self.text.push_str(text);
     }
 
+    /// Resume labels skip all preceding evaluation and ownership transfers.
+    /// Scratch cells retain stale aliases as well as live values; the runtime
+    /// frees this storage without treating every cell as an owned root.
+    fn resumable(self, id: usize) -> String {
+        let mut source = format!(
+            "static TB_NOINLINE Term tb_resume_{id}(const Env *e, TBCallFrame *tb_frame) {{\n  Term *tb_values = tb_frame->values;\n  const Term *captures = tb_frame->captures;\n  Term argument = tb_frame->argument;\n  (void)tb_values; (void)captures; (void)argument;\n  switch (tb_frame->pc) {{\n  case 0: break;\n"
+        );
+        for pc in 1..=self.resumes {
+            writeln!(source, "  case {pc}: goto tb_resume_{pc};").unwrap();
+        }
+        source.push_str("  default: err_fail(\"invalid generated continuation state\");\n  }\n");
+        source.push_str(&self.text);
+        source.push_str("}\n");
+        source
+    }
+
     fn function(
         self,
         name: &str,
@@ -203,6 +223,7 @@ impl Body {
         arguments: &str,
         result: FunctionResult,
     ) -> String {
+        assert_eq!(self.resumes, 0, "synchronous helper cannot suspend");
         let returns_term = matches!(result, FunctionResult::Term);
         let result_type = if returns_term { "Term" } else { "void" };
         let mut source = format!(
@@ -246,17 +267,10 @@ struct Generator<'a> {
 
 impl Generator<'_> {
     fn prototypes(&self, source: &mut String) {
-        for index in 0..self.definitions.len() {
-            writeln!(
-                source,
-                "static TB_NOINLINE Term tb_definition_{index}(const Env *e);"
-            )
-            .unwrap();
-        }
         for index in 0..self.closures.len() {
             writeln!(
                 source,
-                "static TB_NOINLINE Term tb_function_{index}(Env e, const Term *captures, Term argument);"
+                "static TB_NOINLINE Term tb_function_{index}(Env e, const Term *captures, Term argument);\nstatic TB_NOINLINE Term tb_resume_{index}(const Env *e, TBCallFrame *tb_frame);"
             )
             .unwrap();
         }
@@ -346,16 +360,14 @@ impl Generator<'_> {
         // use the same dispatcher entry rather than recursing through C thunks.
         let closure = self.reserve_closure(0)?;
         self.definition_closures.push(closure);
-        self.closures[closure].source = format!(
-            "static TB_NOINLINE Term tb_function_{closure}(Env e, const Term *captures, Term argument) {{\n  (void)captures; term_sink(e, argument);\n  return tb_definition_{index}(&e);\n}}\n"
-        );
+        self.closures[closure].source = closure_wrapper(closure, 0);
         let definition = self
             .program
             .definitions
             .get(name)
             .ok_or_else(|| CompileError::new(format!("missing executable definition {name}")))?
             .clone();
-        let mut output = Body::new("  (void)e;\n  tb_tick();\n");
+        let mut output = Body::new("  tb_c_drop(e, argument);\n  tb_tick();\n");
         let live = definition
             .parameters
             .iter()
@@ -398,12 +410,8 @@ impl Generator<'_> {
             }
         };
         writeln!(output, "  return {value};").unwrap();
-        self.definitions[index] = output.function(
-            &format!("tb_definition_{index}"),
-            "const Env *e",
-            "e",
-            FunctionResult::Term,
-        );
+        self.closures[closure].slots = output.slots;
+        self.definitions[index] = output.resumable(closure);
         Ok(index)
     }
 
@@ -424,12 +432,18 @@ impl Generator<'_> {
         argument: &str,
         tail: bool,
     ) -> Result<String, CompileError> {
-        let apply = if tail {
-            "tb_c_tail_apply"
-        } else {
-            "tb_c_apply"
-        };
-        self.hold(output, &format!("{apply}(e, {function}, {argument})"))
+        if tail {
+            return self.hold(
+                output,
+                &format!("tb_c_tail_apply(e, {function}, {argument})"),
+            );
+        }
+        self.fresh()?;
+        let slot = output.reserve(1);
+        output.resumes += 1;
+        let pc = output.resumes;
+        writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->waiting = true;\n  return tb_c_tail_apply(e, {function}, {argument});\ntb_resume_{pc}: ;").unwrap();
+        Ok(format!("tb_values[{slot}]"))
     }
 
     fn instantiation(&self, name: &str, arguments: &[(&Expression, Quant)]) -> Substitutions {
@@ -501,7 +515,7 @@ impl Generator<'_> {
         next.push("argument".to_owned());
         let value = self.curry_at(arity, &next, &mut body, final_body)?;
         writeln!(body, "  return {value};").unwrap();
-        self.closures[id].source = closure_source(id, body);
+        self.finish_closure(id, body);
         self.make_closure(id, arguments, output)
     }
 
@@ -515,8 +529,16 @@ impl Generator<'_> {
         self.closures.push(Closure {
             source: String::new(),
             captures,
+            slots: 0,
         });
         Ok(id)
+    }
+
+    fn finish_closure(&mut self, id: usize, body: Body) {
+        self.closures[id].slots = body.slots;
+        let mut source = body.resumable(id);
+        source.push_str(&closure_wrapper(id, self.closures[id].captures));
+        self.closures[id].source = source;
     }
 
     fn make_closure(
@@ -578,7 +600,7 @@ impl Generator<'_> {
         };
         drop_owned(&mut inner, &mut body);
         writeln!(body, "  return {value};").unwrap();
-        self.closures[id].source = closure_source(id, body);
+        self.finish_closure(id, body);
         let values = captures
             .iter()
             .map(|variable| self.owned_use(*variable, scope, output))
@@ -821,15 +843,13 @@ impl Generator<'_> {
     }
 }
 
-fn closure_source(id: usize, body: Body) -> String {
-    let mut source = body.function(
-        &format!("tb_function_{id}_inner"),
-        "const Env *e, const Term *captures, Term argument",
-        "e, captures, argument",
-        FunctionResult::Term,
-    );
-    writeln!(source, "static TB_NOINLINE Term tb_function_{id}(Env e, const Term *captures, Term argument) {{\n  return tb_function_{id}_inner(&e, captures, argument);\n}}").unwrap();
-    source
+fn closure_wrapper(id: usize, captures: usize) -> String {
+    // Keep the foreign callback ABI callable. The dispatcher recognizes the
+    // generated entry and runs its resume handler directly, without this wrapper.
+    format!(
+        "static TB_NOINLINE Term tb_function_{id}(Env e, const Term *captures, Term argument) {{\n  return tb_apply(e, tb_closure(e, {}, {captures}, captures), argument);\n}}\n",
+        id + 2
+    )
 }
 
 /// Count owned uses in one generated function. Creating a closure consumes one

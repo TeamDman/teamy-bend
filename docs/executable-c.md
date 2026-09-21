@@ -35,20 +35,29 @@ upstream. Closure captures and unary callback application preserve those boxed
 boundaries. The runtime also provides the upstream closure task bridge for C
 companions that use `task_node` and `corpus_eval`.
 
-Tail calls use an explicit dispatch loop rather than relying on a C compiler's
-tail-call optimization. A tail application transfers its closure and argument
-into a pending root task; the current callback releases its scratch frame and
-capture buffer before dispatch continues. This includes definition thunks and
-the final applications introduced by pattern matching. Function heads,
-arguments, constructor fields and let right-hand sides remain strictly evaluated.
-Non-tail calls retain the call/frame budgets, and every dispatch retains the
-evaluation budget.
+Generated calls use an explicit dispatch loop. A tail application transfers its
+closure and argument into a pending root task; the current callback releases its
+frame before dispatch continues. A non-tail application saves its caller's
+program counter, result slot, captures, argument and scratch values in a tracked
+heap frame. After the child finishes, the caller resumes immediately after the
+call. Definition thunks and applications introduced by pattern matching use the
+same mechanism. Function heads, arguments, constructor fields and let right-hand
+sides remain strictly evaluated, without repeating earlier evaluation on resume.
+Generated recursion no longer grows the native C call stack. Pending work still
+uses bounded storage, and dispatch and resumption consume the evaluation budget.
+
+Foreign C callbacks keep their synchronous ABI. Each nested evaluation owns its
+own pending stack, and a callback's returned root tasks finish before the caller
+receives its result. Calls made recursively by foreign C code remain subject to
+the native call-depth limit. Conversion and printing helpers remain synchronous
+with separate bounds.
 
 The supported `FID_CLO_APPLY` task uses upstream's four-word layout: closure,
 argument, continuation and packed index/remaining metadata. Only ready root
 tasks (`TERM_HOLE`, zero index and zero remaining) execute; other continuations
 are rejected explicitly. Task destruction releases the two owned payloads.
-General continuation tasks, forks and parallel scheduling remain unfinished.
+Generated sequential continuations are private runtime frames. General foreign
+continuation tasks, forks and parallel scheduling remain unfinished.
 
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned
@@ -157,13 +166,15 @@ ownership transfer may have been interrupted. Native worker allocations keep
 their separate host lifetime. The optimized parallel CPU/task/GPU allocator and
 upstream borrowing/sharing optimizations remain unfinished.
 
-Generated temporary scalars and arrays use tracked heap
-frames, released on function return. Small wrappers allocate before entering
-generated bodies. Internal calls pass Env by pointer through fixed native
-bridges; the public foreign ABI still passes Env by value. This also avoids
+Generated temporary scalars and arrays use tracked heap frames, released when
+their function completes or transfers a tail call. Synchronous conversion and
+printing wrappers allocate their own scratch frames. Internal calls pass Env by
+pointer through fixed native bridges; the public foreign ABI still passes Env by
+value. This also avoids
 MSVC's separate stack copy of Env at every call site in an unoptimized body.
-Budgets cover 2,000,000 steps, 512 nested applications, 512 generated
-frames (including conversion and printing calls), a
+Budgets cover 2,000,000 steps, 512 nested foreign evaluation entries,
+512 synchronous helper frames, 65,536 live generated frames
+(`BEND_MAX_CONTINUATIONS`, including the active generated call), a
 64 MiB VM payload arena and an equally sized ownership-metadata arena,
 64 MiB tracked host allocation, 8 MiB per host allocation,
 131,072 live actions and 64 active worker calls. Owned socket rows have a
