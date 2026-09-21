@@ -80,8 +80,7 @@ a stopped invocation do not resume its VM.
 ## Effects and limits
 
 The implemented bundled effects cover console output, tasks, timers, channels,
-environment lookup and files. TCP/UDP builtins are explicitly refused until
-their C host adapters are implemented. Window/audio, GPU and the optimized
+environment lookup, files and TCP/UDP. Window/audio, GPU and the optimized
 parallel C engine remain unfinished.
 
 The cooperative driver drains runnable work before waiting. Timer/readiness
@@ -91,8 +90,16 @@ wait. This matches upstream C and differs from the JavaScript wake-task policy.
 The runtime supports `io_work`, initial read/time hooks and explicit readiness
 re-parking. Worker completions are collected at the outer activation boundaries
 used by upstream C; one activation drains its synchronous requests before yielding.
-Waits currently poll worker completion at most every 10 ms; a wake
-descriptor remains follow-up work. Native C callbacks do not use Node.
+A lazily installed connected loopback UDP pair wakes the descriptor poller on
+worker completion. Installation and completion publication share a mutex;
+collection drains the notifications together with its completion queue. During
+a wait, only a wake reported by that poll snapshot collects workers before
+the original ready callbacks. A completion just after the snapshot waits for
+the next collection point. Notification sends retry interruption; unexpected
+send errors are recorded under the mutex and fail the invocation on the VM,
+even if no wake arrives. A full notification queue already contains a wake.
+Descriptor waits have a 1,000 ms maximum poll interval. Native C callbacks do
+not use Node.
 
 This foundation retains VM values in a bounded arena until invocation cleanup.
 It does not yet implement upstream reference-count reclamation or the optimized
@@ -104,8 +111,10 @@ MSVC's separate stack copy of Env at every call site in an unoptimized body.
 Budgets cover 2,000,000 steps, 512 nested applications, 512 generated
 frames (including conversion and printing calls), a
 64 MiB VM arena, 64 MiB tracked host allocation, 8 MiB per host allocation,
-131,072 live actions and 64 active worker calls. Queued work remains bounded by
-the action limit. Pure printing additionally bounds bytes, nodes and depth.
+131,072 live actions and 64 active worker calls. Owned socket rows have a
+131,072-entry bound and are reused after close. The worker notifier adds two
+internal sockets. Queued work remains bounded by the action limit. Pure printing
+additionally bounds bytes, nodes and depth.
 These are component budgets, not a total-process memory limit.
 
 ## Files and environment
@@ -154,6 +163,46 @@ independent of the active ANSI code page, with a bounded retry for concurrent
 value resizing. Invalid UTF-16 values return EILSEQ. This is an explicit host
 adapter to upstream's narrow `getenv`;
 Unix retains native `getenv` and the C byte decoder.
+
+## TCP, UDP and readiness
+
+The standalone C runtime implements TCP.listen/accept/connect/send/recv,
+UDP.bind/send_to/recv_from/poll and Socket.close/Listener.close. Socket effects
+use nonblocking descriptors and the event loop, independently of file workers.
+Accept, TCP receive and UDP receive park before their first syscall, including
+zero-length receives. Connect and sends try immediately and park on the relevant
+pending/would-block result. A readiness race parks the request again in queue
+order. UDP.poll performs one immediate receive and returns None when no packet
+is available; Some can contain an empty packet.
+
+Addresses use upstream's strict numeric IPv4 parsing, including rejection of
+leading-zero octets, embedded NUL and ports above 65535. Listen and UDP bind
+accept port zero. Listen uses backlog 16 and attempts address reuse. Handles
+remain real descriptors, with full Windows SOCKET width within the native
+56-bit representation; Unix additionally requires an int-sized descriptor.
+
+TCP send retains its offset across partial writes and readiness waits. Empty
+sends make no syscall; zero-progress sends fail explicitly. Other syscall
+errors, including EINTR, return through Result with the original socket. TCP
+receive preserves short reads and EOF. UDP sends one datagram, and receive
+preserves the truncated prefix and sender while consuming the whole datagram,
+even with a zero-byte buffer. Receive counts clamp to INT32_MAX before the
+explicit 8 MiB limit. Network buffers share the tracked 64 MiB host allocation
+budget with other effects. Text uses the native C codec described above.
+
+Windows uses Winsock errors and Unicode system messages; address syntax errors
+remain EINVAL 22. Pending connects inspect SO_ERROR after readiness. WSARecv and
+WSARecvFrom preserve copied bytes on WSAEMSGSIZE. WSAPoll invalid-descriptor
+events retry the effect so it returns its ordinary error, including when all
+rows are invalid. Poll retries interruption. Unix sends suppress SIGPIPE with
+MSG_NOSIGNAL or SO_NOSIGPIPE on supported platforms.
+
+Bundled listen/bind/connect/accept calls register owned sockets immediately;
+setup failure, explicit close, normal exit and Halt release them. Parked socket
+requests are cancelled at shutdown. Unlike active file syscalls, these socket
+operations do not continue on worker threads after Halt. Foreign C can supply
+raw descriptors without automatic adoption. It remains responsible for borrowed
+aliases and any raw closes that bypass runtime ownership helpers.
 
 ## Validation boundary
 

@@ -29,11 +29,21 @@ impl Fixture {
     }
 
     fn run(&self, bend: &str, foreign: &str) -> Output {
+        self.run_transformed(bend, foreign, str::to_owned)
+    }
+
+    fn run_transformed(
+        &self,
+        bend: &str,
+        foreign: &str,
+        transform: impl FnOnce(&str) -> String,
+    ) -> Output {
         fs::write(self.0.join("main.bend"), bend).unwrap();
         fs::write(self.0.join("effect.c"), foreign).unwrap();
         let loaded = load_executable(self.0.join("main.bend")).unwrap();
         let checked = check_executable(&loaded).unwrap();
         let generated = compile_executable_c(&checked).unwrap();
+        let generated = transform(&generated);
         let executable = executable_c_compiler::compile(&self.0, &generated, &[]);
         executable_c_compiler::bounded(
             Command::new(executable).current_dir(&self.0),
@@ -110,6 +120,184 @@ static void __attribute__((constructor)) background_use(void) {
 #[test]
 fn worker_syscalls_run_off_vm_and_packing_can_repark_on_vm() {
     success(&Fixture::new().run(WORKER_BEND, WORKER_C), "42\n");
+}
+
+const SNAPSHOT_BEND: &str = r#"import Base
+def background() -> IO(Unit): import "effect.c"
+def child() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- background()
+    IO.print("worker")
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.spawn(Unit, child())
+    Unit <- IO.sleep(0)
+    IO.print("timer")
+"#;
+
+const SNAPSHOT_C: &str = r#"
+static TBMutex snapshot_gate = TB_MUTEX_INIT;
+static bool snapshot_release;
+static bool snapshot_observed;
+static void snapshot_pause(void) {
+#ifdef _WIN32
+  Sleep(1);
+#else
+  struct timespec duration = {0, 1000000};
+  (void)nanosleep(&duration, NULL);
+#endif
+}
+static void background_call(IoWork *work) {
+  (void)work;
+  for (unsigned attempt = 0; attempt < 5000; ++attempt) {
+    bool ready;
+    tb_lock(&snapshot_gate); ready = snapshot_release; tb_unlock(&snapshot_gate);
+    if (ready) return;
+    snapshot_pause();
+  }
+  err_fail("poll snapshot did not release its worker");
+}
+static Term background_pack(Env e, IoWork *work) {
+  (void)e; (void)work; return term_pak(CID_UNIT, 0);
+}
+static Term background_run(Env e, Term *fields, IoWork *work) {
+  (void)e; (void)fields; return io_work(work, background_call, background_pack);
+}
+#ifdef _WIN32
+static int tb_test_poll(WSAPOLLFD *rows, ULONG count, int timeout) {
+  int result = WSAPoll(rows, count, timeout);
+#else
+static int tb_test_poll(struct pollfd *rows, nfds_t count, int timeout) {
+  int result = poll(rows, count, timeout);
+#endif
+  if (!snapshot_observed) {
+    snapshot_observed = true;
+    if (result != 0) err_fail("worker was ready before the poll snapshot");
+    for (size_t index = 0; index < (size_t)count; ++index)
+      if (rows[index].revents != 0) err_fail("unexpected poll snapshot readiness");
+    tb_lock(&snapshot_gate); snapshot_release = true; tb_unlock(&snapshot_gate);
+    for (unsigned attempt = 0; attempt < 5000; ++attempt) {
+      bool done;
+      tb_lock(&tb_io->host->mutex); done = tb_io->active == 0; tb_unlock(&tb_io->host->mutex);
+      if (done) return result;
+      snapshot_pause();
+    }
+    err_fail("worker did not complete after the poll snapshot");
+  }
+  return result;
+}
+static void __attribute__((constructor)) background_use(void) {
+  io_eff(CID_BACKGROUND, background_run, 0);
+}
+"#;
+
+fn snapshot_poll_seam(source: &str) -> String {
+    let prototype = "#ifdef _WIN32\n\
+        static int tb_test_poll(WSAPOLLFD *, ULONG, int);\n\
+        #else\nstatic int tb_test_poll(struct pollfd *, nfds_t, int);\n#endif\n\
+        OUTLINE void io_wait(Env e) {";
+    assert_eq!(source.matches("OUTLINE void io_wait(Env e) {").count(), 1);
+    let source = source.replacen("OUTLINE void io_wait(Env e) {", prototype, 1);
+    let original = if cfg!(windows) {
+        "WSAPoll(polls, poll_count, timeout)"
+    } else {
+        "poll(polls, poll_count, timeout)"
+    };
+    assert_eq!(source.matches(original).count(), 1);
+    source.replacen(original, "tb_test_poll(polls, poll_count, timeout)", 1)
+}
+
+#[test]
+fn workers_completing_after_the_poll_snapshot_wait_for_a_subsequent_wake() {
+    // The checked Bend program, worker thread, wake socket and poll are real.
+    // Only the poll call is wrapped: after the OS returns a timer-only snapshot,
+    // it releases the worker and waits for completion before returning that
+    // unchanged snapshot to io_wait. This makes the boundary deterministic.
+    success(
+        &Fixture::new().run_transformed(SNAPSHOT_BEND, SNAPSHOT_C, snapshot_poll_seam),
+        "timer\nworker\n",
+    );
+    // Verify the fixture distinguishes the old policy that inspected all
+    // completed workers, even when the snapshot contained no worker wake.
+    success(
+        &Fixture::new().run_transformed(SNAPSHOT_BEND, SNAPSHOT_C, |source| {
+            let source = snapshot_poll_seam(source);
+            let original = "if (worker_ready) io_take(e);";
+            assert_eq!(source.matches(original).count(), 1);
+            source.replacen(
+                original,
+                "(void)worker_ready; if (io_busy != 0) io_take(e);",
+                1,
+            )
+        }),
+        "worker\ntimer\n",
+    );
+}
+
+const NOTIFICATION_C: &str = r#"
+static unsigned notification_attempts;
+static intptr_t tb_test_notification_send(intptr_t descriptor, const char *data,
+    u32 size, const struct sockaddr_in *address) {
+  if (notification_attempts++ == 0) {
+#ifdef _WIN32
+    WSASetLastError(TEST_INTERRUPTED ? WSAEINTR : WSAENOBUFS);
+#else
+    errno = TEST_INTERRUPTED ? EINTR : EIO;
+#endif
+    return -1;
+  }
+  return tb_net_send_system(descriptor, data, size, address);
+}
+static void background_call(IoWork *work) { (void)work; }
+static Term background_pack(Env e, IoWork *work) {
+  (void)e; (void)work;
+  if (notification_attempts != 2) err_fail("interrupted notification was not retried");
+  return 42;
+}
+static Term background_run(Env e, Term *fields, IoWork *work) {
+  (void)e; (void)fields; return io_work(work, background_call, background_pack);
+}
+static void __attribute__((constructor)) background_use(void) {
+  io_eff(CID_BACKGROUND, background_run, 0);
+}
+"#;
+
+fn notification_send_seam(source: &str) -> String {
+    let declaration = "static void tb_network_notify_locked(TBHost *host) {";
+    let prototype = "static intptr_t tb_test_notification_send(intptr_t, const char *, \
+        u32, const struct sockaddr_in *);\n";
+    assert_eq!(source.matches(declaration).count(), 1);
+    let source = source.replacen(declaration, &format!("{prototype}{declaration}"), 1);
+    let call = "tb_net_send_system(host->wake_write, \"w\", 1, NULL)";
+    assert_eq!(source.matches(call).count(), 1);
+    source.replacen(
+        call,
+        "tb_test_notification_send(host->wake_write, \"w\", 1, NULL)",
+        1,
+    )
+}
+
+#[test]
+fn notification_send_retries_interruption_and_other_failures_stop_the_invocation() {
+    // Inject only the first notifier send result. The checked program, real
+    // worker, completion queue and descriptor poll remain production code.
+    for interrupted in [false, true] {
+        let foreign = format!(
+            "#define TEST_INTERRUPTED {}\n{NOTIFICATION_C}",
+            u8::from(interrupted)
+        );
+        let output = Fixture::new().run_transformed(WORKER_BEND, &foreign, notification_send_seam);
+        if interrupted {
+            success(&output, "42\n");
+        } else {
+            assert_eq!(output.status.code(), Some(1));
+            assert!(output.stdout.is_empty());
+            assert_eq!(
+                output.stderr,
+                b"teamy-bend executable C: worker notification send failed\n"
+            );
+        }
+    }
 }
 
 const COLLECTION_C: &str = r#"

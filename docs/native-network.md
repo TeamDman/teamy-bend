@@ -80,8 +80,9 @@ cap. The existing evaluation and arena limits also apply.
 
 Generated JavaScript networking uses a separate synchronous syscall and readiness
 provider preserving raw descriptors and callbacks. See its documentation for
-Node-API packaging and the supplied BEND_SYS interface. Executable C, window/audio
-and GPU remain separate unfinished engine work.
+Node-API packaging and the supplied BEND_SYS interface. Standalone
+[executable C](executable-c.md) has its own packed runtime and socket adapters;
+its reclamation and optimized execution, window/audio and GPU remain unfinished.
 
 ## Validation boundary
 

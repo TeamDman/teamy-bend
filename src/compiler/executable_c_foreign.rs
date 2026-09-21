@@ -48,7 +48,7 @@ pub(super) fn assemble(
             .requests
             .insert(name.to_owned(), table.get(name)?.cid);
         if let Some(builtin) = foreign.builtin {
-            require_builtin(builtin, name)?;
+            require_builtin(builtin);
             continue;
         }
         let Some(source) = canonical_source(name, foreign, ForeignTarget::C, &mut seen)? else {
@@ -115,7 +115,8 @@ pub(super) fn assemble(
     Ok(assembly)
 }
 
-fn require_builtin(builtin: BuiltinForeign, name: &str) -> Result<(), CompileError> {
+// Keep this exhaustive so a newly added builtin needs an explicit C decision.
+fn require_builtin(builtin: BuiltinForeign) {
     match builtin {
         BuiltinForeign::Print
         | BuiltinForeign::Write
@@ -132,10 +133,18 @@ fn require_builtin(builtin: BuiltinForeign, name: &str) -> Result<(), CompileErr
         | BuiltinForeign::FileRead
         | BuiltinForeign::FileReadBytes
         | BuiltinForeign::FileWrite
-        | BuiltinForeign::FileClose => Ok(()),
-        _ => Err(CompileError::new(format!(
-            "executable C effect {name} is not implemented"
-        ))),
+        | BuiltinForeign::FileClose
+        | BuiltinForeign::TcpListen
+        | BuiltinForeign::TcpAccept
+        | BuiltinForeign::TcpConnect
+        | BuiltinForeign::TcpSend
+        | BuiltinForeign::TcpRecv
+        | BuiltinForeign::UdpBind
+        | BuiltinForeign::UdpSendTo
+        | BuiltinForeign::UdpRecvFrom
+        | BuiltinForeign::UdpPoll
+        | BuiltinForeign::SocketClose
+        | BuiltinForeign::ListenerClose => {}
     }
 }
 

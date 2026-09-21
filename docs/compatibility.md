@@ -85,8 +85,8 @@ backend rejects their execution explicitly. The separate
 [executable JavaScript compiler](executable-javascript.md) supports synchronous
 foreign imports, native representations and callbacks. The separate
 [executable C compiler](executable-c.md) provides packed native values,
-foreign registration/callbacks, file effects and a bounded CPU effect runtime. Its network
-adapters, reclamation and optimized execution, plus window/audio Base effects and unsafe execution, remain
+foreign registration/callbacks, file and TCP/UDP effects and a bounded CPU runtime.
+Reclamation and optimized C execution, plus window/audio Base effects and unsafe execution, remain
 required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with

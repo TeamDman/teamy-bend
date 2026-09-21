@@ -1357,17 +1357,65 @@ separate C oracle rather than assuming JavaScript's decoder and errno match C.
 Ignored evidence: target/executable-c-files-oracle,
 target/audit-executable-c-files and target/executable-c-files-release-comparison.
 
+The network slice now implements the eleven TCP/UDP/close effects in
+`executable_network.c`. All current bundled foreign effects have executable C
+implementations. Sockets preserve raw native handles, initial read-hook yielding,
+nonblocking readiness, partial-send offsets, short reads, EOF and datagram
+truncation/sender identity. Windows keeps Winsock errors and handles, checks
+SO_ERROR after pending connect, and processes POLLNVAL even when WSAPoll returns
+zero or an all-invalid call error. Strict IPv4 parsing, native C text decoding
+and bounded allocations remain explicit. Created sockets are owned immediately;
+setup failure, explicit close, normal exit and Halt release them. Trusted native
+aliases retain their documented responsibility.
+
+Worker completion now wakes the poller through a lazily installed connected UDP
+pair. Publication, installation and draining share the completion mutex. Only
+workers indicated by the captured poll snapshot precede its ready callbacks;
+later completions wait for the next collection point. A deterministic regression
+distinguishes this from the former policy with an emitted-C mutant. Notification
+sends retry interruption. Other send failures are reported on the VM outside the
+mutex after poll or at an outer collection point, avoiding an indefinite wait
+when no wake can arrive. An injected syscall failure and interrupted-send retry test
+exercise the real worker, completion queue and poller.
+
+Network-slice validation: ./check-all.ps1 passes 585 tests, including five
+compile-fail API examples, with two optional profilers ignored. Strict workspace
+library/test Clippy passes after simplifying two test-helper signatures; all
+nine affected runtime tests were rerun. Fourteen new network tests compile and
+execute emitted C with MSVC C11 /W4 /WX. Coverage includes seventy parked sockets
+alongside file workers, raw foreign interoperability, native errors/codecs,
+zero-length packets, receive limits and cleanup before Winsock/process teardown.
+One real slow-reader test verifies complete delivery; a separate controlled
+WouldBlock test observes a retained 32 KiB offset and verifies all 512 KiB across
+the real connection. The latter deliberately controls the syscall response and
+does not claim naturally occurring Windows backpressure.
+
+All 117 frozen compiled-source fingerprints remain unchanged. The strict
+1,302-fixture audit retains 362 accepted positives, 491 rejected positives and
+449 rejected negatives, with no accepted negatives, crashes or new rejections.
+The frozen release candidate matches all twelve earlier whole-program
+upstream-JavaScript comparisons and all nine original upstream TCP/UDP fixtures.
+The networking comparison uses actual upstream-generated JavaScript with the
+qualified Windows provider; it does not execute the entire upstream C runtime.
+A fresh ten-group oracle extracts literal upstream C effects and helpers with
+explicit host adapters: six real loopback groups, three scripted send groups
+and harness cleanup. Its plain-string constructor harness does not establish
+compiler, codec, GC or scheduler equivalence. Separate native Winsock and
+upstream poll-snapshot probes qualify the host and scheduling adaptations.
+Ignored evidence: target/audit-executable-c-network,
+target/executable-c-network-release-comparison,
+target/executable-c-network-programs-candidate and
+target/executable-c-network-oracle. Unix execution remains unverified.
+
 Remaining work within this milestone includes reference-count reclamation,
-network host adapters and their complete effect suites, higher-order erased
-type specialization, tail-call/task lowering, worker wake notification, and broader native-value/platform
-qualification. Unresolved Array element layouts fail during compilation instead
-of silently choosing an incompatible representation. The current retained arena
-and bounded worker polling are explicit foundations, not optimized CPU parity.
-Keep this task in progress until its full acceptance scope is met.
-The next implementation step is C network adapters, carrying forward descriptor
-readiness, worker completion/cancellation and the existing TCP/UDP contract tests.
-Continue with reclamation before claiming C runtime parity;
-Poche model expansion stays deferred.
+higher-order erased type specialization, tail-call/task lowering, full channel
+coverage and broader native-value/platform qualification. Unresolved Array
+element layouts fail during compilation instead of silently choosing an
+incompatible representation. The retained arena remains a bounded foundation,
+not optimized CPU parity. Keep this task in progress until its full acceptance
+scope is met. The next implementation step is reference-count reclamation,
+preserving the established native ABI, effect ownership and scheduling contracts.
+Poche model expansion stays deferred; existing Poche gates remain regressions.
 
 ## Completion and risks
 

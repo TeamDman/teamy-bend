@@ -10,7 +10,7 @@ use a separate execution contract checker.
 Generated JavaScript supports foreign calls, callbacks, cooperative tasks, timers
 and channels with fork/join, plus environment, file and TCP/UDP contracts.
 Executable C supports native values, foreign callbacks and console/task/timer/
-channel/environment/file effects. All 37 numeric primitives are implemented in native
+channel/environment/file/TCP/UDP effects. All 37 numeric primitives are implemented in native
 IO and both executable compilers;
 their contracts remain opaque to strict proof checking.
 Closed compile-time templates and their specialized instances are supported.
@@ -132,7 +132,7 @@ resource bounds and Windows/Unix differences.
 Arbitrary foreign source is retained by the loader; the native `run` command
 rejects its execution. Executable JavaScript and executable C support foreign
 companions for their respective targets. The C effect driver currently covers
-console output, tasks, timers, channels, environment lookup and files; see
+console output, tasks, timers, channels, environment lookup, files and TCP/UDP; see
 [executable C](docs/executable-c.md) for remaining effects and runtime limits.
 
 `serve` checks once and reads newline-delimited JSON calls from standard input.

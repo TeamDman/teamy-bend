@@ -22,6 +22,7 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 #include <process.h>
 #include <io.h>
@@ -180,6 +181,7 @@ INLINE void tb_unlock(TBMutex *mutex) { (void)pthread_mutex_unlock(mutex); }
 typedef struct TBAllocation TBAllocation;
 typedef struct TBHost TBHost;
 typedef struct TBFile TBFile;
+typedef struct TBNetSocket TBNetSocket;
 #ifdef _MSC_VER
 struct __declspec(align(16)) TBAllocation { TBAllocation *next; size_t size; };
 #else
@@ -191,6 +193,12 @@ struct TBHost {
   TBFile *files;
   TBFile *idle_files;
   u32 file_count;
+  TBNetSocket *sockets;
+  TBNetSocket *idle_sockets;
+  u32 socket_count;
+  intptr_t wake_read;
+  intptr_t wake_write;
+  bool wake_failed;
   u64 bytes;
   u32 references;
   bool stopped;
@@ -208,6 +216,7 @@ static u64 tb_steps;
 static u32 tb_depth;
 static u32 tb_frames;
 static void tb_files_release(TBHost *host);
+static void tb_network_shutdown(TBHost *host);
 
 OUTLINE TB_NORETURN void err_fail(const char *message) {
   if (tb_host_current != NULL) {
@@ -293,6 +302,7 @@ OUTLINE void tb_host_release(TBHost *host) {
   tb_unlock(&host->mutex);
   if (!final) return;
   tb_files_release(host);
+  tb_network_shutdown(host);
   while ((allocation = host->allocations) != NULL) {
     host->allocations = allocation->next;
     free(allocation);
@@ -551,6 +561,7 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   volatile int result = 1;
   Env e;
   if (host == NULL) { (void)fprintf(stderr, "host initialization failed\n"); return 1; }
+  host->wake_read = -1; host->wake_write = -1;
 #ifdef _WIN32
   InitializeSRWLock(&host->mutex);
 #else

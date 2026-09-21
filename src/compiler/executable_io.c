@@ -51,6 +51,10 @@ static TBIOState *tb_io;
 static void tb_file_job_finished(IoAct *action);
 static void tb_files_shutdown(TBHost *host);
 static void tb_register_files(void);
+static void tb_register_network(void);
+static void tb_network_wake_prepare(TBIOState *owner);
+static void tb_network_notify_locked(TBHost *host);
+static u32 tb_network_wake_drain(TBHost *host);
 static Term tb_get_env_run(Env e, Term *fields, IoWork *work);
 #ifdef _WIN32
 static int tb_stdout_mode = -1;
@@ -211,7 +215,7 @@ static void *tb_worker(void *opaque)
   tb_file_job_finished(action);
   tb_lock(&host->mutex);
   --owner->active;
-  if (!host->stopped) io_push(&owner->completed, action);
+  if (!host->stopped) { io_push(&owner->completed, action); tb_network_notify_locked(host); }
   tb_unlock(&host->mutex);
   tb_host_current = NULL;
   tb_host_release(host);
@@ -245,12 +249,17 @@ static void tb_start_jobs(void) {
 }
 OUTLINE void io_take(Env e) {
   IoQue completed;
-  bool failed;
+  bool failed, wake_failed;
+  u32 wake_error = 0;
   tb_lock(&tb_io->host->mutex);
+  if (tb_io->host->wake_read >= 0) wake_error = tb_network_wake_drain(tb_io->host);
   completed = tb_io->completed;
   memset(&tb_io->completed, 0, sizeof(tb_io->completed));
   failed = tb_io->host->worker_failed;
+  wake_failed = tb_io->host->wake_failed;
   tb_unlock(&tb_io->host->mutex);
+  if (wake_failed) err_fail("worker notification send failed");
+  if (wake_error != 0) err_fail("worker notification receive failed");
   if (failed) err_fail("native worker failed");
   while (completed.head != NULL) {
     IoAct *action = io_pop(&completed);
@@ -274,23 +283,27 @@ OUTLINE Term io_exec(Env e, IoWork *work) {
 }
 OUTLINE void io_wait(Env e) {
   u32 descriptors = 0, position = 0;
-  u64 soon = 0, now = io_tick();
-  int timeout = io_busy != 0 ? 10 : 1000;
+  u64 soon = 0, now;
+  int timeout = 1000;
+  bool wake = io_busy != 0;
   IoQue waiting;
 #ifdef _WIN32
   WSAPOLLFD *polls;
 #else
   struct pollfd *polls;
 #endif
+  if (wake) tb_network_wake_prepare(tb_io);
   for (IoAct *action = io_park.head; action != NULL; action = action->next) {
     if (action->time != 0) { if (soon == 0 || action->time < soon) soon = action->time; }
     else ++descriptors;
   }
+  now = io_tick();
   if (soon != 0) {
     u64 gap = soon <= now ? 0 : (soon - now) / UINT64_C(1000000) + 1;
     if (gap < (u64)timeout) timeout = (int)gap;
   }
-  polls = io_mem(tb_host_calloc(descriptors == 0 ? 1 : descriptors, sizeof(*polls)));
+  u32 poll_count = descriptors + (wake ? 1u : 0u);
+  polls = io_mem(tb_host_calloc(poll_count == 0 ? 1 : poll_count, sizeof(*polls)));
   for (IoAct *action = io_park.head; action != NULL; action = action->next) if (action->time == 0) {
 #ifdef _WIN32
     polls[position].fd = (SOCKET)action->descriptor;
@@ -300,16 +313,40 @@ OUTLINE void io_wait(Env e) {
 #endif
     polls[position].events = action->evts; ++position;
   }
+  if (wake) {
+#ifdef _WIN32
+    polls[descriptors].fd = (SOCKET)tb_io->host->wake_read;
+#else
+    polls[descriptors].fd = (int)tb_io->host->wake_read;
+#endif
+    polls[descriptors].events = POLLIN;
+  }
   io_sync();
 #ifdef _WIN32
-  if (descriptors == 0) Sleep((DWORD)timeout);
-  else if (WSAPoll(polls, descriptors, timeout) == SOCKET_ERROR) err_fail("descriptor poll failed");
+  if (poll_count == 0) Sleep((DWORD)timeout);
+  else while (WSAPoll(polls, poll_count, timeout) == SOCKET_ERROR) {
+    int code = WSAGetLastError();
+    bool invalid = false;
+    if (code == WSAEINTR) continue;
+    /* Winsock reports an all-invalid set as a call error but fills POLLNVAL.
+     * Resume those requests so their syscall returns an ordinary host error. */
+    if (code == WSAENOTSOCK) {
+      for (u32 index = 0; index < poll_count; ++index)
+        if (polls[index].revents & POLLNVAL) invalid = true;
+    }
+    if (invalid) break;
+    err_fail("descriptor poll failed");
+  }
 #else
-  while (poll(polls, descriptors, timeout) < 0) if (errno != EINTR) err_fail("descriptor poll failed");
+  while (poll(polls, poll_count, timeout) < 0) if (errno != EINTR) err_fail("descriptor poll failed");
 #endif
+  bool worker_ready = wake && polls[descriptors].revents != 0;
+  bool wake_failed;
+  tb_lock(&tb_io->host->mutex); wake_failed = tb_io->host->wake_failed; tb_unlock(&tb_io->host->mutex);
+  if (wake_failed) err_fail("worker notification send failed");
   /* A worker pack may register a new wait. Keep it outside this poll snapshot. */
   waiting = io_park; memset(&io_park, 0, sizeof(io_park));
-  if (io_busy != 0) io_take(e);
+  if (worker_ready) io_take(e);
   now = io_tick(); position = 0;
   while (waiting.head != NULL) {
     IoAct *action = io_pop(&waiting);
@@ -466,6 +503,7 @@ static Term tb_chan_recv_run(Env e, Term *fields, IoWork *work) {
 static Term tb_chan_close_run(Env e, Term *fields, IoWork *work) { ChanRow *row = chan_at(fields[0]); (void)work; if (row != NULL) chan_shut(e, row); return term_pak(CID_UNIT, 0); }
 OUTLINE void tb_register_builtins(void) {
   tb_register_files();
+  tb_register_network();
 #ifdef CID_IO_PRINT
   io_eff(CID_IO_PRINT, tb_print_run, 0);
 #endif
@@ -521,6 +559,7 @@ static void tb_io_shutdown(void) {
     /* Queued jobs hold file leases but will never start after cancellation. */
     while (io_jobs.head != NULL) tb_file_job_finished(io_pop(&io_jobs));
     tb_files_shutdown(tb_host_current);
+    tb_network_shutdown(tb_host_current);
   }
   tb_io = NULL;
 #ifdef _WIN32

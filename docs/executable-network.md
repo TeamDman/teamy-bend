@@ -106,7 +106,8 @@ TCP/UDP, truncation, raw BigInt handles, typed-array views and argument bounds.
 These comparisons use the same Windows provider for both generated programs;
 they do not qualify upstream Bun/FFI or other operating systems.
 
-Full generated-C execution, arbitrary native foreign implementations and GPU
-execution remain separate work. Platform and oracle coverage is recorded in the
+Standalone [generated C](executable-c.md) uses its own native socket runtime.
+Optimized C execution, broader native foreign coverage and GPU execution remain
+separate work. Platform and oracle coverage is recorded in the
 implementation plan; source implementations on other hosts are not execution
 evidence for those hosts.
