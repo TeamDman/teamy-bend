@@ -38,7 +38,7 @@ pub(super) fn is_call(program: &ExecutableProgram, expression: &Expression) -> b
     }
 }
 
-fn required_arguments(program: &ExecutableProgram, name: &str) -> Option<usize> {
+pub(super) fn required_arguments(program: &ExecutableProgram, name: &str) -> Option<usize> {
     let definition = program.definitions.get(name)?;
     // The loader's bundled-origin set is authoritative: an ordinary user
     // definition with the same short name is not an intrinsic.
@@ -80,7 +80,7 @@ fn required_arguments(program: &ExecutableProgram, name: &str) -> Option<usize> 
 /// A match arm replaces the scrutinee with its complete constructor telescope;
 /// both branches must expose the same additional prefix. A leading let stops
 /// raising, so a call which computes and then returns a closure remains a call.
-fn raised_arguments(expression: &Expression, remaining: i64) -> Option<usize> {
+pub(super) fn raised_arguments(expression: &Expression, remaining: i64) -> Option<usize> {
     match &expression.kind {
         ExpressionKind::Lambda { body, .. } => {
             if remaining > 0 {

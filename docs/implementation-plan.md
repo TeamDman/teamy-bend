@@ -1720,6 +1720,65 @@ binary before publication. Task 5.15 and the broad goal remain active; this
 bounded single-VM task executor does not complete flattened segment support,
 multicore CPU execution or the GPU port. Poche remains a regression target.
 
+Direct ordinary calls now carry finite values as layout-word vectors through
+saturated calls, generated bodies and joins. Logical parameters remain distinct
+from payload words, including zero-width parameter layouts. As upstream does,
+an empty result layout becomes one boxed word so every generated child has a
+distinct result destination. Unary closures and foreign callbacks retain their
+explicit boxed representation boundaries.
+
+Word-segment completion distinguishes result vectors from task control with an
+explicit outcome, without interpreting raw word bits as tags. Arguments and
+results carry exact active ownership masks. The executor reserves each child's
+complete destination span before callbacks run; trailing placeholders belong
+to that span, overlapping ranges fail, and delivery decrements the child count
+once regardless of result width. Private continuation frames have checked
+vector result destinations. Upstream FID_RESW describes a saved continuation's
+incoming result suffix, not every function's output width.
+
+Segment specialization preserves erased binders while specializing their bodies,
+so the full raised telescope still determines result layout. Arity preflight
+avoids speculative segment generation for partial callable references. Native
+scalar tail crossings compose their cast and ownership changes on the current
+run, preserving W32 truncation and W64 values without retaining identity frames.
+Those adapters are isolated from non-tail children and returned task graphs.
+Finite datatype conversions at dynamic callable boundaries still use tracked
+frames; broader conversion and callable optimization remains unfinished.
+
+The standard quality gate passes 644 tests, including five compile-fail examples,
+with two optional profilers ignored. Strict workspace library/test Clippy with
+all features also passes. Twelve new test groups exercise actual flat bodies,
+direct calls and nested result joins; active raw/reference variants; zero-arity
+tasks and boxed Unit returns; erased telescopes; foreign/closure interoperation;
+malformed spans and widths; and release of all live VM/task/frame owners.
+Private boxed closures retain all 255 captures across suspension, while a public
+task whose payload would exceed 255 words is rejected. Scalar adapter tests cover
+all four modes, all sixteen compositions, exact masks, wide-value truncation,
+non-tail children, returned joins and invalid states. Both U32 and Nat indirect
+loops execute 2,000 iterations under depth/frame/continuation limits of 32 and
+a 4 KiB VM heap. The Nat seed retains its value above U32 using two shallower
+power calls; a separate probe confirms that the original power-of-40 setup
+itself exceeded the intentional non-tail continuation budget.
+
+The frozen candidate matches 21 complete pure programs against freshly executed
+actual upstream JavaScript, with strict MSVC C11 compilation and expected
+segment/task/join shapes. The four scalar loops retain the small limits above;
+the other seventeen use depth/frame limits of 32 and a 1 MiB heap. Twelve
+foundation, nine networking and eight reclamation programs also pass: fifty
+complete-program comparisons in total. Reclamation retains its 4 KiB heap.
+Existing timer/Windows provider adapters and the target-specific Nat overflow
+diagnostic retain their qualifications; whole upstream C remains unexecuted.
+All 120 compiled-source fingerprints remain unchanged. The strict 1,302-fixture
+audit preserves 362 accepted positives, 491 rejected positives and all 449
+rejected negatives, with zero accepted negatives, crashes or new rejections.
+Evidence: target/audit-executable-c-segment,
+target/executable-c-segment-programs-final and
+target/executable-c-segment-{release-comparison,network-programs,reclamation-programs}.
+Retain a clean release and rerun the existing Poche gates against that exact
+binary before publication. Task 5.15 and the broad goal remain active: general
+dynamic specialization, further compiler optimization, multicore and GPU work
+remain required. Poche remains a regression target.
+
 ## Completion and risks
 
 The goal is complete only when U1–U13 are delivered and no required rewrite or

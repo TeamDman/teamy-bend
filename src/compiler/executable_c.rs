@@ -29,6 +29,8 @@ use std::rc::Rc;
 mod forks;
 #[path = "executable_c_native.rs"]
 mod native;
+#[path = "executable_c_segments.rs"]
+mod segments;
 #[path = "executable_c_values.rs"]
 mod values;
 
@@ -75,6 +77,7 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
         definitions: Vec::new(),
         definition_ids: BTreeMap::new(),
         definition_closures: Vec::new(),
+        segment_ids: BTreeMap::new(),
         closures: Vec::new(),
         conversions: Vec::new(),
         conversion_ids: BTreeMap::new(),
@@ -118,16 +121,7 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
         source.push_str(printer);
     }
     source.push_str("static void tb_initialize(Env e) {\n  (void)e;\n  tb_register_builtins();\n");
-    for (index, closure) in generator.closures.iter().enumerate() {
-        writeln!(
-            source,
-            "  tb_register_generated({}, tb_function_{index}, tb_resume_{index}, {}, {});",
-            index + 2,
-            closure.captures,
-            closure.slots
-        )
-        .unwrap();
-    }
+    generator.registrations(&mut source);
     for initializer in &foreign.initializers {
         writeln!(source, "  {initializer}();").unwrap();
     }
@@ -168,6 +162,7 @@ struct Closure {
     source: String,
     captures: usize,
     slots: usize,
+    segment: Option<(usize, usize)>,
 }
 
 /// Generated values live in tracked heap frames, never in a C array whose size
@@ -177,6 +172,7 @@ struct Body {
     text: String,
     slots: usize,
     resumes: usize,
+    words: bool,
 }
 
 #[derive(Clone, Copy)]
@@ -191,6 +187,14 @@ impl Body {
             text: text.to_owned(),
             slots: 0,
             resumes: 0,
+            words: false,
+        }
+    }
+
+    fn new_segment() -> Self {
+        Self {
+            words: true,
+            ..Self::new("")
         }
     }
 
@@ -208,8 +212,9 @@ impl Body {
     /// Scratch cells retain stale aliases as well as live values; the runtime
     /// frees this storage without treating every cell as an owned root.
     fn resumable(self, id: usize) -> String {
+        let result_type = if self.words { "TBOutcome" } else { "Term" };
         let mut source = format!(
-            "static TB_NOINLINE Term tb_resume_{id}(const Env *e, TBCallFrame *tb_frame) {{\n  Term *tb_values = tb_frame->values;\n  const Term *captures = tb_frame->captures;\n  Term argument = tb_frame->argument;\n  (void)tb_values; (void)captures; (void)argument;\n  switch (tb_frame->pc) {{\n  case 0: break;\n"
+            "static TB_NOINLINE {result_type} tb_resume_{id}(const Env *e, TBCallFrame *tb_frame) {{\n  Term *tb_values = tb_frame->values;\n  const Term *captures = tb_frame->captures;\n  Term argument = tb_frame->argument;\n  (void)e; (void)tb_values; (void)captures; (void)argument;\n  switch (tb_frame->pc) {{\n  case 0: break;\n"
         );
         for pc in 1..=self.resumes {
             writeln!(source, "  case {pc}: goto tb_resume_{pc};").unwrap();
@@ -261,6 +266,7 @@ struct Generator<'a> {
     definitions: Vec<String>,
     definition_ids: BTreeMap<String, usize>,
     definition_closures: Vec<usize>,
+    segment_ids: BTreeMap<String, Option<segments::Signature>>,
     closures: Vec<Closure>,
     conversions: Vec<String>,
     conversion_ids: BTreeMap<String, usize>,
@@ -270,8 +276,35 @@ struct Generator<'a> {
 }
 
 impl Generator<'_> {
+    fn registrations(&self, source: &mut String) {
+        for (index, closure) in self.closures.iter().enumerate() {
+            if let Some((arity, result_width)) = closure.segment {
+                writeln!(
+                    source,
+                    "  tb_register_segment({}, tb_resume_{index}, {arity}, {result_width}, {});",
+                    index + 2,
+                    closure.slots
+                )
+                .unwrap();
+            } else {
+                writeln!(
+                    source,
+                    "  tb_register_generated({}, tb_function_{index}, tb_resume_{index}, {}, {});",
+                    index + 2,
+                    closure.captures,
+                    closure.slots
+                )
+                .unwrap();
+            }
+        }
+    }
+
     fn prototypes(&self, source: &mut String) {
-        for index in 0..self.closures.len() {
+        for (index, closure) in self.closures.iter().enumerate() {
+            if closure.segment.is_some() {
+                writeln!(source, "static TB_NOINLINE TBOutcome tb_resume_{index}(const Env *e, TBCallFrame *tb_frame);").unwrap();
+                continue;
+            }
             writeln!(
                 source,
                 "static TB_NOINLINE Term tb_function_{index}(Env e, const Term *captures, Term argument);\nstatic TB_NOINLINE Term tb_resume_{index}(const Env *e, TBCallFrame *tb_frame);"
@@ -403,6 +436,11 @@ impl Generator<'_> {
                     self.curry(live, &mut output, &mut |generator, arguments, body| {
                         generator.native(name, &ty, arguments, body)
                     })?
+                } else if forks::required_arguments(self.program, name) == Some(0)
+                    && let Some(signature) = self.segment(name, substitutions)?
+                    && signature.arguments.is_empty()
+                {
+                    self.segment_boundary(&signature, &[], &mut output, true)?
                 } else {
                     self.expression(
                         &specialize_expression(&body, substitutions),
@@ -427,6 +465,43 @@ impl Generator<'_> {
     ) -> Result<String, CompileError> {
         let fid = self.definition_closures[id] + 2;
         self.apply(output, &format!("term_clo({fid}, 0)"), "0", tail)
+    }
+
+    /// Box only where a word-segment call returns to the unary closure ABI.
+    /// The segment's own body and recursive calls keep their word vectors.
+    fn segment_boundary(
+        &mut self,
+        signature: &segments::Signature,
+        arguments: &[String],
+        output: &mut Body,
+        tail: bool,
+    ) -> Result<String, CompileError> {
+        let (words, owned) = self.segment_arguments(signature, arguments, output)?;
+        let arity: usize = signature
+            .arguments
+            .iter()
+            .map(|layout| layout.words.len())
+            .sum();
+        let task = format!(
+            "tb_c_word_task(e, {}, {arity}, {words}, {owned})",
+            signature.id + 2
+        );
+        if tail && signature.result.arms.is_none() && signature.result.words.len() == 1 {
+            let mode = match signature.result.words[0] {
+                Kind::Box => None,
+                Kind::W32 => Some("TB_RESULT_BOX32"),
+                Kind::W64 => Some("TB_RESULT_BOX64"),
+            };
+            return self.hold(
+                output,
+                &mode.map_or(task.clone(), |mode| {
+                    format!("tb_tail_result(tb_frame, {task}, {mode})")
+                }),
+            );
+        }
+        let value = self.pending_words(output, &task, &signature.result, false)?;
+        let result = self.array(output, &value.words)?;
+        self.segment_result(signature, &result, output)
     }
 
     fn apply(
@@ -456,7 +531,12 @@ impl Generator<'_> {
         let slot = output.reserve(1);
         output.resumes += 1;
         let pc = output.resumes;
-        writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->waiting = true;\n  return {task};\ntb_resume_{pc}: ;").unwrap();
+        let returned = if output.words {
+            format!("tb_segment_task({task})")
+        } else {
+            task.to_owned()
+        };
+        writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->expected = 1; tb_frame->waiting = true;\n  return {returned};\ntb_resume_{pc}: ;").unwrap();
         Ok(format!("tb_values[{slot}]"))
     }
 
@@ -544,8 +624,27 @@ impl Generator<'_> {
             source: String::new(),
             captures,
             slots: 0,
+            segment: None,
         });
         Ok(id)
+    }
+
+    fn reserve_segment(
+        &mut self,
+        arity: usize,
+        result_width: usize,
+    ) -> Result<usize, CompileError> {
+        if arity > 255 || !(1..=255).contains(&result_width) {
+            return Err(CompileError::new("executable C segment arity exhausted"));
+        }
+        let id = self.reserve_closure(0)?;
+        self.closures[id].segment = Some((arity, result_width));
+        Ok(id)
+    }
+
+    fn finish_segment(&mut self, id: usize, body: Body) {
+        self.closures[id].slots = body.slots;
+        self.closures[id].source = body.resumable(id);
     }
 
     fn finish_closure(&mut self, id: usize, body: Body) {
@@ -638,6 +737,12 @@ impl Generator<'_> {
             ExpressionKind::Erased => Ok("0".to_owned()),
             ExpressionKind::Variable(id) => self.owned_use(*id, scope, output),
             ExpressionKind::Definition(name) => {
+                if forks::required_arguments(self.program, name) == Some(0)
+                    && let Some(signature) = self.segment(name, &Substitutions::new())?
+                    && signature.arguments.is_empty()
+                {
+                    return self.segment_boundary(&signature, &[], output, tail);
+                }
                 let id = self.definition(name, &Substitutions::new())?;
                 self.reference(id, output, tail)
             }
@@ -665,6 +770,31 @@ impl Generator<'_> {
                 let mut remaining = arguments.iter().filter(|(_, q)| *q != Quant::None).count();
                 let mut function = if let ExpressionKind::Definition(name) = &head.kind {
                     let substitutions = self.instantiation(name, &arguments);
+                    if forks::required_arguments(self.program, name)
+                        .is_some_and(|required| remaining >= required)
+                        && let Some(signature) = self.segment(name, &substitutions)?
+                        && remaining >= signature.arguments.len()
+                    {
+                        let mut values = Vec::with_capacity(signature.arguments.len());
+                        let mut live = arguments.iter().filter(|(_, quant)| *quant != Quant::None);
+                        for (argument, _) in live.by_ref().take(signature.arguments.len()) {
+                            values.push(self.expression(argument, scope, output, false)?);
+                        }
+                        let mut value = self.segment_boundary(
+                            &signature,
+                            &values,
+                            output,
+                            tail && remaining == values.len(),
+                        )?;
+                        remaining -= values.len();
+                        for (argument, _) in live {
+                            let argument = self.expression(argument, scope, output, false)?;
+                            remaining -= 1;
+                            value =
+                                self.apply(output, &value, &argument, tail && remaining == 0)?;
+                        }
+                        return Ok(value);
+                    }
                     let id = self.definition(name, &substitutions)?;
                     self.reference(id, output, tail && remaining == 0)?
                 } else {
@@ -1120,19 +1250,39 @@ fn specialize_binder(binder: &Binder, substitutions: &Substitutions) -> Binder {
 }
 
 fn specialize_expression(expression: &Expression, substitutions: &Substitutions) -> Expression {
-    if let ExpressionKind::Lambda { parameter, body } = &expression.kind
+    specialize_expression_shape(expression, substitutions, false)
+}
+
+fn specialize_segment_expression(
+    expression: &Expression,
+    substitutions: &Substitutions,
+) -> Expression {
+    specialize_expression_shape(expression, substitutions, true)
+}
+
+fn specialize_expression_shape(
+    expression: &Expression,
+    substitutions: &Substitutions,
+    preserve_erased: bool,
+) -> Expression {
+    if !preserve_erased
+        && let ExpressionKind::Lambda { parameter, body } = &expression.kind
         && parameter.quant == Quant::None
         && substitutions.contains_key(&parameter.id)
     {
-        return specialize_expression(body, substitutions);
+        return specialize_expression_shape(body, substitutions, preserve_erased);
     }
     let mut result = expression.clone();
-    result.ty = specialize_type(&result.ty, substitutions);
+    result.ty = if preserve_erased {
+        replace_type(&result.ty, substitutions)
+    } else {
+        specialize_type(&result.ty, substitutions)
+    };
     result.source = replace_type(&result.source, substitutions);
     match &mut result.kind {
         ExpressionKind::Lambda { parameter, body } => {
             *parameter = specialize_binder(parameter, substitutions);
-            **body = specialize_expression(body, substitutions);
+            **body = specialize_expression_shape(body, substitutions, preserve_erased);
             // Lowering retains the original annotated telescope on `ty`, whose
             // binder IDs can differ from the source lambda. Rebuild it from the
             // actual binder and specialized body, retaining all live lambdas.
@@ -1147,13 +1297,14 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
         ExpressionKind::Apply {
             function, argument, ..
         } => {
-            **function = specialize_expression(function, substitutions);
-            **argument = specialize_expression(argument, substitutions);
+            **function = specialize_expression_shape(function, substitutions, preserve_erased);
+            **argument = specialize_expression_shape(argument, substitutions, preserve_erased);
         }
         ExpressionKind::Constructor { fields, .. } => {
             for field in fields {
                 field.binder = specialize_binder(&field.binder, substitutions);
-                field.value = specialize_expression(&field.value, substitutions);
+                field.value =
+                    specialize_expression_shape(&field.value, substitutions, preserve_erased);
             }
         }
         ExpressionKind::Match {
@@ -1167,8 +1318,8 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
             for field in fields {
                 *field = specialize_binder(field, substitutions);
             }
-            **arm = specialize_expression(arm, substitutions);
-            **fallback = specialize_expression(fallback, substitutions);
+            **arm = specialize_expression_shape(arm, substitutions, preserve_erased);
+            **fallback = specialize_expression_shape(fallback, substitutions, preserve_erased);
         }
         ExpressionKind::Absurd { parameter, .. } => {
             *parameter = specialize_binder(parameter, substitutions);
@@ -1177,7 +1328,8 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
             let mut inner = substitutions.clone();
             for field in bindings {
                 field.binder = specialize_binder(&field.binder, substitutions);
-                field.value = specialize_expression(&field.value, substitutions);
+                field.value =
+                    specialize_expression_shape(&field.value, substitutions, preserve_erased);
                 // Let right-hand sides see only the outer scope. Install their
                 // erased aliases together for the body, never in a sibling RHS.
                 if field.binder.quant == Quant::None
@@ -1186,7 +1338,7 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
                     inner.insert(field.binder.id, Rc::clone(&field.value.source));
                 }
             }
-            **body = specialize_expression(body, &inner);
+            **body = specialize_expression_shape(body, &inner, preserve_erased);
             result.ty = Rc::clone(&body.ty);
         }
         ExpressionKind::Erased | ExpressionKind::Variable(_) | ExpressionKind::Definition(_) => (),

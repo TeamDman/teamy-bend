@@ -124,7 +124,7 @@ impl Generator<'_> {
     /// A merged finite layout can put a raw W64 and a reference in the same
     /// slot in different arms. Record the selected arm's exact ownership,
     /// rather than interpreting arbitrary raw words as native Terms.
-    fn ownership_mask(
+    pub(super) fn ownership_mask(
         &mut self,
         layout: &Layout,
         input: &str,
@@ -135,7 +135,7 @@ impl Generator<'_> {
         Ok(mask)
     }
 
-    fn conversion(&mut self, layout: &Layout) -> Result<usize, CompileError> {
+    pub(super) fn conversion(&mut self, layout: &Layout) -> Result<usize, CompileError> {
         let key = format!("{layout:?}");
         if let Some(index) = self.conversion_ids.get(&key) {
             return Ok(*index);

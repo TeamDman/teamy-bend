@@ -35,6 +35,17 @@ upstream. Closure captures and unary callback application preserve those boxed
 boundaries. The runtime also provides the upstream closure task bridge for C
 companions that use `task_node` and `corpus_eval`.
 
+Saturated direct ordinary calls carry finite values as vectors of layout words
+through generated bodies, arguments, results and joins. Definition signatures
+follow upstream's raised parameter telescope, including erased parameters.
+Unit arguments occupy no words; an empty result layout uses one boxed word so
+each child still has a distinct result destination. Dynamic closures, foreign
+callbacks and heap nodes keep their explicit boxed representation boundaries.
+Native scalar tail crossings compose their cast and ownership changes in the
+dispatcher without retaining conversion frames. Finite datatype conversions
+at dynamic callable boundaries still use tracked frames; broader conversion
+and callable optimization remains unfinished.
+
 Generated calls use an explicit dispatch loop. A tail application transfers its
 closure and argument into a pending root task; the current callback releases its
 frame before dispatch continues. A non-tail application saves its caller's
@@ -72,9 +83,16 @@ non-root task can also enter through a closed chain of one-child continuations.
 Missing external siblings, cycles, duplicate nodes, invalid destinations and
 dependency counts fail explicitly. Nested foreign evaluations have separate
 root results. This executor runs on one VM thread; multicore scheduling remains
-unfinished. Registered callbacks return one boxed Term. Multiword delivery is
-qualified separately at the helper boundary and does not establish support for
-upstream's general flattened segment ABI or bang/GPU calls.
+unfinished. Registered boxed callbacks return one Term; generated word segments
+return an explicit vector outcome. Raw word bits cannot become task controls.
+Argument and result vectors carry exact ownership masks, including finite sums
+whose active variant changes a slot between a reference and a raw word. Graph
+validation reserves each child's complete result span before execution, rejects
+overlap, and decrements the dependency count once per completed child. Saved
+callers resume into checked vector destinations. `corpus_eval_words` exposes
+multiword results to trusted C with an explicit output capacity and ownership
+buffer; `corpus_eval` retains its one-word result contract. Broader callable
+specialization, upstream optimization parity and bang/GPU calls remain open.
 
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned

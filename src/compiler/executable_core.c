@@ -229,6 +229,9 @@ static u32 tb_continuations;
 static u32 tb_tasks;
 static u64 tb_task_joins;
 static u32 tb_task_peak;
+static u64 tb_segment_calls;
+static u64 tb_segment_result_words;
+static u64 tb_segment_multiword_results;
 typedef struct TBTaskRecord TBTaskRecord;
 static TBTaskRecord *tb_task_table[1024];
 static u32 tb_closure_captures[65536];
@@ -656,29 +659,74 @@ INLINE Term tb_word(Env e, u32 value) {
 typedef Term (*BendClosureFn)(Env, const Term *, Term);
 typedef struct TBCallFrame TBCallFrame;
 typedef Term (*BendResumeFn)(const Env *, TBCallFrame *);
+typedef struct {
+  Term task;
+  const Term *words;
+  const Term *owned;
+  u32 count;
+  bool pending;
+} TBOutcome;
+typedef TBOutcome (*BendSegmentFn)(const Env *, TBCallFrame *);
+INLINE TBOutcome tb_segment_task(Term task) {
+  TBOutcome outcome = {task, NULL, NULL, 0, true}; return outcome;
+}
+INLINE TBOutcome tb_segment_words(const Term *words, const Term *owned, u32 count) {
+  TBOutcome outcome = {0, words, owned, count, false}; return outcome;
+}
+/* Scalar representation changes compose without retaining identity frames.
+ * Bit zero enables an adapter, bit one selects an owned result, and bit two
+ * preserves any required native W32 truncation across the tail chain. */
+enum {
+  TB_RESULT_NONE = 0, TB_RESULT_RAW64 = 1, TB_RESULT_BOX64 = 3,
+  TB_RESULT_RAW32 = 5, TB_RESULT_BOX32 = 7
+};
 struct TBCallFrame {
   size_t pc, destination;
+  u32 expected, tail_result;
   bool waiting;
   Term *values;
   const Term *captures;
   Term argument;
-  /* Dispatcher-owned metadata; generated bodies update only pc/destination/waiting. */
+  /* Dispatcher-owned metadata; generated bodies update only the fields above. */
   TBCallFrame *parent;
-  u32 fid;
+  u32 fid, saved_result;
   size_t slots;
 };
+INLINE u32 tb_result_compose(u32 outer, u32 inner) {
+  if ((outer != 0 && ((outer & 1u) == 0 || outer > 7))
+      || (inner != 0 && ((inner & 1u) == 0 || inner > 7)))
+    err_fail("invalid scalar tail result adapter");
+  return outer == 0 ? inner : (outer & 3u) | ((outer | inner) & 4u);
+}
+INLINE Term tb_tail_result(TBCallFrame *frame, Term task, u32 mode) {
+  if (frame == NULL || frame->waiting || mode == TB_RESULT_NONE)
+    err_fail("invalid scalar tail result adapter");
+  frame->tail_result = tb_result_compose(frame->tail_result, mode);
+  return task;
+}
 static BendClosureFn tb_closure_functions[65536];
 static BendResumeFn tb_resume_functions[65536];
 static size_t tb_resume_slots[65536];
+static BendSegmentFn tb_segment_functions[65536];
+static u32 tb_segment_arities[65536], tb_segment_widths[65536];
 INLINE u32 fid_arity(Fid fid) {
   if (fid == FID_CLO_APPLY) return 2;
   if (fid == FID_IO_EMIT) return 1;
-  if (fid >= 65536 || tb_closure_functions[fid] == NULL) err_fail("foreign task id is unsupported");
+  if (fid >= 65536) err_fail("foreign task id is unsupported");
+  if (tb_segment_functions[fid] != NULL) return tb_segment_arities[fid];
+  if (tb_closure_functions[fid] == NULL) err_fail("foreign task id is unsupported");
   if (tb_closure_captures[fid] >= 255) err_fail("foreign task arity is unsupported");
   return tb_closure_captures[fid] + 1;
 }
+INLINE u32 fid_result_width(Fid fid) {
+  if (fid == FID_CLO_APPLY || fid == FID_IO_EMIT) return 1;
+  if (fid >= 65536 || (tb_segment_functions[fid] == NULL && tb_closure_functions[fid] == NULL))
+    err_fail("foreign task id is unsupported");
+  return tb_segment_functions[fid] == NULL ? 1 : tb_segment_widths[fid];
+}
 OUTLINE void tb_register_closure(u32 fid, BendClosureFn function, u32 count) {
   if (fid < 2 || fid >= 65536 || function == NULL || count > 255) err_fail("invalid closure registration");
+  if (tb_segment_functions[fid] != NULL) err_fail("conflicting task registration");
   if (tb_closure_functions[fid] != NULL
       && (tb_closure_functions[fid] != function || tb_closure_captures[fid] != count))
     err_fail("duplicate closure registration");
@@ -694,6 +742,18 @@ OUTLINE void tb_register_generated(u32 fid, BendClosureFn function, BendResumeFn
   tb_register_closure(fid, function, count);
   tb_resume_functions[fid] = resume;
   tb_resume_slots[fid] = slots;
+}
+OUTLINE void tb_register_segment(u32 fid, BendSegmentFn function, u32 arity, u32 result_width, size_t slots) {
+  if (fid < 2 || fid >= 65536 || function == NULL || arity > 255 || result_width == 0
+      || result_width > 255 || slots > SIZE_MAX / sizeof(Term))
+    err_fail("invalid segment registration");
+  if (tb_closure_functions[fid] != NULL) err_fail("conflicting task registration");
+  if (tb_segment_functions[fid] != NULL
+      && (tb_segment_functions[fid] != function || tb_segment_arities[fid] != arity
+          || tb_segment_widths[fid] != result_width || tb_resume_slots[fid] != slots))
+    err_fail("duplicate segment registration");
+  tb_segment_functions[fid] = function; tb_segment_arities[fid] = arity;
+  tb_segment_widths[fid] = result_width; tb_resume_slots[fid] = slots;
 }
 INLINE Term tb_closure(Env e, u32 fid, u32 count, const Term *captures) {
   Loc at = 0;
@@ -727,6 +787,16 @@ INLINE Loc task_tail(Term task) {
   tb_allocation(e, at, cls_fit(arity + 2));
   return at + arity;
 }
+INLINE Term tb_word_task(Env e, Fid fid, u32 count, const Term *words, const Term *owned) {
+  if (count != fid_arity(fid) || (count != 0 && words == NULL)) err_fail("invalid word task payload");
+  Loc at = task_node(e, fid, TERM_HOLE, 0, 0);
+  for (u32 i = 0; i < count; ++i) {
+    if (owned != NULL && owned[i] > 1) err_fail("invalid task ownership mask");
+    e.mem[at + i] = words[i];
+    if (owned != NULL && owned[i] == 0) tb_mark_raw(e, at + i, 1);
+  }
+  return term_tsk(fid, at);
+}
 INLINE void tb_task_take(Env e, Term task, Term *closure, Term *argument) {
   Loc at;
   if (term_tag(task) != TAG_TSK || term_aux(task) != FID_CLO_APPLY) err_fail("foreign task is unsupported");
@@ -754,7 +824,7 @@ OUTLINE TBCallFrame *tb_call_frame_owned(u32 fid, Term *captures, Term argument)
   frame = (TBCallFrame *)io_mem(tb_host_calloc(1, sizeof(*frame)));
   frame->values = slots == 0 ? NULL : (Term *)io_mem(tb_host_calloc(slots, sizeof(Term)));
   frame->captures = captures; frame->argument = argument;
-  frame->fid = fid; frame->slots = slots;
+  frame->fid = fid; frame->slots = slots; frame->expected = 1;
   ++tb_continuations;
   return frame;
 }
@@ -778,6 +848,7 @@ OUTLINE void tb_call_frame_free(TBCallFrame *frame) {
 }
 OUTLINE Term tb_apply(Env e, Term closure, Term argument);
 OUTLINE Term corpus_eval(Corpus memory, Term task);
+OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity);
 
 INLINE Term term_blk(bool array, Cls cls, Loc loc) { return term_make(array ? TAG_ARR : TAG_BUF, cls, loc); }
 INLINE Cls blk_cls(Term block) { return (Cls)term_aux(block); }
@@ -908,12 +979,16 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   e.mem = tb_memory; e.alc = NULL;
   tb_bump = HEAP_OFF; tb_steps = 0; tb_depth = 0; tb_frames = 0; tb_continuations = 0; tb_tasks = 0;
   tb_task_joins = 0; tb_task_peak = 0; tb_task_context_reset();
+  tb_segment_calls = 0; tb_segment_result_words = 0; tb_segment_multiword_results = 0;
   tb_live_words = 0; tb_live_blocks = 0;
   memset(tb_free_lists, 0, sizeof(tb_free_lists));
   memset(tb_closure_functions, 0, sizeof(tb_closure_functions));
   memset(tb_closure_captures, 0, sizeof(tb_closure_captures));
   memset(tb_resume_functions, 0, sizeof(tb_resume_functions));
   memset(tb_resume_slots, 0, sizeof(tb_resume_slots));
+  memset(tb_segment_functions, 0, sizeof(tb_segment_functions));
+  memset(tb_segment_arities, 0, sizeof(tb_segment_arities));
+  memset(tb_segment_widths, 0, sizeof(tb_segment_widths));
   memset(tb_task_table, 0, sizeof(tb_task_table));
   if (setjmp(guard) == 0) {
     Term main;
