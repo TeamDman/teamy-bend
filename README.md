@@ -77,8 +77,9 @@ helpers use the same scheduler. TCP/UDP uses the synchronous Rust Node-API
 provider built alongside the CLI and packaged beside generated programs. See
 [JavaScript networking](docs/executable-network.md) for provider setup, raw
 descriptors and limits. [Executable C](docs/executable-c.md) now has a packed
-native ABI, foreign callbacks and a bounded CPU effect runtime; its remaining
-host effects, reclamation and optimized execution are unfinished.
+native ABI, foreign callbacks and a bounded CPU effect runtime. It uses reference
+counts and reuses freed allocation blocks. Optimized parallel C execution,
+window/audio effects and GPU execution remain unfinished.
 Environment and file effects use synchronous Node calls. The sealed affine File
 type prevents source code from copying handles; reads and writes return the
 handle on both success and failure. See

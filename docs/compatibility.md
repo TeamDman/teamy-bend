@@ -86,8 +86,9 @@ backend rejects their execution explicitly. The separate
 foreign imports, native representations and callbacks. The separate
 [executable C compiler](executable-c.md) provides packed native values,
 foreign registration/callbacks, file and TCP/UDP effects and a bounded CPU runtime.
-Reclamation and optimized C execution, plus window/audio Base effects and unsafe execution, remain
-required work in [the design](effects-design.md).
+CPU reclamation uses reference counts and free lists to reuse released storage.
+Optimized parallel C execution, window/audio Base effects, GPU execution and
+unsafe execution remain required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
 a cooperative FIFO scheduler. Undefined foreign returns suspend; saved

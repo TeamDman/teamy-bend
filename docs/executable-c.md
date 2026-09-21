@@ -101,16 +101,39 @@ even if no wake arrives. A full notification queue already contains a wake.
 Descriptor waits have a 1,000 ms maximum poll interval. Native C callbacks do
 not use Node.
 
-This foundation retains VM values in a bounded arena until invocation cleanup.
-It does not yet implement upstream reference-count reclamation or the optimized
-task/GPU allocator. Generated temporary scalars and arrays use tracked heap
+The CPU runtime reclaims dead VM values during execution. The Rust generator
+tracks owned uses: earlier uses duplicate, the final use transfers ownership,
+and unused bindings are released. Constructor extraction consumes its input;
+printers borrow and release any temporary boxed views. Arrays preserve nested
+ownership through clone, get, replacement, swap, split and join. Exact per-cell
+metadata distinguishes references from raw words, including mixed finite sums.
+
+Reference-count cells preserve the native packed representation. Shared
+constructor extraction upgrades child references dynamically and writes their
+new wrappers back to the shared node. This is a correctness adaptation to the
+current generator: upstream instead expects those shared children to have been
+sealed by its ownership analysis. Captured closures are duplicated structurally;
+the foreign term_keep contract still refuses count cells for captured closures
+and tasks. Destruction and nested closure copying use iterative traversals.
+
+Dead allocations return to their exact size-class free list. Live spans, free
+classes and reference-count overflow are checked. Free lists do not coalesce
+across classes, so fragmentation can still exhaust the bounded arena. Successful
+IO shutdown releases parked continuations and channel payloads on the VM thread.
+A guarded failure bulk-releases the arena without retraversing values whose
+ownership transfer may have been interrupted. Native worker allocations keep
+their separate host lifetime. The optimized parallel CPU/task/GPU allocator and
+upstream borrowing/sharing optimizations remain unfinished.
+
+Generated temporary scalars and arrays use tracked heap
 frames, released on function return. Small wrappers allocate before entering
 generated bodies. Internal calls pass Env by pointer through fixed native
 bridges; the public foreign ABI still passes Env by value. This also avoids
 MSVC's separate stack copy of Env at every call site in an unoptimized body.
 Budgets cover 2,000,000 steps, 512 nested applications, 512 generated
 frames (including conversion and printing calls), a
-64 MiB VM arena, 64 MiB tracked host allocation, 8 MiB per host allocation,
+64 MiB VM payload arena and an equally sized ownership-metadata arena,
+64 MiB tracked host allocation, 8 MiB per host allocation,
 131,072 live actions and 64 active worker calls. Owned socket rows have a
 131,072-entry bound and are reused after close. The worker notifier adds two
 internal sockets. Queued work remains bounded by the action limit. Pure printing

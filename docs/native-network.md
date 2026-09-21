@@ -82,7 +82,9 @@ Generated JavaScript networking uses a separate synchronous syscall and readines
 provider preserving raw descriptors and callbacks. See its documentation for
 Node-API packaging and the supplied BEND_SYS interface. Standalone
 [executable C](executable-c.md) has its own packed runtime and socket adapters;
-its reclamation and optimized execution, window/audio and GPU remain unfinished.
+its bounded CPU runtime now reclaims values through reference counts and reuses
+freed allocation blocks. Optimized parallel C execution, window/audio effects
+and GPU execution remain unfinished.
 
 ## Validation boundary
 

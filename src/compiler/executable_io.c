@@ -32,6 +32,8 @@ struct IoAct {
   short evts;
   intptr_t descriptor;
   IoAct *next;
+  IoAct *owned_previous;
+  IoAct *owned_next;
   TBIOState *owner;
   TBFile *file;
   u32 parked;
@@ -45,9 +47,12 @@ static IoEff io_eff_rows[65536];
 static IoQue io_runs;
 static IoQue io_park;
 static IoQue io_jobs;
+/* VM-thread registry includes actions currently held by native workers. */
+static IoAct *io_owned;
 static u32 io_live;
 static u32 io_busy;
 static TBIOState *tb_io;
+static void tb_io_release(Env e);
 static void tb_file_job_finished(IoAct *action);
 static void tb_files_shutdown(TBHost *host);
 static void tb_register_files(void);
@@ -89,6 +94,12 @@ INLINE IoAct *io_pop(IoQue *queue) {
   action->next = NULL;
   return action;
 }
+INLINE void io_dispose(IoAct *action) {
+  if (action->owned_previous != NULL) action->owned_previous->owned_next = action->owned_next;
+  else io_owned = action->owned_next;
+  if (action->owned_next != NULL) action->owned_next->owned_previous = action->owned_previous;
+  tb_host_free(action); --io_live;
+}
 OUTLINE u64 io_tick(void) {
 #ifdef _WIN32
   LARGE_INTEGER counter, frequency;
@@ -121,7 +132,7 @@ OUTLINE char *io_cstr(Env e, Term string, u64 *length) {
   char *buffer = (char *)io_mem(tb_host_malloc((size_t)capacity));
   while (term_aux(string) == CID_SCON) {
     Term fields[2]; tb_tick();
-    (void)ctr_take(e, string, 2, fields);
+    spare_free(e, cls_fit(2), ctr_take(e, string, 2, fields));
     if (used + 5 > capacity) {
       if (capacity > BEND_MAX_HOST_BUFFER / 2) err_fail("text byte budget exhausted");
       capacity *= 2;
@@ -180,6 +191,9 @@ OUTLINE void io_spawn(Term computation) {
   if (io_live >= BEND_MAX_ACTIONS) err_fail("activation budget exhausted");
   action = (IoAct *)io_mem(tb_host_calloc(1, sizeof(IoAct)));
   action->cont = computation; action->item = term_clo(FID_IO_EMIT, 0); action->owner = tb_io;
+  action->owned_next = io_owned;
+  if (io_owned != NULL) io_owned->owned_previous = action;
+  io_owned = action;
   io_push(&io_runs, action); ++io_live;
 }
 INLINE Term io_wait_on(IoWork *work, intptr_t descriptor, short events, IoPack more) {
@@ -277,7 +291,10 @@ OUTLINE Term io_exec(Env e, IoWork *work) {
   if (term_tag(action->cont) != TAG_CTR) err_fail("foreign request requires a node");
   if (count == 0 || count > 255) err_fail("foreign request has invalid arity");
   tb_require_effect(cid);
-  (void)ctr_take(e, action->cont, count, fields);
+  /* The effect takes its arguments; only its continuation stays in the action. */
+  Term request = action->cont;
+  action->cont = TERM_HOLE;
+  spare_free(e, cls_fit(count), ctr_take(e, request, count, fields));
   action->cont = fields[count - 1];
   return io_eff_rows[cid].run(e, fields, work);
 }
@@ -361,25 +378,33 @@ OUTLINE void io_wait(Env e) {
 }
 OUTLINE int io_step(Env e, IoAct *action) {
   for (;;) {
-    Term request = tb_apply(e, action->cont, action->item);
+    Term continuation = action->cont, item = action->item;
+    /* Application consumes both inputs. Cancelled actions must not drop them twice. */
+    action->cont = TERM_HOLE; action->item = TERM_HOLE;
+    Term request = tb_apply(e, continuation, item);
     u32 cid = (u32)term_aux(request), need;
     Loc at;
     tb_tick();
     if (term_tag(request) != TAG_PAK && term_tag(request) != TAG_CTR) err_fail("IO continuation returned ordinary data");
-    if (cid == CID_EMIT) { tb_host_free(action); --io_live; return -1; }
+    if (cid == CID_EMIT) { term_drop(e, request); io_dispose(action); return -1; }
     if (cid == CID_HALT) {
+      Term fields[2];
+      int code;
       if (term_tag(request) != TAG_CTR) err_fail("malformed Halt request");
-      at = term_peek(e, request); tb_span(e, at, 2);
-      io_errs(e, e.mem[at + 1]); return (int)(u32)e.mem[at];
+      spare_free(e, cls_fit(2), ctr_take(e, request, 2, fields));
+      code = (int)(u32)fields[0];
+      io_errs(e, fields[1]); return code;
     }
     tb_require_effect(cid); need = io_eff_rows[cid].ask; action->cont = request;
     if (need != 0) {
-      Term fields[256]; u32 count = cid_arity(cid);
+      u32 count = cid_arity(cid);
+      Term first;
       if (count == 0 || count > 255) err_fail("invalid parked request");
-      (void)ctr_take(e, request, count, fields);
-      (void)io_wait_on(&action->work, (intptr_t)(need & IO_READ ? io_hand_v(fields[0]) : fields[0]), POLLIN, io_exec);
+      /* A parked request still owns every field until io_exec consumes it. */
+      at = term_peek(e, request); tb_span(e, at, count); first = e.mem[at];
+      (void)io_wait_on(&action->work, (intptr_t)(need & IO_READ ? io_hand_v(first) : first), POLLIN, io_exec);
       if (need & IO_TIME) {
-        u64 delay = (u32)fields[0] * UINT64_C(1000000), now = io_tick();
+        u64 delay = (u32)first * UINT64_C(1000000), now = io_tick();
         if (delay > UINT64_MAX - now) err_fail("timer deadline overflow");
         action->time = now + delay;
         if (action->time == 0) action->time = 1;
@@ -396,13 +421,13 @@ static int io_loop(Env e, Term main) {
   for (u64 turns = 0;; ++turns) {
     tb_tick();
     if (io_runs.head == NULL) {
-      if (io_live == 0) { io_sync(); return 0; }
-      if (io_park.head == NULL && io_busy == 0) { io_sync(); (void)fprintf(stderr, "bend: deadlock: every computation waits on a channel\n"); return 1; }
+      if (io_live == 0) { io_sync(); tb_io_release(e); return 0; }
+      if (io_park.head == NULL && io_busy == 0) { io_sync(); (void)fprintf(stderr, "bend: deadlock: every computation waits on a channel\n"); tb_io_release(e); return 1; }
       io_wait(e); continue;
     }
     if ((turns & 63) == 0 && io_busy != 0) io_take(e);
     int code = io_step(e, io_pop(&io_runs));
-    if (code >= 0) { io_sync(); return code; }
+    if (code >= 0) { io_sync(); tb_io_release(e); return code; }
   }
 }
 
@@ -455,7 +480,8 @@ INLINE void chan_free(ChanRow *row) {
   chan_idle = (u32)(row - chan_rows);
 }
 INLINE Term chan_take(ChanRow *row) {
-  Term value = row->ring[row->head]; row->head = (row->head + 1) % row->room; --row->size;
+  Term value = row->ring[row->head]; row->ring[row->head] = TERM_HOLE;
+  row->head = (row->head + 1) % row->room; --row->size;
   if (row->wait.head != NULL) {
     Term item = chan_wake(row, chan_bool(true)); row->ring[(row->head + row->size) % row->room] = item; ++row->size;
   }
@@ -468,6 +494,31 @@ INLINE void chan_shut(Env e, ChanRow *row) {
     term_sink(e, chan_wake(row, value));
   }
   if (row->size == 0) chan_free(row);
+}
+
+/* Called only after a normal IO-loop return, including explicit Halt/deadlock.
+ * A guarded failure can interrupt an ownership transfer; it instead frees the
+ * invocation arena without traversing a partially consumed graph. */
+static void tb_io_release(Env e) {
+  tb_lock(&tb_io->host->mutex); tb_io->host->stopped = true; tb_unlock(&tb_io->host->mutex);
+  for (IoAct *action = io_owned; action != NULL; action = action->owned_next) {
+    Term continuation = action->cont, item = action->item;
+    action->cont = TERM_HOLE; action->item = TERM_HOLE;
+    term_sink(e, continuation); term_sink(e, item);
+  }
+  for (u32 index = 0; index < chan_len; ++index) {
+    ChanRow *row = &chan_rows[index];
+    if (!row->live) continue;
+    while (row->size != 0) {
+      Term item = row->ring[row->head]; row->ring[row->head] = TERM_HOLE;
+      row->head = (row->head + 1) % row->room; --row->size;
+      term_sink(e, item);
+    }
+    chan_free(row);
+  }
+  tb_host_free(chan_rows); chan_rows = NULL; chan_len = 0; chan_idle = UINT32_MAX;
+  /* Workers retain their IoAct host allocation, but never read these VM roots. */
+  io_owned = NULL;
 }
 
 static Term tb_print_run(Env e, Term *fields, IoWork *work) {
@@ -540,7 +591,7 @@ OUTLINE void tb_register_builtins(void) {
 }
 static void tb_io_initialize(void) {
   memset(&io_runs, 0, sizeof(io_runs)); memset(&io_park, 0, sizeof(io_park)); memset(&io_jobs, 0, sizeof(io_jobs));
-  io_live = 0; io_busy = 0; chan_rows = NULL; chan_len = 0; chan_idle = UINT32_MAX;
+  io_live = 0; io_busy = 0; io_owned = NULL; chan_rows = NULL; chan_len = 0; chan_idle = UINT32_MAX;
   tb_io = (TBIOState *)io_mem(tb_host_calloc(1, sizeof(TBIOState))); tb_io->host = tb_host_current;
 #ifdef _WIN32
   WSADATA winsock;

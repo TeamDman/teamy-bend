@@ -21,7 +21,6 @@ use crate::kernel::elaborate::Expression;
 use crate::kernel::elaborate::ExpressionKind;
 use crate::kernel::substitute;
 use std::collections::BTreeMap;
-use std::collections::BTreeSet;
 use std::fmt::Write;
 use std::rc::Rc;
 
@@ -30,8 +29,25 @@ mod native;
 #[path = "executable_c_values.rs"]
 mod values;
 
-type Scope = BTreeMap<usize, String>;
+type Scope = BTreeMap<usize, OwnedLocal>;
 type Substitutions = BTreeMap<usize, TermRef>;
+
+#[derive(Clone)]
+struct OwnedLocal {
+    value: String,
+    remaining: usize,
+    owned: bool,
+}
+
+impl OwnedLocal {
+    fn new(value: String, remaining: usize) -> Self {
+        Self {
+            value,
+            remaining,
+            owned: true,
+        }
+    }
+}
 
 /// Generate a standalone C program from an execution-only checked book.
 ///
@@ -283,6 +299,29 @@ impl Generator<'_> {
         Ok(format!("(tb_values + {start})"))
     }
 
+    fn owned_use(
+        &mut self,
+        id: usize,
+        scope: &mut Scope,
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let local = scope
+            .get_mut(&id)
+            .ok_or_else(|| CompileError::new(format!("unbound executable C variable {id}")))?;
+        if !local.owned || local.remaining == 0 {
+            return Err(CompileError::new(format!(
+                "unbalanced executable C ownership for variable {id}"
+            )));
+        }
+        local.remaining -= 1;
+        if local.remaining == 0 {
+            local.owned = false;
+            Ok(local.value.clone())
+        } else {
+            self.hold(output, &format!("tb_c_duplicate(e, &{})", local.value))
+        }
+    }
+
     fn definition(
         &mut self,
         name: &str,
@@ -321,7 +360,7 @@ impl Generator<'_> {
                     generator.hold(
                         body,
                         &format!(
-                            "tb_c_construct(e, {cid}, {}, {fields}, false)",
+                            "tb_c_construct(e, {cid}, {}, {fields}, false, NULL)",
                             arguments.len()
                         ),
                     )
@@ -341,7 +380,7 @@ impl Generator<'_> {
                 } else {
                     self.expression(
                         &specialize_expression(&body, substitutions),
-                        &Scope::new(),
+                        &mut Scope::new(),
                         &mut output,
                     )?
                 }
@@ -425,37 +464,53 @@ impl Generator<'_> {
         &mut self,
         expression: &Expression,
         parameter: usize,
-        scope: &Scope,
+        scope: &mut Scope,
         output: &mut Body,
     ) -> Result<String, CompileError> {
-        let mut used = BTreeSet::new();
-        variables(expression, &mut used);
+        let used = runtime_uses(expression);
         let captures = scope
             .iter()
-            .filter(|(id, _)| **id != parameter && used.contains(id))
+            .filter(|(id, _)| **id != parameter && used.contains_key(id))
+            .map(|(id, _)| *id)
             .collect::<Vec<_>>();
         let id = self.reserve_closure(captures.len())?;
         let mut inner = Scope::new();
-        for (index, (variable, _)) in captures.iter().enumerate() {
-            inner.insert(**variable, format!("captures[{index}]"));
-        }
-        inner.insert(parameter, "argument".into());
         let mut body = Body::new("  (void)e; (void)captures; (void)argument;\n");
+        let body_uses = match &expression.kind {
+            ExpressionKind::Lambda { body, .. } => runtime_uses(body),
+            _ => BTreeMap::new(),
+        };
+        for (index, variable) in captures.iter().enumerate() {
+            let value = self.hold(&mut body, &format!("captures[{index}]"))?;
+            inner.insert(
+                *variable,
+                OwnedLocal::new(value, body_uses.get(variable).copied().unwrap_or(0)),
+            );
+        }
+        let argument = self.hold(&mut body, "argument")?;
+        inner.insert(
+            parameter,
+            OwnedLocal::new(argument, body_uses.get(&parameter).copied().unwrap_or(0)),
+        );
+        if matches!(expression.kind, ExpressionKind::Lambda { .. }) {
+            drop_unused(&mut inner, &mut body);
+        }
         let value = match &expression.kind {
             ExpressionKind::Lambda {
                 body: expression, ..
-            } => self.expression(expression, &inner, &mut body)?,
+            } => self.expression(expression, &mut inner, &mut body)?,
             ExpressionKind::Match { .. } | ExpressionKind::Absurd { .. } => {
-                self.match_body(expression, &inner, &mut body)?
+                self.match_body(expression, &mut inner, &mut body)?
             }
             _ => return Err(CompileError::new("invalid executable C closure node")),
         };
+        drop_owned(&mut inner, &mut body);
         writeln!(body, "  return {value};").unwrap();
         self.closures[id].source = closure_source(id, body);
         let values = captures
             .iter()
-            .map(|(_, value)| (*value).clone())
-            .collect::<Vec<_>>();
+            .map(|variable| self.owned_use(*variable, scope, output))
+            .collect::<Result<Vec<_>, _>>()?;
         self.make_closure(id, &values, output)
     }
 
@@ -466,16 +521,13 @@ impl Generator<'_> {
     fn expression(
         &mut self,
         expression: &Expression,
-        scope: &Scope,
+        scope: &mut Scope,
         output: &mut Body,
     ) -> Result<String, CompileError> {
         self.fresh()?;
         match &expression.kind {
             ExpressionKind::Erased => Ok("0".to_owned()),
-            ExpressionKind::Variable(id) => scope
-                .get(id)
-                .cloned()
-                .ok_or_else(|| CompileError::new(format!("unbound executable C variable {id}"))),
+            ExpressionKind::Variable(id) => self.owned_use(*id, scope, output),
             ExpressionKind::Definition(name) => {
                 let id = self.definition(name, &Substitutions::new())?;
                 self.hold(output, &format!("tb_definition_{id}(e)"))
@@ -567,15 +619,32 @@ impl Generator<'_> {
                 self.construct(name, &values, output)
             }
             ExpressionKind::Let { bindings, body } => {
-                let mut inner = scope.clone();
+                let mut locals = Vec::new();
                 for binding in bindings
                     .iter()
                     .filter(|binding| binding.binder.quant != Quant::None)
                 {
                     let value = self.expression(&binding.value, scope, output)?;
-                    inner.insert(binding.binder.id, value);
+                    let value = self.hold(output, &value)?;
+                    locals.push((binding.binder.id, value));
                 }
-                self.expression(body, &inner, output)
+                let uses = runtime_uses(body);
+                for (id, value) in &locals {
+                    scope.insert(
+                        *id,
+                        OwnedLocal::new(value.clone(), uses.get(id).copied().unwrap_or(0)),
+                    );
+                }
+                drop_unused(scope, output);
+                let result = self.expression(body, scope, output)?;
+                for (id, _) in locals {
+                    if let Some(local) = scope.remove(&id)
+                        && local.owned
+                    {
+                        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+                    }
+                }
+                Ok(result)
             }
         }
     }
@@ -583,7 +652,7 @@ impl Generator<'_> {
     fn match_body(
         &mut self,
         expression: &Expression,
-        scope: &Scope,
+        scope: &mut Scope,
         output: &mut Body,
     ) -> Result<String, CompileError> {
         let ExpressionKind::Match {
@@ -602,7 +671,7 @@ impl Generator<'_> {
                 "executable C cannot match an erased scrutinee",
             ));
         }
-        let value = &scope[&parameter.id];
+        let value = scope[&parameter.id].value.clone();
         writeln!(output, "  tb_reject_request({value});").unwrap();
         let condition = if self.program.base_names.contains(owner) {
             match owner.as_str() {
@@ -627,21 +696,26 @@ impl Generator<'_> {
         if condition != "1" {
             writeln!(output, "  if ({condition}) {{").unwrap();
         }
+        let mut arm_scope = branch_scope(scope, arm, parameter.id);
+        drop_unused(&mut arm_scope, output);
+        let arm_value = self.owned_use(parameter.id, &mut arm_scope, output)?;
         let values = if self.program.base_names.contains(owner) {
             match owner.as_str() {
                 "Nat" => {
                     if constructor == "Zero" {
                         Vec::new()
                     } else {
-                        vec![format!("({value} - 1)")]
+                        vec![format!("({arm_value} - 1)")]
                     }
                 }
-                "U32" | "F32" => vec![self.hold(output, &format!("tb_c_word(e, (u32){value})"))?],
-                "Array" => self.array_fields(constructor, &parameter.ty, value, output)?,
-                _ => self.fields(constructor, value, output)?,
+                "U32" | "F32" => {
+                    vec![self.hold(output, &format!("tb_c_word(e, (u32){arm_value})"))?]
+                }
+                "Array" => self.array_fields(constructor, &parameter.ty, &arm_value, output)?,
+                _ => self.fields(constructor, &arm_value, output)?,
             }
         } else {
-            self.fields(constructor, value, output)?
+            self.fields(constructor, &arm_value, output)?
         };
         if values.len()
             != fields
@@ -653,20 +727,32 @@ impl Generator<'_> {
                 "C match field arity differs from its layout",
             ));
         }
-        let mut branch = self.expression(arm, scope, output)?;
+        let mut branch = self.expression(arm, &mut arm_scope, output)?;
         for field in values {
             branch = self.hold(output, &format!("tb_c_apply(e, {branch}, {field})"))?;
         }
+        drop_owned(&mut arm_scope, output);
         if condition == "1" {
+            for local in scope.values_mut() {
+                local.owned = false;
+            }
             return Ok(branch);
         }
         writeln!(output, "  {result} = {branch};\n  }} else {{").unwrap();
-        let branch = self.expression(fallback, scope, output)?;
+        let mut fallback_scope = branch_scope(scope, fallback, parameter.id);
+        drop_unused(&mut fallback_scope, output);
+        let branch = self.expression(fallback, &mut fallback_scope, output)?;
+        let fallback_value = self.owned_use(parameter.id, &mut fallback_scope, output)?;
         writeln!(
             output,
-            "  {result} = tb_c_apply(e, {branch}, {value});\n  }}"
+            "  {result} = tb_c_apply(e, {branch}, {fallback_value});"
         )
         .unwrap();
+        drop_owned(&mut fallback_scope, output);
+        output.push_str("  }\n");
+        for local in scope.values_mut() {
+            local.owned = false;
+        }
         Ok(result)
     }
 }
@@ -682,34 +768,104 @@ fn closure_source(id: usize, body: Body) -> String {
     source
 }
 
-fn variables(expression: &Expression, output: &mut BTreeSet<usize>) {
+/// Count owned uses in one generated function. Creating a closure consumes one
+/// capture per free variable; uses inside that closure belong to its own body.
+/// Match branches are counted independently when their function is generated.
+fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
+    fn merge(target: &mut BTreeMap<usize, usize>, source: BTreeMap<usize, usize>) {
+        for (id, count) in source {
+            *target.entry(id).or_default() += count;
+        }
+    }
+    let mut output = BTreeMap::new();
     match &expression.kind {
         ExpressionKind::Variable(id) => {
-            output.insert(*id);
+            output.insert(*id, 1);
         }
-        ExpressionKind::Lambda { body, .. } => variables(body, output),
+        ExpressionKind::Lambda { parameter, body } => {
+            output = runtime_uses(body);
+            output.remove(&parameter.id);
+            if parameter.quant != Quant::None {
+                for count in output.values_mut() {
+                    *count = 1;
+                }
+            }
+        }
         ExpressionKind::Apply {
-            function, argument, ..
+            function,
+            argument,
+            quant,
         } => {
-            variables(function, output);
-            variables(argument, output);
+            output = runtime_uses(function);
+            if *quant != Quant::None {
+                merge(&mut output, runtime_uses(argument));
+            }
         }
         ExpressionKind::Constructor { fields, .. } => {
-            for field in fields {
-                variables(&field.value, output);
+            for field in fields
+                .iter()
+                .filter(|field| field.binder.quant != Quant::None)
+            {
+                merge(&mut output, runtime_uses(&field.value));
             }
         }
-        ExpressionKind::Match { arm, fallback, .. } => {
-            variables(arm, output);
-            variables(fallback, output);
+        ExpressionKind::Match {
+            parameter,
+            arm,
+            fallback,
+            ..
+        } => {
+            output = runtime_uses(arm);
+            merge(&mut output, runtime_uses(fallback));
+            output.remove(&parameter.id);
+            for count in output.values_mut() {
+                *count = 1;
+            }
         }
         ExpressionKind::Let { bindings, body } => {
-            for field in bindings {
-                variables(&field.value, output);
+            output = runtime_uses(body);
+            for binding in bindings {
+                output.remove(&binding.binder.id);
             }
-            variables(body, output);
+            for binding in bindings
+                .iter()
+                .filter(|binding| binding.binder.quant != Quant::None)
+            {
+                merge(&mut output, runtime_uses(&binding.value));
+            }
         }
         ExpressionKind::Erased | ExpressionKind::Definition(_) | ExpressionKind::Absurd { .. } => {}
+    }
+    output
+}
+
+fn branch_scope(scope: &Scope, expression: &Expression, parameter: usize) -> Scope {
+    let mut uses = runtime_uses(expression);
+    *uses.entry(parameter).or_default() += 1;
+    scope
+        .iter()
+        .map(|(id, local)| {
+            let mut local = local.clone();
+            local.remaining = uses.get(id).copied().unwrap_or(0);
+            (*id, local)
+        })
+        .collect()
+}
+
+fn drop_owned(scope: &mut Scope, output: &mut Body) {
+    for local in scope.values_mut().filter(|local| local.owned) {
+        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+        local.owned = false;
+    }
+}
+
+fn drop_unused(scope: &mut Scope, output: &mut Body) {
+    for local in scope
+        .values_mut()
+        .filter(|local| local.owned && local.remaining == 0)
+    {
+        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+        local.owned = false;
     }
 }
 

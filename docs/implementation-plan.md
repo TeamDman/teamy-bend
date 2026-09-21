@@ -1407,15 +1407,69 @@ target/executable-c-network-release-comparison,
 target/executable-c-network-programs-candidate and
 target/executable-c-network-oracle. Unix execution remains unverified.
 
-Remaining work within this milestone includes reference-count reclamation,
-higher-order erased type specialization, tail-call/task lowering, full channel
-coverage and broader native-value/platform qualification. Unresolved Array
-element layouts fail during compilation instead of silently choosing an
-incompatible representation. The retained arena remains a bounded foundation,
-not optimized CPU parity. Keep this task in progress until its full acceptance
-scope is met. The next implementation step is reference-count reclamation,
-preserving the established native ABI, effect ownership and scheduling contracts.
-Poche model expansion stays deferred; existing Poche gates remain regressions.
+CPU reclamation now covers the existing executable C surface.
+The Rust generator tracks owned variable uses, transfers the final use, duplicates
+earlier uses and releases unused bindings. Constructor/layout conversions and
+arrays carry exact per-cell ownership information, including finite sums whose
+same flattened slot can contain either a scalar or a reference. Printers borrow
+their inputs. The CPU allocator returns dead blocks to bounded size-class free
+lists; count cells and iterative destruction preserve the packed foreign ABI.
+Captured closures are duplicated structurally; the foreign term_keep contract
+still rejects reference-count wrappers for captured closures and tasks. Shared
+constructor extraction upgrades child references lazily with writeback. Upstream
+requires those children to be sealed in advance; this is a documented adaptation
+to the current generator, not identical ownership optimization.
+
+Initial readiness inspection borrows requests that execution later consumes.
+Successful IO shutdown releases parked continuations and channel payloads on the
+VM thread; a guarded failure bulk-releases the invocation arena without walking
+partially consumed values. Workers retain their host allocations and never walk
+VM values. Per-word ownership metadata is bounded by the payload arena: default
+64 MiB payload plus 64 MiB metadata, separate from tracked host allocations. Free
+lists reuse exact classes without coalescing; fragmentation remains a limit.
+
+Reclamation validation: ./check-all.ps1 passes 594 tests, including five
+compile-fail API examples, with two optional profilers ignored. Final strict
+workspace library/test Clippy passes after removing unnecessary raw-string
+delimiters from one test; the embedded C fixture is unchanged. All 63 existing
+emitted-C foundation/runtime/file/network tests pass. Nine new strict-MSVC tests
+cover shared strings, unused branch owners, captured values, nested arrays,
+mixed Nat/String slots, channel reuse and Halt, nested closure copying,
+20,000-node iterative destruction, invalid frees and count overflow. Successful
+cases require zero live VM words and blocks after execution. Four 4 KiB reuse
+fixtures exhaust that same heap under retained e976d76 and complete with the
+new implementation. Direct source-level duplication of affine functions remains
+rejected; the nested closure-copy test explicitly uses the trusted C ABI.
+
+A nine-group probe compiles literal upstream reference-count and block helpers.
+Its host allocator, sequential low-word atomics, fixture tables and guarded
+errors are documented adapters; it does not prove whole-runtime, concurrency or
+allocation-policy equivalence. It confirms the upstream sealed-child requirement.
+Eight new complete programs match actual upstream-generated JavaScript exactly
+under a 4 KiB native heap; the four channel variants use a qualified timer-only
+Node host adapter. Ignored evidence: target/executable-c-reclamation-oracle,
+target/executable-c-reclamation-programs, target/reclamation-baseline-controls,
+target/check-executable-c-reclamation.log and target/clippy-executable-c-reclamation.log.
+
+The frozen candidate retains all 117 compiled-source fingerprints. The strict
+1,302-fixture audit still accepts 362 positives, rejects 491 positives and all
+449 negatives, with zero accepted negatives, crashes or new rejections. The
+twelve earlier complete programs and nine upstream TCP/UDP programs also match
+their actual upstream-JavaScript oracles. These 29 complete-program comparisons
+exercise the current candidate; prior C helper and platform evidence stays
+attributed to its own retained milestone. Frozen evidence is in
+target/audit-executable-c-reclamation, target/executable-c-reclamation-release-comparison
+and target/executable-c-reclamation-network-programs. The clean retained release
+must pass the existing Poche regression script, with source hashes and checkout
+state preserved, before publication; its exact release receipt stays local.
+
+Remaining work within this milestone includes higher-order erased type
+specialization, tail-call/task lowering, full channel coverage and broader
+native-value/platform qualification. Unresolved Array element layouts fail
+during compilation instead of choosing an incompatible representation. Keep
+this task in progress until its full acceptance scope is met. Optimized parallel
+CPU execution, window/audio and GPU remain later engine work. Poche model
+expansion stays deferred; existing Poche gates remain regressions.
 
 ## Completion and risks
 

@@ -55,10 +55,11 @@ impl Generator<'_> {
             )
             .unwrap();
         }
+        let mask = self.ownership_mask(&constructor.layout, &array, output)?;
         self.hold(
             output,
             &format!(
-                "tb_c_construct(e, {}, {}, {array}, {})",
+                "tb_c_construct(e, {}, {}, {array}, {}, {mask})",
                 constructor.cid,
                 constructor.layout.words.len(),
                 packed(&constructor.layout)
@@ -72,6 +73,19 @@ impl Generator<'_> {
         value: &str,
         output: &mut Body,
     ) -> Result<Vec<String>, CompileError> {
+        self.node_fields(name, value, false, output)
+    }
+
+    /// Borrow the shell, but return owned field values for temporary boxing.
+    /// The runtime retains only cells marked as references and updates their
+    /// stored wrappers before sharing them with the printer.
+    fn node_fields(
+        &mut self,
+        name: &str,
+        value: &str,
+        borrowed: bool,
+        output: &mut Body,
+    ) -> Result<Vec<String>, CompileError> {
         let constructor = self.table.get(name)?.clone();
         let array = self.array(
             output,
@@ -79,7 +93,12 @@ impl Generator<'_> {
         )?;
         writeln!(
             output,
-            "  tb_c_fields(e, {value}, {}, {}, {}, {array});",
+            "  {}(e, {value}, {}, {}, {}, {array});",
+            if borrowed {
+                "tb_c_borrow_fields"
+            } else {
+                "tb_c_fields"
+            },
             constructor.cid,
             constructor.layout.words.len(),
             packed(&constructor.layout)
@@ -100,6 +119,20 @@ impl Generator<'_> {
                 )
             })
             .collect()
+    }
+
+    /// A merged finite layout can put a raw W64 and a reference in the same
+    /// slot in different arms. Record the selected arm's exact ownership,
+    /// rather than interpreting arbitrary raw words as native Terms.
+    fn ownership_mask(
+        &mut self,
+        layout: &Layout,
+        input: &str,
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let mask = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
+        fill_ownership_mask(layout, input, &mask, 0, output);
+        Ok(mask)
     }
 
     fn conversion(&mut self, layout: &Layout) -> Result<usize, CompileError> {
@@ -234,10 +267,9 @@ impl Generator<'_> {
         output: &mut Body,
     ) -> Result<String, CompileError> {
         if name == "ANode" {
-            return self.hold(
-                output,
-                &format!("tb_c_blk_node(e, {}, {})", values[0], values[1]),
-            );
+            let left = self.hold(output, &format!("tb_c_blk_unique(e, {})", values[0]))?;
+            let right = self.hold(output, &format!("tb_c_blk_unique(e, {})", values[1]))?;
+            return self.hold(output, &format!("tb_c_blk_node(e, {left}, {right})"));
         }
         let (arr, lgs, layout) = self.array_layout(ty)?;
         let conversion = self.conversion(&layout)?;
@@ -248,10 +280,11 @@ impl Generator<'_> {
             values[0]
         )
         .unwrap();
+        let mask = self.ownership_mask(&layout, &array, output)?;
         self.hold(
             output,
             &format!(
-                "tb_c_blk_new(e, {arr}, 0, {lgs}, {}, {array})",
+                "tb_c_blk_new(e, {arr}, 0, {lgs}, {}, {array}, {mask})",
                 layout.words.len()
             ),
         )
@@ -264,6 +297,7 @@ impl Generator<'_> {
         value: &str,
         output: &mut Body,
     ) -> Result<Vec<String>, CompileError> {
+        let value = self.hold(output, &format!("tb_c_blk_unique(e, {value})"))?;
         if name == "ANode" {
             return Ok(vec![
                 self.hold(output, &format!("tb_c_blk_half(e, {value}, 0)"))?,
@@ -275,6 +309,7 @@ impl Generator<'_> {
             .map(|index| format!("blk_read(e->mem, {arr}, term_loc({value}), {index})"))
             .collect::<Vec<_>>();
         let array = self.array(output, &values)?;
+        writeln!(output, "  tb_c_blk_free(e, {value});").unwrap();
         let conversion = self.conversion(&layout)?;
         Ok(vec![self.hold(
             output,
@@ -292,7 +327,11 @@ impl Generator<'_> {
         let array_ty = find_array_type(self.program, ty, 0)?
             .ok_or_else(|| CompileError::new(format!("C {name} needs a specialized Array type")))?;
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
-        let a = &arguments[0];
+        let a = if name == "Array.new" {
+            arguments[0].clone()
+        } else {
+            self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?
+        };
         if name == "Array.clone" {
             let clone = self.hold(output, &format!("tb_c_blk_copy(e, {a})"))?;
             return self.construct("Tuple", &[a.clone(), clone], output);
@@ -316,10 +355,11 @@ impl Generator<'_> {
                 arguments[1]
             )
             .unwrap();
+            let mask = self.ownership_mask(&layout, &array, output)?;
             return self.hold(
                 output,
                 &format!(
-                    "tb_c_blk_new(e, {arr}, {a}, {lgs}, {}, {array})",
+                    "tb_c_blk_new(e, {arr}, {a}, {lgs}, {}, {array}, {mask})",
                     layout.words.len()
                 ),
             );
@@ -328,7 +368,11 @@ impl Generator<'_> {
         let previous = if name == "Array.get" || name == "Array.swap" {
             let cells = (0..layout.words.len())
                 .map(|index| {
-                    format!("blk_read(e->mem, {arr}, term_loc({a}), (u32){offset} + {index})")
+                    if name == "Array.get" && layout.words[index] == Kind::Box {
+                        format!("tb_c_blk_keep(e, term_loc({a}) + (u32){offset} + {index})")
+                    } else {
+                        format!("blk_read(e->mem, {arr}, term_loc({a}), (u32){offset} + {index})")
+                    }
                 })
                 .collect::<Vec<_>>();
             let array = self.array(output, &cells)?;
@@ -344,8 +388,9 @@ impl Generator<'_> {
                 arguments[2]
             )
             .unwrap();
+            let mask = self.ownership_mask(&layout, &array, output)?;
             for index in 0..layout.words.len() {
-                writeln!(output, "  blk_write(e->mem, {arr}, term_loc({a}), (u32){offset} + {index}, {array}[{index}]);").unwrap();
+                writeln!(output, "  tb_c_blk_write(e, {arr}, term_loc({a}), (u32){offset} + {index}, {array}[{index}], {mask}[{index}] != 0, {});", name == "Array.set").unwrap();
             }
         }
         if let Some(previous) = previous {
@@ -401,15 +446,25 @@ impl Generator<'_> {
                 let (arr, lgs, layout) = self.array_layout(&ty)?;
                 let conversion = self.conversion(&layout)?;
                 let element = self.printer(&args[0], depth + 1)?;
+                let at = self.hold(&mut output, "tb_c_peek(e, value)")?;
                 output.push_str("  tb_show_text(\"[\");\n");
                 writeln!(output, "  for (u32 i = 0; i < (UINT64_C(1) << (blk_cls(value) - {lgs})); ++i) {{\n  if (i) tb_show_text(\", \");").unwrap();
                 let values = (0..layout.words.len())
                     .map(|word| {
-                        format!("blk_read(e->mem, {arr}, term_loc(value), (i << {lgs}) + {word})")
+                        if layout.words[word] == Kind::Box {
+                            format!("tb_c_blk_keep(e, {at} + (i << {lgs}) + {word})")
+                        } else {
+                            format!("blk_read(e->mem, {arr}, {at}, (i << {lgs}) + {word})")
+                        }
                     })
                     .collect::<Vec<_>>();
                 let fields = self.array(&mut output, &values)?;
-                writeln!(output, "  tb_show_{element}(e, tb_box_{conversion}(e, {fields}), depth + 1, 0);\n  }}\n  tb_show_text(\"]\");").unwrap();
+                let boxed = self.hold(&mut output, &format!("tb_box_{conversion}(e, {fields})"))?;
+                writeln!(output, "  tb_show_{element}(e, {boxed}, depth + 1, 0);").unwrap();
+                if boxed_layout(&layout) {
+                    writeln!(output, "  tb_c_drop(e, {boxed});").unwrap();
+                }
+                output.push_str("  }\n  tb_show_text(\"]\");\n");
             }
             Term::Adt { name, args, .. } => {
                 let datatype = self.program.datatypes[name].clone();
@@ -434,7 +489,9 @@ impl Generator<'_> {
                         writeln!(output, "  if (chain != '{open}') tb_show_text(\"{open}\");")
                             .unwrap();
                     }
-                    let values = self.fields(&constructor.name, "value", &mut output)?;
+                    let values = self.node_fields(&constructor.name, "value", true, &mut output)?;
+                    let node = self.table.get(&constructor.name)?.layout.clone();
+                    let layouts = &node.arms.as_ref().expect("node has an arm")[0].fields;
                     if constructor
                         .fields
                         .iter()
@@ -467,6 +524,9 @@ impl Generator<'_> {
                             "  tb_show_{printer}(e, {value}, depth + 1, {next_chain});"
                         )
                         .unwrap();
+                        if boxed_layout(&layouts[field_index].layout) {
+                            writeln!(output, "  tb_c_drop(e, {value});").unwrap();
+                        }
                     }
                     if open == '{' {
                         writeln!(output, "  tb_show_text(\"{close}\");").unwrap();
@@ -494,6 +554,40 @@ impl Generator<'_> {
             FunctionResult::Void,
         );
         Ok(index)
+    }
+}
+
+fn boxed_layout(layout: &Layout) -> bool {
+    layout.arms.is_some() || layout.words == [Kind::Box]
+}
+
+fn fill_ownership_mask(layout: &Layout, input: &str, mask: &str, offset: usize, output: &mut Body) {
+    if let Some(arms) = &layout.arms {
+        if arms.len() > 1 {
+            writeln!(output, "  switch ({input}[{offset}]) {{").unwrap();
+        }
+        for (index, arm) in arms.iter().enumerate() {
+            if arms.len() > 1 {
+                writeln!(output, "  case {index}: {{").unwrap();
+            }
+            for field in &arm.fields {
+                fill_ownership_mask(&field.layout, input, mask, offset + field.offset, output);
+            }
+            if arms.len() > 1 {
+                output.push_str("  break;\n  }\n");
+            }
+        }
+        if arms.len() > 1 {
+            output.push_str(
+                "  default: err_fail(\"invalid ownership layout discriminator\");\n  }\n",
+            );
+        }
+    } else {
+        for (index, kind) in layout.words.iter().enumerate() {
+            if *kind == Kind::Box {
+                writeln!(output, "  {mask}[{}] = 1;", offset + index).unwrap();
+            }
+        }
     }
 }
 

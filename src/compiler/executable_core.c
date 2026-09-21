@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: Apache-2.0
  * Native ABI derived from Bend 2.0.5 comp.ts, Copyright 2026 HigherOrderCO.
  * Bounded CPU implementation: TeamDman. See NOTICE and licenses/Apache-2.0.txt.
- * This first executable-C arena retains values until invocation cleanup. It
- * deliberately does not claim upstream reclamation or its GPU/task optimizer. */
+ * CPU ownership uses bounded, validated allocation classes and count cells.
+ * This does not implement the upstream parallel GPU/task optimizer. */
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -210,11 +210,16 @@ struct TBHost {
 static TB_THREAD_LOCAL TBHost *tb_host_current;
 static TB_THREAD_LOCAL jmp_buf *tb_failure_guard;
 static Corpus tb_memory;
+static u64 *tb_heap_meta;
+static Loc tb_free_lists[NCLS_ALL];
 static Loc tb_bump;
 static Loc tb_capacity;
+static u64 tb_live_words;
+static u64 tb_live_blocks;
 static u64 tb_steps;
 static u32 tb_depth;
 static u32 tb_frames;
+static u32 tb_closure_captures[65536];
 static void tb_files_release(TBHost *host);
 static void tb_network_shutdown(TBHost *host);
 
@@ -340,22 +345,62 @@ INLINE Cls cls_fit(u32 count) {
   while ((UINT64_C(1) << cls) < count) ++cls;
   return cls;
 }
+#define TB_META_OWNED (UINT64_C(1) << 63)
+#define TB_META_FREE (UINT64_C(1) << 62)
+INLINE u64 tb_meta(Loc at, Cls cls) { return at | ((u64)(cls + 1) << 40); }
+INLINE Cls tb_meta_class(u64 metadata) { return (Cls)((metadata >> 40) & 63) - 1; }
 INLINE Loc heap_alloc(Env e, Cls cls) {
-  Loc at = tb_bump;
+  Loc at;
   u64 size;
-  if (e.mem != tb_memory || cls >= 32) err_fail("invalid heap allocation");
+  if (e.mem != tb_memory || tb_heap_meta == NULL || cls >= NCLS_ALL) err_fail("invalid heap allocation");
   size = UINT64_C(1) << cls;
-  if (size > tb_capacity || at > tb_capacity - size) err_fail("VM allocation budget exhausted");
-  tb_bump += size;
+  at = tb_free_lists[cls];
+  if (at != 0) {
+    if (at >= tb_bump || tb_heap_meta[at] != (tb_meta(at, cls) | TB_META_FREE))
+      err_fail("invalid native free list");
+    tb_free_lists[cls] = e.mem[at];
+  } else {
+    at = tb_bump;
+    if (size > tb_capacity || at > tb_capacity - size) err_fail("VM allocation budget exhausted");
+    tb_bump += size;
+  }
   memset(e.mem + at, 0, (size_t)size * sizeof(Term));
+  for (u64 index = 0; index < size; ++index) tb_heap_meta[at + index] = tb_meta(at, cls) | TB_META_OWNED;
+  tb_live_words += size; ++tb_live_blocks;
   return at;
 }
 INLINE void tb_span(Env e, Loc at, u64 count) {
-  if (e.mem != tb_memory || at < HEAP_OFF || at > tb_bump || count > tb_bump - at)
+  u64 metadata, size; Loc owner; Cls cls;
+  if (e.mem != tb_memory || tb_heap_meta == NULL || at < HEAP_OFF || at >= tb_bump)
     err_fail("invalid native heap span");
+  metadata = tb_heap_meta[at]; owner = metadata & LOC_MASK; cls = tb_meta_class(metadata);
+  if (metadata == 0 || (metadata & TB_META_FREE) != 0 || owner < HEAP_OFF || owner > at || cls >= NCLS_ALL)
+    err_fail("invalid native heap span");
+  size = UINT64_C(1) << cls;
+  if (at - owner >= size || count > size - (at - owner)) err_fail("invalid native heap span");
 }
-INLINE void heap_free(Env e, Cls cls, Loc at) { (void)e; (void)cls; (void)at; }
-INLINE void spare_free(Env e, Cls cls, Loc at) { (void)e; (void)cls; (void)at; }
+INLINE void tb_allocation(Env e, Loc at, Cls cls) {
+  tb_span(e, at, 1);
+  if (cls >= NCLS_ALL || (tb_heap_meta[at] & ~(TB_META_OWNED)) != tb_meta(at, cls))
+    err_fail("native allocation class mismatch");
+}
+INLINE bool tb_cell_owned(Env e, Loc at) { tb_span(e, at, 1); return (tb_heap_meta[at] & TB_META_OWNED) != 0; }
+INLINE void tb_mark_raw(Env e, Loc at, u64 count) {
+  tb_span(e, at, count);
+  for (u64 index = 0; index < count; ++index) tb_heap_meta[at + index] &= ~TB_META_OWNED;
+}
+INLINE void tb_mark_owned(Env e, Loc at, u64 count) {
+  tb_span(e, at, count);
+  for (u64 index = 0; index < count; ++index) tb_heap_meta[at + index] |= TB_META_OWNED;
+}
+INLINE void heap_free(Env e, Cls cls, Loc at) {
+  tb_allocation(e, at, cls);
+  memset(tb_heap_meta + at, 0, ((size_t)1 << cls) * sizeof(u64));
+  tb_heap_meta[at] = tb_meta(at, cls) | TB_META_FREE;
+  e.mem[at] = tb_free_lists[cls]; tb_free_lists[cls] = at;
+  tb_live_words -= UINT64_C(1) << cls; --tb_live_blocks;
+}
+INLINE void spare_free(Env e, Cls cls, Loc at) { if (at != 0) heap_free(e, cls, at); }
 INLINE Term term_make(u64 tag, u64 aux, u64 loc) {
   if (tag > 127 || aux > 65535 || loc > LOC_MASK) err_fail("native term fields overflow");
   return (tag << 56) | (aux << 40) | loc;
@@ -369,20 +414,137 @@ INLINE u64 term_tag(Term term) { return (term >> 56) & 127; }
 INLINE u64 term_aux(Term term) { return (term >> 40) & 65535; }
 INLINE Loc term_loc(Term term) { return term & LOC_MASK; }
 INLINE bool term_rfc(Term term) { return (term & RFC_BIT) != 0; }
-INLINE bool term_triv(Term term) { return term_tag(term) <= TAG_PAK || term == TERM_HOLE; }
-INLINE Loc term_peek(Env e, Term term) {
-  if (term_rfc(term)) err_fail("external reference-count cells are unsupported");
-  tb_span(e, term_loc(term), 1);
-  return term_loc(term);
+INLINE bool term_triv(Term term) {
+  return term_tag(term) <= TAG_PAK || term == TERM_HOLE
+      || (term_tag(term) == TAG_CLO && term_loc(term) == 0 && !term_rfc(term));
 }
-INLINE Term rfc_seal(Env e, Term term) { (void)e; return term; }
-INLINE Term term_keep(Env e, Term term) { (void)e; return term; }
-INLINE void term_drop(Env e, Term term) { (void)e; (void)term; }
-INLINE void term_sink(Env e, Term term) { term_drop(e, term); }
 INLINE u32 cid_arity(u32 cid) {
   if (cid >= BEND_CID_COUNT) err_fail("unknown constructor id");
   return CID_ARITY_T[cid];
 }
+#define RFC_CNT UINT32_C(0xffffff)
+INLINE u64 rfc_view(Env e, Loc cell) {
+  u64 value;
+  tb_allocation(e, cell, 0); value = e.mem[cell];
+  if ((value & RFC_CNT) == 0 || (value & RFC_CNT) == RFC_CNT) err_fail("invalid native reference count");
+  tb_span(e, value >> 24, 1);
+  return value;
+}
+INLINE void rfc_bump(Env e, Loc cell, u32 amount) {
+  u64 value = rfc_view(e, cell);
+  if (amount >= RFC_CNT - (u32)(value & RFC_CNT)) err_fail("native reference count overflow");
+  e.mem[cell] = value + amount;
+}
+OUTLINE Term rfc_wrap(Env e, Term term, u32 count) {
+  Loc cell;
+  if (term_rfc(term) || (term_tag(term) != TAG_CTR && term_tag(term) != TAG_ARR && term_tag(term) != TAG_BUF))
+    err_fail("native value cannot use a reference-count cell");
+  if (count == 0 || count >= RFC_CNT) err_fail("native reference count overflow");
+  tb_span(e, term_loc(term), 1);
+  cell = heap_alloc(e, 0); e.mem[cell] = (term_loc(term) << 24) | count;
+  tb_mark_raw(e, cell, 1);
+  return (term & ~LOC_MASK) | RFC_BIT | cell;
+}
+INLINE Loc term_peek(Env e, Term term) {
+  Loc at = term_rfc(term) ? rfc_view(e, term_loc(term)) >> 24 : term_loc(term);
+  tb_span(e, at, 1); return at;
+}
+INLINE Term rfc_seal(Env e, Term term) {
+  return term_tag(term) == TAG_CTR && !term_rfc(term) ? rfc_wrap(e, term, 1) : term;
+}
+INLINE Term term_keep(Env e, Term term) {
+  if (term_triv(term)) return term;
+  if (term_tag(term) == TAG_CLO || term_tag(term) == TAG_TSK)
+    err_fail("native value cannot use a reference-count cell");
+  if (term_rfc(term)) { rfc_bump(e, term_loc(term), 1); return term; }
+  return rfc_wrap(e, term, 2);
+}
+/* Upstream closures remain affine count-cell values. The correctness-first
+ * emitter duplicates a closure structurally, updating shared captures in its
+ * original shell. An explicit heap stack also supports deep capture chains. */
+typedef struct TBDuplicateFrame TBDuplicateFrame;
+struct TBDuplicateFrame { TBDuplicateFrame *previous; Loc source, target; u32 index, count; };
+OUTLINE Term tb_duplicate(Env e, Term *owner) {
+  Term result;
+  Term *destination = &result;
+  TBDuplicateFrame *stack = NULL;
+  for (;;) {
+    Term value = *owner;
+    if (term_tag(value) == TAG_CLO && term_loc(value) != 0) {
+      u32 fid = (u32)term_aux(value), count = tb_closure_captures[fid];
+      Loc source, target;
+      TBDuplicateFrame *frame;
+      if (term_rfc(value) || fid < 2 || count == 0) err_fail("invalid closure duplication");
+      source = term_peek(e, value); tb_allocation(e, source, cls_fit(count));
+      target = heap_alloc(e, cls_fit(count));
+      *destination = term_clo(fid, target);
+      frame = (TBDuplicateFrame *)io_mem(tb_host_calloc(1, sizeof(*frame)));
+      frame->previous = stack; frame->source = source; frame->target = target; frame->count = count;
+      stack = frame;
+    } else { *owner = term_keep(e, value); *destination = *owner; }
+    while (stack != NULL && stack->index == stack->count) {
+      TBDuplicateFrame *previous = stack->previous; tb_host_free(stack); stack = previous;
+    }
+    if (stack == NULL) return result;
+    tb_tick();
+    owner = e.mem + stack->source + stack->index;
+    destination = e.mem + stack->target + stack->index++;
+  }
+}
+/* Destructive pointer reversal holds traversal state in nodes that are already
+ * uniquely owned. It needs no C recursion or input-sized host stack. */
+OUTLINE void term_drop(Env e, Term term) {
+  u64 current = 0;
+  Term first = 0;
+  for (;;) {
+    if (!term_triv(term) && term_rfc(term)) {
+      Loc cell = term_loc(term); u64 value = rfc_view(e, cell);
+      if ((value & RFC_CNT) != 1) { e.mem[cell] = value - 1; term = 0; }
+      else { term = (term & ~(RFC_BIT | LOC_MASK)) | (value >> 24); heap_free(e, 0, cell); }
+    }
+    if (!term_triv(term)) {
+      u32 tag = (u32)term_tag(term), aux = (u32)term_aux(term), count = 0;
+      Loc at = term_loc(term); Cls cls;
+      if (tag == TAG_BUF || tag == TAG_ARR) {
+        if (aux > 17) err_fail("invalid array layout");
+        cls = tag == TAG_ARR ? aux : aux == 0 ? 0 : aux - 1;
+      } else if (tag == TAG_CTR) { count = cid_arity(aux); cls = cls_fit(count); }
+      else if (tag == TAG_CLO) {
+        count = tb_closure_captures[aux];
+        if (aux < 2 || count == 0) err_fail("invalid closure destruction");
+        cls = cls_fit(count);
+      } else if (tag == TAG_TSK && aux == FID_CLO_APPLY) { count = 2; cls = 1; }
+      else { err_fail("invalid native term tag"); }
+      tb_allocation(e, at, cls);
+      if (tag == TAG_BUF) heap_free(e, cls, at);
+      else {
+        first = e.mem[at]; e.mem[at] = current;
+        current = at | ((u64)count << 48) | ((u64)(tag == TAG_ARR ? cls | 64 : cls) << 56);
+      }
+    }
+    for (;;) {
+      Loc at; u32 index, count, position; Cls cls; bool array;
+      if (current == 0) return;
+      tb_tick();
+      at = current & LOC_MASK; index = (u8)(current >> 40); count = (u8)(current >> 48);
+      cls = (Cls)(current >> 56); array = cls >= 64; position = index;
+      if (array) {
+        cls &= 63; count = 1u << cls;
+        if (index == 2) position = (u32)e.mem[at + 1];
+      }
+      if (position < count) {
+        Term child = position == 0 ? first : e.mem[at + position];
+        bool owned = tb_cell_owned(e, at + position);
+        if (array && position > 0) e.mem[at + 1] = position + 1;
+        if (!array || index < 2) current += UINT64_C(1) << 40;
+        if (owned && !term_triv(child)) { term = child; break; }
+      } else {
+        u64 previous = e.mem[at]; heap_free(e, cls, at); current = previous;
+      }
+    }
+  }
+}
+INLINE void term_sink(Env e, Term term) { if (!term_triv(term)) term_drop(e, term); }
 INLINE Loc ctr_take(Env e, Term term, u32 count, Term *fields) {
   Loc at;
   if (term_tag(term) == TAG_PAK) {
@@ -391,8 +553,19 @@ INLINE Loc ctr_take(Env e, Term term, u32 count, Term *fields) {
     return 0;
   }
   if (term_tag(term) != TAG_CTR) err_fail("constructor expected");
+  if (count != cid_arity((u32)term_aux(term))) err_fail("constructor arity mismatch");
   at = term_peek(e, term);
-  tb_span(e, at, count);
+  tb_allocation(e, at, cls_fit(count));
+  if (term_rfc(term)) {
+    Loc cell = term_loc(term); u64 value = rfc_view(e, cell);
+    if ((value & RFC_CNT) != 1) {
+      for (u32 index = 0; index < count; ++index)
+        fields[index] = tb_cell_owned(e, at + index) ? tb_duplicate(e, e.mem + at + index) : e.mem[at + index];
+      e.mem[cell] = value - 1;
+      return 0;
+    }
+    heap_free(e, 0, cell);
+  }
   memcpy(fields, e.mem + at, count * sizeof(Term));
   return at;
 }
@@ -410,7 +583,20 @@ INLINE Term tb_construct(Env e, u32 cid, u32 count, const Term *fields, bool pac
 INLINE void tb_fields(Env e, Term value, u32 cid, u32 count, bool packed, Term *out) {
   if (term_aux(value) != cid || count != cid_arity(cid) || term_tag(value) != (packed ? TAG_PAK : TAG_CTR))
     err_fail("constructor representation mismatch");
-  (void)ctr_take(e, value, count, out);
+  spare_free(e, cls_fit(count), ctr_take(e, value, count, out));
+}
+INLINE void tb_borrow_fields(Env e, Term value, u32 cid, u32 count, bool packed, Term *out) {
+  Loc at;
+  if (term_aux(value) != cid || count != cid_arity(cid) || term_tag(value) != (packed ? TAG_PAK : TAG_CTR))
+    err_fail("constructor representation mismatch");
+  if (packed) {
+    if (count > 1) err_fail("packed constructor has too many fields");
+    if (count != 0) out[0] = term_loc(value);
+    return;
+  }
+  at = term_peek(e, value); tb_allocation(e, at, cls_fit(count));
+  for (u32 index = 0; index < count; ++index)
+    out[index] = tb_cell_owned(e, at + index) ? tb_duplicate(e, e.mem + at + index) : e.mem[at + index];
 }
 INLINE Term io_hand(u64 handle) {
   if (handle >> 56) err_fail("host handle exceeds native 56-bit representation");
@@ -429,6 +615,7 @@ INLINE Nat nat_mul(Env e, Nat left, Nat right) {
 }
 #define U32_BIN(a,op,b) ((u64)((u32)(a) op (u32)(b)))
 INLINE Term term_word(Env e, Term word) {
+  Term owner = word;
   u32 value = 0;
   u32 index = 0;
   while (term_aux(word) == CID_WCON && index < 32) {
@@ -437,7 +624,7 @@ INLINE Term term_word(Env e, Term word) {
     value |= ((u32)e.mem[at] & 1) << index++;
     word = e.mem[at + 1];
   }
-  return value;
+  term_sink(e, owner); return value;
 }
 INLINE Term tb_word(Env e, u32 value) {
 #if CID_WNIL >= BEND_CID_COUNT || CID_WCON >= BEND_CID_COUNT
@@ -454,7 +641,6 @@ INLINE Term tb_word(Env e, u32 value) {
 
 typedef Term (*BendClosureFn)(Env, const Term *, Term);
 static BendClosureFn tb_closure_functions[65536];
-static u32 tb_closure_captures[65536];
 OUTLINE void tb_register_closure(u32 fid, BendClosureFn function, u32 count) {
   if (fid < 2 || fid >= 65536 || function == NULL || count > 255) err_fail("invalid closure registration");
   if (tb_closure_functions[fid] != NULL && tb_closure_functions[fid] != function) err_fail("duplicate closure registration");
@@ -469,39 +655,53 @@ INLINE Term tb_closure(Env e, u32 fid, u32 count, const Term *captures) {
   return term_clo(fid, at);
 }
 OUTLINE Term tb_apply(Env e, Term closure, Term argument) {
-  u32 fid;
+  u32 fid, count;
   Term result;
-  const Term *captures = NULL;
+  Term *captures = NULL;
   tb_tick();
   if (term_tag(closure) != TAG_CLO) err_fail("application of a non-function");
   fid = (u32)term_aux(closure);
-  if (fid == FID_IO_EMIT) return term_pak(CID_EMIT, 0);
+  if (fid == FID_IO_EMIT) { term_sink(e, argument); return term_pak(CID_EMIT, 0); }
   if (tb_closure_functions[fid] == NULL) err_fail("unregistered closure application");
+  if (term_rfc(closure)) err_fail("reference-counted closure application is unsupported");
   if (++tb_depth > BEND_MAX_DEPTH) err_fail("call depth budget exhausted");
-  if (tb_closure_captures[fid] != 0) { Loc at = term_peek(e, closure); tb_span(e, at, tb_closure_captures[fid]); captures = e.mem + at; }
+  count = tb_closure_captures[fid];
+  if (count != 0) {
+    Loc at = term_peek(e, closure); tb_allocation(e, at, cls_fit(count));
+    captures = (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
+    memcpy(captures, e.mem + at, count * sizeof(Term));
+    heap_free(e, cls_fit(count), at);
+  }
   result = tb_closure_functions[fid](e, captures, argument);
+  tb_host_free(captures);
   --tb_depth;
   return result;
 }
 INLINE Loc task_node(Env e, Fid fid, Term continuation, u32 index, u32 remaining) {
   Loc at;
-  (void)continuation; (void)index; (void)remaining;
+  if (!term_triv(continuation) || index != 0 || remaining != 0) err_fail("foreign task continuation is unsupported");
   if (fid != FID_CLO_APPLY) err_fail("foreign task id is unsupported");
   at = heap_alloc(e, 1);
   return at;
 }
 INLINE Term corpus_eval(Corpus memory, Term task) {
-  Env e = {memory, NULL}; Loc at;
+  Env e = {memory, NULL}; Loc at; Term closure, argument;
   if (term_tag(task) != TAG_TSK || term_aux(task) != FID_CLO_APPLY) err_fail("foreign task is unsupported");
-  at = term_peek(e, task); tb_span(e, at, 2);
-  return tb_apply(e, memory[at], memory[at + 1]);
+  if (term_rfc(task)) err_fail("reference-counted foreign task is unsupported");
+  at = term_peek(e, task); tb_allocation(e, at, 1);
+  closure = memory[at]; argument = memory[at + 1]; heap_free(e, 1, at);
+  return tb_apply(e, closure, argument);
 }
 
 INLINE Term term_blk(bool array, Cls cls, Loc loc) { return term_make(array ? TAG_ARR : TAG_BUF, cls, loc); }
 INLINE Cls blk_cls(Term block) { return (Cls)term_aux(block); }
 INLINE Cls buf_wcls(Cls cls) { return cls == 0 ? 0 : cls - 1; }
 INLINE Cls blk_span(Term block) { return term_tag(block) == TAG_ARR ? blk_cls(block) : buf_wcls(blk_cls(block)); }
-INLINE void blk_free(Env e, Term block) { (void)e; (void)block; }
+INLINE void blk_free(Env e, Term block) {
+  if (term_rfc(block) || (term_tag(block) != TAG_ARR && term_tag(block) != TAG_BUF) || blk_cls(block) > 17)
+    err_fail("unique array storage expected");
+  heap_free(e, blk_span(block), term_loc(block));
+}
 INLINE Term blk_read(Corpus memory, bool array, Loc at, u32 index) {
   Env e = {memory, NULL};
   tb_span(e, at, (array ? (u64)index : (u64)index / 2) + 1);
@@ -518,36 +718,84 @@ INLINE u32 blk_at(Term block, U32 index, u32 lgs) {
   if (cls < lgs || cls > 17) err_fail("invalid array layout");
   return ((u32)index & ((1u << (cls - lgs)) - 1)) << lgs;
 }
-INLINE Term blk_new(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values) {
+INLINE Term blk_keep(Env e, Loc at) {
+  return tb_cell_owned(e, at) ? tb_duplicate(e, e.mem + at) : e.mem[at];
+}
+INLINE Term tb_blk_new_masked(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values, const Term *box_mask) {
   Cls cls; Loc at; u32 stride;
   if (depth > 17 || lgs > 17 || depth + lgs > 17 || count > (1u << lgs)) err_fail("array budget exhausted");
   cls = (Cls)depth + lgs; stride = 1u << lgs;
   at = heap_alloc(e, array ? cls : buf_wcls(cls));
-  for (u32 index = 0; index < (1u << cls); ++index) blk_write(e.mem, array, at, index, index % stride < count ? values[index % stride] : 0);
+  for (u32 index = 0; index < (1u << cls); ++index) {
+    u32 column = index % stride;
+    bool owned = array && column < count && (box_mask == NULL || box_mask[column] != 0);
+    Term value = 0;
+    if (column < count) {
+      value = owned && (index >> lgs) + 1 < (1u << (u32)depth)
+          ? tb_duplicate(e, values + column) : values[column];
+    }
+    blk_write(e.mem, array, at, index, value);
+    if (array && !owned) tb_mark_raw(e, at + index, 1);
+  }
   return term_blk(array, cls, at);
+}
+INLINE Term blk_new(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values) {
+  return tb_blk_new_masked(e, array, depth, lgs, count, values, NULL);
 }
 INLINE Term blk_copy(Env e, Term block) {
   Cls cls = blk_span(block); Loc at; Loc from = term_peek(e, block);
-  if (blk_cls(block) > 17) err_fail("array budget exhausted");
-  tb_span(e, from, UINT64_C(1) << cls);
-  at = heap_alloc(e, cls); memcpy(e.mem + at, e.mem + from, ((size_t)1 << cls) * sizeof(Term));
+  bool array = term_tag(block) == TAG_ARR;
+  if ((!array && term_tag(block) != TAG_BUF) || blk_cls(block) > 17) err_fail("array budget exhausted");
+  tb_allocation(e, from, cls);
+  at = heap_alloc(e, cls);
+  for (u64 index = 0; index < (UINT64_C(1) << cls); ++index) {
+    bool owned = array && tb_cell_owned(e, from + index);
+    e.mem[at + index] = owned ? blk_keep(e, from + index) : e.mem[from + index];
+    if (!owned) tb_mark_raw(e, at + index, 1);
+  }
   return term_blk(term_tag(block) == TAG_ARR, blk_cls(block), at);
+}
+INLINE Term blk_unique(Env e, Term block) {
+  Loc at = term_peek(e, block);
+  if ((term_tag(block) != TAG_ARR && term_tag(block) != TAG_BUF) || blk_cls(block) > 17)
+    err_fail("array expected");
+  tb_allocation(e, at, blk_span(block));
+  if (term_rfc(block)) {
+    Loc cell = term_loc(block); u64 value = rfc_view(e, cell);
+    if ((value & RFC_CNT) == 1) { heap_free(e, 0, cell); return (block & ~(RFC_BIT | LOC_MASK)) | at; }
+    Term copy = blk_copy(e, block); term_drop(e, block); return copy;
+  }
+  return block;
 }
 INLINE Term blk_half(Env e, Term block, u32 high) {
   bool array = term_tag(block) == TAG_ARR; Cls cls = blk_cls(block); Loc at; Loc from = term_peek(e, block);
-  if (cls == 0 || cls > 17 || high > 1) err_fail("invalid array half");
+  if (term_rfc(block) || (!array && term_tag(block) != TAG_BUF) || cls == 0 || cls > 17 || high > 1)
+    err_fail("invalid array half");
+  tb_allocation(e, from, blk_span(block));
   --cls; at = heap_alloc(e, array ? cls : buf_wcls(cls));
-  for (u32 index = 0; index < (1u << cls); ++index) blk_write(e.mem, array, at, index, blk_read(e.mem, array, from, (high << cls) + index));
+  for (u32 index = 0; index < (1u << cls); ++index) {
+    u32 source = (high << cls) + index;
+    blk_write(e.mem, array, at, index, blk_read(e.mem, array, from, source));
+    if (array && !tb_cell_owned(e, from + source)) tb_mark_raw(e, at + index, 1);
+  }
+  if (high != 0) blk_free(e, block);
   return term_blk(array, cls, at);
 }
 INLINE Term blk_node(Env e, Term left, Term right) {
-  bool array = term_tag(left) == TAG_ARR; Cls cls = blk_cls(left); Loc at;
-  if (cls != blk_cls(right) || term_tag(left) != term_tag(right) || cls >= 17) err_fail("invalid array concatenation");
+  bool array = term_tag(left) == TAG_ARR; Cls cls = blk_cls(left); Loc at, l, r;
+  if (term_rfc(left) || term_rfc(right) || (!array && term_tag(left) != TAG_BUF)
+      || cls != blk_cls(right) || term_tag(left) != term_tag(right) || cls >= 17) err_fail("invalid array concatenation");
+  l = term_peek(e, left); r = term_peek(e, right);
+  tb_allocation(e, l, blk_span(left)); tb_allocation(e, r, blk_span(right));
+  if (l == r) err_fail("array concatenation aliases unique storage");
   at = heap_alloc(e, array ? cls + 1 : buf_wcls(cls + 1));
   for (u32 index = 0; index < (1u << cls); ++index) {
-    blk_write(e.mem, array, at, index, blk_read(e.mem, array, term_loc(left), index));
-    blk_write(e.mem, array, at, (1u << cls) + index, blk_read(e.mem, array, term_loc(right), index));
+    blk_write(e.mem, array, at, index, blk_read(e.mem, array, l, index));
+    blk_write(e.mem, array, at, (1u << cls) + index, blk_read(e.mem, array, r, index));
+    if (array && !tb_cell_owned(e, l + index)) tb_mark_raw(e, at + index, 1);
+    if (array && !tb_cell_owned(e, r + index)) tb_mark_raw(e, at + (UINT64_C(1) << cls) + index, 1);
   }
+  blk_free(e, left); blk_free(e, right);
   return term_blk(array, cls + 1, at);
 }
 
@@ -570,24 +818,33 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   host->references = 1;
   tb_host_current = host; tb_failure_guard = &guard;
   tb_capacity = BEND_MAX_ALLOC / sizeof(Term);
-  tb_memory = (Corpus)calloc((size_t)tb_capacity, sizeof(Term));
+  tb_memory = NULL; tb_heap_meta = NULL;
   e.mem = tb_memory; e.alc = NULL;
   tb_bump = HEAP_OFF; tb_steps = 0; tb_depth = 0; tb_frames = 0;
+  tb_live_words = 0; tb_live_blocks = 0;
+  memset(tb_free_lists, 0, sizeof(tb_free_lists));
   memset(tb_closure_functions, 0, sizeof(tb_closure_functions));
+  memset(tb_closure_captures, 0, sizeof(tb_closure_captures));
   if (setjmp(guard) == 0) {
     Term main;
-    if (tb_memory == NULL || tb_capacity <= HEAP_OFF) err_fail("VM initialization failed");
+    if (tb_capacity <= HEAP_OFF || tb_capacity > LOC_MASK || tb_capacity > SIZE_MAX / sizeof(Term))
+      err_fail("VM initialization failed");
+    tb_memory = (Corpus)calloc((size_t)tb_capacity, sizeof(Term));
+    tb_heap_meta = (u64 *)calloc((size_t)tb_capacity, sizeof(u64));
+    e.mem = tb_memory;
+    if (tb_memory == NULL || tb_heap_meta == NULL) err_fail("VM initialization failed");
     tb_io_initialize();
     if (initialize != NULL) initialize(e);
     if (entry == NULL) { (void)fputs("All terms check.\n", stdout); result = 0; }
     else {
       main = entry(e);
       if (is_io) result = io_loop(e, main);
-      else { if (show != NULL) show(e, main); result = 0; }
+      else { if (show != NULL) show(e, main); term_sink(e, main); result = 0; }
     }
   }
   tb_io_shutdown();
   free(tb_memory); tb_memory = NULL;
+  free(tb_heap_meta); tb_heap_meta = NULL;
   tb_failure_guard = NULL; tb_host_current = NULL;
   tb_host_release(host);
   return result;

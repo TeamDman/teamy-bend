@@ -98,8 +98,10 @@ INLINE void tb_show_native(Env e, Term value, unsigned kind) {
   } else {
     tb_show_text("\"");
     while (term_aux(value) == CID_SCON) {
-      Term fields[2]; tb_fields(e, value, CID_SCON, 2, false, fields);
-      tb_tick(); tb_show_character(fields[0], '"'); value = fields[1];
+      Loc at;
+      if (term_tag(value) != TAG_CTR) err_fail("invalid String in pure output");
+      at = term_peek(e, value); tb_span(e, at, 2);
+      tb_tick(); tb_show_character(e.mem[at], '"'); value = e.mem[at + 1];
     }
     if (value != term_pak(CID_SNIL, 0)) err_fail("invalid String in pure output");
     tb_show_text("\"");
