@@ -1471,6 +1471,69 @@ this task in progress until its full acceptance scope is met. Optimized parallel
 CPU execution, window/audio and GPU remain later engine work. Poche model
 expansion stays deferred; existing Poche gates remain regressions.
 
+Direct-call specialization now preserves checked erased arguments through direct
+calls' complete leading lambda telescopes, including returned closures, and
+through simultaneous local type aliases. The compiler must retain live argument
+evaluation, capture ownership and foreign constructor arities. Tests cover
+interleaved live/erased binders, returned closures, nested Array layouts, alias
+scope and partial applications against actual upstream behavior. Dynamic
+higher-order values with unresolved layouts still fail closed; supporting them
+requires further representation/demand analysis, not removal of the guard.
+This work changes compiler metadata only and grants no new proof acceptance.
+Constructor discovery must traverse native Array element types even though
+Array itself uses no ordinary constructor table row: an unselected printer arm
+can still require its element constructors. A reduced Holder/Array<Element>
+fixture exposed the missing registration and provides a regression.
+Discovery also inspects the checked source of erased type-valued expressions:
+a concrete datatype can occur only as a generic call's erased argument, then be
+needed by that instance's Array conversion. Erased proofs and ordinary data
+values are not normalized by this discovery rule. A generic trusted foreign
+producer followed by an unused Array conversion exercises that boundary.
+
+Specialization validation: ./check-all.ps1 passes 602 tests, including five
+compile-fail API examples, with two optional profilers ignored. Strict workspace
+library/test Clippy with all features passes. Eight new tests compile and run
+22 pure fixture variants and one foreign IO fixture under MSVC C11 /W4 /WX;
+successful programs have exact outputs and zero live VM words/blocks. The foreign
+producer runs exactly once. Four invalid programs retain their affinity,
+erasure, false-proof and simultaneous-scope rejections. All existing emitted-C
+runtime, ownership, file and networking tests also pass.
+
+All 22 pure fixtures pass actual upstream checking and normalization. Fourteen
+also match upstream-generated JavaScript; the other eight returned-closure
+fixtures are rejected by both upstream target generators for open Array layouts.
+Only two of the 22 generate upstream C. These cases extend executable C coverage
+using evaluator evidence; they do not prove upstream C runtime equivalence.
+Twenty-one upstream constructor trees match the retained Rust pure evaluator;
+the remaining leading-Let fixture reaches its existing kernel nesting limit.
+An independent extraction verifies that final test bodies and expected outputs
+are byte-identical to the prepared oracle fixtures.
+
+A separate literal upstream helper/generated-fragment probe demonstrates a
+generic nested Array producer using ARR while its concrete consumer reads BUF,
+changing a payload from 3 to 0. The host allocator, sequential atomics and bounded
+loop are explicit adapters; this is not execution of the full upstream runtime.
+Retain the unresolved-layout rejection rather than copying that behavior. A
+type function stuck as F(Element) also retains its existing explicit constructor
+registration rejection in both the previous release and this candidate; broader
+type-function discovery remains follow-up work. Ignored evidence is retained in
+target/higher-order-oracle, target/executable-c-specialization-programs and
+target/c-specialization-repro.
+
+The frozen candidate retains all 117 compiled-source fingerprints. Its strict
+1,302-fixture checker audit preserves 362 accepted positives, 491 rejected
+positives and 449 rejected negatives, with zero accepted negatives, crashes or
+new rejections. All 22 new compiled programs match fresh upstream normalization,
+and the fourteen available JavaScript outputs also match. The twelve existing
+foundation, nine networking and eight reclamation programs retain their upstream
+JavaScript matches; the reclamation programs use the same 4 KiB heap. Networking
+and timer host adapters remain explicitly qualified, and whole upstream C/Unix
+execution remains unverified. Candidate evidence is in
+target/audit-executable-c-specialization and
+target/executable-c-specialization-{programs,release-comparison,network-programs,reclamation-programs}.
+Before publication, retain a clean release and rerun the existing Poche gates
+against that exact binary, preserving source hashes and checkout state.
+
 ## Completion and risks
 
 The goal is complete only when U1–U13 are delivered and no required rewrite or

@@ -35,12 +35,29 @@ upstream. Closure captures and unary callback application preserve those boxed
 boundaries. The runtime also provides the upstream closure task bridge for C
 companions that use `task_node` and `corpus_eval`.
 
-Erased type arguments remain private compiler metadata for specialization of
-direct references. They are absent from runtime foreign argument slots. Live
-type/proof arguments have zero-valued slots. Higher-order polymorphic arrays
-whose element layout still contains free type variables are refused; treating
-an unresolved nested type as a fixed Array layout would produce wrong values.
-Broader higher-order specialization remains part of task 5.15.
+Erased type arguments remain private compiler metadata. Direct calls specialize
+the full leading lambda telescope, including erased parameters of returned
+closures and those following live parameters. Local erased or type-valued aliases
+resolve in their lexical scope; simultaneous right-hand sides see only the outer
+scope. Live captures and argument evaluation retain their ordinary ownership.
+Erased arguments are absent from runtime foreign slots; live type/proof arguments
+have zero-valued slots. Dynamic higher-order polymorphic arrays whose element
+layout still contains free type variables are refused: choosing a layout from
+the outer datatype alone can disagree with a concrete caller. Broader callable
+specialization remains part of task 5.15.
+
+Constructor discovery follows Array element types, including types in unselected
+datatype variants that a generated printer still handles. It also inspects the
+checked source of erased type arguments: a concrete datatype passed to a generic
+function can require constructor rows even when it appears nowhere in the live
+expression types. This does not add runtime argument slots or accept new proofs.
+
+The specialization fixtures distinguish evaluator semantics from upstream target
+support. All 22 pure variants match the upstream checker and normalizer; fourteen
+also match generated JavaScript. Upstream JavaScript and C generation reject the
+remaining eight returned-closure variants with open Array element types, and only
+two of the 22 generate upstream C. Their execution here extends C target coverage
+using evaluator evidence; it does not establish whole upstream C runtime parity.
 
 The runtime uses 16-bit constructor/function IDs and 40-bit heap locations.
 Constructor and closure arities are checked against their tables. Generated

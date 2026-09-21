@@ -396,6 +396,42 @@ impl Generator<'_> {
         Ok(index)
     }
 
+    fn instantiation(&self, name: &str, arguments: &[(&Expression, Quant)]) -> Substitutions {
+        let definition = &self.program.definitions[name];
+        let mut substitutions = Substitutions::new();
+        if let DefinitionBody::Ordinary(body) = &definition.body {
+            // The declared telescope excludes binders of a returned closure.
+            // Pair the actual typed lambdas with the complete application spine;
+            // source lambda IDs need not equal the IDs in their type annotations.
+            let mut body = body;
+            for (argument, quant) in arguments {
+                // A returned lambda may close over preceding let bindings.
+                // Inspect its binder without moving or duplicating those RHSs.
+                while let ExpressionKind::Let { body: next, .. } = &body.kind {
+                    body = next;
+                }
+                let ExpressionKind::Lambda {
+                    parameter,
+                    body: next,
+                } = &body.kind
+                else {
+                    break;
+                };
+                if parameter.quant == Quant::None && *quant == Quant::None {
+                    substitutions.insert(parameter.id, Rc::clone(&argument.source));
+                }
+                body = next;
+            }
+        } else {
+            for (parameter, (argument, quant)) in definition.parameters.iter().zip(arguments) {
+                if parameter.quant == Quant::None && *quant == Quant::None {
+                    substitutions.insert(parameter.id, Rc::clone(&argument.source));
+                }
+            }
+        }
+        substitutions
+    }
+
     fn curry<F>(
         &mut self,
         arity: usize,
@@ -554,18 +590,7 @@ impl Generator<'_> {
                 }
                 arguments.reverse();
                 let mut function = if let ExpressionKind::Definition(name) = &head.kind {
-                    let definition = &self.program.definitions[name];
-                    let substitutions = definition
-                        .parameters
-                        .iter()
-                        .zip(&arguments)
-                        .filter(|(parameter, (_, quant))| {
-                            parameter.quant == Quant::None && *quant == Quant::None
-                        })
-                        .map(|(parameter, (argument, _))| {
-                            (parameter.id, Rc::clone(&argument.source))
-                        })
-                        .collect();
+                    let substitutions = self.instantiation(name, &arguments);
                     let id = self.definition(name, &substitutions)?;
                     self.hold(output, &format!("tb_definition_{id}(e)"))?
                 } else {
@@ -904,6 +929,16 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
         ExpressionKind::Lambda { parameter, body } => {
             *parameter = specialize_binder(parameter, substitutions);
             **body = specialize_expression(body, substitutions);
+            // Lowering retains the original annotated telescope on `ty`, whose
+            // binder IDs can differ from the source lambda. Rebuild it from the
+            // actual binder and specialized body, retaining all live lambdas.
+            result.ty = Rc::new(Term::All {
+                quant: parameter.quant,
+                name: parameter.name.clone(),
+                id: parameter.id,
+                domain: Rc::clone(&parameter.ty),
+                body: Rc::clone(&body.ty),
+            });
         }
         ExpressionKind::Apply {
             function, argument, ..
@@ -935,11 +970,20 @@ fn specialize_expression(expression: &Expression, substitutions: &Substitutions)
             *parameter = specialize_binder(parameter, substitutions);
         }
         ExpressionKind::Let { bindings, body } => {
+            let mut inner = substitutions.clone();
             for field in bindings {
                 field.binder = specialize_binder(&field.binder, substitutions);
                 field.value = specialize_expression(&field.value, substitutions);
+                // Let right-hand sides see only the outer scope. Install their
+                // erased aliases together for the body, never in a sibling RHS.
+                if field.binder.quant == Quant::None
+                    || matches!(field.value.kind, ExpressionKind::Erased)
+                {
+                    inner.insert(field.binder.id, Rc::clone(&field.value.source));
+                }
             }
-            **body = specialize_expression(body, substitutions);
+            **body = specialize_expression(body, &inner);
+            result.ty = Rc::clone(&body.ty);
         }
         ExpressionKind::Erased | ExpressionKind::Variable(_) | ExpressionKind::Definition(_) => (),
     }

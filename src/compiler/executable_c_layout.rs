@@ -447,11 +447,14 @@ fn collect_types(
         .expose_type(ty)
         .map_err(|error| CompileError::new(error.to_string()))?;
     match ty.as_ref() {
-        Term::Adt { name, args, .. }
+        Term::Adt { name, args, .. } => {
+            // Native Array needs no ordinary constructor row, but its element
+            // type can contain constructors required by conversions/printers.
             if native_word(program, name).is_none()
-                && !(program.base_names.contains(name) && name == "Array") =>
-        {
-            queue.push_back(name.clone());
+                && !(program.base_names.contains(name) && name == "Array")
+            {
+                queue.push_back(name.clone());
+            }
             for argument in args {
                 collect_types(program, argument, queue, depth + 1)?;
             }
@@ -508,8 +511,18 @@ fn expression_types(
                 pending.push(body);
                 pending.extend(bindings.iter().rev().map(|field| &field.value));
             }
-            ExpressionKind::Erased
-            | ExpressionKind::Variable(_)
+            ExpressionKind::Erased => {
+                // A concrete type can occur only as a generic call's erased
+                // argument. Its expression type is Data/Type, so inspecting
+                // that type alone misses constructors needed by the instance.
+                let ty = program
+                    .expose_type(&expression.ty)
+                    .map_err(|error| CompileError::new(error.to_string()))?;
+                if matches!(ty.as_ref(), Term::Typ(_)) {
+                    collect_types(program, &expression.source, queue, 0)?;
+                }
+            }
+            ExpressionKind::Variable(_)
             | ExpressionKind::Definition(_)
             | ExpressionKind::Absurd { .. } => {}
         }
