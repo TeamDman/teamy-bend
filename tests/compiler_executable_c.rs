@@ -441,21 +441,17 @@ fn wide_recursive_program(depth: &str) -> String {
 }
 
 #[test]
-fn wide_recursive_values_complete_or_exhaust_a_budget_without_native_stack_overflow() {
+fn wide_tail_recursive_values_complete_without_native_stack_growth() {
     success(
         &Fixture::new().run(&wide_recursive_program("3n"), &[]),
         "0\n",
     );
     // This checked input formerly exhausted the default Windows native stack:
     // each recursive body declared ten 80-word automatic constructor buffers.
-    let output = Fixture::new().run(&wide_recursive_program("Nat.pow(2n, 8n)"), &[]);
-    if output.status.success() {
-        success(&output, "0\n");
-    } else {
-        assert_eq!(output.status.code(), Some(1));
-        assert!(output.stdout.is_empty());
-        assert!(String::from_utf8_lossy(&output.stderr).contains("budget"));
-    }
+    success(
+        &Fixture::new().run(&wide_recursive_program("Nat.pow(2n, 8n)"), &[]),
+        "0\n",
+    );
 }
 
 #[test]

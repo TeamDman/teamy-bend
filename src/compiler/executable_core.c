@@ -513,7 +513,7 @@ OUTLINE void term_drop(Env e, Term term) {
         count = tb_closure_captures[aux];
         if (aux < 2 || count == 0) err_fail("invalid closure destruction");
         cls = cls_fit(count);
-      } else if (tag == TAG_TSK && aux == FID_CLO_APPLY) { count = 2; cls = 1; }
+      } else if (tag == TAG_TSK && aux == FID_CLO_APPLY) { count = 2; cls = 2; }
       else { err_fail("invalid native term tag"); }
       tb_allocation(e, at, cls);
       if (tag == TAG_BUF) heap_free(e, cls, at);
@@ -654,42 +654,66 @@ INLINE Term tb_closure(Env e, u32 fid, u32 count, const Term *captures) {
   if (count != 0) { at = heap_alloc(e, cls_fit(count)); memcpy(e.mem + at, captures, count * sizeof(Term)); }
   return term_clo(fid, at);
 }
+INLINE Loc task_node(Env e, Fid fid, Term continuation, u32 index, u32 remaining) {
+  Loc at;
+  if (continuation != TERM_HOLE || index != 0 || remaining != 0) err_fail("foreign task continuation is unsupported");
+  if (fid != FID_CLO_APPLY) err_fail("foreign task id is unsupported");
+  /* Upstream task_node stores arity arguments followed by continuation and
+   * packed index/remaining words. Only ready root applications run here. */
+  at = heap_alloc(e, 2);
+  e.mem[at] = TERM_HOLE; e.mem[at + 1] = TERM_HOLE;
+  e.mem[at + 2] = continuation; e.mem[at + 3] = 0;
+  tb_mark_raw(e, at + 2, 2);
+  return at;
+}
+INLINE void tb_task_take(Env e, Term task, Term *closure, Term *argument) {
+  Loc at;
+  if (term_tag(task) != TAG_TSK || term_aux(task) != FID_CLO_APPLY) err_fail("foreign task is unsupported");
+  if (term_rfc(task)) err_fail("reference-counted foreign task is unsupported");
+  at = term_loc(task); tb_allocation(e, at, 2);
+  if (e.mem[at + 2] != TERM_HOLE || e.mem[at + 3] != 0)
+    err_fail("foreign task continuation is unsupported");
+  if (e.mem[at] == TERM_HOLE || e.mem[at + 1] == TERM_HOLE)
+    err_fail("foreign task argument is missing");
+  *closure = e.mem[at]; *argument = e.mem[at + 1]; heap_free(e, 2, at);
+}
+INLINE Term tb_tail_apply(Env e, Term closure, Term argument) {
+  Loc at = task_node(e, FID_CLO_APPLY, TERM_HOLE, 0, 0);
+  e.mem[at] = closure; e.mem[at + 1] = argument;
+  return term_tsk(FID_CLO_APPLY, at);
+}
 OUTLINE Term tb_apply(Env e, Term closure, Term argument) {
-  u32 fid, count;
   Term result;
-  Term *captures = NULL;
-  tb_tick();
-  if (term_tag(closure) != TAG_CLO) err_fail("application of a non-function");
-  fid = (u32)term_aux(closure);
-  if (fid == FID_IO_EMIT) { term_sink(e, argument); return term_pak(CID_EMIT, 0); }
-  if (tb_closure_functions[fid] == NULL) err_fail("unregistered closure application");
-  if (term_rfc(closure)) err_fail("reference-counted closure application is unsupported");
   if (++tb_depth > BEND_MAX_DEPTH) err_fail("call depth budget exhausted");
-  count = tb_closure_captures[fid];
-  if (count != 0) {
-    Loc at = term_peek(e, closure); tb_allocation(e, at, cls_fit(count));
-    captures = (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
-    memcpy(captures, e.mem + at, count * sizeof(Term));
-    heap_free(e, cls_fit(count), at);
+  for (;;) {
+    u32 fid, count;
+    Term *captures = NULL;
+    tb_tick();
+    if (term_tag(closure) != TAG_CLO) err_fail("application of a non-function");
+    if (term_rfc(closure)) err_fail("reference-counted closure application is unsupported");
+    fid = (u32)term_aux(closure);
+    if (fid == FID_IO_EMIT) { term_sink(e, argument); result = term_pak(CID_EMIT, 0); break; }
+    if (tb_closure_functions[fid] == NULL) err_fail("unregistered closure application");
+    count = tb_closure_captures[fid];
+    if (count != 0) {
+      Loc at = term_peek(e, closure); tb_allocation(e, at, cls_fit(count));
+      captures = (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
+      memcpy(captures, e.mem + at, count * sizeof(Term));
+      heap_free(e, cls_fit(count), at);
+    }
+    result = tb_closure_functions[fid](e, captures, argument);
+    /* The generated callback has popped its scratch frame. Retire copied
+     * captures too before transferring the next task's owned arguments. */
+    tb_host_free(captures);
+    if (term_tag(result) != TAG_TSK) break;
+    tb_task_take(e, result, &closure, &argument);
   }
-  result = tb_closure_functions[fid](e, captures, argument);
-  tb_host_free(captures);
   --tb_depth;
   return result;
 }
-INLINE Loc task_node(Env e, Fid fid, Term continuation, u32 index, u32 remaining) {
-  Loc at;
-  if (!term_triv(continuation) || index != 0 || remaining != 0) err_fail("foreign task continuation is unsupported");
-  if (fid != FID_CLO_APPLY) err_fail("foreign task id is unsupported");
-  at = heap_alloc(e, 1);
-  return at;
-}
 INLINE Term corpus_eval(Corpus memory, Term task) {
-  Env e = {memory, NULL}; Loc at; Term closure, argument;
-  if (term_tag(task) != TAG_TSK || term_aux(task) != FID_CLO_APPLY) err_fail("foreign task is unsupported");
-  if (term_rfc(task)) err_fail("reference-counted foreign task is unsupported");
-  at = term_peek(e, task); tb_allocation(e, at, 1);
-  closure = memory[at]; argument = memory[at + 1]; heap_free(e, 1, at);
+  Env e = {memory, NULL}; Term closure, argument;
+  tb_task_take(e, task, &closure, &argument);
   return tb_apply(e, closure, argument);
 }
 

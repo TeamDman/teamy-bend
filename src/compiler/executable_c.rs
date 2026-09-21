@@ -71,6 +71,7 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
         layouts: Layouts::new(&program),
         definitions: Vec::new(),
         definition_ids: BTreeMap::new(),
+        definition_closures: Vec::new(),
         closures: Vec::new(),
         conversions: Vec::new(),
         conversion_ids: BTreeMap::new(),
@@ -135,9 +136,10 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
     let entry = entry.map_or_else(
         || "NULL".to_owned(),
         |id| {
+            let fid = generator.definition_closures[id] + 2;
             writeln!(
                 source,
-                "static Term tb_entry(Env e) {{ return tb_definition_{id}(&e); }}"
+                "static Term tb_entry(Env e) {{ return tb_apply(e, term_clo({fid}, 0), 0); }}"
             )
             .unwrap();
             "tb_entry".to_owned()
@@ -233,6 +235,7 @@ struct Generator<'a> {
     layouts: Layouts<'a>,
     definitions: Vec<String>,
     definition_ids: BTreeMap<String, usize>,
+    definition_closures: Vec<usize>,
     closures: Vec<Closure>,
     conversions: Vec<String>,
     conversion_ids: BTreeMap<String, usize>,
@@ -339,6 +342,13 @@ impl Generator<'_> {
         let index = self.definitions.len();
         self.definitions.push(String::new());
         self.definition_ids.insert(key, index);
+        // Reserve the thunk before traversing its body: recursive references
+        // use the same dispatcher entry rather than recursing through C thunks.
+        let closure = self.reserve_closure(0)?;
+        self.definition_closures.push(closure);
+        self.closures[closure].source = format!(
+            "static TB_NOINLINE Term tb_function_{closure}(Env e, const Term *captures, Term argument) {{\n  (void)captures; term_sink(e, argument);\n  return tb_definition_{index}(&e);\n}}\n"
+        );
         let definition = self
             .program
             .definitions
@@ -382,6 +392,7 @@ impl Generator<'_> {
                         &specialize_expression(&body, substitutions),
                         &mut Scope::new(),
                         &mut output,
+                        true,
                     )?
                 }
             }
@@ -394,6 +405,31 @@ impl Generator<'_> {
             FunctionResult::Term,
         );
         Ok(index)
+    }
+
+    fn reference(
+        &mut self,
+        id: usize,
+        output: &mut Body,
+        tail: bool,
+    ) -> Result<String, CompileError> {
+        let fid = self.definition_closures[id] + 2;
+        self.apply(output, &format!("term_clo({fid}, 0)"), "0", tail)
+    }
+
+    fn apply(
+        &mut self,
+        output: &mut Body,
+        function: &str,
+        argument: &str,
+        tail: bool,
+    ) -> Result<String, CompileError> {
+        let apply = if tail {
+            "tb_c_tail_apply"
+        } else {
+            "tb_c_apply"
+        };
+        self.hold(output, &format!("{apply}(e, {function}, {argument})"))
     }
 
     fn instantiation(&self, name: &str, arguments: &[(&Expression, Quant)]) -> Substitutions {
@@ -534,7 +570,7 @@ impl Generator<'_> {
         let value = match &expression.kind {
             ExpressionKind::Lambda {
                 body: expression, ..
-            } => self.expression(expression, &mut inner, &mut body)?,
+            } => self.expression(expression, &mut inner, &mut body, true)?,
             ExpressionKind::Match { .. } | ExpressionKind::Absurd { .. } => {
                 self.match_body(expression, &mut inner, &mut body)?
             }
@@ -559,6 +595,7 @@ impl Generator<'_> {
         expression: &Expression,
         scope: &mut Scope,
         output: &mut Body,
+        tail: bool,
     ) -> Result<String, CompileError> {
         self.fresh()?;
         match &expression.kind {
@@ -566,10 +603,10 @@ impl Generator<'_> {
             ExpressionKind::Variable(id) => self.owned_use(*id, scope, output),
             ExpressionKind::Definition(name) => {
                 let id = self.definition(name, &Substitutions::new())?;
-                self.hold(output, &format!("tb_definition_{id}(e)"))
+                self.reference(id, output, tail)
             }
             ExpressionKind::Lambda { parameter, body } if parameter.quant == Quant::None => {
-                self.expression(body, scope, output)
+                self.expression(body, scope, output, tail)
             }
             ExpressionKind::Lambda { parameter, .. }
             | ExpressionKind::Match { parameter, .. }
@@ -589,20 +626,21 @@ impl Generator<'_> {
                     head = function;
                 }
                 arguments.reverse();
+                let mut remaining = arguments.iter().filter(|(_, q)| *q != Quant::None).count();
                 let mut function = if let ExpressionKind::Definition(name) = &head.kind {
                     let substitutions = self.instantiation(name, &arguments);
                     let id = self.definition(name, &substitutions)?;
-                    self.hold(output, &format!("tb_definition_{id}(e)"))?
+                    self.reference(id, output, tail && remaining == 0)?
                 } else {
-                    self.expression(head, scope, output)?
+                    self.expression(head, scope, output, tail && remaining == 0)?
                 };
                 for (argument, quant) in arguments {
                     if quant == Quant::None {
                         continue;
                     }
-                    let argument = self.expression(argument, scope, output)?;
-                    function =
-                        self.hold(output, &format!("tb_c_apply(e, {function}, {argument})"))?;
+                    let argument = self.expression(argument, scope, output, false)?;
+                    remaining -= 1;
+                    function = self.apply(output, &function, &argument, tail && remaining == 0)?;
                 }
                 Ok(function)
             }
@@ -621,7 +659,7 @@ impl Generator<'_> {
                 let values = fields
                     .iter()
                     .filter(|field| field.binder.quant != Quant::None)
-                    .map(|field| self.expression(&field.value, scope, output))
+                    .map(|field| self.expression(&field.value, scope, output, false))
                     .collect::<Result<Vec<_>, _>>()?;
                 if self.program.base_names.contains(owner) {
                     match owner.as_str() {
@@ -649,7 +687,7 @@ impl Generator<'_> {
                     .iter()
                     .filter(|binding| binding.binder.quant != Quant::None)
                 {
-                    let value = self.expression(&binding.value, scope, output)?;
+                    let value = self.expression(&binding.value, scope, output, false)?;
                     let value = self.hold(output, &value)?;
                     locals.push((binding.binder.id, value));
                 }
@@ -661,7 +699,7 @@ impl Generator<'_> {
                     );
                 }
                 drop_unused(scope, output);
-                let result = self.expression(body, scope, output)?;
+                let result = self.expression(body, scope, output, tail)?;
                 for (id, _) in locals {
                     if let Some(local) = scope.remove(&id)
                         && local.owned
@@ -752,9 +790,10 @@ impl Generator<'_> {
                 "C match field arity differs from its layout",
             ));
         }
-        let mut branch = self.expression(arm, &mut arm_scope, output)?;
-        for field in values {
-            branch = self.hold(output, &format!("tb_c_apply(e, {branch}, {field})"))?;
+        let mut branch = self.expression(arm, &mut arm_scope, output, values.is_empty())?;
+        let count = values.len();
+        for (index, field) in values.into_iter().enumerate() {
+            branch = self.apply(output, &branch, &field, index + 1 == count)?;
         }
         drop_owned(&mut arm_scope, output);
         if condition == "1" {
@@ -766,11 +805,11 @@ impl Generator<'_> {
         writeln!(output, "  {result} = {branch};\n  }} else {{").unwrap();
         let mut fallback_scope = branch_scope(scope, fallback, parameter.id);
         drop_unused(&mut fallback_scope, output);
-        let branch = self.expression(fallback, &mut fallback_scope, output)?;
+        let branch = self.expression(fallback, &mut fallback_scope, output, false)?;
         let fallback_value = self.owned_use(parameter.id, &mut fallback_scope, output)?;
         writeln!(
             output,
-            "  {result} = tb_c_apply(e, {branch}, {fallback_value});"
+            "  {result} = tb_c_tail_apply(e, {branch}, {fallback_value});"
         )
         .unwrap();
         drop_owned(&mut fallback_scope, output);

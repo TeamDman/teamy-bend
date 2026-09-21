@@ -35,6 +35,21 @@ upstream. Closure captures and unary callback application preserve those boxed
 boundaries. The runtime also provides the upstream closure task bridge for C
 companions that use `task_node` and `corpus_eval`.
 
+Tail calls use an explicit dispatch loop rather than relying on a C compiler's
+tail-call optimization. A tail application transfers its closure and argument
+into a pending root task; the current callback releases its scratch frame and
+capture buffer before dispatch continues. This includes definition thunks and
+the final applications introduced by pattern matching. Function heads,
+arguments, constructor fields and let right-hand sides remain strictly evaluated.
+Non-tail calls retain the call/frame budgets, and every dispatch retains the
+evaluation budget.
+
+The supported `FID_CLO_APPLY` task uses upstream's four-word layout: closure,
+argument, continuation and packed index/remaining metadata. Only ready root
+tasks (`TERM_HOLE`, zero index and zero remaining) execute; other continuations
+are rejected explicitly. Task destruction releases the two owned payloads.
+General continuation tasks, forks and parallel scheduling remain unfinished.
+
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned
 closures and those following live parameters. Local erased or type-valued aliases

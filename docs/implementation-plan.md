@@ -1463,8 +1463,8 @@ and target/executable-c-reclamation-network-programs. The clean retained release
 must pass the existing Poche regression script, with source hashes and checkout
 state preserved, before publication; its exact release receipt stays local.
 
-Remaining work within this milestone includes higher-order erased type
-specialization, tail-call/task lowering, full channel coverage and broader
+Remaining work within this milestone includes dynamic higher-order erased type
+specialization, non-tail continuation/fork lowering, full channel coverage and broader
 native-value/platform qualification. Unresolved Array element layouts fail
 during compilation instead of choosing an incompatible representation. Keep
 this task in progress until its full acceptance scope is met. Optimized parallel
@@ -1533,6 +1533,62 @@ target/audit-executable-c-specialization and
 target/executable-c-specialization-{programs,release-comparison,network-programs,reclamation-programs}.
 Before publication, retain a clean release and rerun the existing Poche gates
 against that exact binary, preserving source hashes and checkout state.
+
+Tail-call lowering replaces recursive native calls in tail positions with
+owned pending applications consumed by an iterative closure dispatcher. Preserve
+strict evaluation of function heads, arguments, constructor fields and let RHSs;
+only the final live application and matching branch result can transfer control.
+Definition thunks must use the same dispatch boundary so bare references and
+all-erased calls cannot bypass the trampoline. Release generated scratch frames
+and copied capture buffers before advancing to the next pending application.
+
+Correct the supported FID_CLO_APPLY task layout to upstream's four words: two
+arguments, continuation and packed index/remaining metadata. Root tasks require
+TERM_HOLE and zero index/remaining; reject unsupported continuations explicitly.
+Allocation, extraction and destruction must agree on that layout. This is a
+step toward task lowering, not completion of continuation/fork/parallel support.
+Validation: ./check-all.ps1 passes 610 tests, including five compile-fail examples,
+with two optional profilers ignored. Final strict workspace library/test Clippy
+with all features passes. Eight new strict-MSVC tests cover deep direct and
+captured indirect calls, bare/all-erased definition chains, strict arguments,
+synthetic match applications, partial closures and trailing erased arguments.
+Positive cases run with depth/frame limits of 32 and a 4 KiB VM heap, require
+exact output and zero live VM words/blocks. Foreign callbacks execute deep
+checked chains; discarding a root task releases its captured function and argument.
+Malformed continuation/index/remaining, function ID, reference-count bit and
+allocation class are rejected with exit code 1. Non-tail recursion and a trusted
+foreign tail loop retain controlled depth/step failures. The earlier wide
+tail-recursion regression now requires success instead of allowing budget failure.
+
+After the full gate, the focused eight tests and strict Clippy were rerun with
+an exact exit-code assertion for negative cases. The only post-gate edit tightened
+that assertion; final test fixtures and production sources are unchanged.
+An independent extraction bridges the earlier oracle to the final test-file hash,
+including two equivalent test string-building changes made for Clippy.
+
+An independent MSVC probe compiles literal upstream task_node/task_tail helpers
+and the current root-task helpers. Seven observations confirm arity-relative
+footer placement, the four-word root layout, metadata transfer and rejection of
+unsupported continuations. Its allocator, function table and validation adapters
+are explicit; it does not establish the full task scheduler, destruction,
+concurrency or GPU behavior. Evidence: target/executable-c-tail-task-oracle,
+target/c-tail-calls-probe and target/check-executable-c-tail.log. Preserve Poche
+sources and rerun existing regressions against the clean retained release before
+publication.
+
+The frozen candidate matches nine complete positive tail programs against fresh
+execution of actual upstream-generated JavaScript under depth/frame limits of 32
+and a 4 KiB VM heap. The previous retained release reaches the configured frame
+limit on those same programs. A separate non-tail control exits exactly 1 with
+the call-depth diagnostic; it is refusal evidence, not output parity. All ten
+sources generate upstream C, which remains unexecuted on this host. The twelve
+foundation, nine networking and eight reclamation comparisons also pass; their
+host adapters and target-specific diagnostics retain their stated qualifications.
+All 117 frozen compiled-source fingerprints remain unchanged. The strict
+1,302-fixture audit retains 362 accepted positives, 491 rejected positives and
+449 rejected negatives, with zero accepted negatives, crashes or new rejections.
+Evidence: target/audit-executable-c-tail and
+target/executable-c-tail-{programs,release-comparison,network-programs,reclamation-programs}.
 
 ## Completion and risks
 

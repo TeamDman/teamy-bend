@@ -26,6 +26,9 @@ OUTLINE TB_NOINLINE Loc tb_c_peek(const Env *e, Term value) { return term_peek(*
 OUTLINE TB_NOINLINE Term tb_c_apply(const Env *e, Term closure, Term argument) {
   return tb_apply(*e, closure, argument);
 }
+OUTLINE TB_NOINLINE Term tb_c_tail_apply(const Env *e, Term closure, Term argument) {
+  return tb_tail_apply(*e, closure, argument);
+}
 OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {
   return tb_closure(*e, fid, count, captures);
 }
