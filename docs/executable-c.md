@@ -41,8 +41,8 @@ frame before dispatch continues. A non-tail application saves its caller's
 program counter, result slot, captures, argument and scratch values in a tracked
 heap frame. After the child finishes, the caller resumes immediately after the
 call. Definition thunks and applications introduced by pattern matching use the
-same mechanism. Function heads, arguments, constructor fields and let right-hand
-sides remain strictly evaluated, without repeating earlier evaluation on resume.
+same mechanism. Function heads, arguments and constructor fields remain strictly
+evaluated, without repeating earlier evaluation on resume.
 Generated recursion no longer grows the native C call stack. Pending work still
 uses bounded storage, and dispatch and resumption consume the evaluation budget.
 
@@ -52,12 +52,29 @@ receives its result. Calls made recursively by foreign C code remain subject to
 the native call-depth limit. Conversion and printing helpers remain synchronous
 with separate bounds.
 
-The supported `FID_CLO_APPLY` task uses upstream's four-word layout: closure,
-argument, continuation and packed index/remaining metadata. Only ready root
-tasks (`TERM_HOLE`, zero index and zero remaining) execute; other continuations
-are rejected explicitly. Task destruction releases the two owned payloads.
-Generated sequential continuations are private runtime frames. General foreign
-continuation tasks, forks and parallel scheduling remain unfinished.
+Simultaneous lets discard unused or erased bindings. When at least two remaining
+right-hand sides are calls, the generator evaluates their heads and arguments
+first, then publishes child tasks for the final applications. A join holds the
+live outer captures and resumes the body after every child result arrives.
+Mixed groups, partial applications and native intrinsics retain sequential
+lowering. Raised definition arity and dynamic calls follow upstream's call
+classification. Each child has its own private sequential continuation frames.
+
+Tasks use upstream's payload followed by a continuation and packed index/remaining
+footer. `FID_CLO_APPLY` has two payload words; registered closure tasks have their
+captures and final argument. `FID_IO_EMIT` preserves its single payload in an
+Emit constructor. Task destruction releases payload owners without following
+the weak continuation link. Canonical roots use `TERM_HOLE` and index zero.
+
+The bounded FIFO executor validates returned fork graphs before running them,
+detaches embedded children and delivers each result exactly once. A ready
+non-root task can also enter through a closed chain of one-child continuations.
+Missing external siblings, cycles, duplicate nodes, invalid destinations and
+dependency counts fail explicitly. Nested foreign evaluations have separate
+root results. This executor runs on one VM thread; multicore scheduling remains
+unfinished. Registered callbacks return one boxed Term. Multiword delivery is
+qualified separately at the helper boundary and does not establish support for
+upstream's general flattened segment ABI or bang/GPU calls.
 
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned
@@ -163,7 +180,7 @@ across classes, so fragmentation can still exhaust the bounded arena. Successful
 IO shutdown releases parked continuations and channel payloads on the VM thread.
 A guarded failure bulk-releases the arena without retraversing values whose
 ownership transfer may have been interrupted. Native worker allocations keep
-their separate host lifetime. The optimized parallel CPU/task/GPU allocator and
+their separate host lifetime. The optimized parallel CPU/GPU allocator and
 upstream borrowing/sharing optimizations remain unfinished.
 
 Generated temporary scalars and arrays use tracked heap frames, released when
@@ -174,7 +191,8 @@ value. This also avoids
 MSVC's separate stack copy of Env at every call site in an unoptimized body.
 Budgets cover 2,000,000 steps, 512 nested foreign evaluation entries,
 512 synchronous helper frames, 65,536 live generated frames
-(`BEND_MAX_CONTINUATIONS`, including the active generated call), a
+(`BEND_MAX_CONTINUATIONS`, including the active generated call), 65,536 live task
+records (`BEND_MAX_TASKS`), a
 64 MiB VM payload arena and an equally sized ownership-metadata arena,
 64 MiB tracked host allocation, 8 MiB per host allocation,
 131,072 live actions and 64 active worker calls. Owned socket rows have a

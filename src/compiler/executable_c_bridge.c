@@ -29,6 +29,26 @@ OUTLINE TB_NOINLINE Term tb_c_apply(const Env *e, Term closure, Term argument) {
 OUTLINE TB_NOINLINE Term tb_c_tail_apply(const Env *e, Term closure, Term argument) {
   return tb_tail_apply(*e, closure, argument);
 }
+OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const Term *held,
+    u32 children, const Term *applications) {
+  Loc at;
+  Term join;
+  if (children < 2 || held_count > 254 || children > 254 - held_count
+      || fid_arity(fid) != held_count + children + 1)
+    err_fail("invalid generated fork layout");
+  at = task_node(*e, fid, TERM_HOLE, 0, children);
+  join = term_tsk(fid, at);
+  if (held_count != 0) memcpy(e->mem + at, held, held_count * sizeof(Term));
+  e->mem[at + held_count + children] = 0;
+  for (u32 index = 0; index < children; ++index) {
+    u32 destination = held_count + index;
+    Loc child = task_node(*e, FID_CLO_APPLY, join, destination, 0);
+    e->mem[child] = applications[2 * index];
+    e->mem[child + 1] = applications[2 * index + 1];
+    e->mem[at + destination] = term_tsk(FID_CLO_APPLY, child);
+  }
+  return join;
+}
 OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {
   return tb_closure(*e, fid, count, captures);
 }

@@ -360,10 +360,16 @@ fn foreign_root_task_drop_releases_both_payloads_and_rejects_malformed_metadata(
         "discarded\n",
     );
     let small_callback = FOREIGN_CALLBACK.replace("Nat.mul(100n, 20n)", "0n");
-    for corruption in [
-        "e.mem[application + 2] = 0;",
-        "e.mem[application + 3] = 1;",
-        "e.mem[application + 3] = UINT64_C(1) << 32;",
+    for (corruption, diagnostic) in [
+        ("e.mem[application + 2] = 0;", "foreign task is unsupported"),
+        (
+            "e.mem[application + 3] = 1;",
+            "corpus_eval requires a ready task",
+        ),
+        (
+            "e.mem[application + 3] = UINT64_C(1) << 32;",
+            "foreign task continuation is unsupported",
+        ),
     ] {
         let foreign = FOREIGN_CALLBACK_C.replace(
             "return corpus_eval",
@@ -371,14 +377,14 @@ fn foreign_root_task_drop_releases_both_payloads_and_rejects_malformed_metadata(
         );
         failure(
             &Fixture::new().run(&small_callback, &foreign, false, SMALL_STACK),
-            "foreign task continuation is unsupported",
+            diagnostic,
         );
     }
     for (original, replacement, diagnostic) in [
         (
             "term_tsk(FID_CLO_APPLY, application)",
             "term_tsk(65535, application)",
-            "foreign task is unsupported",
+            "foreign task id is unsupported",
         ),
         (
             "term_tsk(FID_CLO_APPLY, application)",

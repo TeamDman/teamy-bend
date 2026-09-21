@@ -2,7 +2,7 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-09-20
+**Last updated:** 2026-09-21
 **Intent audit:** Updated 2026-09-20 against the original request and available scope/GPU follow-ups
 
 ## How to update this plan
@@ -1638,6 +1638,87 @@ Retain a clean release and rerun existing Poche checks against its exact binary
 before publication, preserving the Poche checkout and source hashes. Sequential generated
 continuations do not complete general foreign continuation tasks, fork/join,
 optimized parallel CPU or GPU execution; task 5.15 and the broad goal stay active.
+
+This runtime slice lowers eligible simultaneous bindings into explicit
+child and join tasks. Preserve upstream's staging boundary: evaluate call heads
+and arguments before publishing children, fork the final applications, and make
+the join runnable only after every result arrives. Prune unused/erased bindings
+and serialize mixed groups that are not all calls. The join captures each live
+outer owner once; its body retains ordinary owned-use accounting. Existing
+private sequential frames remain the continuation mechanism within each child.
+
+Task payload arity, result destination and remaining-child count are distinct.
+Use the upstream payload-plus-two-word footer, with non-owning parent backlinks;
+detach child tasks from pending parent payloads when scheduling them. Introduce
+bounded invocation-local runnable jobs and pending joins, preserving foreign
+reentry isolation and avoiding recursive C calls for nested generated forks.
+Register current boxed closure task entries separately from any future flattened
+segment ABI: this backend currently returns one boxed Term. Qualify multiword
+delivery helpers separately against literal upstream code. Canonical roots use
+TERM_HOLE and index zero; validate ownership, IDs, ranges, unique destinations,
+cycles, incomplete dependencies and resource exhaustion before execution.
+
+Validation must prove actual task lowering and ownership, not only equal outputs
+from a sequential fallback. Cover nested/recursive joins with small native stack
+bounds, shared String/Array captures, returned closures, argument staging,
+dead/mixed groups, foreign continuation chains, result delivery and malformed
+graphs. Preserve all existing continuation, effect and exact-release Poche gates.
+This task graph is a prerequisite for parallel execution; multicore scheduling,
+general flattened segments, bang/GPU calls and optimized CPU execution remain
+required by the full goal. Parallel owners: fork classification, generator/bridge,
+task scheduler, and independent literal helper oracle/tests.
+
+The generated fork and bounded executor are implemented. Six new generated-code
+tests cover eleven call-classification programs, 256 nested joins, shallow/deep
+task limits, held String/Array owners, returned closures and argument staging
+with nested foreign reentry. Tests require the expected runtime join count as
+well as exact output and zero live VM/task/frame owners, so sequential fallback
+cannot satisfy the fork cases. Eight task-ABI tests cover registered captures,
+owned Emit payloads, 512 non-root continuation tasks, reversed child completion,
+weak parent links, multiword delivery and malformed/incomplete graphs. Observable
+child markers confirm that malformed graphs fail before callbacks run. The
+existing tail cases retain their successes and update only obsolete metadata
+refusal diagnostics. One host-budget fixture now returns its wide values so
+dead-binding elimination cannot remove the allocation being tested.
+
+An independent strict-MSVC probe executes twenty literal upstream helper spans
+in six groups, with explicit allocator, sequential-atomic and queue adapters.
+It confirms arity-relative footers, result-word copying with one decrement per
+child, root completion/reset, both task-deal routes, child detachment and payload
+destruction without traversing parent backlinks. It does not execute the full
+upstream scheduler or establish concurrency equivalence. Source review also
+checks overapplication, zero-live definitions and foreign continuation staging
+against upstream call classification and argument preparation. Evidence stays
+in target/executable-c-task-research and the focused task test logs.
+
+The standard quality gate passes 632 tests, including five compile-fail examples,
+with two optional profilers ignored. Strict workspace library/test Clippy with
+all features passes after a test-only string-construction cleanup; the six
+affected generated-task tests pass again. Production sources and fixture bodies
+are unchanged by that cleanup. Full gate and final lint evidence are retained in
+target/check-executable-c-task.log and target/clippy-executable-c-task-final.log.
+
+The frozen candidate matches fourteen pure task programs against fresh actual
+upstream JavaScript execution, with strict MSVC compilation, native depth/frame
+limits of 32 and a 1 MiB VM heap. Generated join-call presence also matches the
+upstream C fork shape in all fourteen cases. A source-hash bridge reconstructs
+the original test file from the final test-only formatting change and verifies
+all fixture bodies, outputs, counters and resource settings. These observations
+qualify boxed task execution; upstream generated C remains unexecuted.
+
+Twelve existing foundation, nine networking and eight reclamation programs also
+retain their actual upstream-JavaScript matches: 43 complete-program comparisons
+in total for this candidate. Reclamation retains its 4 KiB heap; timer/Windows
+provider adapters and target-specific Nat overflow diagnostics retain their
+qualifications. All 119 frozen compiled-source fingerprints remain unchanged.
+The strict 1,302-fixture audit preserves 362 accepted positives, 491 rejected
+positives and all 449 rejected negatives, with no accepted negatives, crashes
+or new rejections. Evidence: target/audit-executable-c-task and
+target/executable-c-task-{pure-programs,release-comparison,network-programs,reclamation-programs}.
+Retain a clean release and run the existing Poche regressions against its exact
+binary before publication. Task 5.15 and the broad goal remain active; this
+bounded single-VM task executor does not complete flattened segment support,
+multicore CPU execution or the GPU port. Poche remains a regression target.
 
 ## Completion and risks
 

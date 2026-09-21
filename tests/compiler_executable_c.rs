@@ -456,10 +456,21 @@ fn wide_tail_recursive_values_complete_without_native_stack_growth() {
 
 #[test]
 fn a_wide_generated_frame_respects_the_host_allocation_budget() {
-    let output = Fixture::new().run(
-        &wide_recursive_program("1n"),
-        &["BEND_MAX_HOST_BUFFER=4096"],
+    // Dead let values are pruned before fork selection. Keep these constructor
+    // buffers live in the returned list so this still tests the frame budget.
+    let fields = (0..80)
+        .map(|index| format!("f{index}: U32"))
+        .collect::<Vec<_>>()
+        .join(", ");
+    let values = ["0"; 80].join(", ");
+    let wide = format!("Wide{{{values}}}");
+    let list = vec![wide; 10].join(", ");
+    let source = format!(
+        "import Base\ntype Wide is Data: Wide{{{fields}}}\ndef main() -> List<Wide>: [{list}]\n"
     );
+    let expected = format!("[{list}]\n");
+    success(&Fixture::new().run(&source, &[]), &expected);
+    let output = Fixture::new().run(&source, &["BEND_MAX_HOST_BUFFER=4096"]);
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
     assert!(String::from_utf8_lossy(&output.stderr).contains("allocation budget"));

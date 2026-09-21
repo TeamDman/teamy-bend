@@ -68,6 +68,9 @@
 #ifndef BEND_MAX_CONTINUATIONS
 #define BEND_MAX_CONTINUATIONS 65536u
 #endif
+#ifndef BEND_MAX_TASKS
+#define BEND_MAX_TASKS 65536u
+#endif
 #ifndef BEND_MAX_ALLOC
 #define BEND_MAX_ALLOC UINT64_C(67108864)
 #endif
@@ -223,9 +226,16 @@ static u64 tb_steps;
 static u32 tb_depth;
 static u32 tb_frames;
 static u32 tb_continuations;
+static u32 tb_tasks;
+static u64 tb_task_joins;
+static u32 tb_task_peak;
+typedef struct TBTaskRecord TBTaskRecord;
+static TBTaskRecord *tb_task_table[1024];
 static u32 tb_closure_captures[65536];
+INLINE u32 fid_arity(Fid fid);
 static void tb_files_release(TBHost *host);
 static void tb_network_shutdown(TBHost *host);
+static void tb_task_context_reset(void);
 
 OUTLINE TB_NORETURN void err_fail(const char *message) {
   if (tb_host_current != NULL) {
@@ -517,7 +527,7 @@ OUTLINE void term_drop(Env e, Term term) {
         count = tb_closure_captures[aux];
         if (aux < 2 || count == 0) err_fail("invalid closure destruction");
         cls = cls_fit(count);
-      } else if (tag == TAG_TSK && aux == FID_CLO_APPLY) { count = 2; cls = 2; }
+      } else if (tag == TAG_TSK) { count = fid_arity(aux); cls = cls_fit(count + 2); }
       else { err_fail("invalid native term tag"); }
       tb_allocation(e, at, cls);
       if (tag == TAG_BUF) heap_free(e, cls, at);
@@ -660,6 +670,13 @@ struct TBCallFrame {
 static BendClosureFn tb_closure_functions[65536];
 static BendResumeFn tb_resume_functions[65536];
 static size_t tb_resume_slots[65536];
+INLINE u32 fid_arity(Fid fid) {
+  if (fid == FID_CLO_APPLY) return 2;
+  if (fid == FID_IO_EMIT) return 1;
+  if (fid >= 65536 || tb_closure_functions[fid] == NULL) err_fail("foreign task id is unsupported");
+  if (tb_closure_captures[fid] >= 255) err_fail("foreign task arity is unsupported");
+  return tb_closure_captures[fid] + 1;
+}
 OUTLINE void tb_register_closure(u32 fid, BendClosureFn function, u32 count) {
   if (fid < 2 || fid >= 65536 || function == NULL || count > 255) err_fail("invalid closure registration");
   if (tb_closure_functions[fid] != NULL
@@ -686,16 +703,29 @@ INLINE Term tb_closure(Env e, u32 fid, u32 count, const Term *captures) {
   return term_clo(fid, at);
 }
 INLINE Loc task_node(Env e, Fid fid, Term continuation, u32 index, u32 remaining) {
+  u32 arity = fid_arity(fid);
   Loc at;
-  if (continuation != TERM_HOLE || index != 0 || remaining != 0) err_fail("foreign task continuation is unsupported");
-  if (fid != FID_CLO_APPLY) err_fail("foreign task id is unsupported");
-  /* Upstream task_node stores arity arguments followed by continuation and
-   * packed index/remaining words. Only ready root applications run here. */
-  at = heap_alloc(e, 2);
-  e.mem[at] = TERM_HOLE; e.mem[at + 1] = TERM_HOLE;
-  e.mem[at + 2] = continuation; e.mem[at + 3] = 0;
-  tb_mark_raw(e, at + 2, 2);
+  if ((continuation == TERM_HOLE && index != 0)
+      || (continuation != TERM_HOLE && (term_tag(continuation) != TAG_TSK || term_rfc(continuation))))
+    err_fail("foreign task continuation is unsupported");
+  if (remaining > arity) err_fail("invalid task dependency count");
+  at = heap_alloc(e, cls_fit(arity + 2));
+  /* Ready payloads are initialized too, so malformed foreign construction
+   * cannot accidentally turn recycled words into owned arguments. */
+  for (u32 i = 0; i < arity; ++i) e.mem[at + i] = TERM_HOLE;
+  e.mem[at + arity] = continuation;
+  e.mem[at + arity + 1] = ((u64)index << 32) | remaining;
+  tb_mark_raw(e, at + arity, 2);
   return at;
+}
+INLINE Loc task_tail(Term task) {
+  Env e = {tb_memory, NULL};
+  if (term_tag(task) != TAG_TSK) err_fail("foreign task is unsupported");
+  if (term_rfc(task)) err_fail("reference-counted foreign task is unsupported");
+  u32 arity = fid_arity((Fid)term_aux(task));
+  Loc at = term_loc(task);
+  tb_allocation(e, at, cls_fit(arity + 2));
+  return at + arity;
 }
 INLINE void tb_task_take(Env e, Term task, Term *closure, Term *argument) {
   Loc at;
@@ -716,25 +746,28 @@ INLINE Term tb_tail_apply(Env e, Term closure, Term argument) {
 /* A suspended generated call owns its persistent buffers. Scratch slots are
  * aliases and raw layout words as well as Terms; generated ownership lowering
  * releases their live values, so freeing a frame must not sink every slot. */
-OUTLINE TBCallFrame *tb_call_frame(Env e, Term closure, Term argument) {
-  u32 fid = (u32)term_aux(closure), count = tb_closure_captures[fid];
+OUTLINE TBCallFrame *tb_call_frame_owned(u32 fid, Term *captures, Term argument) {
   size_t slots = tb_resume_slots[fid];
   TBCallFrame *frame;
-  Term *captures = NULL;
   if (tb_continuations == UINT32_MAX || tb_continuations >= BEND_MAX_CONTINUATIONS)
     err_fail("generated continuation budget exhausted");
   frame = (TBCallFrame *)io_mem(tb_host_calloc(1, sizeof(*frame)));
   frame->values = slots == 0 ? NULL : (Term *)io_mem(tb_host_calloc(slots, sizeof(Term)));
+  frame->captures = captures; frame->argument = argument;
+  frame->fid = fid; frame->slots = slots;
+  ++tb_continuations;
+  return frame;
+}
+OUTLINE TBCallFrame *tb_call_frame(Env e, Term closure, Term argument) {
+  u32 fid = (u32)term_aux(closure), count = tb_closure_captures[fid];
+  Term *captures = NULL;
   if (count != 0) {
     Loc at = term_peek(e, closure); tb_allocation(e, at, cls_fit(count));
     captures = (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
     memcpy(captures, e.mem + at, count * sizeof(Term));
     heap_free(e, cls_fit(count), at);
   }
-  frame->captures = captures; frame->argument = argument;
-  frame->fid = fid; frame->slots = slots;
-  ++tb_continuations;
-  return frame;
+  return tb_call_frame_owned(fid, captures, argument);
 }
 OUTLINE void tb_call_frame_free(TBCallFrame *frame) {
   if (tb_continuations == 0) err_fail("unbalanced generated continuation");
@@ -743,71 +776,8 @@ OUTLINE void tb_call_frame_free(TBCallFrame *frame) {
   tb_host_free(frame);
   --tb_continuations;
 }
-OUTLINE Term tb_apply(Env e, Term closure, Term argument) {
-  Term result;
-  TBCallFrame *current = NULL, *pending = NULL;
-  if (++tb_depth > BEND_MAX_DEPTH) err_fail("call depth budget exhausted");
-  for (;;) {
-    tb_tick();
-    if (current != NULL) {
-      if (current->waiting || current->fid >= 65536 || tb_resume_functions[current->fid] == NULL)
-        err_fail("invalid generated continuation state");
-      result = tb_resume_functions[current->fid](&e, current);
-      if (current->waiting) {
-        if (current->pc == 0 || current->destination >= current->slots)
-          err_fail("invalid generated continuation destination");
-        /* Taking the task transfers the child arguments. The caller remains
-         * owned by this invocation until that child's final value arrives. */
-        tb_task_take(e, result, &closure, &argument);
-        current->parent = pending; pending = current; current = NULL;
-        continue;
-      }
-      tb_call_frame_free(current); current = NULL;
-    } else {
-      u32 fid, count;
-      Term *captures = NULL;
-      if (term_tag(closure) != TAG_CLO) err_fail("application of a non-function");
-      if (term_rfc(closure)) err_fail("reference-counted closure application is unsupported");
-      fid = (u32)term_aux(closure);
-      if (fid == FID_IO_EMIT) { term_sink(e, argument); result = term_pak(CID_EMIT, 0); }
-      else {
-        if (tb_closure_functions[fid] == NULL) err_fail("unregistered closure application");
-        if (tb_resume_functions[fid] != NULL) {
-          current = tb_call_frame(e, closure, argument);
-          continue;
-        }
-        count = tb_closure_captures[fid];
-        if (count != 0) {
-          Loc at = term_peek(e, closure); tb_allocation(e, at, cls_fit(count));
-          captures = (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
-          memcpy(captures, e.mem + at, count * sizeof(Term));
-          heap_free(e, cls_fit(count), at);
-        }
-        /* Legacy callbacks may enter tb_apply again. Their nested invocation
-         * has its own pending chain and remains bounded by native call depth. */
-        result = tb_closure_functions[fid](e, captures, argument);
-        tb_host_free(captures);
-      }
-    }
-    if (term_tag(result) == TAG_TSK) {
-      tb_task_take(e, result, &closure, &argument);
-      continue;
-    }
-    if (pending == NULL) break;
-    current = pending; pending = current->parent; current->parent = NULL;
-    if (!current->waiting || current->pc == 0 || current->destination >= current->slots)
-      err_fail("invalid generated continuation destination");
-    current->values[current->destination] = result;
-    current->waiting = false;
-  }
-  --tb_depth;
-  return result;
-}
-INLINE Term corpus_eval(Corpus memory, Term task) {
-  Env e = {memory, NULL}; Term closure, argument;
-  tb_task_take(e, task, &closure, &argument);
-  return tb_apply(e, closure, argument);
-}
+OUTLINE Term tb_apply(Env e, Term closure, Term argument);
+OUTLINE Term corpus_eval(Corpus memory, Term task);
 
 INLINE Term term_blk(bool array, Cls cls, Loc loc) { return term_make(array ? TAG_ARR : TAG_BUF, cls, loc); }
 INLINE Cls blk_cls(Term block) { return (Cls)term_aux(block); }
@@ -936,13 +906,15 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   tb_capacity = BEND_MAX_ALLOC / sizeof(Term);
   tb_memory = NULL; tb_heap_meta = NULL;
   e.mem = tb_memory; e.alc = NULL;
-  tb_bump = HEAP_OFF; tb_steps = 0; tb_depth = 0; tb_frames = 0; tb_continuations = 0;
+  tb_bump = HEAP_OFF; tb_steps = 0; tb_depth = 0; tb_frames = 0; tb_continuations = 0; tb_tasks = 0;
+  tb_task_joins = 0; tb_task_peak = 0; tb_task_context_reset();
   tb_live_words = 0; tb_live_blocks = 0;
   memset(tb_free_lists, 0, sizeof(tb_free_lists));
   memset(tb_closure_functions, 0, sizeof(tb_closure_functions));
   memset(tb_closure_captures, 0, sizeof(tb_closure_captures));
   memset(tb_resume_functions, 0, sizeof(tb_resume_functions));
   memset(tb_resume_slots, 0, sizeof(tb_resume_slots));
+  memset(tb_task_table, 0, sizeof(tb_task_table));
   if (setjmp(guard) == 0) {
     Term main;
     if (tb_capacity <= HEAP_OFF || tb_capacity > LOC_MASK || tb_capacity > SIZE_MAX / sizeof(Term))
@@ -960,11 +932,13 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
       else { if (show != NULL) show(e, main); term_sink(e, main); result = 0; }
     }
     if (tb_continuations != 0) { result = 1; err_fail("generated continuation ownership leaked"); }
+    if (tb_tasks != 0) { result = 1; err_fail("task ownership leaked"); }
   }
   tb_io_shutdown();
   free(tb_memory); tb_memory = NULL;
   free(tb_heap_meta); tb_heap_meta = NULL;
   tb_failure_guard = NULL; tb_host_current = NULL;
+  tb_task_context_reset();
   tb_host_release(host);
   return result;
 }

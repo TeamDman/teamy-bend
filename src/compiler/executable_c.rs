@@ -19,11 +19,14 @@ use crate::kernel::elaborate::DefinitionBody;
 use crate::kernel::elaborate::ExecutableProgram;
 use crate::kernel::elaborate::Expression;
 use crate::kernel::elaborate::ExpressionKind;
+use crate::kernel::elaborate::Field;
 use crate::kernel::substitute;
 use std::collections::BTreeMap;
 use std::fmt::Write;
 use std::rc::Rc;
 
+#[path = "executable_c_forks.rs"]
+mod forks;
 #[path = "executable_c_native.rs"]
 mod native;
 #[path = "executable_c_values.rs"]
@@ -94,6 +97,7 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
     );
     source.push_str(&generator.table.declarations());
     source.push_str(include_str!("executable_core.c"));
+    source.push_str(include_str!("executable_tasks.c"));
     source.push_str(include_str!("executable_io.c"));
     source.push_str(include_str!("executable_files.c"));
     source.push_str(include_str!("executable_network.c"));
@@ -432,17 +436,27 @@ impl Generator<'_> {
         argument: &str,
         tail: bool,
     ) -> Result<String, CompileError> {
+        self.pending(
+            output,
+            &format!("tb_c_tail_apply(e, {function}, {argument})"),
+            tail,
+        )
+    }
+
+    fn pending(
+        &mut self,
+        output: &mut Body,
+        task: &str,
+        tail: bool,
+    ) -> Result<String, CompileError> {
         if tail {
-            return self.hold(
-                output,
-                &format!("tb_c_tail_apply(e, {function}, {argument})"),
-            );
+            return self.hold(output, task);
         }
         self.fresh()?;
         let slot = output.reserve(1);
         output.resumes += 1;
         let pc = output.resumes;
-        writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->waiting = true;\n  return tb_c_tail_apply(e, {function}, {argument});\ntb_resume_{pc}: ;").unwrap();
+        writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->waiting = true;\n  return {task};\ntb_resume_{pc}: ;").unwrap();
         Ok(format!("tb_values[{slot}]"))
     }
 
@@ -561,7 +575,7 @@ impl Generator<'_> {
         scope: &mut Scope,
         output: &mut Body,
     ) -> Result<String, CompileError> {
-        let used = runtime_uses(expression);
+        let used = runtime_uses(self.program, expression);
         let captures = scope
             .iter()
             .filter(|(id, _)| **id != parameter && used.contains_key(id))
@@ -571,7 +585,7 @@ impl Generator<'_> {
         let mut inner = Scope::new();
         let mut body = Body::new("  (void)e; (void)captures; (void)argument;\n");
         let body_uses = match &expression.kind {
-            ExpressionKind::Lambda { body, .. } => runtime_uses(body),
+            ExpressionKind::Lambda { body, .. } => runtime_uses(self.program, body),
             _ => BTreeMap::new(),
         };
         for (index, variable) in captures.iter().enumerate() {
@@ -704,16 +718,17 @@ impl Generator<'_> {
                 self.construct(name, &values, output)
             }
             ExpressionKind::Let { bindings, body } => {
+                let uses = runtime_uses(self.program, body);
+                let bindings = live_bindings(bindings, &uses);
+                if fork_group(self.program, &bindings) {
+                    return self.fork(&bindings, body, scope, output, tail);
+                }
                 let mut locals = Vec::new();
-                for binding in bindings
-                    .iter()
-                    .filter(|binding| binding.binder.quant != Quant::None)
-                {
+                for binding in bindings {
                     let value = self.expression(&binding.value, scope, output, false)?;
                     let value = self.hold(output, &value)?;
                     locals.push((binding.binder.id, value));
                 }
-                let uses = runtime_uses(body);
                 for (id, value) in &locals {
                     scope.insert(
                         *id,
@@ -732,6 +747,110 @@ impl Generator<'_> {
                 Ok(result)
             }
         }
+    }
+
+    /// Prepare every operand before publishing a child. Only the last live
+    /// application becomes work in the fork; nested calls keep their strict order.
+    fn fork_application(
+        &mut self,
+        expression: &Expression,
+        scope: &mut Scope,
+        output: &mut Body,
+    ) -> Result<(String, String), CompileError> {
+        let mut arguments = Vec::new();
+        let mut head = expression;
+        while let ExpressionKind::Apply {
+            function,
+            argument,
+            quant,
+        } = &head.kind
+        {
+            arguments.push((argument.as_ref(), *quant));
+            head = function;
+        }
+        arguments.reverse();
+        let mut remaining = arguments
+            .iter()
+            .filter(|(_, quant)| *quant != Quant::None)
+            .count();
+        let mut function = if let ExpressionKind::Definition(name) = &head.kind {
+            let substitutions = self.instantiation(name, &arguments);
+            let id = self.definition(name, &substitutions)?;
+            if remaining == 0 {
+                return Ok((
+                    format!("term_clo({}, 0)", self.definition_closures[id] + 2),
+                    "0".into(),
+                ));
+            }
+            self.reference(id, output, false)?
+        } else {
+            self.expression(head, scope, output, false)?
+        };
+        for (argument, quant) in arguments {
+            if quant == Quant::None {
+                continue;
+            }
+            let argument = self.expression(argument, scope, output, false)?;
+            remaining -= 1;
+            if remaining == 0 {
+                return Ok((function, argument));
+            }
+            function = self.apply(output, &function, &argument, false)?;
+        }
+        Err(CompileError::new("fork child has no callable application"))
+    }
+
+    fn fork(
+        &mut self,
+        bindings: &[&Field],
+        expression: &Expression,
+        scope: &mut Scope,
+        output: &mut Body,
+        tail: bool,
+    ) -> Result<String, CompileError> {
+        let mut children = Vec::with_capacity(bindings.len() * 2);
+        for binding in bindings {
+            let (function, argument) = self.fork_application(&binding.value, scope, output)?;
+            children.extend([function, argument]);
+        }
+        let uses = runtime_uses(self.program, expression);
+        let captures = scope
+            .keys()
+            .filter(|id| uses.contains_key(id))
+            .copied()
+            .collect::<Vec<_>>();
+        let id = self.reserve_closure(captures.len() + bindings.len())?;
+        let mut inner = Scope::new();
+        let mut body = Body::new("  tb_c_drop(e, argument);\n");
+        for (index, variable) in captures
+            .iter()
+            .copied()
+            .chain(bindings.iter().map(|binding| binding.binder.id))
+            .enumerate()
+        {
+            let value = self.hold(&mut body, &format!("captures[{index}]"))?;
+            inner.insert(variable, OwnedLocal::new(value, uses[&variable]));
+        }
+        let value = self.expression(expression, &mut inner, &mut body, true)?;
+        drop_owned(&mut inner, &mut body);
+        writeln!(body, "  return {value};").unwrap();
+        self.finish_closure(id, body);
+        let held = captures
+            .iter()
+            .map(|variable| self.owned_use(*variable, scope, output))
+            .collect::<Result<Vec<_>, _>>()?;
+        let held_array = self.array(output, &held)?;
+        let children_array = self.array(output, &children)?;
+        self.pending(
+            output,
+            &format!(
+                "tb_c_join(e, {}, {}, {held_array}, {}, {children_array})",
+                id + 2,
+                held.len(),
+                bindings.len()
+            ),
+            tail,
+        )
     }
 
     fn match_body(
@@ -781,7 +900,7 @@ impl Generator<'_> {
         if condition != "1" {
             writeln!(output, "  if ({condition}) {{").unwrap();
         }
-        let mut arm_scope = branch_scope(scope, arm, parameter.id);
+        let mut arm_scope = branch_scope(self.program, scope, arm, parameter.id);
         drop_unused(&mut arm_scope, output);
         let arm_value = self.owned_use(parameter.id, &mut arm_scope, output)?;
         let values = if self.program.base_names.contains(owner) {
@@ -825,7 +944,7 @@ impl Generator<'_> {
             return Ok(branch);
         }
         writeln!(output, "  {result} = {branch};\n  }} else {{").unwrap();
-        let mut fallback_scope = branch_scope(scope, fallback, parameter.id);
+        let mut fallback_scope = branch_scope(self.program, scope, fallback, parameter.id);
         drop_unused(&mut fallback_scope, output);
         let branch = self.expression(fallback, &mut fallback_scope, output, false)?;
         let fallback_value = self.owned_use(parameter.id, &mut fallback_scope, output)?;
@@ -855,7 +974,7 @@ fn closure_wrapper(id: usize, captures: usize) -> String {
 /// Count owned uses in one generated function. Creating a closure consumes one
 /// capture per free variable; uses inside that closure belong to its own body.
 /// Match branches are counted independently when their function is generated.
-fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
+fn runtime_uses(program: &ExecutableProgram, expression: &Expression) -> BTreeMap<usize, usize> {
     fn merge(target: &mut BTreeMap<usize, usize>, source: BTreeMap<usize, usize>) {
         for (id, count) in source {
             *target.entry(id).or_default() += count;
@@ -867,7 +986,7 @@ fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
             output.insert(*id, 1);
         }
         ExpressionKind::Lambda { parameter, body } => {
-            output = runtime_uses(body);
+            output = runtime_uses(program, body);
             output.remove(&parameter.id);
             if parameter.quant != Quant::None {
                 for count in output.values_mut() {
@@ -880,9 +999,9 @@ fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
             argument,
             quant,
         } => {
-            output = runtime_uses(function);
+            output = runtime_uses(program, function);
             if *quant != Quant::None {
-                merge(&mut output, runtime_uses(argument));
+                merge(&mut output, runtime_uses(program, argument));
             }
         }
         ExpressionKind::Constructor { fields, .. } => {
@@ -890,7 +1009,7 @@ fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
                 .iter()
                 .filter(|field| field.binder.quant != Quant::None)
             {
-                merge(&mut output, runtime_uses(&field.value));
+                merge(&mut output, runtime_uses(program, &field.value));
             }
         }
         ExpressionKind::Match {
@@ -899,23 +1018,28 @@ fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
             fallback,
             ..
         } => {
-            output = runtime_uses(arm);
-            merge(&mut output, runtime_uses(fallback));
+            output = runtime_uses(program, arm);
+            merge(&mut output, runtime_uses(program, fallback));
             output.remove(&parameter.id);
             for count in output.values_mut() {
                 *count = 1;
             }
         }
         ExpressionKind::Let { bindings, body } => {
-            output = runtime_uses(body);
+            output = runtime_uses(program, body);
+            let live = live_bindings(bindings, &output);
             for binding in bindings {
                 output.remove(&binding.binder.id);
             }
-            for binding in bindings
-                .iter()
-                .filter(|binding| binding.binder.quant != Quant::None)
-            {
-                merge(&mut output, runtime_uses(&binding.value));
+            if fork_group(program, &live) {
+                // The join captures each outer owner once; its body performs
+                // any internal duplication after the child results arrive.
+                for count in output.values_mut() {
+                    *count = 1;
+                }
+            }
+            for binding in live {
+                merge(&mut output, runtime_uses(program, &binding.value));
             }
         }
         ExpressionKind::Erased | ExpressionKind::Definition(_) | ExpressionKind::Absurd { .. } => {}
@@ -923,8 +1047,29 @@ fn runtime_uses(expression: &Expression) -> BTreeMap<usize, usize> {
     output
 }
 
-fn branch_scope(scope: &Scope, expression: &Expression, parameter: usize) -> Scope {
-    let mut uses = runtime_uses(expression);
+fn live_bindings<'a>(bindings: &'a [Field], uses: &BTreeMap<usize, usize>) -> Vec<&'a Field> {
+    bindings
+        .iter()
+        .filter(|binding| {
+            binding.binder.quant != Quant::None && uses.contains_key(&binding.binder.id)
+        })
+        .collect()
+}
+
+fn fork_group(program: &ExecutableProgram, bindings: &[&Field]) -> bool {
+    bindings.len() > 1
+        && bindings
+            .iter()
+            .all(|binding| forks::is_call(program, &binding.value))
+}
+
+fn branch_scope(
+    program: &ExecutableProgram,
+    scope: &Scope,
+    expression: &Expression,
+    parameter: usize,
+) -> Scope {
+    let mut uses = runtime_uses(program, expression);
     *uses.entry(parameter).or_default() += 1;
     scope
         .iter()
