@@ -254,6 +254,31 @@ fn numeric_metadata_is_sealed_and_independent_from_foreign_contracts() {
 }
 
 #[test]
+fn unsafe_annotations_do_not_relax_sealed_numeric_or_foreign_contracts() {
+    let fixture = Fixture::new();
+    let path = fixture.write("main.bend", "import Base\n");
+    for name in ["F32.add", "IO.print"] {
+        let mut source = load_executable(&path).unwrap();
+        let mut changed = false;
+        for declaration in &mut source.book.declarations {
+            if let Declaration::Def(definition) = declaration
+                && definition.name == name
+            {
+                definition.unsafe_ = true;
+                changed = true;
+            }
+        }
+        assert!(changed);
+        let error = check_executable(&source).unwrap_err().to_string();
+        assert!(error.contains(name), "{error}");
+        assert!(
+            error.contains("invalid numeric") || error.contains("bundled foreign"),
+            "{error}"
+        );
+    }
+}
+
+#[test]
 fn constructor_tags_retain_original_spelling_before_qualification() {
     let fixture = Fixture::new();
     fixture.write("library.bend", "type Value is Data: Local.Tag{}\n");

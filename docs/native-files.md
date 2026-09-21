@@ -20,7 +20,9 @@ Read and write return `(file, result)`, keeping the same live handle outside
 Result on both success and failure. Close consumes it and ignores host close
 failure. Native handles are private monotonically assigned identities whose
 host resources reside in the Machine or its pending worker job; source code
-cannot inspect or manufacture them. The checker rejects copying an affine File.
+cannot inspect or manufacture them. Ordinary checking rejects copying an affine
+File; execution-only `@unsafe` definitions may introduce reusable binders, as
+described in [compatibility](compatibility.md).
 Generated JavaScript retains upstream's raw descriptor representation for foreign
 interoperability, including descriptors supplied by trusted foreign code.
 

@@ -35,10 +35,12 @@ pub enum ExecutableEntry {
     Io,
 }
 
-/// A checked program that may rely on foreign runtime contracts.
+/// A checked program that may rely on foreign contracts or unsafe definitions.
 ///
 /// This type is not a proof certificate and cannot become a [`super::CheckedBook`].
-/// Foreign results remain assumptions even if their types mention equalities.
+/// Foreign results and unsafe definitions remain execution assumptions even if
+/// their types mention equalities. Unsafe definitions can diverge and can grant
+/// reusable access to values whose types are ordinarily affine.
 /// There is intentionally no public proof-normalization or evaluation API.
 ///
 /// ```compile_fail
@@ -81,7 +83,7 @@ impl ExecutableBook {
         )
     }
 
-    /// Look up a checked signature; foreign signatures are runtime assumptions.
+    /// Look up a checked signature; foreign and unsafe signatures are assumptions.
     #[must_use]
     pub fn definition_type(&self, name: &str) -> Option<&TermRef> {
         self.engine.defs.get(name).map(|definition| &definition.ty)
@@ -95,6 +97,15 @@ impl ExecutableBook {
     /// Names of the foreign contracts assumed by this executable program.
     pub fn foreign_names(&self) -> impl Iterator<Item = &str> {
         self.foreign.keys().map(String::as_str)
+    }
+
+    /// Names of definitions carrying execution-only `@unsafe` assumptions.
+    pub fn unsafe_names(&self) -> impl Iterator<Item = &str> {
+        self.engine
+            .defs
+            .values()
+            .filter(|definition| definition.unsafe_)
+            .map(|definition| definition.name.as_str())
     }
 
     /// Names of opaque numeric runtime contracts; these are not checked proofs.
@@ -239,6 +250,11 @@ fn foreign_contract(
     if metadata.builtin.is_some() && !source.base_names.contains(&definition.name) {
         return Err(KernelError::new(
             "intrinsic contract did not originate in bundled Base",
+        ));
+    }
+    if metadata.builtin.is_some() && definition.unsafe_ {
+        return Err(KernelError::new(
+            "bundled foreign contracts cannot acquire unsafe assumptions",
         ));
     }
     // This is intentionally syntactic. In contrast to entry detection, upstream
@@ -393,24 +409,35 @@ fn numeric_contract(
 /// Check ordinary definitions and executable foreign IO contracts in source order.
 ///
 /// The loader alone constructs [`ExecutableSource`] and identifies actual Base
-/// declarations. All ordinary signatures, bodies, laws and template instances
-/// use the strict kernel rules. Foreign bodies remain opaque runtime assumptions.
+/// declarations. Annotated definitions use upstream's execution-only exceptions
+/// to structural descent and reusable-domain formation; quantities, equality and
+/// declaration order remain checked. Foreign bodies remain opaque assumptions.
 ///
 /// # Errors
 /// Rejects invalid signatures, false proofs, holes, unfilled ordinary laws,
-/// unsafe declarations, forged effect contracts and exhausted checking limits.
+/// forged effect contracts and exhausted checking limits. Accepted unsafe
+/// definitions do not become strict proof evidence.
 pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, KernelError> {
     let mut engine = empty_engine(&source.book)?;
+    // Upstream stores a law and its later body in one definition object. Its
+    // eventual annotation also governs signature formation at the earlier law
+    // event. Retain our source-order events: this pre-scan supplies no bodies,
+    // and unfilled laws still cannot be used as live evidence.
+    let unsafe_definitions = source
+        .book
+        .declarations
+        .iter()
+        .filter_map(|declaration| match declaration {
+            Declaration::Def(definition) if definition.unsafe_ => Some(&definition.name),
+            _ => None,
+        })
+        .collect::<BTreeSet<_>>();
     for declaration in &source.book.declarations {
         engine.reset();
         let (name, result) = match declaration {
             Declaration::Adt(adt) => (&adt.name, engine.validate_adt(adt)),
             Declaration::Def(definition) => {
-                let result = if definition.unsafe_ {
-                    Err(KernelError::new(
-                        "unsafe executable definitions are not supported yet",
-                    ))
-                } else if let Some(opaque) = source.opaque.get(&definition.name) {
+                let result = if let Some(opaque) = source.opaque.get(&definition.name) {
                     opaque_contract(source, definition, *opaque)
                         .and_then(|()| engine.validate_opaque_definition(definition))
                 } else if definition.foreign {
@@ -420,7 +447,10 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
                     numeric_contract(source, &engine, definition, *intrinsic)
                         .and_then(|()| engine.validate_numeric_definition(definition))
                 } else {
-                    engine.validate_def(definition)
+                    engine.validate_executable_definition(
+                        definition,
+                        unsafe_definitions.contains(&definition.name),
+                    )
                 };
                 (&definition.name, result)
             }

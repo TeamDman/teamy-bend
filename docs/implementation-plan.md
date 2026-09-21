@@ -16,8 +16,10 @@
   Native tasks, timers and channels are complete for this bounded native slice
   (5.12), as are environment and file effects (5.13). Native descriptor readiness
   and TCP/UDP now pass native and generated JavaScript validation on Windows
-  (5.14); executable C is the active engine implementation (5.15). Keep existing Poche
-  checks as regressions and defer model expansion.
+  (5.14); execution-only unsafe checking is implemented (5.16). Executable C
+  remains in progress (5.15), with actual multicore CPU execution the next
+  runtime priority. Keep existing Poche checks as regressions and defer model
+  expansion.
 
 ## Goal wording and scope
 
@@ -55,7 +57,7 @@ in the ignored `.local/gpu-port-references.md` file at the repository root.
 | U7 | Then use the rewrite to formalize the user's Poche4 repo. | 4.1–4.3 |
 | U8 | Locate Poche4 at the approximate older games-repository path. | 1.1 |
 | U9 | Set an active goal for this work. | Goal tool, done |
-| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12–5.15; existing Poche regression coverage |
+| U10 | Keep progress focused on the Bend2 engine; address concern about rebuilding Poche or Bevy. | Goal wording and scope; 5.12–5.16; existing Poche regression coverage |
 | U11 | Makepad strategies identified by the user as Rik Arends's work may help the later Bend GPU port. | GPU port references; 3.4, evaluation deferred to GPU phase |
 | U12 | The user reports those strategies improved teamy-tts; retain it as a second implementation reference. | GPU port references; user-reported provenance distinguished from inspected source |
 | U13 | Persist both local reference paths and their purpose across compaction; assess current goal wording. | Ignored local reference note; portable GPU reference document; accepted wording above |
@@ -1816,6 +1818,62 @@ that milestone and was not rerun or counted as new behavior coverage.
 Retain the clean release and run the existing Poche gates before publication.
 Existing Poche sources remain unchanged. General dynamic specialization and the
 remaining CPU/GPU/runtime work keep task 5.15 active.
+
+### [x] 5.16 Support upstream unsafe definitions only in executable checking
+
+Work: preserve the two upstream `@unsafe` exceptions using an explicit local
+checking context: self-calls skip structural descent, and reusable function/let
+domains form at Type. Keep quantity usage, erasure, equality, holes, datatype
+validation, declaration order and sealed Base contracts unchanged. The annotation
+on a filling definition also applies to its preceding law signature without
+making that law live before completion. Instantiated templates and imported
+definitions retain their annotation. Foreign definitions still require trusted
+loader metadata and a direct Base IO return contract.
+
+Acceptance: strict checking, pure compilation/evaluation and the Poche protocol
+continue to reject materialized unsafe definitions. Executable books expose their
+unsafe assumptions and cannot become proof books. Compare terminating recursive,
+reusable-closure and template programs against upstream execution on native,
+JavaScript and C targets; test bounded divergence and rejection of invalid
+affine use, holes, false reflexivity, leaked context and premature law use. Run
+the standard gate, strict Clippy, the strict upstream audit and existing exact
+release Poche checks before publication. This is engine work; Poche stays a
+regression target and broader compiler/multicore/GPU parity remains required.
+
+Completion: the explicit per-definition context implements both exceptions on
+the execution path. It also supplies the eventual annotation to earlier law
+signatures while preserving source-order availability. No parser, lowerer or
+runtime production changes were needed. Strict proof interfaces reject even
+unreachable materialized unsafe definitions; sealed numeric and built-in foreign
+contracts reject annotation mutation. Existing opaque-contract controls remain.
+
+Seven grouped integration tests cover seven positive programs on native,
+JavaScript and strict-warning C, twelve invalid-checking cases, imports,
+templates, law completion, foreign signatures, strict CLI/API boundaries and
+controlled failure of pure and IO divergence. Successful C cases also verify
+that no VM/task/frame owners remain under an 8 KiB heap. The standard gate
+passes 659 tests, including five compile-fail examples, with two optional local
+profilers ignored. Strict workspace library/test Clippy also passes.
+
+Sixteen programs match actual upstream-generated JavaScript output on both
+candidate C and JavaScript execution. Seven have additional native assertions;
+the erased-equality case retains the documented native constructor-printer
+difference. All sixteen pass upstream checking. Fifteen generate upstream C;
+the erased cyclic equality assumption reaches a preserved 15-second upstream
+C-generation timeout, while its independently generated upstream JavaScript
+executes successfully. Whole upstream C remains unexecuted. Ignored receipts
+are retained under target/unsafe-execution-programs.
+
+The fresh complete 1,302-fixture strict checker audit preserves 362 accepted
+positives, 491 rejected positives and all 449 rejected negatives, with zero
+abnormal exits, accepted negative controls or changed acceptance decisions.
+All 120 compiled-source fingerprints and the reference checkout are unchanged
+during validation. Candidate evidence is retained under
+target/audit-unsafe-execution. Retain the clean release and run the existing
+Poche gates against that exact binary before publication. This completion
+does not cover general specialization, optimized multicore CPU execution,
+GPU/window/audio, remaining language/library/CLI compatibility or the full
+formalization goal.
 
 ## Completion and risks
 

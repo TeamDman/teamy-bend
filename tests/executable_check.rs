@@ -224,21 +224,16 @@ fn strict_loading_and_proof_checking_never_accept_foreign_flags() {
 }
 
 #[test]
-fn unsafe_executable_source_and_foreign_refills_are_rejected() {
+fn foreign_refills_are_rejected() {
     let fixture = Fixture::new();
-    for body in [
-        "import Base\n@unsafe def main() -> Nat: main()\n",
+    let path = fixture.write(
+        "invalid.bend",
         "import Base\ndef foreign() -> IO(Unit):\n  import \"foreign.js\"\ndef foreign(): IO.pure(Unit, Unit{})\n",
-    ] {
-        let path = fixture.write("invalid.bend", body);
-        match load_executable(path) {
-            Ok(parsed) => {
-                check_executable(&parsed).expect_err("invalid executable source");
-            }
-            Err(error) => assert!(
-                error.message.contains("unsafe") || error.message.contains("duplicate"),
-                "{error}"
-            ),
+    );
+    match load_executable(path) {
+        Ok(parsed) => {
+            check_executable(&parsed).expect_err("foreign declarations cannot be refilled");
         }
+        Err(error) => assert!(error.message.contains("duplicate"), "{error}"),
     }
 }

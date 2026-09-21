@@ -34,9 +34,15 @@ number of declaration events as a strict-checking option.
 Upstream's foreign return check requires a direct reference to the actual Base
 `IO`, after traversing the function telescope and stripping annotations. It
 does not unfold a return alias. Entry-point detection does unfold aliases.
-These two rules need distinct tests. `@unsafe` also has precise execution-only
-exceptions to descent and reusable-domain checking; ordinary checking must not
-inherit them.
+These two rules have distinct tests. `@unsafe` uses two execution-only exceptions:
+self-calls skip structural descent, and reusable function/let domains form at
+Type. The local definition context carries these exceptions; ordinary definitions
+and datatype validation do not inherit them. Declared affine/erased usage, holes
+and equality checks remain enforced. A completing definition's annotation also
+applies to its earlier law signature without installing a future body. Foreign
+annotations retain their origin and direct-IO checks; sealed numeric, opaque and
+built-in foreign contracts cannot acquire unsafe assumptions. `ExecutableBook`
+exposes annotated names and remains separate from strict proof evidence.
 
 ## Runtime representation
 

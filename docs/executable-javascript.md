@@ -3,8 +3,10 @@
 `compile --executable FILE --output program.cjs` checks execution contracts
 and generates a standalone CommonJS program. Run it with Node.js. The compiler
 is implemented in Rust and consumes typed expressions from `ExecutableBook`;
-foreign signatures cannot produce a strict `CheckedBook` or a proof result.
-Unsafe declarations remain unsupported.
+foreign signatures and `@unsafe` definitions cannot produce a strict `CheckedBook`
+or a proof result. Annotated definitions use the upstream execution-only descent
+and reusable-domain exceptions described in [compatibility](compatibility.md).
+The existing call-depth and execution limits still apply.
 
 ## Entry points and output
 
@@ -79,7 +81,7 @@ window/audio effects remain unfinished.
 ## Environment and files
 
 IO.get_env and File.open/read/read_bytes/write/close use sealed executable
-contracts. File is an opaque affine Type: source code cannot construct or copy
+contracts. File is an opaque affine Type: ordinary checked source cannot construct or copy
 a handle. Strict proof Base excludes it. Generated JavaScript retains the
 upstream raw descriptor representation for trusted foreign code.
 

@@ -45,11 +45,19 @@ the pure compilers do not admit their opaque implementation assumptions.
 ## Executable checking and native IO
 
 `run` loads a separate execution-only Base and checks ordinary terms with the
-same proof/resource rules. Foreign declarations need loader-owned origin and a
+same proof/resource rules. Annotated `@unsafe` definitions skip structural
+self-descent and permit reusable function/let domains at Type. They still obey
+declared quantity usage, erasure, equality, holes and declaration order. A later
+annotated implementation also supplies the context for its earlier law signature;
+the unfilled law remains unavailable as live evidence. Imported definitions and
+instantiated templates retain the annotation; unused template text remains
+deferred. Foreign declarations need loader-owned origin and a
 direct return reference to actual Base IO. `ExecutableBook` is a distinct API
-with no conversion to `CheckedBook` and no proof-evaluation method. Its foreign
-signature metadata describes runtime assumptions. Unsafe definitions remain
-unsupported even on this executable path.
+with no conversion to `CheckedBook` and no proof-evaluation method. Foreign
+signatures and unsafe definitions describe runtime assumptions, and `unsafe_names`
+exposes the latter to library callers. Strict proof commands reject materialized
+unsafe definitions, including unreachable ones. Unsafe execution retains the
+existing target resource limits and can fail by exhausting them.
 
 Native execution supports IO.pure/bind/die/pass/try, console effects, tasks,
 timers, channels, environment lookup, files and TCP/UDP. Requests are private runtime
@@ -87,8 +95,8 @@ foreign imports, native representations and callbacks. The separate
 [executable C compiler](executable-c.md) provides packed native values,
 foreign registration/callbacks, file and TCP/UDP effects and a bounded CPU runtime.
 CPU reclamation uses reference counts and free lists to reuse released storage.
-Optimized parallel C execution, window/audio Base effects, GPU execution and
-unsafe execution remain required work in [the design](effects-design.md).
+Optimized parallel C execution, window/audio Base effects and GPU execution
+remain required work in [the design](effects-design.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
 a cooperative FIFO scheduler. Undefined foreign returns suspend; saved

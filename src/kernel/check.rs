@@ -276,6 +276,7 @@ struct Lhs {
     equation: TermRef,
     remaining: usize,
     quants: Vec<Quant>,
+    unsafe_: bool,
 }
 impl Default for Lhs {
     fn default() -> Self {
@@ -284,7 +285,20 @@ impl Default for Lhs {
             equation: term(Term::Ref(String::new())),
             remaining: 0,
             quants: vec![],
+            unsafe_: false,
         }
+    }
+}
+
+impl Lhs {
+    /// Upstream's execution-only exception changes domain formation, not the
+    /// binder's demand or usage count. Strict checking never sets this flag.
+    fn domain_kind(&self, quant: Quant) -> TermRef {
+        kind(if self.unsafe_ && quant == Quant::Many {
+            Quant::Lone
+        } else {
+            quant
+        })
     }
 }
 
@@ -406,17 +420,28 @@ impl Engine {
                 "strict proof checking rejects unsafe and foreign definitions",
             ));
         }
-        self.validate_definition(definition, false)
+        self.validate_definition(definition, false, false)
+    }
+
+    pub(super) fn validate_executable_definition(
+        &mut self,
+        definition: &DefDecl,
+        unsafe_context: bool,
+    ) -> Result<(), KernelError> {
+        if definition.foreign {
+            return Err(KernelError::new("invalid ordinary executable declaration"));
+        }
+        self.validate_definition(definition, false, unsafe_context)
     }
 
     pub(super) fn validate_foreign_definition(
         &mut self,
         definition: &DefDecl,
     ) -> Result<(), KernelError> {
-        if definition.unsafe_ || !definition.foreign || definition.body.is_some() {
+        if !definition.foreign || definition.body.is_some() {
             return Err(KernelError::new("invalid foreign executable declaration"));
         }
-        self.validate_definition(definition, true)?;
+        self.validate_definition(definition, true, definition.unsafe_)?;
         self.foreign_contracts.insert(definition.name.clone());
         Ok(())
     }
@@ -428,7 +453,7 @@ impl Engine {
         if definition.unsafe_ || definition.foreign || definition.body.is_some() {
             return Err(KernelError::new("invalid numeric executable declaration"));
         }
-        self.validate_definition(definition, false)?;
+        self.validate_definition(definition, false, false)?;
         self.numeric_contracts.insert(definition.name.clone());
         Ok(())
     }
@@ -440,7 +465,7 @@ impl Engine {
         if definition.unsafe_ || definition.foreign || definition.body.is_some() {
             return Err(KernelError::new("invalid opaque executable declaration"));
         }
-        self.validate_definition(definition, false)?;
+        self.validate_definition(definition, false, false)?;
         self.opaque_contracts.insert(definition.name.clone());
         Ok(())
     }
@@ -449,6 +474,7 @@ impl Engine {
         &mut self,
         definition: &DefDecl,
         foreign_completion: bool,
+        unsafe_context: bool,
     ) -> Result<(), KernelError> {
         if self.adts.contains_key(&definition.name) {
             return Err(KernelError::new("definition collides with a datatype"));
@@ -476,6 +502,7 @@ impl Engine {
             equation: term(Term::Ref(definition.name.clone())),
             remaining: 0,
             quants: vec![],
+            unsafe_: unsafe_context,
         };
         self.check(
             &lhs,
@@ -665,7 +692,7 @@ impl Engine {
                     .cloned()
                     .ok_or_else(|| KernelError::new(format!("undefined name {name}")))?;
                 if demand != Quant::None {
-                    if name == &lhs.name {
+                    if name == &lhs.name && !lhs.unsafe_ {
                         let (_, columns) = spine(&lhs.equation);
                         let mut order = std::cmp::Ordering::Equal;
                         for ((arg, col), quant) in arguments.iter().zip(&columns).zip(&lhs.quants) {
@@ -679,7 +706,9 @@ impl Engine {
                                 "recursive self-call must decrease structurally, left to right",
                             ));
                         }
-                    } else if def.body.is_none()
+                    }
+                    if name != &lhs.name
+                        && def.body.is_none()
                         && !self.foreign_contracts.contains(name)
                         && !self.numeric_contracts.contains(name)
                         && !self.opaque_contracts.contains(name)
@@ -709,7 +738,7 @@ impl Engine {
                 domain,
                 body,
             } => {
-                self.check(lhs, domain, Quant::None, &kind(*quant), context)?;
+                self.check(lhs, domain, Quant::None, &lhs.domain_kind(*quant), context)?;
                 let mut context = context.clone();
                 if context
                     .insert(
@@ -887,7 +916,7 @@ impl Engine {
                         return Err(KernelError::new("duplicate let binder identifier"));
                     }
                     let (t, u) = self.infer(lhs, &b.value, b.quant.demand(demand), context, &[])?;
-                    self.check(lhs, &t, Quant::None, &kind(b.quant), context)?;
+                    self.check(lhs, &t, Quant::None, &lhs.domain_kind(b.quant), context)?;
                     let binder = Binder {
                         quant: b.quant,
                         name: b.name.clone(),

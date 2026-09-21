@@ -51,8 +51,8 @@ cargo run -- run examples/app-playback.bend
 `check` requires complete proofs for every ordinary law and checks ordinary
 definitions and instantiated templates. Template bodies are parsed at their
 declaration and type-checked when specialized with closed `~` arguments.
-Unsupported syntax, unsafe executable definitions, holes in checked terms,
-unfilled laws and failed proof checks return errors. `eval` checks the program
+Strict proof commands reject `@unsafe` definitions. Unsupported syntax, holes in
+checked terms, unfilled laws and failed proof checks return errors. `eval` checks the program
 before normalizing an entry point. Successful checking is relative to the implemented kernel; the
 rewrite has not itself been formally proved sound. The induction example proves
 `Nat.add(n, 0n) == n` for arbitrary `n` using structural induction and equality
@@ -120,7 +120,12 @@ TCP/UDP/socket effects.
 Console output stays raw even with `--output-format json`. `Emit` discards its
 payload and exits successfully; `Halt` writes its message to stderr and sets
 the exit status. The console example prints `The answer is 42` and exits 0.
-Foreign signatures are runtime assumptions, separate from strict proof evidence.
+Foreign signatures and `@unsafe` definitions are runtime assumptions, separate
+from strict proof evidence. Executable checking allows an annotated definition
+to skip structural descent and use reusable function or local binders at Type.
+Ordinary quantity usage, erased-value restrictions, equality and holes remain
+checked. Annotations survive imports and instantiated templates. `check`, `eval`,
+the pure compilers and `serve` keep their strict proof boundary.
 Valid native file open/read/write requests suspend through bounded host workers while other
 tasks can run. The collector retains their pending continuations. Halt and
 cancellation discard queued work and release owned files; an OS call already

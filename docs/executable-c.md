@@ -4,7 +4,9 @@
 execution-only checked book. The compiler and type-directed lowering run in
 Rust. The generated program uses a CPU runtime with Bend's packed native value
 and foreign-effect interfaces. Strict proof checking remains a separate path;
-foreign results are runtime assumptions, not proofs.
+foreign results and `@unsafe` definitions are runtime assumptions, not proofs.
+Annotated definitions use the same generated dispatcher and runtime limits;
+their checking exceptions are described in [compatibility](compatibility.md).
 
 ```text
 teamy-bend compile example.bend --executable --target c --output example.c
