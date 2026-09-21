@@ -629,6 +629,7 @@ impl Generator<'_> {
                 if arguments.is_empty()
                     && let Some(mode) = legacy_tail_mode(result)
                     && legacy_call(expression)
+                    && !self.direct_native_application(expression)
                 {
                     // Preserve the final unary call as task control. Scalar
                     // casts and ownership travel with its result boundary,

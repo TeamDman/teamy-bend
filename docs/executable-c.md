@@ -133,6 +133,15 @@ worker-local allocation and scheduling. See the
 
 ## Specialization
 
+Fully supplied calls to recognized Base primitives and sealed numeric contracts
+emit their existing operation directly in the current generated body. Live
+arguments are evaluated once, from left to right; erased arguments have no
+runtime evaluation. Each operation still checks the shared step budget and
+cancellation. Partial applications and dynamic calls retain their closure ABI.
+Direct primitive tail results follow their value layout rather than becoming
+task controls. This removes primitive thunk/closure dispatch; general flat-call
+fusion and upstream borrowing analysis remain unfinished.
+
 Erased type arguments remain private compiler metadata. Direct calls specialize
 the full leading lambda telescope, including erased parameters of returned
 closures and those following live parameters. Local erased or type-valued aliases
@@ -230,11 +239,11 @@ printers borrow and release any temporary boxed views. Arrays preserve nested
 ownership through clone, get, replacement, swap, split and join. Exact per-cell
 metadata distinguishes references from raw words, including mixed finite sums.
 
-Reference-count cells preserve the native packed representation. Shared
-constructor extraction upgrades child references dynamically and writes their
-new wrappers back to the shared node. This is a correctness adaptation to the
-current generator: upstream instead expects those shared children to have been
-sealed by its ownership analysis. Captured closures are duplicated structurally;
+Reference-count cells preserve the native packed representation. Descendants
+are sealed before a constructor is published as shared, so shared extraction
+retains child references without rewriting the published payload. This runtime
+sealing supplies the sharing guarantees that upstream obtains from its ownership
+analysis. Captured closures are duplicated structurally;
 the foreign term_keep contract still refuses count cells for captured closures
 and tasks. Destruction and nested closure copying use iterative traversals.
 

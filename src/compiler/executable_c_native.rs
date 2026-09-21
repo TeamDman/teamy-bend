@@ -4,8 +4,15 @@
 
 use super::Body;
 use super::CompileError;
+use super::DefinitionBody;
+use super::ExecutableProgram;
+use super::Expression;
+use super::ExpressionKind;
 use super::Generator;
+use super::Quant;
+use super::Scope;
 use super::TermRef;
+use super::specialize_type;
 use crate::syntax::executable::NumericIntrinsic;
 
 pub(super) fn optimized(name: &str) -> bool {
@@ -53,7 +60,96 @@ pub(super) fn optimized(name: &str) -> bool {
     )
 }
 
+enum DirectCall {
+    Native,
+    Numeric(NumericIntrinsic),
+}
+
+/// Decide before consuming any operand: a partial application still creates a
+/// callable, and an unrelated definition with a builtin's name is ordinary code.
+fn direct_call(
+    program: &ExecutableProgram,
+    name: &str,
+    arguments: &[(&Expression, Quant)],
+) -> Option<DirectCall> {
+    let definition = program.definitions.get(name)?;
+    if !program.base_names.contains(name)
+        || definition.parameters.len() != arguments.len()
+        || definition
+            .parameters
+            .iter()
+            .zip(arguments)
+            .any(|(parameter, (_, quant))| parameter.quant != *quant)
+    {
+        return None;
+    }
+    match &definition.body {
+        DefinitionBody::Numeric(intrinsic)
+            if arguments.iter().filter(|(_, q)| *q != Quant::None).count() == intrinsic.arity() =>
+        {
+            Some(DirectCall::Numeric(*intrinsic))
+        }
+        DefinitionBody::Ordinary(_) if optimized(name) => Some(DirectCall::Native),
+        _ => None,
+    }
+}
+
 impl Generator<'_> {
+    /// A direct primitive produces its value immediately, including in tail
+    /// position. Other applications may return task control to the dispatcher.
+    pub(super) fn direct_native_application(&self, expression: &Expression) -> bool {
+        let mut head = expression;
+        let mut arguments = Vec::new();
+        while let ExpressionKind::Apply {
+            function,
+            argument,
+            quant,
+        } = &head.kind
+        {
+            arguments.push((argument.as_ref(), *quant));
+            head = function;
+        }
+        let ExpressionKind::Definition(name) = &head.kind else {
+            return false;
+        };
+        arguments.reverse();
+        direct_call(self.program, name, &arguments).is_some()
+    }
+
+    /// Upstream `emit_intr` evaluates its live operands in order before emitting
+    /// the primitive. Keep that order and the existing helpers' representations,
+    /// ownership, Array layout checks and numeric edge behavior.
+    pub(super) fn direct_native(
+        &mut self,
+        name: &str,
+        arguments: &[(&Expression, Quant)],
+        scope: &mut Scope,
+        output: &mut Body,
+    ) -> Result<Option<String>, CompileError> {
+        let Some(call) = direct_call(self.program, name, arguments) else {
+            return Ok(None);
+        };
+        let mut values = Vec::new();
+        for (argument, quant) in arguments {
+            if *quant != Quant::None {
+                let value = self.expression(argument, scope, output, false)?;
+                values.push(self.hold(output, &value)?);
+            }
+        }
+        // Removing closure dispatch must retain an aggregate step-budget and
+        // cancellation boundary for each executed primitive.
+        output.push_str("  tb_tick();\n");
+        let value = match call {
+            DirectCall::Native => {
+                let substitutions = self.instantiation(name, arguments);
+                let ty = specialize_type(&self.program.definitions[name].ty, &substitutions);
+                self.native(name, &ty, &values, output)?
+            }
+            DirectCall::Numeric(intrinsic) => self.numeric(intrinsic, &values, output)?,
+        };
+        Ok(Some(value))
+    }
+
     pub(super) fn native(
         &mut self,
         name: &str,

@@ -1891,6 +1891,58 @@ that exact binary before publication. Whole upstream C and Unix execution,
 measured speedup, worker-local allocator optimization, remaining specialization
 and GPU/window/audio remain unverified or unfinished; task 5.15 stays active.
 
+#### [x] 5.15.3 Lower saturated native primitives directly
+
+Work: follow upstream's direct primitive emission for statically known,
+fully supplied native and sealed numeric operations. Evaluate live arguments
+once in source order, preserve erased arguments and specialized Array layouts,
+and emit the existing operation in the current generated body. Retain a budget
+and cancellation check. Partial applications and dynamic callable values keep
+their closure ABI. Flat segment tails must distinguish direct primitive values
+from pending task controls, including raw words, finite sums and owned results.
+
+Validation: reproduce the arithmetic-loop dispatch overhead before editing;
+run exact generated C with a bounded step/storage budget, partial/returned
+closures, owned Array copy-on-write, numeric text, failure ordering and worker
+counts one/two/four. Compare complete positive programs with actual upstream
+JavaScript and inspect upstream C generation. Record before/after measurements
+separately from semantic evidence. Complete the standard gate and exact-release
+Poche regressions before publication. This advances CPU optimization without
+claiming full flat-call fusion, borrowed-parameter analysis or allocator parity.
+
+Completion: known saturated native and numeric calls now emit their existing
+operation directly, with sealed-origin, exact arity and quantity checks before
+consuming operands. Flat segment tails route those results as values, preserving
+raw words, boxed owners and finite layouts. Partial/dynamic calls keep existing
+dispatch. Seven new grouped tests cover the planned boundaries. The standard
+gate passes 674 tests, including five compile-fail examples, with two optional
+profilers ignored; strict workspace library/test Clippy also passes.
+
+Five unchanged source programs pass fresh upstream checking, C generation and
+JavaScript execution. The frozen compiler produces seven exact native-output
+matches, including the fork at one, two and four workers. Whole upstream C
+remains unexecuted. Only three compiler files differ from the preceding
+multicore release among 120 compiled sources; the other 117, including parser,
+checker, Base and runtimes, are byte-identical. The strict fixture audit retains
+its prior attribution and was not rerun.
+
+The same 1,000-iteration arithmetic program uses 4,009 VM steps instead of
+22,015 and now fits the tracked 18,000-step budget with unchanged output and
+zero retained owners. A separate MSVC /O2 Windows measurement observes a median
+1.205 ms per complete invocation versus 2.542 ms previously. Each measurement
+has 20 warmup invocations followed by seven groups of ten; timing includes VM
+initialization, printing and teardown. These are local single-workload results,
+not a whole-engine or multicore speedup claim. Receipts are retained under
+target/direct-intrinsics-reference. Retain the clean release and run existing
+Poche regressions before publication; keep task 5.15 and the full goal active.
+
+Reconnaissance also identifies higher-order Array specialization as remaining
+work. A generic producer can use a boxed field while a concrete consumer uses
+packed words; successful upstream C generation alone does not prove the layouts
+agree. Preserve the current stability guard until callable/type-use analysis
+or a complete representation boundary establishes compatibility. Do not weaken
+it to accept more fixtures without runtime-layout evidence.
+
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
 Work: preserve the two upstream `@unsafe` exceptions using an explicit local

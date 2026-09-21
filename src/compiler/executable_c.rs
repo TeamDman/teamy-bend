@@ -770,6 +770,9 @@ impl Generator<'_> {
                 arguments.reverse();
                 let mut remaining = arguments.iter().filter(|(_, q)| *q != Quant::None).count();
                 let mut function = if let ExpressionKind::Definition(name) = &head.kind {
+                    if let Some(value) = self.direct_native(name, &arguments, scope, output)? {
+                        return Ok(value);
+                    }
                     let substitutions = self.instantiation(name, &arguments);
                     if forks::required_arguments(self.program, name)
                         .is_some_and(|required| remaining >= required)
