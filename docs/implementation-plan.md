@@ -23,6 +23,8 @@
   remains in progress. Windows native builds, generated GPU controls and
   persistent CUDA caching are complete (5.15.6). Broader GPU program coverage,
   helper yielding, memory sizing and platform behavior remain next engine work.
+  Host corpus commitment is complete (5.15.7.1); resumable device allocation
+  helpers and full GPU backing/default sizing remain next (5.15.7).
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -2196,9 +2198,9 @@ is quiescent. Even demand mapping requires a managed or overflow strategy when
 values plus separate metadata exceed physical memory. This full milestone stays
 open until those contracts are implemented and qualified.
 
-##### [~] 5.15.7.1 Commit host corpus storage as the used prefix grows
+##### [x] 5.15.7.1 Commit host corpus storage as the used prefix grows
 
-Current focus: replace full-capacity host calloc with stable virtual reservations
+Completed implementation: replaced full-capacity host calloc with stable virtual reservations
 for values and ownership metadata. Commit both prefixes before publishing a
 fresh allocation or importing a validated GPU result. Preserve logical limits,
 pointer stability, free-list contents and shutdown ordering; never restart a
@@ -2234,8 +2236,17 @@ matches actual upstream JavaScript. Whole upstream C remains unexecuted.
 Initial focused-test failures were test C signedness warnings and unsupported
 direct tuple destructuring; actual upstream checking confirms that original
 syntax is also invalid. The parameter-match form passes both implementations.
-Independent production review found no defects. Clean release retention,
-exact-release Poche regressions and publication remain pending for this task.
+Independent production review found no defects. Implementation `fa97c9d` has a
+retained clean release whose 143 source/resource and 85 validation fingerprints
+match the frozen candidate. Its exact-release Poche regressions pass seven
+symbolic privacy laws, three imported equalities and one typed negative control;
+15,503 scalar cases with seven equalities and two controls; and the bounded
+trajectory with 22 states, 44 observations, 21 transitions, 300 chance partitions,
+eight controls and 67 requests in 298 ms. All seventeen source hashes, thirteen
+compiled fingerprints, Poche HEAD and dirty paths remain unchanged. No Poche
+source edits, commits or pushes were made. Historical exhaustive and sanitizer
+evidence retains its original attribution; neither was rerun for this milestone.
+The broad GPU storage milestone and full engine/formalization goal remain active.
 
 The baseline release additionally qualified four unchanged upstream programs:
 closure lists, plain-record reachability and compile-time offload with its
