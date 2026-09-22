@@ -6,6 +6,7 @@
 use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
+use super::DEVICE_ARRAY_NEW_STATE_WORDS;
 use super::ExecutableProgram;
 use super::FunctionResult;
 use super::Generator;
@@ -342,12 +343,11 @@ impl Generator<'_> {
     ) -> Result<String, CompileError> {
         let array_ty = find_array_type(self.program, ty, 0)?
             .ok_or_else(|| CompileError::new(format!("C {name} needs a specialized Array type")))?;
+        if name == "Array.new" {
+            return self.array_new(&array_ty, arguments, output);
+        }
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
-        let a = if name == "Array.new" {
-            arguments[0].clone()
-        } else {
-            self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?
-        };
+        let a = self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?;
         if name == "Array.clone" {
             let clone = self.hold(output, &format!("tb_c_blk_copy(e, {a})"))?;
             return self.construct("Tuple", &[a.clone(), clone], output);
@@ -363,23 +363,6 @@ impl Generator<'_> {
             );
         }
         let conversion = self.conversion_use(&layout, output)?;
-        if name == "Array.new" {
-            let array = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
-            writeln!(
-                output,
-                "  tb_unbox_{conversion}(e, {}, {array});",
-                arguments[1]
-            )
-            .unwrap();
-            let mask = self.ownership_mask(&layout, &array, output)?;
-            return self.hold(
-                output,
-                &format!(
-                    "tb_c_blk_new(e, {arr}, {a}, {lgs}, {}, {array}, {mask})",
-                    layout.words.len()
-                ),
-            );
-        }
         let offset = self.hold(output, &format!("blk_at({a}, {}, {lgs})", arguments[1]))?;
         let previous = if name == "Array.get" || name == "Array.swap" {
             let cells = (0..layout.words.len())
@@ -414,6 +397,48 @@ impl Generator<'_> {
         } else {
             Ok(a.clone())
         }
+    }
+
+    fn array_new(
+        &mut self,
+        array_ty: &TermRef,
+        arguments: &[String],
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let (arr, lgs, layout) = self.array_layout(array_ty)?;
+        let depth = self.hold(output, &arguments[0])?;
+        let conversion = self.conversion_use(&layout, output)?;
+        let values = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
+        writeln!(
+            output,
+            "  tb_unbox_{conversion}(e, {}, {values});",
+            arguments[1]
+        )
+        .unwrap();
+        let mask = self.ownership_mask(&layout, &values, output)?;
+        let operands = format!("e, {arr}, {depth}, {lgs}, {}, {values}", layout.words.len());
+        let synchronous = format!("tb_c_blk_new({operands}, {mask})");
+        if !output.can_suspend || layout.words.contains(&Kind::Box) {
+            return self.hold(output, &synchronous);
+        }
+
+        // The resume label follows every operand evaluation and ownership
+        // transfer. Only raw fields may be reused without nested duplication.
+        let result = self.hold(output, "0")?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_ARRAY_NEW_STATE_WORDS])?;
+        output.resumes += 1;
+        let pc = output.resumes;
+        let yielded = if output.words {
+            "tb_segment_yield()"
+        } else {
+            "0"
+        };
+        writeln!(
+            output,
+            "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_new_raw({operands}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif"
+        )
+        .unwrap();
+        Ok(result)
     }
 
     #[expect(

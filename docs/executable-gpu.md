@@ -91,9 +91,23 @@ growth; its default is three times `BEND_MAX_ALLOC`. Device scratch defaults to
 half `BEND_MAX_ALLOC` and can be configured with `BEND_MAX_GPU_SCRATCH`.
 
 `BEND_GPU_BLOCKS`, `BEND_GPU_THREADS` and `BEND_GPU_QUANTUM` configure bounded
-dispatch launches. Long individual value-helper traversals still need broader
-watchdog and cancellation qualification; a dispatch quantum alone does not make
-every helper preemptible. Expected device errors record their first diagnostic
+dispatch launches. `BEND_GPU_PRIMITIVE_QUANTUM` controls the work slice for raw
+`Array.new` initialization and filling (default 1,024 units, range 1–4,096).
+Its host compile definition is included in the generated CUDA source and cache
+identity. A unit initializes one corpus word and its metadata, or fills one
+logical element slot. Packed words, raw wide fields and zero-word elements use
+this path; layouts containing boxed fields still use the synchronous helper.
+
+Resumable arrays retain their evaluated operands and private allocation in the
+current generated frame. A yield does not replay seed evaluation, unboxing or
+allocation. The result becomes available only after initialization and filling
+finish. Slice changes preserve the suspended logical dispatch and its remaining
+quantum; primitive requeues and empty queue probes do not consume language steps.
+The host checks actual step, primitive-work or requeue progress between launches.
+
+Other long value-helper traversals still need broader watchdog and cancellation
+qualification; a dispatch quantum alone does not make every helper preemptible.
+Expected device errors record their first diagnostic
 and end the affected lanes; lock waiters observe the same cancellation flag.
 The host discards the failed invocation without importing its partially changed
 heap. Budget failures therefore preserve the specific Bend diagnostic and allow
@@ -116,8 +130,12 @@ offloads a base-case input in a second invocation of the same generated program.
 Two nested-conversion tests separately prove that helper depth can exceed a
 one-continuation limit and that its own lower depth limit is enforced. The
 first execution milestone has twelve passing hardware cases. The current suite
-passes twenty-two, adding cache lifecycle, kernel-contract startup checks and actual
-native CLI build/relocation coverage, plus host commitment growth and recovery. The portable gate skips all twenty-two explicitly.
+passes twenty-nine, adding cache lifecycle, kernel-contract startup checks and
+actual native CLI build/relocation coverage, host commitment growth and recovery,
+and resumable raw allocation. The portable gate skips all twenty-nine explicitly.
+The current standard gate passes 717 tests with 31 skips, comprising those
+hardware tests and two optional local profilers. Strict workspace/library/test
+Clippy also passes. These counts describe validation, not a parity percentage.
 
 Two host-storage tests return a GPU-created 4,096-element U32 array whose heap
 span exceeds the host's existing committed prefix. Both host arrays grow before
@@ -127,8 +145,36 @@ download runs, no CPU replay occurs, all resources release and the identical
 program then succeeds in the same process. The expected value also matches
 freshly executed upstream JavaScript for that complete Bend source.
 
-Each of the first twelve cases also has an exact generated-executable Compute
-Sanitizer pass from the `e2ae6ed` milestone. These sanitizer results retain that
+Resumable primitive tests compare slices of one and 4,096 work units. Typed
+creation, dynamic closures and mixed sibling work return identical results with
+identical logical step counts despite extra launches. Per-operation observations
+check stable operands, single seed evaluation/unboxing/reservation/completion,
+monotonic work and full payload/metadata, including padding and wide values.
+Interrupted initialization and capacity refusal permit same-process recovery.
+Separate host snapshot faults reject invalid counters, stalled work and pending
+ownership before importing the device heap. Actual generated command-line tests
+also verify that explicit GPU spans raise or lower the shared CPU corpus limit.
+
+A separate dynamic-closure probe uses dispatch quantum four to cross a resumed
+READY boundary. Both primitive slice sizes return 12351 in 27 language steps.
+A test-only mutation resetting the saved dispatch turn to zero produces 26
+steps, confirming that this probe detects lost dispatch accounting.
+
+All thirteen exact retained executables for the current raw-allocation work
+pass Compute Sanitizer memcheck: twelve primitive cases and the host-progress
+fault/recovery program. Expected output and diagnostics match, every sanitizer
+summary reports zero errors, and no timeout or retry occurred. Source,
+validation and executable fingerprints remain unchanged. These executables
+retain their test observers; this is scoped memory-checking evidence, not a
+performance result. The current candidate also repeats all twenty-two CPU/GPU
+comparisons across eleven unchanged original upstream programs, with eleven
+prebuilds that skip main and ten marked warm GPU runs recording a cache hit,
+zero NVRTC compilations, five persistent allocations and complete cleanup.
+Whole upstream C remains unexecuted. The milestone still awaits its
+clean-release Poche checks.
+
+Each of the first execution milestone's twelve cases also has an exact
+generated-executable Compute Sanitizer pass from the `e2ae6ed` milestone. These sanitizer results retain that
 attribution. One recursive-fork invocation timed out under instrumentation; four
 unchanged reruns completed in about three seconds with zero errors. The first
 timeout is retained as an unexplained validation observation. No source,
@@ -146,6 +192,12 @@ launch dimensions or timeout was changed for those reruns.
   device overlap do not establish a speedup.
 
 The [implementation plan](implementation-plan.md) retains these requirements.
+The next bounded helper task persists sealing and duplication, starting at
+explicit generated duplication calls. It must retain traversal state and owner
+transitions across yields before synchronous callers can use the same nested
+operation. Device buffers remain fully backed during that work. Stable device
+reservations, demand backing, exact default sizing and residency/overflow
+behavior remain separate required work.
 The [Makepad and teamy-tts references](gpu-port-references.md) informed persistent
 resources, explicit transfers and ordered work submission. Their reported
 performance improvements are not Bend benchmark results.

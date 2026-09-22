@@ -2,6 +2,7 @@
 //! CUDA assembly from the same typed resumes used by the CPU dispatcher.
 
 use super::CompileError;
+use super::DEVICE_ARRAY_NEW_STATE_WORDS;
 use super::DefinitionBody;
 use super::ExecutableProgram;
 use super::Expression;
@@ -190,6 +191,8 @@ impl Generator<'_> {
         source.push_str("  default: return;\n  }\n}\n");
         source.push_str(include_str!("executable_device_control.h"));
         source.push_str(include_str!("executable_device_tasks.cu"));
+        source.push_str(include_str!("executable_device_primitives.cu"));
+        writeln!(source, "#if TB_DEVICE_ARRAY_NEW_STATE_WORDS != {DEVICE_ARRAY_NEW_STATE_WORDS}\n#error incompatible generated Array.new state layout\n#endif").unwrap();
         source.push_str(include_str!("executable_value_bridge.c"));
         source.push_str(
             "INLINE Term tb_impossible(void) { err_fail(\"entered an impossible match\"); }\n",
@@ -227,7 +230,7 @@ impl Generator<'_> {
                 )
                 .unwrap();
             } else {
-                writeln!(source, "  case {}: *frame->result = tb_resume_{id}(e, frame); return term_tag(*frame->result) == TAG_TSK ? tb_segment_task(*frame->result) : tb_segment_words(frame->result, NULL, 1);", id + 2).unwrap();
+                writeln!(source, "  case {}: {{ Term result = tb_resume_{id}(e, frame); if (frame->yielded) return tb_segment_yield(); *frame->result = result; return term_tag(result) == TAG_TSK ? tb_segment_task(result) : tb_segment_words(frame->result, NULL, 1); }}", id + 2).unwrap();
             }
         }
         source.push_str("  default: err_fail(\"host-only or unknown GPU function\");\n  }\n}\n");

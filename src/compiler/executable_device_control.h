@@ -11,6 +11,8 @@ struct TBDeviceControl {
   u64 dispatches, direct_calls, reused_calls, forks, launches;
   u64 lanes_seen[4];
   u64 helper_depths, helper_live, helper_calls;
+  u64 primitive_progress, primitive_starts, primitive_yields, primitive_requeues;
+  u32 primitive_live;
   u32 helper_lanes, helper_limit, helper_peak;
   u32 ready_count, completed_count, live_runs, live_records, live_frames;
   u32 run_limit, task_limit, frame_limit;

@@ -15,6 +15,9 @@
 #ifndef BEND_GPU_QUANTUM
 #define BEND_GPU_QUANTUM 64u
 #endif
+#ifndef BEND_GPU_PRIMITIVE_QUANTUM
+#define BEND_GPU_PRIMITIVE_QUANTUM 1024u
+#endif
 #ifndef TB_GPU_COMPLETE
 #define TB_GPU_COMPLETE(control, state, info) ((void)0)
 #endif
@@ -58,7 +61,17 @@ static bool tb_gpu_prepare(bool prebuild) {
     "tb_device_initialize", "tb_device_tables_initialize", "tb_device_tasks_begin",
     "tb_device_tasks_commit", "tb_device_tasks_step"
   };
-  size_t length = 0, at = 0;
+  /* Include the slice size in the compiled source and therefore the persistent
+   * cache identity. Host compiler definitions do not otherwise reach NVRTC. */
+  u64 primitive_quantum = BEND_GPU_PRIMITIVE_QUANTUM;
+  if (primitive_quantum == 0 || primitive_quantum > 4096)
+    return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "invalid CUDA primitive quantum");
+  char prefix[80];
+  int prefix_length = snprintf(prefix, sizeof(prefix),
+    "#define BEND_GPU_PRIMITIVE_QUANTUM %u\n", (u32)primitive_quantum);
+  if (prefix_length < 0 || (size_t)prefix_length >= sizeof(prefix))
+    return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA source prefix is too large");
+  size_t length = (size_t)prefix_length, at = length;
   for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
     size_t count = strlen(tb_gpu_source_parts[i]);
     if (length == SIZE_MAX || count > SIZE_MAX - length - 1)
@@ -67,6 +80,7 @@ static bool tb_gpu_prepare(bool prebuild) {
   }
   char *source = (char *)malloc(length + 1);
   if (source == NULL) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA source allocation failed");
+  memcpy(source, prefix, at);
   for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
     size_t count = strlen(tb_gpu_source_parts[i]);
     memcpy(source + at, tb_gpu_source_parts[i], count); at += count;
@@ -155,9 +169,11 @@ static TBOutcome tb_gpu_execute(Env e, Term root) {
   tb_gpu_require(tb_cuda_launch("tb_device_tables_initialize", 1, 1, NULL));
   tb_gpu_require(tb_cuda_launch("tb_device_tasks_begin", 1, 1, begin));
   tb_gpu_require(tb_cuda_launch("tb_device_tasks_commit", 1, 1, advance));
-  /* Each launch executes a bounded segment quantum. The host synchronizes at
-   * these yields, retaining all device frames and graph queues in scratch. */
-  u64 rounds = 0;
+  /* Each launch executes bounded segment/primitive work. Primitive slices and
+   * their completed-to-ready transfers are progress, not new language steps.
+   * Retain frames and queues while requiring an actual advance each round. */
+  u64 previous_steps = initial_steps, previous_progress = 0, previous_requeues = 0;
+  u64 previous_starts = 0, previous_yields = 0;
   for (;;) {
     tb_gpu_require(tb_cuda_launch("tb_device_tasks_step", BEND_GPU_BLOCKS, BEND_GPU_THREADS, advance));
     tb_gpu_require(tb_cuda_launch("tb_device_tasks_commit", 1, 1, advance));
@@ -170,9 +186,22 @@ static TBOutcome tb_gpu_execute(Env e, Term root) {
         state.error_text[0] == 0 ? "CUDA task execution failed" : state.error_text);
       tb_gpu_fail(tb_cuda_error());
     }
+    if (state.steps < previous_steps || state.steps > BEND_MAX_STEPS
+        || state.step_limit != BEND_MAX_STEPS
+        || control.primitive_progress < previous_progress
+        || control.primitive_requeues < previous_requeues
+        || control.primitive_starts < previous_starts || control.primitive_yields < previous_yields
+        || control.primitive_requeues > control.primitive_yields
+        || control.primitive_yields > control.primitive_progress
+        || control.primitive_live > control.primitive_starts)
+      tb_gpu_fail("invalid CUDA progress boundary");
     if (control.done != 0) break;
-    if (rounds == UINT64_MAX || ++rounds > BEND_MAX_STEPS)
-      tb_gpu_fail("CUDA scheduling budget exhausted");
+    if (state.steps == previous_steps && control.primitive_progress == previous_progress
+        && control.primitive_requeues == previous_requeues)
+      tb_gpu_fail("CUDA task graph made no progress");
+    previous_steps = state.steps; previous_progress = control.primitive_progress;
+    previous_requeues = control.primitive_requeues; previous_starts = control.primitive_starts;
+    previous_yields = control.primitive_yields;
     if (control.ready_count == 0 && control.completed_count == 0 && control.adopt_head == 0)
       tb_gpu_fail("incomplete CUDA task graph");
   }
@@ -184,7 +213,7 @@ static TBOutcome tb_gpu_execute(Env e, Term root) {
       || state.scratch_bump > scratch_words || state.scratch_live != 0
       || control.done != 1 || control.live_runs != 0 || control.live_records != 0
       || control.live_frames != 0 || control.ready_count != 0 || control.completed_count != 0
-      || control.helper_depths != 0 || control.helper_live != 0
+      || control.helper_depths != 0 || control.helper_live != 0 || control.primitive_live != 0
       || control.helper_lanes != helper_lanes || control.helper_limit != BEND_MAX_FRAMES
       || control.helper_peak > control.helper_limit
       || control.adopt_head != 0 || control.lock != 0 || control.active_lanes != 0

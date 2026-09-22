@@ -40,6 +40,8 @@ mod values;
 type Scope = BTreeMap<usize, OwnedLocal>;
 type Substitutions = BTreeMap<usize, TermRef>;
 
+const DEVICE_ARRAY_NEW_STATE_WORDS: usize = 8;
+
 #[derive(Clone)]
 struct OwnedLocal {
     value: String,
@@ -247,6 +249,7 @@ struct Body {
     slots: usize,
     resumes: usize,
     words: bool,
+    can_suspend: bool,
     dependencies: BodyDependencies,
 }
 
@@ -263,14 +266,22 @@ impl Body {
             slots: 0,
             resumes: 0,
             words: false,
+            can_suspend: false,
             dependencies: BodyDependencies::default(),
+        }
+    }
+
+    fn new_resumable(text: &str) -> Self {
+        Self {
+            can_suspend: true,
+            ..Self::new(text)
         }
     }
 
     fn new_segment() -> Self {
         Self {
             words: true,
-            ..Self::new("")
+            ..Self::new_resumable("")
         }
     }
 
@@ -288,6 +299,10 @@ impl Body {
     /// Scratch cells retain stale aliases as well as live values; the runtime
     /// frees this storage without treating every cell as an owned root.
     fn resumable(self, id: usize) -> String {
+        assert!(
+            self.can_suspend,
+            "synchronous helper cannot become a resume"
+        );
         let result_type = if self.words { "TBOutcome" } else { "Term" };
         let mut source = format!(
             "static TB_NOINLINE {result_type} tb_resume_{id}(const Env *e, TBCallFrame *tb_frame) {{\n  Term *tb_values = tb_frame->values;\n  const Term *captures = tb_frame->captures;\n  Term argument = tb_frame->argument;\n  (void)e; (void)tb_values; (void)captures; (void)argument;\n  switch (tb_frame->pc) {{\n  case 0: break;\n"
@@ -308,6 +323,7 @@ impl Body {
         arguments: &str,
         result: FunctionResult,
     ) -> String {
+        assert!(!self.can_suspend, "resumable body needs a persistent frame");
         assert_eq!(self.resumes, 0, "synchronous helper cannot suspend");
         let returns_term = matches!(result, FunctionResult::Term);
         let result_type = if returns_term { "Term" } else { "void" };
@@ -485,7 +501,7 @@ impl Generator<'_> {
             .get(name)
             .ok_or_else(|| CompileError::new(format!("missing executable definition {name}")))?
             .clone();
-        let mut output = Body::new("  tb_c_drop(e, argument);\n  tb_tick();\n");
+        let mut output = Body::new_resumable("  tb_c_drop(e, argument);\n  tb_tick();\n");
         let live = definition
             .parameters
             .iter()
@@ -717,7 +733,7 @@ impl Generator<'_> {
             return final_body(self, arguments, output);
         }
         let id = self.reserve_closure(arguments.len())?;
-        let mut body = Body::new("  (void)e; (void)captures; (void)argument;\n");
+        let mut body = Body::new_resumable("  (void)e; (void)captures; (void)argument;\n");
         let mut next = (0..arguments.len())
             .map(|index| format!("captures[{index}]"))
             .collect::<Vec<_>>();
@@ -806,7 +822,7 @@ impl Generator<'_> {
             .collect::<Vec<_>>();
         let id = self.reserve_closure(captures.len())?;
         let mut inner = Scope::new();
-        let mut body = Body::new("  (void)e; (void)captures; (void)argument;\n");
+        let mut body = Body::new_resumable("  (void)e; (void)captures; (void)argument;\n");
         let body_uses = match &expression.kind {
             ExpressionKind::Lambda { body, .. } => runtime_uses(self.program, body),
             _ => BTreeMap::new(),
@@ -1084,7 +1100,7 @@ impl Generator<'_> {
         let id = self.reserve_closure(captures.len() + bindings.len())?;
         output.dependencies.fids.insert(id);
         let mut inner = Scope::new();
-        let mut body = Body::new("  tb_c_drop(e, argument);\n");
+        let mut body = Body::new_resumable("  tb_c_drop(e, argument);\n");
         for (index, variable) in captures
             .iter()
             .copied()

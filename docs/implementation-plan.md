@@ -23,8 +23,11 @@
   remains in progress. Windows native builds, generated GPU controls and
   persistent CUDA caching are complete (5.15.6). Broader GPU program coverage,
   helper yielding, memory sizing and platform behavior remain next engine work.
-  Host corpus commitment is complete (5.15.7.1); resumable device allocation
-  helpers and full GPU backing/default sizing remain next (5.15.7).
+  Host corpus commitment is complete (5.15.7.1). Raw device array suspension is
+  implemented and undergoing clean-release and Poche regression
+  validation (5.15.7.2). Persistent sealing and duplication are the next bounded
+  helper task (5.15.7.3); full GPU backing, default sizing and residency remain
+  required by 5.15.7.
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -47,6 +50,14 @@ remains the main unfinished work. Existing bounded Poche evidence is useful
 validation, not a claim of whole-game/application correctness and not a silent
 redefinition of the final requested formalization. Resolve any additional
 formalization acceptance scope before declaring the overall goal complete.
+
+The earlier informal 55–65% estimate was not based on a complete, weighted
+inventory of upstream behavior. Do not use it as a reliable completion or
+remaining-effort estimate. The strict audit accepts 364 of 853 expected-positive
+fixtures (42.7%); this measures strict-mode acceptance, not executable CPU/GPU
+behavior or whole-goal completion. Neither that ratio nor test totals establish
+whether the engine is more than halfway ported. Report supported behavior by
+execution mode, remaining contracts and their validation boundaries instead.
 
 The goal tool now reports active. When GPU work becomes the active phase, read
 [GPU port references](gpu-port-references.md); exact local checkout locations are
@@ -2254,6 +2265,123 @@ ordinary-definition control. Eight CPU-off/GPU-on executions match actual
 upstream JavaScript output/status; all four GPU runs record real offloads and
 warm cache reuse. These expand the prior seven-program baseline without proving
 whole-upstream-C parity or a speedup. The frozen host-storage candidate repeats all eight additional comparisons successfully.
+
+##### [~] 5.15.7.2 Resume raw device array allocation across bounded work slices
+
+Work: retain evaluated operands and an eight-word operation state in generated
+continuations. Raw Array.new layouts, including packed words, raw wide values
+and zero-word elements, reserve their block once and initialize and fill it in
+bounded slices. Publish the resulting array only after completion. The compiler
+must distinguish resumable bodies from synchronous conversion/printer helpers;
+both typed results and scalar closures need the same yield boundary. CPU
+execution keeps its synchronous array helper.
+
+The device dispatcher preserves its current frame, logical dispatch charge and
+remaining dispatch quantum across a primitive yield. Commit accounting charges
+actual ordinary events and adoption, but not empty queue probes or primitive
+requeues. Empty probes were previously charged; retaining that incidental count
+cannot also preserve step counts when chunk sizes change the interleaving of
+sibling tasks. Host scheduling must observe actual logical or primitive progress
+or a completed primitive's requeue instead of charging each extra launch against
+the language step budget. No
+partially executed function, argument evaluation or unboxing may be replayed.
+
+Parallel ownership: the compiler track owns resumable lowering and CUDA source
+assembly; the runtime track owns device primitive storage, scheduler integration
+and its transfer counters; the validation track owns generated CUDA tests; the
+coordinator owns host progress checks, documentation and release validation.
+
+Progress: the frozen candidate captures 144 source/resource inputs and 88
+validation inputs. The standard gate passes 717 tests with 31 explicit skips;
+strict workspace/library/test Clippy and all 29 CUDA hardware tests pass. Twelve
+new primitive executions compare small and large slices, retaining identical
+step counts for typed calls (18), dynamic closures (26) and mixed siblings (107)
+while increasing actual launch counts. The observers check one seed evaluation,
+unboxing, reservation and completion per operation, stable operands, advancing
+initialization/fill cursors and complete payload/metadata. Packed depth-zero,
+three-field padding, Unit and wide Nat layouts pass. Initialization interruption
+and capacity failure preserve ownership boundaries and permit the same program
+to succeed in a fresh invocation within the same process.
+
+Three host snapshot faults separately reject invalid progress counters, a
+stalled snapshot and unfinished ownership at completion before heap import;
+each allows same-process recovery. Real generated argv tests independently
+raise and lower the shared CPU capacity through explicit GPU spans. Eight exact
+fixture programs match freshly executed upstream JavaScript, with generated
+upstream C retained but unexecuted. The original Unit fixture used its type name
+as a value and was also rejected upstream; the corrected constructor form
+matches both implementations. Warnings/string delimiters/cold-cache diagnostic
+expectations were corrected without changing production workloads or budgets.
+The fresh complete strict audit preserves 364 accepted positives, 489 positive
+refusals and all 449 negative refusals, with zero abnormal exits, accepted
+negative controls or lost positive acceptances. Compute Sanitizer memcheck
+passes all thirteen exact retained executables: the twelve primitive cases and
+the host-progress fault/recovery program. Each matches its expected output and
+diagnostics and reports zero errors, with no timeout or retry. Frozen source,
+validation and executable identities remain unchanged. These instrumented test
+programs do not establish general performance or platform parity.
+
+A separate dispatch-quantum probe uses the dynamic closure with quantum four.
+Both primitive slice sizes return 12351 in 27 language steps; the tiny-slice
+path reaches a resumed READY boundary. A test-only mutation resetting the saved
+dispatch turn to zero produces 26 steps, demonstrating that the probe detects
+lost dispatch accounting. Earlier probes that did not reach that boundary are
+not sufficient evidence for this contract.
+
+The current candidate matches all twenty-two CPU-off/GPU-on comparisons across
+eleven unchanged original upstream programs. Eleven prebuilds skip main; all
+ten marked warm GPU runs record a cache hit, zero NVRTC compilations, five
+persistent allocations and complete cleanup. The inert program touches no CUDA.
+Whole upstream C remains unexecuted. Retained clean-release Poche validation is
+pending; keep this task in progress until those release checks complete.
+
+Validation: identical Bend programs with small and large primitive slices must
+produce identical outputs and logical step counts while exhibiting different
+CUDA launch counts. Cover typed and scalar closure entry, mixed sibling work,
+once-only seed evaluation/unboxing/reservation/publication, packed boundaries and
+raw layout padding. Exercise mid-initialization failure with no CPU replay and
+same-process recovery, capacity refusal before allocator mutation, and actual
+CLI-selected CPU corpus capacity. Run the standard gate, strict Clippy, the full
+CUDA hardware suite and fresh upstream comparisons, then retain a clean release
+and run the existing Poche regressions before publication.
+
+This is a prerequisite for device backing requests. Device buffers remain fully
+allocated during this step. Boxed-element duplication and other allocation
+helpers still require persistent nested ownership state; full memory sizing,
+residency/overflow, platform and performance contracts remain in 5.15.7 and U6.
+
+##### [ ] 5.15.7.3 Persist device sealing and duplication across yields
+
+Work: make the explicit generated duplication path resumable while retaining
+fully backed device buffers. Persist its owner reference, result destination,
+traversal stack and phase using corpus/scratch offsets rather than lane-local
+pointers. Bound traversal and allocation initialization. Preserve the exact
+ownership transition around each child rewrite, seal publication, reference
+cell allocation and clone-shell allocation; resume the same operation without
+repeating a retain, transfer or publication.
+
+This supplies a dependency for shared constructor extraction, borrowed fields,
+boxed array operations and closure duplication. It does not make every
+synchronous conversion or array helper resumable. Record each allocating call
+chain as nonallocating, provably bounded, or dependent on persistent nested
+operations. Fixed-size helpers may later use exact reservation credits that
+respect free-list reuse; checking available space and releasing the lock is
+insufficient when sibling lanes can consume it.
+
+Validation: force yields before a child reference-cell allocation and after an
+earlier child has been sealed. Compare outputs and logical steps across slice
+sizes, observe ownership transitions once, retain sibling independence, and
+exercise cancellation, allocation refusal and same-process recovery. Cover
+typed and scalar closure callers, sharing and nested captures. Qualify actual
+upstream programs and run the standard gate, strict Clippy, CUDA checks and
+release regressions before completing this bounded task.
+
+Device backing requests follow only after every reachable allocation path has
+a sufficient reservation or persistent wait state. Scratch exhaustion remains
+separate from corpus backing. Stable device reservations, prefix-preserving
+value/metadata growth while lanes are quiescent, the exact total-device-memory
+default and managed/overflow residency remain required by 5.15.7. This helper
+task does not substitute for those contracts or for platform/performance work.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

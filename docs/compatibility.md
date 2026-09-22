@@ -226,19 +226,40 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The completed host-corpus candidate audit on 2026-09-22 covered all 1,302 fixtures: 364 expected-positive programs
-checked, 489 expected-positive programs were rejected, and all 449 expected
-failures were rejected. There were zero abnormal exits and zero accepted
+The completed resumable-GPU candidate audit on 2026-09-22 covered all 1,302
+fixtures: 364 expected-positive programs checked, 489 expected-positive programs
+were rejected, and all 449 expected failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
 GPU reference parsing adds the two printer/offload_bang fixtures without losing
-a previously accepted positive. The host-corpus audit preserves every
+a previously accepted positive. The resumable-GPU audit preserves every
 previous positive acceptance. The current quality gate passes 717 tests,
 including five compile-fail examples, plus separate strict workspace/test Clippy.
-Twenty-two CUDA hardware tests pass separately; the portable gate skips those twenty-two
-and two optional local profilers. The frozen candidate also matches twenty-two
-upstream CPU-off/GPU-on output comparisons, eleven prebuild runs without main and
-ten warm GPU runs with zero NVRTC compilations. See [CUDA execution](executable-gpu.md)
-for sanitizer evidence, its recorded transient timeout and remaining work.
+Twenty-nine CUDA hardware tests pass separately; the portable gate skips those
+twenty-nine and two optional local profilers. The current candidate repeats all
+twenty-two upstream CPU-off/GPU-on output comparisons across eleven unchanged
+original programs. Eleven prebuilds skip main; ten marked warm GPU runs each
+record a cache hit, zero NVRTC compilations, five persistent allocations and
+complete cleanup. Its clean-release Poche checks remain pending.
+Eight additional complete programs qualify resumable raw-array layouts, typed
+and dynamic calls, sibling work and actual CLI-selected capacity against freshly
+executed upstream JavaScript. Small and large primitive slices retain identical
+logical step counts for the compared programs. This is bounded runtime evidence;
+device backing growth and the remaining allocating helpers are still unfinished.
+Thirteen exact retained raw-allocation and host-progress executables also pass
+Compute Sanitizer with zero errors, timeouts or retries. A separate closure
+probe crosses a resumed dispatch boundary: both slice sizes take 27 steps,
+while resetting the saved dispatch turn in a test-only mutant takes 26. See
+[CUDA execution](executable-gpu.md) for current and historical evidence; the
+earlier execution milestone's unexplained sanitizer timeout retains its own
+attribution.
+
+The 364 accepted positive fixtures are 42.7% of the 853 expected positives.
+This is not a whole-engine behavior denominator: strict-mode exclusions and
+resource limits contribute to refusals, and executable behavior is measured
+separately. Earlier informal 55–65% completion estimates lacked a weighted
+upstream inventory. Neither these audit counts nor passing test totals support
+a reliable overall completion percentage or a claim that half the work remains.
+
 The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows

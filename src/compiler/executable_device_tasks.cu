@@ -3,12 +3,13 @@
  * Copyright 2026 HigherOrderCO. CUDA offset storage and bounded launch phases:
  * TeamDman. See NOTICE and licenses/Apache-2.0.txt.
  * Include executable_device_control.h immediately before this source. */
-enum { TB_OUTCOME_WORDS = 0, TB_OUTCOME_TASK = 1, TB_OUTCOME_CALL = 2 };
+enum { TB_OUTCOME_WORDS = 0, TB_OUTCOME_TASK = 1, TB_OUTCOME_CALL = 2,
+       TB_OUTCOME_YIELD = 3 };
 struct TBOutcome { Term task; const Term *words, *owned; u32 count, pending; };
 struct TBCallFrame {
   size_t pc, destination;
   u32 expected, tail_result;
-  bool waiting;
+  bool waiting, yielded;
   Term *values;
   const Term *captures;
   Term argument;
@@ -22,6 +23,9 @@ INLINE TBOutcome tb_segment_words(const Term *words, const Term *owned, u32 coun
 }
 INLINE TBOutcome tb_segment_call(Fid fid, u32 count, const Term *words, const Term *owned) {
   TBOutcome result = {fid, words, owned, count, TB_OUTCOME_CALL}; return result;
+}
+INLINE TBOutcome tb_segment_yield(void) {
+  TBOutcome result = {0, NULL, NULL, 0, TB_OUTCOME_YIELD}; return result;
 }
 OUTLINE TBOutcome tb_device_resume(Fid fid, const Env *e, TBCallFrame *frame);
 enum { TB_RESULT_NONE = 0, TB_RESULT_RAW64 = 1, TB_RESULT_BOX64 = 3,
@@ -45,11 +49,13 @@ struct TBDeviceFrame {
   Term argument, result;
   u32 fid, slots, pc, destination, expected, tail_result, saved_result, waiting;
 };
-enum { TB_DEVICE_RUN_READY, TB_DEVICE_RUN_WORDS, TB_DEVICE_RUN_GRAPH };
+enum { TB_DEVICE_RUN_READY, TB_DEVICE_RUN_WORDS, TB_DEVICE_RUN_GRAPH,
+       TB_DEVICE_RUN_PRIMITIVE };
 struct TBDeviceRun {
   u64 next, target, current, pending, packet;
   Term task;
   u32 expected, tail_result, packet_count, event;
+  u32 resume_tick, resume_turn;
 };
 struct TBDeviceRecord {
   u64 hash_next, adopt_next, parent, boundary;
@@ -333,9 +339,20 @@ INLINE void tb_device_waiting(const TBDeviceFrame *frame) {
 /* One lane exclusively owns this run. All persisted state is restored before
  * yielding; outcomes borrow only until this dispatcher copies their vectors. */
 OUTLINE void tb_device_advance(Env e, TBDeviceRun *run, u32 quantum) {
+  u32 first_turn = 0;
+  if (run->resume_tick != 0) {
+    if (run->resume_tick != 1 || run->event != TB_DEVICE_RUN_PRIMITIVE
+        || run->resume_turn >= quantum || run->current == 0 || run->packet != 0)
+      err_fail("invalid device primitive continuation");
+    first_turn = run->resume_turn;
+  } else if (run->resume_turn != 0 || run->event == TB_DEVICE_RUN_PRIMITIVE)
+    err_fail("invalid device primitive continuation");
   run->event = TB_DEVICE_RUN_READY;
-  for (u32 turn = 0; turn < quantum; ++turn) {
-    tb_tick();
+  for (u32 turn = first_turn; turn < quantum; ++turn) {
+    /* Primitive slices continue one logical invocation and its original
+     * quantum position. A smaller slice must not introduce READY events. */
+    if (run->resume_tick == 0) tb_tick();
+    run->resume_tick = 0; run->resume_turn = 0;
     if (run->current != 0) {
       u64 current = run->current;
       TBDeviceFrame *frame = tb_device_frame(current);
@@ -346,7 +363,7 @@ OUTLINE void tb_device_advance(Env e, TBDeviceRun *run, u32 quantum) {
       TBCallFrame view;
       view.pc = frame->pc; view.destination = frame->destination;
       view.expected = frame->expected; view.tail_result = frame->tail_result;
-      view.waiting = false; view.argument = frame->argument;
+      view.waiting = false; view.yielded = false; view.argument = frame->argument;
       /* Every borrowed result pointer targets persistent scratch storage.
        * Mixing a lane-local scalar with global typed-result pointers causes
        * NVRTC to infer a local address space for otherwise global outcomes. */
@@ -361,12 +378,21 @@ OUTLINE void tb_device_advance(Env e, TBDeviceRun *run, u32 quantum) {
         *view.result = term_ctr(CID_EMIT, at);
         outcome = tb_segment_words(view.result, NULL, 1);
       } else outcome = tb_device_resume(frame->fid, &e, &view);
-      if (outcome.pending > TB_OUTCOME_CALL) err_fail("invalid segment outcome tag");
+      if (outcome.pending > TB_OUTCOME_YIELD) err_fail("invalid segment outcome tag");
       if (view.pc > UINT32_MAX || view.destination > UINT32_MAX)
         err_fail("invalid generated continuation destination");
       frame->pc = (u32)view.pc; frame->destination = (u32)view.destination;
       frame->expected = view.expected; frame->tail_result = view.tail_result;
       frame->waiting = view.waiting; frame->argument = view.argument;
+      /* Neither scalar adapters nor task/word ownership may observe a
+       * suspended primitive's dummy result. Its frame and run stay owned. */
+      if (view.yielded || outcome.pending == TB_OUTCOME_YIELD) {
+        if (!view.yielded || outcome.pending != TB_OUTCOME_YIELD || frame->waiting
+            || frame->pc == 0 || run->packet != 0)
+          err_fail("invalid device primitive continuation");
+        run->resume_tick = 1; run->resume_turn = turn;
+        run->event = TB_DEVICE_RUN_PRIMITIVE; return;
+      }
       if (frame->tail_result != TB_RESULT_NONE) {
         if (frame->waiting || outcome.pending == TB_OUTCOME_WORDS || fid_result_width(frame->fid) != 1)
           err_fail("invalid scalar tail result adapter");
@@ -563,6 +589,7 @@ extern "C" __global__ void tb_device_tasks_begin(TBDeviceControl *control, Term 
   u32 helper_lanes = control->helper_lanes, helper_limit = control->helper_limit;
   if (control->live_runs != 0 || control->live_records != 0 || control->live_frames != 0
       || control->helper_live != 0 || control->helper_depths != 0
+      || control->primitive_live != 0
       || tb_device_state->scratch_live != 0) err_fail("device invocation retained active work");
   if (helper_lanes == 0) err_fail("invalid device helper lane count");
   memset(control, 0, sizeof(*control));
@@ -605,11 +632,18 @@ extern "C" __global__ void tb_device_tasks_commit(TBDeviceControl *control, u32 
   if (control->helper_live != 0) err_fail("device helper frame retained across dispatch");
   Env e = {tb_memory, NULL};
   for (u32 turn = 0; turn < quantum && !control->done; ++turn) {
-    tb_tick();
-    if (control->adopt_head != 0) { tb_device_adopt_step(e); continue; }
+    if (control->adopt_head != 0) { tb_tick(); tb_device_adopt_step(e); continue; }
     u64 offset = tb_device_dequeue(true);
     if (offset == 0) break;
     TBDeviceRun *run = tb_device_run(offset);
+    /* Queue transitions remain bounded by quantum, but primitive requeues
+     * and empty probes are scheduling work, not Bend evaluation steps. */
+    if (run->event == TB_DEVICE_RUN_PRIMITIVE) {
+      if (control->primitive_requeues == UINT64_MAX)
+        err_fail("device primitive progress overflow");
+      ++control->primitive_requeues; tb_device_enqueue(offset, false); continue;
+    }
+    tb_tick();
     if (run->event == TB_DEVICE_RUN_READY) tb_device_enqueue(offset, false);
     else if (run->event == TB_DEVICE_RUN_WORDS) tb_device_finish(e, offset);
     else if (run->event == TB_DEVICE_RUN_GRAPH) {
@@ -618,6 +652,7 @@ extern "C" __global__ void tb_device_tasks_commit(TBDeviceControl *control, u32 
   }
   if (control->done) {
     if (control->live_runs != 0 || control->live_records != 0 || control->live_frames != 0
+        || control->primitive_live != 0
         || control->ready_count != 0 || control->completed_count != 0 || control->adopt_head != 0)
       err_fail("device root completed with pending work");
     tb_host_free(tb_device_pointer(control->helper_depths, 0));
