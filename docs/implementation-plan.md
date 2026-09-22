@@ -20,9 +20,10 @@
   remains in progress (5.15), with actual multicore CPU execution implemented
   (5.15.2), with direct typed calls and self-tail frame reuse complete (5.15.4).
   The first CUDA execution milestone is complete (5.15.5); full GPU parity
-  remains in progress. Native builds, generated GPU controls and persistent
-  CUDA caching are the next focus (5.15.6). Compiler specialization, remaining
-  CPU optimization and platform validation stay open.
+  remains in progress. Windows native builds, generated GPU controls and
+  persistent CUDA caching are complete (5.15.6). Broader GPU program coverage,
+  helper yielding, memory sizing and platform behavior remain next engine work.
+  Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
 
@@ -2102,9 +2103,9 @@ the broad goal remain active. See
 remaining cache, platform, helper-yield and optimization scope. Poche stays a
 regression target; no game or Bevy reconstruction is part of this milestone.
 
-#### [~] 5.15.6 Complete native builds and the CUDA compilation-cache lifecycle
+#### [x] 5.15.6 Complete native builds and the CUDA compilation-cache lifecycle
 
-Progress: generated executables now parse GPU/worker controls before program
+Completion: generated executables now parse GPU/worker controls before program
 effects; the Rust CLI has a native output route with source-identity protection
 and staged publication. Explicit GPU spans reserve the requested corpus, with
 separate metadata/scratch accounting and an independently configured hard cap.
@@ -2112,11 +2113,8 @@ The CUDA adapter uses a versioned adjacent cubin cache with SHA-256 identity and
 integrity checks. All five focused cache probes pass, including real CUDA
 zero-compilation warm starts, stale/driver-rejected entries and the two cache
 write-failure policies. These probes are distinct from generated Bend execution.
-The focused native CLI, pure C, generated CLI and portable cache suite passes
-31 tests. Sixteen CUDA hardware tests pass separately, including generated
-cold/warm execution, relocation and prebuild ordering. These results precede
-the final candidate freeze; full gates, release retention and publication remain
-in progress. Independent review identified a loadable cached module with missing
+Generated cold/warm execution, relocation and prebuild ordering have dedicated
+hardware coverage. Independent review identified a loadable cached module with missing
 Bend kernel entries as a startup-order gap. Its regression reproduced foreign
 and main effects before rejection. All five required entries now resolve before
 program or foreign initialization, successful cache-hit accounting and fresh
@@ -2137,9 +2135,18 @@ exits or newly lost positives. All fourteen CPU-off/GPU-on comparisons match the
 seven unchanged upstream JavaScript originals. Seven separate prebuilds never
 enter main; the six marked programs compile/write once and subsequently record
 warm hits with zero NVRTC compilation and five persistent buffers. The inert
-program touches no CUDA. Whole upstream C remains unexecuted. Clean release
-retention and exact-release Poche regressions remain before publication. See
-[native builds](native-builds.md).
+program touches no CUDA. Whole upstream C remains unexecuted.
+
+Implementation `8b75e3a` has a retained clean release whose 142 source/resource
+and 83 validation fingerprints match the frozen candidate. Exact-release Poche
+regressions pass seven symbolic privacy laws, three imported equalities and one
+typed negative control; 15,503 scalar cases, seven equalities and two controls;
+and the bounded trajectory (22 states, 44 observations, 21 transitions, 300 chance
+partitions, eight controls and 67 requests in 294 ms). All seventeen Poche source
+hashes, thirteen compiled fingerprints, HEAD and dirty paths remain unchanged.
+Historical exhaustive and sanitizer results keep their original attributions;
+they were not rerun for this cache milestone. The broad engine and formalization
+goal remains active. See [native builds](native-builds.md).
 
 Work: add native binary output to the Rust CLI, generated-executable GPU/build
 controls and persistent CUDA cubin reuse beside the actual executable. Preserve
