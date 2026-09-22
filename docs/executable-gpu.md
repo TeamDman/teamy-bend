@@ -170,8 +170,9 @@ performance result. The current candidate also repeats all twenty-two CPU/GPU
 comparisons across eleven unchanged original upstream programs, with eleven
 prebuilds that skip main and ten marked warm GPU runs recording a cache hit,
 zero NVRTC compilations, five persistent allocations and complete cleanup.
-Whole upstream C remains unexecuted. The milestone still awaits its
-clean-release Poche checks.
+Whole upstream C remains unexecuted. The retained clean `8dd4146` release also
+passes the existing Poche privacy, scalar and bounded trajectory regressions
+with unchanged source fingerprints. Full GPU storage remains unfinished.
 
 Each of the first execution milestone's twelve cases also has an exact
 generated-executable Compute Sanitizer pass from the `e2ae6ed` milestone. These sanitizer results retain that

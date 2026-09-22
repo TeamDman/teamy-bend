@@ -23,9 +23,9 @@
   remains in progress. Windows native builds, generated GPU controls and
   persistent CUDA caching are complete (5.15.6). Broader GPU program coverage,
   helper yielding, memory sizing and platform behavior remain next engine work.
-  Host corpus commitment is complete (5.15.7.1). Raw device array suspension is
-  implemented and undergoing clean-release and Poche regression
-  validation (5.15.7.2). Persistent sealing and duplication are the next bounded
+  Host corpus commitment (5.15.7.1) and raw device array suspension (5.15.7.2)
+  are complete with retained-release Poche regression validation.
+  Persistent sealing and duplication are the next bounded
   helper task (5.15.7.3); full GPU backing, default sizing and residency remain
   required by 5.15.7.
   Compiler specialization and remaining CPU optimization stay open.
@@ -2266,7 +2266,7 @@ upstream JavaScript output/status; all four GPU runs record real offloads and
 warm cache reuse. These expand the prior seven-program baseline without proving
 whole-upstream-C parity or a speedup. The frozen host-storage candidate repeats all eight additional comparisons successfully.
 
-##### [~] 5.15.7.2 Resume raw device array allocation across bounded work slices
+##### [x] 5.15.7.2 Resume raw device array allocation across bounded work slices
 
 Work: retain evaluated operands and an eight-word operation state in generated
 continuations. Raw Array.new layouts, including packed words, raw wide values
@@ -2332,8 +2332,19 @@ The current candidate matches all twenty-two CPU-off/GPU-on comparisons across
 eleven unchanged original upstream programs. Eleven prebuilds skip main; all
 ten marked warm GPU runs record a cache hit, zero NVRTC compilations, five
 persistent allocations and complete cleanup. The inert program touches no CUDA.
-Whole upstream C remains unexecuted. Retained clean-release Poche validation is
-pending; keep this task in progress until those release checks complete.
+Whole upstream C remains unexecuted.
+
+Implementation `8dd4146` has a retained clean release whose 144 source/resource
+and 88 validation fingerprints match the frozen candidate. The exact release
+passes seven symbolic Poche privacy laws, three imported equalities and one
+typed negative control; 15,503 scalar comparisons with seven equalities and two
+controls; and the bounded trajectory with 22 states, 44 observations, 21
+transitions, 300 chance partitions, eight controls and 67 requests in 297 ms.
+All seventeen source hashes, thirteen compiled fingerprints, Poche HEAD and
+dirty paths remain unchanged. No Poche source edits, commits or pushes were
+made. The historical exhaustive comparison retains its original release
+attribution. This completes the raw-allocation prerequisite; full GPU storage
+and the engine/formalization goal remain active.
 
 Validation: identical Bend programs with small and large primitive slices must
 produce identical outputs and logical step counts while exhibiting different

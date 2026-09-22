@@ -239,7 +239,9 @@ twenty-nine and two optional local profilers. The current candidate repeats all
 twenty-two upstream CPU-off/GPU-on output comparisons across eleven unchanged
 original programs. Eleven prebuilds skip main; ten marked warm GPU runs each
 record a cache hit, zero NVRTC compilations, five persistent allocations and
-complete cleanup. Its clean-release Poche checks remain pending.
+complete cleanup. The retained clean `8dd4146` release passes the existing Poche
+privacy, 15,503-case scalar and bounded trajectory checks with unchanged model
+and conformance sources; see the [implementation plan](implementation-plan.md).
 Eight additional complete programs qualify resumable raw-array layouts, typed
 and dynamic calls, sibling work and actual CLI-selected capacity against freshly
 executed upstream JavaScript. Small and large primitive slices retain identical
