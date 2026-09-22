@@ -74,6 +74,10 @@
 #ifndef BEND_MAX_ALLOC
 #define BEND_MAX_ALLOC UINT64_C(67108864)
 #endif
+/* The CLI's explicit GPU span is a corpus reservation, independent of the
+ * adapter's separate metadata/scratch allocation limit. Zero keeps defaults. */
+static uint64_t tb_cli_gpu_span;
+static bool tb_cli_gpu_active;
 #ifndef BEND_MAX_HOST_ALLOC
 #define BEND_MAX_HOST_ALLOC UINT64_C(67108864)
 #endif
@@ -647,7 +651,8 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   tb_host_current = host; tb_failure_guard = &guard;
   tb_failure_message[0] = '\0'; tb_worker_failure_capture = false;
   tb_vm_held = false; tb_vm_cancelled = false; tb_cpu_active = false;
-  tb_capacity = BEND_MAX_ALLOC / sizeof(Term);
+  tb_capacity = (tb_cli_gpu_active && tb_cli_gpu_span != 0
+    ? tb_cli_gpu_span : BEND_MAX_ALLOC) / sizeof(Term);
   tb_memory = NULL; tb_heap_meta = NULL;
   e.mem = tb_memory; e.alc = NULL;
   tb_bump = HEAP_OFF; tb_steps = 0; tb_depth = 0; tb_frames = 0; tb_continuations = 0; tb_tasks = 0;

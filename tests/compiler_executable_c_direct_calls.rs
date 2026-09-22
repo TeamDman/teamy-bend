@@ -47,8 +47,10 @@ static void record_direct_call(unsigned int fid, int reused) {
 #define TB_DIRECT_CALL(fid, reused) record_direct_call(fid, reused)
 ",
         );
-        instrumented
-            .push_str(&generated.replace("int main(void)", "static int checked_main(void)"));
+        instrumented.push_str(&generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        ));
         write!(
             instrumented,
             r#"

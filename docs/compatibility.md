@@ -226,16 +226,18 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The completed GPU candidate audit on 2026-09-22 covered all 1,302 fixtures: 364 expected-positive programs
+The completed native-build/cache candidate audit on 2026-09-22 covered all 1,302 fixtures: 364 expected-positive programs
 checked, 489 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
 GPU reference parsing adds the two printer/offload_bang fixtures without losing
-a previously accepted positive. The current quality gate passes 695 tests,
+a previously accepted positive. The native-build/cache audit preserves every
+previous positive acceptance. The current quality gate passes 712 tests,
 including five compile-fail examples, plus separate strict workspace/test Clippy.
-Twelve CUDA hardware tests pass separately; the portable gate skips those twelve
+Twenty CUDA hardware tests pass separately; the portable gate skips those twenty
 and two optional local profilers. The frozen candidate also matches fourteen
-upstream CPU-off/GPU-on output comparisons. See [CUDA execution](executable-gpu.md)
+upstream CPU-off/GPU-on output comparisons, seven prebuild runs without main and
+six warm GPU runs with zero NVRTC compilations. See [CUDA execution](executable-gpu.md)
 for sanitizer evidence, its recorded transient timeout and remaining work.
 The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add

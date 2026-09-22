@@ -38,7 +38,7 @@ impl Fixture {
         // Keep the complete real adapter body for the off case. Other cases
         // inject a classified failure before touching any CUDA library, so
         // policy and replay behavior are testable on every host.
-        let signature = "static inline bool tb_cuda_initialize(const char *source) {";
+        let signature = "static bool tb_cuda_libraries(void) {";
         let cpu_signature = "OUTLINE void tb_task_start_cpu(Env e, Term task, TBTaskRun *run) {";
         assert_eq!(generated.matches(signature).count(), 1);
         assert_eq!(generated.matches(cpu_signature).count(), 1);
@@ -62,7 +62,7 @@ static volatile int cuda_error_injection;
                         "{cpu_signature}\n  if (tb_gpu_marked((Fid)term_aux(task))) ++cpu_marked_runs;"
                     ),
                 )
-                .replace("int main(void)", "static int checked_main(void)"),
+                .replace("static int tb_program_main(void)", "#define TB_NO_MAIN 1\nstatic int checked_main(void)"),
         );
         let attempts = u32::from(error_class != "TB_CUDA_ERROR_NONE");
         let expected_status = i32::from(!succeeds);

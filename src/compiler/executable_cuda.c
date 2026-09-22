@@ -27,7 +27,10 @@ typedef HMODULE TBCudaLibrary;
 typedef void *TBCudaLibrary;
 #endif
 #ifndef BEND_MAX_GPU_ALLOC
+#define TB_CUDA_GPU_ALLOC_EXPLICIT 0
 #define BEND_MAX_GPU_ALLOC (BEND_MAX_ALLOC > UINT64_MAX / 3 ? UINT64_MAX : BEND_MAX_ALLOC * UINT64_C(3))
+#else
+#define TB_CUDA_GPU_ALLOC_EXPLICIT 1
 #endif
 #define TB_CUDA_BUFFERS 8u
 enum { TB_CUDA_ERROR_NONE, TB_CUDA_ERROR_UNAVAILABLE, TB_CUDA_ERROR_COMPILE, TB_CUDA_ERROR_RUNTIME };
@@ -36,15 +39,17 @@ typedef struct {
   int max_block, max_grid;
   char device_name[256];
   uint64_t compilations, allocations, launches, upload_bytes, download_bytes;
+  uint64_t cache_hits, cache_misses, cache_rejections, cache_writes, cache_write_failures;
 } TBCudaInfo;
 typedef struct { uint64_t address; size_t capacity; } TBCudaBuffer;
 typedef struct {
   TBCudaLibrary driver, compiler;
   void *context, *module, *stream;
-  char *source;
+  char *source, *cache_path;
   char error[2048];
   int error_class;
   bool initialized;
+  uint64_t allocation_limit;
   TBCudaBuffer buffers[TB_CUDA_BUFFERS];
   TBCudaInfo info;
   int (TB_CUDA_CALL *cuInit)(unsigned int);
@@ -105,6 +110,7 @@ static bool tb_cuda_compile_status(int result, const char *operation) {
   (void)snprintf(tb_cuda.error, sizeof(tb_cuda.error), "%s: %s", operation, tb_cuda.nvrtcGetErrorString(result));
   return false;
 }
+/* TB_CUDA_CACHE */
 static void tb_cuda_cleanup_status(int result, const char *operation) {
   if (result != 0 && tb_cuda.error_class == TB_CUDA_ERROR_NONE)
     (void)tb_cuda_status(result, operation, TB_CUDA_ERROR_RUNTIME);
@@ -227,8 +233,10 @@ static inline void tb_cuda_shutdown(void) {
     tb_cuda_cleanup_status(tb_cuda.cuCtxDestroy(tb_cuda.context), "cuCtxDestroy during shutdown");
   }
   tb_cuda.context = NULL; tb_cuda.module = NULL; tb_cuda.stream = NULL;
+  tb_cuda.allocation_limit = 0;
   memset(tb_cuda.buffers, 0, sizeof(tb_cuda.buffers));
-  free(tb_cuda.source); tb_cuda.source = NULL; tb_cuda.initialized = false;
+  free(tb_cuda.source); tb_cuda.source = NULL;
+  free(tb_cuda.cache_path); tb_cuda.cache_path = NULL; tb_cuda.initialized = false;
 #ifdef _WIN32
   if (tb_cuda.compiler != NULL) (void)FreeLibrary(tb_cuda.compiler);
   if (tb_cuda.driver != NULL) (void)FreeLibrary(tb_cuda.driver);
@@ -239,15 +247,45 @@ static inline void tb_cuda_shutdown(void) {
   tb_cuda.compiler = NULL; tb_cuda.driver = NULL;
   /* Diagnostics and counters survive shutdown for the caller's receipt. */
 }
-static inline bool tb_cuda_initialize(const char *source) {
+/* Call with this session's context current, including before initialized is
+ * published. The transport accepts each caller's module contract; Bend's
+ * required entrypoints belong to its GPU runtime, not this generic adapter. */
+static bool tb_cuda_validate_kernels(const char *const *required, size_t count) {
+  for (size_t i = 0; i < count; ++i) {
+    void *function = NULL;
+    int status = tb_cuda.cuModuleGetFunction(&function, tb_cuda.module, required[i]);
+    if (status != 0 || function == NULL) {
+      tb_cuda.error_class = TB_CUDA_ERROR_RUNTIME;
+      (void)snprintf(tb_cuda.error, sizeof(tb_cuda.error),
+        "required CUDA kernel is unavailable: %s (CUDA error %d)", required[i], status);
+      return false;
+    }
+  }
+  return true;
+}
+static bool tb_cuda_initialize_kernels(const char *source, bool prebuild,
+    const char *const *required, size_t count) {
   void *program = NULL;
   char *image = NULL;
   size_t size = 0, source_size = 0;
-  bool current = false, success = false;
+  bool current = false, success = false, cached = false;
+  unsigned char identity[32];
   char architecture[64];
   const char *options[3];
   if (source == NULL) return tb_cuda_message(TB_CUDA_ERROR_COMPILE, "CUDA device source is missing");
-  if (tb_cuda.initialized) return strcmp(tb_cuda.source, source) == 0 || tb_cuda_message(TB_CUDA_ERROR_COMPILE, "CUDA session already owns a different device program");
+  if (count != 0 && required == NULL)
+    return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA kernel contract is missing");
+  for (size_t i = 0; i < count; ++i)
+    if (required[i] == NULL || required[i][0] == 0)
+      return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA kernel contract contains an empty name");
+  if (tb_cuda.initialized) {
+    if (prebuild) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA prebuild requires a fresh session");
+    if (strcmp(tb_cuda.source, source) != 0)
+      return tb_cuda_message(TB_CUDA_ERROR_COMPILE, "CUDA session already owns a different device program");
+    if (count == 0) return true;
+    if (!tb_cuda_push()) return false;
+    return tb_cuda_pop(tb_cuda_validate_kernels(required, count));
+  }
   tb_cuda.error[0] = 0; tb_cuda.error_class = TB_CUDA_ERROR_NONE;
   while (source_size < BEND_MAX_HOST_BUFFER && source[source_size] != 0) ++source_size;
   if (source_size == BEND_MAX_HOST_BUFFER) return tb_cuda_message(TB_CUDA_ERROR_COMPILE, "CUDA device source exceeds host buffer limit");
@@ -266,6 +304,25 @@ static inline bool tb_cuda_initialize(const char *source) {
   }
   (void)snprintf(architecture, sizeof(architecture), "--gpu-architecture=sm_%d%d", tb_cuda.info.major, tb_cuda.info.minor);
   options[0] = architecture; options[1] = "--fmad=false"; options[2] = "--std=c++17";
+  if (prebuild && tb_cuda.cache_path == NULL) {
+    (void)tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA prebuild requires a cache path"); goto done;
+  }
+  tb_cuda_cache_identity(source, source_size, options, 3, identity);
+  if (!tb_cuda_status(tb_cuda.cuCtxCreate(&tb_cuda.context, 0, tb_cuda.info.device), "cuCtxCreate", TB_CUDA_ERROR_RUNTIME)) goto done;
+  current = true;
+  if (!prebuild && tb_cuda.cache_path != NULL) {
+    image = tb_cuda_cache_read(identity, &size);
+    if (image != NULL) {
+      cached = tb_cuda.cuModuleLoadData(&tb_cuda.module, image) == 0;
+      if (!cached) { tb_cuda.module = NULL; tb_cuda_counter(&tb_cuda.info.cache_rejections, 1); }
+      free(image); image = NULL;
+    }
+    if (!cached) {
+      tb_cuda_counter(&tb_cuda.info.cache_misses, 1);
+      (void)fprintf(stderr, "bend: compiling the GPU program (%s is missing or stale)\n", tb_cuda.cache_path);
+    }
+  }
+  if (cached) goto loaded;
   if (!tb_cuda_compile_status(tb_cuda.nvrtcCreateProgram(&program, source, "bend-device.cu", 0, NULL, NULL), "nvrtcCreateProgram")) goto done;
   if (!tb_cuda_compile_status(tb_cuda.nvrtcCompileProgram(program, 3, options), "nvrtcCompileProgram")) {
     size_t log_size = 0;
@@ -277,14 +334,30 @@ static inline bool tb_cuda_initialize(const char *source) {
   }
   if (!tb_cuda_compile_status(tb_cuda.nvrtcGetCUBINSize(program, &size), "nvrtcGetCUBINSize")) goto done;
   if (size == 0 || size > BEND_MAX_HOST_BUFFER) { (void)tb_cuda_message(TB_CUDA_ERROR_COMPILE, "CUDA compiled image exceeds host buffer limit"); goto done; }
-  image = (char *)malloc(size); tb_cuda.source = (char *)malloc(source_size + 1);
-  if (image == NULL || tb_cuda.source == NULL) { (void)tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA compilation allocation failed"); goto done; }
-  memcpy(tb_cuda.source, source, source_size + 1);
+  image = (char *)malloc(size);
+  if (image == NULL) { (void)tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA compilation allocation failed"); goto done; }
   if (!tb_cuda_compile_status(tb_cuda.nvrtcGetCUBIN(program, image), "nvrtcGetCUBIN")) goto done;
-  if (!tb_cuda_status(tb_cuda.cuCtxCreate(&tb_cuda.context, 0, tb_cuda.info.device), "cuCtxCreate", TB_CUDA_ERROR_RUNTIME)) goto done;
-  current = true;
-  if (!tb_cuda_status(tb_cuda.cuModuleLoadData(&tb_cuda.module, image), "cuModuleLoadData", TB_CUDA_ERROR_RUNTIME)
-      || !tb_cuda_status(tb_cuda.cuStreamCreate(&tb_cuda.stream, 1), "cuStreamCreate", TB_CUDA_ERROR_RUNTIME)) goto done;
+  tb_cuda_counter(&tb_cuda.info.compilations, 1);
+  if (!tb_cuda_status(tb_cuda.cuModuleLoadData(&tb_cuda.module, image), "cuModuleLoadData", TB_CUDA_ERROR_RUNTIME)) goto done;
+loaded:
+  /* A driver-loadable image can still be the wrong program. Reject it before
+   * reporting a hit, publishing a fresh cubin or running host/foreign effects. */
+  if (!tb_cuda_validate_kernels(required, count)) {
+    if (cached) tb_cuda_counter(&tb_cuda.info.cache_rejections, 1);
+    goto done;
+  }
+  if (cached) tb_cuda_counter(&tb_cuda.info.cache_hits, 1);
+  if (!cached && tb_cuda.cache_path != NULL) {
+    bool written = tb_cuda_cache_write(identity, image, size);
+    tb_cuda_counter(written ? &tb_cuda.info.cache_writes : &tb_cuda.info.cache_write_failures, 1);
+    if (!written && prebuild) {
+      (void)tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "cannot write the CUDA GPU program cache"); goto done;
+    }
+  }
+  tb_cuda.source = (char *)malloc(source_size + 1);
+  if (tb_cuda.source == NULL) { (void)tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA source allocation failed"); goto done; }
+  memcpy(tb_cuda.source, source, source_size + 1);
+  if (!tb_cuda_status(tb_cuda.cuStreamCreate(&tb_cuda.stream, 1), "cuStreamCreate", TB_CUDA_ERROR_RUNTIME)) goto done;
   success = true;
 done:
   if (program != NULL) {
@@ -294,23 +367,50 @@ done:
   free(image);
   if (current && !tb_cuda_pop(success)) success = false;
   if (!success) tb_cuda_shutdown();
-  else { tb_cuda.initialized = true; tb_cuda_counter(&tb_cuda.info.compilations, 1); }
+  else tb_cuda.initialized = true;
   return success;
+}
+static inline bool tb_cuda_initialize(const char *source) {
+  return tb_cuda_initialize_kernels(source, false, NULL, 0);
+}
+static inline bool tb_cuda_build_cache(const char *source) {
+  bool success = tb_cuda_initialize_kernels(source, true, NULL, 0);
+  return success || tb_cuda.error_class == TB_CUDA_ERROR_UNAVAILABLE;
 }
 static inline bool tb_cuda_synchronize(void) {
   if (!tb_cuda_push()) return false;
   return tb_cuda_pop(tb_cuda_status(tb_cuda.cuStreamSynchronize(tb_cuda.stream), "cuStreamSynchronize", TB_CUDA_ERROR_RUNTIME));
 }
+static inline bool tb_cuda_set_allocation_limit(uint64_t bytes) {
+  uint64_t used = 0;
+  if (bytes == 0) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "invalid CUDA allocation limit");
+#if TB_CUDA_GPU_ALLOC_EXPLICIT
+  if (bytes > BEND_MAX_GPU_ALLOC)
+    return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "requested CUDA allocation limit exceeds the configured hard limit");
+#endif
+  for (unsigned int i = 0; i < TB_CUDA_BUFFERS; ++i) {
+    if (used > UINT64_MAX - tb_cuda.buffers[i].capacity)
+      return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA allocation accounting overflow");
+    used += tb_cuda.buffers[i].capacity;
+  }
+  if (bytes < used) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA allocation limit is below live allocations");
+  tb_cuda.allocation_limit = bytes; return true;
+}
 static inline bool tb_cuda_reserve(unsigned int slot, size_t bytes) {
   uint64_t total = 0, replacement = 0;
+  uint64_t limit = tb_cuda.allocation_limit == 0 ? BEND_MAX_GPU_ALLOC : tb_cuda.allocation_limit;
   bool success;
   if (slot >= TB_CUDA_BUFFERS) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA buffer slot is invalid");
   if (!tb_cuda.initialized) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA session is not initialized");
   if (bytes <= tb_cuda.buffers[slot].capacity) return true;
-  for (unsigned int i = 0; i < TB_CUDA_BUFFERS; ++i) total += tb_cuda.buffers[i].capacity;
+  for (unsigned int i = 0; i < TB_CUDA_BUFFERS; ++i) {
+    if (total > UINT64_MAX - tb_cuda.buffers[i].capacity)
+      return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA allocation accounting overflow");
+    total += tb_cuda.buffers[i].capacity;
+  }
   /* Account for replacement overlap too: retain the old buffer until its
    * replacement is successfully allocated, without exceeding the hard cap. */
-  if (bytes > BEND_MAX_GPU_ALLOC || total > BEND_MAX_GPU_ALLOC - bytes)
+  if (bytes > limit || total > limit - bytes)
     return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA device allocation budget exhausted");
   if (!tb_cuda_push()) return false;
   success = tb_cuda_status(tb_cuda.cuStreamSynchronize(tb_cuda.stream), "cuStreamSynchronize before allocation", TB_CUDA_ERROR_RUNTIME)

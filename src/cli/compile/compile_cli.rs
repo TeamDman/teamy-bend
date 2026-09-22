@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
+use super::compile_native_cli::compile_native;
+use super::compile_output_cli::OutputPlan;
+use super::compile_output_cli::Stage;
 use crate::cli::output::CliOutput;
 use crate::compiler::compile_c;
 use crate::compiler::compile_executable_c;
@@ -13,9 +16,11 @@ use eyre::eyre;
 use facet::Facet;
 use figue as args;
 use std::io::Write;
+use std::path::Path;
+use std::path::PathBuf;
 use teamy_cancellation::CancellationToken;
 
-/// Generated source language for a standalone program.
+/// Generated source language or native binary for a standalone program.
 #[derive(Facet, Arbitrary, Clone, Copy, Debug, Default, PartialEq, Eq)]
 #[facet(rename_all = "kebab-case")]
 #[repr(u8)]
@@ -23,6 +28,7 @@ pub enum CompileTarget {
     #[default]
     Javascript,
     C,
+    Native,
 }
 
 /// Compile checked Bend source into a standalone program.
@@ -34,13 +40,13 @@ pub struct CompileArgs {
     /// Closed data entry point; executable mode requires main.
     #[facet(args::named)]
     pub entry: Option<String>,
-    /// Output source language: javascript (default) or c.
+    /// Output target: javascript (default), c source, or a native binary.
     #[facet(args::named, default)]
     pub target: CompileTarget,
     /// Compile executable contracts and IO instead of pure data.
     #[facet(args::named, default)]
     pub executable: bool,
-    /// Output source file to create.
+    /// Output source file or native binary to create.
     #[facet(args::named)]
     pub output: String,
     /// Replace an existing output file after successful checking.
@@ -54,6 +60,7 @@ struct CompileReport {
     target: String,
     bytes: usize,
     socket_provider: Option<String>,
+    gpu_artifact: Option<String>,
 }
 
 impl CompileArgs {
@@ -63,59 +70,84 @@ impl CompileArgs {
     /// Returns source, proof, compilation, output or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let entry = self.entry.as_deref().unwrap_or("main");
-        let (target, program) = if self.executable {
-            if entry != "main" {
-                return Err(eyre!("executable compilation requires the main entry"));
-            }
-            let source = syntax::load_executable(std::path::Path::new(&self.file))
-                .map_err(|error| eyre!("{error}"))?;
-            let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
-            match self.target {
-                CompileTarget::Javascript => {
-                    ("javascript", compile_executable_javascript(&checked))
-                }
-                CompileTarget::C => ("c", compile_executable_c(&checked)),
-            }
-        } else {
-            let book =
-                syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
-            match self.target {
-                CompileTarget::Javascript => ("javascript", compile_javascript(&book, entry)),
-                CompileTarget::C => ("c", compile_c(&book, entry)),
-            }
-        };
-        let program = program.map_err(|error| eyre!("{error}"))?;
+        let (program, inputs) = self.generate()?;
         cancellation.bail_if_cancelled()?;
-        if !self.force && std::path::Path::new(&self.output).exists() {
-            return Err(eyre!(
-                "cannot create compiled output (use --force to replace an existing file)"
-            ));
-        }
+        // Reserved emitter preamble contract: inert marks without an emitted
+        // device program do not trigger a prebuild, nor does strict pure C.
+        let gpu = self.executable
+            && self.target == CompileTarget::Native
+            && program
+                .lines()
+                .any(|line| line == "#define TB_GPU_ENABLED 1");
+        let output = OutputPlan::new(Path::new(&self.output), self.force, &inputs, gpu)?;
         let socket_provider = if self.executable && self.target == CompileTarget::Javascript {
-            install_socket_provider(std::path::Path::new(&self.output))?
+            install_socket_provider(&output.output)?
         } else {
             None
         };
-        let mut options = std::fs::OpenOptions::new();
-        options.write(true);
-        if self.force {
-            options.create(true).truncate(true);
+        let (bytes, gpu_artifact) = if self.target == CompileTarget::Native {
+            compile_native(&program, &output, cancellation)?
         } else {
-            options.create_new(true);
-        }
-        let mut output = options
-            .open(&self.output)
-            .wrap_err("cannot create compiled output (use --force to replace an existing file)")?;
-        output
-            .write_all(program.as_bytes())
-            .wrap_err("cannot write compiled output")?;
+            let stage = Stage::new(&output.output)?;
+            let source = stage.0.join("output.source");
+            std::fs::write(&source, &program).wrap_err("cannot stage compiled output")?;
+            cancellation.bail_if_cancelled()?;
+            output.install(&source, &output.output)?;
+            (program.len(), None)
+        };
+        let target = match self.target {
+            CompileTarget::Javascript => "javascript",
+            CompileTarget::C => "c",
+            CompileTarget::Native => "native",
+        };
         Ok(CliOutput::facet(CompileReport {
             output: self.output,
             target: target.to_owned(),
-            bytes: program.len(),
+            bytes,
             socket_provider,
+            gpu_artifact,
         }))
+    }
+
+    fn generate(&self) -> Result<(String, Vec<PathBuf>)> {
+        let entry = self.entry.as_deref().unwrap_or("main");
+        let (program, inputs) = if self.executable {
+            if entry != "main" {
+                return Err(eyre!("executable compilation requires the main entry"));
+            }
+            let (source, mut inputs) = syntax::load_executable_with_sources(Path::new(&self.file))
+                .map_err(|error| eyre!("{error}"))?;
+            let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
+            for name in checked.foreign_names() {
+                if let Some(imports) = checked.foreign_imports(name) {
+                    for (target, path) in imports {
+                        let selected = if self.target == CompileTarget::Javascript {
+                            "js"
+                        } else {
+                            "c"
+                        };
+                        if target == selected && path.is_file() {
+                            inputs.push(path.to_owned());
+                        }
+                    }
+                }
+            }
+            let program = match self.target {
+                CompileTarget::Javascript => compile_executable_javascript(&checked),
+                CompileTarget::C | CompileTarget::Native => compile_executable_c(&checked),
+            };
+            (program, inputs)
+        } else {
+            let (book, inputs) = syntax::load_with_sources(Path::new(&self.file))
+                .map_err(|error| eyre!("{error}"))?;
+            let program = match self.target {
+                CompileTarget::Javascript => compile_javascript(&book, entry),
+                CompileTarget::C | CompileTarget::Native => compile_c(&book, entry),
+            };
+            (program, inputs)
+        };
+        let program = program.map_err(|error| eyre!("{error}"))?;
+        Ok((program, inputs))
     }
 }
 

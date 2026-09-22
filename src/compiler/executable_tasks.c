@@ -554,6 +554,9 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
 #define BEND_CPU_TEST_SPAWN_FAIL_AFTER UINT32_MAX
 #endif
 #define TB_CPU_LIMIT 128u
+/* A generated command-line selection overrides the compiled default. Zero
+ * retains automatic/default selection. Only the coordinator writes this. */
+static u32 tb_cpu_requested_workers;
 typedef struct {
   TBHost *host;
   TBTaskRun *head, *tail, *completed_head, *completed_tail;
@@ -595,7 +598,7 @@ INLINE void tb_cpu_set_active(bool active) {
   tb_vm_acquire(); tb_cpu_active = active; tb_vm_release();
 }
 static void tb_cpu_initialize(void) {
-  u32 desired = BEND_CPU_WORKERS;
+  u32 desired = tb_cpu_requested_workers != 0 ? tb_cpu_requested_workers : BEND_CPU_WORKERS;
   if (tb_cpu.created != 0 || tb_cpu_live_workers != 0) err_fail("CPU pool is already running");
   memset(&tb_cpu, 0, sizeof(tb_cpu)); tb_cpu_pending = 0;
   tb_cpu.host = tb_host_current;

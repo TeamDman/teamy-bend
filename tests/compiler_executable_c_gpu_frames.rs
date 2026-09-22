@@ -111,7 +111,10 @@ static unsigned int gpu_entries, gpu_completions, cpu_marked_runs, helper_peak, 
                     "{cpu_start}\n  if (tb_gpu_marked((Fid)term_aux(task))) ++cpu_marked_runs;"
                 ),
             )
-            .replace("int main(void)", "static int checked_main(void)"),
+            .replace(
+                "static int tb_program_main(void)",
+                "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+            ),
     );
     writeln!(
         source,

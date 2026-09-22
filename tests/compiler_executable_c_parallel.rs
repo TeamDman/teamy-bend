@@ -52,9 +52,17 @@ impl Fixture {
             "fixture must generate a real fork"
         );
         let fid = if overlap { overlap_fid(&generated) } else { 0 };
-        assert_eq!(generated.matches("int main(void)").count(), 1);
+        assert_eq!(
+            generated
+                .matches("static int tb_program_main(void)")
+                .count(),
+            1
+        );
         let mut compiled = String::from(HOOK_DECLARATIONS);
-        compiled.push_str(&generated.replace("int main(void)", "static int checked_main(void)"));
+        compiled.push_str(&generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        ));
         compiled.push_str(HOOK_IMPLEMENTATION);
         writeln!(
             compiled,

@@ -52,7 +52,10 @@ static unsigned long long gpu_offloads, gpu_dispatches, gpu_forks, gpu_reuse_err
 } while (0)
 ",
         );
-        source.push_str(&generated.replace("int main(void)", "static int checked_main(void)"));
+        source.push_str(&generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        ));
         writeln!(source, r"
 int main(void) {{
   int status = checked_main();

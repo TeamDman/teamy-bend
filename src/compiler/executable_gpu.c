@@ -24,12 +24,16 @@
 
 enum { TB_GPU_CORPUS, TB_GPU_METADATA, TB_GPU_STATE, TB_GPU_SCRATCH, TB_GPU_CONTROL };
 static int tb_gpu_status; /* 0 untried, 1 initialized, -1 unavailable. */
+static const char *tb_gpu_policy_override;
+static const char *tb_gpu_policy(void) {
+  return tb_gpu_policy_override != NULL ? tb_gpu_policy_override : getenv("BEND_GPU");
+}
 
 /* This read-only gate is safe at CPU call boundaries: CUDA status changes
  * only after the coordinator drains workers. Never initialize CUDA here.
  * Preserve ordinary ready-call reuse when a mark cannot request offload. */
 static bool tb_gpu_cpu_only(void) {
-  const char *policy = getenv("BEND_GPU");
+  const char *policy = tb_gpu_policy();
   if (policy != NULL && (strcmp(policy, "off") == 0 || strcmp(policy, "0") == 0)) return true;
   return tb_gpu_status < 0 && (policy == NULL || strcmp(policy, "auto") == 0);
 }
@@ -47,10 +51,38 @@ static TB_NORETURN void tb_gpu_fail(const char *message) {
 static void tb_gpu_require(bool success) {
   if (!success) tb_gpu_fail(tb_cuda_error());
 }
+/* This preparation also runs before the host VM exists during --gpu-build.
+ * Use ordinary owned temporary storage and return errors without longjmp. */
+static bool tb_gpu_prepare(bool prebuild) {
+  static const char *const required[] = {
+    "tb_device_initialize", "tb_device_tables_initialize", "tb_device_tasks_begin",
+    "tb_device_tasks_commit", "tb_device_tasks_step"
+  };
+  size_t length = 0, at = 0;
+  for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
+    size_t count = strlen(tb_gpu_source_parts[i]);
+    if (length == SIZE_MAX || count > SIZE_MAX - length - 1)
+      return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA generated source is too large");
+    length += count;
+  }
+  char *source = (char *)malloc(length + 1);
+  if (source == NULL) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA source allocation failed");
+  for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
+    size_t count = strlen(tb_gpu_source_parts[i]);
+    memcpy(source + at, tb_gpu_source_parts[i], count); at += count;
+  }
+  source[at] = 0;
+  bool ready = tb_cuda_initialize_kernels(source, prebuild, required,
+    sizeof(required) / sizeof(required[0]));
+  free(source);
+  if (tb_cuda_error_class() == TB_CUDA_ERROR_UNAVAILABLE) { tb_gpu_status = -1; return true; }
+  if (ready) tb_gpu_status = 1;
+  return ready;
+}
 /* Only explicit disable or unavailability before execution permits fallback.
  * A compilation, allocation, transfer or execution failure is never replayed. */
 static bool tb_gpu_initialize(void) {
-  const char *policy = getenv("BEND_GPU");
+  const char *policy = tb_gpu_policy();
   bool forced = false;
   if (policy == NULL || strcmp(policy, "auto") == 0) { }
   else if (strcmp(policy, "off") == 0 || strcmp(policy, "0") == 0) return false;
@@ -58,25 +90,7 @@ static bool tb_gpu_initialize(void) {
     forced = true;
   else tb_gpu_fail("BEND_GPU must be auto, off, or on");
   if (tb_gpu_status == 0) {
-    size_t length = 0;
-    for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
-      size_t count = strlen(tb_gpu_source_parts[i]);
-      if (length == SIZE_MAX || count > SIZE_MAX - length - 1)
-        tb_gpu_fail("CUDA generated source is too large");
-      length += count;
-    }
-    char *source = (char *)io_mem(tb_host_malloc(length + 1));
-    size_t at = 0;
-    for (size_t i = 0; tb_gpu_source_parts[i] != NULL; ++i) {
-      size_t count = strlen(tb_gpu_source_parts[i]);
-      memcpy(source + at, tb_gpu_source_parts[i], count); at += count;
-    }
-    source[at] = 0;
-    bool ready = tb_cuda_initialize(source);
-    tb_host_free(source);
-    if (ready) tb_gpu_status = 1;
-    else if (tb_cuda_error_class() == TB_CUDA_ERROR_UNAVAILABLE) tb_gpu_status = -1;
-    else tb_gpu_fail(tb_cuda_error());
+    if (!tb_gpu_prepare(false)) tb_gpu_fail(tb_cuda_error());
   }
   if (tb_gpu_status < 0 && forced) tb_gpu_fail(tb_cuda_error());
   return tb_gpu_status > 0;

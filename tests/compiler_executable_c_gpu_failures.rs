@@ -42,7 +42,13 @@ impl Fixture {
         let gpu_start = "static TBOutcome tb_gpu_execute(Env e, Term root) {";
         let destroy = "tb_cuda_cleanup_status(tb_cuda.cuCtxDestroy(tb_cuda.context), \"cuCtxDestroy during shutdown\");";
         let failure = "if (state.error != 0) {";
-        for marker in [cpu_start, gpu_start, destroy, failure, "int main(void)"] {
+        for marker in [
+            cpu_start,
+            gpu_start,
+            destroy,
+            failure,
+            "static int tb_program_main(void)",
+        ] {
             assert_eq!(generated.matches(marker).count(), 1, "{marker}");
         }
         let mut source = String::from(
@@ -93,7 +99,10 @@ static unsigned int device_errors, failed_peak_lanes;
                         "{failure}\n      ++device_errors; failed_peak_lanes = control.peak_lanes;"
                     ),
                 )
-                .replace("int main(void)", "static int checked_main(void)"),
+                .replace(
+                    "static int tb_program_main(void)",
+                    "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+                ),
         );
         Self::append_probe_main(&mut source, minimum_lanes);
         source

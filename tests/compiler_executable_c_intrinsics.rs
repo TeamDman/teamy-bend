@@ -33,7 +33,10 @@ impl Fixture {
         let loaded = load_executable(self.0.join("main.bend")).unwrap();
         let checked = check_executable(&loaded).unwrap();
         let generated = compile_executable_c(&checked).unwrap();
-        let mut generated = generated.replace("int main(void)", "static int checked_main(void)");
+        let mut generated = generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        );
         generated.push_str(
             r#"
 int main(void) {

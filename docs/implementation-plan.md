@@ -2104,6 +2104,43 @@ regression target; no game or Bevy reconstruction is part of this milestone.
 
 #### [~] 5.15.6 Complete native builds and the CUDA compilation-cache lifecycle
 
+Progress: generated executables now parse GPU/worker controls before program
+effects; the Rust CLI has a native output route with source-identity protection
+and staged publication. Explicit GPU spans reserve the requested corpus, with
+separate metadata/scratch accounting and an independently configured hard cap.
+The CUDA adapter uses a versioned adjacent cubin cache with SHA-256 identity and
+integrity checks. All five focused cache probes pass, including real CUDA
+zero-compilation warm starts, stale/driver-rejected entries and the two cache
+write-failure policies. These probes are distinct from generated Bend execution.
+The focused native CLI, pure C, generated CLI and portable cache suite passes
+31 tests. Sixteen CUDA hardware tests pass separately, including generated
+cold/warm execution, relocation and prebuild ordering. These results precede
+the final candidate freeze; full gates, release retention and publication remain
+in progress. Independent review identified a loadable cached module with missing
+Bend kernel entries as a startup-order gap. Its regression reproduced foreign
+and main effects before rejection. All five required entries now resolve before
+program or foreign initialization, successful cache-hit accounting and fresh
+cache publication. Ten focused tests pass, including each missing-entry case,
+fresh-publication refusal and changed contracts on initialized sessions. A
+separate native CLI hardware test passes installed-cache execution and Unicode
+relocation without running main during compilation. Final validation captures
+142 source/resource inputs and 83 validation inputs. The corrected final gate
+passes 712 tests, with twenty CUDA tests and two optional profilers explicitly
+skipped; strict workspace/library/test Clippy and all twenty CUDA hardware tests
+pass separately. The first gate exposed four obsolete policy-test injection
+hooks; moving injection to the unchanged library-loading boundary preserves all
+assertions and passes all five policy cases. No production change was needed.
+
+The frozen candidate's fresh 1,302-fixture audit preserves all 364 accepted
+positives, 489 positive refusals and 449 negative refusals, with zero abnormal
+exits or newly lost positives. All fourteen CPU-off/GPU-on comparisons match the
+seven unchanged upstream JavaScript originals. Seven separate prebuilds never
+enter main; the six marked programs compile/write once and subsequently record
+warm hits with zero NVRTC compilation and five persistent buffers. The inert
+program touches no CUDA. Whole upstream C remains unexecuted. Clean release
+retention and exact-release Poche regressions remain before publication. See
+[native builds](native-builds.md).
+
 Work: add native binary output to the Rust CLI, generated-executable GPU/build
 controls and persistent CUDA cubin reuse beside the actual executable. Preserve
 existing C/JavaScript source output and environment controls. Explicit prebuild

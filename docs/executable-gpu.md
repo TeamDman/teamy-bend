@@ -23,18 +23,21 @@ teamy-bend compile --executable --target c --output program.c main.bend
 ```
 
 Compile the resulting C program with the usual host compiler. CUDA is loaded
-dynamically; NVRTC compiles the embedded device source when the first eligible
-call runs. Windows lookup uses the installed driver and CUDA toolkit libraries,
+dynamically; startup loads a valid cache or uses NVRTC to compile the embedded
+device source before program effects. Windows lookup uses the driver and CUDA toolkit libraries,
 including `CUDA_PATH`. Unix uses the dynamic loader and additionally needs
 `-ldl` where those functions are not provided by libc.
 
-Set `BEND_GPU` in the generated program's environment:
+The generated executable also accepts `--gpu on|off|NMB|NGB`, `--threads N`,
+`--gpu-build` and `--help`. Native builds and persistent caching have Windows
+validation; see [native builds](native-builds.md) for their contracts.
+An explicit CLI policy overrides `BEND_GPU` in the generated program's environment:
 
 | Value | Behavior |
 | --- | --- |
 | `auto`, or unset | Use CUDA when available; otherwise execute on the CPU. |
 | `off` | Execute on the CPU without initializing CUDA. |
-| `on` | Fail if an eligible marked call cannot initialize CUDA. |
+| `on` | Fail at startup if a binary with an emitted device program cannot initialize CUDA. |
 
 Only device unavailability permits automatic fallback. Compilation, allocation,
 transfer or execution failures terminate the invocation. Consumed arguments are
@@ -104,11 +107,13 @@ CPU replay, releases the CUDA context and host resources, then successfully
 offloads a base-case input in a second invocation of the same generated program.
 Two nested-conversion tests separately prove that helper depth can exceed a
 one-continuation limit and that its own lower depth limit is enforced. The
-current hardware suite has twelve passing tests; the portable gate skips these
-hardware-dependent tests explicitly.
+first execution milestone has twelve passing hardware cases. The current suite
+passes twenty, adding cache lifecycle, kernel-contract startup checks and actual
+native CLI build/relocation coverage. The portable gate skips all twenty explicitly.
 
-Each hardware case also has an exact generated-executable Compute Sanitizer
-pass. One recursive-fork invocation timed out under instrumentation; four
+Each of the first twelve cases also has an exact generated-executable Compute
+Sanitizer pass from the `e2ae6ed` milestone. These sanitizer results retain that
+attribution. One recursive-fork invocation timed out under instrumentation; four
 unchanged reruns completed in about three seconds with zero errors. The first
 timeout is retained as an unexplained validation observation. No source,
 launch dimensions or timeout was changed for those reruns.
@@ -117,9 +122,7 @@ launch dimensions or timeout was changed for those reruns.
 
 - Broader upstream programs, numeric behavior, invalid outcomes, effect
   boundaries and additional allocation/transfer failure paths.
-- Persistent compilation cache with source, architecture, compiler version and
-  options in its identity; validation of corrupt cache entries.
-- Upstream CLI/build controls, platform contracts and Metal support. Unix CUDA
+- Remaining upstream CLI/platform contracts, default device memory sizing and Metal support. Unix CUDA
   and Metal remain unexecuted on the current Windows validation host.
 - Yielding within long helper operations, allocator contention, transfer
   reduction and scheduling optimization.

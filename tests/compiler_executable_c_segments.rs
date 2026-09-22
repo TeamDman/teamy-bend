@@ -79,8 +79,16 @@ impl Fixture {
                 "missing flattened argument/result signature {signature:?}; found {registrations:?}"
             );
         }
-        assert_eq!(generated.matches("int main(void)").count(), 1);
-        let mut generated = generated.replace("int main(void)", "static int checked_main(void)");
+        assert_eq!(
+            generated
+                .matches("static int tb_program_main(void)")
+                .count(),
+            1
+        );
+        let mut generated = generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        );
         write!(
             generated,
             r#"

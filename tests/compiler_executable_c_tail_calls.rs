@@ -42,8 +42,16 @@ impl Fixture {
         let checked = check_executable(&loaded).unwrap();
         let mut generated = compile_executable_c(&checked).unwrap();
         if released {
-            assert_eq!(generated.matches("int main(void)").count(), 1);
-            generated = generated.replace("int main(void)", "static int checked_main(void)");
+            assert_eq!(
+                generated
+                    .matches("static int tb_program_main(void)")
+                    .count(),
+                1
+            );
+            generated = generated.replace(
+                "static int tb_program_main(void)",
+                "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+            );
             generated.push_str(
                 r#"
 int main(void) {

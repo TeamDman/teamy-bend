@@ -53,7 +53,11 @@ static Value erased = { V_ERASED, NULL, NULL, NULL };
 static unsigned char output[BEND_MAX_OUTPUT];
 static size_t output_length = 0;
 
-static void fail(const char *message) {
+#if defined(_MSC_VER)
+static __declspec(noreturn) void fail(const char *message) {
+#else
+static _Noreturn void fail(const char *message) {
+#endif
   (void)fprintf(stderr, "teamy-bend generated program: %s\n", message);
   longjmp(failure, 1);
 }
@@ -119,7 +123,6 @@ static Thunk *lookup(Env *environment, uint64_t id) {
     environment = environment->next;
   }
   fail("unbound runtime variable");
-  return NULL;
 }
 
 static Value *force(Thunk *thunk);
@@ -147,7 +150,6 @@ static Value *apply(Value *function, Thunk *argument) {
     }
   } else {
     fail("entered an impossible match branch");
-    return NULL;
   }
   --evaluation_depth;
   return result;
@@ -208,7 +210,6 @@ static Value *force(Thunk *thunk) {
       break;
     default:
       fail("unknown runtime instruction");
-      return NULL;
   }
   thunk->value = result;
   thunk->state = 2;

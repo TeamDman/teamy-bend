@@ -41,6 +41,7 @@ cargo run -- compile examples/induction.bend --target c --output target/inductio
 cargo run -- compile --executable examples/console.bend --output target/console.cjs
 node target/console.cjs
 cargo run -- compile --executable examples/console.bend --target c --output target/console.c
+cargo run -- compile --executable examples/console.bend --target native --output target/console.exe
 cargo run -- compile --executable examples/tasks.bend --output target/tasks.cjs
 node target/tasks.cjs
 cargo run -- compile --executable examples/channels.bend --output target/channels.cjs
@@ -81,7 +82,7 @@ native ABI, foreign callbacks and a bounded CPU effect runtime. It uses referenc
 counts and reuses freed allocation blocks. Generated sibling tasks can run on
 multiple CPU workers, with foreign callbacks coordinated between jobs. Fully
 supplied Base primitive calls emit directly without intermediate closure
-dispatch. Further CPU optimization, window/audio effects and GPU execution
+dispatch. Further CPU optimization, window/audio effects and full GPU parity
 remain unfinished.
 Ordinary typed calls transfer directly through the dispatcher, and self-tail
 calls reuse their frame and argument storage without growing the native stack.

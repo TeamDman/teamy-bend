@@ -13,5 +13,7 @@ pub use executable::ExecutableSource;
 pub use parser::ParseError;
 pub use parser::load;
 pub use parser::load_executable;
+pub use parser::load_executable_with_sources;
+pub use parser::load_with_sources;
 pub use parser::parse;
 pub use parser::parse_term;

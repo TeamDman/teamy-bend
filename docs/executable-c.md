@@ -15,6 +15,11 @@ teamy-bend compile example.bend --executable --target c --output example.c
 cl /nologo /TC /std:c11 /W4 /WX example.c
 ```
 
+`--target native` invokes the host C toolchain and prepares an emitted GPU
+program before installing a binary. Generated executables accept GPU/worker
+controls and prebuild without running main. This integration is validated on Windows;
+see [native builds and caching](native-builds.md).
+
 The validated toolchain is MSVC on Windows. Generated source selects the Winsock
 link library through an MSVC pragma and uses binary standard streams for exact
 UTF-8/NUL output. Unix code needs a C11 compiler, libm and pthread; its source

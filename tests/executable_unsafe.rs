@@ -71,8 +71,16 @@ impl Fixture {
 
     fn native_c(&self, checked: &ExecutableBook, definitions: &[&str]) -> Output {
         let generated = compile_executable_c(checked).unwrap();
-        assert_eq!(generated.matches("int main(void)").count(), 1);
-        let mut generated = generated.replace("int main(void)", "static int checked_main(void)");
+        assert_eq!(
+            generated
+                .matches("static int tb_program_main(void)")
+                .count(),
+            1
+        );
+        let mut generated = generated.replace(
+            "static int tb_program_main(void)",
+            "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
+        );
         generated.push_str(
             r#"
 int main(void) {

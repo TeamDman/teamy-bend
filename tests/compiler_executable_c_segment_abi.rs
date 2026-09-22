@@ -50,10 +50,18 @@ impl Fixture {
         let loaded = load_executable(self.0.join("main.bend")).unwrap();
         let checked = check_executable(&loaded).unwrap();
         let generated = compile_executable_c(&checked).unwrap();
-        assert_eq!(generated.matches("int main(void)").count(), 1);
+        assert_eq!(
+            generated
+                .matches("static int tb_program_main(void)")
+                .count(),
+            1
+        );
         let mut generated = format!(
             "{prelude}\n{}",
-            generated.replace("int main(void)", "static int checked_main(void)")
+            generated.replace(
+                "static int tb_program_main(void)",
+                "#define TB_NO_MAIN 1\nstatic int checked_main(void)"
+            )
         );
         generated.push_str(
             r#"

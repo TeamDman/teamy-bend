@@ -2656,9 +2656,19 @@ fn normalize_namespace(path: &str) -> String {
 /// # Errors
 /// Returns a located error on file access, import resolution or parsing failure.
 pub fn load(path: impl AsRef<Path>) -> Result<Book, ParseError> {
+    load_with_sources(path).map(|(book, _)| book)
+}
+
+/// Read a local module and return the canonical files consumed by its loader.
+///
+/// The embedded Base library has no filesystem path in this list.
+///
+/// # Errors
+/// Returns the same file, import and parse errors as [`load`].
+pub fn load_with_sources(path: impl AsRef<Path>) -> Result<(Book, Vec<PathBuf>), ParseError> {
     let mut loader = Loader::default();
     loader.file(path.as_ref(), "")?;
-    Ok(loader.book)
+    Ok((loader.book, loader.seen.into_keys().collect()))
 }
 
 /// Read a local program with execution-only Base and retained foreign contracts.
@@ -2669,17 +2679,31 @@ pub fn load(path: impl AsRef<Path>) -> Result<Book, ParseError> {
 /// # Errors
 /// Returns a located error on Bend file access, import resolution or parsing failure.
 pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, ParseError> {
+    load_executable_with_sources(path).map(|(source, _)| source)
+}
+
+/// Read execution contracts and return their canonical Bend source paths.
+///
+/// Foreign implementation paths remain available on the checked executable
+/// book. This list describes Bend files actually read, including imported modules.
+///
+/// # Errors
+/// Returns the same file, import and parse errors as [`load_executable`].
+pub fn load_executable_with_sources(
+    path: impl AsRef<Path>,
+) -> Result<(ExecutableSource, Vec<PathBuf>), ParseError> {
     let mut loader = Loader {
         executable: true,
         ..Loader::default()
     };
     loader.file(path.as_ref(), "")?;
-    Ok(ExecutableSource {
+    let source = ExecutableSource {
         book: loader.book,
         foreign: loader.foreign,
         numeric: loader.numeric,
         opaque: loader.opaque,
         constructor_tags: loader.constructor_tags,
         base_names: loader.base_names,
-    })
+    };
+    Ok((source, loader.seen.into_keys().collect()))
 }
