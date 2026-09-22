@@ -127,6 +127,10 @@ INLINE void tb_tick(void) {
   tb_vm_release();
 }
 
+/* Device buffers currently back their entire logical span before dispatch.
+ * The shared allocator uses this boundary for the demand-backed host corpus. */
+INLINE void tb_heap_commit(Loc end) { (void)end; }
+
 /* Shared value helpers need bounded temporary traversal storage. Power-of-two
  * scratch blocks preserve allocations across segment launches and reuse freed
  * blocks. Their links and headers contain offsets, never host addresses. */

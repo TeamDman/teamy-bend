@@ -2177,6 +2177,73 @@ release and existing Poche regressions before publication. Metal, broader device
 semantics, optimization and representative performance remain required beyond
 this milestone. Keep the full goal active.
 
+#### [~] 5.15.7 Complete GPU corpus sizing and backing storage
+
+Upstream selects total reported device memory, rounded down to 16 KiB, and
+reserves one managed corpus. The current port has separate full-size device
+value and ownership arrays, plus scratch. Merely selecting the upstream total
+would exceed physical device capacity. Preserve the exact sizing requirement;
+do not replace it with an arbitrary free-memory fraction or replay consumed
+work after allocation failure.
+
+The implementation sequence is host address-space reservation, explicit
+suspension for allocation-producing device helpers, stable device virtual
+reservations with bounded backing growth, then exact default selection and
+qualified residency/overflow behavior. Device VMM alone cannot make an unmapped
+access resumable. Helpers must retain operands, traversal state and ownership
+before yielding a backing request; the host grows storage only while device work
+is quiescent. Even demand mapping requires a managed or overflow strategy when
+values plus separate metadata exceed physical memory. This full milestone stays
+open until those contracts are implemented and qualified.
+
+##### [~] 5.15.7.1 Commit host corpus storage as the used prefix grows
+
+Current focus: replace full-capacity host calloc with stable virtual reservations
+for values and ownership metadata. Commit both prefixes before publishing a
+fresh allocation or importing a validated GPU result. Preserve logical limits,
+pointer stability, free-list contents and shutdown ordering; never restart a
+partially executed segment. Partial commitment remains owned until cleanup.
+Windows uses reserve/commit/release; the POSIX counterpart uses a private virtual
+mapping and prefix protection changes, whose physical backing remains governed
+by the operating system. Unix execution remains unverified on this host.
+
+Validation: OS-observed reserved versus committed ranges, zero initialization,
+stable pointers across growth, free-list reuse, logical-capacity refusals,
+partial reservation/commit failures, locked-allocation failure and same-process
+recovery. Generated CUDA tests must create a result larger than the host prefix,
+commit before either readback, and abort without importing allocator state or
+CPU replay when the second commitment fails. Run the standard gate, strict
+workspace/test Clippy, all CUDA hardware cases and exact-output upstream
+comparisons. Retain a clean release and run existing Poche regressions before
+publication. Full GPU memory defaults, device demand growth and performance
+remain required beyond this host prerequisite.
+
+Implementation validation: the frozen candidate captures 143 source/resource
+and 85 validation files. The full standard gate passes 717 tests (five added
+host-storage tests), with 24 explicit skips; strict workspace/library/test
+Clippy passes. All 22 CUDA hardware tests pass, including two new host-growth
+and failure/recovery cases. A fresh 1,302-fixture audit preserves 364 accepted
+positives, 489 positive refusals and all 449 negative refusals, with zero
+abnormal exits or newly lost positives. Twenty-two CPU-off/GPU-on comparisons
+match eleven unchanged upstream programs; ten marked programs use warm caches
+with zero NVRTC compilation and five persistent allocations. Eleven prebuilds
+skip main; the inert program touches no CUDA. Cleanup receipts now include
+both new host-storage records. The complete added array-growth program also
+matches actual upstream JavaScript. Whole upstream C remains unexecuted.
+
+Initial focused-test failures were test C signedness warnings and unsupported
+direct tuple destructuring; actual upstream checking confirms that original
+syntax is also invalid. The parameter-match form passes both implementations.
+Independent production review found no defects. Clean release retention,
+exact-release Poche regressions and publication remain pending for this task.
+
+The baseline release additionally qualified four unchanged upstream programs:
+closure lists, plain-record reachability and compile-time offload with its
+ordinary-definition control. Eight CPU-off/GPU-on executions match actual
+upstream JavaScript output/status; all four GPU runs record real offloads and
+warm cache reuse. These expand the prior seven-program baseline without proving
+whole-upstream-C parity or a speedup. The frozen host-storage candidate repeats all eight additional comparisons successfully.
+
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
 Work: preserve the two upstream `@unsafe` exceptions using an explicit local

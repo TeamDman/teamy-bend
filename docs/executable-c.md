@@ -298,6 +298,15 @@ ownership transfer may have been interrupted. Native worker allocations keep
 their separate host lifetime. Further CPU/device allocator optimization and
 upstream borrowing/sharing optimizations remain unfinished.
 
+The VM reserves stable virtual addresses for its payload and ownership arrays,
+then commits pages through the allocated prefix. Logical capacity remains
+bounded separately. New allocations commit both arrays while holding the VM
+lock, before advancing the bump pointer; free-list reuse retains its existing
+pages and links. Shutdown releases both mappings after workers finish. Windows
+reservation and commitment follow the [VirtualAlloc contract](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc).
+The POSIX mapping/protection counterpart remains unexecuted on this validation
+host; its physical backing follows the operating system's memory policy.
+
 Generated temporary scalars and arrays use tracked heap frames, released when
 their function completes or transfers a tail call. Synchronous conversion and
 printing wrappers allocate their own scratch frames. Internal calls pass Env by

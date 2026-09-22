@@ -169,6 +169,10 @@ impl Generator<'_> {
         source.push_str(
             &include_str!("executable_core.c")
                 .replace(
+                    "/* TB_HOST_STORAGE */",
+                    include_str!("executable_host_storage.c"),
+                )
+                .replace(
                     "/* TB_SHARED_VALUES */",
                     include_str!("executable_value_core.c"),
                 )

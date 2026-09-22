@@ -25,6 +25,7 @@ INLINE Loc heap_alloc_locked(Env e, Cls cls) {
   } else {
     at = tb_bump;
     if (size > tb_capacity || at > tb_capacity - size) err_fail("VM allocation budget exhausted");
+    tb_heap_commit(at + size);
     tb_bump += size;
   }
   memset(e.mem + at, 0, (size_t)size * sizeof(Term));
@@ -418,4 +419,3 @@ INLINE Term tb_word(Env e, u32 value) {
   }
   return word;
 }
-

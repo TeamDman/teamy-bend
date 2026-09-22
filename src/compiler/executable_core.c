@@ -405,6 +405,7 @@ OUTLINE void tb_frame_pop(Term *values) {
   tb_host_free(values);
   --tb_frames;
 }
+/* TB_HOST_STORAGE */
 /* TB_SHARED_VALUES */
 typedef Term (*BendClosureFn)(Env, const Term *, Term);
 typedef struct TBCallFrame TBCallFrame;
@@ -673,10 +674,13 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
     Term main;
     if (tb_capacity <= HEAP_OFF || tb_capacity > LOC_MASK || tb_capacity > SIZE_MAX / sizeof(Term))
       err_fail("VM initialization failed");
-    tb_memory = (Corpus)calloc((size_t)tb_capacity, sizeof(Term));
-    tb_heap_meta = (u64 *)calloc((size_t)tb_capacity, sizeof(u64));
+    if (!tb_host_storage_reserve(&tb_corpus_storage, (size_t)tb_capacity * sizeof(Term))
+        || !tb_host_storage_reserve(&tb_metadata_storage, (size_t)tb_capacity * sizeof(u64)))
+      err_fail("VM initialization failed");
+    tb_memory = (Corpus)tb_corpus_storage.address;
+    tb_heap_meta = (u64 *)tb_metadata_storage.address;
     e.mem = tb_memory;
-    if (tb_memory == NULL || tb_heap_meta == NULL) err_fail("VM initialization failed");
+    tb_heap_commit(HEAP_OFF);
     tb_io_initialize();
     if (initialize != NULL) initialize(e);
     tb_cpu_initialize();
@@ -696,8 +700,8 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
   tb_gpu_shutdown();
 #endif
   tb_io_shutdown();
-  free(tb_memory); tb_memory = NULL;
-  free(tb_heap_meta); tb_heap_meta = NULL;
+  tb_host_storage_release(&tb_corpus_storage); tb_memory = NULL;
+  tb_host_storage_release(&tb_metadata_storage); tb_heap_meta = NULL;
   tb_failure_guard = NULL; tb_host_current = NULL;
   tb_task_context_reset();
   tb_host_release(host);

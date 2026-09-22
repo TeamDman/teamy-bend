@@ -51,6 +51,14 @@ frames remain on the host. Corpus words, ownership metadata, allocation counts
 and free lists transfer together. Successful completion imports that same state
 before delivering the complete result words and ownership mask to the CPU.
 
+Host values and ownership metadata have stable virtual reservations. CPU
+allocation commits their used prefixes before publishing a new heap span. A
+GPU result may grow beyond the previous host prefix: both host arrays become
+writable before either readback, and allocator state is published only after
+both downloads succeed. A failed commitment aborts the invocation without
+replaying device work. Device buffers still allocate their full logical spans;
+this host change does not establish upstream default-memory parity.
+
 Device frames, queues and graph records store offsets into bounded device
 storage. Generated functions return words, direct calls or task graphs to an
 iterative dispatcher. Fork adoption and result delivery run between parallel
@@ -108,8 +116,16 @@ offloads a base-case input in a second invocation of the same generated program.
 Two nested-conversion tests separately prove that helper depth can exceed a
 one-continuation limit and that its own lower depth limit is enforced. The
 first execution milestone has twelve passing hardware cases. The current suite
-passes twenty, adding cache lifecycle, kernel-contract startup checks and actual
-native CLI build/relocation coverage. The portable gate skips all twenty explicitly.
+passes twenty-two, adding cache lifecycle, kernel-contract startup checks and actual
+native CLI build/relocation coverage, plus host commitment growth and recovery. The portable gate skips all twenty-two explicitly.
+
+Two host-storage tests return a GPU-created 4,096-element U32 array whose heap
+span exceeds the host's existing committed prefix. Both host arrays grow before
+either heap download, without changing their base addresses. A second test fails
+the metadata commitment after the payload commitment succeeds: neither heap
+download runs, no CPU replay occurs, all resources release and the identical
+program then succeeds in the same process. The expected value also matches
+freshly executed upstream JavaScript for that complete Bend source.
 
 Each of the first twelve cases also has an exact generated-executable Compute
 Sanitizer pass from the `e2ae6ed` milestone. These sanitizer results retain that

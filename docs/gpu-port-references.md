@@ -1,9 +1,10 @@
 # References for the Bend2 GPU port
 
 Recorded 2026-09-20 for guidance U11-U13 in the implementation plan. These
-references now inform the generated CUDA implementation in milestone 5.15.5.
-The first CUDA execution milestone is validated. The plan retains full GPU
-parity, cache/build controls, platform coverage and performance requirements.
+references inform the generated CUDA implementation in milestones 5.15.5 and
+5.15.6. CUDA execution, native builds and persistent compilation caching are
+validated. The plan retains full GPU parity, default memory sizing,
+platform coverage and performance requirements.
 
 ## User guidance and provenance
 
@@ -61,7 +62,7 @@ either reference project a dependency:
 
 | Principle | Current implementation and remaining work |
 | --- | --- |
-| Retain device resources | One module, stream and set of buffers serve repeated offloads within an invocation. A persistent compilation cache remains open. |
+| Retain device resources | One module, stream and set of buffers serve repeated offloads within an invocation. The adjacent persistent cubin cache supports validated warm reuse across processes, explicit prebuild and native binary relocation (5.15.6). |
 | Keep intermediate work resident | Task graphs and their intermediate values stay on the device until root completion. Each CPU boundary still copies the used corpus and metadata prefix; dirty-region tracking remains open. |
 | Order submissions and synchronize explicitly | CPU workers drain before export. Initialization, dispatch and graph delivery use ordered launches with explicit host transfer boundaries. Kernels do not wait for another block's dependency. |
 | Bound storage | Device frames and graphs use bounded scratch storage. Allocation budgets include temporary growth; allocator contention and buffer reuse need further performance work. |
@@ -73,10 +74,23 @@ establish platform parity or reproduce the reported teamy-tts speedup.
 
 ## Remaining evaluation
 
-Continue from the actual upstream requirements in `bend2/comp.ts`: Metal/CUDA
-runtime generation, GPU pool handling, device-program compilation/cache and
-offload calls. Broaden validation against the surrounding GPU fixtures and CLI
-contracts before treating the current execution milestone as parity.
+Continue from the actual upstream requirements in `bend2/comp.ts`: broader GPU
+program behavior, corpus sizing, offload calls and Metal runtime/build/cache
+support. CUDA build and cache validation is recorded in
+[milestone 5.15.6](implementation-plan.md#x-5156-complete-native-builds-and-the-cuda-compilation-cache-lifecycle).
+Broaden validation against surrounding GPU fixtures and CLI contracts before
+treating these completed milestones as parity.
+
+Default CUDA memory sizing remains open. Upstream uses the total device memory
+reported by CUDA, rounds it down to 16 KiB and reserves a managed corpus
+(`bend2/comp.ts`, `gpu_span`, `gpu_map` and `corpus_setup`). The port keeps separate
+host and device corpora, ownership metadata and device scratch. Host regions now
+commit only the used prefix; device buffers still allocate their full spans. Copying the
+upstream total into its device corpus would leave these additional allocations
+outside that span. The sizing policy must account for host commitment, device
+storage, scratch and temporary growth while preserving the requested corpus
+semantics. The saved Makepad and teamy-tts principles guide storage and residency
+choices; they do not justify choosing an arbitrary fraction of device memory.
 
 Evaluate keeping data resident, reusing/suballocating buffers, batching compatible
 work, reducing transfers and synchronization, and selective kernel fusion or

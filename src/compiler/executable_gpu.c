@@ -202,6 +202,7 @@ static TBOutcome tb_gpu_execute(Env e, Term root) {
   /* Every allocated or freed address lies below bump. The unallocated suffix
    * has no owners or allocator links; future allocation initializes its cells. */
   used_bytes = (size_t)state.bump * sizeof(Term);
+  tb_heap_commit(state.bump);
   tb_gpu_require(tb_cuda_download(TB_GPU_CORPUS, 0, e.mem, used_bytes));
   tb_gpu_require(tb_cuda_download(TB_GPU_METADATA, 0, tb_heap_meta, used_bytes));
   tb_bump = state.bump; tb_live_words = state.live_words; tb_live_blocks = state.live_blocks;
