@@ -19,8 +19,10 @@
   (5.14); execution-only unsafe checking is implemented (5.16). Executable C
   remains in progress (5.15), with actual multicore CPU execution implemented
   (5.15.2), with direct typed calls and self-tail frame reuse complete (5.15.4).
-  GPU compiler/runtime work is in progress (5.15.5). Compiler
-  specialization, remaining CPU optimization and platform validation stay open.
+  The first CUDA execution milestone is complete (5.15.5); full GPU parity
+  remains in progress. Native builds, generated GPU controls and persistent
+  CUDA caching are the next focus (5.15.6). Compiler specialization, remaining
+  CPU optimization and platform validation stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
 
@@ -191,7 +193,7 @@ Completion notes: source declarations, nested patterns, quantities, literals,
 operators, do/array sugar and local imports implemented; 18 parser tests pass.
 Empty datatypes, reusable parallel lets and implicit array-write rebinding are
 covered. Named GPU calls now retain their reference metadata through lowering;
-executable C offload is being validated in 5.15.5. Full foreign execution
+the first executable C offload milestone is validated in 5.15.5. Full foreign execution
 contracts and hub packages remain open.
 Exact supported surface/limits: `docs/compatibility.md`.
 
@@ -2006,7 +2008,7 @@ original `18c8590` attribution, not rerun or treated as runtime coverage. Receip
 are retained under target/direct-calls-reference and target/verified-3ae05e5.
 The broad 5.15 milestone and full goal remain active; GPU work is next.
 
-#### [~] 5.15.5 Execute marked typed functions and fork graphs on CUDA
+#### [x] 5.15.5 Execute marked typed functions and fork graphs on CUDA
 
 Work: preserve GPU reference marks through parsing, imports, templates and typed
 lowering; reuse CPU word-segment bodies in generated device source. Export a
@@ -2085,12 +2087,51 @@ errors. Every hardware case has a successful exact sanitizer result; the first
 timeout remains recorded with unknown cause, not rewritten as a pass. No source,
 launch dimensions or timeout was changed to obtain those reruns.
 
-The clean-release build, exact-release Poche regressions and publication remain.
-Current implementation is uncommitted. The previous
-published direct-call milestone remains the validated release baseline. See
+Implementation commit `e2ae6ed` has a retained clean release. Its 136 compiled
+and embedded-resource input fingerprints and 77 validation input fingerprints
+match the frozen candidate. Exact-release Poche regressions pass seven symbolic
+privacy laws, three imported equalities, their typed negative control, 15,503
+scalar cases and the diagnostic micro trajectory (22 states, 44 observations,
+21 transitions, 300 chance partitions, eight controls and 67 requests in 295 ms).
+All seventeen Poche source hashes, thirteen compiled fingerprints, HEAD and dirty
+paths remain unchanged; prior exhaustive evidence stays attributed to `6802c1e`.
+
+This completes the first CUDA execution integration, while full GPU parity and
+the broad goal remain active. See
 [generated CUDA execution](executable-gpu.md) for controls, contracts and the
 remaining cache, platform, helper-yield and optimization scope. Poche stays a
 regression target; no game or Bevy reconstruction is part of this milestone.
+
+#### [~] 5.15.6 Complete native builds and the CUDA compilation-cache lifecycle
+
+Work: add native binary output to the Rust CLI, generated-executable GPU/build
+controls and persistent CUDA cubin reuse beside the actual executable. Preserve
+existing C/JavaScript source output and environment controls. Explicit prebuild
+must never run Bend main; upstream treats an unavailable GPU as a successful
+no-op. Coordinate runtime worker/span selection with existing resource bounds.
+
+The CUDA cache must include source, architecture, compiler version/options and
+format identity; validate bounded lengths and integrity before module loading.
+Missing, stale, corrupt or driver-rejected artifacts trigger compilation. Write
+atomically and release temporary resources. An ordinary execution may continue
+after a cache-write failure once its module is loaded; explicit prebuild must
+report the write failure. Compilation or execution failure must not replay
+consumed work on the CPU. This strengthens upstream's source/CUBE_LOG identity
+without dropping its observable cache and build behavior.
+
+Parallel ownership: the CUDA adapter/cache track owns persistence and focused
+cache tests; the native CLI track owns compiler discovery/output and its tests;
+the coordinator owns generated argv controls, integration and validation.
+Read-only reconnaissance of bend2/main.ts and bend2/comp.ts is retained privately.
+
+Validation: separate-process cold/warm execution with actual compile counters;
+cache invalidation/corruption, explicit versus opportunistic write errors,
+relocation and changed working directory; prebuild with no main effects and
+no available GPU; native output/input-path protections; unchanged upstream GPU
+program comparisons. Complete the standard gate, strict Clippy, retained clean
+release and existing Poche regressions before publication. Metal, broader device
+semantics, optimization and representative performance remain required beyond
+this milestone. Keep the full goal active.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

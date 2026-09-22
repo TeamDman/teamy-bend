@@ -5,7 +5,8 @@ uses the same typed function bodies and word layouts for CPU and device code.
 Native `run`, proof evaluation and JavaScript preserve the value semantics of
 the mark without offloading work.
 
-This implementation is under validation. It is not full upstream GPU parity.
+The Windows/CUDA execution milestone is validated for the cases below. Full
+upstream GPU parity remains in progress.
 
 ## Calling and selecting the GPU
 

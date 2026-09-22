@@ -2,8 +2,8 @@
 
 Recorded 2026-09-20 for guidance U11-U13 in the implementation plan. These
 references now inform the generated CUDA implementation in milestone 5.15.5.
-The implementation remains uncommitted and under validation; the plan retains
-the full GPU parity and performance requirements.
+The first CUDA execution milestone is validated. The plan retains full GPU
+parity, cache/build controls, platform coverage and performance requirements.
 
 ## User guidance and provenance
 

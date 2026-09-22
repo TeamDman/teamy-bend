@@ -36,7 +36,7 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
 
 Named GPU calls are preserved through parsing and lowering. The executable C
 backend now runs eligible marked calls on CUDA, including forks, closures and
-owned arrays. This implementation is uncommitted and under validation; see
+owned arrays. The first Windows/CUDA execution milestone is validated; see
 [generated CUDA execution](executable-gpu.md) for its contracts and evidence.
 Native `run`, proof evaluation and JavaScript evaluate the same marked calls
 without GPU offloading.
@@ -226,10 +226,17 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
-The completed JavaScript-network candidate audit on 2026-09-20 covered all 1,302 fixtures: 362 expected-positive programs
-checked, 491 expected-positive programs were rejected, and all 449 expected
+The completed GPU candidate audit on 2026-09-22 covered all 1,302 fixtures: 364 expected-positive programs
+checked, 489 expected-positive programs were rejected, and all 449 expected
 failures were rejected. There were zero abnormal exits and zero accepted
 expected-failure fixtures. These are acceptance counts, not a parity percentage.
+GPU reference parsing adds the two printer/offload_bang fixtures without losing
+a previously accepted positive. The current quality gate passes 695 tests,
+including five compile-fail examples, plus separate strict workspace/test Clippy.
+Twelve CUDA hardware tests pass separately; the portable gate skips those twelve
+and two optional local profilers. The frozen candidate also matches fourteen
+upstream CPU-off/GPU-on output comparisons. See [CUDA execution](executable-gpu.md)
+for sanitizer evidence, its recorded transient timeout and remaining work.
 The numeric helper slice adds `proof/word_add_comm.bend` to the previous 360
 accepted positives. Transparent let aliases in structural descent add
 `proof/rewrite_type_family.bend`; no previous positive was lost. This follows

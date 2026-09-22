@@ -4,8 +4,8 @@
 execution-only checked book. The compiler and type-directed lowering run in
 Rust. The generated program uses a CPU runtime with Bend's packed native value
 and foreign-effect interfaces, with CUDA offload for eligible marked calls.
-The CUDA implementation is uncommitted and under validation. Strict proof
-checking remains a separate path;
+The first CUDA execution milestone has Windows hardware validation; broader
+GPU parity remains in progress. Strict proof checking remains a separate path;
 foreign results and `@unsafe` definitions are runtime assumptions, not proofs.
 Annotated definitions use the same generated dispatcher and runtime limits;
 their checking exceptions are described in [compatibility](compatibility.md).
