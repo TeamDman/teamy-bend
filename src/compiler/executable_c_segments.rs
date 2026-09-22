@@ -138,6 +138,7 @@ impl Generator<'_> {
         }
         let result = result_layout(self.layouts.layout(&ty)?);
         let arity = arguments.iter().map(|layout| layout.words.len()).sum();
+        let previous_origin = self.current_origin.replace(name.to_owned());
         let id = self.reserve_segment(arity, result.words.len())?;
         let signature = Signature {
             id,
@@ -169,6 +170,7 @@ impl Generator<'_> {
             &signature.result,
         )?;
         self.finish_segment(id, body);
+        self.current_origin = previous_origin;
         Ok(Some(signature))
     }
 
@@ -203,7 +205,7 @@ impl Generator<'_> {
         input: &str,
         output: &mut Body,
     ) -> Result<String, CompileError> {
-        let conversion = self.conversion(&signature.result)?;
+        let conversion = self.conversion_use(&signature.result, output)?;
         self.hold(output, &format!("tb_box_{conversion}(e, {input})"))
     }
 
@@ -285,9 +287,9 @@ impl Generator<'_> {
             });
         }
         let input = self.array(output, &value.words)?;
-        let from = self.conversion(&value.layout)?;
+        let from = self.conversion_use(&value.layout, output)?;
         let word = self.hold(output, &format!("tb_box_{from}(e, {input})"))?;
-        let to = self.conversion(layout)?;
+        let to = self.conversion_use(layout, output)?;
         let array = self.array(output, &vec!["0".into(); layout.words.len()])?;
         writeln!(output, "  tb_unbox_{to}(e, {word}, {array});").unwrap();
         let words = (0..layout.words.len())
@@ -414,10 +416,7 @@ impl Generator<'_> {
                     let count = values.iter().map(|value| value.words.len()).sum::<usize>();
                     return self.pending_return(
                         output,
-                        &format!(
-                            "tb_segment_call({}, {count}, {words}, {owned})",
-                            signature.id + 2
-                        ),
+                        &Self::segment_outcome(expression, &signature, count, &words, &owned),
                         &signature.result,
                     );
                 }
@@ -545,6 +544,7 @@ impl Generator<'_> {
         if supplied != signature.arguments.len() {
             return Ok(None);
         }
+        output.dependencies.fids.insert(signature.id);
         let mut values = Vec::new();
         for ((argument, _), layout) in arguments
             .iter()
@@ -623,10 +623,7 @@ impl Generator<'_> {
                 {
                     let (words, owned) = self.flat_arrays(&values, output)?;
                     let count = values.iter().map(|value| value.words.len()).sum::<usize>();
-                    let call = format!(
-                        "tb_segment_call({}, {count}, {words}, {owned})",
-                        signature.id + 2
-                    );
+                    let call = Self::segment_outcome(expression, &signature, count, &words, &owned);
                     if signature.result == *result {
                         self.flat_drop_scope(scope, output, false)?;
                         writeln!(output, "  return {call};").unwrap();
@@ -958,6 +955,7 @@ impl Generator<'_> {
                 .sum::<usize>();
         let result = result_layout(self.layouts.layout(&expression.ty)?);
         let id = self.reserve_segment(arity, result.words.len())?;
+        output.dependencies.fids.insert(id);
         let mut body = Body::new_segment();
         let mut inner = FlatScope::new();
         let mut offset = 0;

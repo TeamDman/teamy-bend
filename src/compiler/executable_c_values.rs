@@ -4,6 +4,7 @@
 //! Conversion between a boxed ABI Term and finite inline field layouts.
 
 use super::Body;
+use super::BodyDependencies;
 use super::CompileError;
 use super::ExecutableProgram;
 use super::FunctionResult;
@@ -46,7 +47,7 @@ impl Generator<'_> {
             &vec!["0".to_owned(); constructor.layout.words.len()],
         )?;
         for (field, value) in fields.iter().zip(values) {
-            let conversion = self.conversion(&field.layout)?;
+            let conversion = self.conversion_use(&field.layout, output)?;
             writeln!(
                 output,
                 "  tb_unbox_{conversion}(e, {value}, {array} + {});",
@@ -111,7 +112,7 @@ impl Generator<'_> {
             .fields
             .iter()
             .map(|field| {
-                let conversion = self.conversion(&field.layout)?;
+                let conversion = self.conversion_use(&field.layout, output)?;
                 self.hold(
                     output,
                     &format!("tb_box_{conversion}(e, {array} + {})", field.offset),
@@ -134,7 +135,17 @@ impl Generator<'_> {
         Ok(mask)
     }
 
-    pub(super) fn conversion(&mut self, layout: &Layout) -> Result<usize, CompileError> {
+    pub(super) fn conversion_use(
+        &mut self,
+        layout: &Layout,
+        output: &mut Body,
+    ) -> Result<usize, CompileError> {
+        let index = self.conversion(layout)?;
+        output.dependencies.conversions.insert(index);
+        Ok(index)
+    }
+
+    fn conversion(&mut self, layout: &Layout) -> Result<usize, CompileError> {
         let key = format!("{layout:?}");
         if let Some(index) = self.conversion_ids.get(&key) {
             return Ok(*index);
@@ -146,6 +157,8 @@ impl Generator<'_> {
         }
         let index = self.conversions.len();
         self.conversions.push(String::new());
+        self.conversion_dependencies
+            .push(BodyDependencies::default());
         self.conversion_ids.insert(key, index);
         let mut boxing = Body::new("  (void)e; (void)input;\n");
         let mut unboxing = Body::new("  (void)e; (void)value; (void)output;\n");
@@ -160,7 +173,7 @@ impl Generator<'_> {
                 }
                 let mut values = Vec::new();
                 for field in &arm.fields {
-                    let conversion = self.conversion(&field.layout)?;
+                    let conversion = self.conversion_use(&field.layout, &mut boxing)?;
                     values.push(self.hold(
                         &mut boxing,
                         &format!("tb_box_{conversion}(e, input + {})", field.offset),
@@ -181,7 +194,7 @@ impl Generator<'_> {
                 }
                 let fields = self.fields(&arm.name, "value", &mut unboxing)?;
                 for (field, value) in arm.fields.iter().zip(fields) {
-                    let conversion = self.conversion(&field.layout)?;
+                    let conversion = self.conversion_use(&field.layout, &mut unboxing)?;
                     writeln!(
                         unboxing,
                         "  tb_unbox_{conversion}(e, {value}, output + {});",
@@ -211,6 +224,9 @@ impl Generator<'_> {
             writeln!(boxing, "  return {cast}input[0];").unwrap();
             writeln!(unboxing, "  output[0] = {cast}value;").unwrap();
         }
+        let mut dependencies = boxing.dependencies.clone();
+        dependencies.extend(&unboxing.dependencies);
+        self.conversion_dependencies[index] = dependencies;
         let mut source = boxing.function(
             &format!("tb_box_{index}"),
             "const Env *e, const Term *input",
@@ -272,7 +288,7 @@ impl Generator<'_> {
             return self.hold(output, &format!("tb_c_blk_node(e, {left}, {right})"));
         }
         let (arr, lgs, layout) = self.array_layout(ty)?;
-        let conversion = self.conversion(&layout)?;
+        let conversion = self.conversion_use(&layout, output)?;
         let array = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
         writeln!(
             output,
@@ -310,7 +326,7 @@ impl Generator<'_> {
             .collect::<Vec<_>>();
         let array = self.array(output, &values)?;
         writeln!(output, "  tb_c_blk_free(e, {value});").unwrap();
-        let conversion = self.conversion(&layout)?;
+        let conversion = self.conversion_use(&layout, output)?;
         Ok(vec![self.hold(
             output,
             &format!("tb_box_{conversion}(e, {array})"),
@@ -346,7 +362,7 @@ impl Generator<'_> {
                 output,
             );
         }
-        let conversion = self.conversion(&layout)?;
+        let conversion = self.conversion_use(&layout, output)?;
         if name == "Array.new" {
             let array = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
             writeln!(
@@ -444,7 +460,7 @@ impl Generator<'_> {
                 if self.program.base_names.contains(name) && name == "Array" =>
             {
                 let (arr, lgs, layout) = self.array_layout(&ty)?;
-                let conversion = self.conversion(&layout)?;
+                let conversion = self.conversion_use(&layout, &mut output)?;
                 let element = self.printer(&args[0], depth + 1)?;
                 let at = self.hold(&mut output, "tb_c_peek(e, value)")?;
                 output.push_str("  tb_show_text(\"[\");\n");

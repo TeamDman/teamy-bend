@@ -110,7 +110,7 @@ impl Generator<'_> {
     fn lower(&mut self, value: &TermRef) -> Result<usize, CompileError> {
         let node = match value.as_ref() {
             Term::Var { id, .. } => format!("{{N_VAR, 0, 0, UINT64_C({id}), 0, 0, NULL, 0}}"),
-            Term::Ref(name) => match self.indices.get(name.as_str()) {
+            Term::Ref(name) | Term::GpuRef(name) => match self.indices.get(name.as_str()) {
                 Some(index) => format!("{{N_REF, {index}, 0, 0, 0, 0, NULL, 0}}"),
                 None if self.datatypes.contains(name.as_str()) => erased_node(),
                 None => {

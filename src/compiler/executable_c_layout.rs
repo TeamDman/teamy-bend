@@ -344,7 +344,7 @@ fn closed_over(term: &TermRef, fixed: &BTreeSet<usize>) -> bool {
                 && closed_over(body, &inner)
         }
         Term::Hole(_) => false,
-        Term::Ref(_) | Term::Qnt | Term::Qua(_) | Term::Efq | Term::Rfl => true,
+        Term::Ref(_) | Term::GpuRef(_) | Term::Qnt | Term::Qua(_) | Term::Efq | Term::Rfl => true,
     }
 }
 

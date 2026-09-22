@@ -64,6 +64,9 @@ pub enum Term {
         id: usize,
     },
     Ref(String),
+    /// A named reference with upstream's `!` scheduling annotation. The marker
+    /// survives compilation but has no effect on proof equality or evaluation.
+    GpuRef(String),
     Typ(TermRef),
     Qnt,
     Qua(Quant),
@@ -191,6 +194,7 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
         Term::Var { id, .. } if *id == target => Rc::clone(replacement),
         Term::Var { .. }
         | Term::Ref(_)
+        | Term::GpuRef(_)
         | Term::Qnt
         | Term::Qua(_)
         | Term::Efq
@@ -357,6 +361,7 @@ impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Var { name, .. } | Self::Ref(name) => f.write_str(name),
+            Self::GpuRef(name) => write!(f, "{name}!"),
             Self::Typ(g) => match g.as_ref() {
                 Self::Qua(Quant::Lone) => f.write_str("Type"),
                 Self::Qua(Quant::Many) => f.write_str("Data"),

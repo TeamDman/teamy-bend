@@ -110,7 +110,7 @@ impl Generator<'_> {
     fn expression(&self, value: &TermRef) -> Result<String, CompileError> {
         let result = match value.as_ref() {
             Term::Var { id, .. } => format!("v{id}"),
-            Term::Ref(name) => match self.indices.get(name.as_str()) {
+            Term::Ref(name) | Term::GpuRef(name) => match self.indices.get(name.as_str()) {
                 Some(index) => format!("definitions[{index}]"),
                 None if self.datatypes.contains(name.as_str()) => "erased".to_owned(),
                 None => {

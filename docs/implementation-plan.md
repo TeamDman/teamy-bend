@@ -19,7 +19,7 @@
   (5.14); execution-only unsafe checking is implemented (5.16). Executable C
   remains in progress (5.15), with actual multicore CPU execution implemented
   (5.15.2), with direct typed calls and self-tail frame reuse complete (5.15.4).
-  GPU compiler/runtime work is the next implementation focus. Compiler
+  GPU compiler/runtime work is in progress (5.15.5). Compiler
   specialization, remaining CPU optimization and platform validation stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -190,7 +190,9 @@ unsafe or incomplete proof can produce a successful check report.
 Completion notes: source declarations, nested patterns, quantities, literals,
 operators, do/array sugar and local imports implemented; 18 parser tests pass.
 Empty datatypes, reusable parallel lets and implicit array-write rebinding are
-covered. Foreign bodies, GPU calls and hub packages remain open.
+covered. Named GPU calls now retain their reference metadata through lowering;
+executable C offload is being validated in 5.15.5. Full foreign execution
+contracts and hub packages remain open.
 Exact supported surface/limits: `docs/compatibility.md`.
 
 Closed compile-time template specialization now passes 13 focused tests:
@@ -372,21 +374,21 @@ Rust implementations and Rust-generated backends with observed compatibility.
 
 ### [~] 3.4 Evaluate Makepad and teamy-tts strategies during the GPU port
 
-GPU execution is the next implementation focus after direct CPU calls. Source
-reconnaissance has identified relevant residency, ordered-stream and explicit
-transfer boundaries in the saved Makepad/teamy-tts references. Local hardware
-queries identify an available CUDA target whose concurrent managed-memory
-capability differs from upstream's requirements. No Bend program has executed
-on a GPU yet. Start with [GPU port references](gpu-port-references.md), its local
-checkout map and the ignored `.local/gpu-phase-recon.md` decision evidence.
+GPU execution is the current implementation focus. The saved Makepad/teamy-tts
+references informed persistent resources, ordered submission and explicit
+transfer boundaries. Generated Bend programs now execute on the available CUDA
+target through an exclusive host/device ownership boundary, without assuming
+upstream's concurrent managed-memory capability. See
+[GPU port references](gpu-port-references.md), its local checkout map and the
+ignored `.local/gpu-phase-recon.md` decision evidence.
 
-The next implementation must carry bang annotations through the compiler,
-execute compiler-generated device segments and their recursive fork graph,
-then deliver their result to the existing CPU continuation. Retain the full
-upstream GPU contracts and later platform acceptance; a standalone kernel demo
-does not complete this seam. Remaining CPU optimization and higher-order
-specialization remain tracked requirements, not prerequisites silently dropped
-by changing focus.
+Task 5.15.5 carries bang annotations through the compiler, executes generated
+device segments and recursive fork graphs, and delivers complete results to
+parked CPU continuations. Twelve hardware tests cover values, scheduling,
+ownership, budget failure/recovery and separate helper-frame accounting. Full
+GPU contracts, performance measurements and platform acceptance remain open.
+Remaining CPU optimization and higher-order specialization remain tracked
+requirements as this GPU implementation advances.
 
 Work: compare the original Bend2 offload/compiler/runtime requirements with the
 reference approaches to device residency, transfer/synchronization boundaries,
@@ -2003,6 +2005,92 @@ files differ from `3ad868e`. The strict checker audit is inherited with its
 original `18c8590` attribution, not rerun or treated as runtime coverage. Receipts
 are retained under target/direct-calls-reference and target/verified-3ae05e5.
 The broad 5.15 milestone and full goal remain active; GPU work is next.
+
+#### [~] 5.15.5 Execute marked typed functions and fork graphs on CUDA
+
+Work: preserve GPU reference marks through parsing, imports, templates and typed
+lowering; reuse CPU word-segment bodies in generated device source. Export a
+ready root after draining CPU workers, preserve parked CPU continuations, and
+return full word spans with ownership and allocator state. Keep persistent
+module/stream/buffers, bounded storage and launch phases, and no CPU replay after
+device mutation. Retain full GPU parity, cache, platform, CLI and performance
+requirements beyond the first executable integration.
+
+Progress: frontend metadata passes 55 focused tests. The generated CUDA runtime
+now executes recursive forks, direct/self-tail calls, closures, multiword owned
+results and shared arrays. Device frames and graph links use scratch offsets;
+the existing heap/refcount and array logic is shared with CPU generation. The
+host adapter dynamically loads the driver and NVRTC and uses explicit transfers,
+without assuming concurrent managed-memory access. This applies the residency,
+resource reuse and explicit synchronization principles from the saved references.
+
+Six generated CUDA programs pass on the current Windows target, including
+5,001 self-tail transitions, partial marked calls, a boxed argument used after
+a pending call, a host-created closure inside a constructor and copy-on-write
+preserving a parked CPU array owner. The recursive test observes overlapping
+device task lifetimes and two offloads with one compilation and five persistent
+buffers. Six earlier exact generated programs also pass Compute Sanitizer with
+zero errors. Seven unchanged upstream programs have fourteen exact CPU-off and
+GPU-on output comparisons against actual upstream JavaScript, including the
+inert partial intrinsic that correctly performs no offload. Those comparisons
+predate the error/accounting fixes below and require final-candidate replay.
+Whole upstream C remains unexecuted. These are actual Bend executions, distinct
+from the separately qualified 32-lane shared-helper probes.
+
+The first recursive run exposed a device result-address-space failure. A
+single-lane run and a queried 32 KiB stack limit reproduced it. Compute Sanitizer
+located the leaf packet read; an isolated persistent-result change corrected it
+with zero errors. All device outcomes now borrow global scratch storage, and
+boxed results no longer overwrite the original suspended argument. Runtime
+limits were not increased to make that workload pass.
+
+Five CPU-only policy tests pass: disabled CUDA never initializes; unavailable
+auto mode probes once and preserves 513 marked tail calls under a 16-task limit;
+forced unavailability and compilation/runtime initialization errors fail without
+CPU replay. These tests preserve the full adapter implementation. The Nat test
+uses the existing executable U32 conversion rather than exceeding the parser's
+128-literal bound.
+
+Four additional hardware tests now prove step, task and scratch failures,
+including concurrently active unsafe siblings, release the failed invocation
+without CPU replay and allow a successful second invocation of the same program.
+The first three tests reproduced CUDA719 from a device trap followed by failure
+to create another context. Expected Bend errors now record the first diagnostic,
+exit lanes cooperatively and cancel lock waiters; successful host synchronization
+retrieves the exact error before discarding the device arena. Actual CUDA driver
+or hardware faults retain their separate, potentially process-fatal semantics.
+
+Independent review found that synchronous helper conversions were charged to
+the continuation limit. Per-lane helper depths now enforce BEND_MAX_FRAMES with
+separate scratch accounting. Two generated nested-conversion tests prove that
+helper depth can exceed a one-continuation limit and that its own lower limit
+fails. The initial fixture flattened away all conversions; the retained
+replacement passes nested data through a dynamic device callback and observes
+actual nested helper calls. All twelve hardware tests pass together.
+
+The broad gate now passes 695 tests (including five compile-fail examples), with
+twelve hardware tests and two optional profilers explicitly skipped. Strict
+workspace library/test Clippy also passes. The frozen candidate's fresh complete
+1,302-fixture audit accepts 364 positives, rejects 489 positives and all 449
+negatives, with zero abnormal exits. The two newly accepted positives are
+printer/offload_bang_g.bend and printer/offload_bang_h.bend; no previous positive
+was lost. This is strict checking evidence, not a runtime parity percentage.
+
+The frozen candidate matches fourteen CPU-off/GPU-on runs across the seven
+unchanged upstream sources, with device counters checked separately from output.
+Updated sanitizer checks pass eleven cases in their first run. The recursive-fork
+executable timed out once under instrumentation, then the exact same executable
+passed four unchanged reruns in about three seconds each with zero sanitizer
+errors. Every hardware case has a successful exact sanitizer result; the first
+timeout remains recorded with unknown cause, not rewritten as a pass. No source,
+launch dimensions or timeout was changed to obtain those reruns.
+
+The clean-release build, exact-release Poche regressions and publication remain.
+Current implementation is uncommitted. The previous
+published direct-call milestone remains the validated release baseline. See
+[generated CUDA execution](executable-gpu.md) for controls, contracts and the
+remaining cache, platform, helper-yield and optimization scope. Poche stays a
+regression target; no game or Bevy reconstruction is part of this milestone.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

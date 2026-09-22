@@ -677,7 +677,7 @@ impl Engine {
                     .ok_or_else(|| KernelError::new(format!("unbound variable {value}")))?;
                 Ok((Rc::clone(&b.ty), usage(*id, demand)))
             }
-            Term::Ref(name) => {
+            Term::Ref(name) | Term::GpuRef(name) => {
                 if let Some(adt) = self.adts.get(name) {
                     if !adt.parameters.is_empty() {
                         return Err(KernelError::new(

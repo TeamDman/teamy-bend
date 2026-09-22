@@ -205,7 +205,10 @@ impl Shape {
                 .rev()
                 .find(|(id, _)| id == actual_id)
                 .is_some_and(|(_, id)| id == expected_id),
-            (Term::Ref(actual_name), Term::Ref(expected_name)) => {
+            (
+                Term::Ref(actual_name) | Term::GpuRef(actual_name),
+                Term::Ref(expected_name) | Term::GpuRef(expected_name),
+            ) => {
                 self.references.insert(expected_name.clone());
                 actual_name == expected_name
             }

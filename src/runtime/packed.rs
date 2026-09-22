@@ -38,7 +38,7 @@ impl Wrapper {
 }
 
 fn reference(value: &TermRef, expected: &str) -> bool {
-    matches!(value.as_ref(), Term::Ref(name) if name == expected)
+    matches!(value.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == expected)
 }
 
 fn data_kind(datatype: &AdtDecl) -> bool {

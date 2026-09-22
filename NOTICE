@@ -9,9 +9,9 @@ Reference revision: e6676b080f25b1bc1bf5b5b7d7a17e22f8022599
 
 Files marked SPDX-License-Identifier: Apache-2.0 are translated or adapted
 from Bend and remain under Apache License 2.0 (licenses/Apache-2.0.txt).
-Changes include translation from TypeScript to Rust and explicit interfaces
-for native checking and evaluation. This is an independent project and is
-not an official Bend release.
+Changes include translation from TypeScript to Rust, shared C/CUDA value and
+task runtime adaptations, and explicit interfaces for native checking and
+evaluation. This is an independent project and is not an official Bend release.
 
 The CLI infrastructure is adapted from TeamDman/teamy-rust-cli (MPL-2.0),
 using the reviewed working tree based on revision

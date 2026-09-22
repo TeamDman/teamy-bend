@@ -469,3 +469,41 @@ def main() -> IO(Unit):
         })
     }));
 }
+
+#[test]
+fn gpu_reference_metadata_survives_transparent_typed_lowering() {
+    let program = lowered(
+        r"
+import Base
+def identity(n: Nat) -> Nat: n
+def trivial() -> {0n == 0n : Nat}: {==}
+def beta() -> Nat -> Nat: (unused => identity!())(0n)
+def annotated() -> Nat -> Nat: {identity!() : Nat -> Nat}
+def rewritten() -> Nat -> Nat:
+  %trivial : Nat -> Nat
+  identity!()
+def plain() -> Nat -> Nat: identity
+def main() -> List<Nat>: [beta()(1n), annotated()(2n), rewritten()(3n), plain()(4n)]
+",
+    );
+    for name in ["beta", "annotated", "rewritten", "plain"] {
+        let reference = ordinary(&program, name);
+        assert!(
+            matches!(&reference.kind, ExpressionKind::Definition(target) if target == "identity")
+        );
+        assert_eq!(reference.is_gpu_reference(), name != "plain", "{name}");
+    }
+    assert!(matches!(
+        ordinary(&program, "beta").source.as_ref(),
+        Term::App(_, _)
+    ));
+    assert!(matches!(
+        ordinary(&program, "rewritten").source.as_ref(),
+        Term::Rwt { .. }
+    ));
+    assert!(
+        expressions(ordinary(&program, "main"))
+            .into_iter()
+            .all(|expression| !expression.is_gpu_reference())
+    );
+}

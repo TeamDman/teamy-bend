@@ -4,6 +4,9 @@
  * licenses/Apache-2.0.txt. Boxed closure callbacks and flat word segments
  * share the dispatcher without interpreting raw words as task controls. */
 typedef struct TBTaskRun TBTaskRun;
+#ifdef TB_GPU_ENABLED
+static bool tb_gpu_cpu_only(void);
+#endif
 typedef struct TBTaskContext TBTaskContext;
 struct TBTaskRecord {
   TBTaskRecord *hash_next, *adopt_next, *parent;
@@ -33,7 +36,7 @@ struct TBTaskContext {
 };
 static TB_THREAD_LOCAL TBTaskContext *tb_task_current;
 static void tb_task_context_reset(void) { tb_task_current = NULL; }
-enum { TB_TASK_APPLY, TB_TASK_VALUE, TB_TASK_DIRECT };
+enum { TB_TASK_APPLY, TB_TASK_VALUE, TB_TASK_DIRECT, TB_TASK_GPU };
 enum { TB_CPU_FINISH, TB_CPU_GRAPH, TB_CPU_COORDINATOR };
 #ifndef TB_CPU_RESUME_ENTER
 #define TB_CPU_RESUME_ENTER(fid, frame) ((void)0)
@@ -169,16 +172,10 @@ OUTLINE void tb_task_segment_start(Env e, Fid fid, Loc at, TBTaskRun *run) {
   run->current = tb_call_frame_owned(fid, payload, 0);
   tb_counter_add(&tb_segment_calls, 1, "segment call counter exhausted");
 }
-/* Starting a node transfers all boxed arguments into a run before releasing
- * its shell. Unindex first: the allocator may immediately reuse that address. */
-OUTLINE void tb_task_start(Env e, TBTaskRecord *record) {
-  Loc at = term_loc(record->task);
-  u32 fid = (u32)term_aux(record->task);
-  TBTaskRun *run;
-  if (record->remaining != 0) err_fail("task started before its dependencies");
-  tb_task_arguments(record);
-  run = (TBTaskRun *)io_mem(tb_host_calloc(1, sizeof(*run)));
-  run->target = record; run->expected = record->width;
+OUTLINE void tb_task_start_cpu(Env e, Term task, TBTaskRun *run) {
+  Loc at = term_loc(task);
+  u32 fid = (u32)term_aux(task), arity = fid_arity(fid);
+  run->state = TB_TASK_APPLY;
   if (tb_segment_functions[fid] != NULL) {
     tb_task_segment_start(e, fid, at, run);
   } else if (fid == FID_CLO_APPLY) {
@@ -186,13 +183,32 @@ OUTLINE void tb_task_start(Env e, TBTaskRecord *record) {
   } else if (fid == FID_IO_EMIT) {
     run->closure = term_clo(FID_IO_EMIT, 0); run->argument = e.mem[at];
   } else {
-    u32 count = record->arity - 1;
+    u32 count = arity - 1;
     run->fid = fid; run->state = TB_TASK_DIRECT; run->argument = e.mem[at + count];
     run->captures = count == 0 ? NULL : (Term *)io_mem(tb_host_malloc(count * sizeof(Term)));
     if (count != 0) memcpy(run->captures, e.mem + at, count * sizeof(Term));
   }
+  heap_free(e, cls_fit(arity + 2), at);
+}
+/* Starting a node transfers all boxed arguments into a run before releasing
+ * its shell. Unindex first: the allocator may immediately reuse that address.
+ * A CUDA root retains its shell, but its host destination remains parked in
+ * the record; no device link ever points into a host continuation. */
+OUTLINE void tb_task_start(Env e, TBTaskRecord *record) {
+  TBTaskRun *run;
+  if (record->remaining != 0) err_fail("task started before its dependencies");
+  tb_task_arguments(record);
+  run = (TBTaskRun *)io_mem(tb_host_calloc(1, sizeof(*run)));
+  run->target = record; run->expected = record->width;
   tb_task_unindex(record);
-  heap_free(e, cls_fit(record->arity + 2), at);
+#ifdef TB_GPU_ENABLED
+  if (tb_gpu_marked((Fid)term_aux(record->task)) && !tb_gpu_cpu_only()) {
+    Loc tail = task_tail(record->task);
+    e.mem[tail] = TERM_HOLE; e.mem[tail + 1] = 0;
+    run->state = TB_TASK_GPU; run->result = tb_segment_task(record->task);
+  } else
+#endif
+  tb_task_start_cpu(e, record->task, run);
   tb_task_enqueue(record->context, run);
 }
 OUTLINE void tb_task_root(TBTaskRecord *record, TBTaskRun *boundary) {
@@ -316,6 +332,7 @@ OUTLINE void tb_task_finish(Env e, TBTaskContext *context, TBTaskRun *run, TBOut
  * foreign registration alone never certifies a callback as parallel-safe. */
 INLINE bool tb_task_worker_safe(const TBTaskRun *run) {
   u32 fid;
+  if (run->state == TB_TASK_GPU) return false;
   if (run->state == TB_TASK_VALUE) return true;
   if (run->current != NULL) fid = run->current->fid;
   else if (run->state == TB_TASK_DIRECT) fid = run->fid;
@@ -353,6 +370,18 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
       TBOutcome outcome;
       if (worker && !tb_task_worker_safe(run)) return TB_CPU_COORDINATOR;
       tb_tick();
+#ifdef TB_GPU_ENABLED
+      if (run->state == TB_TASK_GPU) {
+        Term root = run->result.task;
+        outcome = tb_gpu_execute(e, root);
+        run->state = TB_TASK_APPLY;
+        if (outcome.pending == TB_OUTCOME_TASK) {
+          if (outcome.task != root) err_fail("invalid GPU fallback root");
+          tb_task_start_cpu(e, root, run);
+          continue;
+        }
+      } else
+#endif
       if (run->state == TB_TASK_VALUE) {
         outcome = run->result; run->result.words = NULL; run->state = TB_TASK_APPLY;
       } else if (run->current != NULL) {
@@ -466,7 +495,11 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
         Term task = outcome.task;
         Loc tail = task_tail(task);
         Fid fid = (Fid)term_aux(task);
-        if (tb_segment_functions[fid] != NULL && e.mem[tail] == TERM_HOLE && e.mem[tail + 1] == 0) {
+        if (tb_segment_functions[fid] != NULL && e.mem[tail] == TERM_HOLE && e.mem[tail + 1] == 0
+#ifdef TB_GPU_ENABLED
+            && (!tb_gpu_marked(fid) || tb_gpu_cpu_only())
+#endif
+        ) {
           Loc at = term_loc(task);
           u32 arity = fid_arity(fid);
           if (run->expected != fid_result_width(fid)) err_fail("task result width mismatch");

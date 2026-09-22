@@ -235,6 +235,16 @@ impl Generator<'_> {
         output: &mut Body,
     ) -> Result<String, CompileError> {
         use NumericIntrinsic as N;
+        if matches!(intrinsic, N::Show | N::Read) {
+            output.dependencies.host_operations.insert(
+                if intrinsic == N::Show {
+                    "F32.show"
+                } else {
+                    "F32.read"
+                }
+                .to_owned(),
+            );
+        }
         let a = &arguments[0];
         let b = arguments.get(1).map_or("0", String::as_str);
         let left = format!("f32_unbox({a})");

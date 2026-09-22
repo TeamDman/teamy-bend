@@ -74,6 +74,18 @@ pub(crate) struct Expression {
     /// type arguments. It is compiler metadata, never an execution/proof token.
     pub(crate) source: TermRef,
     pub(crate) kind: ExpressionKind,
+    /// Kept separately because transparent beta/annotation/rewrite lowering can
+    /// leave an outer source term around an inner definition reference.
+    gpu_reference: bool,
+}
+
+impl Expression {
+    /// A checked reference's scheduling annotation, retained through
+    /// specialization. Saturation belongs to the target's call-spine analysis;
+    /// a marked partial application still has ordinary closure semantics.
+    pub(crate) fn is_gpu_reference(&self) -> bool {
+        self.gpu_reference
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -309,7 +321,7 @@ impl Lowerer {
                 .get(id)
                 .map(|binder| Rc::clone(&binder.ty))
                 .ok_or_else(|| error(format!("unbound variable {value}"))),
-            Term::Ref(name) => self.engine.adts.get(name).map_or_else(
+            Term::Ref(name) | Term::GpuRef(name) => self.engine.adts.get(name).map_or_else(
                 || {
                     self.engine
                         .defs
@@ -358,12 +370,14 @@ impl Lowerer {
     ) -> Result<Expression, KernelError> {
         self.engine.step()?;
         self.engine.enter()?;
-        let result = self.expression_inner(value, ty, demand, context);
+        let mut gpu_reference = false;
+        let result = self.expression_inner(value, ty, demand, context, &mut gpu_reference);
         self.engine.depth -= 1;
         result.map(|kind| Expression {
             ty: Rc::clone(ty),
             source: Rc::clone(value),
             kind,
+            gpu_reference,
         })
     }
 
@@ -377,6 +391,7 @@ impl Lowerer {
         ty: &TermRef,
         demand: Quant,
         context: &Context,
+        gpu_reference: &mut bool,
     ) -> Result<ExpressionKind, KernelError> {
         if demand == Quant::None
             || matches!(
@@ -393,11 +408,12 @@ impl Lowerer {
                 }
                 Ok(ExpressionKind::Variable(*id))
             }
-            Term::Ref(name) => {
+            Term::Ref(name) | Term::GpuRef(name) => {
                 if !self.engine.defs.contains_key(name) {
                     return Err(error(format!("unbound runtime definition {name}")));
                 }
                 self.references.insert(name.clone());
+                *gpu_reference = matches!(value.as_ref(), Term::GpuRef(_));
                 Ok(ExpressionKind::Definition(name.clone()))
             }
             Term::Lam { name, id, body } => {
@@ -421,7 +437,10 @@ impl Lowerer {
                 if let Term::Lam { id, body, .. } = function.as_ref() {
                     return self
                         .expression(&substitute(body, *id, argument), ty, demand, context)
-                        .map(|expression| expression.kind);
+                        .map(|expression| {
+                            *gpu_reference = expression.gpu_reference;
+                            expression.kind
+                        });
                 }
                 let function_type = self.infer(function, context)?;
                 let (parameter, _) = self.function(&function_type)?;
@@ -479,9 +498,13 @@ impl Lowerer {
                     body: Box::new(result?),
                 })
             }
-            Term::Ann(body, annotation) => self
-                .expression(body, annotation, demand, context)
-                .map(|expression| expression.kind),
+            Term::Ann(body, annotation) => {
+                self.expression(body, annotation, demand, context)
+                    .map(|expression| {
+                        *gpu_reference = expression.gpu_reference;
+                        expression.kind
+                    })
+            }
             Term::Rwt {
                 evidence,
                 motive,
@@ -494,7 +517,10 @@ impl Lowerer {
                 };
                 let premise = apply(Rc::clone(motive), [Rc::clone(left), term(Term::Rfl)]);
                 self.expression(body, &premise, demand, context)
-                    .map(|expression| expression.kind)
+                    .map(|expression| {
+                        *gpu_reference = expression.gpu_reference;
+                        expression.kind
+                    })
             }
             Term::Hole(name) => Err(error(format!("unexpected checked hole ?{name}"))),
             Term::Typ(_)

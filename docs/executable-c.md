@@ -3,7 +3,9 @@
 `compile --executable --target c` generates a standalone C program from the
 execution-only checked book. The compiler and type-directed lowering run in
 Rust. The generated program uses a CPU runtime with Bend's packed native value
-and foreign-effect interfaces. Strict proof checking remains a separate path;
+and foreign-effect interfaces, with CUDA offload for eligible marked calls.
+The CUDA implementation is uncommitted and under validation. Strict proof
+checking remains a separate path;
 foreign results and `@unsafe` definitions are runtime assumptions, not proofs.
 Annotated definitions use the same generated dispatcher and runtime limits;
 their checking exceptions are described in [compatibility](compatibility.md).
@@ -101,7 +103,34 @@ overlap, and decrements the dependency count once per completed child. Saved
 callers resume into checked vector destinations. `corpus_eval_words` exposes
 multiword results to trusted C with an explicit output capacity and ownership
 buffer; `corpus_eval` retains its one-word result contract. Broader callable
-specialization, upstream optimization parity and bang/GPU calls remain open.
+specialization and upstream optimization parity remain open.
+
+## CUDA offload
+
+Named calls such as `walk!(depth, value)` preserve their GPU mark through typed
+lowering. Generated C embeds device source for eligible functions and their
+dependencies. The host dynamically loads CUDA and NVRTC when an eligible task
+first runs. Native `run`, proof evaluation and JavaScript retain the call's
+value semantics without GPU offload.
+
+Set `BEND_GPU` in the generated program's environment to `auto` (the default),
+`off` or `on`. Auto mode falls back to CPU only when CUDA is unavailable. Off
+mode never initializes CUDA; on mode requires CUDA for an eligible marked task.
+Compilation, allocation, transfer and execution failures terminate the
+invocation without replaying consumed arguments on the CPU.
+
+The coordinator drains CPU workers before exporting a ready graph. Device
+execution shares the CPU value representation and uses persistent frames,
+bounded queues and an iterative dispatcher. The module, stream and buffers
+remain available across offloads in one invocation. Completion restores value
+storage, ownership and allocator state before resuming parked CPU callers.
+
+Actual Windows/CUDA execution covers recursive forks, self-tail calls, closures,
+owned multiword results and shared arrays. Full GPU parity remains open,
+including broader numerical and effect behavior, compilation caching, upstream
+CLI controls, Unix CUDA, Metal and performance qualification. See
+[generated CUDA execution](executable-gpu.md) for requirements, limits and
+validation scope.
 
 ## CPU workers
 
@@ -218,8 +247,9 @@ a stopped invocation do not resume its VM.
 ## Effects and limits
 
 The implemented bundled effects cover console output, tasks, timers, channels,
-environment lookup, files and TCP/UDP. Window/audio, GPU and the optimized
-parallel C engine remain unfinished.
+environment lookup, files and TCP/UDP. CUDA handles eligible computational task
+graphs; foreign effect handlers remain on the host. Window/audio effects,
+remaining GPU parity and full parallel C optimization remain unfinished.
 
 The cooperative driver drains runnable work before waiting. Timer/readiness
 registrations retain order. After worker completions are collected, C callbacks run
@@ -260,7 +290,7 @@ across classes, so fragmentation can still exhaust the bounded arena. Successful
 IO shutdown releases parked continuations and channel payloads on the VM thread.
 A guarded failure bulk-releases the arena without retraversing values whose
 ownership transfer may have been interrupted. Native worker allocations keep
-their separate host lifetime. The optimized parallel CPU/GPU allocator and
+their separate host lifetime. Further CPU/device allocator optimization and
 upstream borrowing/sharing optimizations remain unfinished.
 
 Generated temporary scalars and arrays use tracked heap frames, released when
@@ -376,6 +406,11 @@ erased slots, initialization, aliases, CLI packaging and refusal/resource
 boundaries. Additional checked programs exercise the worker and scheduler ABI.
 The [implementation plan](implementation-plan.md) records gate totals and
 retained release evidence after validation.
+
+CUDA hardware tests run separately from the portable gate. Their retained
+receipts distinguish generated Bend programs from adapter and shared-helper
+probes. The [GPU validation scope](executable-gpu.md) describes what has executed;
+correct output and overlapping device tasks do not establish a performance gain.
 
 Whole-program comparisons execute actual upstream-generated JavaScript against
 the emitted native C. Actual upstream C is generated and retained, and separate

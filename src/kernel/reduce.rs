@@ -85,7 +85,7 @@ impl Engine {
                     Ok(Rc::clone(value))
                 }
             }
-            Term::Ref(name) if self.adts.contains_key(name) => {
+            Term::Ref(name) | Term::GpuRef(name) if self.adts.contains_key(name) => {
                 let declaration = &self.adts[name];
                 if declaration.parameters.is_empty() {
                     Ok(term(Term::Adt {
@@ -97,14 +97,14 @@ impl Engine {
                     Ok(Rc::clone(value))
                 }
             }
-            Term::Ref(_) | Term::App(_, _) => self.whnf_spine(value),
+            Term::Ref(_) | Term::GpuRef(_) | Term::App(_, _) => self.whnf_spine(value),
             _ => Ok(Rc::clone(value)),
         }
     }
 
     fn whnf_spine(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
         let (head, args) = spine(value);
-        if let Term::Ref(name) = head.as_ref() {
+        if let Term::Ref(name) | Term::GpuRef(name) = head.as_ref() {
             let definition = self.defs.get(name).cloned();
             if let Some(def) = definition
                 && args.len() >= def.parameters.len()
@@ -330,7 +330,7 @@ impl Engine {
         }
         match (a.as_ref(), b.as_ref()) {
             (Term::Var { id: a, .. }, Term::Var { id: b, .. }) => Ok(a == b),
-            (Term::Ref(a), Term::Ref(b)) => Ok(a == b),
+            (Term::Ref(a) | Term::GpuRef(a), Term::Ref(b) | Term::GpuRef(b)) => Ok(a == b),
             (Term::Typ(g), Term::Typ(h)) => {
                 if mode == Comparison::Equal {
                     return self.compare(mode, g, h);

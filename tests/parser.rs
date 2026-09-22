@@ -362,9 +362,9 @@ fn import_cycles_are_rejected() {
 
 #[test]
 fn unsupported_features_and_bad_imports_have_specific_locations() {
-    let failure = parse_term("f!(x)").expect_err("offload unsupported");
+    let failure = parse_term("f! (x)").expect_err("the bang suffix requires adjacent parentheses");
     assert_eq!((failure.line, failure.column), (1, 2));
-    assert!(failure.message.contains("GPU offload"));
+    assert!(failure.message.contains("immediately after"));
     assert!(
         parse_term("f(~Type)")
             .expect_err("template head must be declared")

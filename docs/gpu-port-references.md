@@ -1,8 +1,9 @@
-# References for the future Bend2 GPU port
+# References for the Bend2 GPU port
 
-Recorded 2026-09-20 for guidance U11-U13 in the implementation plan. Read this
-when GPU work becomes the active phase; current and next engine milestones are
-tracked in the implementation plan.
+Recorded 2026-09-20 for guidance U11-U13 in the implementation plan. These
+references now inform the generated CUDA implementation in milestone 5.15.5.
+The implementation remains uncommitted and under validation; the plan retains
+the full GPU parity and performance requirements.
 
 ## User guidance and provenance
 
@@ -10,8 +11,9 @@ The user identifies Rik Arends's Makepad GPU strategies as useful precedent and
 reports that applying them to teamy-tts improved performance. Preserve that
 relationship as user-provided context. A bounded source inspection found relevant
 mechanisms in both projects, but did not independently establish that historical
-attribution or reproduce the performance gains. Transferability to Bend remains
-an open design question.
+attribution or reproduce the performance gains. The first CUDA integration
+applies the resource-lifetime and submission principles described below.
+Their performance benefit for Bend remains unmeasured.
 
 Use the existing checkouts read-only. Exact machine-specific locations and their
 roles are stored in the ignored `.local/gpu-port-references.md` file at this
@@ -51,20 +53,38 @@ staging, host/GPU timing separation and dependency-aware barriers. It also recor
 failed fusion attempts and a Vulkan candidate that remained slower than its
 LibTorch comparison. These are historical reports, not newly reproduced results.
 
-## Decision gate for Bend
+## Decisions applied to Bend
 
-Start from the actual upstream requirements in `bend2/comp.ts`: Metal/CUDA
+The [generated CUDA runtime](executable-gpu.md) now executes eligible marked Bend
+calls. The following decisions apply the inspected principles without making
+either reference project a dependency:
+
+| Principle | Current implementation and remaining work |
+| --- | --- |
+| Retain device resources | One module, stream and set of buffers serve repeated offloads within an invocation. A persistent compilation cache remains open. |
+| Keep intermediate work resident | Task graphs and their intermediate values stay on the device until root completion. Each CPU boundary still copies the used corpus and metadata prefix; dirty-region tracking remains open. |
+| Order submissions and synchronize explicitly | CPU workers drain before export. Initialization, dispatch and graph delivery use ordered launches with explicit host transfer boundaries. Kernels do not wait for another block's dependency. |
+| Bound storage | Device frames and graphs use bounded scratch storage. Allocation budgets include temporary growth; allocator contention and buffer reuse need further performance work. |
+| Measure before optimizing | Correctness tests cover actual Bend programs. Cold/warm timing, transfer costs, offload thresholds, fusion and speedup claims still require representative benchmarks. |
+
+CUDA is the first implemented target. Unix CUDA remains unexecuted on the
+current validation host, and Metal remains required work. These results do not
+establish platform parity or reproduce the reported teamy-tts speedup.
+
+## Remaining evaluation
+
+Continue from the actual upstream requirements in `bend2/comp.ts`: Metal/CUDA
 runtime generation, GPU pool handling, device-program compilation/cache and
-offload calls. Inspect the surrounding GPU fixtures and CLI contracts before
-mapping mechanisms from either reference onto them.
+offload calls. Broaden validation against the surrounding GPU fixtures and CLI
+contracts before treating the current execution milestone as parity.
 
 Evaluate keeping data resident, reusing/suballocating buffers, batching compatible
 work, reducing transfers and synchronization, and selective kernel fusion or
 specialization. Profile the Bend workload first: an optimization for tensor
 inference need not benefit graph evaluation or preserve its semantics.
 
-Record the selected targets, lifetime/ownership model and synchronization
-boundaries. Validate against upstream behavior and representative release-build
+Keep the selected targets, lifetime/ownership model and synchronization
+boundaries documented. Validate against upstream behavior and representative release-build
 workloads; distinguish cold compilation/upload, warm execution, host submission,
 device time and readback. Preserve required numerical behavior and document any
 justified target-specific differences. Report unavailable hardware as unverified.

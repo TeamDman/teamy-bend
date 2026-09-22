@@ -34,9 +34,16 @@ supported subset. It is not a drop-in replacement for the full upstream CLI.
   18 templates, 25 laws and 20 datatypes). Templates enter the checked book only
   when instantiated, so check-report counts differ from source-form counts.
 
-GPU calls, hub fetch/publish, window/audio effects,
-general large native Nat computation, optimized C and GPU
-backends, and upstream CLI parity remain unfinished. F32 syntax/representation
+Named GPU calls are preserved through parsing and lowering. The executable C
+backend now runs eligible marked calls on CUDA, including forks, closures and
+owned arrays. This implementation is uncommitted and under validation; see
+[generated CUDA execution](executable-gpu.md) for its contracts and evidence.
+Native `run`, proof evaluation and JavaScript evaluate the same marked calls
+without GPU offloading.
+
+Hub fetch/publish, window/audio effects, general large native Nat computation,
+full CPU compiler optimization, GPU parity and upstream CLI parity remain
+unfinished. F32 syntax/representation
 does not establish floating-point proof support. Native IO execution additionally
 supports [all 37 numeric primitive contracts](numeric-execution.md), also implemented
 by executable JavaScript and executable C. Strict checking and
@@ -98,9 +105,11 @@ CPU reclamation uses reference counts and free lists to reuse released storage.
 Generated C sibling tasks now execute on a bounded CPU pool with a coordinator
 for graph delivery and foreign effects. Shared payloads are sealed before
 publication; allocation and count operations are synchronized. Compiler-generated
-entries opt in individually, and dynamic calls recheck eligibility. Worker-local
-allocator optimization, window/audio Base effects and GPU execution
-remain required work in [the design](effects-design.md).
+entries opt in individually, and dynamic calls recheck eligibility. CUDA offload
+drains these workers before transferring a ready graph and its value storage;
+suspended CPU continuations resume after device completion. Worker-local
+allocator optimization, window/audio Base effects and remaining GPU work
+are tracked in [the implementation plan](implementation-plan.md).
 
 Executable JavaScript additionally supports IO.spawn, IO.sleep and IO.now with
 a cooperative FIFO scheduler. Undefined foreign returns suspend; saved
@@ -176,8 +185,8 @@ the depth-six sum of 8,386,560 over 4,096 pixels and the corresponding leaf
 count of 4,096. Following one path and forcing Image.free also pass through six.
 The original full Image observation program matches upstream on native and
 generated JavaScript execution. No workload was reduced or limit raised.
-These are CPU data-runtime results; window effects and GPU execution remain
-unfinished.
+These are CPU data-runtime results. GPU execution of this Image workload remains
+unverified, and window effects remain unfinished.
 
 Imported standalone models may use Nat literals and default Nat operators for
 their own locally declared Nat type. The loader resolves the generated names in

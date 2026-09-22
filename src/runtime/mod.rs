@@ -389,7 +389,7 @@ impl<'program> Machine<'program> {
                             current = self.variable(environment, *id)?;
                             continue;
                         }
-                        Term::Ref(name) => {
+                        Term::Ref(name) | Term::GpuRef(name) => {
                             current = self.reference(name)?;
                             continue;
                         }

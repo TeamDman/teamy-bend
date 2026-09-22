@@ -878,7 +878,11 @@ impl Parser<'_> {
 
     fn call(&mut self, mut function: TermRef) -> Result<TermRef, ParseError> {
         let template = match function.as_ref() {
-            Term::Ref(name) if self.templates.declarations.contains_key(name) => Some(name.clone()),
+            Term::Ref(name) | Term::GpuRef(name)
+                if self.templates.declarations.contains_key(name) =>
+            {
+                Some(name.clone())
+            }
             _ => None,
         };
         let mut compile_arguments = Vec::new();
@@ -900,7 +904,11 @@ impl Parser<'_> {
         if let Some(name) = template
             && let Some(instance) = self.specialize(&name, &compile_arguments)?
         {
-            function = term(Term::Ref(instance));
+            function = term(if matches!(function.as_ref(), Term::GpuRef(_)) {
+                Term::GpuRef(instance)
+            } else {
+                Term::Ref(instance)
+            });
         }
         for argument in compile_arguments.into_iter().chain(runtime_arguments) {
             function = if let Term::Lam { id, body, .. } = function.as_ref()
@@ -1002,9 +1010,17 @@ impl Parser<'_> {
             }
             let same_line = self.at > 0 && self.tokens[self.at - 1].line == self.current().line;
             if self.is("!") {
-                return Err(self.error(
-                    "GPU offload calls (!) are not supported by this Rust implementation yet",
-                ));
+                let next = self.tokens.get(self.at + 1);
+                if !next.is_some_and(|token| token.text == "(" && token.start == self.current().end)
+                {
+                    return Err(self.error("expected '(' immediately after the GPU call mark !"));
+                }
+                let (Term::Ref(name) | Term::GpuRef(name)) = out.as_ref() else {
+                    return Err(self.error("a named def before ! (only f!(..) offloads)"));
+                };
+                out = term(Term::GpuRef(name.clone()));
+                self.bump();
+                continue;
             }
             if self.is("(") && same_line {
                 self.bump();
@@ -1037,7 +1053,9 @@ impl Parser<'_> {
                 let first = self.expression(5)?;
                 if self.is(">") || self.is(">>") || self.is(",") {
                     let name = match out.as_ref() {
-                        Term::Ref(n) | Term::Var { name: n, .. } => self.resolve(n),
+                        Term::Ref(n) | Term::GpuRef(n) | Term::Var { name: n, .. } => {
+                            self.resolve(n)
+                        }
                         _ => return Err(self.error("type arguments require a datatype name")),
                     };
                     let mut args = vec![first];
@@ -1826,7 +1844,7 @@ fn array_write_binder(value: &TermRef) -> Option<TermRef> {
     let Term::App(head, _) = set_with_type.as_ref() else {
         return None;
     };
-    (matches!(head.as_ref(), Term::Ref(name) if name == "Array.set")
+    (matches!(head.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "Array.set")
         && matches!(array.as_ref(), Term::Var { .. }))
     .then(|| Rc::clone(array))
 }
@@ -1860,7 +1878,9 @@ fn apply(head: TermRef, args: impl IntoIterator<Item = TermRef>) -> TermRef {
 }
 fn type_head(ty: &TermRef) -> Option<String> {
     match ty.as_ref() {
-        Term::Ref(n) | Term::Var { name: n, .. } | Term::Adt { name: n, .. } => Some(n.clone()),
+        Term::Ref(n) | Term::GpuRef(n) | Term::Var { name: n, .. } | Term::Adt { name: n, .. } => {
+            Some(n.clone())
+        }
         Term::App(f, _) => type_head(f),
         _ => None,
     }
@@ -2026,7 +2046,7 @@ fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
     match value.as_ref() {
         // Relative module identities may begin with ../ or a dot-directory.
         // Only parser-generated operator placeholders need a type namespace.
-        Term::Ref(name)
+        Term::Ref(name) | Term::GpuRef(name)
             if matches!(
                 name.as_str(),
                 ".add"
@@ -2045,7 +2065,11 @@ fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
                     | ".shrn"
             ) =>
         {
-            term(Term::Ref(format!("{namespace}{name}")))
+            term(if matches!(value.as_ref(), Term::GpuRef(_)) {
+                Term::GpuRef(format!("{namespace}{name}"))
+            } else {
+                Term::Ref(format!("{namespace}{name}"))
+            })
         }
         Term::Typ(t) => term(Term::Typ(go(t))),
         Term::Min(a, b) => term(Term::Min(go(a), go(b))),
@@ -2182,6 +2206,7 @@ impl TemplateKey {
                 self.name("v", &index.to_string())?;
             }
             Term::Ref(name) => self.name("r", name)?,
+            Term::GpuRef(name) => self.name("r!", name)?,
             Term::Typ(grade) => {
                 self.write("t")?;
                 if !self.term(grade, scope, depth + 1)? {

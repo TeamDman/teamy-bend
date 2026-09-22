@@ -176,7 +176,9 @@ impl ExecutableBook {
         Rc::make_mut(&mut engine.defs).insert("IO".into(), opaque);
         let result = engine.whnf(&main.ty)?;
         let (head, arguments) = spine(&result);
-        if matches!(head.as_ref(), Term::Ref(name) if name == "IO") && arguments.len() == 1 {
+        if matches!(head.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "IO")
+            && arguments.len() == 1
+        {
             Ok(ExecutableEntry::Io)
         } else {
             Ok(ExecutableEntry::Pure)
@@ -270,7 +272,7 @@ fn foreign_contract(
             .get("IO")
             .is_some_and(|io| !io.foreign && io.body.is_some());
     if !actual_io
-        || !matches!(head.as_ref(), Term::Ref(name) if name == "IO")
+        || !matches!(head.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "IO")
         || arguments.len() != 1
     {
         return Err(KernelError::new(
@@ -381,8 +383,8 @@ fn numeric_contract(
         if *quant != intrinsic.input_quant()
             || parameter.quant != intrinsic.input_quant()
             || *id != parameter.id
-            || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
-            || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) if name == intrinsic.input_type())
+            || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == intrinsic.input_type())
+            || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == intrinsic.input_type())
         {
             return Err(KernelError::new(
                 "numeric contract has an invalid parameter",
@@ -394,9 +396,9 @@ fn numeric_contract(
         matches!(result.as_ref(), Term::Adt { name, args, excluded }
             if name == "Maybe" && excluded.is_empty() && args.len() == 2
                 && matches!(strip_annotations(&args[0]).as_ref(), Term::Qua(Quant::Many))
-                && matches!(strip_annotations(&args[1]).as_ref(), Term::Ref(name) if name == "F32"))
+                && matches!(strip_annotations(&args[1]).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "F32"))
     } else {
-        matches!(result.as_ref(), Term::Ref(name) if name == intrinsic.output_type())
+        matches!(result.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == intrinsic.output_type())
     };
     if !valid_result {
         return Err(KernelError::new(

@@ -133,14 +133,14 @@ fn is_checked_word_operation(definition: &DefDecl, arity: usize) -> bool {
         if *quant != Quant::Lone
             || parameter.quant != Quant::Lone
             || *id != parameter.id
-            || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) if name == "U32")
-            || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) if name == "U32")
+            || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "U32")
+            || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "U32")
         {
             return false;
         }
         telescope = strip_annotations(body);
     }
-    matches!(telescope.as_ref(), Term::Ref(name) if name == "U32")
+    matches!(telescope.as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "U32")
 }
 
 pub(super) struct NumericArguments {
