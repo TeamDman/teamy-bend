@@ -18,7 +18,9 @@
   and TCP/UDP now pass native and generated JavaScript validation on Windows
   (5.14); execution-only unsafe checking is implemented (5.16). Executable C
   remains in progress (5.15), with actual multicore CPU execution implemented
-  (5.15.2). Compiler specialization, runtime optimization and GPU work remain.
+  (5.15.2), with direct typed calls and self-tail frame reuse complete (5.15.4).
+  GPU compiler/runtime work is the next implementation focus. Compiler
+  specialization, remaining CPU optimization and platform validation stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
 
@@ -368,11 +370,23 @@ and callback behavior, plus unchanged strict proof and Poche protocol tests.
 Completion: the full documented effect/interface inventory executes through
 Rust implementations and Rust-generated backends with observed compatibility.
 
-### [ ] 3.4 Evaluate Makepad and teamy-tts strategies during the GPU port
+### [~] 3.4 Evaluate Makepad and teamy-tts strategies during the GPU port
 
-This is a deferred reference/decision task within the existing GPU scope, not
-the next implementation milestone. Start with
-[GPU port references](gpu-port-references.md) and its local checkout map.
+GPU execution is the next implementation focus after direct CPU calls. Source
+reconnaissance has identified relevant residency, ordered-stream and explicit
+transfer boundaries in the saved Makepad/teamy-tts references. Local hardware
+queries identify an available CUDA target whose concurrent managed-memory
+capability differs from upstream's requirements. No Bend program has executed
+on a GPU yet. Start with [GPU port references](gpu-port-references.md), its local
+checkout map and the ignored `.local/gpu-phase-recon.md` decision evidence.
+
+The next implementation must carry bang annotations through the compiler,
+execute compiler-generated device segments and their recursive fork graph,
+then deliver their result to the existing CPU continuation. Retain the full
+upstream GPU contracts and later platform acceptance; a standalone kernel demo
+does not complete this seam. Remaining CPU optimization and higher-order
+specialization remain tracked requirements, not prerequisites silently dropped
+by changing focus.
 
 Work: compare the original Bend2 offload/compiler/runtime requirements with the
 reference approaches to device residency, transfer/synchronization boundaries,
@@ -1943,7 +1957,7 @@ agree. Preserve the current stability guard until callable/type-use analysis
 or a complete representation boundary establishes compatibility. Do not weaken
 it to accept more fixtures without runtime-layout evidence.
 
-#### [~] 5.15.4 Dispatch typed calls directly and reuse self-tail frames
+#### [x] 5.15.4 Dispatch typed calls directly and reuse self-tail frames
 
 Work: emit direct outcomes for statically resolved segment-to-segment calls,
 preserving exact word layouts and argument evaluation order. The dispatcher
@@ -1962,7 +1976,8 @@ programs with freshly checked and executed upstream JavaScript. Complete the
 standard gate, strict workspace library/test Clippy, retained clean release and
 existing Poche regressions before publication. Keep the full goal active.
 
-Progress: generator and runtime changes are implemented. A 5,001-iteration
+Completion: implementation commit `3ae05e5` connects direct typed outcomes to
+the dispatcher and reuses self-tail frames. A 5,001-iteration
 argument permutation and a 1,001-iteration alternating-ownership program now
 exercise actual frame reuse. The latter needs more than 32 continuation frames
 inside the existing U32.show helper: the previous release reproduces that limit
@@ -1973,8 +1988,21 @@ library/test Clippy passes after removing an unnecessary test-string delimiter;
 the embedded Bend source is unchanged. Eight frozen-candidate native executions
 match fresh upstream JavaScript for six complete programs, with nested forks at
 one/two/four workers. Whole upstream C remains generated only. Independent review
-found no production defects. Clean-release Poche checks and publication remain
-pending.
+found no production defects.
+
+The retained clean `3ae05e5` release passes all existing Poche regressions:
+seven symbolic privacy theorems, three imported equalities and one typed
+negative control; 15,503 scalar comparisons with seven equalities and two
+controls; and the 22-state/21-transition trajectory with 300 chance partitions
+and eight controls. The transcript, all 17 model/source hashes, 13 compiled
+conformance fingerprints, Poche HEAD and dirty paths are unchanged. The previous
+exhaustive graph remains attributed to its earlier release; it was not rerun.
+
+Among 120 compiled source files, only the segment generator and two C runtime
+files differ from `3ad868e`. The strict checker audit is inherited with its
+original `18c8590` attribution, not rerun or treated as runtime coverage. Receipts
+are retained under target/direct-calls-reference and target/verified-3ae05e5.
+The broad 5.15 milestone and full goal remain active; GPU work is next.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
