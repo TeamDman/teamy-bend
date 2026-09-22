@@ -813,19 +813,25 @@ INLINE Term tb_word(Env e, u32 value) {
 typedef Term (*BendClosureFn)(Env, const Term *, Term);
 typedef struct TBCallFrame TBCallFrame;
 typedef Term (*BendResumeFn)(const Env *, TBCallFrame *);
+enum { TB_OUTCOME_WORDS = 0, TB_OUTCOME_TASK = 1, TB_OUTCOME_CALL = 2 };
 typedef struct {
   Term task;
   const Term *words;
   const Term *owned;
   u32 count;
-  bool pending;
+  u32 pending;
 } TBOutcome;
 typedef TBOutcome (*BendSegmentFn)(const Env *, TBCallFrame *);
 INLINE TBOutcome tb_segment_task(Term task) {
-  TBOutcome outcome = {task, NULL, NULL, 0, true}; return outcome;
+  TBOutcome outcome = {task, NULL, NULL, 0, TB_OUTCOME_TASK}; return outcome;
 }
 INLINE TBOutcome tb_segment_words(const Term *words, const Term *owned, u32 count) {
-  TBOutcome outcome = {0, words, owned, count, false}; return outcome;
+  TBOutcome outcome = {0, words, owned, count, TB_OUTCOME_WORDS}; return outcome;
+}
+/* A direct call borrows its argument span until the dispatcher copies it.
+ * Only this outcome stores a plain function ID in the task field. */
+INLINE TBOutcome tb_segment_call(Fid fid, u32 count, const Term *words, const Term *owned) {
+  TBOutcome outcome = {fid, words, owned, count, TB_OUTCOME_CALL}; return outcome;
 }
 /* Scalar representation changes compose without retaining identity frames.
  * Bit zero enables an adapter, bit one selects an owned result, and bit two

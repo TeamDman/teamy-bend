@@ -41,13 +41,20 @@ impl Fixture {
     }
 
     fn run(&self, foreign: &str, definitions: &[&str]) -> Output {
+        self.run_with_prelude(foreign, definitions, "")
+    }
+
+    fn run_with_prelude(&self, foreign: &str, definitions: &[&str], prelude: &str) -> Output {
         fs::write(self.0.join("main.bend"), SOURCE).unwrap();
         fs::write(self.0.join("effect.c"), foreign).unwrap();
         let loaded = load_executable(self.0.join("main.bend")).unwrap();
         let checked = check_executable(&loaded).unwrap();
         let generated = compile_executable_c(&checked).unwrap();
         assert_eq!(generated.matches("int main(void)").count(), 1);
-        let mut generated = generated.replace("int main(void)", "static int checked_main(void)");
+        let mut generated = format!(
+            "{prelude}\n{}",
+            generated.replace("int main(void)", "static int checked_main(void)")
+        );
         generated.push_str(
             r#"
 int main(void) {
@@ -161,6 +168,140 @@ fn raw_task_and_hole_bits_round_trip_without_becoming_owners_or_control_flow() {
         &Fixture::new().run(&invalid_mask, &[]),
         "invalid task ownership mask",
     );
+}
+
+const INVALID_DIRECT_CALL: &str = r#"
+static const Term direct_raw_one[1] = {0};
+static TBOutcome unexpected_direct_target(const Env *e, TBCallFrame *frame) {
+  (void)e; (void)frame;
+  err_fail("direct target executed before call validation");
+}
+static TBOutcome malformed_direct_call(const Env *e, TBCallFrame *frame) {
+  TBOutcome outcome;
+  (void)e;
+  frame->values[0] = 41;
+  outcome = tb_segment_call(62001, 1, frame->values, direct_raw_one);
+  /* mutate call */
+  return outcome;
+}
+"#;
+
+#[test]
+fn malformed_direct_calls_fail_before_entering_the_target() {
+    let foreign = probe(
+        INVALID_DIRECT_CALL,
+        "  (void)corpus_eval(e.mem, tb_word_task(e, 62000, 0, NULL, NULL));",
+        "  tb_register_segment(62000, malformed_direct_call, 0, 1, 2);\n  tb_register_segment(62001, unexpected_direct_target, 1, 1, 0);\n  tb_register_segment(62003, unexpected_direct_target, 1, 2, 0);",
+    );
+    for (mutation, diagnostic) in [
+        ("outcome.pending = 3;", "invalid segment outcome tag"),
+        (
+            "outcome.task = (UINT64_C(1) << 32) | 62001;",
+            "invalid direct segment call",
+        ),
+        ("outcome.task = 65536;", "invalid direct segment call"),
+        ("outcome.task = 62002;", "invalid direct segment call"),
+        ("outcome.count = 0;", "invalid direct segment arguments"),
+        ("outcome.words = NULL;", "invalid direct segment arguments"),
+        ("outcome.task = 62003;", "task result width mismatch"),
+        (
+            "frame->values[1] = 2; outcome.owned = frame->values + 1;",
+            "invalid task ownership mask",
+        ),
+        (
+            "frame->values[0] = TERM_HOLE; outcome.owned = NULL;",
+            "foreign task argument is missing",
+        ),
+        (
+            "frame->values[0] = term_tsk(65535, 123); outcome.owned = NULL;",
+            "runnable task contains a pending task",
+        ),
+        (
+            "frame->pc = 1; frame->expected = 1; frame->waiting = true; outcome.task = 62003;",
+            "task result width mismatch",
+        ),
+    ] {
+        failure(
+            &Fixture::new().run(&foreign.replace("/* mutate call */", mutation), &[]),
+            diagnostic,
+        );
+    }
+}
+
+const DIRECT_REUSE_PRELUDE: &str = r"
+static void record_direct_call(unsigned int fid, int reused);
+#define TB_DIRECT_CALL(fid, reused) record_direct_call((fid), (reused))
+";
+
+const DIRECT_REUSE: &str = r#"
+static const Term direct_packet_owned[3] = {0, 0, 1};
+static const Term direct_loop_owned[4] = {0, 0, 0, 1};
+static u32 direct_calls, reused_calls;
+static void record_direct_call(unsigned int fid, int reused) {
+  if (fid >= 62000 && fid <= 62002) {
+    ++direct_calls;
+    if (reused) {
+      if (fid != 62001) err_fail("unexpected direct frame reuse");
+      ++reused_calls;
+    }
+  }
+}
+static TBOutcome direct_entry(const Env *e, TBCallFrame *frame) {
+  (void)e;
+  return tb_segment_call(62001, 4, frame->captures + 1, direct_loop_owned);
+}
+static TBOutcome direct_permute(const Env *e, TBCallFrame *frame) {
+  (void)e;
+  for (u32 i = 0; i < 8; ++i) {
+    if (frame->values[i] != 0) err_fail("reused frame retained stale scratch words");
+  }
+  if (frame->pc != 0 || frame->destination != 0 || frame->expected != 1
+      || frame->argument != 0 || frame->waiting || frame->parent != NULL
+      || frame->tail_result != TB_RESULT_NONE || frame->saved_result != TB_RESULT_NONE)
+    err_fail("reused frame retained stale continuation state");
+  if (frame->captures[0] == 0)
+    return tb_segment_call(62002, 3, frame->captures + 1, direct_packet_owned);
+  frame->values[0] = frame->captures[0] - 1;
+  frame->values[1] = frame->captures[3];
+  frame->values[2] = frame->captures[2];
+  frame->values[3] = frame->captures[1];
+  frame->values[4] = 0;
+  frame->values[5] = frame->values[0] & 1;
+  frame->values[6] = 0;
+  frame->values[7] = 1 - frame->values[5];
+  frame->pc = 17; frame->destination = 7; frame->expected = 3;
+  return tb_segment_call(62001, 4, frame->values, frame->values + 4);
+}
+static TBOutcome direct_packet(const Env *e, TBCallFrame *frame) {
+  (void)e;
+  return tb_segment_words(frame->captures, direct_packet_owned, 3);
+}
+"#;
+
+#[test]
+fn direct_self_tail_calls_reuse_frames_and_preserve_aliased_raw_and_owned_arguments() {
+    let foreign = probe(
+        &(String::from(TEXT_CHECK) + DIRECT_REUSE),
+        r#"
+  const Term input_owned[5] = {0, 0, 0, 0, 1};
+  Term input[5] = {99, 10000, term_tsk(65535, 123), TERM_HOLE, io_str(e, "owned", 5)};
+  Term result[3], owned[3];
+  direct_calls = 0; reused_calls = 0;
+  u32 count = corpus_eval_words(e.mem, tb_word_task(e, 62000, 5, input, input_owned), result, owned, 3);
+  if (count != 3 || result[0] != input[2] || result[1] != TERM_HOLE
+      || memcmp(owned, direct_packet_owned, sizeof(owned)) != 0)
+    err_fail("direct argument transfer changed raw bits or ownership");
+  if (direct_calls != 10002 || reused_calls != 10000)
+    err_fail("self-tail calls did not reuse their dispatcher frame");
+  check_text(e, result[2], "owned");
+"#,
+        "  tb_register_segment(62000, direct_entry, 5, 3, 0);\n  tb_register_segment(62001, direct_permute, 4, 3, 8);\n  tb_register_segment(62002, direct_packet, 3, 3, 0);",
+    );
+    success(&Fixture::new().run_with_prelude(
+        &foreign,
+        &["BEND_MAX_CONTINUATIONS=8"],
+        DIRECT_REUSE_PRELUDE,
+    ));
 }
 
 const REORDERED_PACKETS: &str = r#"
@@ -380,10 +521,9 @@ static TBOutcome fork_children(const Env *e, TBCallFrame *frame) {
 }
 "#;
 
-#[test]
-fn scalar_tail_adapters_preserve_exact_masks_and_do_not_modify_nested_children() {
-    let foreign = probe(
-        &(String::from(TEXT_CHECK) + SCALAR_ADAPTERS),
+fn scalar_adapter_probe(callbacks: &str) -> String {
+    probe(
+        &(String::from(TEXT_CHECK) + callbacks),
         r#"
   const Term raw_two[2] = {0, 0};
   const u32 modes[4] = {TB_RESULT_RAW32, TB_RESULT_RAW64, TB_RESULT_BOX32, TB_RESULT_BOX64};
@@ -412,7 +552,12 @@ fn scalar_tail_adapters_preserve_exact_masks_and_do_not_modify_nested_children()
   }
 "#,
         "  tb_register_closure(62000, wide_legacy, 0);\n  tb_register_segment(62001, adapt_legacy, 2, 1, 0);\n  tb_register_segment(62002, adapt_word, 2, 1, 0);\n  tb_register_segment(62003, pending_middle, 0, 1, 1);\n  tb_register_segment(62004, owned_child, 0, 1, 1);\n  tb_register_segment(62006, fork_children, 0, 1, 0);\n  tb_register_segment(62007, joined_children, 2, 1, 1);\n  tb_register_segment(62008, composed_adapter, 2, 1, 0);",
-    );
+    )
+}
+
+#[test]
+fn scalar_tail_adapters_preserve_exact_masks_and_do_not_modify_nested_children() {
+    let foreign = scalar_adapter_probe(SCALAR_ADAPTERS);
     success(&Fixture::new().run(&foreign, &[]));
     for (original, replacement) in [
         (
@@ -434,4 +579,38 @@ fn scalar_tail_adapters_preserve_exact_masks_and_do_not_modify_nested_children()
             "invalid scalar tail result adapter",
         );
     }
+}
+
+#[test]
+fn direct_calls_preserve_scalar_adapters_across_nested_waits_and_task_graphs() {
+    let callbacks = SCALAR_ADAPTERS
+        .replace(
+            "return tb_segment_task(tb_word_task(*e, 62004, 0, NULL, NULL));",
+            "return tb_segment_call(62004, 0, NULL, NULL);",
+        )
+        .replace(
+            r"  Term task = tb_word_task(*e, (Fid)frame->captures[1], 0, NULL, NULL);
+  return tb_segment_task(tb_tail_result(frame, task, (u32)frame->captures[0]));",
+            r"  (void)e;
+  frame->tail_result = (u32)frame->captures[0];
+  return tb_segment_call((Fid)frame->captures[1], 0, NULL, NULL);",
+        )
+        .replace(
+            r"  const Term raw_two[2] = {0, 0};
+  Term input[2] = {frame->captures[1], UINT64_C(0x100000007)};
+  Term task = tb_word_task(*e, 62001, 2, input, raw_two);
+  return tb_segment_task(tb_tail_result(frame, task, (u32)frame->captures[0]));",
+            r"  static const Term raw_two[2] = {0, 0};
+  (void)e;
+  frame->values[0] = frame->captures[1];
+  frame->values[1] = UINT64_C(0x100000007);
+  frame->tail_result = (u32)frame->captures[0];
+  return tb_segment_call(62001, 2, frame->values, raw_two);",
+        );
+    assert_eq!(callbacks.matches("return tb_segment_call(").count(), 3);
+    let foreign = scalar_adapter_probe(&callbacks).replace(
+        "tb_register_segment(62008, composed_adapter, 2, 1, 0)",
+        "tb_register_segment(62008, composed_adapter, 2, 1, 2)",
+    );
+    success(&Fixture::new().run(&foreign, &[]));
 }

@@ -41,6 +41,9 @@ enum { TB_CPU_FINISH, TB_CPU_GRAPH, TB_CPU_COORDINATOR };
 #ifndef TB_CPU_RESUME_LEAVE
 #define TB_CPU_RESUME_LEAVE(fid, frame) ((void)0)
 #endif
+#ifndef TB_DIRECT_CALL
+#define TB_DIRECT_CALL(fid, reused) ((void)0)
+#endif
 
 /* A completed packet owns its words. Its metadata shares the same tracked
  * allocation, and moving the packet never duplicates the contained owners. */
@@ -323,6 +326,25 @@ INLINE bool tb_task_worker_safe(const TBTaskRun *run) {
   }
   return fid < 65536 && tb_parallel_functions[fid];
 }
+/* Validate the full plain ID before narrowing it. A direct call's words and
+ * mask can alias the source frame, so complete validation before moving or
+ * releasing any of that storage. Raw words retain all bits, including values
+ * that would look like holes or tasks if treated as boxed Terms. */
+OUTLINE Fid tb_task_call_validate(TBOutcome outcome, u32 expected) {
+  if (outcome.task >= 65536 || tb_segment_functions[(u32)outcome.task] == NULL)
+    err_fail("invalid direct segment call");
+  Fid fid = (Fid)outcome.task;
+  if (outcome.count != tb_segment_arities[fid] || (outcome.count != 0 && outcome.words == NULL))
+    err_fail("invalid direct segment arguments");
+  if (expected != tb_segment_widths[fid]) err_fail("task result width mismatch");
+  for (u32 i = 0; i < outcome.count; ++i) {
+    if (outcome.owned != NULL && outcome.owned[i] > 1) err_fail("invalid task ownership mask");
+    if (outcome.owned != NULL && outcome.owned[i] == 0) continue;
+    if (outcome.words[i] == TERM_HOLE) err_fail("foreign task argument is missing");
+    if (term_tag(outcome.words[i]) == TAG_TSK) err_fail("runnable task contains a pending task");
+  }
+  return fid;
+}
 /* Advance one exclusively owned run. Graph adoption and result delivery are
  * coordinator operations; neither happens inside a worker. Recheck safety at
  * every call boundary, including dynamic closures and ready tail calls. */
@@ -342,7 +364,8 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
           if (worker) TB_CPU_RESUME_ENTER(current->fid, current);
           outcome = tb_segment_functions[current->fid](&e, current);
           if (worker) TB_CPU_RESUME_LEAVE(current->fid, current);
-          if (!outcome.pending) {
+          if (outcome.pending > TB_OUTCOME_CALL) err_fail("invalid segment outcome tag");
+          if (outcome.pending == TB_OUTCOME_WORDS) {
             if (outcome.count != fid_result_width(current->fid)) err_fail("task result width mismatch");
             tb_counter_add(&tb_segment_result_words, outcome.count, "segment result counter exhausted");
             outcome = tb_task_packet(outcome.words, outcome.owned, outcome.count);
@@ -357,7 +380,7 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
           outcome = term_tag(result) == TAG_TSK ? tb_segment_task(result) : tb_task_packet(&result, NULL, 1);
         }
         if (current->tail_result != TB_RESULT_NONE) {
-          if (current->waiting || !outcome.pending || fid_result_width(current->fid) != 1)
+          if (current->waiting || outcome.pending == TB_OUTCOME_WORDS || fid_result_width(current->fid) != 1)
             err_fail("invalid scalar tail result adapter");
           run->tail_result = tb_result_compose(run->tail_result, current->tail_result);
         }
@@ -365,7 +388,38 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
           if (current->pc == 0 || current->expected == 0 || current->expected > 255
               || current->destination > current->slots || current->expected > current->slots - current->destination)
             err_fail("invalid generated continuation destination");
-          if (!outcome.pending || term_tag(outcome.task) != TAG_TSK) err_fail("foreign task is unsupported");
+          if (outcome.pending != TB_OUTCOME_CALL
+              && (outcome.pending != TB_OUTCOME_TASK || term_tag(outcome.task) != TAG_TSK))
+            err_fail("foreign task is unsupported");
+        }
+        if (outcome.pending == TB_OUTCOME_CALL) {
+          Fid fid = tb_task_call_validate(outcome, current->waiting ? current->expected : run->expected);
+          bool reuse = !current->waiting && fid == current->fid;
+          Term *captures;
+          if (reuse) {
+            /* Both input spans may point inside captures. Copy first, then
+             * clear scratch and control fields without inspecting stale owners. */
+            captures = (Term *)current->captures;
+            if (outcome.count != 0) memmove(captures, outcome.words, outcome.count * sizeof(Term));
+            if (current->slots != 0) memset(current->values, 0, current->slots * sizeof(Term));
+            current->pc = 0; current->destination = 0; current->expected = 1;
+            current->tail_result = TB_RESULT_NONE; current->argument = 0;
+            current->saved_result = TB_RESULT_NONE; current->parent = NULL;
+          } else {
+            captures = outcome.count == 0 ? NULL : (Term *)io_mem(tb_host_malloc(outcome.count * sizeof(Term)));
+            if (outcome.count != 0) memcpy(captures, outcome.words, outcome.count * sizeof(Term));
+            if (current->waiting) {
+              run->expected = current->expected;
+              current->saved_result = run->tail_result; run->tail_result = TB_RESULT_NONE;
+              current->parent = run->pending; run->pending = current;
+            } else tb_call_frame_free(current);
+            run->current = tb_call_frame_owned(fid, captures, 0);
+          }
+          tb_counter_add(&tb_segment_calls, 1, "segment call counter exhausted");
+          TB_DIRECT_CALL(fid, reuse);
+          continue;
+        }
+        if (current->waiting) {
           run->expected = current->expected;
           current->saved_result = run->tail_result; run->tail_result = TB_RESULT_NONE;
           current->parent = run->pending; run->pending = current; run->current = NULL;
@@ -406,7 +460,9 @@ OUTLINE u32 tb_task_advance(Env e, TBTaskRun *run, bool worker) {
         tb_host_free(captures);
         outcome = term_tag(result) == TAG_TSK ? tb_segment_task(result) : tb_task_packet(&result, NULL, 1);
       }
-      if (outcome.pending) {
+      if (outcome.pending != TB_OUTCOME_WORDS && outcome.pending != TB_OUTCOME_TASK)
+        err_fail("invalid segment outcome tag");
+      if (outcome.pending == TB_OUTCOME_TASK) {
         Term task = outcome.task;
         Loc tail = task_tail(task);
         Fid fid = (Fid)term_aux(task);

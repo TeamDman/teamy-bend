@@ -74,6 +74,12 @@ int main(void) {{
     (void)fputs("CPU workers survived runtime shutdown\n", stderr);
     return 90;
   }}
+#if BEND_TEST_REQUIRE_DIRECT_REUSE
+  if (tb_test_worker_reused < 128) {{
+    (void)fputs("worker failure did not exercise repeated direct self calls\n", stderr);
+    return 95;
+  }}
+#endif
   if (status == 0 && (tb_live_words != 0 || tb_live_blocks != 0 || tb_tasks != 0 ||
       tb_continuations != 0 || tb_frames != 0 || tb_depth != 0)) {{
     (void)fputs("parallel program retained owners or pending work\n", stderr);
@@ -167,13 +173,18 @@ const HOOK_DECLARATIONS: &str = r"
 static void tb_test_resume_enter(unsigned fid, const void *frame);
 static void tb_test_resume_leave(unsigned fid, const void *frame);
 static int tb_test_on_coordinator(void);
+static void tb_test_direct_call(unsigned fid, int reused);
 #define TB_CPU_RESUME_ENTER(fid, frame) tb_test_resume_enter((fid), (frame))
 #define TB_CPU_RESUME_LEAVE(fid, frame) tb_test_resume_leave((fid), (frame))
+#define TB_DIRECT_CALL(fid, reused) tb_test_direct_call((unsigned)(fid), (reused))
 ";
 
 const HOOK_IMPLEMENTATION: &str = r#"
 #ifndef BEND_TEST_REPEAT_RUNTIME
 #define BEND_TEST_REPEAT_RUNTIME 0
+#endif
+#ifndef BEND_TEST_REQUIRE_DIRECT_REUSE
+#define BEND_TEST_REQUIRE_DIRECT_REUSE 0
 #endif
 #ifdef _WIN32
 typedef DWORD TBTestThread;
@@ -195,9 +206,17 @@ static void tb_test_yield(void) { struct timespec delay = {0, 1000000}; (void)na
 static TBTestThread tb_test_main_thread, tb_test_threads[2];
 static TBMutex tb_test_mutex = TB_MUTEX_INIT;
 static u32 tb_test_selected_fid, tb_test_arrivals, tb_test_mask, tb_test_active, tb_test_peak;
+static u32 tb_test_worker_reused;
 static TB_THREAD_LOCAL const void *tb_test_entered;
 static int tb_test_on_coordinator(void) {
   return tb_test_same_thread(tb_test_thread(), tb_test_main_thread);
+}
+static void tb_test_direct_call(unsigned fid, int reused) {
+  (void)fid;
+  if (!reused || tb_test_on_coordinator()) return;
+  tb_lock(&tb_test_mutex);
+  ++tb_test_worker_reused;
+  tb_unlock(&tb_test_mutex);
 }
 static void tb_test_resume_enter(unsigned fid, const void *pointer) {
   const TBCallFrame *frame = (const TBCallFrame *)pointer;
@@ -388,7 +407,7 @@ fn worker_budget_failure_cancels_and_joins_the_other_children() {
                 "",
                 workers,
                 false,
-                &["BEND_MAX_STEPS=4096"],
+                &["BEND_MAX_STEPS=4096", "BEND_TEST_REQUIRE_DIRECT_REUSE=1"],
             ),
             "evaluation budget exhausted",
         );
@@ -509,6 +528,110 @@ static Term foreign_resume(const Env *e, TBCallFrame *frame) {
   return tb_word_task(*e, 62002, 1, words, NULL);
 }
 "#;
+
+const DIRECT_HANDOFF: &str = r#"import Base
+def probe(seed: U32) -> IO(Unit): import "effect.c"
+def identity(value: U32) -> U32: value
+def main() -> IO(Unit):
+  left right = identity(1) identity(2)
+  do IO<Unit>:
+    Unit <- probe(U32.add(left, right))
+    IO.print("ok")
+"#;
+
+const DIRECT_HANDOFF_C: &str = r#"
+static const Term handoff_pair_owned[2] = {0, 1};
+static const Term handoff_join_owned[4] = {0, 1, 0, 1};
+#if BEND_CPU_WORKERS > 1
+static TBMutex handoff_mutex = TB_MUTEX_INIT;
+static u32 handoff_workers;
+#endif
+static u32 handoff_foreign;
+static TBOutcome handoff_bridge(const Env *e, TBCallFrame *frame) {
+  u32 marker = (u32)frame->captures[0];
+  (void)e;
+  if (marker < 1 || marker > 2) err_fail("direct handoff lost raw argument");
+#if BEND_CPU_WORKERS > 1
+  if (tb_test_on_coordinator()) err_fail("direct handoff never entered a worker");
+  tb_lock(&handoff_mutex);
+  handoff_workers |= 1u << marker;
+  tb_unlock(&handoff_mutex);
+#else
+  if (!tb_test_on_coordinator()) err_fail("serial handoff entered a worker");
+#endif
+  /* Captures are borrowed from the source frame. The dispatcher must copy
+   * them before freeing it, then reconsider the target's worker eligibility. */
+  return tb_segment_call(62001, 2, frame->captures, handoff_pair_owned);
+}
+static TBOutcome handoff_foreign_segment(const Env *e, TBCallFrame *frame) {
+  u32 marker = (u32)frame->captures[0];
+  (void)e;
+  if (!tb_test_on_coordinator() || tb_cpu_pending != 0)
+    err_fail("direct foreign segment ran before CPU workers drained");
+  if (marker < 1 || marker > 2 || (handoff_foreign & (1u << marker)) != 0)
+    err_fail("direct foreign segment repeated or lost arguments");
+  handoff_foreign |= 1u << marker;
+  return tb_segment_words(frame->captures, handoff_pair_owned, 2);
+}
+static TBOutcome handoff_join(const Env *e, TBCallFrame *frame) {
+  (void)e;
+  if (!tb_test_on_coordinator()) err_fail("unmarked direct join ran on a CPU worker");
+  return tb_segment_words(frame->captures, handoff_join_owned, 4);
+}
+static TBOutcome handoff_launch(const Env *e, TBCallFrame *frame) {
+  Term first[2] = {1, io_str(*e, "first", 5)};
+  Term second[2] = {2, io_str(*e, "second", 6)};
+  Term children[2];
+  (void)frame;
+  children[0] = tb_word_task(*e, 62000, 2, first, handoff_pair_owned);
+  children[1] = tb_word_task(*e, 62000, 2, second, handoff_pair_owned);
+  return tb_segment_task(tb_c_word_join(e, 62002, 0, NULL, NULL, 2, children));
+}
+static void handoff_check_text(Env e, Term value, const char *expected) {
+  u64 length;
+  char *text = io_cstr(e, value, &length);
+  if (length != strlen(expected) || memcmp(text, expected, (size_t)length) != 0)
+    err_fail("direct handoff lost owned text");
+  free(text);
+}
+static Term probe_run(Env e, Term *fields, IoWork *work) {
+  Term result[4], owned[4], entry;
+  u32 count;
+  (void)work;
+  if (!tb_test_on_coordinator() || fields[0] != 3) err_fail("invalid direct handoff setup");
+  entry = tb_word_task(e, 62003, 0, NULL, NULL);
+  count = corpus_eval_words(e.mem, entry, result, owned, 4);
+  if (count != 4 || result[0] != 1 || result[2] != 2 || handoff_foreign != 6)
+    err_fail("direct handoff did not preserve both sibling results");
+#if BEND_CPU_WORKERS > 1
+  if (handoff_workers != 6) err_fail("direct handoff did not run both siblings on workers");
+#endif
+  for (u32 i = 0; i < 4; ++i)
+    if (owned[i] != handoff_join_owned[i]) err_fail("direct handoff changed result ownership");
+  handoff_check_text(e, result[1], "first");
+  handoff_check_text(e, result[3], "second");
+  return term_pak(CID_UNIT, 0);
+}
+static void __attribute__((constructor)) probe_use(void) {
+  tb_register_segment(62000, handoff_bridge, 2, 2, 0);
+  tb_register_parallel(62000);
+  tb_register_segment(62001, handoff_foreign_segment, 2, 2, 0);
+  tb_register_segment(62002, handoff_join, 4, 4, 0);
+  tb_register_segment(62003, handoff_launch, 0, 4, 0);
+  io_eff(CID_PROBE, probe_run, 0);
+}
+"#;
+
+#[test]
+fn direct_worker_calls_recheck_foreign_eligibility_and_preserve_owned_results() {
+    for workers in [1, 2, 4] {
+        success(
+            &Fixture::new().run(DIRECT_HANDOFF, DIRECT_HANDOFF_C, workers, false, &[]),
+            "ok\n",
+            workers,
+        );
+    }
+}
 
 // This deliberately exercises native reference-counted copy-on-write under the
 // explicit unsafe quantity relaxation. Upstream JavaScript mutates aliased

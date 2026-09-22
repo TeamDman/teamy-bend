@@ -219,16 +219,26 @@ impl Generator<'_> {
                 "tail word calls must return their task directly",
             ));
         }
+        let returned = if output.words {
+            format!("tb_segment_task({task})")
+        } else {
+            task.to_owned()
+        };
+        self.pending_return(output, &returned, layout)
+    }
+
+    fn pending_return(
+        &mut self,
+        output: &mut Body,
+        returned: &str,
+        layout: &Layout,
+    ) -> Result<Value, CompileError> {
         self.fresh()?;
         let slot = output.reserve(layout.words.len().max(1));
         output.resumes += 1;
         let pc = output.resumes;
         writeln!(output, "  tb_frame->pc = {pc}; tb_frame->destination = {slot}; tb_frame->expected = {}; tb_frame->waiting = true;", layout.words.len()).unwrap();
-        if output.words {
-            writeln!(output, "  return tb_segment_task({task});").unwrap();
-        } else {
-            writeln!(output, "  return {task};").unwrap();
-        }
+        writeln!(output, "  return {returned};").unwrap();
         writeln!(output, "tb_resume_{pc}: ;").unwrap();
         Ok(Value {
             layout: layout.clone(),
@@ -402,14 +412,13 @@ impl Generator<'_> {
                 if let Some((signature, values)) = self.flat_call(expression, scope, output)? {
                     let (words, owned) = self.flat_arrays(&values, output)?;
                     let count = values.iter().map(|value| value.words.len()).sum::<usize>();
-                    return self.pending_words(
+                    return self.pending_return(
                         output,
                         &format!(
-                            "tb_c_word_task(e, {}, {count}, {words}, {owned})",
+                            "tb_segment_call({}, {count}, {words}, {owned})",
                             signature.id + 2
                         ),
                         &signature.result,
-                        false,
                     );
                 }
                 self.flat_legacy(expression, scope, output, false)
@@ -614,16 +623,16 @@ impl Generator<'_> {
                 {
                     let (words, owned) = self.flat_arrays(&values, output)?;
                     let count = values.iter().map(|value| value.words.len()).sum::<usize>();
-                    let task = format!(
-                        "tb_c_word_task(e, {}, {count}, {words}, {owned})",
+                    let call = format!(
+                        "tb_segment_call({}, {count}, {words}, {owned})",
                         signature.id + 2
                     );
                     if signature.result == *result {
                         self.flat_drop_scope(scope, output, false)?;
-                        writeln!(output, "  return tb_segment_task({task});").unwrap();
+                        writeln!(output, "  return {call};").unwrap();
                         return Ok(());
                     }
-                    let value = self.pending_words(output, &task, &signature.result, false)?;
+                    let value = self.pending_return(output, &call, &signature.result)?;
                     return self.flat_return(value, scope, output, result);
                 }
                 if arguments.is_empty()

@@ -48,9 +48,12 @@ dispatcher without retaining conversion frames. Finite datatype conversions
 at dynamic callable boundaries still use tracked frames; broader conversion
 and callable optimization remains unfinished.
 
-Generated calls use an explicit dispatch loop. A tail application transfers its
-closure and argument into a pending root task; the current callback releases its
-frame before dispatch continues. A non-tail application saves its caller's
+Generated calls use an explicit dispatch loop. Direct typed calls return a
+function ID and borrowed argument/ownership spans to that loop, which validates
+both spans and copies the argument words before releasing the source frame. A self-tail call reuses its
+frame and capture storage, including when argument order or active sum variants
+change. Other tail calls release the current frame before dispatch continues.
+Boxed applications retain their closure-task boundary. A non-tail call saves its caller's
 program counter, result slot, captures, argument and scratch values in a tracked
 heap frame. After the child finishes, the caller resumes immediately after the
 call. Definition thunks and applications introduced by pattern matching use the
@@ -58,6 +61,10 @@ same mechanism. Function heads, arguments and constructor fields remain strictly
 evaluated, without repeating earlier evaluation on resume.
 Generated recursion no longer grows the native C call stack. Pending work still
 uses bounded storage, and dispatch and resumption consume the evaluation budget.
+Every direct transition also rechecks worker eligibility before invoking the
+target. Forks retain their task graphs and result destinations. This removes
+intermediate task allocation from ordinary typed calls; it does not yet provide
+upstream's full native-body fusion or borrowed-parameter optimization.
 
 Foreign C callbacks keep their synchronous ABI. Each nested evaluation owns its
 own pending stack, and a callback's returned root tasks finish before the caller

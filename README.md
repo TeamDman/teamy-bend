@@ -83,6 +83,8 @@ multiple CPU workers, with foreign callbacks coordinated between jobs. Fully
 supplied Base primitive calls emit directly without intermediate closure
 dispatch. Further CPU optimization, window/audio effects and GPU execution
 remain unfinished.
+Ordinary typed calls transfer directly through the dispatcher, and self-tail
+calls reuse their frame and argument storage without growing the native stack.
 Environment and file effects use synchronous Node calls. The sealed affine File
 type prevents ordinary checked code from copying handles; reads and writes return the
 handle on both success and failure. See

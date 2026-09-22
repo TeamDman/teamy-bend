@@ -2,7 +2,7 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-09-21
+**Last updated:** 2026-09-22
 **Intent audit:** Updated 2026-09-20 against the original request and available scope/GPU follow-ups
 
 ## How to update this plan
@@ -1942,6 +1942,39 @@ packed words; successful upstream C generation alone does not prove the layouts
 agree. Preserve the current stability guard until callable/type-use analysis
 or a complete representation boundary establishes compatibility. Do not weaken
 it to accept more fixtures without runtime-layout evidence.
+
+#### [~] 5.15.4 Dispatch typed calls directly and reuse self-tail frames
+
+Work: emit direct outcomes for statically resolved segment-to-segment calls,
+preserving exact word layouts and argument evaluation order. The dispatcher
+validates the target, spans and ownership before copying borrowed arguments.
+Self-tail transitions reuse the frame and capture allocation; other calls keep
+explicit continuations. Preserve scalar result adapters, fork graphs, boxed
+foreign boundaries, cancellation and worker eligibility at every transition.
+This advances ordinary-call optimization; full native-body fusion, callable
+specialization and borrowed-parameter analysis remain required work.
+
+Validation: compile and execute long argument permutations and alternating
+owned/raw variants, inspect actual reuse counts, test malformed direct outcomes,
+and exercise pending multiword results and scalar adapters. Run worker-to-foreign
+handoffs and cancellation with one/two/four workers. Compare unchanged whole
+programs with freshly checked and executed upstream JavaScript. Complete the
+standard gate, strict workspace library/test Clippy, retained clean release and
+existing Poche regressions before publication. Keep the full goal active.
+
+Progress: generator and runtime changes are implemented. A 5,001-iteration
+argument permutation and a 1,001-iteration alternating-ownership program now
+exercise actual frame reuse. The latter needs more than 32 continuation frames
+inside the existing U32.show helper: the previous release reproduces that limit
+and succeeds at 64. Its test allows 128 frames without changing runtime defaults
+or reducing the workload. The standard gate passes 682 tests, including five
+compile-fail examples, with two optional profilers ignored. Strict workspace
+library/test Clippy passes after removing an unnecessary test-string delimiter;
+the embedded Bend source is unchanged. Eight frozen-candidate native executions
+match fresh upstream JavaScript for six complete programs, with nested forks at
+one/two/four workers. Whole upstream C remains generated only. Independent review
+found no production defects. Clean-release Poche checks and publication remain
+pending.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
