@@ -2549,6 +2549,8 @@ kernel rows (7 equalities, 2 controls), and the bounded 22-state trajectory
 (21 transitions, 300 chance partitions, 8 controls, 67 requests). Poche HEAD
 and its pre-existing dirty source paths are unchanged; no Poche source was
 edited. The full state graph was not rerun.
+Commit `af0e9c671071f6abe45acaf12b6745d190d83508` is published on public
+`main`; the worktree is clean and tracks `origin/main`.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
