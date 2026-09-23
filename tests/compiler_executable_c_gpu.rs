@@ -41,7 +41,7 @@ impl Fixture {
             expected,
             (minimum_offloads, minimum_forks),
             1024,
-            false,
+            None,
         );
     }
 
@@ -52,7 +52,7 @@ impl Fixture {
         expected: &str,
         (minimum_offloads, minimum_forks): (u32, u32),
         quantum: u32,
-        require_primitive_yield: bool,
+        required_resumable_payload: Option<&str>,
     ) -> Vec<u64> {
         let path = self.0.join("main.bend");
         fs::write(&path, bend).unwrap();
@@ -60,8 +60,8 @@ impl Fixture {
             compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap())
                 .unwrap();
         assert!(generated.contains("#define TB_GPU_ENABLED 1"));
-        if require_primitive_yield {
-            assert!(generated.contains("tb_device_construct_raw(e"));
+        if let Some(helper) = required_resumable_payload {
+            assert!(generated.contains(helper));
         }
         let mut source = String::from(
             r"
@@ -98,7 +98,7 @@ int main(void) {{
       gpu_primitive_yields) < 0 || fclose(statistics) != 0) return 97;
   return 0;
 }}
-"#, u64::from(require_primitive_yield)).unwrap();
+"#, u64::from(required_resumable_payload.is_some())).unwrap();
         let quantum = format!("BEND_GPU_PRIMITIVE_QUANTUM={quantum}");
         let executable = executable_c_compiler::compile(
             &self.0,
@@ -365,7 +365,7 @@ fn cuda_nonpacked_constructor_resumes_across_payload_slices() {
         "OwnedChoice{\"boxed\", 1, 2}\n",
         (1, 0),
         1,
-        true,
+        Some("tb_device_construct_raw(e"),
     );
     let large = Fixture::new().run_with_quantum(
         RESUMABLE_CONSTRUCTOR,
@@ -373,7 +373,7 @@ fn cuda_nonpacked_constructor_resumes_across_payload_slices() {
         "OwnedChoice{\"boxed\", 1, 2}\n",
         (1, 0),
         1024,
-        false,
+        None,
     );
     assert_eq!(
         tiny[0], large[0],
@@ -391,6 +391,54 @@ fn cuda_nonpacked_constructor_resumes_across_payload_slices() {
     assert_eq!(
         large[2], 0,
         "one large slice must complete the bounded constructor"
+    );
+}
+
+const RESUMABLE_CLOSURE: &str = r"import Base
+def combine(first: U32, second: U32, third: U32, suffix: U32) -> U32:
+  join = {tail => U32.add(U32.add(first, second), U32.add(third, tail)) : U32 -> U32}
+  join(suffix)
+def main() -> U32: combine!(10, 20, 30, 40)
+";
+
+#[test]
+fn closure_capture_allocation_keeps_cpu_semantics() {
+    Fixture::new().run(RESUMABLE_CLOSURE, "off", "100\n", 0, 0);
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn cuda_closure_capture_allocation_resumes_across_payload_slices() {
+    let tiny = Fixture::new().run_with_quantum(
+        RESUMABLE_CLOSURE,
+        "on",
+        "100\n",
+        (1, 0),
+        1,
+        Some("tb_device_closure_raw(e"),
+    );
+    let large =
+        Fixture::new().run_with_quantum(RESUMABLE_CLOSURE, "on", "100\n", (1, 0), 1024, None);
+    assert_eq!(
+        tiny[0], large[0],
+        "closure capture slices must preserve language steps"
+    );
+    assert_eq!(
+        tiny[1], large[1],
+        "closure capture slices must initialize identical payloads"
+    );
+    assert_eq!(tiny[1], 4, "the three captures and padding need four words");
+    assert_eq!(
+        large[1], 4,
+        "the full capture block must be initialized once"
+    );
+    assert_eq!(
+        tiny[2], 3,
+        "quantum one must yield after each of the first three payload words"
+    );
+    assert_eq!(
+        large[2], 0,
+        "one large slice must complete the closure capture payload"
     );
 }
 

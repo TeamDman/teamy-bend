@@ -7,7 +7,7 @@ use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
-use super::DEVICE_CONSTRUCT_STATE_WORDS;
+use super::DEVICE_PAYLOAD_STATE_WORDS;
 use super::ExecutableProgram;
 use super::FunctionResult;
 use super::Generator;
@@ -69,7 +69,7 @@ impl Generator<'_> {
         }
 
         let result = self.hold(output, "0")?;
-        let state = self.array(output, &vec!["0".to_owned(); DEVICE_CONSTRUCT_STATE_WORDS])?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_PAYLOAD_STATE_WORDS])?;
         output.resumes += 1;
         let pc = output.resumes;
         let yielded = if output.words {

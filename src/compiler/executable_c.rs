@@ -42,7 +42,7 @@ type Substitutions = BTreeMap<usize, TermRef>;
 
 const DEVICE_ARRAY_NEW_STATE_WORDS: usize = 8;
 const DEVICE_DUPLICATE_STATE_WORDS: usize = 4;
-const DEVICE_CONSTRUCT_STATE_WORDS: usize = 6;
+const DEVICE_PAYLOAD_STATE_WORDS: usize = 6;
 
 #[derive(Clone)]
 struct OwnedLocal {
@@ -851,10 +851,28 @@ impl Generator<'_> {
     ) -> Result<String, CompileError> {
         output.dependencies.fids.insert(id);
         let array = self.array(output, captures)?;
-        self.hold(
+        let fid = id + 2;
+        let synchronous = format!("tb_c_closure(e, {fid}, {}, {array})", captures.len());
+        if !output.can_suspend || captures.is_empty() {
+            return self.hold(output, &synchronous);
+        }
+
+        let result = self.hold(output, "0")?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_PAYLOAD_STATE_WORDS])?;
+        output.resumes += 1;
+        let pc = output.resumes;
+        let yielded = if output.words {
+            "tb_segment_yield()"
+        } else {
+            "0"
+        };
+        writeln!(
             output,
-            &format!("tb_c_closure(e, {}, {}, {array})", id + 2, captures.len()),
+            "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_closure_raw(e, {fid}, {}, {array}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif",
+            captures.len()
         )
+        .unwrap();
+        Ok(result)
     }
 
     fn closure(
