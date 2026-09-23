@@ -2557,6 +2557,8 @@ and its pre-existing dirty source paths are unchanged; no Poche source was
 edited. The full state graph was not rerun. Closure capture payload copying is
 qualified only for nonempty closures created inside resumable generated GPU
 bodies, and the next allocation chains remain open.
+Commit `52fb59461a00408aa82901612e75abd5478ed2ea` is published on public
+`main`; the worktree is clean and tracks `origin/main`.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
