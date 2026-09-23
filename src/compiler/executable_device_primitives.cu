@@ -53,21 +53,31 @@ INLINE Loc tb_device_corpus_reserve(const Env *e, Cls cls) {
   return at;
 }
 
-/* Atomically reserve one block followed by a fixed run of another class.
- * Reserved offsets form a private linked ticket in their data words, in request
- * order. This avoids a lane-local offsets array even for a wide task join. */
-INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
-    Cls repeated_cls, u32 repeated_count) {
+/* Atomically reserve one block followed by either a repeated class or the
+ * classes implied by a run of child function identifiers. Reserved offsets
+ * form a private linked ticket in request order, avoiding a lane-local offsets
+ * array even for a wide or heterogeneous task join. */
+INLINE Loc tb_device_corpus_reserve_bundle(const Env *e, Cls first_cls,
+    Cls repeated_cls, const Term *fids, u32 tail_count) {
   if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL
-      || first_cls >= NCLS_ALL || repeated_cls >= NCLS_ALL
-      || repeated_count == UINT32_MAX)
+      || first_cls >= NCLS_ALL || tail_count == UINT32_MAX
+      || (fids == NULL && repeated_cls >= NCLS_ALL))
     err_fail("invalid heap reservation");
   u32 requested[NCLS_ALL] = {0}, reused[NCLS_ALL] = {0}, consumed[NCLS_ALL] = {0};
-  u32 count = repeated_count + 1;
+  u32 count = tail_count + 1;
   ++requested[first_cls];
-  requested[repeated_cls] += repeated_count;
-  u64 total_words = (UINT64_C(1) << first_cls)
-      + (u64)repeated_count * (UINT64_C(1) << repeated_cls);
+  u64 total_words = UINT64_C(1) << first_cls;
+  for (u32 index = 0; index < tail_count; ++index) {
+    Cls cls = repeated_cls;
+    if (fids != NULL) {
+      if (fids[index] >= UINT32_C(65536)) err_fail("invalid heap reservation");
+      cls = cls_fit(fid_arity((Fid)fids[index]) + 2);
+    }
+    if (cls >= NCLS_ALL || requested[cls] == UINT32_MAX)
+      err_fail("invalid heap reservation");
+    ++requested[cls];
+    total_words += UINT64_C(1) << cls;
+  }
   u64 fresh_words = 0;
   tb_vm_acquire();
   for (u32 cls = 0; cls < NCLS_ALL; ++cls) {
@@ -97,7 +107,11 @@ INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
 
   Loc head = 0, previous = 0;
   for (u32 index = 0; index < count; ++index) {
-    Cls cls = index == 0 ? first_cls : repeated_cls;
+    Cls cls = first_cls;
+    if (index != 0) {
+      cls = repeated_cls;
+      if (fids != NULL) cls = cls_fit(fid_arity((Fid)fids[index - 1]) + 2);
+    }
     Loc at;
     if (consumed[cls] < reused[cls]) {
       at = tb_free_lists[cls];
@@ -118,6 +132,16 @@ INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
   tb_live_blocks += count;
   tb_vm_release();
   return head;
+}
+
+INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
+    Cls repeated_cls, u32 repeated_count) {
+  return tb_device_corpus_reserve_bundle(e, first_cls, repeated_cls, NULL,
+      repeated_count);
+}
+INLINE Loc tb_device_corpus_reserve_task_children(const Env *e, Cls parent_cls,
+    const Term *child_fids, u32 children) {
+  return tb_device_corpus_reserve_bundle(e, parent_cls, 0, child_fids, children);
 }
 
 /* Advance a private reservation ticket before its current block is zeroed. */

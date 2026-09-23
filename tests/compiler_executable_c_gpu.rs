@@ -264,6 +264,43 @@ fn cuda_nested_closure_task_joins_reserve_all_nodes_before_building_the_tasks() 
     fixture.run(TASK_JOIN, "on", "TaskValue{\"abcd\", \"abcd\"}\n", 1, 1);
 }
 
+const MIXED_WORD_JOIN: &str = r"import Base
+def pair_result() -> U32 & U32: (7, 8)
+def combine(pair: U32 & U32, value: U32) -> U32:
+  (left, right) = pair
+  U32.add(U32.add(left, right), value)
+def run(unit: Unit) -> U32:
+  function = {x => U32.add(x, 9) : U32 -> U32}
+  pair value = pair_result() function(1)
+  combine(pair, value)
+def main() -> U32: run!(Unit{})
+";
+
+#[test]
+fn mixed_word_join_keeps_cpu_semantics_and_uses_the_bundle_builder() {
+    let fixture = Fixture::new();
+    let path = fixture.0.join("main.bend");
+    fs::write(&path, MIXED_WORD_JOIN).unwrap();
+    let generated =
+        compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap()).unwrap();
+    assert!(generated.contains("tb_c_word_join_build(e,"));
+    assert!(generated.contains("FID_CLO_APPLY"));
+    fixture.run(MIXED_WORD_JOIN, "off", "25\n", 0, 0);
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn cuda_mixed_word_join_reserves_parent_and_heterogeneous_children_together() {
+    let fixture = Fixture::new();
+    let path = fixture.0.join("main.bend");
+    fs::write(&path, MIXED_WORD_JOIN).unwrap();
+    let generated =
+        compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap()).unwrap();
+    assert!(generated.contains("tb_c_word_join_build(e,"));
+    assert!(generated.contains("tb_device_corpus_reserve_task_children"));
+    fixture.run(MIXED_WORD_JOIN, "on", "25\n", 1, 1);
+}
+
 const PENDING_ARGUMENT: &str = r"import Base
 def plus_one(x: U32) -> U32: U32.add(x, 1)
 def keep(x: U32) -> U32:

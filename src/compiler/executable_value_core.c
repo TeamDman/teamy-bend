@@ -398,6 +398,8 @@ INLINE Nat nat_mul(Env e, Nat left, Nat right) {
 #if defined(__CUDA_ARCH__)
 INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
     Cls repeated_cls, u32 repeated_count);
+INLINE Loc tb_device_corpus_reserve_task_children(const Env *e, Cls parent_cls,
+    const Term *child_fids, u32 children);
 INLINE Loc tb_device_corpus_ticket_take(const Env *e, Loc *ticket);
 INLINE void tb_device_corpus_initialize_reserved(const Env *e, Loc at, Cls cls);
 #endif

@@ -2452,12 +2452,14 @@ remaining device allocation families:
 
 - Fixed allocation bundles: constructor payloads (`tb_construct`), closure
   captures (`tb_closure`), task nodes and joins (`task_node`, `tb_c_join`,
-  `tb_c_word_join`), the `FID_IO_EMIT` node, and the 32-node `tb_word` value.
+  word-lowered joins), the `FID_IO_EMIT` node, and the 32-node `tb_word` value.
   CUDA `tb_word` now reserves its 32 class-one blocks in one allocator
   transaction. The generic CUDA `tb_c_join` path likewise reserves its parent
   plus every `FID_CLO_APPLY` child before linking the task graph; CPU behavior
-  is unchanged. Word-lowered joins and child task creation, constructors,
-  closures and `FID_IO_EMIT` still allocate synchronously.
+  is unchanged. The word-lowered join builder now reserves its parent and
+  heterogeneous direct/closure child nodes together; CPU task construction
+  retains its established per-child path. Constructors, closure captures and
+  `FID_IO_EMIT` still allocate synchronously.
 - Nested ownership work: shared constructor extraction and borrowed fields call
   `tb_duplicate` through `ctr_take`/`tb_borrow_fields`; boxed constructors also
   reach those helpers through generated `tb_box_*` conversions. The explicit
@@ -2496,25 +2498,34 @@ CUDA `tb_c_join` path now reserves the parent and all closure-application child
 nodes under one allocator lock, checking and accounting the full bundle before
 publishing links. Its linked reservation ticket stores offsets in the reserved
 blocks, so a wide join needs no lane-local offsets array. CPU task allocation
-is unchanged. The actual-CUDA join fixture calls nested dynamically invoked
-closures that each fork allocated constructor results; generated source
-contains the `tb_c_join` call and the run requires offload, a fork and a
-parallel lane. It prints `TaskValue{"abcd", "abcd"}` and verifies all task,
-frame and corpus owners are released. All eight ignored hardware tests in the
-focused C-GPU integration target pass. The retained join executable also passes
-Compute Sanitizer memcheck with zero errors via the named-pipe wrapper.
+is unchanged. The word-lowered `tb_c_word_join_build` path now validates a flat
+heterogeneous child layout before reserving the parent and each exact child
+class as one bundle. Its linked ticket supports different direct-segment
+arities without a lane-local offsets array. The CPU path still creates each
+word task and delegates linking to `tb_c_word_join`. A mixed-width integration
+program combines a two-word direct child with a dynamically invoked closure;
+CPU-off and actual-CUDA runs both print `25`, and the CUDA run requires an
+offload and fork. Its retained executable passes Compute Sanitizer memcheck
+with `ERROR SUMMARY: 0 errors` using `scripts/compute-sanitizer.ps1`.
 
-The repository `check-all.ps1` gate and strict all-targets/all-features Clippy
-pass. The rebuilt release SHA-256 is
-`52be73ea94b4368659b3af71481c87a1e7491b9a02229e6c9dc2d1de244f9153`. It passes
-the established Poche regressions: seven symbolic privacy theorems, three
-imported equalities and one typed negative; 15,503 scalar rows, seven
-equalities and two controls; and the 22-state/44-observation/21-transition
-trajectory with 300 chance partitions, eight controls and 67 requests. Poche
-HEAD remains `e5e767cc6b545b725994e50984d01d69091bface`; its pre-existing dirty
+The actual-CUDA generic join fixture calls nested dynamically invoked closures
+that each fork allocated constructor results; it prints
+`TaskValue{"abcd", "abcd"}` and verifies all task, frame and corpus owners are
+released. Against the current source, all nine ignored hardware tests in
+`compiler_executable_c_gpu` pass. The focused segment, parallel and segment-ABI
+tests pass, as do `check-all.ps1` and strict all-target/all-feature Clippy. The
+release build SHA-256 is
+`12ccc8b8537770999718a87a6139f90482b8858ec9be7b8a346876753475ab6f`.
+
+The exact release passes the established Poche regressions: seven symbolic
+privacy theorems, three imported equalities and one typed negative; 15,503
+scalar rows, seven equalities and two negative controls; and the bounded
+22-state/44-observation/21-transition trajectory with 300 chance partitions,
+eight controls and 67 requests. Poche HEAD remains
+`e5e767cc6b545b725994e50984d01d69091bface`; its pre-existing dirty
 paths are unchanged and no Poche source was edited. The full 431,800-state graph
-was not rerun and keeps its earlier attribution. This closes two fixed bundles
-only; word-lowered joins, other task/closure nodes, nested allocations and
+was not rerun and keeps its earlier attribution. The current source also closes
+the word-lowered join bundle; other task/closure nodes, nested allocations and
 backing waits remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking

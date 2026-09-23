@@ -899,6 +899,40 @@ impl Generator<'_> {
         Ok(values)
     }
 
+    fn flat_fork_child(
+        &mut self,
+        binding: &Field,
+        scope: &mut FlatScope,
+        output: &mut Body,
+    ) -> Result<(String, Vec<Value>, Layout), CompileError> {
+        if let Some((signature, values)) = self.flat_call(&binding.value, scope, output)? {
+            return Ok(((signature.id + 2).to_string(), values, signature.result));
+        }
+        let uses = runtime_uses(self.program, &binding.value);
+        let mut inner = Scope::new();
+        for (id, count) in uses {
+            let value = self.flat_take(id, count, scope, output)?;
+            let word = self.flat_box(value, output)?;
+            inner.insert(id, OwnedLocal::new(word, count));
+        }
+        let (function, argument) = self.fork_application(&binding.value, &mut inner, output)?;
+        drop_owned(&mut inner, output);
+        Ok((
+            "FID_CLO_APPLY".to_owned(),
+            vec![
+                Value {
+                    layout: boxed(),
+                    words: vec![function],
+                },
+                Value {
+                    layout: boxed(),
+                    words: vec![argument],
+                },
+            ],
+            boxed(),
+        ))
+    }
+
     fn flat_fork(
         &mut self,
         bindings: &[&Field],
@@ -906,37 +940,14 @@ impl Generator<'_> {
         scope: &mut FlatScope,
         output: &mut Body,
     ) -> Result<Value, CompileError> {
-        let mut tasks = Vec::new();
+        let mut child_fids = Vec::new();
+        let mut arguments = Vec::new();
         let mut results = Vec::new();
         for binding in bindings {
-            if let Some((signature, values)) = self.flat_call(&binding.value, scope, output)? {
-                let count = values.iter().map(|value| value.words.len()).sum::<usize>();
-                let (words, owned) = self.flat_arrays(&values, output)?;
-                tasks.push(self.hold(
-                    output,
-                    &format!(
-                        "tb_c_word_task(e, {}, {count}, {words}, {owned})",
-                        signature.id + 2
-                    ),
-                )?);
-                results.push(signature.result);
-            } else {
-                let uses = runtime_uses(self.program, &binding.value);
-                let mut inner = Scope::new();
-                for (id, count) in uses {
-                    let value = self.flat_take(id, count, scope, output)?;
-                    let word = self.flat_box(value, output)?;
-                    inner.insert(id, OwnedLocal::new(word, count));
-                }
-                let (function, argument) =
-                    self.fork_application(&binding.value, &mut inner, output)?;
-                drop_owned(&mut inner, output);
-                tasks.push(self.hold(
-                    output,
-                    &format!("tb_c_tail_apply(e, {function}, {argument})"),
-                )?);
-                results.push(boxed());
-            }
+            let (fid, values, result) = self.flat_fork_child(binding, scope, output)?;
+            child_fids.push(fid);
+            arguments.extend(values);
+            results.push(result);
         }
         let uses = runtime_uses(self.program, expression);
         let ids = scope
@@ -991,13 +1002,19 @@ impl Generator<'_> {
         self.flat_body(expression, Vec::new(), &mut inner, &mut body, &result)?;
         self.finish_segment(id, body);
         let (words, owned) = self.flat_arrays(&held, output)?;
-        let children = self.array(output, &tasks)?;
+        let children = self.array(output, &child_fids)?;
+        let (argument_words, argument_owned) = self.flat_arrays(&arguments, output)?;
+        let tasks = self.array(output, &vec!["0".into(); child_fids.len()])?;
+        let argument_count = arguments
+            .iter()
+            .map(|value| value.words.len())
+            .sum::<usize>();
         self.pending_words(
             output,
             &format!(
-                "tb_c_word_join(e, {}, {held_count}, {words}, {owned}, {}, {children})",
+                "tb_c_word_join_build(e, {}, {held_count}, {words}, {owned}, {}, {children}, {argument_count}, {argument_words}, {argument_owned}, {tasks})",
                 id + 2,
-                tasks.len()
+                child_fids.len()
             ),
             &result,
             false,

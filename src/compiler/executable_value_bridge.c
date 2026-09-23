@@ -65,6 +65,98 @@ OUTLINE TB_NOINLINE Term tb_c_word_join(const Env *e, u32 fid, u32 held_count,
 }
 #if defined(__CUDA_ARCH__)
 INLINE Loc tb_device_task_node_reserved(const Env *e, Fid fid, Term continuation,
+    u32 index, u32 remaining, Loc at);
+#endif
+/* Build a word-lowered fork from one flat argument vector. CUDA first
+ * validates the full layout and reserves the parent plus each child's exact
+ * task class as one allocator transaction. The host keeps the established
+ * per-child construction path and uses caller-owned frame storage for tasks. */
+OUTLINE TB_NOINLINE Term tb_c_word_join_build(const Env *e, u32 fid,
+    u32 held_count, const Term *held, const Term *held_owned, u32 children,
+    const Term *child_fids, u32 argument_count, const Term *arguments,
+    const Term *argument_owned, Term *tasks) {
+  if (children < 2 || children > 255 || held_count > 255
+      || child_fids == NULL || tasks == NULL
+      || (held_count != 0 && held == NULL))
+    err_fail("invalid generated word fork layout");
+  u32 arity = held_count, expected_arguments = 0;
+  for (u32 index = 0; index < held_count; ++index)
+    if (held_owned != NULL && held_owned[index] > 1)
+      err_fail("invalid segment ownership mask");
+  for (u32 index = 0; index < children; ++index) {
+    if (child_fids[index] >= UINT32_C(65536))
+      err_fail("invalid generated word fork child");
+    Fid child_fid = (Fid)child_fids[index];
+    u32 child_arity = fid_arity(child_fid);
+    u32 width = fid_result_width(child_fid);
+    if (child_arity > UINT32_MAX - expected_arguments || width == 0
+        || width > 255 - arity)
+      err_fail("invalid generated word fork child");
+    expected_arguments += child_arity;
+    arity += width;
+  }
+  if (expected_arguments != argument_count
+      || (argument_count != 0 && (arguments == NULL || argument_owned == NULL))
+      || fid_arity((Fid)fid) != arity)
+    err_fail("invalid generated word fork arity");
+#if defined(__CUDA_ARCH__)
+  for (u32 index = 0; index < argument_count; ++index) {
+    if (argument_owned[index] > 1)
+      err_fail("invalid task ownership mask");
+    if (argument_owned[index] != 0 && arguments[index] == TERM_HOLE)
+      err_fail("foreign task argument is missing");
+    if (argument_owned[index] != 0 && term_tag(arguments[index]) == TAG_TSK)
+      err_fail("runnable task contains a pending task");
+  }
+  Loc ticket = tb_device_corpus_reserve_task_children(e,
+      cls_fit(arity + 2), child_fids, children);
+  Loc parent = tb_device_task_node_reserved(e, (Fid)fid, TERM_HOLE, 0,
+      children, tb_device_corpus_ticket_take(e, &ticket));
+  Term join = term_tsk((Fid)fid, parent);
+  for (u32 index = 0; index < held_count; ++index) {
+    e->mem[parent + index] = held[index];
+    if (held_owned != NULL && held_owned[index] == 0)
+      tb_mark_raw(*e, parent + index, 1);
+  }
+  u32 argument = 0, destination = held_count;
+  for (u32 index = 0; index < children; ++index) {
+    Fid child_fid = (Fid)child_fids[index];
+    u32 child_arity = fid_arity(child_fid);
+    u32 width = fid_result_width(child_fid);
+    Loc child = tb_device_task_node_reserved(e, child_fid, TERM_HOLE, 0, 0,
+        tb_device_corpus_ticket_take(e, &ticket));
+    for (u32 word = 0; word < child_arity; ++word) {
+      e->mem[child + word] = arguments[argument + word];
+      if (argument_owned[argument + word] == 0)
+        tb_mark_raw(*e, child + word, 1);
+    }
+    Loc tail = child + child_arity;
+    if (e->mem[tail] != TERM_HOLE || e->mem[tail + 1] != 0)
+      err_fail("duplicate generated word fork child");
+    e->mem[tail] = join;
+    e->mem[tail + 1] = (u64)destination << 32;
+    e->mem[parent + destination] = term_tsk(child_fid, child);
+    tb_mark_owned(*e, parent + destination, 1);
+    argument += child_arity;
+    destination += width;
+  }
+  if (ticket != 0) err_fail("invalid heap reservation");
+  return join;
+#else
+  u32 argument = 0;
+  for (u32 index = 0; index < children; ++index) {
+    Fid child_fid = (Fid)child_fids[index];
+    u32 child_arity = fid_arity(child_fid);
+    tasks[index] = tb_word_task(*e, child_fid, child_arity,
+        child_arity == 0 ? NULL : arguments + argument,
+        child_arity == 0 ? NULL : argument_owned + argument);
+    argument += child_arity;
+  }
+  return tb_c_word_join(e, fid, held_count, held, held_owned, children, tasks);
+#endif
+}
+#if defined(__CUDA_ARCH__)
+INLINE Loc tb_device_task_node_reserved(const Env *e, Fid fid, Term continuation,
     u32 index, u32 remaining, Loc at) {
   u32 arity = fid_arity(fid);
   if ((continuation == TERM_HOLE && index != 0)
