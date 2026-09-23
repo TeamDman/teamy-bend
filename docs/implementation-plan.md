@@ -2577,10 +2577,19 @@ fallback passes. Actual-CUDA validation passes the 12 tests in
 duplicate tests, both host-storage tests, capacity, progress, cache, failure,
 frame and kernel suites, plus all five GPU-off tests. The raw-array observer now
 accounts nested payload and duplicate work separately from its own cursor so the
-aggregate progress remains reconciled. The full repository gate and exact
-`check-all.ps1` gate passes; exact release Poche checks remain pending for this
-follow-on. `5.15.7.4` remains active: other synchronous allocation chains,
-device backing waits and broader GPU parity remain open.
+aggregate progress remains reconciled. The full `check-all.ps1` gate passes.
+The committed release at `672f67101125707cd6ee36782cf522fb5e2e4b67`, executable
+SHA-256 `77416a977dd7d39b7771e0dd5829849de16e8310da0bc4639e958e773a82cd29`,
+passes the exact Poche regression gates: seven privacy theorems, three imported
+equalities and one typed negative; all 15,503 scalar rows with seven equalities
+and two controls; and the bounded 22-state trajectory with 21 transitions, 44
+observations, 300 chance partitions, eight negative controls and 67 requests.
+Poche HEAD, its pre-existing dirty paths, all 17 source hashes and 13 compiled
+fingerprints are unchanged. The full state graph was not rerun. The retained
+quantum-one boxed-array executable passes Compute Sanitizer memcheck with the
+exact four-string output and zero errors using the named-pipe wrapper.
+`5.15.7.4` remains active: other synchronous allocation chains, device backing
+waits and broader GPU parity remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
