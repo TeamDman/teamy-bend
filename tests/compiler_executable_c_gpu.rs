@@ -35,18 +35,42 @@ impl Fixture {
         minimum_offloads: u32,
         minimum_forks: u32,
     ) {
+        let _statistics = self.run_with_quantum(
+            bend,
+            policy,
+            expected,
+            (minimum_offloads, minimum_forks),
+            1024,
+            false,
+        );
+    }
+
+    fn run_with_quantum(
+        &self,
+        bend: &str,
+        policy: &str,
+        expected: &str,
+        (minimum_offloads, minimum_forks): (u32, u32),
+        quantum: u32,
+        require_primitive_yield: bool,
+    ) -> Vec<u64> {
         let path = self.0.join("main.bend");
         fs::write(&path, bend).unwrap();
         let generated =
             compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap())
                 .unwrap();
         assert!(generated.contains("#define TB_GPU_ENABLED 1"));
+        if require_primitive_yield {
+            assert!(generated.contains("tb_device_construct_raw(e"));
+        }
         let mut source = String::from(
             r"
-static unsigned long long gpu_offloads, gpu_dispatches, gpu_forks, gpu_reuse_errors, gpu_parallel;
+static unsigned long long gpu_offloads, gpu_dispatches, gpu_forks, gpu_reuse_errors, gpu_parallel, gpu_steps, gpu_primitive_progress, gpu_primitive_yields;
 #define TB_GPU_COMPLETE(control, state, info) do { \
-  (void)(state); ++gpu_offloads; gpu_dispatches += (control)->dispatches; \
+  gpu_steps = (state)->steps; ++gpu_offloads; gpu_dispatches += (control)->dispatches; \
   gpu_forks += (control)->forks; \
+  gpu_primitive_progress += (control)->primitive_progress; \
+  gpu_primitive_yields += (control)->primitive_yields; \
   if ((control)->peak_lanes > 1) ++gpu_parallel; \
   if ((info)->compilations != 1 || (info)->allocations != 5) ++gpu_reuse_errors; \
 } while (0)
@@ -56,7 +80,7 @@ static unsigned long long gpu_offloads, gpu_dispatches, gpu_forks, gpu_reuse_err
             "static int tb_program_main(void)",
             "#define TB_NO_MAIN 1\nstatic int checked_main(void)",
         ));
-        writeln!(source, r"
+        writeln!(source, r#"
 int main(void) {{
   int status = checked_main();
   if (status != 0) return status;
@@ -64,16 +88,22 @@ int main(void) {{
       || tb_continuations != 0 || tb_frames != 0 || tb_depth != 0) return 91;
   if (gpu_offloads < {minimum_offloads}u || gpu_forks < {minimum_forks}u || gpu_reuse_errors != 0) return 92;
   if (gpu_offloads != 0 && gpu_dispatches == 0) return 93;
+  if (gpu_primitive_yields < {}ull) return 95;
 #if {minimum_forks} != 0
   if (gpu_parallel == 0) return 94;
 #endif
+  FILE *statistics = fopen("gpu-stats.txt", "wb");
+  if (statistics == NULL) return 96;
+  if (fprintf(statistics, "%llu %llu %llu", gpu_steps, gpu_primitive_progress,
+      gpu_primitive_yields) < 0 || fclose(statistics) != 0) return 97;
   return 0;
 }}
-").unwrap();
+"#, u64::from(require_primitive_yield)).unwrap();
+        let quantum = format!("BEND_GPU_PRIMITIVE_QUANTUM={quantum}");
         let executable = executable_c_compiler::compile(
             &self.0,
             &source,
-            &["BEND_MAX_ALLOC=1048576", "BEND_CPU_WORKERS=4"],
+            &["BEND_MAX_ALLOC=1048576", "BEND_CPU_WORKERS=4", &quantum],
         );
         let output = executable_c_compiler::bounded(
             Command::new(executable)
@@ -93,6 +123,11 @@ int main(void) {{
             "{}",
             String::from_utf8_lossy(&output.stderr)
         );
+        fs::read_to_string(self.0.join("gpu-stats.txt"))
+            .unwrap()
+            .split_whitespace()
+            .map(|word| word.parse().unwrap())
+            .collect()
     }
 }
 impl Drop for Fixture {
@@ -299,6 +334,64 @@ fn cuda_mixed_word_join_reserves_parent_and_heterogeneous_children_together() {
     assert!(generated.contains("tb_c_word_join_build(e,"));
     assert!(generated.contains("tb_device_corpus_reserve_task_children"));
     fixture.run(MIXED_WORD_JOIN, "on", "25\n", 1, 1);
+}
+
+const RESUMABLE_CONSTRUCTOR: &str = r#"import Base
+type Choice is Data:
+  RawChoice{value: U32}
+  OwnedChoice{text: String, left: U32, right: U32}
+def apply(function: String -> Choice, text: String) -> Choice: function(text)
+def main() -> Choice:
+  apply!({text => OwnedChoice{text, 1, 2} : String -> Choice}, String.append("box", "ed"))
+ "#;
+
+#[test]
+fn nonpacked_constructor_keeps_cpu_semantics() {
+    Fixture::new().run(
+        RESUMABLE_CONSTRUCTOR,
+        "off",
+        "OwnedChoice{\"boxed\", 1, 2}\n",
+        0,
+        0,
+    );
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn cuda_nonpacked_constructor_resumes_across_payload_slices() {
+    let tiny = Fixture::new().run_with_quantum(
+        RESUMABLE_CONSTRUCTOR,
+        "on",
+        "OwnedChoice{\"boxed\", 1, 2}\n",
+        (1, 0),
+        1,
+        true,
+    );
+    let large = Fixture::new().run_with_quantum(
+        RESUMABLE_CONSTRUCTOR,
+        "on",
+        "OwnedChoice{\"boxed\", 1, 2}\n",
+        (1, 0),
+        1024,
+        false,
+    );
+    assert_eq!(
+        tiny[0], large[0],
+        "constructor slices must preserve language steps"
+    );
+    assert_eq!(
+        tiny[1], large[1],
+        "constructor slices must initialize identical payloads"
+    );
+    assert!(tiny[1] > 0);
+    assert!(
+        tiny[2] > 0,
+        "quantum one must yield during constructor initialization"
+    );
+    assert_eq!(
+        large[2], 0,
+        "one large slice must complete the bounded constructor"
+    );
 }
 
 const PENDING_ARGUMENT: &str = r"import Base

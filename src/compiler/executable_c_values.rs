@@ -7,6 +7,7 @@ use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
+use super::DEVICE_CONSTRUCT_STATE_WORDS;
 use super::ExecutableProgram;
 use super::FunctionResult;
 use super::Generator;
@@ -57,15 +58,33 @@ impl Generator<'_> {
             .unwrap();
         }
         let mask = self.ownership_mask(&constructor.layout, &array, output)?;
-        self.hold(
+        let synchronous = format!(
+            "tb_c_construct(e, {}, {}, {array}, {}, {mask})",
+            constructor.cid,
+            constructor.layout.words.len(),
+            packed(&constructor.layout)
+        );
+        if !output.can_suspend || packed(&constructor.layout) {
+            return self.hold(output, &synchronous);
+        }
+
+        let result = self.hold(output, "0")?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_CONSTRUCT_STATE_WORDS])?;
+        output.resumes += 1;
+        let pc = output.resumes;
+        let yielded = if output.words {
+            "tb_segment_yield()"
+        } else {
+            "0"
+        };
+        writeln!(
             output,
-            &format!(
-                "tb_c_construct(e, {}, {}, {array}, {}, {mask})",
-                constructor.cid,
-                constructor.layout.words.len(),
-                packed(&constructor.layout)
-            ),
+            "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_construct_raw(e, {}, {}, {array}, {mask}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif",
+            constructor.cid,
+            constructor.layout.words.len()
         )
+        .unwrap();
+        Ok(result)
     }
 
     pub(super) fn fields(

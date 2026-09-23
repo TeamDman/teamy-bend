@@ -2458,8 +2458,11 @@ remaining device allocation families:
   plus every `FID_CLO_APPLY` child before linking the task graph; CPU behavior
   is unchanged. The word-lowered join builder now reserves its parent and
   heterogeneous direct/closure child nodes together; CPU task construction
-  retains its established per-child path. Constructors, closure captures and
-  `FID_IO_EMIT` still allocate synchronously.
+  retains its established per-child path. One generated non-packed AST
+  constructor path now initializes its exact block through a bounded cursor in
+  resumable GPU closures; packed constructors and synchronous callers retain
+  their prior allocation path. Closure captures and `FID_IO_EMIT` still
+  allocate synchronously.
 - Nested ownership work: shared constructor extraction and borrowed fields call
   `tb_duplicate` through `ctr_take`/`tb_borrow_fields`; boxed constructors also
   reach those helpers through generated `tb_box_*` conversions. The explicit
@@ -2511,11 +2514,11 @@ with `ERROR SUMMARY: 0 errors` using `scripts/compute-sanitizer.ps1`.
 The actual-CUDA generic join fixture calls nested dynamically invoked closures
 that each fork allocated constructor results; it prints
 `TaskValue{"abcd", "abcd"}` and verifies all task, frame and corpus owners are
-released. Against the current source, all nine ignored hardware tests in
+released. Against the current source, all ten ignored hardware tests in
 `compiler_executable_c_gpu` pass. The focused segment, parallel and segment-ABI
 tests pass, as do `check-all.ps1` and strict all-target/all-feature Clippy. The
 release build SHA-256 is
-`12ccc8b8537770999718a87a6139f90482b8858ec9be7b8a346876753475ab6f`.
+`81a267f3d5fcde4c66546714676821eaee538671b5cc994c6f6ebf02276357cc`.
 
 The exact release passes the established Poche regressions: seven symbolic
 privacy theorems, three imported equalities and one typed negative; 15,503
@@ -2525,8 +2528,27 @@ eight controls and 67 requests. Poche HEAD remains
 `e5e767cc6b545b725994e50984d01d69091bface`; its pre-existing dirty
 paths are unchanged and no Poche source was edited. The full 431,800-state graph
 was not rerun and keeps its earlier attribution. The current source also closes
-the word-lowered join bundle; other task/closure nodes, nested allocations and
-backing waits remain open.
+the word-lowered join bundle; closure-capture/task allocation paths, remaining
+nested allocations and backing waits remain open.
+
+Generated non-packed AST constructors in resumable GPU closure bodies now keep
+their result slot, exact allocation base and payload cursor in the continuation
+frame. A one-word primitive quantum suspends between payload writes; completion
+publishes the constructor only after all fields and padding are initialized.
+CPU construction still uses the existing synchronous helper, and packed or
+other synchronous constructor paths are not yet converted. An actual-CUDA
+fixture covers a boxed `String`, raw `U32` fields and padding: quantum 1 and
+quantum 1024 produce identical output, language step counts and primitive work,
+while only quantum 1 yields. The CPU-off semantic case passes. The retained
+CUDA executable passes Compute Sanitizer memcheck with `ERROR SUMMARY: 0 errors`.
+The full repository gate, strict Clippy and all ten actual-CUDA
+integration tests pass. Release SHA-256
+`81a267f3d5fcde4c66546714676821eaee538671b5cc994c6f6ebf02276357cc` passes the
+Poche privacy suite (7 theorems, 3 equalities, 1 typed negative), all 15,503
+kernel rows (7 equalities, 2 controls), and the bounded 22-state trajectory
+(21 transitions, 300 chance partitions, 8 controls, 67 requests). Poche HEAD
+and its pre-existing dirty source paths are unchanged; no Poche source was
+edited. The full state graph was not rerun.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

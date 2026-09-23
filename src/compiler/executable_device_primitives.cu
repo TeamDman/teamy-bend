@@ -16,10 +16,18 @@ enum {
   TB_DEVICE_ARRAY_NEW_ENTER = 0, TB_DEVICE_ARRAY_NEW_RESERVED = 1,
   TB_DEVICE_ARRAY_NEW_SLICE = 2, TB_DEVICE_ARRAY_NEW_COMPLETE = 3
 };
+#define TB_DEVICE_CONSTRUCT_STATE_WORDS 6
+enum {
+  TB_DEVICE_CONSTRUCT_ENTER = 0, TB_DEVICE_CONSTRUCT_RESERVED = 1,
+  TB_DEVICE_CONSTRUCT_SLICE = 2, TB_DEVICE_CONSTRUCT_COMPLETE = 3
+};
 /* Optional test observation points run outside locks. A production observer
  * must not alter operands, state, or corpus ownership. */
 #ifndef TB_DEVICE_ARRAY_NEW_OBSERVE
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) ((void)0)
+#endif
+#ifndef TB_DEVICE_CONSTRUCT_OBSERVE
+#define TB_DEVICE_CONSTRUCT_OBSERVE(event, state, work, fields, mask, count) ((void)0)
 #endif
 
 /* Reserve without touching the block's potentially large payload/metadata.
@@ -250,5 +258,77 @@ OUTLINE bool tb_device_array_new_raw(const Env *e, bool array, Nat depth,
   TB_DEVICE_ARRAY_NEW_OBSERVE(TB_DEVICE_ARRAY_NEW_COMPLETE, state, work);
   *result = term_blk(array, logical, at);
   memset(state, 0, TB_DEVICE_ARRAY_NEW_STATE_WORDS * sizeof(Term));
+  return true;
+}
+
+/* A constructor owns one exact allocation class. Reserve it before exposing
+ * any copied field, then initialize its payload and ownership map in bounded
+ * slices. State and operands live in the generated continuation frame. */
+OUTLINE bool tb_device_construct_raw(const Env *e, u32 cid, u32 count,
+    const Term *fields, const Term *box_mask, Term *state, Term *result) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || state == NULL
+      || result == NULL || cid >= BEND_CID_COUNT || count != cid_arity(cid)
+      || (count != 0 && fields == NULL))
+    err_fail("invalid device constructor arguments");
+  for (u32 index = 0; index < count; ++index)
+    if (box_mask != NULL && box_mask[index] > 1)
+      err_fail("invalid constructor ownership mask");
+  TB_DEVICE_CONSTRUCT_OBSERVE(TB_DEVICE_CONSTRUCT_ENTER, state, 0, fields,
+      box_mask, count);
+  Cls cls = cls_fit(count);
+  u64 words = UINT64_C(1) << cls;
+  if (state[0] == 0) {
+    for (u32 cell = 1; cell < TB_DEVICE_CONSTRUCT_STATE_WORDS; ++cell)
+      if (state[cell] != 0) err_fail("invalid device constructor state");
+    Loc at = tb_device_corpus_reserve(e, cls);
+    state[0] = 1; state[1] = at; state[2] = 0;
+    state[3] = cid; state[4] = count; state[5] = cls;
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts; ++tb_device_control->primitive_live;
+    tb_device_unlock();
+    TB_DEVICE_CONSTRUCT_OBSERVE(TB_DEVICE_CONSTRUCT_RESERVED, state, 0, fields,
+        box_mask, count);
+  } else if (state[0] != 1 || state[1] < HEAP_OFF || state[1] > LOC_MASK
+      || state[1] >= tb_bump || words > tb_capacity || state[1] > tb_capacity - words
+      || state[2] >= words || state[3] != cid || state[4] != count
+      || state[5] != cls
+      || (state[2] != 0 && (tb_heap_meta[state[1]]
+          & ~(TB_META_OWNED | TB_META_SEALED)) != tb_meta(state[1], cls)))
+    err_fail("invalid device constructor state");
+
+  Loc at = state[1];
+  u64 cursor = state[2], work = 0;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM && cursor < words) {
+    tb_device_check_cancelled();
+    Term value = cursor < count ? fields[cursor] : 0;
+    bool owned = cursor >= count || box_mask == NULL || box_mask[cursor] != 0;
+    e->mem[at + cursor] = value;
+    tb_heap_meta[at + cursor] = tb_meta(at, cls) | (owned ? TB_META_OWNED : 0);
+    ++cursor; ++work;
+  }
+  state[2] = cursor;
+  bool done = cursor == words;
+  tb_device_lock();
+  if (work == 0 || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  TB_DEVICE_CONSTRUCT_OBSERVE(TB_DEVICE_CONSTRUCT_SLICE, state, work, fields,
+      box_mask, count);
+  if (!done) return false;
+
+  state[0] = 2;
+  *result = term_ctr(cid, at);
+  TB_DEVICE_CONSTRUCT_OBSERVE(TB_DEVICE_CONSTRUCT_COMPLETE, state, work, fields,
+      box_mask, count);
+  memset(state, 0, TB_DEVICE_CONSTRUCT_STATE_WORDS * sizeof(Term));
   return true;
 }
