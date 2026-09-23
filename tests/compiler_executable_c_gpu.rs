@@ -188,6 +188,23 @@ def main() -> Array<String> & Array<String> & String:
   use(Array.clone(String, Array.new(String, 1n, "saved")))
 "#;
 
+const NUMERIC_WORD: &str = r"import Base
+def make(bits: U32) -> F32:
+  match bits:
+    case U32{word}: F32{word}
+def walk(n: Nat, bits: U32) -> F32:
+  match n:
+    case 0n: make(bits)
+    case 1n+p: walk(p, bits)
+def both(+n: Nat, +bits: U32) -> U32:
+  match n:
+    case 0n:
+      left right = walk(3n, bits) walk(3n, U32.add(bits, 1))
+      U32.add(F32.bits(left), F32.bits(right))
+    case 1n+p: both(p, bits)
+def main() -> U32: both!(3n, 12345)
+";
+
 #[test]
 #[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
 fn cuda_array_copy_on_write_preserves_the_parked_cpu_owner() {
@@ -198,6 +215,19 @@ fn cuda_array_copy_on_write_preserves_the_parked_cpu_owner() {
         1,
         0,
     );
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn cuda_word_conversion_reserves_all_32_nodes_before_building_the_word() {
+    let fixture = Fixture::new();
+    let path = fixture.0.join("main.bend");
+    fs::write(&path, NUMERIC_WORD).unwrap();
+    let generated =
+        compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap()).unwrap();
+    assert!(generated.contains("tb_c_word(e,"));
+    assert!(generated.contains("tb_device_corpus_reserve_repeat"));
+    fixture.run(NUMERIC_WORD, "on", "24691\n", 1, 1);
 }
 
 const PENDING_ARGUMENT: &str = r"import Base

@@ -2,7 +2,7 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-09-22
+**Last updated:** 2026-09-23
 **Intent audit:** Updated 2026-09-22 against the original request and available scope/GPU/firewall follow-ups
 
 ## How to update this plan
@@ -25,9 +25,9 @@
   helper yielding, memory sizing and platform behavior remain next engine work.
   Host corpus commitment (5.15.7.1) and raw device array suspension (5.15.7.2)
   are complete with retained-release Poche regression validation.
-  Persistent sealing and duplication are the next bounded
-  helper task (5.15.7.3); full GPU backing, default sizing and residency remain
-  required by 5.15.7.
+  Persistent sealing and duplication (5.15.7.3) are complete. The next GPU
+  dependency is qualifying remaining allocation chains (5.15.7.4); full device
+  backing, default sizing and residency remain required by 5.15.7.
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -2453,9 +2453,10 @@ remaining device allocation families:
 - Fixed allocation bundles: constructor payloads (`tb_construct`), closure
   captures (`tb_closure`), task nodes and joins (`task_node`, `tb_c_join`,
   `tb_c_word_join`), the `FID_IO_EMIT` node, and the 32-node `tb_word` value.
-  Their class sequences are bounded, but callers still need an atomic
-  reservation ticket or persistent allocation phase before allocator or owner
-  mutation. Joins must reserve parent and child nodes before linking tasks.
+  The CUDA `tb_word` path now reserves its 32 class-one blocks in one allocator
+  transaction before constructing any node; CPU allocation is unchanged.
+  Constructor, closure and task helpers still allocate synchronously. Joins
+  must reserve their complete parent/child bundle before linking tasks.
 - Nested ownership work: shared constructor extraction and borrowed fields call
   `tb_duplicate` through `ctr_take`/`tb_borrow_fields`; boxed constructors also
   reach those helpers through generated `tb_box_*` conversions. The explicit
@@ -2488,6 +2489,24 @@ repeating allocation or owner transfer, and array cursors preserve exact output
 and step accounting across slices. Keep full device backing throughout this
 stage. This task does not complete the remaining exact memory default, residency,
 platform or performance requirements in 5.15.7 and U6.
+
+Progress: `tb_word` builds its fixed 32-node class-one chain from an atomic
+same-class reservation. The CUDA integration case matches the numeric result
+and requires actual offload, a fork and parallel lane execution; its retained
+program passes Compute Sanitizer memcheck with zero errors. Formatting and the
+`check-all.ps1` gate pass, including the Node socket provider and all
+non-ignored Rust tests. Strict all-targets/all-features Clippy also passes; an
+existing import-order lint in `examples/audit_upstream.rs` was corrected so
+that gate could run cleanly. The full Poche regressions pass against the rebuilt
+release (SHA-256 `8a3cd8362289c81acc9b06a924f08d8d338f1fe6e6e483c17c419f1a301aa728`):
+seven symbolic privacy laws, three imported equalities and one typed negative;
+15,503 scalar comparisons with seven equalities and two controls; and the
+22-state/44-observation/21-transition trajectory with 300 chance partitions,
+eight controls and 67 requests. Poche HEAD remains
+`e5e767cc6b545b725994e50984d01d69091bface` with its pre-existing dirty paths;
+no Poche source was edited. The full 431,800-state graph was not rerun and keeps
+its earlier attribution. This is the first fixed bundle only; it does not
+qualify nested allocations, other task/closure bundles, or any backing wait.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

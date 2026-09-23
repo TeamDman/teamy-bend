@@ -4,6 +4,7 @@
 //! execution outputs are deliberately reported as not compared by this tool.
 use facet::Facet;
 use std::collections::BTreeMap;
+use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
@@ -130,7 +131,6 @@ fn main() -> eyre::Result<()> {
             });
         }
     }
-    use std::io::Write;
     writeln!(
         std::io::stdout().lock(),
         "{}",

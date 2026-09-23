@@ -395,6 +395,11 @@ INLINE Nat nat_mul(Env e, Nat left, Nat right) {
   return nat_chk(e, left * right);
 }
 #define U32_BIN(a,op,b) ((u64)((u32)(a) op (u32)(b)))
+#if defined(__CUDA_ARCH__)
+INLINE void tb_device_corpus_reserve_repeat(const Env *e, Cls cls, u32 count,
+    Loc *blocks);
+INLINE void tb_device_corpus_initialize_reserved(const Env *e, Loc at, Cls cls);
+#endif
 INLINE Term term_word(Env e, Term word) {
   Term owner = word;
   u32 value = 0;
@@ -412,10 +417,22 @@ INLINE Term tb_word(Env e, u32 value) {
   err_fail("Word representation unavailable");
 #endif
   Term word = term_pak(CID_WNIL, 0);
+#if defined(__CUDA_ARCH__)
+  Loc blocks[32];
+  tb_device_corpus_reserve_repeat(&e, 1, 32, blocks);
+  for (u32 index = 32; index != 0; --index) {
+    Loc at = blocks[32 - index];
+    tb_device_corpus_initialize_reserved(&e, at, 1);
+    e.mem[at] = (value >> (index - 1)) & 1;
+    e.mem[at + 1] = word;
+    word = term_ctr(CID_WCON, at);
+  }
+#else
   for (u32 index = 32; index != 0; --index) {
     Loc at = heap_alloc(e, 1);
     e.mem[at] = (value >> (index - 1)) & 1; e.mem[at + 1] = word;
     word = term_ctr(CID_WCON, at);
   }
+#endif
   return word;
 }

@@ -53,6 +53,77 @@ INLINE Loc tb_device_corpus_reserve(const Env *e, Cls cls) {
   return at;
 }
 
+/* Atomically reserve a fixed run of same-class blocks. The whole run is
+ * removed from the free list or bump span under one allocator lock, so sibling
+ * lanes cannot consume capacity checked by one member of the bundle. Failure
+ * leaves the allocator unchanged. Reserved blocks are private until the caller
+ * initializes and publishes them. */
+INLINE void tb_device_corpus_reserve_repeat(const Env *e, Cls cls, u32 count,
+    Loc *blocks) {
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || cls >= NCLS_ALL
+      || count == 0 || blocks == NULL)
+    err_fail("invalid heap reservation");
+  u64 size = UINT64_C(1) << cls;
+  tb_vm_acquire();
+
+  Loc at = tb_free_lists[cls];
+  u32 reused = 0;
+  while (at != 0 && reused < count) {
+    if (at < HEAP_OFF || at >= tb_bump || size > tb_bump - at
+        || tb_heap_meta[at] != (tb_meta(at, cls) | TB_META_FREE))
+      err_fail("invalid native free list");
+    Loc next = e->mem[at];
+    if (next != 0 && (next < HEAP_OFF || next >= tb_bump))
+      err_fail("invalid native free list");
+    at = next;
+    ++reused;
+  }
+  u32 fresh = count - reused;
+  u64 fresh_words = (u64)fresh * size;
+  u64 total_words = (u64)count * size;
+  if (tb_bump < HEAP_OFF || tb_bump > tb_capacity
+      || fresh_words > tb_capacity - tb_bump
+      || total_words > tb_capacity)
+    err_fail("VM allocation budget exhausted");
+  if (tb_live_words > tb_capacity - total_words
+      || count > UINT64_MAX - tb_live_blocks)
+    err_fail("invalid native heap accounting");
+  Loc next_bump = tb_bump + fresh_words;
+  if (fresh != 0) tb_heap_commit(next_bump);
+
+  for (u32 index = 0; index < reused; ++index) {
+    Loc reused_at = tb_free_lists[cls];
+    tb_free_lists[cls] = e->mem[reused_at];
+    blocks[index] = reused_at;
+  }
+  at = tb_bump;
+  for (u32 index = reused; index < count; ++index) {
+    blocks[index] = at;
+    at += size;
+  }
+  tb_bump = next_bump;
+  tb_live_words += total_words;
+  tb_live_blocks += count;
+  tb_vm_release();
+}
+
+/* Complete a previously reserved block without changing allocator counters.
+ * The free-list marker (if reused) is still present until this private block is
+ * initialized. No other lane can discover it after the reservation commit. */
+INLINE void tb_device_corpus_initialize_reserved(const Env *e, Loc at, Cls cls) {
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || cls >= NCLS_ALL)
+    err_fail("invalid heap reservation");
+  u64 size = UINT64_C(1) << cls;
+  if (at < HEAP_OFF || at >= tb_bump || size > tb_bump - at)
+    err_fail("invalid heap reservation");
+  u64 metadata = tb_heap_meta[at];
+  if (metadata != 0 && metadata != (tb_meta(at, cls) | TB_META_FREE))
+    err_fail("invalid heap reservation");
+  memset(e->mem + at, 0, (size_t)size * sizeof(Term));
+  for (u64 index = 0; index < size; ++index)
+    tb_heap_meta[at + index] = tb_meta(at, cls) | TB_META_OWNED;
+}
+
 /* State cells: phase, allocation offset, cursor, logical class, physical class,
  * stride, value count, array flag. Phase 1 initializes physical words and their
  * metadata; phase 2 fills logical elements; phase 3 is complete. The caller
