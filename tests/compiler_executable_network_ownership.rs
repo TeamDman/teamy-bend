@@ -34,6 +34,7 @@ impl Fixture {
         fs::write(self.0.join("main.cjs"), javascript).unwrap();
         Command::new(std::env::var_os("TEAMY_BEND_NODE").unwrap_or_else(|| "node".into()))
             .arg(self.0.join("main.cjs"))
+            .env("TEAMY_BEND_TEST_LOOPBACK_NETWORK", "1")
             .output()
             .expect("network ownership tests require Node.js")
     }

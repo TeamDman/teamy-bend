@@ -6,6 +6,7 @@
 use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
+use super::DEVICE_ARRAY_COPY_STATE_WORDS;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
 use super::DEVICE_DUPLICATE_STATE_WORDS;
 use super::DEVICE_PAYLOAD_STATE_WORDS;
@@ -366,12 +367,11 @@ impl Generator<'_> {
         if name == "Array.new" {
             return self.array_new(&array_ty, arguments, output);
         }
+        if name == "Array.clone" {
+            return self.array_clone(arguments, output);
+        }
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
         let a = self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?;
-        if name == "Array.clone" {
-            let clone = self.hold(output, &format!("tb_c_blk_copy(e, {a})"))?;
-            return self.construct("Tuple", &[a.clone(), clone], output);
-        }
         if name == "Array.size" {
             return self.construct(
                 "Tuple",
@@ -478,6 +478,41 @@ impl Generator<'_> {
         )
         .unwrap();
         Ok(result)
+    }
+
+    fn array_clone(
+        &mut self,
+        arguments: &[String],
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let (a, copy) = if output.can_suspend {
+            let a = self.hold(output, &arguments[0])?;
+            let copy = self.hold(output, "0")?;
+            let duplicate_owner = self.hold(output, "0")?;
+            let duplicate_result = self.hold(output, "0")?;
+            let duplicate_result_arg = format!("&{duplicate_result}");
+            let duplicate_state =
+                self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?;
+            let state = self.array(output, &vec!["0".to_owned(); DEVICE_ARRAY_COPY_STATE_WORDS])?;
+            output.resumes += 1;
+            let pc = output.resumes;
+            let yielded = if output.words {
+                "tb_segment_yield()"
+            } else {
+                "0"
+            };
+            writeln!(
+                output,
+                "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_clone_raw(e, tb_frame, &{a}, &{copy}, &{duplicate_owner}, {duplicate_state}, {duplicate_result_arg}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {a} = tb_c_blk_unique(e, {a});\n  {copy} = tb_c_blk_copy(e, {a});\n#endif"
+            )
+            .unwrap();
+            (a, copy)
+        } else {
+            let a = self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?;
+            let copy = self.hold(output, &format!("tb_c_blk_copy(e, {a})"))?;
+            (a, copy)
+        };
+        self.construct("Tuple", &[a, copy], output)
     }
 
     #[expect(

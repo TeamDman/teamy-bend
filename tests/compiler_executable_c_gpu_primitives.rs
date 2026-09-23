@@ -84,6 +84,18 @@ def pick(pair: Array<Nat> & Nat) -> Nat:
 def main() -> Nat: pick(Array.get(Nat, make!(2n), 3))
 ";
 
+const PACKED_CLONE: &str = r"import Base
+def pick(pair: Array<U32> & U32) -> U32:
+  (array, value) = pair
+  value
+def sum_pair(pair: Array<U32> & Array<U32>) -> U32:
+  (left, right) = pair
+  U32.add(pick(Array.get(U32, left, 4095)), pick(Array.get(U32, right, 0)))
+def run_copy(array: Array<U32>) -> U32:
+  sum_pair(Array.clone(U32, array))
+def main() -> U32: run_copy!(Array.new(U32, 12n, 7))
+";
+
 static NEXT: AtomicUsize = AtomicUsize::new(0);
 
 struct Fixture(PathBuf);
@@ -160,13 +172,29 @@ fn instrument(mut generated: String, mode: u32, count_seed: bool) -> String {
         .unwrap();
     let end = start + generated[start..].find("\n};").unwrap() + 3;
     let mut device = decode_parts(&generated[start..end]);
+    let clone_prefix = "  if (!tb_device_array_clone_raw(e, tb_frame, &tb_values[";
+    if let Some(at) = device.find(clone_prefix) {
+        let owner_start = at + clone_prefix.len();
+        let owner_end = owner_start + device[owner_start..].find(']').unwrap();
+        let owner = device[owner_start..owner_end].to_owned();
+        let share = format!(
+            "  if (tb_device_control->root_words[233] == 0) probe_share_array(e, &tb_values[{owner}]);\n"
+        );
+        device.insert_str(at, &share);
+        let call_start = at + share.len();
+        let endif = call_start + device[call_start..].find("\n#endif").unwrap() + 7;
+        device.insert_str(endif, "\n  probe_release_array_alias(e);");
+    }
     let mut insertions = Vec::new();
     for (at, _) in device.match_indices("  if (!tb_device_array_new_raw(") {
         let unbox = device[..at].rfind("  tb_unbox_").unwrap();
         assert!(!device[unbox..at].contains("\n}"));
         insertions.push((unbox, "  probe_unbox();\n"));
     }
-    assert!(!insertions.is_empty());
+    assert!(
+        !insertions.is_empty() || device.contains("tb_device_array_clone_raw("),
+        "the instrumented program must exercise a bounded array primitive"
+    );
     if count_seed {
         let mut offset = 0;
         let mut sites = 0;
@@ -276,7 +304,11 @@ static __device__ void probe_duplicate_observe(unsigned int, unsigned long long 
   unsigned long long);
 static __device__ void probe_seed(void);
 static __device__ void probe_unbox(void);
+static __device__ void probe_array_copy_observe(unsigned int, unsigned long long *, unsigned long long);
+static __device__ void probe_share_array(const void *, void *);
+static __device__ void probe_release_array_alias(const void *);
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) probe_observe(event, state, work, raw_values, count)
+#define TB_DEVICE_ARRAY_COPY_OBSERVE(event, state, work) probe_array_copy_observe(event, state, work)
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) \
   probe_payload_observe(event, state, work, fields, mask, count, closure)
 #define TB_DEVICE_DUPLICATE_OBSERVE(event, state, frame, work) \
@@ -313,6 +345,32 @@ static __device__ void probe_duplicate_observe(u32 event, Term *state,
     atomicAdd(tb_device_control->root_words + 239, work);
   else if (event == TB_DEVICE_DUPLICATE_START)
     atomicAdd(tb_device_control->root_words + 238, 1ull);
+}
+static __device__ void probe_array_copy_observe(u32 event, Term *state, u64 work) {
+  (void)state;
+  u64 *receipt = tb_device_control->root_words;
+  if (event == TB_DEVICE_ARRAY_COPY_RESERVED)
+    atomicAdd(receipt + 234, 1ull);
+  else if (event == TB_DEVICE_ARRAY_COPY_START)
+    atomicAdd(receipt + 235, 1ull);
+  else if (event == TB_DEVICE_ARRAY_COPY_SLICE) {
+    atomicAdd(receipt + 236, work);
+    atomicAdd(receipt + 237, 1ull);
+  }
+}
+static __device__ void probe_share_array(const void *raw_env, void *raw_owner) {
+  const Env *e = (const Env *)raw_env;
+  Term *owner = (Term *)raw_owner;
+  if (tb_device_control->root_words[233] != 0)
+    err_fail("array clone probe alias already set");
+  tb_device_control->root_words[233] = tb_c_duplicate(e, owner);
+}
+static __device__ void probe_release_array_alias(const void *raw_env) {
+  const Env *e = (const Env *)raw_env;
+  Term alias = tb_device_control->root_words[233];
+  if (alias == 0) err_fail("array clone probe alias is missing");
+  tb_device_control->root_words[233] = 0;
+  term_drop(*e, alias);
 }
 static __device__ u64 probe_free_hash(void) {
   u64 hash = 0;
@@ -409,6 +467,7 @@ static __device__ void probe_observe(u32 event, Term *state, u64 work,
 const HOST_PREFIX: &str = r"
 static unsigned int probe_mode, probe_completions, probe_failures, probe_errors, probe_cpu_replays;
 static unsigned long long probe_stats[9], probe_receipt[15];
+static unsigned long long probe_copy_stats[4];
 static unsigned long long probe_nested_progress, probe_nested_starts;
 #define PROBE_ROUND(state, control) do { \
   if ((control)->root_count > 3) ++probe_errors; \
@@ -431,9 +490,14 @@ static unsigned long long probe_nested_progress, probe_nested_starts;
 } while (0)
 #define TB_GPU_COMPLETE(control, state, info) do { \
   ++probe_completions; \
+  if ((control)->root_words[233] != 0) ++probe_errors; \
   memcpy(probe_receipt, (control)->root_words + 240, sizeof(probe_receipt)); \
   probe_nested_progress = (control)->root_words[239]; \
   probe_nested_starts = (control)->root_words[238]; \
+  probe_copy_stats[0] = (control)->root_words[234]; \
+  probe_copy_stats[1] = (control)->root_words[235]; \
+  probe_copy_stats[2] = (control)->root_words[236]; \
+  probe_copy_stats[3] = (control)->root_words[237]; \
   probe_stats[0] = (state)->steps; probe_stats[1] = (info)->launches; \
   probe_stats[2] = (control)->primitive_progress; probe_stats[3] = (control)->primitive_starts; \
   probe_stats[4] = (control)->primitive_yields; probe_stats[5] = (control)->primitive_requeues; \
@@ -465,16 +529,17 @@ int main(void) {
       || probe_cpu_replays != 0 || !probe_released()) return 92;
   if (tb_live_words != 0 || tb_live_blocks != 0 || tb_tasks != 0
       || tb_continuations != 0 || tb_frames != 0 || tb_depth != 0) return 93;
-  if (probe_receipt[6] != 0 || probe_receipt[0] == 0
+  if (probe_receipt[6] != 0 || (probe_receipt[0] == 0 && probe_copy_stats[1] == 0)
       || probe_receipt[0] != probe_receipt[1] || probe_receipt[0] != probe_receipt[3]
       || probe_receipt[0] != probe_receipt[5]
-      || probe_receipt[0] + probe_nested_starts != probe_stats[3]
-      || probe_receipt[7] + probe_receipt[8] + probe_nested_progress != probe_stats[2] || probe_stats[6] != 0
+      || probe_receipt[0] + probe_copy_stats[1] + probe_nested_starts != probe_stats[3]
+      || probe_receipt[7] + probe_receipt[8] + probe_copy_stats[2]
+          + probe_nested_progress != probe_stats[2] || probe_stats[6] != 0
       || probe_stats[5] != probe_stats[4]) {
-    fprintf(stderr, "array probe mismatch: errors=%llu operations=%llu/%llu/%llu/%llu/%llu work=%llu+%llu/%llu starts=%llu+%llu/%llu live=%llu requeues=%llu yields=%llu\n",
+    fprintf(stderr, "array probe mismatch: errors=%llu operations=%llu/%llu/%llu/%llu/%llu work=%llu+%llu+%llu/%llu starts=%llu+%llu+%llu/%llu live=%llu requeues=%llu yields=%llu\n",
       probe_receipt[6], probe_receipt[0], probe_receipt[1], probe_receipt[3],
-      probe_receipt[5], probe_stats[3], probe_receipt[7] + probe_receipt[8], probe_nested_progress,
-      probe_stats[2], probe_receipt[0], probe_nested_starts, probe_stats[3], probe_stats[6],
+      probe_receipt[5], probe_stats[3], probe_receipt[7] + probe_receipt[8], probe_copy_stats[2], probe_nested_progress,
+      probe_stats[2], probe_receipt[0], probe_copy_stats[1], probe_nested_starts, probe_stats[3], probe_stats[6],
       probe_stats[5], probe_stats[4]);
     return 94;
   }
@@ -483,6 +548,7 @@ int main(void) {
   for (u32 i = 0; i < 9; ++i) fprintf(receipt, "%llu ", probe_stats[i]);
   for (u32 i = 0; i < 15; ++i) fprintf(receipt, "%llu ", probe_receipt[i]);
   fprintf(receipt, "%llu %llu", probe_nested_progress, probe_nested_starts);
+  for (u32 i = 0; i < 4; ++i) fprintf(receipt, " %llu", probe_copy_stats[i]);
   if (fclose(receipt) != 0) return 96;
   return 0;
 }
@@ -491,8 +557,8 @@ int main(void) {
 fn compare_slices(bend: &str, expected: &str, operations: u64, forks: bool) {
     let tiny = Fixture::new().run(bend, 1, 0, expected);
     let large = Fixture::new().run(bend, 4096, 0, expected);
-    assert_eq!(tiny.len(), 26);
-    assert_eq!(large.len(), 26);
+    assert_eq!(tiny.len(), 30);
+    assert_eq!(large.len(), 30);
     assert_eq!(
         tiny[0], large[0],
         "primitive slices must not charge language steps"
@@ -523,6 +589,37 @@ fn compare_slices(bend: &str, expected: &str, operations: u64, forks: bool) {
         assert!(tiny[7] >= 2 && large[7] >= 2);
         assert!(tiny[8] > 1 && large[8] > 1);
     }
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn packed_array_clone_copies_the_full_block_once_across_slices() {
+    let tiny = Fixture::new().run(PACKED_CLONE, 1, 0, "14\n");
+    let large = Fixture::new().run(PACKED_CLONE, 4096, 0, "14\n");
+    assert_eq!(tiny.len(), 30);
+    assert_eq!(large.len(), 30);
+    assert_eq!(
+        tiny[0], large[0],
+        "copy slices must preserve language steps"
+    );
+    assert_eq!(tiny[2], large[2], "the same total work must complete");
+    assert_eq!(
+        tiny[26], 2,
+        "shared input needs COW plus clone reservations"
+    );
+    assert_eq!(
+        large[26], 2,
+        "shared input needs COW plus clone reservations"
+    );
+    assert_eq!(tiny[27], 1, "one resumable clone operation must start");
+    assert_eq!(large[27], 1, "one resumable clone operation must start");
+    assert_eq!(tiny[28], 8192, "both copies initialize and copy 2048 words");
+    assert_eq!(tiny[28], large[28], "copy work must not replay");
+    assert_eq!(
+        tiny[29], 8192,
+        "quantum one must process one word per slice"
+    );
+    assert_eq!(large[29], 2, "each block copy completes in one large slice");
 }
 
 #[test]

@@ -264,12 +264,14 @@ fn a_partial_marked_ordinary_call_enters_cuda_after_its_last_argument() {
 const SHARED_ARRAY: &str = r#"import Base
 def change(array: Array<String>) -> Array<String> & String:
   Array.swap(String, array, 1, "changed")
+def clone_pair(array: Array<String>) -> Array<String> & Array<String>:
+  Array.clone(String, array)
 def use(pair: Array<String> & Array<String>) -> Array<String> & Array<String> & String:
   (saved, copy) = pair
   changed = change!(copy)
   (saved, changed)
 def main() -> Array<String> & Array<String> & String:
-  use(Array.clone(String, Array.new(String, 1n, "saved")))
+  use(clone_pair!(Array.new(String, 1n, "saved")))
 "#;
 
 const NUMERIC_WORD: &str = r"import Base
@@ -292,13 +294,19 @@ def main() -> U32: both!(3n, 12345)
 #[test]
 #[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
 fn cuda_array_copy_on_write_preserves_the_parked_cpu_owner() {
-    Fixture::new().run(
+    let expected = "([\"saved\", \"saved\"], [\"saved\", \"changed\"], \"saved\")\n";
+    let tiny = Fixture::new().run_with_quantum(
         SHARED_ARRAY,
         "on",
-        "([\"saved\", \"saved\"], [\"saved\", \"changed\"], \"saved\")\n",
+        expected,
+        (1, 0),
         1,
-        0,
+        Some("tb_device_array_clone_raw(e, tb_frame"),
     );
+    let large = Fixture::new().run_with_quantum(SHARED_ARRAY, "on", expected, (1, 0), 1024, None);
+    assert_eq!(tiny[0], large[0], "boxed COW must preserve language steps");
+    assert_eq!(tiny[1], large[1], "nested boxed copy work must not replay");
+    assert!(tiny[2] > large[2], "small slices must yield more often");
 }
 
 #[test]

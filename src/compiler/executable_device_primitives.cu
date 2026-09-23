@@ -12,6 +12,22 @@
 #error BEND_GPU_PRIMITIVE_QUANTUM must be between 1 and 4096
 #endif
 #define TB_DEVICE_ARRAY_NEW_STATE_WORDS 8
+/* phase, source, destination, cursor, word count, physical class, block tag,
+ * array flag, and whether the current copy reads a still-shared source. */
+#define TB_DEVICE_ARRAY_COPY_STATE_WORDS 9
+enum {
+  TB_DEVICE_ARRAY_COPY_ENTER = 0, TB_DEVICE_ARRAY_COPY_START = 1,
+  TB_DEVICE_ARRAY_COPY_RESERVED = 2, TB_DEVICE_ARRAY_COPY_SLICE = 3,
+  TB_DEVICE_ARRAY_COPY_YIELD = 4, TB_DEVICE_ARRAY_COPY_COMPLETE = 5
+};
+enum {
+  TB_DEVICE_ARRAY_COPY_IDLE = 0, TB_DEVICE_ARRAY_COPY_COW_INIT = 1,
+  TB_DEVICE_ARRAY_COPY_COW_VALUES = 2, TB_DEVICE_ARRAY_COPY_CLONE_INIT = 3,
+  TB_DEVICE_ARRAY_COPY_CLONE_VALUES = 4
+};
+enum {
+  TB_DEVICE_ARRAY_COPY_FLAG_COW = 1, TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED = 2
+};
 enum {
   TB_DEVICE_ARRAY_NEW_ENTER = 0, TB_DEVICE_ARRAY_NEW_RESERVED = 1,
   TB_DEVICE_ARRAY_NEW_SLICE = 2, TB_DEVICE_ARRAY_NEW_COMPLETE = 3
@@ -26,6 +42,9 @@ enum {
  * must not alter operands, state, or corpus ownership. */
 #ifndef TB_DEVICE_ARRAY_NEW_OBSERVE
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) ((void)0)
+#endif
+#ifndef TB_DEVICE_ARRAY_COPY_OBSERVE
+#define TB_DEVICE_ARRAY_COPY_OBSERVE(event, state, work) ((void)0)
 #endif
 #ifndef TB_DEVICE_PAYLOAD_OBSERVE
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) ((void)0)
@@ -166,6 +185,192 @@ INLINE Loc tb_device_corpus_ticket_take(const Env *e, Loc *ticket) {
     err_fail("invalid heap reservation");
   *ticket = next;
   return at;
+}
+
+/* Copy-on-write and clone use the same bounded block copier. Shared sources
+ * are never rewritten: their owned fields are duplicated from a persistent
+ * frame slot. For a unique source, duplicate rewrites are published back to
+ * its cells, matching blk_copy's synchronous ownership transfer. */
+OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
+    Term *owner, Term *result, Term *duplicate_owner, Term *duplicate_state,
+    Term *duplicate_result, Term *state) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || call == NULL
+      || owner == NULL || result == NULL || duplicate_owner == NULL
+      || duplicate_state == NULL || duplicate_result == NULL || state == NULL
+      || owner == result || duplicate_owner == result || owner == duplicate_owner)
+    err_fail("invalid device array clone arguments");
+  TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_ENTER, state, 0);
+  bool resumed = state[0] != TB_DEVICE_ARRAY_COPY_IDLE;
+  if (state[0] == TB_DEVICE_ARRAY_COPY_IDLE) {
+    for (u32 cell = 1; cell < TB_DEVICE_ARRAY_COPY_STATE_WORDS; ++cell)
+      if (state[cell] != 0) err_fail("invalid device array clone state");
+    if (*result != 0 || *duplicate_owner != 0 || *duplicate_result != 0
+        || duplicate_state[0] != 0 || duplicate_state[1] != 0
+        || duplicate_state[2] != 0 || duplicate_state[3] != 0)
+      err_fail("invalid device array clone frame");
+    Term block = *owner;
+    u32 tag = (u32)term_tag(block);
+    Cls logical = blk_cls(block);
+    if ((tag != TAG_ARR && tag != TAG_BUF) || logical > 17)
+      err_fail("array expected");
+    Cls physical = tag == TAG_ARR ? logical : buf_wcls(logical);
+    Loc source = term_peek(*e, block);
+    tb_allocation(*e, source, physical);
+    state[1] = source;
+    state[4] = UINT64_C(1) << physical;
+    state[5] = physical;
+    state[6] = block & ~(RFC_BIT | LOC_MASK);
+    state[7] = tag == TAG_ARR;
+    state[8] = 0;
+    if (term_rfc(block)) {
+      if (rfc_claim_unique(*e, term_loc(block))) {
+        tb_set_sealed(*e, source, false);
+        *owner = state[6] | source;
+      } else {
+        state[0] = TB_DEVICE_ARRAY_COPY_COW_INIT;
+        state[8] = TB_DEVICE_ARRAY_COPY_FLAG_COW;
+      }
+    }
+    if (state[0] == TB_DEVICE_ARRAY_COPY_IDLE)
+      state[0] = TB_DEVICE_ARRAY_COPY_CLONE_INIT;
+    state[2] = tb_device_corpus_reserve(e, physical);
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts;
+    ++tb_device_control->primitive_live;
+    tb_device_unlock();
+    TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_START, state, 0);
+    TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, 0);
+  } else if ((state[0] != TB_DEVICE_ARRAY_COPY_COW_INIT
+          && state[0] != TB_DEVICE_ARRAY_COPY_COW_VALUES
+          && state[0] != TB_DEVICE_ARRAY_COPY_CLONE_INIT
+          && state[0] != TB_DEVICE_ARRAY_COPY_CLONE_VALUES)
+      || state[1] < HEAP_OFF || state[1] >= tb_bump || state[2] < HEAP_OFF
+      || state[2] >= tb_bump || state[4] == 0 || state[5] >= NCLS_ALL
+      || state[4] != (UINT64_C(1) << state[5]) || state[6] == 0
+      || (state[7] != 0 && state[7] != 1)
+      || (state[8] & ~(TB_DEVICE_ARRAY_COPY_FLAG_COW
+          | TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED)) != 0
+      || state[3] >= state[4]
+      || ((state[0] == TB_DEVICE_ARRAY_COPY_COW_INIT
+              || state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES)
+          != ((state[8] & TB_DEVICE_ARRAY_COPY_FLAG_COW) != 0))
+      || ((state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES
+              || state[0] == TB_DEVICE_ARRAY_COPY_CLONE_VALUES)
+          && (state[8] & TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED) == 0)
+      || (state[7] != (u64)(term_tag(state[6]) == TAG_ARR))
+      || (term_tag(state[6]) != TAG_ARR && term_tag(state[6]) != TAG_BUF)
+      || term_aux(state[6]) > 17)
+    err_fail("invalid device array clone state");
+  if (resumed) {
+    tb_allocation(*e, state[1], (Cls)state[5]);
+    if ((state[8] & TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED) != 0)
+      tb_allocation(*e, state[2], (Cls)state[5]);
+    if (state[0] == TB_DEVICE_ARRAY_COPY_COW_INIT
+        || state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES) {
+      if (!term_rfc(*owner) || term_peek(*e, *owner) != state[1]
+          || (*owner & ~(RFC_BIT | LOC_MASK)) != state[6])
+        err_fail("shared array owner changed during copy");
+    } else if (term_rfc(*owner) || term_loc(*owner) != state[1]
+        || (*owner & ~(RFC_BIT | LOC_MASK)) != state[6]) {
+      err_fail("unique array owner changed during copy");
+    }
+  }
+
+  u64 work = 0;
+  bool duplicate_waiting = false;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM) {
+    tb_device_check_cancelled();
+    if (state[0] == TB_DEVICE_ARRAY_COPY_COW_INIT
+        || state[0] == TB_DEVICE_ARRAY_COPY_CLONE_INIT) {
+      e->mem[state[2] + state[3]] = 0;
+      tb_heap_meta[state[2] + state[3]] = tb_meta(state[2], (Cls)state[5]);
+      state[8] |= TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED;
+      ++state[3];
+      ++work;
+      if (state[3] == state[4]) {
+        state[3] = 0;
+        state[0] = state[0] == TB_DEVICE_ARRAY_COPY_COW_INIT
+            ? TB_DEVICE_ARRAY_COPY_COW_VALUES : TB_DEVICE_ARRAY_COPY_CLONE_VALUES;
+      }
+    } else if (state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES
+        || state[0] == TB_DEVICE_ARRAY_COPY_CLONE_VALUES) {
+      bool cow = state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES;
+      Loc from = state[1], to = state[2], index = state[3];
+      Loc count = state[4];
+      if (index >= count) err_fail("invalid device array clone cursor");
+      bool owned = state[7] != 0 && tb_cell_owned(*e, from + index);
+      if (owned) {
+        if (duplicate_state[0] == 0)
+          *duplicate_owner = e->mem[from + index];
+        if (!tb_device_duplicate(e, call, duplicate_owner, duplicate_state,
+            duplicate_result)) {
+          duplicate_waiting = true;
+          break;
+        }
+        Term value = *duplicate_result;
+        *duplicate_result = 0;
+        if (!cow) {
+          if (tb_cell_sealed(*e, from))
+            err_fail("unique array copy source is sealed");
+          e->mem[from + index] = *duplicate_owner;
+        }
+        *duplicate_owner = 0;
+        e->mem[to + index] = value;
+        tb_heap_meta[to + index] = tb_meta(to, (Cls)state[5]) | TB_META_OWNED;
+      } else {
+        e->mem[to + index] = e->mem[from + index];
+        tb_heap_meta[to + index] = tb_meta(to, (Cls)state[5]);
+      }
+      ++state[3];
+      ++work;
+      if (state[3] == count) {
+        if (cow) {
+          Term previous = *owner;
+          *owner = state[6] | to;
+          term_drop(*e, previous);
+          state[1] = to;
+          state[2] = tb_device_corpus_reserve(e, (Cls)state[5]);
+          state[3] = 0;
+          state[0] = TB_DEVICE_ARRAY_COPY_CLONE_INIT;
+          state[6] = *owner & ~(RFC_BIT | LOC_MASK);
+          state[8] = 0;
+          TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, work);
+        } else {
+          *result = state[6] | to;
+          state[0] = TB_DEVICE_ARRAY_COPY_IDLE;
+          break;
+        }
+      }
+    } else {
+      err_fail("invalid device array clone phase");
+    }
+  }
+
+  bool done = state[0] == TB_DEVICE_ARRAY_COPY_IDLE;
+  tb_device_lock();
+  if ((work == 0 && !duplicate_waiting)
+      || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && !duplicate_waiting
+          && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else if (!duplicate_waiting) ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_SLICE, state, work);
+  if (!done) {
+    if (!duplicate_waiting)
+      TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_YIELD, state, work);
+    return false;
+  }
+  TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_COMPLETE, state, work);
+  memset(state, 0, TB_DEVICE_ARRAY_COPY_STATE_WORDS * sizeof(Term));
+  return true;
 }
 
 /* Complete a previously reserved block without changing allocator counters.

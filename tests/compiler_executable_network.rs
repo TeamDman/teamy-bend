@@ -166,6 +166,7 @@ struct Running {
 impl Running {
     fn start(command: &mut Command) -> Self {
         let mut child = command
+            .env("TEAMY_BEND_TEST_LOOPBACK_NETWORK", "1")
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()

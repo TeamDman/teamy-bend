@@ -90,12 +90,30 @@ pub(super) struct Datagram {
     pub(super) data: Vec<u8>,
 }
 
+fn bind_host(loopback_only: bool) -> &'static [u8] {
+    if loopback_only {
+        b"127.0.0.1"
+    } else {
+        b"0.0.0.0"
+    }
+}
+
+fn bind_address(port: u32) -> HostResult<socket2::SockAddr> {
+    #[cfg(test)]
+    let loopback_only = true;
+    #[cfg(not(test))]
+    let loopback_only = std::env::var_os("TEAMY_BEND_TEST_LOOPBACK_NETWORK")
+        .as_deref()
+        .is_some_and(|value| value == "1");
+    address(bind_host(loopback_only), port)
+}
+
 pub(super) fn listen(port: u32) -> HostResult<NativeListener> {
     let socket = socket2::Socket::new(Domain::IPV4, Type::STREAM, Some(Protocol::TCP))
         .map_err(host_error)?;
     // Upstream attempts reuse but does not treat its failure as listen failure.
     let _reuse = socket.set_reuse_address(true);
-    let address = address(b"0.0.0.0", port)?;
+    let address = bind_address(port)?;
     socket.bind(&address).map_err(host_error)?;
     socket.listen(16).map_err(host_error)?;
     socket.set_nonblocking(true).map_err(host_error)?;
@@ -140,9 +158,7 @@ pub(super) fn finish_connect(socket: &NativeSocket) -> HostResult<()> {
 pub(super) fn bind(port: u32) -> HostResult<NativeSocket> {
     let socket =
         socket2::Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP)).map_err(host_error)?;
-    socket
-        .bind(&address(b"0.0.0.0", port)?)
-        .map_err(host_error)?;
+    socket.bind(&bind_address(port)?).map_err(host_error)?;
     socket.set_nonblocking(true).map_err(host_error)?;
     Ok(NativeSocket(socket))
 }

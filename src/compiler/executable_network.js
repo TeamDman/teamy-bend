@@ -87,7 +87,9 @@ function $tbNetworkBind(port, stream) {
     sys.setsockopt(fd, sys.mac ? 0xffff : 1, sys.mac ? 4 : 2,
       sys.ptr(new Int32Array([1])), 4);
   }
-  const address = io_addr('0.0.0.0', Number(port));
+  const host = process.env.TEAMY_BEND_TEST_LOOPBACK_NETWORK === '1'
+    ? '127.0.0.1' : '0.0.0.0';
+  const address = io_addr(host, Number(port));
   if (address === null) { $tbDropSocket(sys, fd); return io_fail(22); }
   if (sys.bind(fd, sys.ptr(address), 16) < 0 || (stream && sys.listen(fd, 16) < 0)
       || $tbNetworkNonblocking(sys, fd) < 0) {

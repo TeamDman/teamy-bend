@@ -16,6 +16,15 @@ struct TBNetSocket {
   TBNetSocket *idle_next;
   intptr_t descriptor;
 };
+/* Native network integration tests compile disposable programs with
+ * TEAMY_BEND_TEST_LOOPBACK_NETWORK. Production keeps wildcard binds. */
+static const char *tb_net_bind_host(void) {
+#if defined(TEAMY_BEND_TEST_LOOPBACK_NETWORK)
+  return "127.0.0.1";
+#else
+  return "0.0.0.0";
+#endif
+}
 static u32 tb_net_error(void) {
 #ifdef _WIN32
   return (u32)WSAGetLastError();
@@ -265,7 +274,7 @@ static Term tb_tcp_listen_run(Env e, Term *fields, IoWork *work) {
   (void)work;
   if (descriptor < 0) return tb_net_fail(e, tb_net_error());
   (void)setsockopt((TBNetRaw)descriptor, SOL_SOCKET, SO_REUSEADDR, (const char *)&one, sizeof(one));
-  if (io_sys_addr("0.0.0.0", (u32)fields[0], &address) != 0) code = EINVAL;
+  if (io_sys_addr(tb_net_bind_host(), (u32)fields[0], &address) != 0) code = EINVAL;
   else if (bind((TBNetRaw)descriptor, (struct sockaddr *)&address, sizeof(address)) != 0
       || listen((TBNetRaw)descriptor, 16) != 0 || tb_net_nonblocking(descriptor) != 0) code = tb_net_error();
   else return io_done(e, io_hand((u64)descriptor));
@@ -345,7 +354,7 @@ static Term tb_udp_bind_run(Env e, Term *fields, IoWork *work) {
   struct sockaddr_in address; u32 code;
   (void)work;
   if (descriptor < 0) return tb_net_fail(e, tb_net_error());
-  if (io_sys_addr("0.0.0.0", (u32)fields[0], &address) != 0) code = EINVAL;
+  if (io_sys_addr(tb_net_bind_host(), (u32)fields[0], &address) != 0) code = EINVAL;
   else if (bind((TBNetRaw)descriptor, (struct sockaddr *)&address, sizeof(address)) != 0
       || tb_net_nonblocking(descriptor) != 0) code = tb_net_error();
   else return io_done(e, io_hand((u64)descriptor));

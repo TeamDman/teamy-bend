@@ -100,7 +100,10 @@ impl Fixture {
         let loaded = load_executable(self.0.join("main.bend")).unwrap();
         let checked = check_executable(&loaded).unwrap();
         let source = edit(compile_executable_c(&checked).unwrap());
-        let executable = executable_c_compiler::compile(&self.0, &source, definitions);
+        let mut test_definitions = Vec::with_capacity(definitions.len() + 1);
+        test_definitions.push("TEAMY_BEND_TEST_LOOPBACK_NETWORK=1");
+        test_definitions.extend_from_slice(definitions);
+        let executable = executable_c_compiler::compile(&self.0, &source, &test_definitions);
         let mut child = Command::new(executable)
             .current_dir(&self.0)
             .stdout(Stdio::piped())

@@ -21,6 +21,10 @@ Addresses are strict numeric IPv4. DNS names, embedded NUL, leading-zero octets,
 extra characters and ports above 65535 fail. Listen binds the unspecified IPv4
 address with backlog 16 and attempts address reuse. UDP.bind also binds the
 unspecified address. Both accept port zero for an OS-selected port.
+Windows integration tests set `TEAMY_BEND_TEST_LOOPBACK_NETWORK=1` only on
+their disposable child processes; internal host-adapter tests bind loopback
+under `cfg(test)`. This keeps test listeners local while leaving the default
+production bind address unchanged.
 
 TCP.send completes successive partial writes and retains its unsent suffix while
 waiting for writability. Empty sends succeed without an OS call. Zero progress

@@ -388,6 +388,9 @@ leading-zero octets, embedded NUL and ports above 65535. Listen and UDP bind
 accept port zero. Listen uses backlog 16 and attempts address reuse. Handles
 remain real descriptors, with full Windows SOCKET width within the native
 56-bit representation; Unix additionally requires an int-sized descriptor.
+The disposable Windows C-network test programs define
+`TEAMY_BEND_TEST_LOOPBACK_NETWORK` and bind to `127.0.0.1`; ordinary generated
+programs keep the wildcard bind and retain their normal network behavior.
 
 TCP send retains its offset across partial writes and readiness waits. Empty
 sends make no syscall; zero-progress sends fail explicitly. Other syscall

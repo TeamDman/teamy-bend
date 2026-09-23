@@ -41,6 +41,7 @@ type Scope = BTreeMap<usize, OwnedLocal>;
 type Substitutions = BTreeMap<usize, TermRef>;
 
 const DEVICE_ARRAY_NEW_STATE_WORDS: usize = 8;
+const DEVICE_ARRAY_COPY_STATE_WORDS: usize = 9;
 const DEVICE_DUPLICATE_STATE_WORDS: usize = 4;
 const DEVICE_PAYLOAD_STATE_WORDS: usize = 6;
 

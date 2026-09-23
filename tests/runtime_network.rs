@@ -85,6 +85,7 @@ impl Fixture {
         let mut child = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
             .args(["run", "main.bend"])
             .current_dir(&self.0)
+            .env("TEAMY_BEND_TEST_LOOPBACK_NETWORK", "1")
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()

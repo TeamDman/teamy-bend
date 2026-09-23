@@ -20,3 +20,10 @@ transport in their receipts. TCP sanitizer transport has caused firewall
 approval prompts for each temporary test executable. Keep the override scoped
 to validation processes; do not change system firewall settings or disable
 Bend's networking effects to silence these prompts.
+
+Windows network integration tests must keep listeners local: compile disposable
+C-network programs with `TEAMY_BEND_TEST_LOOPBACK_NETWORK=1` and set
+`TEAMY_BEND_TEST_LOOPBACK_NETWORK=1` only in CLI/JavaScript test child
+processes. Internal Rust host-adapter tests use loopback under `cfg(test)`.
+Keep normal TCP/UDP bind addresses unchanged; do not set this environment
+variable globally.

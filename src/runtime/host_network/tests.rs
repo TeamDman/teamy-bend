@@ -3,6 +3,12 @@ use super::*;
 use std::io::Read;
 use std::io::Write;
 
+#[test]
+fn test_bind_policy_preserves_wildcard_default_and_localizes_tests() {
+    assert_eq!(bind_host(false), b"0.0.0.0");
+    assert_eq!(bind_host(true), b"127.0.0.1");
+}
+
 fn socket_registration(socket: &NativeSocket, interest: Interest) -> Registration<'_> {
     Registration {
         source: Source::Socket(socket),

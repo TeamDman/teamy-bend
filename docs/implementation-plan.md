@@ -2560,7 +2560,7 @@ bodies, and the next allocation chains remain open.
 Commit `52fb59461a00408aa82901612e75abd5478ed2ea` is published on public
 `main`; the worktree is clean and tracks `origin/main`.
 
-### Active follow-on: resumable boxed `Array.new`
+###### [x] 5.15.7.4.a Make `Array.new` initialization resumable
 
 Generated resumable GPU bodies now route boxed `Array.new` through the bounded
 array helper. The helper keeps the array reservation and cursor in the outer
@@ -2588,8 +2588,58 @@ Poche HEAD, its pre-existing dirty paths, all 17 source hashes and 13 compiled
 fingerprints are unchanged. The full state graph was not rerun. The retained
 quantum-one boxed-array executable passes Compute Sanitizer memcheck with the
 exact four-string output and zero errors using the named-pipe wrapper.
-`5.15.7.4` remains active: other synchronous allocation chains, device backing
-waits and broader GPU parity remain open.
+This closes only `Array.new` initialization, including repeated boxed values.
+Other synchronous allocation chains, device backing waits and broader GPU
+parity remain open.
+
+###### [x] 5.15.7.4.b Make GPU `Array.clone` copies resumable
+
+**Work:** Replace the direct `tb_c_blk_unique` plus `tb_c_blk_copy` sequence in
+resumable generated GPU bodies with a continuation-backed operation. Preserve
+the reference-count claim path, shared-array copy-on-write, packed buffer
+layouts, per-element ownership and nested boxed duplication. Reserve each
+required destination exactly once before initializing or copying it; keep the
+source/owner, destination, cursor and nested duplicate state in the persistent
+frame. Leave synchronous CPU callers unchanged.
+
+**Validation:** Add actual-CUDA tests for a large packed buffer at primitive
+quanta 1 and 4,096, and a boxed/shared array at quanta 1 and 1,024. Require
+exact semantic output, equal language steps and operation-specific copy work,
+and more yields at quantum one. Exercise copy-on-write against an independently
+retained owner. Run the focused C-GPU suites, `./check-all.ps1`, strict
+all-target/all-feature Clippy, Compute Sanitizer memcheck through
+`scripts/compute-sanitizer.ps1`, then exact release Poche privacy, scalar and
+bounded-trajectory gates.
+
+**Completion criteria:** Every `Array.clone` call from a resumable GPU body
+uses the cursor operation; packed and boxed layouts preserve source/clone
+ownership and upstream-visible output at both quanta; no allocation or nested
+duplicate is replayed across yields; CPU behavior is unchanged; targeted and
+repository gates pass.
+
+**Completion:** Resumable GPU bodies now retain the array owner, clone result,
+source/destination state and nested boxed-duplicate state across yields. The
+synchronous CPU `tb_c_blk_unique`/`tb_c_blk_copy` path is unchanged. The packed
+observer forces the shared COW path and reports exactly two reservations, one
+clone start, 8,192 words of initialization/copy work and 8,192 one-word slices;
+the 4,096-word quantum uses two slices. Both packed runs return `14` with equal
+language steps. The boxed COW output, language steps and nested-duplicate work
+match at quanta 1 and 1,024, with more yields at quantum one.
+
+All 12 ignored CUDA tests in `compiler_executable_c_gpu` and all six in
+`compiler_executable_c_gpu_primitives` pass. CPU-focused cases pass, and
+`./check-all.ps1`, `cargo fmt --check`, strict workspace Clippy and a release
+build pass. The final packed executable passes Compute Sanitizer memcheck with
+`14` and `ERROR SUMMARY: 0 errors` through the named-pipe wrapper.
+
+The exact release Poche gates pass: seven symbolic privacy theorems, three
+imported equalities and a well-typed wrong-viewer rejection; all 15,503 scalar
+rows with seven checked equalities and two negative controls; and the bounded
+trajectory with 22 states, 21 transitions, 120/180 chance partitions and eight
+negative controls. Poche remains at HEAD
+`e5e767cc6b545b725994e50984d01d69091bface`, with its 13 pre-existing dirty
+paths unchanged. The full state graph was not rerun. Remaining synchronous
+allocation chains, device-backing waits and broader GPU parity remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
@@ -2652,8 +2702,11 @@ formalization goal.
 Completion notes: `scripts/compute-sanitizer.ps1` selects named pipes only for
 Windows child processes. The pending bounded GPU runner uses the same setting
 and records it in each receipt. Repository instructions require this transport
-for future Windows sanitizer launches. No Bend runtime/network behavior or
-machine firewall configuration changed.
+for future Windows sanitizer launches. Native network integration fixtures
+also bind to loopback using a compile-time define for disposable C programs and
+the child-only `TEAMY_BEND_TEST_LOOPBACK_NETWORK=1` setting for CLI and
+JavaScript programs. Production wildcard binds remain unchanged; no machine
+firewall configuration changed.
 
 PowerShell 7 validation passes argument boundaries (spaces, quotes, shell-like
 text and option-shaped arguments), exact stdout/stderr forwarding, nonzero child
