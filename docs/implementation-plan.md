@@ -3,7 +3,7 @@
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
 **Last updated:** 2026-09-22
-**Intent audit:** Updated 2026-09-20 against the original request and available scope/GPU follow-ups
+**Intent audit:** Updated 2026-09-22 against the original request and available scope/GPU/firewall follow-ups
 
 ## How to update this plan
 
@@ -80,6 +80,7 @@ in the ignored `.local/gpu-port-references.md` file at the repository root.
 | U11 | Makepad strategies identified by the user as Rik Arends's work may help the later Bend GPU port. | GPU port references; 3.4, evaluation deferred to GPU phase |
 | U12 | The user reports those strategies improved teamy-tts; retain it as a second implementation reference. | GPU port references; user-reported provenance distinguished from inspected source |
 | U13 | Persist both local reference paths and their purpose across compaction; assess current goal wording. | Ignored local reference note; portable GPU reference document; accepted wording above |
+| U14 | Prevent repeated public/private-network permission prompts from temporary test executables, while preserving Bend's ability to implement public network programs; the user cancelled the reported prompts. | 5.17; Windows sanitizer transport and validation instructions |
 
 ## Intent audit evidence
 
@@ -106,6 +107,14 @@ in the ignored `.local/gpu-port-references.md` file at the repository root.
   recorded goal. Local paths remain untracked.
 - The subsequent goal continuation adopts the recommended wording and resumes
   implementation; U1-U13 and their existing acceptance boundaries remain intact.
+- Firewall follow-up extraction (2026-09-22): recorded temporary executable
+  prompts, cancelled approvals, and retained public-network capability as U14.
+- Firewall follow-up traceability: U14 maps to 5.17 and the Windows sanitizer
+  launcher, with transport and output/error validation separate from engine
+  behavior. The exact reported executable reference stays in ignored local notes.
+- Firewall follow-up adversarial review: avoiding validation prompts does not
+  authorize weakening the system firewall or removing Bend network effects.
+  Preserve earlier engine/Poche scope and historical sanitizer evidence.
 - Known source limitation: intervening implementation conversations have been
   compacted; their existing ledger and completion evidence are retained. The
   original request and the current scope/GPU follow-ups are available directly.
@@ -2361,7 +2370,47 @@ allocated during this step. Boxed-element duplication and other allocation
 helpers still require persistent nested ownership state; full memory sizing,
 residency/overflow, platform and performance contracts remain in 5.15.7 and U6.
 
-##### [ ] 5.15.7.3 Persist device sealing and duplication across yields
+##### [x] 5.15.7.3 Persist device sealing and duplication across yields
+
+The two initial tree-sharing and nested-closure programs pass actual pinned
+upstream checking, C/JavaScript generation and JavaScript execution with result
+20. A third scalar-closure program has the same upstream result. The retained
+port generates executable C for all three; the first two reach typed duplication
+and the third reaches an explicit call inside a scalar generated closure. The
+unsafe nested-closure fixture is correctly excluded from strict proof checking.
+Focused generated-C/CUDA execution returns20 for all three. Typed/scalar
+slice comparisons, nested captures and both failure/recovery cases pass. The
+four focused CUDA tests now count incoming host steps, resumable duplication,
+iterative term destruction and other device ticks separately, then reconcile
+their sum exactly with the runtime total. Duplication consumes exactly 9 ticks
+for typed/scalar calls and 15 for nested captures. Tree and nested fixtures can
+destroy one or two of their three input Forks according to scheduler interleaving;
+each destruction costs exactly 3 accounted ticks. Those comparisons exclude only
+that measured cleanup work. The scalar quantum-four case also observes a
+nonzero resumed dispatch turn crossing READY. Every cleanup tick still charges
+the runtime budget.
+
+The implementation adds persistent operation records with checked allocation
+base/index references, bounded sealing and clone initialization, and separate
+publication phases. Generated typed and scalar calls retain their original
+owner slot, result and four operation cells; CPU calls retain synchronous
+duplication. Device buffers remain fully backed. The fresh candidate passes
+formatting, `check-all.ps1`, strict workspace/library/test Clippy, every listed
+CUDA hardware suite, release build and the strict 1,302-fixture upstream audit;
+it preserves the prior 364 accepted positives with no abnormal exits or
+accepted negative fixtures. All 22 CPU-off/GPU-on comparisons across 11 unchanged
+upstream programs match actual upstream JavaScript. All eight new typed,
+scalar, nested-capture and recovery executables pass Compute Sanitizer memcheck
+with zero errors using Windows named pipes. The first broad gate had one CUDA
+cache-writer test failure; that exact test passed alone and the complete fresh
+gate passed. The clean committed release is retained with source and validation
+inputs identical to the frozen candidate. Exact-release Poche checks pass seven
+symbolic privacy laws, three imported equalities and one typed negative; 15,503
+scalar rows, seven equalities and two controls; and a bounded 22-state,
+44-observation, 21-transition trajectory with 300 chance partitions, eight
+controls and 67 requests. All 17 Poche source hashes, 13 compiled fingerprints,
+HEAD and pre-existing dirty paths are unchanged. This closes the bounded
+duplication milestone without expanding the Poche model or application.
 
 Work: make the explicit generated duplication path resumable while retaining
 fully backed device buffers. Persist its owner reference, result destination,
@@ -2380,7 +2429,7 @@ respect free-list reuse; checking available space and releasing the lock is
 insufficient when sibling lanes can consume it.
 
 Validation: force yields before a child reference-cell allocation and after an
-earlier child has been sealed. Compare outputs and logical steps across slice
+earlier child has been sealed. Compare outputs and categorized step accounting across slice
 sizes, observe ownership transitions once, retain sibling independence, and
 exercise cancellation, allocation refusal and same-process recovery. Cover
 typed and scalar closure callers, sharing and nested captures. Qualify actual
@@ -2450,9 +2499,47 @@ does not cover general specialization, optimized multicore CPU execution,
 GPU/window/audio, remaining language/library/CLI compatibility or the full
 formalization goal.
 
+### [x] 5.17 Avoid Windows firewall prompts from GPU validation
+
+Completion notes: `scripts/compute-sanitizer.ps1` selects named pipes only for
+Windows child processes. The pending bounded GPU runner uses the same setting
+and records it in each receipt. Repository instructions require this transport
+for future Windows sanitizer launches. No Bend runtime/network behavior or
+machine firewall configuration changed.
+
+PowerShell 7 validation passes argument boundaries (spaces, quotes, shell-like
+text and option-shaped arguments), exact stdout/stderr forwarding, nonzero child
+exit status23 and unchanged caller environment. Installed-tool discovery and
+`-SanitizerArguments @('--version')` pass. Both scripts parse successfully and
+Git whitespace checks pass. Targeted sanitizer and socket evidence follows;
+this script/documentation change does not rerun or reattribute the engine suite.
+
+The reported pure arithmetic executable is an exact historical Compute Sanitizer
+target. Valid process observations show the default sanitizer transport opens
+an injected TCP listener on all IPv4 interfaces at port49152. Named-pipe mode
+passes a fresh-path copy of the historically fixed executable (9696, status0,
+zero sanitizer errors), with six valid process-tree snapshots showing no TCP
+or UDP endpoints. The historical bad executable still produces sanitizer99 in
+both modes. Initial sandbox socket queries were denied and are not evidence.
+The old GPU defect stays attributed to its original milestone.
+
+Work: use NVIDIA's documented Windows named-pipe transport for sanitizer
+frontend/target communication. Provide a reusable launcher and update the
+pending bounded runner; preserve old executables, receipts and runner hashes.
+Keep the setting in child processes and preserve ordinary Bend network effects.
+
+Validation: compare default and named-pipe instrumentation on a retained known
+failure, qualify a known-good executable at a fresh path with named pipes, and
+check argument forwarding, environment isolation and exit status. Observe
+process-owned sockets during the transport comparison. Do not change firewall
+rules or global notification settings.
+
+Completion: named-pipe runs retain sanitizer diagnostics and successful GPU
+execution, with durable instructions preventing accidental TCP launches.
+
 ## Completion and risks
 
-The goal is complete only when U1–U13 are delivered and no required rewrite or
+The goal is complete only when U1–U14 are delivered and no required rewrite or
 formalization work remains. A scaffold or supported language subset is progress.
 Proof soundness risk is controlled by preserving erasure/resource/descent rules,
 rejecting unsupported constructs and testing false proofs. Model correspondence

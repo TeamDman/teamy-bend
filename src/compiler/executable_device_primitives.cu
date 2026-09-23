@@ -27,7 +27,7 @@ enum {
  * before allocator mutation so a later backing-request protocol can suspend
  * here without retrying consumed work. A failed invocation discards its arena
  * rather than attempting to free a partially initialized private block. */
-INLINE Loc tb_device_array_new_reserve(const Env *e, Cls cls) {
+INLINE Loc tb_device_corpus_reserve(const Env *e, Cls cls) {
   if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || cls >= NCLS_ALL)
     err_fail("invalid heap allocation");
   u64 size = UINT64_C(1) << cls;
@@ -72,7 +72,7 @@ OUTLINE bool tb_device_array_new_raw(const Env *e, bool array, Nat depth,
   if (state[0] == 0) {
     for (u32 cell = 1; cell < TB_DEVICE_ARRAY_NEW_STATE_WORDS; ++cell)
       if (state[cell] != 0) err_fail("invalid device array primitive state");
-    Loc at = tb_device_array_new_reserve(e, physical);
+    Loc at = tb_device_corpus_reserve(e, physical);
     state[0] = 1; state[1] = at; state[2] = 0;
     state[3] = logical; state[4] = physical; state[5] = stride;
     state[6] = count; state[7] = array;

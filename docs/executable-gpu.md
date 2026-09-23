@@ -181,6 +181,34 @@ unchanged reruns completed in about three seconds with zero errors. The first
 timeout is retained as an unexplained validation observation. No source,
 launch dimensions or timeout was changed for those reruns.
 
+## Compute Sanitizer on Windows
+
+Use the repository wrapper from PowerShell 7:
+
+```powershell
+./scripts/compute-sanitizer.ps1 -SanitizerArguments @('--tool', 'memcheck', '--error-exitcode', '99', './program.exe')
+```
+
+The wrapper discovers Compute Sanitizer through `CUDA_PATH` or `PATH`; an
+explicit `-SanitizerPath` can select another installation. It forwards arguments,
+output and the exit status, setting
+`NV_COMPUTE_SANITIZER_LOCAL_CONNECTION_OVERRIDE=named-pipes` only in the Windows
+child process. Other platforms retain their existing transport. Custom bounded
+validation runners must use the same Windows child environment and record it
+with their evidence.
+
+Compute Sanitizer can otherwise open a TCP listener inside the instrumented
+program, causing Windows Firewall prompts even for a Bend program that only
+performs arithmetic. NVIDIA documents
+[named pipes as a Windows local transport](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html#environment-variables).
+This changes tool communication, not GPU instrumentation or Bend's TCP/UDP
+effects. It does not create firewall exceptions or change machine settings.
+
+Cancelling a firewall prompt can create inbound block rules for that executable
+path, as described in [Microsoft's firewall documentation](https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/rules#applications-rules).
+Those rules do not need removal for named-pipe sanitizer communication. A real
+network server still needs its own deliberate bind address and firewall policy.
+
 ## Remaining GPU work
 
 - Broader upstream programs, numeric behavior, invalid outcomes, effect

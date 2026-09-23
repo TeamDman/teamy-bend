@@ -3,6 +3,7 @@
 
 use super::CompileError;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
+use super::DEVICE_DUPLICATE_STATE_WORDS;
 use super::DefinitionBody;
 use super::ExecutableProgram;
 use super::Expression;
@@ -192,7 +193,9 @@ impl Generator<'_> {
         source.push_str(include_str!("executable_device_control.h"));
         source.push_str(include_str!("executable_device_tasks.cu"));
         source.push_str(include_str!("executable_device_primitives.cu"));
+        source.push_str(include_str!("executable_device_duplicate.cu"));
         writeln!(source, "#if TB_DEVICE_ARRAY_NEW_STATE_WORDS != {DEVICE_ARRAY_NEW_STATE_WORDS}\n#error incompatible generated Array.new state layout\n#endif").unwrap();
+        writeln!(source, "#if TB_DEVICE_DUPLICATE_STATE_WORDS != {DEVICE_DUPLICATE_STATE_WORDS}\n#error incompatible generated duplication state layout\n#endif").unwrap();
         source.push_str(include_str!("executable_value_bridge.c"));
         source.push_str(
             "INLINE Term tb_impossible(void) { err_fail(\"entered an impossible match\"); }\n",

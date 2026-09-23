@@ -41,6 +41,7 @@ type Scope = BTreeMap<usize, OwnedLocal>;
 type Substitutions = BTreeMap<usize, TermRef>;
 
 const DEVICE_ARRAY_NEW_STATE_WORDS: usize = 8;
+const DEVICE_DUPLICATE_STATE_WORDS: usize = 4;
 
 #[derive(Clone)]
 struct OwnedLocal {
@@ -468,8 +469,56 @@ impl Generator<'_> {
             local.owned = false;
             Ok(local.value.clone())
         } else {
-            self.hold(output, &format!("tb_c_duplicate(e, &{})", local.value))
+            self.duplicate_owned(&local.value, None, output)
         }
+    }
+
+    /// The original owner stays in its frame slot because duplication can
+    /// replace it with a shared reference before the next use. A copied alias
+    /// would lose that rewrite. The optional mask was computed before this
+    /// operation and remains in the same persistent frame across a yield.
+    fn duplicate_owned(
+        &mut self,
+        owner: &str,
+        mask: Option<&str>,
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let synchronous = format!("tb_c_duplicate(e, &{owner})");
+        if !output.can_suspend {
+            let expression = mask.map_or_else(
+                || synchronous.clone(),
+                |mask| format!("{mask} ? {synchronous} : {owner}"),
+            );
+            return self.hold(output, &expression);
+        }
+        let slot = owner
+            .strip_prefix("tb_values[")
+            .and_then(|index| index.strip_suffix(']'))
+            .and_then(|index| index.parse::<usize>().ok());
+        if slot.is_none_or(|slot| slot >= output.slots) {
+            return Err(CompileError::new(
+                "resumable duplication requires a retained owner slot",
+            ));
+        }
+        let result = self.hold(output, "0")?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?;
+        output.resumes += 1;
+        let pc = output.resumes;
+        let yielded = if output.words {
+            "tb_segment_yield()"
+        } else {
+            "0"
+        };
+        if let Some(mask) = mask {
+            writeln!(output, "  if ({mask}) {{").unwrap();
+        }
+        // Jumping into this branch skips its saved mask and initialization.
+        // No lane-local declaration or owner transfer spans the resume label.
+        writeln!(output, "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_duplicate(e, tb_frame, &{owner}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif").unwrap();
+        if mask.is_some() {
+            writeln!(output, "  }} else {{\n    {result} = {owner};\n  }}").unwrap();
+        }
+        Ok(result)
     }
 
     fn definition(

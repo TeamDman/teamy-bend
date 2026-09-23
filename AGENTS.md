@@ -12,3 +12,11 @@ Run `./check-all.ps1` for the standard quality gate. Compiler runtime tests need
 Node.js on PATH or `TEAMY_BEND_NODE`. Keep translated Bend files under Apache-2.0
 with their attribution; new project files use MPL-2.0. Never commit local paths,
 raw audit diagnostics, captures or unrelated reference-checkout artifacts.
+
+On Windows, launch Compute Sanitizer through `scripts/compute-sanitizer.ps1`.
+Custom bounded runners must set the child environment variable
+`NV_COMPUTE_SANITIZER_LOCAL_CONNECTION_OVERRIDE=named-pipes` and record that
+transport in their receipts. TCP sanitizer transport has caused firewall
+approval prompts for each temporary test executable. Keep the override scoped
+to validation processes; do not change system firewall settings or disable
+Bend's networking effects to silence these prompts.

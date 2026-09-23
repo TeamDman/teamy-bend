@@ -343,10 +343,11 @@ impl Generator<'_> {
             .iter()
             .enumerate()
             .map(|(i, word)| {
-                self.hold(
-                    output,
-                    &format!("{mask}[{i}] ? tb_c_duplicate(e, &{word}) : {word}"),
-                )
+                if local.value.layout.words[i] == Kind::Box {
+                    self.duplicate_owned(word, Some(&format!("{mask}[{i}]")), output)
+                } else {
+                    self.hold(output, word)
+                }
             })
             .collect::<Result<_, _>>()?;
         Ok(Value {
