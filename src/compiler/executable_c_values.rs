@@ -371,6 +371,7 @@ impl Generator<'_> {
             return self.array_clone(arguments, output);
         }
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
+        let array_storage = if arr { "true" } else { "false" };
         let a = self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?;
         if name == "Array.size" {
             return self.construct(
@@ -385,16 +386,16 @@ impl Generator<'_> {
         let conversion = self.conversion_use(&layout, output)?;
         let offset = self.hold(output, &format!("blk_at({a}, {}, {lgs})", arguments[1]))?;
         let previous = if name == "Array.get" || name == "Array.swap" {
-            let cells = (0..layout.words.len())
-                .map(|index| {
-                    if name == "Array.get" && layout.words[index] == Kind::Box {
-                        format!("tb_c_blk_keep(e, term_loc({a}) + (u32){offset} + {index})")
-                    } else {
+            let array = if name == "Array.get" {
+                self.array_get_values(array_storage, &a, &offset, &layout.words, output)?
+            } else {
+                let cells = (0..layout.words.len())
+                    .map(|index| {
                         format!("blk_read(e->mem, {arr}, term_loc({a}), (u32){offset} + {index})")
-                    }
-                })
-                .collect::<Vec<_>>();
-            let array = self.array(output, &cells)?;
+                    })
+                    .collect::<Vec<_>>();
+                self.array(output, &cells)?
+            };
             Some(self.hold(output, &format!("tb_box_{conversion}(e, {array})"))?)
         } else {
             None
@@ -417,6 +418,59 @@ impl Generator<'_> {
         } else {
             Ok(a.clone())
         }
+    }
+
+    /// Read an array element, resuming ownership duplication for boxed words
+    /// when this operation runs in a suspendable GPU body.
+    fn array_get_values(
+        &mut self,
+        array: &str,
+        owner: &str,
+        offset: &str,
+        words: &[Kind],
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let duplicate = if output.can_suspend && words.contains(&Kind::Box) {
+            Some((
+                self.hold(output, "0")?,
+                self.hold(output, "0")?,
+                self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?,
+            ))
+        } else {
+            None
+        };
+        let mut values = Vec::with_capacity(words.len());
+        for (index, kind) in words.iter().enumerate() {
+            if *kind != Kind::Box {
+                values.push(format!(
+                    "blk_read(e->mem, {array}, term_loc({owner}), (u32){offset} + {index})"
+                ));
+                continue;
+            }
+            let Some((duplicate_owner, duplicate_result, duplicate_state)) = &duplicate else {
+                values.push(format!(
+                    "tb_c_blk_keep(e, term_loc({owner}) + (u32){offset} + {index})"
+                ));
+                continue;
+            };
+            let cell = format!("term_loc({owner}) + (u32){offset} + {index}");
+            let value = self.hold(output, "0")?;
+            writeln!(output, "  {duplicate_owner} = e->mem[{cell}];").unwrap();
+            output.resumes += 1;
+            let pc = output.resumes;
+            let yielded = if output.words {
+                "tb_segment_yield()"
+            } else {
+                "0"
+            };
+            writeln!(
+                output,
+                "/* resumable boxed Array.get element duplication */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (tb_cell_owned(*e, {cell})) {{\n    if (!tb_device_duplicate(e, tb_frame, &{duplicate_owner}, {duplicate_state}, &{duplicate_result})) {{\n      tb_frame->pc = {pc};\n      tb_frame->yielded = true;\n      return {yielded};\n    }}\n    e->mem[{cell}] = {duplicate_owner};\n    {value} = {duplicate_result};\n    {duplicate_owner} = 0;\n    {duplicate_result} = 0;\n  }} else {{\n    {value} = e->mem[{cell}];\n  }}\n#else\n  {value} = tb_c_blk_keep(e, {cell});\n#endif"
+            )
+            .unwrap();
+            values.push(value);
+        }
+        self.array(output, &values)
     }
 
     fn array_new(

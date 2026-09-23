@@ -159,6 +159,31 @@ def make() -> Array<String>:
 def main() -> Array<String>: make!()
 "#;
 
+const BOXED_ARRAY_GET: &str = r"import Base
+type Tree is Data:
+  Tip{value: U32}
+  Fork{left: Tree, right: Tree}
+type Payload is Data: Payload{left: Tree, right: Tree}
+def sum(tree: Tree) -> U32:
+  match tree:
+    case Tip{value}: value
+    case Fork{left, right}: U32.add(sum(left), sum(right))
+def total(payload: Payload) -> U32:
+  match payload:
+    case Payload{left, right}: U32.add(sum(left), sum(right))
+def finish(pair: Array<Payload> & Payload) -> U32:
+  (array, selected) = pair
+  total(selected)
+def read(array: Array<Payload>) -> U32: finish(Array.get(Payload, array, 0))
+def sample() -> Tree:
+  Fork{Fork{Fork{Tip{1}, Tip{1}}, Fork{Tip{1}, Tip{1}}}, Fork{Fork{Tip{1}, Tip{1}}, Fork{Tip{1}, Tip{1}}}}
+def make_payload() -> Payload: Payload{sample(), sample()}
+def main() -> U32:
+  payload = make_payload()
+  array = Array.new(Payload, 0n, payload)
+  read!(array)
+";
+
 #[test]
 fn boxed_array_creation_keeps_cpu_semantics_when_gpu_is_off() {
     Fixture::new().run(
@@ -168,6 +193,31 @@ fn boxed_array_creation_keeps_cpu_semantics_when_gpu_is_off() {
         0,
         0,
     );
+}
+
+#[test]
+fn boxed_array_get_keeps_cpu_semantics_when_gpu_is_off() {
+    Fixture::new().run(BOXED_ARRAY_GET, "off", "16\n", 0, 0);
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn boxed_array_get_resumes_nested_value_duplication_across_slices() {
+    let tiny = Fixture::new().run_with_quantum(
+        BOXED_ARRAY_GET,
+        "on",
+        "16\n",
+        (1, 0),
+        1,
+        Some("resumable boxed Array.get element duplication"),
+    );
+    let large = Fixture::new().run_with_quantum(BOXED_ARRAY_GET, "on", "16\n", (1, 0), 1024, None);
+    assert_eq!(
+        tiny[0], large[0],
+        "duplicate slices preserve language steps"
+    );
+    assert_eq!(tiny[1], large[1], "nested duplication work must not replay");
+    assert!(tiny[2] > large[2], "small slices must yield more often");
 }
 
 #[test]

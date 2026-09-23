@@ -2473,9 +2473,10 @@ remaining device allocation families:
 - Array chains: `Array.new` now has a bounded resumable path for raw and boxed
   layouts. Boxed repeated elements compose the array cursor with persistent
   nested duplication state and publish owned metadata only when each copy is
-  ready. `blk_copy`/copy-on-write, split/join and get/access can still allocate
-  and copy up to the supported array bound; owned boxed elements can additionally
-  require nested duplication.
+  ready. `Array.clone` copies and boxed `Array.get` element duplication also
+  resume across yields. Shared-array copy-on-write in `blk_unique`, split/join
+  and other access operations can still allocate and copy up to the supported
+  array bound; owned boxed elements can additionally require nested duplication.
 - Scratch frames and traversal records use `tb_host_calloc` and the separate
   scratch budget; scratch exhaustion is not a device corpus backing request.
   `term_drop` does not allocate corpus, but its traversal is still synchronous.
@@ -2640,6 +2641,40 @@ negative controls. Poche remains at HEAD
 `e5e767cc6b545b725994e50984d01d69091bface`, with its 13 pre-existing dirty
 paths unchanged. The full state graph was not rerun. Remaining synchronous
 allocation chains, device-backing waits and broader GPU parity remain open.
+
+###### [x] 5.15.7.4.c Resume owned boxed-field duplication in GPU `Array.get`
+
+**Work:** In suspendable generated GPU bodies, read owned boxed `Array.get`
+fields through the persistent `tb_device_duplicate` operation. Keep the
+temporary owner, duplicate result and four-word duplicate state in the call
+frame across yields, then publish the rewritten owner back into the now-unique
+array cell. Preserve direct reads of raw words, packed-buffer storage layouts,
+and synchronous `tb_c_blk_keep` behavior on CPU and non-suspendable bodies.
+
+**Completion:** `array_get_values` now emits a resume point for each boxed word
+in the selected element. It shares one resettable duplicate state across those
+words, writes each retained owner wrapper back once, and stores each completed
+copy in the persistent result layout before boxing the element. The helper uses
+the compiler-selected array/buffer representation for raw layouts. Shared-array
+copy-on-write still runs through synchronous `tb_c_blk_unique` and is explicitly
+outside this subtask.
+
+The regression reads an element containing two boxed recursive trees. CPU and
+actual CUDA both produce `16`; primitive quanta 1 and 1,024 preserve language
+steps and total work while quantum 1 yields more. All 13 ignored CUDA tests in
+`compiler_executable_c_gpu` and all six in
+`compiler_executable_c_gpu_primitives` pass. The final quantum-one executable
+passes Compute Sanitizer memcheck with output `16` and zero errors through the
+named-pipe wrapper. `cargo fmt --check`, strict workspace Clippy and
+`./check-all.ps1` pass.
+
+The rebuilt release has SHA-256
+`9a0c08ccc47355d1401f3337bdc9f4561c458ba5a08c2837df9092ccaeb2a88f`. Its exact
+Poche privacy, 15,503-row scalar and bounded trajectory gates pass. Poche HEAD
+remains `e5e767cc6b545b725994e50984d01d69091bface`; its 13 pre-existing dirty
+paths are unchanged and no Poche source was edited. Whole-array COW, split/join,
+the other generated access operations, remaining allocation chains and device
+backing waits remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
