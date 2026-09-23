@@ -2443,6 +2443,52 @@ value/metadata growth while lanes are quiescent, the exact total-device-memory
 default and managed/overflow residency remain required by 5.15.7. This helper
 task does not substitute for those contracts or for platform/performance work.
 
+##### [~] 5.15.7.4 Qualify remaining GPU allocation chains before demand backing
+
+The CUDA executable assembles `executable_device_tasks.cu`,
+`executable_value_core.c` and `executable_array_core.c`; the host task/value
+files are not evidence for device coverage. The source audit identifies these
+remaining device allocation families:
+
+- Fixed allocation bundles: constructor payloads (`tb_construct`), closure
+  captures (`tb_closure`), task nodes and joins (`task_node`, `tb_c_join`,
+  `tb_c_word_join`), the `FID_IO_EMIT` node, and the 32-node `tb_word` value.
+  Their class sequences are bounded, but callers still need an atomic
+  reservation ticket or persistent allocation phase before allocator or owner
+  mutation. Joins must reserve parent and child nodes before linking tasks.
+- Nested ownership work: shared constructor extraction and borrowed fields call
+  `tb_duplicate` through `ctr_take`/`tb_borrow_fields`; boxed constructors also
+  reach those helpers through generated `tb_box_*` conversions. The explicit
+  generated duplicate call sites now suspend, but these synchronous wrappers
+  cannot call an unfinished operation. Descendant sealing and closure capture
+  duplication remain data-dependent.
+- Array chains: non-boxed `Array.new` already has a bounded resumable path.
+  Boxed creation calls synchronous duplication. `blk_copy`/copy-on-write,
+  split/join and get/access can allocate and copy up to the supported array
+  bound; owned boxed elements can additionally require nested duplication.
+  Raw copying can be cursor-based, while boxed operations need persistent outer
+  cursors composed with duplication state.
+- Scratch frames and traversal records use `tb_host_calloc` and the separate
+  scratch budget; scratch exhaustion is not a device corpus backing request.
+  `term_drop` does not allocate corpus, but its traversal is still synchronous.
+
+Work: map each generated GPU call chain to no allocation, an exact fixed class
+sequence, a bounded cursor operation, or nested persistent work. Build atomic
+reservation credits that preserve free-list reuse and cannot be consumed by a
+sibling lane between checking and use. Then convert or explicitly gate each
+boxed/nested chain before introducing a backing wait. Only after this inventory
+has no unqualified reachable caller may the stable device reservation and
+backing-request protocol begin.
+
+Acceptance: source and generated-call coverage includes every device
+`heap_alloc` site, every wrapper that reaches `tb_duplicate`, and all compiler
+array operations. Tests demonstrate that fixed bundles reserve before ownership
+changes, sibling lanes cannot steal credits, nested operations resume without
+repeating allocation or owner transfer, and array cursors preserve exact output
+and step accounting across slices. Keep full device backing throughout this
+stage. This task does not complete the remaining exact memory default, residency,
+platform or performance requirements in 5.15.7 and U6.
+
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
 Work: preserve the two upstream `@unsafe` exceptions using an explicit local

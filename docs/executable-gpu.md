@@ -221,12 +221,12 @@ network server still needs its own deliberate bind address and firewall policy.
   device overlap do not establish a speedup.
 
 The [implementation plan](implementation-plan.md) retains these requirements.
-The next bounded helper task persists sealing and duplication, starting at
-explicit generated duplication calls. It must retain traversal state and owner
-transitions across yields before synchronous callers can use the same nested
-operation. Device buffers remain fully backed during that work. Stable device
-reservations, demand backing, exact default sizing and residency/overflow
-behavior remain separate required work.
+The explicit generated sealing and duplication paths now retain traversal state
+and owner transitions across yields. Other synchronous allocation chains remain
+open: boxed constructor conversions, shared field extraction, closure and task
+creation, word conversion, and boxed array creation/copy/access. Device buffers
+remain fully backed. Stable device reservations, demand backing, exact default
+sizing and residency/overflow behavior remain separate required work.
 The [Makepad and teamy-tts references](gpu-port-references.md) informed persistent
 resources, explicit transfers and ordered work submission. Their reported
 performance improvements are not Bend benchmark results.
