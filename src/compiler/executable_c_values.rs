@@ -7,6 +7,7 @@ use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
+use super::DEVICE_DUPLICATE_STATE_WORDS;
 use super::DEVICE_PAYLOAD_STATE_WORDS;
 use super::ExecutableProgram;
 use super::FunctionResult;
@@ -437,12 +438,30 @@ impl Generator<'_> {
         let mask = self.ownership_mask(&layout, &values, output)?;
         let operands = format!("e, {arr}, {depth}, {lgs}, {}, {values}", layout.words.len());
         let synchronous = format!("tb_c_blk_new({operands}, {mask})");
-        if !output.can_suspend || layout.words.contains(&Kind::Box) {
+        if !output.can_suspend {
             return self.hold(output, &synchronous);
         }
 
-        // The resume label follows every operand evaluation and ownership
-        // transfer. Only raw fields may be reused without nested duplication.
+        // Boxed array elements may need a bounded nested duplication before
+        // each repeated branch can be published. All operands and the nested
+        // operation state live in this continuation's persistent value frame.
+        let boxed = layout.words.contains(&Kind::Box);
+        let device_mask = if boxed { mask.as_str() } else { "NULL" };
+        let duplicate_state = if boxed {
+            self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?
+        } else {
+            "NULL".to_owned()
+        };
+        let duplicate_result = if boxed {
+            self.hold(output, "0")?
+        } else {
+            "NULL".to_owned()
+        };
+        let duplicate_result_arg = if boxed {
+            format!("&{duplicate_result}")
+        } else {
+            "NULL".to_owned()
+        };
         let result = self.hold(output, "0")?;
         let state = self.array(output, &vec!["0".to_owned(); DEVICE_ARRAY_NEW_STATE_WORDS])?;
         output.resumes += 1;
@@ -454,7 +473,8 @@ impl Generator<'_> {
         };
         writeln!(
             output,
-            "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_new_raw({operands}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif"
+            "tb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_new_raw(e, tb_frame, {arr}, {depth}, {lgs}, {}, {values}, {device_mask}, {duplicate_state}, {duplicate_result_arg}, {state}, &{result})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = {synchronous};\n#endif",
+            layout.words.len()
         )
         .unwrap();
         Ok(result)

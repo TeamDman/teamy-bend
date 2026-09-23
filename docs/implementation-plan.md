@@ -2470,12 +2470,12 @@ remaining device allocation families:
   generated duplicate call sites now suspend, but these synchronous wrappers
   cannot call an unfinished operation. Descendant sealing and closure capture
   duplication remain data-dependent.
-- Array chains: non-boxed `Array.new` already has a bounded resumable path.
-  Boxed creation calls synchronous duplication. `blk_copy`/copy-on-write,
-  split/join and get/access can allocate and copy up to the supported array
-  bound; owned boxed elements can additionally require nested duplication.
-  Raw copying can be cursor-based, while boxed operations need persistent outer
-  cursors composed with duplication state.
+- Array chains: `Array.new` now has a bounded resumable path for raw and boxed
+  layouts. Boxed repeated elements compose the array cursor with persistent
+  nested duplication state and publish owned metadata only when each copy is
+  ready. `blk_copy`/copy-on-write, split/join and get/access can still allocate
+  and copy up to the supported array bound; owned boxed elements can additionally
+  require nested duplication.
 - Scratch frames and traversal records use `tb_host_calloc` and the separate
   scratch budget; scratch exhaustion is not a device corpus backing request.
   `term_drop` does not allocate corpus, but its traversal is still synchronous.
@@ -2559,6 +2559,28 @@ qualified only for nonempty closures created inside resumable generated GPU
 bodies, and the next allocation chains remain open.
 Commit `52fb59461a00408aa82901612e75abd5478ed2ea` is published on public
 `main`; the worktree is clean and tracks `origin/main`.
+
+### Active follow-on: resumable boxed `Array.new`
+
+Generated resumable GPU bodies now route boxed `Array.new` through the bounded
+array helper. The helper keeps the array reservation and cursor in the outer
+continuation, and roots nested duplicate state and its result in the same call
+frame. It does not advance the array cursor while duplication is pending. Once
+complete, it transfers the duplicate result into the array and marks that slot
+owned; padding and raw fields remain raw. The synchronous CPU path is unchanged.
+
+The boxed-string regression builds four copies and compares CPU output with
+actual CUDA at primitive quantum 1 and 1024. Both CUDA runs have identical
+language steps and total primitive work; quantum 1 yields more often. The CPU
+fallback passes. Actual-CUDA validation passes the 12 tests in
+`compiler_executable_c_gpu`, all five raw-array primitive tests, all four
+duplicate tests, both host-storage tests, capacity, progress, cache, failure,
+frame and kernel suites, plus all five GPU-off tests. The raw-array observer now
+accounts nested payload and duplicate work separately from its own cursor so the
+aggregate progress remains reconciled. The full repository gate and exact
+`check-all.ps1` gate passes; exact release Poche checks remain pending for this
+follow-on. `5.15.7.4` remains active: other synchronous allocation chains,
+device backing waits and broader GPU parity remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

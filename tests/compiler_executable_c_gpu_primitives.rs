@@ -270,9 +270,17 @@ fn encode_parts(device: &str) -> String {
 const DEVICE_PREFIX: &str = r"
 static __device__ void probe_observe(unsigned int, unsigned long long *, unsigned long long,
   const unsigned long long *, unsigned int);
+static __device__ void probe_payload_observe(unsigned int, unsigned long long *, unsigned long long,
+  const unsigned long long *, const unsigned long long *, unsigned int, bool);
+static __device__ void probe_duplicate_observe(unsigned int, unsigned long long *, void *,
+  unsigned long long);
 static __device__ void probe_seed(void);
 static __device__ void probe_unbox(void);
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) probe_observe(event, state, work, raw_values, count)
+#define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) \
+  probe_payload_observe(event, state, work, fields, mask, count, closure)
+#define TB_DEVICE_DUPLICATE_OBSERVE(event, state, frame, work) \
+  probe_duplicate_observe(event, state, (void *)(frame), work)
 ";
 
 // The fixture roots contain at most three words. The otherwise unused tail
@@ -289,6 +297,23 @@ static __device__ ProbeOperation probe_operations[8];
 static __device__ u32 probe_lock, probe_operation_count;
 static __device__ void probe_seed(void) { atomicAdd(tb_device_control->root_words + 244, 1ull); }
 static __device__ void probe_unbox(void) { atomicAdd(tb_device_control->root_words + 245, 1ull); }
+static __device__ void probe_payload_observe(u32 event, Term *state, u64 work,
+    const Term *fields, const Term *mask, u32 count, bool closure) {
+  (void)state; (void)fields; (void)mask; (void)count; (void)closure;
+  if (event == TB_DEVICE_PAYLOAD_SLICE)
+    atomicAdd(tb_device_control->root_words + 239, work);
+  else if (event == TB_DEVICE_PAYLOAD_CTR_RESERVED
+      || event == TB_DEVICE_PAYLOAD_CLO_RESERVED)
+    atomicAdd(tb_device_control->root_words + 238, 1ull);
+}
+static __device__ void probe_duplicate_observe(u32 event, Term *state,
+    void *frame, u64 work) {
+  (void)state; (void)frame;
+  if (event == TB_DEVICE_DUPLICATE_SLICE)
+    atomicAdd(tb_device_control->root_words + 239, work);
+  else if (event == TB_DEVICE_DUPLICATE_START)
+    atomicAdd(tb_device_control->root_words + 238, 1ull);
+}
 static __device__ u64 probe_free_hash(void) {
   u64 hash = 0;
   for (u32 i = 0; i < NCLS_ALL; ++i) hash = (hash * 33u) ^ tb_free_lists[i];
@@ -384,6 +409,7 @@ static __device__ void probe_observe(u32 event, Term *state, u64 work,
 const HOST_PREFIX: &str = r"
 static unsigned int probe_mode, probe_completions, probe_failures, probe_errors, probe_cpu_replays;
 static unsigned long long probe_stats[9], probe_receipt[15];
+static unsigned long long probe_nested_progress, probe_nested_starts;
 #define PROBE_ROUND(state, control) do { \
   if ((control)->root_count > 3) ++probe_errors; \
   if ((state)->error != 0) { \
@@ -406,6 +432,8 @@ static unsigned long long probe_stats[9], probe_receipt[15];
 #define TB_GPU_COMPLETE(control, state, info) do { \
   ++probe_completions; \
   memcpy(probe_receipt, (control)->root_words + 240, sizeof(probe_receipt)); \
+  probe_nested_progress = (control)->root_words[239]; \
+  probe_nested_starts = (control)->root_words[238]; \
   probe_stats[0] = (state)->steps; probe_stats[1] = (info)->launches; \
   probe_stats[2] = (control)->primitive_progress; probe_stats[3] = (control)->primitive_starts; \
   probe_stats[4] = (control)->primitive_yields; probe_stats[5] = (control)->primitive_requeues; \
@@ -439,13 +467,22 @@ int main(void) {
       || tb_continuations != 0 || tb_frames != 0 || tb_depth != 0) return 93;
   if (probe_receipt[6] != 0 || probe_receipt[0] == 0
       || probe_receipt[0] != probe_receipt[1] || probe_receipt[0] != probe_receipt[3]
-      || probe_receipt[0] != probe_receipt[5] || probe_receipt[0] != probe_stats[3]
-      || probe_receipt[7] + probe_receipt[8] != probe_stats[2] || probe_stats[6] != 0
-      || probe_stats[5] != probe_stats[4]) return 94;
+      || probe_receipt[0] != probe_receipt[5]
+      || probe_receipt[0] + probe_nested_starts != probe_stats[3]
+      || probe_receipt[7] + probe_receipt[8] + probe_nested_progress != probe_stats[2] || probe_stats[6] != 0
+      || probe_stats[5] != probe_stats[4]) {
+    fprintf(stderr, "array probe mismatch: errors=%llu operations=%llu/%llu/%llu/%llu/%llu work=%llu+%llu/%llu starts=%llu+%llu/%llu live=%llu requeues=%llu yields=%llu\n",
+      probe_receipt[6], probe_receipt[0], probe_receipt[1], probe_receipt[3],
+      probe_receipt[5], probe_stats[3], probe_receipt[7] + probe_receipt[8], probe_nested_progress,
+      probe_stats[2], probe_receipt[0], probe_nested_starts, probe_stats[3], probe_stats[6],
+      probe_stats[5], probe_stats[4]);
+    return 94;
+  }
   FILE *receipt = fopen("receipt.txt", "wb");
   if (receipt == NULL) return 95;
   for (u32 i = 0; i < 9; ++i) fprintf(receipt, "%llu ", probe_stats[i]);
   for (u32 i = 0; i < 15; ++i) fprintf(receipt, "%llu ", probe_receipt[i]);
+  fprintf(receipt, "%llu %llu", probe_nested_progress, probe_nested_starts);
   if (fclose(receipt) != 0) return 96;
   return 0;
 }
@@ -454,15 +491,25 @@ int main(void) {
 fn compare_slices(bend: &str, expected: &str, operations: u64, forks: bool) {
     let tiny = Fixture::new().run(bend, 1, 0, expected);
     let large = Fixture::new().run(bend, 4096, 0, expected);
-    assert_eq!(tiny.len(), 24);
-    assert_eq!(large.len(), 24);
+    assert_eq!(tiny.len(), 26);
+    assert_eq!(large.len(), 26);
     assert_eq!(
         tiny[0], large[0],
         "primitive slices must not charge language steps"
     );
     assert_eq!(tiny[2], large[2], "the same payload work must complete");
-    assert_eq!(tiny[3], operations);
-    assert_eq!(large[3], operations);
+    assert_eq!(tiny[9], operations, "array helper starts must be exact");
+    assert_eq!(large[9], operations, "array helper starts must be exact");
+    assert_eq!(
+        tiny[3],
+        operations + tiny[25],
+        "all helper starts must be accounted"
+    );
+    assert_eq!(
+        large[3],
+        operations + large[25],
+        "all helper starts must be accounted"
+    );
     assert!(
         tiny[1] > large[1] + 2,
         "small slices must cause actual extra CUDA launches"
@@ -496,13 +543,14 @@ fn raw_array_slices_preserve_sibling_forks_and_ordinary_task_steps() {
 fn raw_array_slices_initialize_depth_zero_padding_unit_and_wide_layouts() {
     for (bend, expected, progress) in [
         (DEPTH_ZERO, "[7]\n", 2),
-        (PADDED, "Three{1, 2, 3}\n", 24),
+        (PADDED, "Three{1, 2, 3}\n", 28),
         (UNIT, "[Unit{}, Unit{}]\n", 3),
         (WIDE, "1099511627783n\n", 8),
     ] {
         let receipt = Fixture::new().run(bend, 1, 0, expected);
         assert_eq!(receipt[2], progress);
-        assert_eq!(receipt[3], 1);
+        assert_eq!(receipt[9], 1, "one Array.new helper must complete");
+        assert_eq!(receipt[3], receipt[9] + receipt[25]);
         assert!(receipt[4] > 0);
     }
 }

@@ -31,6 +31,9 @@ enum {
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) ((void)0)
 #endif
 
+OUTLINE bool tb_device_duplicate(const Env *e, TBCallFrame *call,
+    Term *owner, Term *state, Term *result);
+
 /* Reserve without touching the block's potentially large payload/metadata.
  * Device storage currently backs the complete capacity; tb_heap_commit stays
  * before allocator mutation so a later backing-request protocol can suspend
@@ -183,18 +186,26 @@ INLINE void tb_device_corpus_initialize_reserved(const Env *e, Loc at, Cls cls) 
 }
 
 /* State cells: phase, allocation offset, cursor, logical class, physical class,
- * stride, value count, array flag. Phase 1 initializes physical words and their
- * metadata; phase 2 fills logical elements; phase 3 is complete. The caller
- * keeps operands and these cells in its persistent generated frame. */
-OUTLINE bool tb_device_array_new_raw(const Env *e, bool array, Nat depth,
-    u32 lgs, u32 count, const Term *raw_values, Term *state, Term *result) {
+ * stride, value count, array flag. Phase 1 initializes physical words and
+ * metadata; phase 2 fills logical elements; phase 3 is complete. Boxed array
+ * elements may suspend through the nested duplicate state before one slot is
+ * published. All operands and state cells are rooted in the generated frame. */
+OUTLINE bool tb_device_array_new_raw(const Env *e, TBCallFrame *call, bool array,
+    Nat depth, u32 lgs, u32 count, Term *raw_values, const Term *box_mask,
+    Term *duplicate_state, Term *duplicate_result, Term *state, Term *result) {
   tb_device_check_cancelled();
   if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || state == NULL
-      || result == NULL || (count != 0 && raw_values == NULL))
+      || result == NULL || (count != 0 && raw_values == NULL)
+      || ((box_mask == NULL) != (duplicate_state == NULL))
+      || ((box_mask == NULL) != (duplicate_result == NULL))
+      || (box_mask != NULL && (!array || call == NULL)))
     err_fail("invalid device array primitive arguments");
   TB_DEVICE_ARRAY_NEW_OBSERVE(TB_DEVICE_ARRAY_NEW_ENTER, state, 0);
   if (depth > 17 || lgs > 17 || depth + lgs > 17 || count > (1u << lgs))
     err_fail("array budget exhausted");
+  if (box_mask != NULL)
+    for (u32 column = 0; column < count; ++column)
+      if (box_mask[column] > 1) err_fail("invalid array ownership mask");
   Cls logical = (Cls)depth + lgs, physical = array ? logical : buf_wcls(logical);
   u64 words = UINT64_C(1) << physical, elements = UINT64_C(1) << logical;
   u32 stride = 1u << lgs;
@@ -221,6 +232,7 @@ OUTLINE bool tb_device_array_new_raw(const Env *e, bool array, Nat depth,
 
   Loc at = state[1];
   u64 cursor = state[2], work = 0;
+  bool duplicate_waiting = false;
   u64 metadata = tb_meta(at, physical) | (array ? 0 : TB_META_OWNED);
   while (work < BEND_GPU_PRIMITIVE_QUANTUM && state[0] != 3) {
     tb_device_check_cancelled();
@@ -231,27 +243,52 @@ OUTLINE bool tb_device_array_new_raw(const Env *e, bool array, Nat depth,
       if (cursor == words) { state[0] = 2; cursor = 0; }
     } else {
       u32 column = (u32)cursor & (stride - 1);
+      bool owned = array && column < count && box_mask != NULL
+          && box_mask[column] != 0;
+      bool needs_duplicate = owned && depth != 0
+          && (cursor >> lgs) + 1 < (UINT64_C(1) << (u32)depth);
       Term value = column < count ? raw_values[column] : 0;
+      if (needs_duplicate) {
+        if (duplicate_state == NULL || duplicate_result == NULL)
+          err_fail("missing boxed array duplication state");
+        if (!tb_device_duplicate(e, call, raw_values + column,
+            duplicate_state, duplicate_result)) {
+          duplicate_waiting = true;
+          break;
+        }
+        value = *duplicate_result;
+        *duplicate_result = 0;
+      }
       if (array) e->mem[at + cursor] = value;
       else {
         u32 shift = ((u32)cursor & 1u) * 32;
         u64 *word = e->mem + at + cursor / 2;
         *word = (*word & ~(UINT64_C(0xffffffff) << shift)) | ((u64)(u32)value << shift);
       }
+      if (array)
+        tb_heap_meta[at + cursor] = tb_meta(at, physical)
+            | (owned ? TB_META_OWNED : 0);
       ++cursor; ++work;
+      if (needs_duplicate) break;
       if (cursor == elements) state[0] = 3;
     }
   }
   state[2] = cursor;
   bool done = state[0] == 3;
   tb_device_lock();
-  if (work == 0 || work > UINT64_MAX - tb_device_control->primitive_progress
-      || (!done && tb_device_control->primitive_yields == UINT64_MAX)
+  if ((work == 0 && !duplicate_waiting)
+      || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && !duplicate_waiting
+          && tb_device_control->primitive_yields == UINT64_MAX)
       || tb_device_control->primitive_live == 0)
     err_fail("device primitive progress overflow");
   tb_device_control->primitive_progress += work;
   if (done) --tb_device_control->primitive_live;
-  else ++tb_device_control->primitive_yields;
+  else {
+    /* A pending duplicate owns the yield count for this task requeue. Counting
+     * a second outer yield here could make yields exceed measured work. */
+    if (!duplicate_waiting) ++tb_device_control->primitive_yields;
+  }
   tb_device_unlock();
   TB_DEVICE_ARRAY_NEW_OBSERVE(TB_DEVICE_ARRAY_NEW_SLICE, state, work);
   if (!done) return false;

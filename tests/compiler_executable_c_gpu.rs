@@ -153,6 +153,55 @@ def main() -> U32:
   U32.add(U32.mul(x, 100), y)
 ";
 
+const BOXED_ARRAY: &str = r#"import Base
+def make() -> Array<String>:
+  Array.new(String, 2n, String.append("cap", "ture"))
+def main() -> Array<String>: make!()
+"#;
+
+#[test]
+fn boxed_array_creation_keeps_cpu_semantics_when_gpu_is_off() {
+    Fixture::new().run(
+        BOXED_ARRAY,
+        "off",
+        "[\"capture\", \"capture\", \"capture\", \"capture\"]\n",
+        0,
+        0,
+    );
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn boxed_array_creation_resumes_nested_duplication_across_slices() {
+    let expected = "[\"capture\", \"capture\", \"capture\", \"capture\"]\n";
+    let tiny = Fixture::new().run_with_quantum(
+        BOXED_ARRAY,
+        "on",
+        expected,
+        (1, 0),
+        1,
+        Some("tb_device_array_new_raw(e, tb_frame"),
+    );
+    let large = Fixture::new().run_with_quantum(
+        BOXED_ARRAY,
+        "on",
+        expected,
+        (1, 0),
+        1024,
+        Some("tb_device_array_new_raw(e, tb_frame"),
+    );
+    assert_eq!(
+        tiny[0], large[0],
+        "array slices must not change language steps"
+    );
+    assert_eq!(tiny[1], large[1], "nested and outer work must be exact");
+    assert!(tiny[2] > large[2], "small slices must increase yields");
+    assert!(
+        large[2] > 0,
+        "each bounded nested duplicate may yield its outer operation"
+    );
+}
+
 #[test]
 fn marked_recursive_program_keeps_cpu_semantics_when_gpu_is_off() {
     Fixture::new().run(RECURSIVE, "off", "9696\n", 0, 0);
