@@ -396,8 +396,9 @@ INLINE Nat nat_mul(Env e, Nat left, Nat right) {
 }
 #define U32_BIN(a,op,b) ((u64)((u32)(a) op (u32)(b)))
 #if defined(__CUDA_ARCH__)
-INLINE void tb_device_corpus_reserve_repeat(const Env *e, Cls cls, u32 count,
-    Loc *blocks);
+INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
+    Cls repeated_cls, u32 repeated_count);
+INLINE Loc tb_device_corpus_ticket_take(const Env *e, Loc *ticket);
 INLINE void tb_device_corpus_initialize_reserved(const Env *e, Loc at, Cls cls);
 #endif
 INLINE Term term_word(Env e, Term word) {
@@ -418,15 +419,15 @@ INLINE Term tb_word(Env e, u32 value) {
 #endif
   Term word = term_pak(CID_WNIL, 0);
 #if defined(__CUDA_ARCH__)
-  Loc blocks[32];
-  tb_device_corpus_reserve_repeat(&e, 1, 32, blocks);
+  Loc ticket = tb_device_corpus_reserve_pair(&e, 1, 1, 31);
   for (u32 index = 32; index != 0; --index) {
-    Loc at = blocks[32 - index];
+    Loc at = tb_device_corpus_ticket_take(&e, &ticket);
     tb_device_corpus_initialize_reserved(&e, at, 1);
     e.mem[at] = (value >> (index - 1)) & 1;
     e.mem[at + 1] = word;
     word = term_ctr(CID_WCON, at);
   }
+  if (ticket != 0) err_fail("invalid heap reservation");
 #else
   for (u32 index = 32; index != 0; --index) {
     Loc at = heap_alloc(e, 1);

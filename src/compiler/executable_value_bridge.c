@@ -63,6 +63,22 @@ OUTLINE TB_NOINLINE Term tb_c_word_join(const Env *e, u32 fid, u32 held_count,
   }
   return join;
 }
+#if defined(__CUDA_ARCH__)
+INLINE Loc tb_device_task_node_reserved(const Env *e, Fid fid, Term continuation,
+    u32 index, u32 remaining, Loc at) {
+  u32 arity = fid_arity(fid);
+  if ((continuation == TERM_HOLE && index != 0)
+      || (continuation != TERM_HOLE && (term_tag(continuation) != TAG_TSK || term_rfc(continuation)))
+      || remaining > arity)
+    err_fail("foreign task continuation is unsupported");
+  tb_device_corpus_initialize_reserved(e, at, cls_fit(arity + 2));
+  for (u32 i = 0; i < arity; ++i) e->mem[at + i] = TERM_HOLE;
+  e->mem[at + arity] = continuation;
+  e->mem[at + arity + 1] = ((u64)index << 32) | remaining;
+  tb_mark_raw(*e, at + arity, 2);
+  return at;
+}
+#endif
 OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const Term *held,
     u32 children, const Term *applications) {
   Loc at;
@@ -70,17 +86,33 @@ OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const 
   if (children < 2 || held_count > 254 || children > 254 - held_count
       || fid_arity(fid) != held_count + children + 1)
     err_fail("invalid generated fork layout");
+#if defined(__CUDA_ARCH__)
+  u32 parent_arity = fid_arity(fid), child_arity = fid_arity(FID_CLO_APPLY);
+  Loc ticket = tb_device_corpus_reserve_pair(e, cls_fit(parent_arity + 2),
+      cls_fit(child_arity + 2), children);
+  at = tb_device_task_node_reserved(e, (Fid)fid, TERM_HOLE, 0, children,
+      tb_device_corpus_ticket_take(e, &ticket));
+#else
   at = task_node(*e, fid, TERM_HOLE, 0, children);
+#endif
   join = term_tsk(fid, at);
   if (held_count != 0) memcpy(e->mem + at, held, held_count * sizeof(Term));
   e->mem[at + held_count + children] = 0;
   for (u32 index = 0; index < children; ++index) {
     u32 destination = held_count + index;
+#if defined(__CUDA_ARCH__)
+    Loc child = tb_device_task_node_reserved(e, FID_CLO_APPLY, join, destination, 0,
+        tb_device_corpus_ticket_take(e, &ticket));
+#else
     Loc child = task_node(*e, FID_CLO_APPLY, join, destination, 0);
+#endif
     e->mem[child] = applications[2 * index];
     e->mem[child + 1] = applications[2 * index + 1];
     e->mem[at + destination] = term_tsk(FID_CLO_APPLY, child);
   }
+#if defined(__CUDA_ARCH__)
+  if (ticket != 0) err_fail("invalid heap reservation");
+#endif
   return join;
 }
 OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {

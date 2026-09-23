@@ -53,34 +53,38 @@ INLINE Loc tb_device_corpus_reserve(const Env *e, Cls cls) {
   return at;
 }
 
-/* Atomically reserve a fixed run of same-class blocks. The whole run is
- * removed from the free list or bump span under one allocator lock, so sibling
- * lanes cannot consume capacity checked by one member of the bundle. Failure
- * leaves the allocator unchanged. Reserved blocks are private until the caller
- * initializes and publishes them. */
-INLINE void tb_device_corpus_reserve_repeat(const Env *e, Cls cls, u32 count,
-    Loc *blocks) {
-  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || cls >= NCLS_ALL
-      || count == 0 || blocks == NULL)
+/* Atomically reserve one block followed by a fixed run of another class.
+ * Reserved offsets form a private linked ticket in their data words, in request
+ * order. This avoids a lane-local offsets array even for a wide task join. */
+INLINE Loc tb_device_corpus_reserve_pair(const Env *e, Cls first_cls,
+    Cls repeated_cls, u32 repeated_count) {
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL
+      || first_cls >= NCLS_ALL || repeated_cls >= NCLS_ALL
+      || repeated_count == UINT32_MAX)
     err_fail("invalid heap reservation");
-  u64 size = UINT64_C(1) << cls;
+  u32 requested[NCLS_ALL] = {0}, reused[NCLS_ALL] = {0}, consumed[NCLS_ALL] = {0};
+  u32 count = repeated_count + 1;
+  ++requested[first_cls];
+  requested[repeated_cls] += repeated_count;
+  u64 total_words = (UINT64_C(1) << first_cls)
+      + (u64)repeated_count * (UINT64_C(1) << repeated_cls);
+  u64 fresh_words = 0;
   tb_vm_acquire();
-
-  Loc at = tb_free_lists[cls];
-  u32 reused = 0;
-  while (at != 0 && reused < count) {
-    if (at < HEAP_OFF || at >= tb_bump || size > tb_bump - at
-        || tb_heap_meta[at] != (tb_meta(at, cls) | TB_META_FREE))
-      err_fail("invalid native free list");
-    Loc next = e->mem[at];
-    if (next != 0 && (next < HEAP_OFF || next >= tb_bump))
-      err_fail("invalid native free list");
-    at = next;
-    ++reused;
+  for (u32 cls = 0; cls < NCLS_ALL; ++cls) {
+    Loc at = tb_free_lists[cls];
+    u64 size = UINT64_C(1) << cls;
+    while (at != 0 && reused[cls] < requested[cls]) {
+      if (at < HEAP_OFF || at >= tb_bump || size > tb_bump - at
+          || tb_heap_meta[at] != (tb_meta(at, (Cls)cls) | TB_META_FREE))
+        err_fail("invalid native free list");
+      Loc next = e->mem[at];
+      if (next != 0 && (next < HEAP_OFF || next >= tb_bump))
+        err_fail("invalid native free list");
+      at = next;
+      ++reused[cls];
+    }
+    fresh_words += (u64)(requested[cls] - reused[cls]) * size;
   }
-  u32 fresh = count - reused;
-  u64 fresh_words = (u64)fresh * size;
-  u64 total_words = (u64)count * size;
   if (tb_bump < HEAP_OFF || tb_bump > tb_capacity
       || fresh_words > tb_capacity - tb_bump
       || total_words > tb_capacity)
@@ -89,22 +93,43 @@ INLINE void tb_device_corpus_reserve_repeat(const Env *e, Cls cls, u32 count,
       || count > UINT64_MAX - tb_live_blocks)
     err_fail("invalid native heap accounting");
   Loc next_bump = tb_bump + fresh_words;
-  if (fresh != 0) tb_heap_commit(next_bump);
+  if (fresh_words != 0) tb_heap_commit(next_bump);
 
-  for (u32 index = 0; index < reused; ++index) {
-    Loc reused_at = tb_free_lists[cls];
-    tb_free_lists[cls] = e->mem[reused_at];
-    blocks[index] = reused_at;
+  Loc head = 0, previous = 0;
+  for (u32 index = 0; index < count; ++index) {
+    Cls cls = index == 0 ? first_cls : repeated_cls;
+    Loc at;
+    if (consumed[cls] < reused[cls]) {
+      at = tb_free_lists[cls];
+      if (at == 0) err_fail("invalid native free list");
+      tb_free_lists[cls] = e->mem[at];
+      ++consumed[cls];
+    } else {
+      at = tb_bump;
+      tb_bump += UINT64_C(1) << cls;
+    }
+    if (previous == 0) head = at;
+    else e->mem[previous] = at;
+    previous = at;
   }
-  at = tb_bump;
-  for (u32 index = reused; index < count; ++index) {
-    blocks[index] = at;
-    at += size;
-  }
-  tb_bump = next_bump;
+  if (previous != 0) e->mem[previous] = 0;
+  if (tb_bump != next_bump) err_fail("invalid native heap accounting");
   tb_live_words += total_words;
   tb_live_blocks += count;
   tb_vm_release();
+  return head;
+}
+
+/* Advance a private reservation ticket before its current block is zeroed. */
+INLINE Loc tb_device_corpus_ticket_take(const Env *e, Loc *ticket) {
+  if (e == NULL || e->mem != tb_memory || ticket == NULL
+      || *ticket < HEAP_OFF || *ticket >= tb_bump)
+    err_fail("invalid heap reservation");
+  Loc at = *ticket, next = e->mem[at];
+  if (next != 0 && (next < HEAP_OFF || next >= tb_bump))
+    err_fail("invalid heap reservation");
+  *ticket = next;
+  return at;
 }
 
 /* Complete a previously reserved block without changing allocator counters.

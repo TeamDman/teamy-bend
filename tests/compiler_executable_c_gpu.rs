@@ -226,8 +226,42 @@ fn cuda_word_conversion_reserves_all_32_nodes_before_building_the_word() {
     let generated =
         compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap()).unwrap();
     assert!(generated.contains("tb_c_word(e,"));
-    assert!(generated.contains("tb_device_corpus_reserve_repeat"));
+    assert!(generated.contains("tb_device_corpus_reserve_pair"));
     fixture.run(NUMERIC_WORD, "on", "24691\n", 1, 1);
+}
+
+const TASK_JOIN: &str = r#"import Base
+type TaskValue is Data: TaskValue{left: String, right: String}
+def combine(a: TaskValue, b: TaskValue) -> TaskValue:
+  match a:
+    case TaskValue{left_a, right_a}:
+      match b:
+        case TaskValue{left_b, right_b}:
+          TaskValue{String.append(left_a, left_b), String.append(right_a, right_b)}
+def leaf(+text: String) -> TaskValue: TaskValue{text, text}
+def first() -> Unit -> TaskValue: unit =>
+  a b = leaf("a") leaf("b")
+  combine(a, b)
+def second() -> Unit -> TaskValue: unit =>
+  a b = leaf("c") leaf("d")
+  combine(a, b)
+def both(left: Unit -> TaskValue, right: Unit -> TaskValue) -> TaskValue:
+  a b = left(Unit{}) right(Unit{})
+  combine(a, b)
+def main() -> TaskValue: both!(first(), second())
+"#;
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn cuda_nested_closure_task_joins_reserve_all_nodes_before_building_the_tasks() {
+    let fixture = Fixture::new();
+    let path = fixture.0.join("main.bend");
+    fs::write(&path, TASK_JOIN).unwrap();
+    let generated =
+        compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap()).unwrap();
+    assert!(generated.contains("tb_c_join(e,"));
+    assert!(generated.contains("tb_device_corpus_reserve_pair"));
+    fixture.run(TASK_JOIN, "on", "TaskValue{\"abcd\", \"abcd\"}\n", 1, 1);
 }
 
 const PENDING_ARGUMENT: &str = r"import Base
