@@ -224,9 +224,11 @@ The [implementation plan](implementation-plan.md) retains these requirements.
 The explicit generated sealing and duplication paths now retain traversal state
 and owner transitions across yields. Other synchronous allocation chains remain
 open: boxed constructor conversions, shared field extraction, closure and task
-creation, word conversion, and boxed array creation/copy/access. Device buffers
-remain fully backed. Stable device reservations, demand backing, exact default
-sizing and residency/overflow behavior remain separate required work.
+creation, and boxed array creation/copy/access. Fixed CUDA Word construction
+reserves its 32-node bundle atomically, but still runs synchronously and cannot
+wait for device backing. Device buffers remain fully backed. Stable device
+reservations, demand backing, exact default sizing and residency/overflow
+behavior remain separate required work.
 The [Makepad and teamy-tts references](gpu-port-references.md) informed persistent
 resources, explicit transfers and ordered work submission. Their reported
 performance improvements are not Bend benchmark results.
