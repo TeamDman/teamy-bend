@@ -144,6 +144,70 @@ def main() -> String & String:
   observe(replace!(Array.new(String, 8n, "saved")))
 "#;
 
+const SHARED_ARRAY_JOIN: &str = r#"import Base
+def join(left: Array<String>, right: Array<String>) -> Array<String>:
+  ANode{left, right}
+def finish(pair: Array<String> & String, first: String) -> String & String:
+  (array, last) = pair
+  (first, last)
+def read_first(pair: Array<String> & String) -> String & String:
+  (array, first) = pair
+  finish(Array.get(String, array, 511), first)
+def endpoints(array: Array<String>) -> String & String:
+  read_first(Array.get(String, array, 0))
+def main() -> String & String:
+  endpoints(join!(Array.new(String, 8n, "left"), Array.new(String, 8n, "right")))
+"#;
+
+const SHARED_PACKED_ARRAY_JOIN: &str = r"import Base
+def join(left: Array<U32>, right: Array<U32>) -> Array<U32>:
+  ANode{left, right}
+def finish(pair: Array<U32> & U32, first: U32) -> U32 & U32:
+  (array, last) = pair
+  (first, last)
+def read_first(pair: Array<U32> & U32) -> U32 & U32:
+  (array, first) = pair
+  finish(Array.get(U32, array, 511), first)
+def endpoints(array: Array<U32>) -> U32 & U32:
+  read_first(Array.get(U32, array, 0))
+def main() -> U32 & U32:
+  endpoints(join!(Array.new(U32, 8n, 7), Array.new(U32, 8n, 9)))
+";
+
+const SHARED_ARRAY_SPLIT: &str = r#"import Base
+def split(array: Array<String>) -> Array<String> & Array<String>:
+  match array:
+    case ALeaf{+value}: (ALeaf{value}, ALeaf{value})
+    case ANode{left, right}: (left, right)
+def read_value(pair: Array<String> & String) -> String:
+  (array, value) = pair
+  value
+def read(array: Array<String>, index: U32) -> String:
+  read_value(Array.get(String, array, index))
+def inspect(pair: Array<String> & Array<String>) -> String & String:
+  (left, right) = pair
+  (read(left, 0), read(right, 127))
+def main() -> String & String:
+  inspect(split!(ANode{Array.new(String, 7n, "left"), Array.new(String, 7n, "right")}))
+"#;
+
+const SHARED_PACKED_ARRAY_SPLIT: &str = r"import Base
+def split(array: Array<U32>) -> Array<U32> & Array<U32>:
+  match array:
+    case ALeaf{+value}: (ALeaf{value}, ALeaf{value})
+    case ANode{left, right}: (left, right)
+def read_value(pair: Array<U32> & U32) -> U32:
+  (array, value) = pair
+  value
+def read(array: Array<U32>, index: U32) -> U32:
+  read_value(Array.get(U32, array, index))
+def inspect(pair: Array<U32> & Array<U32>) -> U32 & U32:
+  (left, right) = pair
+  (read(left, 0), read(right, 127))
+def main() -> U32 & U32:
+  inspect(split!(ANode{Array.new(U32, 7n, 7), Array.new(U32, 7n, 9)}))
+";
+
 static NEXT: AtomicUsize = AtomicUsize::new(0);
 
 struct Fixture(PathBuf);
@@ -389,6 +453,8 @@ static __device__ void probe_share_array(const void *, void *);
 static __device__ void probe_release_array_alias(const void *, void *);
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) probe_observe(event, state, work, raw_values, count)
 #define TB_DEVICE_ARRAY_COPY_OBSERVE(event, state, work) probe_array_copy_observe(event, state, work)
+#define TB_DEVICE_ARRAY_JOIN_OBSERVE(event, state, work) probe_array_copy_observe(event, state, work)
+#define TB_DEVICE_ARRAY_SPLIT_OBSERVE(event, state, work) probe_array_copy_observe(event, state, work)
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) \
   probe_payload_observe(event, state, work, fields, mask, count, closure)
 #define TB_DEVICE_DUPLICATE_OBSERVE(event, state, frame, work) \
@@ -760,6 +826,48 @@ fn shared_array_size_set_and_swap_resume_copy_on_write() {
         assert_eq!(stats[27], 1, "each shared access starts one COW operation");
         assert_eq!(stats[28], 512, "256 words initialize and copy once");
         assert_eq!(stats[29], 512, "quantum one copies one word per slice");
+    }
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn shared_array_join_resumes_both_copy_on_write_and_concatenation() {
+    for (program, expected, words, slices) in [
+        (SHARED_ARRAY_JOIN, "(\"left\", \"right\")\n", 2048, 2048),
+        (SHARED_PACKED_ARRAY_JOIN, "(7, 9)\n", 1280, 1280),
+    ] {
+        let stats = Fixture::new().run_with_shared_array(program, 1, 0, expected, true);
+        assert_eq!(
+            stats[26], 3,
+            "two COW copies and one joined block are reserved"
+        );
+        assert_eq!(stats[27], 3, "both children and the join complete once");
+        assert_eq!(stats[28], words, "initialize/copy work runs exactly once");
+        assert_eq!(stats[29], slices, "quantum one bounds every copy slice");
+    }
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn shared_array_split_resumes_copy_on_write_and_both_halves() {
+    for (program, expected) in [
+        (SHARED_ARRAY_SPLIT, "(\"left\", \"right\")\n"),
+        (SHARED_PACKED_ARRAY_SPLIT, "(7, 9)\n"),
+    ] {
+        let tiny = Fixture::new().run_with_shared_array(program, 1, 0, expected, true);
+        let large = Fixture::new().run_with_shared_array(program, 1024, 0, expected, true);
+        assert_eq!(tiny[0], large[0], "split slices preserve language steps");
+        assert_eq!(tiny[2], large[2], "split work is not replayed");
+        assert_eq!(tiny[26], 3, "COW plus two atomic half reservations");
+        assert_eq!(large[26], 3, "COW plus two atomic half reservations");
+        assert_eq!(tiny[27], 2, "COW and split each start once");
+        assert_eq!(large[27], 2, "COW and split each start once");
+        assert_eq!(tiny[28], large[28], "copy work is slice independent");
+        assert_eq!(
+            tiny[29], tiny[28],
+            "quantum one uses one copy word per slice"
+        );
+        assert_eq!(large[29], 2, "each large operation completes in one slice");
     }
 }
 

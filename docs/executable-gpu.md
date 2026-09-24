@@ -224,11 +224,12 @@ The [implementation plan](implementation-plan.md) retains these requirements.
 The explicit generated sealing and duplication paths now retain traversal state
 and owner transitions across yields. Other synchronous allocation chains remain
 open: boxed constructor conversions, shared field extraction, closure and task
-creation, split/join and other array access operations. Raw and boxed
-`Array.new` initialization, `Array.clone`, `Array.get` value duplication, and
+creation, and the remaining unqualified access paths. Raw and boxed
+`Array.new` initialization, `Array.clone`, `Array.get` value duplication,
 shared-array copy-on-write for `Array.get`, `Array.size`, `Array.set` and
-`Array.swap` now resume across yields. Fixed CUDA Word construction
-reserves its 32-node bundle atomically,
+`Array.swap`, and GPU `ANode` concatenation/split now resume across yields for
+boxed arrays and packed buffers. Fixed CUDA Word construction reserves its
+32-node bundle atomically,
 but still runs synchronously and cannot wait for device backing. Device buffers
 remain fully backed. Stable device reservations, demand backing, exact default
 sizing and residency/overflow

@@ -7,7 +7,9 @@ use super::Body;
 use super::BodyDependencies;
 use super::CompileError;
 use super::DEVICE_ARRAY_COPY_STATE_WORDS;
+use super::DEVICE_ARRAY_JOIN_STATE_WORDS;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
+use super::DEVICE_ARRAY_SPLIT_STATE_WORDS;
 use super::DEVICE_DUPLICATE_STATE_WORDS;
 use super::DEVICE_PAYLOAD_STATE_WORDS;
 use super::ExecutableProgram;
@@ -307,6 +309,26 @@ impl Generator<'_> {
         output: &mut Body,
     ) -> Result<String, CompileError> {
         if name == "ANode" {
+            if output.can_suspend {
+                let (left, _) = self.array_owner_for_access(&values[0], output)?;
+                let (right, _) = self.array_owner_for_access(&values[1], output)?;
+                let result = self.hold(output, "0")?;
+                let state =
+                    self.array(output, &vec!["0".to_owned(); DEVICE_ARRAY_JOIN_STATE_WORDS])?;
+                output.resumes += 1;
+                let pc = output.resumes;
+                let yielded = if output.words {
+                    "tb_segment_yield()"
+                } else {
+                    "0"
+                };
+                writeln!(
+                    output,
+                    "/* resumable array concatenation */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_join_raw(e, &{left}, &{right}, &{result}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {result} = tb_c_blk_node(e, {left}, {right});\n#endif"
+                )
+                .unwrap();
+                return Ok(result);
+            }
             let left = self.hold(output, &format!("tb_c_blk_unique(e, {})", values[0]))?;
             let right = self.hold(output, &format!("tb_c_blk_unique(e, {})", values[1]))?;
             return self.hold(output, &format!("tb_c_blk_node(e, {left}, {right})"));
@@ -337,8 +359,29 @@ impl Generator<'_> {
         value: &str,
         output: &mut Body,
     ) -> Result<Vec<String>, CompileError> {
-        let value = self.hold(output, &format!("tb_c_blk_unique(e, {value})"))?;
+        let (value, _) = self.array_owner_for_access(value, output)?;
         if name == "ANode" {
+            if output.can_suspend {
+                let left = self.hold(output, "0")?;
+                let right = self.hold(output, "0")?;
+                let state = self.array(
+                    output,
+                    &vec!["0".to_owned(); DEVICE_ARRAY_SPLIT_STATE_WORDS],
+                )?;
+                output.resumes += 1;
+                let pc = output.resumes;
+                let yielded = if output.words {
+                    "tb_segment_yield()"
+                } else {
+                    "0"
+                };
+                writeln!(
+                    output,
+                    "/* resumable array split */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_split_raw(e, &{value}, &{left}, &{right}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {left} = tb_c_blk_half(e, {value}, 0);\n  {right} = tb_c_blk_half(e, {value}, 1);\n#endif"
+                )
+                .unwrap();
+                return Ok(vec![left, right]);
+            }
             return Ok(vec![
                 self.hold(output, &format!("tb_c_blk_half(e, {value}, 0)"))?,
                 self.hold(output, &format!("tb_c_blk_half(e, {value}, 1)"))?,

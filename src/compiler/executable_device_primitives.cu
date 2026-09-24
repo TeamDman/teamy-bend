@@ -15,6 +15,8 @@
 /* phase, source, destination, cursor, word count, physical class, block tag,
  * array flag, and whether the current copy reads a still-shared source. */
 #define TB_DEVICE_ARRAY_COPY_STATE_WORDS 9
+#define TB_DEVICE_ARRAY_JOIN_STATE_WORDS 10
+#define TB_DEVICE_ARRAY_SPLIT_STATE_WORDS 9
 enum {
   TB_DEVICE_ARRAY_COPY_ENTER = 0, TB_DEVICE_ARRAY_COPY_START = 1,
   TB_DEVICE_ARRAY_COPY_RESERVED = 2, TB_DEVICE_ARRAY_COPY_SLICE = 3,
@@ -45,6 +47,12 @@ enum {
 #endif
 #ifndef TB_DEVICE_ARRAY_COPY_OBSERVE
 #define TB_DEVICE_ARRAY_COPY_OBSERVE(event, state, work) ((void)0)
+#endif
+#ifndef TB_DEVICE_ARRAY_JOIN_OBSERVE
+#define TB_DEVICE_ARRAY_JOIN_OBSERVE(event, state, work) ((void)0)
+#endif
+#ifndef TB_DEVICE_ARRAY_SPLIT_OBSERVE
+#define TB_DEVICE_ARRAY_SPLIT_OBSERVE(event, state, work) ((void)0)
 #endif
 #ifndef TB_DEVICE_PAYLOAD_OBSERVE
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) ((void)0)
@@ -396,6 +404,283 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
   if (result == NULL) err_fail("invalid device array clone result");
   return tb_device_array_unique_or_clone_raw(e, call, owner, result,
       duplicate_owner, duplicate_state, duplicate_result, state);
+}
+
+/* Join consumes two unique, equal-width arrays/buffers and preserves the
+ * ownership bits of their elements. Generated GPU bodies make each child
+ * unique first; this cursor then reserves and fills the joined block without
+ * keeping an input-sized lane-local array. */
+OUTLINE bool tb_device_array_join_raw(const Env *e, Term *left, Term *right,
+    Term *result, Term *state) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL
+      || left == NULL || right == NULL || result == NULL || state == NULL
+      || left == right)
+    err_fail("invalid device array join arguments");
+  TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_ENTER, state, 0);
+  if (state[0] == 0) {
+    for (u32 cell = 1; cell < TB_DEVICE_ARRAY_JOIN_STATE_WORDS; ++cell)
+      if (state[cell] != 0) err_fail("invalid device array join state");
+    if (*result != 0 || term_rfc(*left) || term_rfc(*right))
+      err_fail("invalid device array join frame");
+    u32 tag = (u32)term_tag(*left);
+    Cls child_cls = blk_cls(*left);
+    if ((tag != TAG_ARR && tag != TAG_BUF) || term_tag(*right) != tag
+        || child_cls != blk_cls(*right) || child_cls >= 17)
+      err_fail("invalid array concatenation");
+    Loc left_at = term_loc(*left), right_at = term_loc(*right);
+    if (left_at == right_at) err_fail("array concatenation aliases unique storage");
+    tb_allocation(*e, left_at, blk_span(*left));
+    tb_allocation(*e, right_at, blk_span(*right));
+    bool array = tag == TAG_ARR;
+    Cls result_cls = (Cls)(child_cls + 1);
+    Cls physical_cls = array ? result_cls : buf_wcls(result_cls);
+    Loc destination = tb_device_corpus_reserve(e, physical_cls);
+    state[0] = 1;
+    state[1] = left_at;
+    state[2] = right_at;
+    state[3] = destination;
+    state[4] = child_cls;
+    state[5] = physical_cls;
+    state[6] = array;
+    state[7] = 0;
+    state[8] = *left;
+    state[9] = *right;
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts;
+    ++tb_device_control->primitive_live;
+    tb_device_unlock();
+    TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_START, state, 0);
+    TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, 0);
+  } else if ((state[0] != 1 && state[0] != 2)
+      || term_rfc(*left) || term_rfc(*right) || *result != 0
+      || *left != state[8] || *right != state[9]
+      || term_loc(*left) != state[1] || term_loc(*right) != state[2]
+      || term_tag(*left) != term_tag(*right)
+      || blk_cls(*left) != state[4] || blk_cls(*right) != state[4]
+      || state[4] >= 17 || state[5] >= NCLS_ALL
+      || state[6] != (u64)(term_tag(*left) == TAG_ARR)
+      || state[5] != (state[6] != 0
+          ? (Cls)(state[4] + 1) : buf_wcls((Cls)(state[4] + 1)))
+      || state[7] >= (state[0] == 1
+          ? (UINT64_C(1) << state[5])
+          : (UINT64_C(1) << (state[4] + 1)))
+      || (term_tag(*left) != TAG_ARR && term_tag(*left) != TAG_BUF)) {
+    err_fail("invalid device array join state");
+  } else {
+    tb_allocation(*e, state[1], blk_span(*left));
+    tb_allocation(*e, state[2], blk_span(*right));
+    if (state[0] == 2 || state[7] != 0)
+      tb_allocation(*e, state[3], (Cls)state[5]);
+  }
+
+  Cls child_cls = (Cls)state[4], physical_cls = (Cls)state[5];
+  bool array = state[6] != 0;
+  Loc destination = state[3];
+  u64 destination_words = UINT64_C(1) << physical_cls;
+  u64 elements = UINT64_C(1) << (child_cls + 1);
+  u64 half = UINT64_C(1) << child_cls;
+  u64 work = 0;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM && state[0] != 0) {
+    tb_device_check_cancelled();
+    if (state[0] == 1) {
+      u64 index = state[7];
+      e->mem[destination + index] = 0;
+      tb_heap_meta[destination + index] = tb_meta(destination, physical_cls);
+      ++state[7];
+      ++work;
+      if (state[7] == destination_words) {
+        state[0] = 2;
+        state[7] = 0;
+      }
+    } else {
+      u64 index = state[7];
+      Loc source = index < half ? state[1] : state[2];
+      u32 source_index = (u32)(index < half ? index : index - half);
+      Term value = blk_read(e->mem, array, source, source_index);
+      bool owned = array && tb_cell_owned(*e, source + source_index);
+      blk_write(e->mem, array, destination, (u32)index, value);
+      if (array)
+        tb_heap_meta[destination + index] = tb_meta(destination, physical_cls)
+            | (owned ? TB_META_OWNED : 0);
+      ++state[7];
+      ++work;
+      if (state[7] == elements) {
+        Cls result_cls = (Cls)(child_cls + 1);
+        blk_free(*e, *left);
+        blk_free(*e, *right);
+        *left = 0;
+        *right = 0;
+        *result = term_blk(array, result_cls, destination);
+        state[0] = 0;
+        break;
+      }
+    }
+  }
+
+  bool done = state[0] == 0;
+  tb_device_lock();
+  if ((work == 0 && !done)
+      || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_SLICE, state, work);
+  if (!done) {
+    TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_YIELD, state, work);
+    return false;
+  }
+  TB_DEVICE_ARRAY_JOIN_OBSERVE(TB_DEVICE_ARRAY_COPY_COMPLETE, state, work);
+  memset(state, 0, TB_DEVICE_ARRAY_JOIN_STATE_WORDS * sizeof(Term));
+  return true;
+}
+
+/* Split a unique array/buffer into two equal halves. The pair reservation is
+ * atomic; source elements and their ownership metadata move into the child
+ * blocks only after both blocks have been initialized. */
+OUTLINE bool tb_device_array_split_raw(const Env *e, Term *owner, Term *left,
+    Term *right, Term *state) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL
+      || owner == NULL || left == NULL || right == NULL || state == NULL
+      || owner == left || owner == right || left == right)
+    err_fail("invalid device array split arguments");
+  TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_ENTER, state, 0);
+  if (state[0] == 0) {
+    for (u32 cell = 1; cell < TB_DEVICE_ARRAY_SPLIT_STATE_WORDS; ++cell)
+      if (state[cell] != 0) err_fail("invalid device array split state");
+    if (*left != 0 || *right != 0 || term_rfc(*owner))
+      err_fail("invalid device array split frame");
+    u32 tag = (u32)term_tag(*owner);
+    Cls source_cls = blk_cls(*owner);
+    if ((tag != TAG_ARR && tag != TAG_BUF) || source_cls == 0 || source_cls > 17)
+      err_fail("invalid array half");
+    Loc source = term_loc(*owner);
+    tb_allocation(*e, source, blk_span(*owner));
+    bool array = tag == TAG_ARR;
+    Cls child_cls = (Cls)(source_cls - 1);
+    Cls child_physical_cls = array ? child_cls : buf_wcls(child_cls);
+    Loc ticket = tb_device_corpus_reserve_pair(e, child_physical_cls,
+        child_physical_cls, 1);
+    Loc left_at = tb_device_corpus_ticket_take(e, &ticket);
+    Loc right_at = tb_device_corpus_ticket_take(e, &ticket);
+    if (ticket != 0) err_fail("invalid heap reservation");
+    state[0] = 1;
+    state[1] = source;
+    state[2] = left_at;
+    state[3] = right_at;
+    state[4] = source_cls;
+    state[5] = child_cls;
+    state[6] = array;
+    state[7] = 0;
+    state[8] = *owner;
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts;
+    ++tb_device_control->primitive_live;
+    tb_device_unlock();
+    TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_START, state, 0);
+    TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, 0);
+    TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, 0);
+  } else if ((state[0] != 1 && state[0] != 2)
+      || term_rfc(*owner) || *left != 0 || *right != 0 || *owner != state[8]
+      || term_loc(*owner) != state[1] || blk_cls(*owner) != state[4]
+      || state[4] == 0 || state[4] > 17 || state[5] != state[4] - 1
+      || state[6] != (u64)(term_tag(*owner) == TAG_ARR)
+      || (term_tag(*owner) != TAG_ARR && term_tag(*owner) != TAG_BUF)) {
+    err_fail("invalid device array split state");
+  } else {
+    tb_allocation(*e, state[1], blk_span(*owner));
+    Cls child_cls = (Cls)state[5];
+    Cls child_physical_cls = state[6] != 0 ? child_cls : buf_wcls(child_cls);
+    u64 child_words = UINT64_C(1) << child_physical_cls;
+    u64 half = UINT64_C(1) << child_cls;
+    u64 limit = state[0] == 1 ? child_words * 2 : half * 2;
+    if (state[7] >= limit || state[2] < HEAP_OFF || state[2] >= tb_bump
+        || state[3] < HEAP_OFF || state[3] >= tb_bump)
+      err_fail("invalid device array split cursor");
+    if (state[0] == 2 || state[7] != 0)
+      tb_allocation(*e, state[2], child_physical_cls);
+    if (state[0] == 2 || state[7] > child_words)
+      tb_allocation(*e, state[3], child_physical_cls);
+  }
+
+  Cls source_cls = (Cls)state[4], child_cls = (Cls)state[5];
+  bool array = state[6] != 0;
+  Cls child_physical_cls = array ? child_cls : buf_wcls(child_cls);
+  u64 child_words = UINT64_C(1) << child_physical_cls;
+  u64 destination_words = child_words * 2;
+  u64 elements = UINT64_C(1) << source_cls;
+  u64 half = UINT64_C(1) << child_cls;
+  u64 work = 0;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM && state[0] != 0) {
+    tb_device_check_cancelled();
+    if (state[0] == 1) {
+      u64 index = state[7];
+      Loc destination = index < child_words ? state[2] : state[3];
+      u64 destination_index = index < child_words ? index : index - child_words;
+      e->mem[destination + destination_index] = 0;
+      tb_heap_meta[destination + destination_index] =
+          tb_meta(destination, child_physical_cls);
+      ++state[7];
+      ++work;
+      if (state[7] == destination_words) {
+        state[0] = 2;
+        state[7] = 0;
+      }
+    } else {
+      u64 index = state[7];
+      Loc source = state[1];
+      u32 source_index = (u32)index;
+      Loc destination = index < half ? state[2] : state[3];
+      u32 destination_index = (u32)(index < half ? index : index - half);
+      Term value = blk_read(e->mem, array, source, source_index);
+      bool owned = array && tb_cell_owned(*e, source + source_index);
+      blk_write(e->mem, array, destination, destination_index, value);
+      if (array)
+        tb_heap_meta[destination + destination_index] =
+            tb_meta(destination, child_physical_cls) | (owned ? TB_META_OWNED : 0);
+      ++state[7];
+      ++work;
+      if (state[7] == elements) {
+        blk_free(*e, *owner);
+        *owner = 0;
+        *left = term_blk(array, child_cls, state[2]);
+        *right = term_blk(array, child_cls, state[3]);
+        state[0] = 0;
+        break;
+      }
+    }
+  }
+
+  bool done = state[0] == 0;
+  tb_device_lock();
+  if ((work == 0 && !done)
+      || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_SLICE, state, work);
+  if (!done) {
+    TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_YIELD, state, work);
+    return false;
+  }
+  TB_DEVICE_ARRAY_SPLIT_OBSERVE(TB_DEVICE_ARRAY_COPY_COMPLETE, state, work);
+  memset(state, 0, TB_DEVICE_ARRAY_SPLIT_STATE_WORDS * sizeof(Term));
+  return true;
 }
 
 /* Complete a previously reserved block without changing allocator counters.

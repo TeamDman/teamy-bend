@@ -28,8 +28,9 @@
   Persistent sealing and duplication (5.15.7.3) are complete. Allocation-chain
   work (5.15.7.4) remains active: raw and boxed `Array.new`, `Array.clone`, and GPU
   `Array.get` value/owner duplication now resume across slices. Shared-array
-  COW for `Array.get`, `Array.size`, `Array.set` and `Array.swap` is covered;
-  split/join COW, full device backing, default sizing and residency remain open.
+  COW for `Array.get`, `Array.size`, `Array.set` and `Array.swap`, plus bounded
+  GPU `ANode` split/join, is covered; full device backing, default sizing and
+  residency remain open.
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -2477,9 +2478,10 @@ remaining device allocation families:
   nested duplication state and publish owned metadata only when each copy is
   ready. `Array.clone` copies and GPU `Array.get` value/owner duplication also
   resume across yields. Shared-array copy-on-write for `Array.get`, `Array.size`,
-  `Array.set` and `Array.swap` is resumable; split/join and other access
-  operations can still allocate and copy up to the supported array bound, with
-  nested duplication for owned boxed elements.
+  `Array.set` and `Array.swap` is resumable. GPU `ANode` concatenation and split
+  also run through bounded copy state after shared-owner COW for boxed arrays
+  and packed buffers. Other not-yet-qualified access and allocation paths remain
+  subject to the source audit.
 - Scratch frames and traversal records use `tb_host_calloc` and the separate
   scratch budget; scratch exhaustion is not a device corpus backing request.
   `term_drop` does not allocate corpus, but its traversal is still synchronous.
@@ -2736,6 +2738,42 @@ Poche remains at HEAD `e5e767cc6b545b725994e50984d01d69091bface` with its 13
 pre-existing dirty paths unchanged; no Poche source was edited. Split/join
 COW, other synchronous allocation chains, device backing and broader GPU parity
 remain open.
+
+###### [x] 5.15.7.4.f Resume GPU `ANode` concatenation and split
+
+**Work:** In suspendable GPU bodies, make `ANode` construction copy both unique
+children into a newly reserved parent through a bounded cursor. Make `ANode`
+pattern extraction reserve both child blocks together, initialize and fill them
+over bounded slices, then transfer owned-element metadata and release the
+source. Preserve synchronous CPU behavior and apply resumable shared-array COW
+before operating on shared operands.
+
+**Completion:** `tb_device_array_join_raw` and `tb_device_array_split_raw` now
+retain their progress in generated call-frame state. The split reserves both
+halves atomically; boxed arrays transfer owned-field metadata, while packed
+buffers preserve their two-U32-per-word representation. Forced-alias CUDA tests
+cover boxed strings and packed U32 buffers at primitive quanta 1 and 1,024.
+Join results match `("left", "right")` and `(7, 9)`; split returns the same
+values. Boxed/packed joins use 2,048/1,280 work units, with 2,048/1,280 slices
+at quantum 1. Splits use 1,024/640 work units, with that many slices at quantum
+1 and two slices at quantum 1,024. Reservation/start accounting is exact and
+work does not replay across slices.
+
+Both join executables and all four split executables pass Compute Sanitizer
+memcheck with zero errors through `scripts/compute-sanitizer.ps1`. The complete
+10-test primitive CUDA suite and 13-test core CUDA suite pass. Nightly formatting,
+strict all-target/all-feature Clippy, `./check-all.ps1` and release build pass.
+Release SHA-256 is
+`7748bcf4cc83226089f2a248c491838f06686902636a524e2a293d3586dbd0e0`.
+
+Exact Poche regressions pass against that release: 15,503 scalar rows, seven
+symbolic privacy theorems and three imported equalities with a well-typed
+negative control, plus the 22-state/21-transition bounded trajectory and its
+eight negative controls. Seven compiled witnesses and two well-typed mutation
+controls also pass. Poche remains at HEAD
+`e5e767cc6b545b725994e50984d01d69091bface` with the same 13 pre-existing dirty
+paths; no Poche source was edited. Further allocation chains, full device
+backing, default sizing, residency and broader GPU parity remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
