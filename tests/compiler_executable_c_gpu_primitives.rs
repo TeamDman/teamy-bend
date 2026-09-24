@@ -107,6 +107,43 @@ def main() -> String:
   finish(read!(array))
 "#;
 
+const SHARED_ARRAY_SIZE: &str = r#"import Base
+def measure(array: Array<String>) -> Array<String> & U32:
+  Array.size(String, array)
+def read_size(pair: Array<String> & U32) -> U32:
+  (array, size) = pair
+  size
+def main() -> U32:
+  read_size(measure!(Array.new(String, 8n, "saved")))
+"#;
+
+const SHARED_ARRAY_SET: &str = r#"import Base
+def update(array: Array<String>) -> Array<String>:
+  Array.set(String, array, 255, "changed")
+def read_value(pair: Array<String> & String) -> String:
+  (array, value) = pair
+  value
+def read(array: Array<String>) -> String:
+  read_value(Array.get(String, array, 255))
+def main() -> String:
+  read(update!(Array.new(String, 8n, "saved")))
+"#;
+
+const SHARED_ARRAY_SWAP: &str = r#"import Base
+def replace(array: Array<String>) -> Array<String> & String:
+  Array.swap(String, array, 255, "changed")
+def finish(old: String, current: String) -> String & String:
+  (old, current)
+def read_value(pair: Array<String> & String) -> String:
+  (array, value) = pair
+  value
+def observe(pair: Array<String> & String) -> String & String:
+  (array, old) = pair
+  finish(old, read_value(Array.get(String, array, 255)))
+def main() -> String & String:
+  observe(replace!(Array.new(String, 8n, "saved")))
+"#;
+
 static NEXT: AtomicUsize = AtomicUsize::new(0);
 
 struct Fixture(PathBuf);
@@ -197,28 +234,34 @@ fn instrument(mut generated: String, mode: u32, count_seed: bool, force_shared: 
     let clone_prefix = "  if (!tb_device_array_clone_raw(e, tb_frame, &tb_values[";
     let unique_prefix = "  if (!tb_device_array_unique_raw(e, tb_frame, &tb_values[";
     let clone_at = device.find(clone_prefix);
-    let unique_at = if clone_at.is_none() && force_shared {
-        device.find(unique_prefix)
+    let share_sites = if let Some(at) = clone_at {
+        vec![(at, clone_prefix)]
+    } else if force_shared {
+        device
+            .match_indices(unique_prefix)
+            .map(|(at, _)| (at, unique_prefix))
+            .collect()
     } else {
-        None
+        Vec::new()
     };
-    if let Some((at, prefix)) = clone_at
-        .map(|at| (at, clone_prefix))
-        .or_else(|| unique_at.map(|at| (at, unique_prefix)))
-    {
+    let mut probe_insertions = Vec::new();
+    for (at, prefix) in share_sites {
         let owner_start = at + prefix.len();
         let owner_end = owner_start + device[owner_start..].find(']').unwrap();
         let owner = device[owner_start..owner_end].to_owned();
         let share = format!(
             "  if (tb_device_control->root_words[233] == 0) probe_share_array(e, &tb_values[{owner}]);\n"
         );
-        device.insert_str(at, &share);
-        let call_start = at + share.len();
-        let endif = call_start + device[call_start..].find("\n#endif").unwrap() + 7;
-        device.insert_str(
+        let endif = at + device[at..].find("\n#endif").unwrap() + 7;
+        probe_insertions.push((at, share));
+        probe_insertions.push((
             endif,
-            &format!("\n  probe_release_array_alias(e, &tb_values[{owner}]);"),
-        );
+            format!("\n  probe_release_array_alias(e, &tb_values[{owner}]);"),
+        ));
+    }
+    probe_insertions.sort_by_key(|insertion| std::cmp::Reverse(insertion.0));
+    for (at, text) in probe_insertions {
+        device.insert_str(at, &text);
     }
     let mut insertions = Vec::new();
     for (at, _) in device.match_indices("  if (!tb_device_array_new_raw(") {
@@ -702,6 +745,22 @@ fn shared_array_get_cow_preserves_the_parked_owner_across_slices() {
     );
     assert_eq!(tiny[29], 8192, "quantum one copies one word per slice");
     assert_eq!(large[29], 8, "quantum 1024 copies eight slices");
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn shared_array_size_set_and_swap_resume_copy_on_write() {
+    for (program, expected) in [
+        (SHARED_ARRAY_SIZE, "256\n"),
+        (SHARED_ARRAY_SET, "\"changed\"\n"),
+        (SHARED_ARRAY_SWAP, "(\"saved\", \"changed\")\n"),
+    ] {
+        let stats = Fixture::new().run_with_shared_array(program, 1, 0, expected, true);
+        assert_eq!(stats[26], 1, "each shared access needs one COW reservation");
+        assert_eq!(stats[27], 1, "each shared access starts one COW operation");
+        assert_eq!(stats[28], 512, "256 words initialize and copy once");
+        assert_eq!(stats[29], 512, "quantum one copies one word per slice");
+    }
 }
 
 #[test]

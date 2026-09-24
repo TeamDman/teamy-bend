@@ -374,14 +374,7 @@ impl Generator<'_> {
         }
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
         let array_storage = if arr { "true" } else { "false" };
-        let (a, get_duplicate) = if name == "Array.get" {
-            self.array_owner_for_get(&arguments[0], output)?
-        } else {
-            (
-                self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?,
-                None,
-            )
-        };
+        let (a, duplicate_context) = self.array_owner_for_access(&arguments[0], output)?;
         if name == "Array.size" {
             return self.construct(
                 "Tuple",
@@ -396,7 +389,7 @@ impl Generator<'_> {
         let offset = self.hold(output, &format!("blk_at({a}, {}, {lgs})", arguments[1]))?;
         let previous = if name == "Array.get" || name == "Array.swap" {
             let array = if name == "Array.get" {
-                let duplicate = get_duplicate.as_ref().map(|(owner, result, state)| {
+                let duplicate = duplicate_context.as_ref().map(|(owner, result, state)| {
                     (owner.as_str(), result.as_str(), state.as_str())
                 });
                 self.array_get_values(array_storage, &a, &offset, &layout.words, duplicate, output)?
@@ -432,7 +425,7 @@ impl Generator<'_> {
         }
     }
 
-    fn array_owner_for_get(
+    fn array_owner_for_access(
         &mut self,
         expression: &str,
         output: &mut Body,
@@ -459,7 +452,7 @@ impl Generator<'_> {
         };
         writeln!(
             output,
-            "/* resumable Array.get copy-on-write */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_unique_raw(e, tb_frame, &{owner}, &{duplicate_owner}, {duplicate_state}, &{duplicate_result}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {owner} = tb_c_blk_unique(e, {owner});\n#endif"
+            "/* resumable array access copy-on-write */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_unique_raw(e, tb_frame, &{owner}, &{duplicate_owner}, {duplicate_state}, &{duplicate_result}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {owner} = tb_c_blk_unique(e, {owner});\n#endif"
         )
         .unwrap();
         Ok((

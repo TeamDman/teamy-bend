@@ -27,8 +27,9 @@
   are complete with retained-release Poche regression validation.
   Persistent sealing and duplication (5.15.7.3) are complete. Allocation-chain
   work (5.15.7.4) remains active: raw and boxed `Array.new`, `Array.clone`, and GPU
-  `Array.get` value/owner duplication now resume across slices. Other shared
-  access paths, full device backing, default sizing and residency remain open.
+  `Array.get` value/owner duplication now resume across slices. Shared-array
+  COW for `Array.get`, `Array.size`, `Array.set` and `Array.swap` is covered;
+  split/join COW, full device backing, default sizing and residency remain open.
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -2475,9 +2476,10 @@ remaining device allocation families:
   layouts. Boxed repeated elements compose the array cursor with persistent
   nested duplication state and publish owned metadata only when each copy is
   ready. `Array.clone` copies and GPU `Array.get` value/owner duplication also
-  resume across yields. Shared-array copy-on-write for `Array.get` is resumable;
-  split/join and other access operations can still allocate and copy up to the
-  supported array bound, with nested duplication for owned boxed elements.
+  resume across yields. Shared-array copy-on-write for `Array.get`, `Array.size`,
+  `Array.set` and `Array.swap` is resumable; split/join and other access
+  operations can still allocate and copy up to the supported array bound, with
+  nested duplication for owned boxed elements.
 - Scratch frames and traversal records use `tb_host_calloc` and the separate
   scratch budget; scratch exhaustion is not a device corpus backing request.
   `term_drop` does not allocate corpus, but its traversal is still synchronous.
@@ -2708,6 +2710,32 @@ Poche remains at HEAD `e5e767cc6b545b725994e50984d01d69091bface` with its 13
 pre-existing dirty paths unchanged; no Poche source was edited. Shared COW in
 split/join and other access operations, remaining allocation chains, device
 backing waits and broader GPU parity remain open.
+
+###### [x] 5.15.7.4.e Resume shared COW for GPU array size, set and swap
+
+**Work:** Route suspendable GPU `Array.size`, `Array.set` and `Array.swap`
+through the resumable array-uniqueness operation already used by `Array.get`.
+Keep the source owner, copy cursor, nested duplication state and destination in
+the frame while shared input is copied. Preserve CPU and non-suspendable array
+access and the synchronous behavior of unique arrays.
+
+**Completion:** Generated GPU array access now uses one shared ownership helper
+for `Array.get`, `Array.size`, `Array.set` and `Array.swap`. Forced-alias CUDA
+cases prove each of the three new operations retains the independent old owner,
+performs one COW reservation and produces the expected size or updated value.
+Each case copies and initializes 256 words over 512 quantum-one slices without
+replaying work. The full eight-test primitive suite and thirteen-test core CUDA
+suite pass; the focused three-operation CUDA test passes Compute Sanitizer
+memcheck with zero errors for all three retained executables.
+
+`cargo fmt --all -- --check`, strict all-target/all-feature Clippy,
+`./check-all.ps1` and `cargo build --release` pass. The release SHA-256 is
+`8954e2ffbba0cb0e172c985851a4649bb1b8d71fcf0c3bf401a08e02e0b9d6c7`; exact
+Poche privacy, scalar and bounded-trajectory gates pass against that binary.
+Poche remains at HEAD `e5e767cc6b545b725994e50984d01d69091bface` with its 13
+pre-existing dirty paths unchanged; no Poche source was edited. Split/join
+COW, other synchronous allocation chains, device backing and broader GPU parity
+remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
