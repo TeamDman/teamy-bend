@@ -25,9 +25,10 @@
   helper yielding, memory sizing and platform behavior remain next engine work.
   Host corpus commitment (5.15.7.1) and raw device array suspension (5.15.7.2)
   are complete with retained-release Poche regression validation.
-  Persistent sealing and duplication (5.15.7.3) are complete. The next GPU
-  dependency is qualifying remaining allocation chains (5.15.7.4); full device
-  backing, default sizing and residency remain required by 5.15.7.
+  Persistent sealing and duplication (5.15.7.3) are complete. Allocation-chain
+  work (5.15.7.4) remains active: raw and boxed `Array.new`, `Array.clone`, and GPU
+  `Array.get` value/owner duplication now resume across slices. Other shared
+  access paths, full device backing, default sizing and residency remain open.
   Compiler specialization and remaining CPU optimization stay open.
   Keep existing Poche checks as regressions and defer model
   expansion.
@@ -2473,10 +2474,10 @@ remaining device allocation families:
 - Array chains: `Array.new` now has a bounded resumable path for raw and boxed
   layouts. Boxed repeated elements compose the array cursor with persistent
   nested duplication state and publish owned metadata only when each copy is
-  ready. `Array.clone` copies and boxed `Array.get` element duplication also
-  resume across yields. Shared-array copy-on-write in `blk_unique`, split/join
-  and other access operations can still allocate and copy up to the supported
-  array bound; owned boxed elements can additionally require nested duplication.
+  ready. `Array.clone` copies and GPU `Array.get` value/owner duplication also
+  resume across yields. Shared-array copy-on-write for `Array.get` is resumable;
+  split/join and other access operations can still allocate and copy up to the
+  supported array bound, with nested duplication for owned boxed elements.
 - Scratch frames and traversal records use `tb_host_calloc` and the separate
   scratch budget; scratch exhaustion is not a device corpus backing request.
   `term_drop` does not allocate corpus, but its traversal is still synchronous.
@@ -2655,9 +2656,10 @@ and synchronous `tb_c_blk_keep` behavior on CPU and non-suspendable bodies.
 in the selected element. It shares one resettable duplicate state across those
 words, writes each retained owner wrapper back once, and stores each completed
 copy in the persistent result layout before boxing the element. The helper uses
-the compiler-selected array/buffer representation for raw layouts. Shared-array
-copy-on-write still runs through synchronous `tb_c_blk_unique` and is explicitly
-outside this subtask.
+the compiler-selected array/buffer representation for raw layouts. At this
+milestone, shared-array copy-on-write still ran through synchronous
+`tb_c_blk_unique` and was outside this subtask; GPU `Array.get` now covers that
+separate edge in 5.15.7.4.d below.
 
 The regression reads an element containing two boxed recursive trees. CPU and
 actual CUDA both produce `16`; primitive quanta 1 and 1,024 preserve language
@@ -2672,9 +2674,40 @@ The rebuilt release has SHA-256
 `9a0c08ccc47355d1401f3337bdc9f4561c458ba5a08c2837df9092ccaeb2a88f`. Its exact
 Poche privacy, 15,503-row scalar and bounded trajectory gates pass. Poche HEAD
 remains `e5e767cc6b545b725994e50984d01d69091bface`; its 13 pre-existing dirty
-paths are unchanged and no Poche source was edited. Whole-array COW, split/join,
-the other generated access operations, remaining allocation chains and device
-backing waits remain open.
+paths are unchanged and no Poche source was edited. COW for split/join and other
+generated access operations, remaining allocation chains and device backing
+waits remain open.
+
+###### [x] 5.15.7.4.d Make shared GPU `Array.get` copy-on-write resumable
+
+**Work:** Replace the synchronous `tb_c_blk_unique` in suspendable GPU
+`Array.get` bodies with a resumable uniqueness operation. Preserve the source
+owner, COW copy cursor, destination and nested boxed-field duplication state in
+the call frame across yields. Unique inputs take the no-copy path; shared
+inputs reserve and initialize one private array, then publish the unique owner
+only after the copy is complete. Keep CPU/non-suspendable behavior and packed
+Array/Buffer layout semantics unchanged.
+
+**Completion:** `tb_device_array_unique_raw` now shares the existing bounded
+array-copy state machine with `Array.clone` without allocating a second clone.
+GPU `Array.get` carries its owner and copy state across yields before reading
+the requested field. A forced-sharing regression retains an independent alias,
+checks that the old block remains unchanged, and reads from a 4,096-element
+boxed array. Primitive quanta 1 and 1,024 produce `"saved"` with equal language
+steps and total work; quantum 1 performs 8,192 copy/init words over 8,192
+slices, while quantum 1,024 uses eight slices. Both reserve one COW block.
+
+All 13 ignored CUDA tests in `compiler_executable_c_gpu` and all seven in
+`compiler_executable_c_gpu_primitives` pass on the installed CUDA device. The
+quantum-one COW executable passes Compute Sanitizer memcheck with zero errors
+through `scripts/compute-sanitizer.ps1`. `cargo fmt --check`, strict workspace
+Clippy and `./check-all.ps1` pass. The release executable SHA-256 is
+`a1ab41707186a21d1fe4bb957b427a58d7c5d81b833edbc3a2c59dee709aed17`; exact
+Poche privacy, 15,503-row scalar and bounded-trajectory gates pass against it.
+Poche remains at HEAD `e5e767cc6b545b725994e50984d01d69091bface` with its 13
+pre-existing dirty paths unchanged; no Poche source was edited. Shared COW in
+split/join and other access operations, remaining allocation chains, device
+backing waits and broader GPU parity remain open.
 
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 

@@ -27,6 +27,8 @@ fn packed(layout: &Layout) -> bool {
     layout.words.is_empty() || layout.words == [Kind::W32]
 }
 
+type DeviceDuplicateContext = (String, String, String);
+
 impl Generator<'_> {
     pub(super) fn construct(
         &mut self,
@@ -372,7 +374,14 @@ impl Generator<'_> {
         }
         let (arr, lgs, layout) = self.array_layout(&array_ty)?;
         let array_storage = if arr { "true" } else { "false" };
-        let a = self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?;
+        let (a, get_duplicate) = if name == "Array.get" {
+            self.array_owner_for_get(&arguments[0], output)?
+        } else {
+            (
+                self.hold(output, &format!("tb_c_blk_unique(e, {})", arguments[0]))?,
+                None,
+            )
+        };
         if name == "Array.size" {
             return self.construct(
                 "Tuple",
@@ -387,7 +396,10 @@ impl Generator<'_> {
         let offset = self.hold(output, &format!("blk_at({a}, {}, {lgs})", arguments[1]))?;
         let previous = if name == "Array.get" || name == "Array.swap" {
             let array = if name == "Array.get" {
-                self.array_get_values(array_storage, &a, &offset, &layout.words, output)?
+                let duplicate = get_duplicate.as_ref().map(|(owner, result, state)| {
+                    (owner.as_str(), result.as_str(), state.as_str())
+                });
+                self.array_get_values(array_storage, &a, &offset, &layout.words, duplicate, output)?
             } else {
                 let cells = (0..layout.words.len())
                     .map(|index| {
@@ -420,6 +432,42 @@ impl Generator<'_> {
         }
     }
 
+    fn array_owner_for_get(
+        &mut self,
+        expression: &str,
+        output: &mut Body,
+    ) -> Result<(String, Option<DeviceDuplicateContext>), CompileError> {
+        let owner = if output.can_suspend {
+            self.hold(output, expression)?
+        } else {
+            return Ok((
+                self.hold(output, &format!("tb_c_blk_unique(e, {expression})"))?,
+                None,
+            ));
+        };
+        let duplicate_owner = self.hold(output, "0")?;
+        let duplicate_result = self.hold(output, "0")?;
+        let duplicate_state =
+            self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?;
+        let state = self.array(output, &vec!["0".to_owned(); DEVICE_ARRAY_COPY_STATE_WORDS])?;
+        output.resumes += 1;
+        let pc = output.resumes;
+        let yielded = if output.words {
+            "tb_segment_yield()"
+        } else {
+            "0"
+        };
+        writeln!(
+            output,
+            "/* resumable Array.get copy-on-write */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_array_unique_raw(e, tb_frame, &{owner}, &{duplicate_owner}, {duplicate_state}, &{duplicate_result}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  {owner} = tb_c_blk_unique(e, {owner});\n#endif"
+        )
+        .unwrap();
+        Ok((
+            owner,
+            Some((duplicate_owner, duplicate_result, duplicate_state)),
+        ))
+    }
+
     /// Read an array element, resuming ownership duplication for boxed words
     /// when this operation runs in a suspendable GPU body.
     fn array_get_values(
@@ -428,9 +476,12 @@ impl Generator<'_> {
         owner: &str,
         offset: &str,
         words: &[Kind],
+        duplicate_context: Option<(&str, &str, &str)>,
         output: &mut Body,
     ) -> Result<String, CompileError> {
-        let duplicate = if output.can_suspend && words.contains(&Kind::Box) {
+        let duplicate = if let Some((owner, result, state)) = duplicate_context {
+            Some((owner.to_owned(), result.to_owned(), state.to_owned()))
+        } else if output.can_suspend && words.contains(&Kind::Box) {
             Some((
                 self.hold(output, "0")?,
                 self.hold(output, "0")?,

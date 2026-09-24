@@ -96,6 +96,17 @@ def run_copy(array: Array<U32>) -> U32:
 def main() -> U32: run_copy!(Array.new(U32, 12n, 7))
 ";
 
+const SHARED_ARRAY_GET: &str = r#"import Base
+def read(array: Array<String>) -> Array<String> & String:
+  Array.get(String, array, 0)
+def finish(pair: Array<String> & String) -> String:
+  (array, value) = pair
+  value
+def main() -> String:
+  array = Array.new(String, 12n, "saved")
+  finish(read!(array))
+"#;
+
 static NEXT: AtomicUsize = AtomicUsize::new(0);
 
 struct Fixture(PathBuf);
@@ -112,13 +123,24 @@ impl Fixture {
     }
 
     fn run(&self, bend: &str, quantum: u32, mode: u32, expected: &str) -> Vec<u64> {
+        self.run_with_shared_array(bend, quantum, mode, expected, false)
+    }
+
+    fn run_with_shared_array(
+        &self,
+        bend: &str,
+        quantum: u32,
+        mode: u32,
+        expected: &str,
+        force_shared: bool,
+    ) -> Vec<u64> {
         let path = self.0.join("main.bend");
         fs::write(&path, bend).unwrap();
         let generated =
             compile_executable_c(&check_executable(&load_executable(path).unwrap()).unwrap())
                 .unwrap();
         assert!(generated.contains("#define TB_GPU_ENABLED 1"));
-        let source = instrument(generated, mode, bend.contains("12345"));
+        let source = instrument(generated, mode, bend.contains("12345"), force_shared);
         let definition = format!("BEND_GPU_PRIMITIVE_QUANTUM={quantum}");
         let executable = executable_c_compiler::compile(
             &self.0,
@@ -166,15 +188,25 @@ impl Drop for Fixture {
     }
 }
 
-fn instrument(mut generated: String, mode: u32, count_seed: bool) -> String {
+fn instrument(mut generated: String, mode: u32, count_seed: bool, force_shared: bool) -> String {
     let start = generated
         .find("static const char *const tb_gpu_source_parts[] = {\n")
         .unwrap();
     let end = start + generated[start..].find("\n};").unwrap() + 3;
     let mut device = decode_parts(&generated[start..end]);
     let clone_prefix = "  if (!tb_device_array_clone_raw(e, tb_frame, &tb_values[";
-    if let Some(at) = device.find(clone_prefix) {
-        let owner_start = at + clone_prefix.len();
+    let unique_prefix = "  if (!tb_device_array_unique_raw(e, tb_frame, &tb_values[";
+    let clone_at = device.find(clone_prefix);
+    let unique_at = if clone_at.is_none() && force_shared {
+        device.find(unique_prefix)
+    } else {
+        None
+    };
+    if let Some((at, prefix)) = clone_at
+        .map(|at| (at, clone_prefix))
+        .or_else(|| unique_at.map(|at| (at, unique_prefix)))
+    {
+        let owner_start = at + prefix.len();
         let owner_end = owner_start + device[owner_start..].find(']').unwrap();
         let owner = device[owner_start..owner_end].to_owned();
         let share = format!(
@@ -183,7 +215,10 @@ fn instrument(mut generated: String, mode: u32, count_seed: bool) -> String {
         device.insert_str(at, &share);
         let call_start = at + share.len();
         let endif = call_start + device[call_start..].find("\n#endif").unwrap() + 7;
-        device.insert_str(endif, "\n  probe_release_array_alias(e);");
+        device.insert_str(
+            endif,
+            &format!("\n  probe_release_array_alias(e, &tb_values[{owner}]);"),
+        );
     }
     let mut insertions = Vec::new();
     for (at, _) in device.match_indices("  if (!tb_device_array_new_raw(") {
@@ -192,7 +227,9 @@ fn instrument(mut generated: String, mode: u32, count_seed: bool) -> String {
         insertions.push((unbox, "  probe_unbox();\n"));
     }
     assert!(
-        !insertions.is_empty() || device.contains("tb_device_array_clone_raw("),
+        !insertions.is_empty()
+            || device.contains("tb_device_array_clone_raw(")
+            || device.contains("tb_device_array_unique_raw("),
         "the instrumented program must exercise a bounded array primitive"
     );
     if count_seed {
@@ -306,7 +343,7 @@ static __device__ void probe_seed(void);
 static __device__ void probe_unbox(void);
 static __device__ void probe_array_copy_observe(unsigned int, unsigned long long *, unsigned long long);
 static __device__ void probe_share_array(const void *, void *);
-static __device__ void probe_release_array_alias(const void *);
+static __device__ void probe_release_array_alias(const void *, void *);
 #define TB_DEVICE_ARRAY_NEW_OBSERVE(event, state, work) probe_observe(event, state, work, raw_values, count)
 #define TB_DEVICE_ARRAY_COPY_OBSERVE(event, state, work) probe_array_copy_observe(event, state, work)
 #define TB_DEVICE_PAYLOAD_OBSERVE(event, state, work, fields, mask, count, closure) \
@@ -358,17 +395,34 @@ static __device__ void probe_array_copy_observe(u32 event, Term *state, u64 work
     atomicAdd(receipt + 237, 1ull);
   }
 }
+static __device__ Term probe_shared_values[4];
+static __device__ Loc probe_shared_base;
+static __device__ u32 probe_shared_count;
 static __device__ void probe_share_array(const void *raw_env, void *raw_owner) {
   const Env *e = (const Env *)raw_env;
   Term *owner = (Term *)raw_owner;
   if (tb_device_control->root_words[233] != 0)
-    err_fail("array clone probe alias already set");
+    err_fail("array probe alias already set");
+  if (term_tag(*owner) != TAG_ARR && term_tag(*owner) != TAG_BUF)
+    err_fail("array probe expected an array");
+  probe_shared_base = term_peek(*e, *owner);
+  u64 span = UINT64_C(1) << blk_span(*owner);
+  probe_shared_count = span < 4 ? (u32)span : 4;
+  for (u32 i = 0; i < probe_shared_count; ++i)
+    probe_shared_values[i] = e->mem[probe_shared_base + i];
   tb_device_control->root_words[233] = tb_c_duplicate(e, owner);
 }
-static __device__ void probe_release_array_alias(const void *raw_env) {
+static __device__ void probe_release_array_alias(const void *raw_env, void *raw_owner) {
   const Env *e = (const Env *)raw_env;
+  Term *owner = (Term *)raw_owner;
   Term alias = tb_device_control->root_words[233];
-  if (alias == 0) err_fail("array clone probe alias is missing");
+  if (alias == 0 || owner == NULL || !term_rfc(alias) || term_rfc(*owner)
+      || term_peek(*e, alias) != probe_shared_base
+      || term_loc(*owner) == probe_shared_base)
+    err_fail("array probe copy-on-write did not preserve both owners");
+  for (u32 i = 0; i < probe_shared_count; ++i)
+    if (e->mem[probe_shared_base + i] != probe_shared_values[i])
+      err_fail("array probe copy-on-write mutated the shared source");
   tb_device_control->root_words[233] = 0;
   term_drop(*e, alias);
 }
@@ -620,6 +674,34 @@ fn packed_array_clone_copies_the_full_block_once_across_slices() {
         "quantum one must process one word per slice"
     );
     assert_eq!(large[29], 2, "each block copy completes in one large slice");
+}
+
+#[test]
+#[ignore = "requires an installed CUDA driver, NVRTC, and compute capability 7.0 or newer"]
+fn shared_array_get_cow_preserves_the_parked_owner_across_slices() {
+    let tiny = Fixture::new().run_with_shared_array(SHARED_ARRAY_GET, 1, 0, "\"saved\"\n", true);
+    let large =
+        Fixture::new().run_with_shared_array(SHARED_ARRAY_GET, 1024, 0, "\"saved\"\n", true);
+    assert_eq!(tiny[0], large[0], "COW slices preserve language steps");
+    assert_eq!(tiny[2], large[2], "COW and nested work must not replay");
+    assert!(
+        tiny[4] > large[4],
+        "small copy slices must yield more often"
+    );
+    assert_eq!(tiny[26], 1, "one shared input needs one COW reservation");
+    assert_eq!(large[26], 1, "one shared input needs one COW reservation");
+    assert_eq!(tiny[27], 1, "one unique-array operation must start");
+    assert_eq!(large[27], 1, "one unique-array operation must start");
+    assert_eq!(
+        tiny[28], 8192,
+        "4096 words initialize and copy exactly once"
+    );
+    assert_eq!(
+        tiny[28], large[28],
+        "copy work must not replay across slices"
+    );
+    assert_eq!(tiny[29], 8192, "quantum one copies one word per slice");
+    assert_eq!(large[29], 8, "quantum 1024 copies eight slices");
 }
 
 #[test]

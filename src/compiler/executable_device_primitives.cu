@@ -191,21 +191,23 @@ INLINE Loc tb_device_corpus_ticket_take(const Env *e, Loc *ticket) {
  * are never rewritten: their owned fields are duplicated from a persistent
  * frame slot. For a unique source, duplicate rewrites are published back to
  * its cells, matching blk_copy's synchronous ownership transfer. */
-OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
+OUTLINE bool tb_device_array_unique_or_clone_raw(const Env *e, TBCallFrame *call,
     Term *owner, Term *result, Term *duplicate_owner, Term *duplicate_state,
     Term *duplicate_result, Term *state) {
   tb_device_check_cancelled();
   if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL || call == NULL
-      || owner == NULL || result == NULL || duplicate_owner == NULL
+      || owner == NULL || duplicate_owner == NULL
       || duplicate_state == NULL || duplicate_result == NULL || state == NULL
-      || owner == result || duplicate_owner == result || owner == duplicate_owner)
+      || owner == duplicate_owner
+      || (result != NULL && (owner == result || duplicate_owner == result)))
     err_fail("invalid device array clone arguments");
+  bool clone = result != NULL;
   TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_ENTER, state, 0);
   bool resumed = state[0] != TB_DEVICE_ARRAY_COPY_IDLE;
   if (state[0] == TB_DEVICE_ARRAY_COPY_IDLE) {
     for (u32 cell = 1; cell < TB_DEVICE_ARRAY_COPY_STATE_WORDS; ++cell)
       if (state[cell] != 0) err_fail("invalid device array clone state");
-    if (*result != 0 || *duplicate_owner != 0 || *duplicate_result != 0
+    if ((clone && *result != 0) || *duplicate_owner != 0 || *duplicate_result != 0
         || duplicate_state[0] != 0 || duplicate_state[1] != 0
         || duplicate_state[2] != 0 || duplicate_state[3] != 0)
       err_fail("invalid device array clone frame");
@@ -232,6 +234,7 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
         state[8] = TB_DEVICE_ARRAY_COPY_FLAG_COW;
       }
     }
+    if (state[0] == TB_DEVICE_ARRAY_COPY_IDLE && !clone) return true;
     if (state[0] == TB_DEVICE_ARRAY_COPY_IDLE)
       state[0] = TB_DEVICE_ARRAY_COPY_CLONE_INIT;
     state[2] = tb_device_corpus_reserve(e, physical);
@@ -261,11 +264,14 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
       || ((state[0] == TB_DEVICE_ARRAY_COPY_COW_VALUES
               || state[0] == TB_DEVICE_ARRAY_COPY_CLONE_VALUES)
           && (state[8] & TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED) == 0)
+      || (!clone && state[0] != TB_DEVICE_ARRAY_COPY_COW_INIT
+          && state[0] != TB_DEVICE_ARRAY_COPY_COW_VALUES)
       || (state[7] != (u64)(term_tag(state[6]) == TAG_ARR))
       || (term_tag(state[6]) != TAG_ARR && term_tag(state[6]) != TAG_BUF)
       || term_aux(state[6]) > 17)
     err_fail("invalid device array clone state");
   if (resumed) {
+    if (clone && *result != 0) err_fail("invalid device array clone result");
     tb_allocation(*e, state[1], (Cls)state[5]);
     if ((state[8] & TB_DEVICE_ARRAY_COPY_FLAG_DEST_INITIALIZED) != 0)
       tb_allocation(*e, state[2], (Cls)state[5]);
@@ -332,6 +338,10 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
           Term previous = *owner;
           *owner = state[6] | to;
           term_drop(*e, previous);
+          if (!clone) {
+            state[0] = TB_DEVICE_ARRAY_COPY_IDLE;
+            break;
+          }
           state[1] = to;
           state[2] = tb_device_corpus_reserve(e, (Cls)state[5]);
           state[3] = 0;
@@ -340,6 +350,7 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
           state[8] = 0;
           TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_RESERVED, state, work);
         } else {
+          if (!clone) err_fail("invalid device array unique phase");
           *result = state[6] | to;
           state[0] = TB_DEVICE_ARRAY_COPY_IDLE;
           break;
@@ -371,6 +382,20 @@ OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
   TB_DEVICE_ARRAY_COPY_OBSERVE(TB_DEVICE_ARRAY_COPY_COMPLETE, state, work);
   memset(state, 0, TB_DEVICE_ARRAY_COPY_STATE_WORDS * sizeof(Term));
   return true;
+}
+
+OUTLINE bool tb_device_array_unique_raw(const Env *e, TBCallFrame *call,
+    Term *owner, Term *duplicate_owner, Term *duplicate_state,
+    Term *duplicate_result, Term *state) {
+  return tb_device_array_unique_or_clone_raw(e, call, owner, NULL,
+      duplicate_owner, duplicate_state, duplicate_result, state);
+}
+OUTLINE bool tb_device_array_clone_raw(const Env *e, TBCallFrame *call,
+    Term *owner, Term *result, Term *duplicate_owner, Term *duplicate_state,
+    Term *duplicate_result, Term *state) {
+  if (result == NULL) err_fail("invalid device array clone result");
+  return tb_device_array_unique_or_clone_raw(e, call, owner, result,
+      duplicate_owner, duplicate_state, duplicate_result, state);
 }
 
 /* Complete a previously reserved block without changing allocator counters.
