@@ -1,5 +1,14 @@
 # teamy-bend
 
+## Incomplete work-in-progress port
+
+**This is an incomplete, experimental Rust port of Bend 2. It is not a
+completed or production-ready implementation, and is not a drop-in replacement
+for Bend 2.** Only a subset is implemented; full C runtime parity, GPU support,
+and complete library compatibility remain unfinished. See the
+[implementation plan](docs/implementation-plan.md) for the recorded scope and
+remaining work.
+
 A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).
 
