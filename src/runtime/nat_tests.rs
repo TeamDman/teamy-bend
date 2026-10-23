@@ -38,7 +38,7 @@ fn poisoned(machine: &mut Machine<'_>, name: &str) -> ThunkId {
 #[test]
 fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
     let program = program();
-    assert_eq!(program.nat_optimizations.len(), 5);
+    assert_eq!(program.nat_optimizations.len(), 6);
     let origins = program
         .definitions
         .keys()
@@ -50,6 +50,7 @@ fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
             .is_empty()
     );
     for (name, operation) in [
+        ("Array.new", Operation::ArrayNew),
         ("Nat.sub", Operation::Sub),
         ("Nat.cmp", Operation::Cmp),
         ("Nat.show.fin", Operation::Show),
@@ -118,7 +119,7 @@ fn body_guards_compare_binding_identity_instead_of_printed_variable_names() {
         .collect();
     assert_eq!(
         checked_optimizations(&definitions, &datatypes, &origins).len(),
-        5
+        6
     );
 }
 
@@ -391,4 +392,124 @@ fn ordinary_u32_conversion_does_not_force_an_unused_word_tail() {
     let result = call(&mut machine, "U32.to_nat", &[word]);
     let value = machine.force(result).unwrap();
     assert_eq!(machine.constructor_value(value).unwrap().0, "Succ");
+}
+
+#[test]
+fn array_depth_guard_preserves_lazy_elements_and_the_inclusive_boundary() {
+    let program = program();
+    for depth in [0, 1, 17, 31, 32, MAX] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let erased = poisoned(&mut machine, "erased_array_type");
+        let depth_value = machine.nat(depth).unwrap();
+        let element = poisoned(&mut machine, "unused_array_element");
+        let array = call(&mut machine, "Array.new", &[erased, depth_value, element]);
+        if depth > 31 {
+            assert_eq!(
+                machine.force(array).err().unwrap().to_string(),
+                "an array past the deepest block class 31"
+            );
+        } else {
+            let value = machine.force(array).unwrap();
+            assert_eq!(
+                machine.constructor_value(value).unwrap().0,
+                if depth == 0 { "ALeaf" } else { "ANode" }
+            );
+        }
+        assert!(machine.gc.collections > 0);
+    }
+}
+
+#[test]
+fn array_depth_guard_handles_unary_prefixes_without_forcing_past_the_wall() {
+    let program = program();
+    for depth in [31, 32, 33] {
+        let mut machine = Machine::new(&program);
+        let erased = poisoned(&mut machine, "erased_array_type");
+        let element = poisoned(&mut machine, "unused_array_element");
+        let mut depth_value = if depth == 31 {
+            machine.nat(0).unwrap()
+        } else {
+            poisoned(&mut machine, "unused_depth_tail")
+        };
+        for _ in 0..depth {
+            depth_value = machine
+                .ready_constructor("Succ", vec![depth_value])
+                .unwrap();
+        }
+        let array = call(&mut machine, "Array.new", &[erased, depth_value, element]);
+        if depth == 31 {
+            let value = machine.force(array).unwrap();
+            assert_eq!(machine.constructor_value(value).unwrap().0, "ANode");
+        } else {
+            assert_eq!(
+                machine.force(array).err().unwrap().to_string(),
+                "an array past the deepest block class 31"
+            );
+        }
+    }
+}
+
+#[test]
+fn array_depth_guard_preserves_partial_application_error_order_and_work_limits() {
+    let program = program();
+    let mut machine = Machine::new(&program);
+    let erased = poisoned(&mut machine, "erased_array_type");
+    let depth = poisoned(&mut machine, "invalid_array_depth");
+    let element = poisoned(&mut machine, "unused_array_element");
+    let partial = call(&mut machine, "Array.new", &[erased, depth]);
+    assert!(matches!(
+        machine.force(partial).unwrap(),
+        Value::Natural { .. }
+    ));
+    let array = machine
+        .allocate(Thunk::Application(partial, element))
+        .unwrap();
+    assert!(
+        machine
+            .force(array)
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("invalid_array_depth")
+    );
+    for cancel in [false, true] {
+        let mut machine = Machine::new(&program);
+        let erased = poisoned(&mut machine, "erased_array_type");
+        let depth = machine.nat(31).unwrap();
+        let element = poisoned(&mut machine, "unused_array_element");
+        let array = call(&mut machine, "Array.new", &[erased, depth, element]);
+        let cancelled = || cancel;
+        machine.cancelled = Some(&cancelled);
+        if !cancel {
+            machine.remaining = 0;
+        }
+        let error = machine.force(array).err().unwrap().to_string();
+        assert!(error.contains(if cancel { "cancel" } else { "step budget" }));
+    }
+}
+
+#[test]
+fn array_guard_requires_the_sealed_array_layout_and_never_applies_to_proofs() {
+    let program = program();
+    let origins = program
+        .definitions
+        .keys()
+        .chain(program.datatypes.keys())
+        .cloned()
+        .collect();
+    let mut changed = program.datatypes.as_ref().clone();
+    changed.get_mut("Array").unwrap().constructors[0].name = "OtherLeaf".into();
+    assert!(
+        !checked_optimizations(&program.definitions, &changed, &origins)
+            .contains(&Operation::ArrayNew)
+    );
+    let strict = Program::from_checked(&program.definitions, &program.datatypes);
+    let mut machine = Machine::new(&strict);
+    let erased = poisoned(&mut machine, "erased_array_type");
+    let depth = machine.expression(parse_term("32n").unwrap(), 0).unwrap();
+    let element = poisoned(&mut machine, "unused_array_element");
+    let array = call(&mut machine, "Array.new", &[erased, depth, element]);
+    let value = machine.force(array).unwrap();
+    assert_eq!(machine.constructor_value(value).unwrap().0, "ANode");
 }

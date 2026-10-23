@@ -300,3 +300,40 @@ def main() -> IO(Unit): IO.bind(Chan(String), Unit, Chan.new(String, 0), send)
     assert!(machine.gc.collections > 20);
     assert_clean(&machine);
 }
+
+#[test]
+fn array_depth_refusal_drops_parked_channel_payloads_and_continuations() {
+    let program = program(
+        r#"def send(c: Chan(String)) -> IO(Unit):
+  do IO<Unit>:
+    ok : Bool <- Chan.send(String, c, "pending")
+    IO.print("BAD")
+def show(r: Array<U32> & U32) -> IO(Unit):
+  (a, x) = r
+  IO.print(U32.show(x))
+def main() -> IO(Unit):
+  do IO<Unit>:
+    c : Chan(String) <- Chan.new(String, 0)
+    Unit <- IO.spawn(Unit, send(c))
+    Unit <- IO.sleep(0)
+    show(Array.get(U32, [7 : U32^32n], 5))
+"#,
+    );
+    let mut machine = Machine::new(&program);
+    machine.gc_mode = gc::Mode::EverySafePoint;
+    let main = machine.reference("main").unwrap();
+    let first = machine.io_action(main).unwrap();
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let error = machine
+        .drive_io_with_clock(first, &mut stdout, &mut stderr, &mut TestClock::default())
+        .unwrap_err();
+    assert_eq!(
+        error.to_string(),
+        "an array past the deepest block class 31"
+    );
+    assert!(stdout.is_empty());
+    assert!(stderr.is_empty());
+    assert!(machine.gc.collections > 20);
+    assert_clean(&machine);
+}

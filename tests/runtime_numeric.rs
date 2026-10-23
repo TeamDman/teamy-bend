@@ -497,3 +497,24 @@ fn nested_float_text_uses_bounded_continuations_and_cancellable_decoding() {
         .to_string();
     assert!(error.contains("cancelled"), "{error}");
 }
+
+#[test]
+fn original_upstream_array_depth_wall_refuses_before_printing_the_element() {
+    let fixture = Fixture::new(include_str!(
+        "fixtures/cpu-runtime-negatives/array_depth_bound.bend"
+    ));
+    let checked = fixture.checked();
+    for _ in 0..2 {
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            checked
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap_err()
+                .to_string(),
+            "an array past the deepest block class 31"
+        );
+        assert!(stdout.is_empty());
+        assert!(stderr.is_empty());
+    }
+}

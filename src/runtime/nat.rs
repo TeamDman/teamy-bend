@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Compact executable naturals. Strict proofs retain ordinary constructors.
+//! Compact executable naturals and array-depth validation. Strict proofs retain
+//! ordinary constructors.
 //! Fast paths replace exact checked Base bodies, never user-defined lookalikes.
 
 use super::Frame;
@@ -23,6 +24,7 @@ pub(super) const MAX: u64 = (1 << 48) - 1;
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum Operation {
+    ArrayNew,
     Sub,
     Cmp,
     Show,
@@ -33,6 +35,7 @@ pub(super) enum Operation {
 impl Operation {
     pub(super) const fn name(self) -> &'static str {
         match self {
+            Self::ArrayNew => "Array.new",
             Self::Sub => "Nat.sub",
             Self::Cmp => "Nat.cmp",
             Self::Show => "Nat.show",
@@ -43,6 +46,7 @@ impl Operation {
 
     const fn arity(self) -> usize {
         match self {
+            Self::ArrayNew => 3,
             Self::Sub | Self::Cmp => 2,
             Self::Show | Self::FromU32 | Self::ToU32 => 1,
         }
@@ -82,6 +86,7 @@ pub(super) fn checked_optimizations(
     }
     BASE.with(|(base_definitions, base_datatypes)| {
         [
+            Operation::ArrayNew,
             Operation::Sub,
             Operation::Cmp,
             Operation::Show,
@@ -450,7 +455,9 @@ impl Machine<'_> {
         if arguments.len() != operation.arity() {
             return Err(KernelError::new("native Nat operation has invalid arity"));
         }
-        let first = arguments[0];
+        // Array.new keeps its erased type and lazy element; only depth must be
+        // demanded to enforce the shared executable array-class boundary.
+        let first = arguments[usize::from(operation == Operation::ArrayNew)];
         Self::push(
             frames,
             Frame::Natural(Evaluation {
@@ -469,6 +476,9 @@ impl Machine<'_> {
         value: Value,
         frames: &mut Vec<Frame>,
     ) -> Result<ThunkId, KernelError> {
+        if state.operation == Operation::ArrayNew {
+            return self.array_depth_step(state, value, frames);
+        }
         let value = match (state.operation, value) {
             (
                 Operation::FromU32,
@@ -510,6 +520,7 @@ impl Machine<'_> {
             return Ok(next);
         }
         match state.operation {
+            Operation::ArrayNew => unreachable!("array depth uses its own demand path"),
             Operation::Sub => self.nat(state.values[0].saturating_sub(state.values[1])),
             Operation::Cmp => self.ready_constructor(
                 match state.values[0].cmp(&state.values[1]) {
@@ -535,6 +546,37 @@ impl Machine<'_> {
                 Ok(result)
             }
         }
+    }
+
+    fn array_depth_step(
+        &mut self,
+        mut state: Evaluation,
+        value: Value,
+        frames: &mut Vec<Frame>,
+    ) -> Result<ThunkId, KernelError> {
+        const MAX_DEPTH: u64 = 31;
+        let depth = match value {
+            Value::PackedNat(depth) => state.prefix.saturating_add(depth),
+            Value::Constructor { name, fields } if name == "Zero" && fields.is_empty() => {
+                state.prefix
+            }
+            Value::Constructor { name, fields } if name == "Succ" && fields.len() == 1 => {
+                state.prefix += 1;
+                if state.prefix <= MAX_DEPTH {
+                    let next = fields[0];
+                    Self::push(frames, Frame::Natural(state))?;
+                    return Ok(next);
+                }
+                state.prefix
+            }
+            _ => return self.ordinary_nat(state.operation, &state.arguments),
+        };
+        if depth > MAX_DEPTH {
+            return Err(KernelError::new("an array past the deepest block class 31"));
+        }
+        // Use the original checked constructor body after validation. This
+        // preserves sharing and does not force the array's element or children.
+        self.ordinary_nat(state.operation, &state.arguments)
     }
 
     fn ordinary_nat(
