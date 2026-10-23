@@ -483,9 +483,13 @@ mod tests {
                 continuation: 0,
             })
             .unwrap_err();
-        assert!(error.is_request_out_of_band());
+        assert_eq!(error.language_failure().unwrap().0, "request_out_of_band");
         assert!(error.to_string().contains("foreign effect request"));
-        assert!(!KernelError::new(error.to_string()).is_request_out_of_band());
+        assert!(
+            KernelError::new(error.to_string())
+                .language_failure()
+                .is_none()
+        );
         let id = machine
             .allocate(Thunk::Ready(Value::PackedWord {
                 wrapper: Wrapper::U32,

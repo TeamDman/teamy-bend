@@ -28,6 +28,10 @@ type Uses = BTreeMap<usize, Quant>;
 type Context = BTreeMap<usize, Binder>;
 
 /// A rejected check or execution, retaining internal diagnostic context.
+///
+/// Classification is private: callers can read the message or use Display,
+/// but cannot construct an error with a struct literal. In particular, diagnostic
+/// text alone never grants an internal error the language-exit contract.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct KernelError {
     pub message: String,
@@ -38,6 +42,7 @@ pub struct KernelError {
 enum FailureKind {
     Internal,
     RequestOutOfBand,
+    NatOverflow,
 }
 impl fmt::Display for KernelError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -60,8 +65,24 @@ impl KernelError {
         }
     }
 
-    pub(crate) fn is_request_out_of_band(&self) -> bool {
-        self.kind == FailureKind::RequestOutOfBand
+    pub(crate) fn nat_overflow(message: impl Into<String>) -> Self {
+        Self {
+            message: message.into(),
+            kind: FailureKind::NatOverflow,
+        }
+    }
+
+    pub(crate) const fn language_failure(&self) -> Option<(&'static str, &'static [u8])> {
+        match self.kind {
+            FailureKind::Internal => None,
+            FailureKind::RequestOutOfBand => {
+                Some(("request_out_of_band", b"bend: runtime fail-stop\n"))
+            }
+            FailureKind::NatOverflow => Some((
+                "nat_overflow",
+                b"bend: a Nat past the largest immediate 2^48-1\n",
+            )),
+        }
     }
 }
 

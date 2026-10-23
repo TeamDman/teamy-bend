@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
+#[path = "support/nat_failure_cases.rs"]
+mod nat_failure_cases;
 use std::path::PathBuf;
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
@@ -531,12 +533,78 @@ fn original_nat_overflow_reaches_the_language_bound_before_the_work_limit() {
         assert_eq!(
             checked
                 .run_main(&mut stdout, &mut stderr, &|| false)
-                .unwrap_err()
-                .to_string(),
-            "a Nat past the largest immediate 2^48-1"
+                .unwrap(),
+            1
         );
         assert!(stdout.is_empty());
-        assert!(stderr.is_empty());
+        assert_eq!(stderr, b"bend: a Nat past the largest immediate 2^48-1\n");
+    }
+}
+
+#[test]
+fn natural_failure_boundaries_preserve_prefix_and_distinguish_unqualified_work_limits() {
+    for (expression, resource_limited) in nat_failure_cases::cases() {
+        let fixture = Fixture::new(&nat_failure_cases::source(expression));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let result = fixture
+            .checked()
+            .run_main(&mut stdout, &mut stderr, &|| false);
+        if resource_limited {
+            let error = result.unwrap_err();
+            assert!(
+                error.to_string().contains("step budget exhausted"),
+                "{expression}: {error}"
+            );
+            assert!(stderr.is_empty());
+        } else {
+            assert_eq!(result.unwrap(), 1, "{expression}");
+            assert_eq!(stderr, b"bend: a Nat past the largest immediate 2^48-1\n");
+        }
+        assert_eq!(stdout, b"before");
+    }
+}
+
+#[test]
+fn natural_overflow_remains_lazy_and_first_demanded_failure_wins() {
+    let helpers = r#"import Base
+def overflow() -> Nat: Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216))
+def reject(op: IO.OP<Unit>) -> Nat:
+  match op:
+    case Emit{x}: 0n
+    case _: 0n
+def invalid() -> Nat: reject(IO.print("SECRET")(Unit, x => Emit{x}))
+"#;
+    assert_eq!(
+        output(&format!(
+            "{helpers}def main() -> IO(Unit): IO.print(Nat.show(Nat.mul(0n, overflow())))\n"
+        )),
+        "0\n"
+    );
+    for (expression, diagnostic) in [
+        (
+            "Nat.mul(invalid(), overflow())",
+            "bend: runtime fail-stop\n",
+        ),
+        (
+            "Nat.mul(overflow(), invalid())",
+            "bend: a Nat past the largest immediate 2^48-1\n",
+        ),
+    ] {
+        let fixture = Fixture::new(&format!(
+            "{helpers}def main() -> IO(Unit):\n  do IO<Unit>:\n    Unit <- IO.write(\"before\")\n    Unit <- IO.print(Nat.show({expression}))\n    IO.print(\"after\")\n"
+        ));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            fixture
+                .checked()
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap(),
+            1
+        );
+        assert_eq!(stdout, b"before");
+        assert_eq!(stderr, diagnostic.as_bytes());
     }
 }
 

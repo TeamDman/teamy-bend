@@ -120,15 +120,20 @@ fn undefined_foreign_return_without_a_resumer_reports_deadlock() {
 }
 
 #[test]
-fn ordinary_host_errors_cannot_impersonate_request_failures() {
-    let output = Fixture::new(
-        "import Base\ndef fail() -> IO(Unit): import \"./effect.js\"\ndef main() -> IO(Unit): fail()\n",
-        "function fail(){throw Error('foreign request inspected outside the IO driver')}",
-    ).run();
-    assert_eq!(output.status.code(), Some(1));
-    assert!(output.stdout.is_empty());
-    assert_eq!(
-        output.stderr,
-        b"teamy-bend generated program: foreign request inspected outside the IO driver\n"
-    );
+fn ordinary_host_errors_cannot_impersonate_language_failures() {
+    for message in [
+        "foreign request inspected outside the IO driver",
+        "a Nat past the largest immediate 2^48-1",
+    ] {
+        let output = Fixture::new(
+            "import Base\ndef fail() -> IO(Unit): import \"./effect.js\"\ndef main() -> IO(Unit): fail()\n",
+            &format!("function fail(){{throw Error('{message}')}}"),
+        ).run();
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+        assert_eq!(
+            output.stderr,
+            format!("teamy-bend generated program: {message}\n").as_bytes()
+        );
+    }
 }

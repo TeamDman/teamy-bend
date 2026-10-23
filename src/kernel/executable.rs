@@ -188,8 +188,10 @@ impl ExecutableBook {
     /// Run the nullary main while preserving separate stdout and stderr streams.
     ///
     /// IO payloads are discarded at successful completion. Halt supplies its
-    /// program exit code; channel deadlock and out-of-band request inspection write
-    /// their language diagnostic and return 1.
+    /// program exit code; channel deadlock, out-of-band request inspection and
+    /// executable Nat overflow write their language diagnostic and return 1.
+    /// `Ok(code)` describes a completed driver invocation, not necessarily a
+    /// successful Bend program: callers must inspect the returned exit code.
     /// Pure output is the canonical core term syntax.
     ///
     /// # Errors

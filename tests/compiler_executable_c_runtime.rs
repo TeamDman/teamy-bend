@@ -123,22 +123,28 @@ fn worker_syscalls_run_off_vm_and_packing_can_repark_on_vm() {
 }
 
 #[test]
-fn ordinary_host_errors_cannot_impersonate_request_failures() {
-    let output = Fixture::new().run(
+fn ordinary_host_errors_cannot_impersonate_language_failures() {
+    for message in [
+        "foreign request inspected as ordinary data",
+        "Nat multiplication overflow",
+        "Nat exceeds largest immediate",
+    ] {
+        let output = Fixture::new().run(
         "import Base\ndef host_error() -> IO(Unit): import \"effect.c\"\ndef main() -> IO(Unit): host_error()\n",
-        r#"static Term host_error_run(Env e, Term *fields, IoWork *work) {
+        &r#"static Term host_error_run(Env e, Term *fields, IoWork *work) {
   (void)e; (void)fields; (void)work;
-  err_fail("foreign request inspected as ordinary data");
+  err_fail("MESSAGE");
 }
 static void __attribute__((constructor)) host_error_use(void) { io_eff(CID_HOST_ERROR, host_error_run, 0); }
-"#,
+"#.replace("MESSAGE", message),
     );
-    assert_eq!(output.status.code(), Some(1));
-    assert!(output.stdout.is_empty());
-    assert_eq!(
-        output.stderr,
-        b"teamy-bend executable C: foreign request inspected as ordinary data\n"
-    );
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+        assert_eq!(
+            output.stderr,
+            format!("teamy-bend executable C: {message}\n").as_bytes()
+        );
+    }
 }
 
 const SNAPSHOT_BEND: &str = r#"import Base

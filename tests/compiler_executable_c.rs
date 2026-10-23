@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
 #[path = "support/executable_c_compiler.rs"]
 mod executable_c_compiler;
+#[path = "support/nat_failure_cases.rs"]
+mod nat_failure_cases;
 
 use std::fs;
 use std::path::PathBuf;
@@ -104,9 +106,25 @@ def main() -> Nat: Nat.pow(2n, 48n)
 #[test]
 fn native_natural_overflow_fails_instead_of_wrapping_at_the_upstream_48_bit_bound() {
     let output = Fixture::new().run(NAT_OVERFLOW, &[]);
-    assert!(!output.status.success());
+    assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("Nat"));
+    assert_eq!(
+        output.stderr,
+        b"bend: a Nat past the largest immediate 2^48-1\n"
+    );
+}
+
+#[test]
+fn natural_multiply_add_double_and_successor_share_the_language_failure_contract() {
+    for (expression, _) in nat_failure_cases::cases() {
+        let output = Fixture::new().run(&nat_failure_cases::source(expression), &[]);
+        assert_eq!(output.status.code(), Some(1), "{expression}");
+        assert_eq!(output.stdout, b"before");
+        assert_eq!(
+            output.stderr,
+            b"bend: a Nat past the largest immediate 2^48-1\n"
+        );
+    }
 }
 
 const ARRAYS: &str = r"import Base

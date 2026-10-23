@@ -7,6 +7,7 @@ const $tb = (() => {
   const raw = Symbol('Bend raw closure');
   const jumping = Symbol('Bend tail call');
   const building = Symbol('Bend constructor tail');
+  const languageFailures = new WeakMap();
   let steps = 2000000;
   let depth = 0;
   const maxArray = 131072;
@@ -86,9 +87,14 @@ const $tb = (() => {
     });
   }
   function nat(value) {
-    if (value > 0xFFFFFFFFFFFFn) throw new Error('a Nat past the largest immediate 2^48-1');
+    if (value > 0xFFFFFFFFFFFFn) {
+      const error = new Error('a Nat past the largest immediate 2^48-1');
+      languageFailures.set(error, 'bend: a Nat past the largest immediate 2^48-1');
+      throw error;
+    }
     return value;
   }
+  function languageDiagnostic(error) { return languageFailures.get(error); }
   function bits(value) { return new Uint32Array(new Float32Array([value]).buffer)[0]; }
   function fromBits(value) { return new Float32Array(new Uint32Array([value]).buffer)[0]; }
   function wordToU32(word) {
@@ -353,7 +359,8 @@ const $tb = (() => {
     go(root,value,0,0);
     return parts.join('');
   }
-  return {tick,jump,run,closure,apply,forceCall,curry,construct,constructTail,matches,field,native,show,fromBits};
+  return {tick,jump,run,closure,apply,forceCall,curry,construct,constructTail,matches,field,native,show,fromBits,languageDiagnostic};
 })();
 function $tbTick() { $tb.tick(); }
 function $tbForceCall(fn,args) { return $tb.forceCall(fn,args); }
+function $tbLanguageDiagnostic(error) { return $tb.languageDiagnostic(error); }

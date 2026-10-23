@@ -493,7 +493,7 @@ impl Machine<'_> {
             (operation, Value::PackedNat(value)) if operation != Operation::FromU32 => value
                 .checked_add(state.prefix)
                 .filter(|value| *value <= MAX)
-                .ok_or_else(|| KernelError::new("native Nat exceeds the 48-bit bound"))?,
+                .ok_or_else(|| KernelError::nat_overflow("native Nat exceeds the 48-bit bound"))?,
             // Both bodies consume the complete natural before yielding their
             // result. Decode a reconstructed unary prefix on the bounded
             // machine stack, stopping as soon as its compact tail is found.
@@ -509,7 +509,9 @@ impl Machine<'_> {
                     .prefix
                     .checked_add(1)
                     .filter(|value| *value <= MAX)
-                    .ok_or_else(|| KernelError::new("native Nat exceeds the 48-bit bound"))?;
+                    .ok_or_else(|| {
+                        KernelError::nat_overflow("native Nat exceeds the 48-bit bound")
+                    })?;
                 let next = fields[0];
                 Self::push(frames, Frame::Natural(state))?;
                 return Ok(next);
@@ -535,7 +537,9 @@ impl Machine<'_> {
                 let product = state.values[0]
                     .checked_mul(state.values[1])
                     .filter(|product| *product <= MAX)
-                    .ok_or_else(|| KernelError::new("a Nat past the largest immediate 2^48-1"))?;
+                    .ok_or_else(|| {
+                        KernelError::nat_overflow("a Nat past the largest immediate 2^48-1")
+                    })?;
                 self.nat(product)
             }
             Operation::Sub => self.nat(state.values[0].saturating_sub(state.values[1])),

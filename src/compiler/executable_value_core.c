@@ -389,9 +389,14 @@ INLINE u64 io_hand_v(Term handle) {
 }
 INLINE f32 f32_unbox(u64 bits) { u32 raw = (u32)bits; f32 value; memcpy(&value, &raw, 4); return value; }
 INLINE u64 f32_rewrap(f32 value) { u32 bits; memcpy(&bits, &value, 4); return bits; }
-INLINE Nat nat_chk(Env e, Nat value) { (void)e; if (value > NAT_IMM) err_fail("Nat exceeds largest immediate"); return value; }
+/* The CPU backend supplies its typed language failure boundary. Device
+ * execution keeps its existing refusal and diagnostics pending qualification. */
+#ifndef TB_NAT_OVERFLOW
+#define TB_NAT_OVERFLOW(message) err_fail(message)
+#endif
+INLINE Nat nat_chk(Env e, Nat value) { (void)e; if (value > NAT_IMM) TB_NAT_OVERFLOW("Nat exceeds largest immediate"); return value; }
 INLINE Nat nat_mul(Env e, Nat left, Nat right) {
-  if (right != 0 && left > NAT_IMM / right) err_fail("Nat multiplication overflow");
+  if (right != 0 && left > NAT_IMM / right) TB_NAT_OVERFLOW("Nat multiplication overflow");
   return nat_chk(e, left * right);
 }
 #define U32_BIN(a,op,b) ((u64)((u32)(a) op (u32)(b)))

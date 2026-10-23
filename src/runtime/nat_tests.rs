@@ -545,9 +545,13 @@ fn multiplication_checks_the_48_bit_boundary_without_host_integer_overflow() {
                 matches!(machine.force(product).unwrap(), Value::PackedNat(n) if n == expected)
             );
         } else {
-            assert_eq!(
-                machine.force(product).err().unwrap().to_string(),
-                "a Nat past the largest immediate 2^48-1"
+            let error = machine.force(product).err().unwrap();
+            assert_eq!(error.to_string(), "a Nat past the largest immediate 2^48-1");
+            assert_eq!(error.language_failure().unwrap().0, "nat_overflow");
+            assert!(
+                KernelError::new(error.to_string())
+                    .language_failure()
+                    .is_none()
             );
         }
         assert!(machine.gc.collections > 0);

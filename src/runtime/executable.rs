@@ -123,27 +123,27 @@ impl Machine<'_> {
         self.jobs = super::host_jobs::State::default();
         self.files = super::file_handles::State::default();
         self.network = super::network::State::default();
-        match result {
-            Err(error) if error.is_request_out_of_band() => {
-                tracing::debug!(
-                    operation = "run", phase = "execute", failure = "request_out_of_band",
-                    detail = %error, "Bend execution failed"
-                );
-                // Cleanup is complete. This language outcome owns its raw
-                // program diagnostic; writer failures remain internal errors.
-                stdout
-                    .flush()
-                    .map_err(|error| KernelError::new(format!("stdout flush failed: {error}")))?;
-                stderr
-                    .write_all(b"bend: runtime fail-stop\n")
-                    .map_err(|error| KernelError::new(format!("stderr write failed: {error}")))?;
-                stderr
-                    .flush()
-                    .map_err(|error| KernelError::new(format!("stderr flush failed: {error}")))?;
-                Ok(1)
-            }
-            result => result,
+        if let Err(error) = &result
+            && let Some((failure, diagnostic)) = error.language_failure()
+        {
+            tracing::debug!(
+                operation = "run", phase = "execute", failure,
+                detail = %error, "Bend execution failed"
+            );
+            // Cleanup is complete. This language outcome owns its raw
+            // program diagnostic; writer failures remain internal errors.
+            stdout
+                .flush()
+                .map_err(|error| KernelError::new(format!("stdout flush failed: {error}")))?;
+            stderr
+                .write_all(diagnostic)
+                .map_err(|error| KernelError::new(format!("stderr write failed: {error}")))?;
+            stderr
+                .flush()
+                .map_err(|error| KernelError::new(format!("stderr flush failed: {error}")))?;
+            return Ok(1);
         }
+        result
     }
 
     fn drive_tasks(

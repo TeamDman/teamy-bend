@@ -82,11 +82,11 @@ int main(void) {{
     (void)fputs("CPU workers survived runtime shutdown\n", stderr);
     return 90;
   }}
-#if BEND_TEST_REQUIRE_REQUEST_FAILURE
-  if (!tb_cpu.failed || tb_cpu.failure_kind != TB_FAILURE_REQUEST_OUT_OF_BAND ||
+#ifdef BEND_TEST_REQUIRE_FAILURE_KIND
+  if (!tb_cpu.failed || tb_cpu.failure_kind != BEND_TEST_REQUIRE_FAILURE_KIND ||
       tb_host_current != NULL || tb_failure_guard != NULL || tb_io != NULL ||
       tb_task_current != NULL || tb_memory != NULL || tb_cpu_active || tb_vm_held) {{
-    (void)fputs("request failure did not cross a worker boundary and clean up\n", stderr);
+    (void)fputs("language failure did not cross a worker boundary and clean up\n", stderr);
     return 96;
   }}
 #endif
@@ -434,7 +434,7 @@ def main() -> IO(Unit):
         let definitions: &[&str] = if workers == 1 {
             &[]
         } else {
-            &["BEND_TEST_REQUIRE_REQUEST_FAILURE=1"]
+            &["BEND_TEST_REQUIRE_FAILURE_KIND=TB_FAILURE_REQUEST_OUT_OF_BAND"]
         };
         let output = Fixture::new().run(source, "", workers, false, definitions);
         assert_eq!(
@@ -729,6 +729,39 @@ fn shared_closure_and_nested_array_views_keep_raw_words_and_private_updates() {
             ),
             "(WorkerResult{\"held!\", RawCell{1099511627776n}, [TextCell{\"left\"}, TextCell{\"root\"}], [RawCell{1099511627776n}, TextCell{\"root\"}]}, WorkerResult{\"held!\", RawCell{1099511627776n}, [TextCell{\"right\"}, TextCell{\"root\"}], [RawCell{1099511627776n}, TextCell{\"root\"}]})\n",
             workers,
+        );
+    }
+}
+
+#[test]
+fn natural_overflow_crosses_cpu_workers_and_cleans_up() {
+    let source = r#"import Base
+def multiply(a: Nat, b: Nat) -> Nat: Nat.mul(a, b)
+def identity(n: Nat) -> Nat: n
+def pair(a: Nat, b: Nat) -> Nat:
+  left right = multiply(a, b) identity(0n)
+  Nat.add(left, right)
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    IO.print(Nat.show(pair(U32.to_nat(16777216), U32.to_nat(16777216))))
+"#;
+    for workers in [1, 2, 4] {
+        let definitions: &[&str] = if workers == 1 {
+            &[]
+        } else {
+            &["BEND_TEST_REQUIRE_FAILURE_KIND=TB_FAILURE_NAT_OVERFLOW"]
+        };
+        let output = Fixture::new().run(source, "", workers, false, definitions);
+        assert_eq!(
+            output.status.code(),
+            Some(1),
+            "workers={workers}: {output:?}"
+        );
+        assert_eq!(output.stdout, b"before");
+        assert_eq!(
+            output.stderr,
+            b"bend: a Nat past the largest immediate 2^48-1\n"
         );
     }
 }

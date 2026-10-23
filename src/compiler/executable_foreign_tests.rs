@@ -15,7 +15,7 @@ use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 
 static NEXT: AtomicUsize = AtomicUsize::new(0);
-const CORE: &str = "function $tbTick(){}\nfunction $tbForceCall(f,args){if(args.length===0)return f();for(const a of args)f=f(a);return f;}\n";
+const CORE: &str = "function $tbLanguageDiagnostic(){return undefined;}\nfunction $tbTick(){}\nfunction $tbForceCall(f,args){if(args.length===0)return f();for(const a of args)f=f(a);return f;}\n";
 
 struct Fixture(PathBuf);
 

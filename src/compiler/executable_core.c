@@ -226,7 +226,8 @@ struct TBHost {
   bool winsock;
 #endif
 };
-typedef enum { TB_FAILURE_INTERNAL, TB_FAILURE_REQUEST_OUT_OF_BAND } TBFailureKind;
+typedef enum { TB_FAILURE_INTERNAL, TB_FAILURE_REQUEST_OUT_OF_BAND, TB_FAILURE_NAT_OVERFLOW } TBFailureKind;
+#define TB_NAT_OVERFLOW(message) tb_fail(TB_FAILURE_NAT_OVERFLOW, (message))
 static TB_THREAD_LOCAL TBFailureKind tb_failure_kind;
 static TB_THREAD_LOCAL TBHost *tb_host_current;
 static TB_THREAD_LOCAL jmp_buf *tb_failure_guard;
@@ -290,11 +291,13 @@ OUTLINE TB_NORETURN void tb_fail(TBFailureKind kind, const char *message) {
   }
   /* A language failure preserves pending program bytes before its diagnostic.
    * Flush failures keep the internal-error path rather than claiming parity. */
-  if (kind == TB_FAILURE_REQUEST_OUT_OF_BAND && fflush(stdout) != 0) {
+  if (kind != TB_FAILURE_INTERNAL && fflush(stdout) != 0) {
     kind = TB_FAILURE_INTERNAL; message = "standard stream flush failed";
   }
   if (kind == TB_FAILURE_REQUEST_OUT_OF_BAND)
     (void)fputs("bend: runtime fail-stop\n", stderr);
+  else if (kind == TB_FAILURE_NAT_OVERFLOW)
+    (void)fputs("bend: a Nat past the largest immediate 2^48-1\n", stderr);
   else (void)fprintf(stderr, "teamy-bend executable C: %s\n", message);
   if (tb_failure_guard != NULL) longjmp(*tb_failure_guard, 1);
   exit(1);

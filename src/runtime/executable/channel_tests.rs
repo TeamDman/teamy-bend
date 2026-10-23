@@ -338,8 +338,7 @@ def main() -> IO(Unit):
     assert_clean(&machine);
 }
 
-#[test]
-fn request_refusal_and_diagnostic_writer_errors_discard_parked_channels() {
+fn language_failure_discard_parked_channels(terminal: &str, diagnostic: &[u8]) {
     #[derive(Default)]
     struct Sink {
         bytes: Vec<u8>,
@@ -362,7 +361,7 @@ fn request_refusal_and_diagnostic_writer_errors_discard_parked_channels() {
         }
     }
     let program = program(
-        r#"def send(c: Chan(String)) -> IO(Unit):
+        &r#"def send(c: Chan(String)) -> IO(Unit):
   do IO<Unit>:
     ok : Bool <- Chan.send(String, c, "pending")
     IO.print("BAD child")
@@ -376,8 +375,9 @@ def main() -> IO(Unit):
     Unit <- IO.spawn(Unit, send(c))
     Unit <- IO.sleep(0)
     Unit <- IO.write("before")
-    inspect(IO.print("SECRET")(Unit, x => Emit{x}))
-"#,
+    TERMINAL
+"#
+        .replace("TERMINAL", terminal),
     );
     for failure in [
         None,
@@ -406,7 +406,7 @@ def main() -> IO(Unit):
                 error.to_string(),
                 format!("{failure} failed: runtime fail-stop")
             );
-            assert!(!error.is_request_out_of_band());
+            assert!(error.language_failure().is_none());
         } else {
             assert_eq!(result.unwrap(), 1);
         }
@@ -414,7 +414,7 @@ def main() -> IO(Unit):
         assert_eq!(
             stderr.bytes,
             if failure.is_none() || failure == Some("stderr flush") {
-                &b"bend: runtime fail-stop\n"[..]
+                diagnostic
             } else {
                 &b""[..]
             }
@@ -422,4 +422,20 @@ def main() -> IO(Unit):
         assert!(machine.gc.collections > 20);
         assert_clean(&machine);
     }
+}
+
+#[test]
+fn request_refusal_and_diagnostic_writer_errors_discard_parked_channels() {
+    language_failure_discard_parked_channels(
+        "inspect(IO.print(\"SECRET\")(Unit, x => Emit{x}))",
+        b"bend: runtime fail-stop\n",
+    );
+}
+
+#[test]
+fn nat_overflow_and_diagnostic_writer_errors_discard_parked_channels() {
+    language_failure_discard_parked_channels(
+        "IO.print(Nat.show(Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216))))",
+        b"bend: a Nat past the largest immediate 2^48-1\n",
+    );
 }

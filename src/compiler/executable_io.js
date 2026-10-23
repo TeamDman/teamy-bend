@@ -488,12 +488,11 @@ function $tbRunMain(mainThunk, isIo, purePrinter) {
     }
     return $tbRunTasks(main);
   } catch (error) {
-    // Only an authenticated request has the language fail-stop contract.
-    // Ordinary host exceptions retain their internal diagnostic, even if their
-    // message happens to describe a request.
+    // Only authenticated requests and classified language errors own raw
+    // diagnostics. Ordinary host exceptions with identical text remain internal.
     const diagnostic = $tbIsRequest(error)
       ? 'bend: runtime fail-stop'
-      : 'teamy-bend generated program: ' + String(error && error.message !== undefined ? error.message : error);
+      : $tbLanguageDiagnostic(error) ?? 'teamy-bend generated program: ' + String(error && error.message !== undefined ? error.message : error);
     // Reporting must still work after the evaluation budget has been exhausted.
     try { require('fs').writeSync(2, diagnostic + '\n'); }
     catch (_) { /* A failed diagnostic stream cannot turn failure into success. */ }
