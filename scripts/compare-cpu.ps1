@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -143,13 +143,23 @@ $scheduler = @(
 # Assert ordering, not elapsed duration. Different-duration timers can all be
 # overdue after host descheduling, when registration order takes precedence;
 # such timing-dependent goldens (for example spawn_sleep) do not belong here.
+$words = @(
+    @{ name = 'word_wrap_chains'; source = "$Reference/tests/run/word_wrap_chains.bend"; expected = "4`n" },
+    @{ name = 'word_div_mod'; source = "$Reference/tests/run/word_div_mod.bend"; expected = "9`n" },
+    @{ name = 'word_compare'; source = "$Reference/tests/run/word_compare.bend"; expected = "6`n" },
+    @{ name = 'word_bitwise_literals'; source = "$Reference/tests/run/word_bitwise_literals.bend"; expected = "11`n" },
+    @{ name = 'bit_walking'; source = "$Reference/tests/run/bit_walking.bend"; expected = "5`n" },
+    @{ name = 'u32_divmod_zero'; source = "$Reference/tests/base/u32_divmod_zero.bend"; expected = "6n`n" },
+    @{ name = 'u32_divmod'; source = "$Reference/tests/base/u32_divmod.bend"; expected = "14n`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
     'control' { $control }
     'collections' { $collections }
     'scheduler' { $scheduler }
-    'all' { $baseline + $effects + $control + $collections + $scheduler }
+    'words' { $words }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {

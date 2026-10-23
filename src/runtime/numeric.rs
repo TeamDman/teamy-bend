@@ -31,6 +31,8 @@ pub(super) enum PureOptimization {
     Add,
     Mul,
     Shl,
+    Div,
+    Mod,
 }
 
 impl PureOptimization {
@@ -40,13 +42,23 @@ impl PureOptimization {
             Self::Add => "U32.add",
             Self::Mul => "U32.mul",
             Self::Shl => "U32.shl",
+            Self::Div => "U32.div",
+            Self::Mod => "U32.mod",
         }
     }
 
     pub(super) const fn arity(self) -> usize {
         match self {
-            Self::Add | Self::Mul => 2,
+            Self::Add | Self::Mul | Self::Div | Self::Mod => 2,
             Self::Inc | Self::Shl => 1,
+        }
+    }
+
+    const fn quantity(self, parameter: usize) -> Quant {
+        if matches!(self, Self::Div | Self::Mod) && parameter == 1 {
+            Quant::Many
+        } else {
+            Quant::Lone
         }
     }
 
@@ -56,6 +68,8 @@ impl PureOptimization {
             Self::Add => words[0].wrapping_add(words[1]),
             Self::Mul => words[0].wrapping_mul(words[1]),
             Self::Shl => words[0].wrapping_shl(1),
+            Self::Div => words[0].checked_div(words[1]).unwrap_or(0),
+            Self::Mod => words[0].checked_rem(words[1]).unwrap_or(words[0]),
         }
     }
 }
@@ -101,12 +115,14 @@ pub(super) fn checked_optimizations(
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Div,
+        PureOptimization::Mod,
     ] {
         if base_names.contains(operation.name())
             && base_names.contains("U32")
             && definitions.get(operation.name()).is_some_and(|definition| {
                 definition.name == operation.name()
-                    && is_checked_word_operation(definition, operation.arity())
+                    && is_checked_word_operation(definition, operation)
             })
         {
             result.insert(operation);
@@ -122,16 +138,16 @@ fn strip_annotations(mut value: &TermRef) -> &TermRef {
     value
 }
 
-fn is_checked_word_operation(definition: &DefDecl, arity: usize) -> bool {
+fn is_checked_word_operation(definition: &DefDecl, operation: PureOptimization) -> bool {
     if definition.body.is_none()
         || definition.foreign
         || definition.unsafe_
-        || definition.parameters.len() != arity
+        || definition.parameters.len() != operation.arity()
     {
         return false;
     }
     let mut telescope = strip_annotations(&definition.ty);
-    for parameter in &definition.parameters {
+    for (index, parameter) in definition.parameters.iter().enumerate() {
         let Term::All {
             quant,
             id,
@@ -142,8 +158,8 @@ fn is_checked_word_operation(definition: &DefDecl, arity: usize) -> bool {
         else {
             return false;
         };
-        if *quant != Quant::Lone
-            || parameter.quant != Quant::Lone
+        if *quant != operation.quantity(index)
+            || parameter.quant != operation.quantity(index)
             || *id != parameter.id
             || !matches!(strip_annotations(domain).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "U32")
             || !matches!(strip_annotations(&parameter.ty).as_ref(), Term::Ref(name) | Term::GpuRef(name) if name == "U32")

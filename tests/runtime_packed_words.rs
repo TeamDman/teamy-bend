@@ -119,6 +119,43 @@ fn wrapping_multiplication_and_one_bit_shift_keep_partial_application_semantics(
 }
 
 #[test]
+fn original_unsigned_division_programs_complete_with_unchanged_limits() {
+    for (source, expected) in [
+        (include_str!("fixtures/cpu-words/word_div_mod.bend"), "9\n"),
+        (include_str!("fixtures/cpu-words/u32_divmod.bend"), "14n\n"),
+        (
+            include_str!("fixtures/cpu-words/u32_divmod_zero.bend"),
+            "6n\n",
+        ),
+    ] {
+        assert_output(source, expected);
+    }
+}
+
+#[test]
+fn unsigned_division_preserves_full_width_partial_calls_and_ordinary_fallback() {
+    assert_expressions(&[
+        ("U32.show(U32.div(4294967295, 1))", "4294967295"),
+        ("U32.show(U32.mod(4294967295, 1))", "0"),
+        ("U32.show(U32.div(4000000000, 3000000000))", "1"),
+        ("U32.show(U32.mod(4000000000, 3000000000))", "1000000000"),
+        ("U32.show(U32.div(copied(17), 5))", "3"),
+        ("U32.show(U32.mod(17, copied(5)))", "2"),
+    ]);
+    assert_output(
+        r"import Base
+def main() -> IO(Unit):
+  divide = U32.div(4294967295)
+  modulo = U32.mod(4294967295)
+  do IO<Unit>:
+    Unit <- IO.print(U32.show(divide(10)))
+    IO.print(U32.show(modulo(10)))
+",
+        "429496729\n5\n",
+    );
+}
+
+#[test]
 fn raw_float_payloads_survive_word_views_and_repacking() {
     // These are bit patterns, never host float values: both NaN categories must
     // retain their payloads across constructor matching and ordinary copying.
@@ -218,6 +255,8 @@ fn ordinary_arithmetic_optimizations_preserve_demand_for_unused_input_bits() {
         ("Bool.show(low(U32.shln(lazy_word(), 1n)))", "False\n"),
         ("U32.show(U32.mul(0, lazy_word()))", "0\n"),
         ("Bool.show(low(U32.add(lazy_word(), 0)))", "True\n"),
+        ("U32.show(U32.div(lazy_word(), 0))", "0\n"),
+        ("Bool.show(low(U32.mod(lazy_word(), 0)))", "True\n"),
     ] {
         assert_output(
             &format!("{WORD_HELPERS}{LAZY_WORD}def main() -> IO(Unit): IO.print({expression})\n"),
@@ -239,6 +278,9 @@ fn recognizing_a_word_does_not_force_its_unused_tail() {
         // Multiplication still demands both outer U32 constructors, even when
         // its first operand is zero. This also refused in the previous release.
         "U32.show(U32.mul(0, expensive_whole(U32.to_nat(1000000))))",
+        "U32.show(U32.div(expensive_whole(U32.to_nat(1000000)), 0))",
+        "U32.show(U32.div(0, lazy_word()))",
+        "U32.show(U32.mod(0, lazy_word()))",
     ] {
         let fixture = Fixture::new(&format!(
             "{WORD_HELPERS}{LAZY_WORD}def main() -> IO(Unit): IO.print({expression})\n"
@@ -325,6 +367,86 @@ def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 0)))
         .unwrap_err();
     assert!(error.to_string().contains("cancelled"), "{error}");
     assert!(stdout.is_empty() && stderr.is_empty());
+}
+
+#[test]
+fn unsigned_division_keeps_first_error_and_output_order() {
+    for operation in ["div", "mod"] {
+        let helper = format!(
+            r#"{WORD_HELPERS}{LAZY_WORD}
+def reject(op: IO.OP<Unit>) -> U32:
+  match op:
+    case Emit{{value}}: 0
+    case rest: 0
+def invalid() -> U32: reject(IO.print("must not execute")(Unit, value => Emit{{value}}))
+"#
+        );
+        for (left, right, language_failure) in [
+            ("invalid()", "expensive_whole(U32.to_nat(1000000))", true),
+            ("expensive_whole(U32.to_nat(1000000))", "invalid()", false),
+            ("0", "invalid()", true),
+        ] {
+            let fixture = Fixture::new(&format!(
+                r#"{helper}
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.print("before")
+    Unit <- IO.print(U32.show(U32.{operation}({left}, {right})))
+    IO.print("after")
+"#
+            ));
+            let mut stdout = Vec::new();
+            let mut stderr = Vec::new();
+            let result = fixture
+                .checked()
+                .run_main(&mut stdout, &mut stderr, &|| false);
+            if language_failure {
+                assert_eq!(result.unwrap(), 1);
+                assert_eq!(stderr, b"bend: runtime fail-stop\n");
+            } else {
+                assert!(
+                    result
+                        .unwrap_err()
+                        .to_string()
+                        .contains("step budget exhausted")
+                );
+                assert!(stderr.is_empty());
+            }
+            assert_eq!(stdout, b"before\n");
+        }
+    }
+}
+
+#[test]
+fn packed_division_loops_still_obey_work_and_cancellation_limits() {
+    let fixture = Fixture::new(
+        r"import Base
+def count(n: Nat, acc: U32) -> U32:
+  match n:
+    case 0n: acc
+    case 1n+p: count(p, U32.mod(U32.div(acc, 1), 4294967295))
+def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 7)))
+",
+    );
+    let checked = fixture.checked();
+    for cancel in [false, true] {
+        let calls = Cell::new(0);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| {
+                calls.set(calls.get() + 1);
+                cancel && calls.get() > 200
+            })
+            .unwrap_err();
+        let expected = if cancel {
+            "cancelled"
+        } else {
+            "step budget exhausted"
+        };
+        assert!(error.to_string().contains(expected), "{error}");
+        assert!(stdout.is_empty() && stderr.is_empty());
+    }
 }
 
 #[test]

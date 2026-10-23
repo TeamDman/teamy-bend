@@ -39,6 +39,8 @@ fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Div,
+        PureOptimization::Mod,
     ] {
         let parameters = if operation.arity() == 1 {
             "a: U32"
@@ -63,12 +65,14 @@ fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
 }
 
 #[test]
-fn optimization_requires_a_filled_ordinary_body_and_exact_affine_signature() {
+fn optimization_requires_a_filled_ordinary_body_and_exact_quantity_signature() {
     let program = checked_program(
         include_str!("../syntax/base.bend"),
-        &["U32", "U32.inc", "U32.add", "U32.mul", "U32.shl"],
+        &[
+            "U32", "U32.inc", "U32.add", "U32.mul", "U32.shl", "U32.div", "U32.mod",
+        ],
     );
-    assert_eq!(program.optimizations.len(), 4);
+    assert_eq!(program.optimizations.len(), 6);
     assert!(program.numeric.is_empty());
     assert!(program.foreign.is_empty());
     let strict = Program::from_checked(&program.definitions, &program.datatypes);
@@ -78,11 +82,13 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_affine_signature() {
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Div,
+        PureOptimization::Mod,
     ] {
         let original = &program.definitions[operation.name()];
         assert!(original.body.is_some());
         let origins = BTreeSet::from(["U32".into(), operation.name().into()]);
-        for variant in 0..11 {
+        for variant in 0..13 {
             let mut invalid = original.clone();
             match variant {
                 0 => invalid.body = None,
@@ -120,6 +126,27 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_affine_signature() {
                     }
                 }
                 10 => invalid.name = "user.other".into(),
+                11 | 12 => {
+                    if operation.arity() == 1 {
+                        continue;
+                    }
+                    let wrong = if operation.quantity(1) == Quant::Many {
+                        Quant::Lone
+                    } else {
+                        Quant::Many
+                    };
+                    if variant == 11 {
+                        invalid.parameters[1].quant = wrong;
+                    } else {
+                        let Term::All { body, .. } = Rc::make_mut(&mut invalid.ty) else {
+                            panic!("function")
+                        };
+                        let Term::All { quant, .. } = Rc::make_mut(body) else {
+                            panic!("second argument")
+                        };
+                        *quant = wrong;
+                    }
+                }
                 _ => unreachable!(),
             }
             let definitions = BTreeMap::from([(operation.name().into(), invalid)]);
@@ -137,7 +164,7 @@ fn packed_program() -> Program {
         include_str!("../syntax/base.bend"),
         &[
             "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.inc", "U32.add",
-            "U32.mul", "U32.shl",
+            "U32.mul", "U32.shl", "U32.div", "U32.mod",
         ],
     )
 }
@@ -542,39 +569,47 @@ fn collection_preserves_numeric_text_tails_through_character_and_word_decoding()
 #[test]
 fn collection_preserves_original_arguments_when_ordinary_optimization_falls_back() {
     let program = packed_program();
-    let mut machine = Machine::new(&program);
-    machine.gc_mode = super::super::gc::Mode::EverySafePoint;
-    let function = machine.reference("U32.add").unwrap();
-    let first = machine.expression(parse_term("1").unwrap(), 0).unwrap();
-    let second_literal = parse_term("2").unwrap();
-    let Term::Ctr { args, .. } = second_literal.as_ref() else {
-        panic!("U32 literal")
-    };
-    // The annotation preserves an ordinary outer wrapper; the Word remains
-    // lazy and requires the checked source fallback after the first argument.
-    let second = machine
-        .expression(
-            term(Term::Ctr {
-                name: "U32".into(),
-                args: vec![term(Term::Ann(
-                    Rc::clone(&args[0]),
-                    parse_term("Word(32n)").unwrap(),
-                ))],
-            }),
-            0,
-        )
-        .unwrap();
-    let partial = machine
-        .allocate(Thunk::Application(function, first))
-        .unwrap();
-    let call = machine
-        .allocate(Thunk::Application(partial, second))
-        .unwrap();
-    assert_eq!(
-        machine.materialize(call, 0).unwrap().to_string(),
-        parse_term("3").unwrap().to_string()
-    );
-    assert!(machine.gc.collections > 1);
+    for (operation, left, right, expected) in [
+        ("U32.add", "1", "2", "3"),
+        // Zero divisors exercise fallback and retained arguments without the
+        // bitwise division body's cost under collection at every safe point.
+        ("U32.div", "17", "0", "0"),
+        ("U32.mod", "17", "0", "17"),
+    ] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let function = machine.reference(operation).unwrap();
+        let first = machine.expression(parse_term(left).unwrap(), 0).unwrap();
+        let second_literal = parse_term(right).unwrap();
+        let Term::Ctr { args, .. } = second_literal.as_ref() else {
+            panic!("U32 literal")
+        };
+        // The annotation preserves an ordinary outer wrapper; the Word remains
+        // lazy and requires the checked source fallback after the first argument.
+        let second = machine
+            .expression(
+                term(Term::Ctr {
+                    name: "U32".into(),
+                    args: vec![term(Term::Ann(
+                        Rc::clone(&args[0]),
+                        parse_term("Word(32n)").unwrap(),
+                    ))],
+                }),
+                0,
+            )
+            .unwrap();
+        let partial = machine
+            .allocate(Thunk::Application(function, first))
+            .unwrap();
+        let call = machine
+            .allocate(Thunk::Application(partial, second))
+            .unwrap();
+        assert_eq!(
+            machine.materialize(call, 0).unwrap().to_string(),
+            parse_term(expected).unwrap().to_string()
+        );
+        assert!(machine.gc.collections > 1);
+    }
 }
 
 #[test]
