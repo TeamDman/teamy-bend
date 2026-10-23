@@ -1121,7 +1121,12 @@ impl Engine {
             }
             _ => (),
         }
-        let (observed, uses) = self.infer(lhs, value, demand, context, &[])?;
+        // Switching from checking to inference does not descend into a child:
+        // infer this same term under check's active depth frame. Keep the work
+        // charge; infer_inner still guards every recursive child through infer
+        // or check, and normalization retains its own nesting checks.
+        self.step()?;
+        let (observed, uses) = self.infer_inner(lhs, value, demand, context, &[])?;
         if self.compare(Comparison::Fits, &observed, ty)? {
             Ok(uses)
         } else {
@@ -1340,5 +1345,80 @@ impl Engine {
             }
             _ => Greater,
         })
+    }
+}
+
+#[cfg(test)]
+mod depth_tests {
+    use super::*;
+
+    #[test]
+    fn check_to_infer_keeps_work_charge_and_unwinds_after_exhaustion() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let ty = term(Term::Qnt);
+        let value = term(Term::Var {
+            name: "q".into(),
+            id: 1,
+        });
+        let context = Context::from([(
+            1,
+            Binder {
+                quant: Quant::Lone,
+                name: "q".into(),
+                id: 1,
+                ty: Rc::clone(&ty),
+            },
+        )]);
+        engine.fuel = 2;
+        let error = engine
+            .check(&Lhs::default(), &value, Quant::Lone, &ty, &context)
+            .expect_err("checking, inference and comparison each require work");
+        assert!(
+            error.to_string().contains("evaluation budget exhausted"),
+            "{error}"
+        );
+        assert_eq!(engine.depth, 0);
+        engine.reset();
+        assert_eq!(
+            engine
+                .check(&Lhs::default(), &value, Quant::Lone, &ty, &context)
+                .unwrap(),
+            usage(1, Quant::Lone)
+        );
+    }
+
+    #[test]
+    fn beta_expansion_in_inference_still_obeys_nesting_guard() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let x = term(Term::Var {
+            name: "x".into(),
+            id: 1,
+        });
+        let lambda = term(Term::Lam {
+            name: "x".into(),
+            id: 1,
+            body: term(Term::App(Rc::clone(&x), x)),
+        });
+        let looping = term(Term::App(Rc::clone(&lambda), lambda));
+        let error = engine
+            .check(
+                &Lhs::default(),
+                &looping,
+                Quant::Lone,
+                &term(Term::Qnt),
+                &Context::new(),
+            )
+            .expect_err("same-node delegation cannot bypass recursive inference's guard");
+        assert!(
+            error.to_string().contains("kernel nesting limit exhausted"),
+            "{error}"
+        );
+        assert_eq!(engine.depth, 0);
     }
 }

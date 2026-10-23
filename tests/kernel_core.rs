@@ -487,3 +487,40 @@ fn rewrite_motive_must_reconstruct_the_claim() {
     .expect_err("a constant true motive cannot establish an unrelated false goal");
     assert!(error.to_string().contains("type mismatch"));
 }
+
+#[test]
+fn nested_application_checking_preserves_types_and_quantity_checks() {
+    let identity = def(
+        "identity",
+        vec![b("n", 1, Quant::Lone, r("Nat"))],
+        r("Nat"),
+        lambdas(&[b("n", 1, Quant::Lone, r("Nat"))], v("n", 1)),
+    );
+    for (leaf, parameters, expected) in [
+        (nat(0), vec![], None),
+        (term(Term::Qua(Quant::Many)), vec![], Some("type mismatch")),
+        (
+            app(r("add"), vec![v("x", 21), v("x", 21)]),
+            vec![b("x", 21, Quant::Lone, r("Nat"))],
+            Some("binder x permits Lone use, observed Many"),
+        ),
+    ] {
+        let nested = (0..90).fold(leaf, |inner, _| app(r("identity"), vec![inner]));
+        let body = lambdas(&parameters, nested);
+        let result = check_book(&Book {
+            declarations: vec![
+                natural(),
+                identity.clone(),
+                addition(),
+                def("nested", parameters, r("Nat"), body),
+            ],
+        });
+        if let Some(expected) = expected {
+            let error = result.expect_err("deep terms must still undergo ordinary checking");
+            assert!(error.to_string().contains(expected), "{error}");
+            assert!(!error.to_string().contains("limit"), "{error}");
+        } else {
+            result.expect("checking and inferring the same node share a depth frame");
+        }
+    }
+}
