@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -158,6 +158,11 @@ $representation = @(
     @{ name = 'word_copy_native'; source = "$Reference/tests/reg/word_copy_native.bend"; expected = "22`n" },
     @{ name = 'u32_structural_view'; source = "$Reference/tests/reg/u32_structural_view.bend"; expected = "14`n" }
 )
+$parseChains = @(
+    @{ name = 'adjacent_application'; source = "$Reference/tests/parse/adjacent_application.bend"; expected = "True{}`n"; direct_mode = 'pure' },
+    @{ name = 'chain_paren_group'; source = "$Reference/tests/parse/chain_paren_group.bend"; expected = "7`n"; direct_mode = 'io' },
+    @{ name = 'chain_spacing_rules'; source = "$Reference/tests/parse/chain_spacing_rules.bend"; expected = "2`n"; direct_mode = 'io' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -166,7 +171,8 @@ $fixtures = switch ($Suite) {
     'scheduler' { $scheduler }
     'words' { $words }
     'representation' { $representation }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation }
+    'parse-chains' { $parseChains }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
@@ -181,6 +187,7 @@ foreach ($fixture in $fixtures) {
         fixture = $fixture.name; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $referenceHead; port_revision = $portHead; port_dirty = [bool]$portStatus
         port_binary_sha256 = $binaryHash; c_arguments = @('--threads', '1', '--gpu', 'off'); upstream_c_optimization = $OracleOptimization
+        upstream_c_link_flags = @('-lpthread', '-lm'); upstream_direct_cli = 'unverified'
         timeout_seconds = 60; repetitions = $Repetitions; steps = [ordered]@{}; matched = $false
         completed_runtimes_match = $false; deterministic = $null; environmental_limits = @()
     }
@@ -197,9 +204,13 @@ foreach ($fixture in $fixtures) {
             $c = Join-Path $fixtureDirectory "$implementation.c"
             $exe = Join-Path $fixtureDirectory $implementation
             $flags = @('-std=c11')
+            $links = @('-lpthread', '-lm')
             if ($implementation -eq 'upstream') { $flags += "-$OracleOptimization" }
-            if ($implementation -eq 'port') { $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic') }
-            $null = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($c, '-pthread', '-lm', '-ldl', '-o', $exe)) $port
+            if ($implementation -eq 'port') {
+                $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic')
+                $links = @('-pthread', '-lm', '-ldl')
+            }
+            $null = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($c) + $links + @('-o', $exe)) $port
         }
         $expected = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fixture.expected))
         $expectedExit = if ($fixture.ContainsKey('expected_exit')) { $fixture.expected_exit } else { 0 }
@@ -244,12 +255,31 @@ foreach ($fixture in $fixtures) {
                     throw "$($fixture.name) $label differs from expected output."
                 }
             }
+            if ($fixture.ContainsKey('direct_mode')) {
+                $label = "upstream-direct-$repeat"
+                $direct = Invoke-Bounded $label $node @('main.ts', $source) "$Reference/bend2" -AllowFailure
+                if ($repeat -gt 1) {
+                    foreach ($field in @('exit', 'stdout_base64', 'stderr_base64')) {
+                        if ($direct[$field] -cne $row.steps['upstream-direct-1'][$field]) { throw 'Direct upstream entry changed between repetitions.' }
+                    }
+                }
+                if ($direct.exit -eq $expectedExit -and $direct.stdout_base64 -ceq $expected -and $direct.stderr_base64 -ceq $expectedError) {
+                    $row.upstream_direct_cli = 'pass'
+                } elseif ($fixture.direct_mode -eq 'io' -and $direct.exit -eq 1 -and $direct.stdout_base64 -ceq '' -and
+                    $direct.stderr_base64 -ceq [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("TypeError: require is not a function`n"))) {
+                    $row.upstream_direct_cli = 'blocked_import_meta_require'
+                } else {
+                    throw 'Unclassified direct upstream entry result.'
+                }
+            }
         }
         $row.completed_runtimes_match = $true
         if ($Repetitions -gt 1) { $row.deterministic = $true }
-        $row.matched = $row.environmental_limits.Count -eq 0
+        $row.matched = $row.environmental_limits.Count -eq 0 -and $row.upstream_direct_cli -ne 'blocked_import_meta_require'
         if ($row.matched) {
             Write-Host "$($fixture.name): all five runtimes match, $Repetitions repetition(s)"
+        } elseif ($row.upstream_direct_cli -eq 'blocked_import_meta_require') {
+            Write-Host "$($fixture.name): all five generated/native runtimes match; direct upstream IO entry lacks import.meta.require ($Repetitions repetition(s))"
         } else {
             Write-Host "$($fixture.name): four runtimes match; upstream JS requires bun:ffi ($Repetitions repetition(s))"
         }

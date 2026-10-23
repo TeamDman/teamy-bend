@@ -111,6 +111,7 @@ foreach ($fixture in $fixtures) {
         fixture = "$($fixture.name).bend"; source_sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $pin; port_revision = $revision; port_dirty = $dirty; port_binary_sha256 = $binaryHash
         timeout_seconds = 60; repetitions = $Repetitions; c_arguments = @('--threads', '1', '--gpu', 'off'); upstream_c_optimization = $OracleOptimization
+        upstream_c_link_flags = @('-lpthread', '-lm')
         expected = @{ exit = $fixture.exit; stdout = $fixture.stdout; stderr = $fixture.stderr }
         fixture_origin = $(if ($Suite -eq 'demand') { 'authored_contract_control' } else { 'pinned_upstream' })
         steps = [ordered]@{}; lanes = [ordered]@{}; deterministic = $true
@@ -139,9 +140,13 @@ foreach ($fixture in $fixtures) {
                 if ($target -eq 'c') {
                     $program = Join-Path $directoryRoot $implementation
                     $flags = @('-std=c11')
+                    $links = @('-lpthread', '-lm')
                     if ($implementation -eq 'upstream') { $flags += "-$OracleOptimization" }
-                    if ($implementation -eq 'port') { $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic') }
-                    $result = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($output, '-pthread', '-lm', '-ldl', '-o', $program)) $port
+                    if ($implementation -eq 'port') {
+                        $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic')
+                        $links = @('-pthread', '-lm', '-ldl')
+                    }
+                    $result = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($output) + $links + @('-o', $program)) $port
                     if ($result.exit -ne 0 -or $result.timed_out) { $row.lanes[$runtime] = 'compilation_failed'; $openCells++; continue }
                     $arguments = @('--threads', '1', '--gpu', 'off')
                 }
