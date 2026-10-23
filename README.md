@@ -1,10 +1,18 @@
 # teamy-bend
 
-## On hold: work in progress, not ready
+## Incomplete work-in-progress port
 
-Development is paused. This unfinished Rust rewrite is not ready for general
-use or as a replacement for Bend 2. The repository preserves the experimental
-implementation and its progress record; the overall rewrite is incomplete.
+**This is an incomplete, experimental Rust port of Bend 2. It is not a
+completed or production-ready implementation, and is not a drop-in replacement
+for Bend 2.** Only a subset is implemented; full C runtime parity, GPU support,
+and complete library compatibility remain unfinished. See the
+[implementation plan](docs/implementation-plan.md) for the recorded scope and
+remaining work.
+
+Development resumed on 2026-10-23 after other work took priority. The next
+milestone is reproducible Linux CPU validation against the pinned upstream
+runtime. The preserved GPU continuation candidate remains experimental;
+fresh GPU hardware validation is deferred to a separate local session.
 
 A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).
