@@ -6,3 +6,8 @@ Copyright 2026 HigherOrderCO; Apache-2.0. See NOTICE and `licenses/Apache-2.0.tx
 
 The original fixture must fail at execution before printing its array element.
 Native rejection is covered without claiming upstream diagnostic-byte parity.
+
+`nat_overflow.bend` is an unchanged copy of `tests/run/nat_overflow.bend`
+from the same [Bend pin](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/run/nat_overflow.bend).
+It shares the copyright/license above and exercises the first product beyond
+2^48-1, without shortening the upstream workload or increasing a port limit.

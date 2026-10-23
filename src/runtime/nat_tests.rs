@@ -38,7 +38,7 @@ fn poisoned(machine: &mut Machine<'_>, name: &str) -> ThunkId {
 #[test]
 fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
     let program = program();
-    assert_eq!(program.nat_optimizations.len(), 6);
+    assert_eq!(program.nat_optimizations.len(), 7);
     let origins = program
         .definitions
         .keys()
@@ -51,6 +51,8 @@ fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
     );
     for (name, operation) in [
         ("Array.new", Operation::ArrayNew),
+        ("Nat.mul", Operation::Mul),
+        ("Nat.add", Operation::Mul),
         ("Nat.sub", Operation::Sub),
         ("Nat.cmp", Operation::Cmp),
         ("Nat.show.fin", Operation::Show),
@@ -119,7 +121,7 @@ fn body_guards_compare_binding_identity_instead_of_printed_variable_names() {
         .collect();
     assert_eq!(
         checked_optimizations(&definitions, &datatypes, &origins).len(),
-        6
+        7
     );
 }
 
@@ -273,7 +275,7 @@ fn sampled_optimized_results_equal_checked_ordinary_bodies() {
                 parse_term(&format!("{a}n")).unwrap(),
                 parse_term(&format!("{b}n")).unwrap(),
             ];
-            for name in ["Nat.sub", "Nat.cmp", "Nat.is_lt", "Nat.is_ge"] {
+            for name in ["Nat.mul", "Nat.sub", "Nat.cmp", "Nat.is_lt", "Nat.is_ge"] {
                 assert_eq!(
                     program.evaluate(name, &arguments).unwrap().to_string(),
                     strict.evaluate(name, &arguments).unwrap().to_string(),
@@ -512,4 +514,150 @@ fn array_guard_requires_the_sealed_array_layout_and_never_applies_to_proofs() {
     let array = call(&mut machine, "Array.new", &[erased, depth, element]);
     let value = machine.force(array).unwrap();
     assert_eq!(machine.constructor_value(value).unwrap().0, "ANode");
+}
+
+#[test]
+fn multiplication_checks_the_48_bit_boundary_without_host_integer_overflow() {
+    let program = program();
+    for (left, right) in [
+        (0, MAX),
+        (MAX, 0),
+        (1, MAX),
+        (MAX, 1),
+        (3, 7),
+        (65_535, 65_537),
+        (16_777_215, 16_777_216),
+        (16_777_215, 16_777_217),
+        (16_777_216, 16_777_216),
+        (MAX, 2),
+        (MAX, MAX),
+    ] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let a = machine.nat(left).unwrap();
+        let b = machine.nat(right).unwrap();
+        let product = call(&mut machine, "Nat.mul", &[a, b]);
+        let expected = u128::from(left) * u128::from(right);
+        if let Ok(expected) = u64::try_from(expected)
+            && expected <= MAX
+        {
+            assert!(
+                matches!(machine.force(product).unwrap(), Value::PackedNat(n) if n == expected)
+            );
+        } else {
+            assert_eq!(
+                machine.force(product).err().unwrap().to_string(),
+                "a Nat past the largest immediate 2^48-1"
+            );
+        }
+        assert!(machine.gc.collections > 0);
+        assert!(machine.remaining < super::super::STEPS);
+    }
+}
+
+#[test]
+fn multiplication_preserves_zero_laziness_and_ordinary_constructor_error_order() {
+    let optimized = program();
+    let mut ordinary = optimized.clone();
+    Rc::make_mut(&mut ordinary.nat_optimizations).remove(&Operation::Mul);
+    for program in [&optimized, &ordinary] {
+        for case in 0..5 {
+            let mut machine = Machine::new(program);
+            let first_error = poisoned(&mut machine, "first_error");
+            let second_error = poisoned(&mut machine, "second_error");
+            let zero = machine.nat(0).unwrap();
+            let two = machine.nat(2).unwrap();
+            let (a, b, expected) = match case {
+                0 => (zero, second_error, None),
+                1 => (first_error, second_error, Some("first_error")),
+                2 => (first_error, zero, Some("first_error")),
+                3 => (two, second_error, Some("second_error")),
+                _ => (
+                    machine
+                        .ready_constructor("Succ", vec![first_error])
+                        .unwrap(),
+                    zero,
+                    Some("first_error"),
+                ),
+            };
+            let product = call(&mut machine, "Nat.mul", &[a, b]);
+            if let Some(expected) = expected {
+                assert!(
+                    machine
+                        .force(product)
+                        .err()
+                        .unwrap()
+                        .to_string()
+                        .contains(expected)
+                );
+            } else {
+                let value = machine.force(product).unwrap();
+                assert_eq!(machine.constructor_value(value).unwrap().0, "Zero");
+            }
+        }
+        // A successor shell is enough to return a successor product. Neither
+        // operand's invalid tail may be demanded until the product's tail is.
+        for packed_left in [false, true] {
+            let mut machine = Machine::new(program);
+            let first_error = poisoned(&mut machine, "first_tail");
+            let second_error = poisoned(&mut machine, "second_tail");
+            let a = if packed_left {
+                machine.nat(2).unwrap()
+            } else {
+                machine
+                    .ready_constructor("Succ", vec![first_error])
+                    .unwrap()
+            };
+            let b = machine
+                .ready_constructor("Succ", vec![second_error])
+                .unwrap();
+            let product = call(&mut machine, "Nat.mul", &[a, b]);
+            let value = machine.force(product).unwrap();
+            let (name, fields) = machine.constructor_value(value).unwrap();
+            assert_eq!(name, "Succ");
+            assert!(
+                machine
+                    .force(fields[0])
+                    .err()
+                    .unwrap()
+                    .to_string()
+                    .contains("second_tail")
+            );
+        }
+    }
+}
+
+#[test]
+fn multiplication_partial_calls_budget_and_cancellation_remain_bounded() {
+    let program = program();
+    let mut machine = Machine::new(&program);
+    let first = poisoned(&mut machine, "unforced_partial_argument");
+    let partial = call(&mut machine, "Nat.mul", &[first]);
+    assert!(matches!(
+        machine.force(partial).unwrap(),
+        Value::Natural { .. }
+    ));
+    let zero = machine.nat(0).unwrap();
+    let product = machine.allocate(Thunk::Application(partial, zero)).unwrap();
+    assert!(
+        machine
+            .force(product)
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("unforced_partial_argument")
+    );
+    for cancel in [false, true] {
+        let mut machine = Machine::new(&program);
+        let a = machine.nat(MAX).unwrap();
+        let b = machine.nat(2).unwrap();
+        let product = call(&mut machine, "Nat.mul", &[a, b]);
+        let cancelled = || cancel;
+        machine.cancelled = Some(&cancelled);
+        if !cancel {
+            machine.remaining = 0;
+        }
+        let error = machine.force(product).err().unwrap().to_string();
+        assert!(error.contains(if cancel { "cancel" } else { "step budget" }));
+    }
 }

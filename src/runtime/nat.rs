@@ -25,6 +25,7 @@ pub(super) const MAX: u64 = (1 << 48) - 1;
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum Operation {
     ArrayNew,
+    Mul,
     Sub,
     Cmp,
     Show,
@@ -36,6 +37,7 @@ impl Operation {
     pub(super) const fn name(self) -> &'static str {
         match self {
             Self::ArrayNew => "Array.new",
+            Self::Mul => "Nat.mul",
             Self::Sub => "Nat.sub",
             Self::Cmp => "Nat.cmp",
             Self::Show => "Nat.show",
@@ -47,7 +49,7 @@ impl Operation {
     const fn arity(self) -> usize {
         match self {
             Self::ArrayNew => 3,
-            Self::Sub | Self::Cmp => 2,
+            Self::Mul | Self::Sub | Self::Cmp => 2,
             Self::Show | Self::FromU32 | Self::ToU32 => 1,
         }
     }
@@ -87,6 +89,7 @@ pub(super) fn checked_optimizations(
     BASE.with(|(base_definitions, base_datatypes)| {
         [
             Operation::ArrayNew,
+            Operation::Mul,
             Operation::Sub,
             Operation::Cmp,
             Operation::Show,
@@ -513,6 +516,13 @@ impl Machine<'_> {
             }
             _ => return self.ordinary_nat(state.operation, &state.arguments),
         };
+        // The checked Nat.mul body matches its left operand first and returns
+        // Zero without looking at the right operand. A constructor operand
+        // above takes the ordinary-body fallback: never decode its lazy tail
+        // merely to make a compact multiplication possible.
+        if state.operation == Operation::Mul && state.values.is_empty() && value == 0 {
+            return self.nat(0);
+        }
         state.values.push(value);
         if state.values.len() < state.arguments.len() {
             let next = state.arguments[state.values.len()];
@@ -521,6 +531,13 @@ impl Machine<'_> {
         }
         match state.operation {
             Operation::ArrayNew => unreachable!("array depth uses its own demand path"),
+            Operation::Mul => {
+                let product = state.values[0]
+                    .checked_mul(state.values[1])
+                    .filter(|product| *product <= MAX)
+                    .ok_or_else(|| KernelError::new("a Nat past the largest immediate 2^48-1"))?;
+                self.nat(product)
+            }
             Operation::Sub => self.nat(state.values[0].saturating_sub(state.values[1])),
             Operation::Cmp => self.ready_constructor(
                 match state.values[0].cmp(&state.values[1]) {

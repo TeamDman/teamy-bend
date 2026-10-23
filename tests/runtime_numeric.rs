@@ -518,3 +518,105 @@ fn original_upstream_array_depth_wall_refuses_before_printing_the_element() {
         assert!(stderr.is_empty());
     }
 }
+
+#[test]
+fn original_nat_overflow_reaches_the_language_bound_before_the_work_limit() {
+    let fixture = Fixture::new(include_str!(
+        "fixtures/cpu-runtime-negatives/nat_overflow.bend"
+    ));
+    let checked = fixture.checked();
+    for _ in 0..2 {
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            checked
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap_err()
+                .to_string(),
+            "a Nat past the largest immediate 2^48-1"
+        );
+        assert!(stdout.is_empty());
+        assert!(stderr.is_empty());
+    }
+}
+
+#[test]
+fn natural_products_preserve_full_width_and_higher_order_application() {
+    for (a, b, expected) in [
+        (0, 16_777_216, "0"),
+        (16_777_216, 0, "0"),
+        (3, 7, "21"),
+        (65_535, 65_537, "4294967295"),
+        (16_777_215, 16_777_216, "281474959933440"),
+        (16_777_215, 16_777_217, "281474976710655"),
+    ] {
+        assert_eq!(
+            output(&format!(
+                r"import Base
+def apply(f: (@+x: Nat -> Nat), x: Nat) -> Nat: f(x)
+def main() -> IO(Unit): IO.print(Nat.show(apply(Nat.mul(U32.to_nat({a})), U32.to_nat({b}))))
+"
+            )),
+            format!("{expected}\n")
+        );
+    }
+}
+
+#[test]
+fn natural_multiplication_preserves_unused_errors_effect_order_and_demanded_budgets() {
+    let helpers = r#"import Base
+def reject(op: IO.OP<Nat>) -> Nat:
+  match op:
+    case Emit{value}: value
+    case Halt{code, message}: 0n
+def invalid() -> Nat: reject(IO.print("SECRET")(Nat, unit => Emit{0n}))
+def lazy() -> Nat: 1n+invalid()
+def nonzero(n: Nat) -> String:
+  match n:
+    case 0n: "zero"
+    case 1n+p: "positive"
+def costly(n: Nat) -> Nat:
+  match n:
+    case 0n: 1n
+    case 1n+p: costly(p)
+"#;
+    for (expression, expected) in [
+        ("Nat.show(Nat.mul(0n, invalid()))", "0\n"),
+        ("nonzero(Nat.mul(2n, lazy()))", "positive\n"),
+        ("nonzero(Nat.mul(lazy(), lazy()))", "positive\n"),
+        ("Nat.show(Nat.mul(0n, costly(U32.to_nat(1000000))))", "0\n"),
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{helpers}def main() -> IO(Unit): IO.print({expression})\n"
+            )),
+            expected
+        );
+    }
+    for (expression, diagnostic) in [
+        ("Nat.show(Nat.mul(2n, lazy()))", "foreign effect request"),
+        (
+            "Nat.show(Nat.mul(1n, costly(U32.to_nat(1000000))))",
+            "step budget exhausted",
+        ),
+    ] {
+        let fixture = Fixture::new(&format!(
+            r#"{helpers}
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.print("before")
+    Unit <- IO.print({expression})
+    IO.print("after")
+"#
+        ));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = fixture
+            .checked()
+            .run_main(&mut stdout, &mut stderr, &|| false)
+            .unwrap_err();
+        assert!(error.to_string().contains(diagnostic), "{error}");
+        assert_eq!(stdout, b"before\n");
+        assert!(stderr.is_empty());
+    }
+}
