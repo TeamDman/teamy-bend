@@ -24,6 +24,8 @@ typedef struct { Corpus mem; u64 *alc; } Env;
 
 #define INLINE static __device__ __forceinline__
 #define OUTLINE static __device__ __noinline__
+/* Host-only optional-entry annotation in the shared value/array helpers. */
+#define TB_OPTIONAL
 #define TB_NOINLINE __noinline__
 #define UINT64_C(value) value##ull
 #define UINT32_C(value) value##u

@@ -414,8 +414,10 @@ impl Generator<'_> {
             )
             .unwrap();
         }
+        // A layout emits both conversion directions, including dependencies;
+        // a particular program can use only one direction (or a nested subset).
         for index in 0..self.conversions.len() {
-            writeln!(source, "static TB_NOINLINE Term tb_box_{index}(const Env *e, const Term *input);\nstatic TB_NOINLINE void tb_unbox_{index}(const Env *e, Term value, Term *output);").unwrap();
+            writeln!(source, "static TB_OPTIONAL TB_NOINLINE Term tb_box_{index}(const Env *e, const Term *input);\nstatic TB_OPTIONAL TB_NOINLINE void tb_unbox_{index}(const Env *e, Term value, Term *output);").unwrap();
         }
         for index in 0..self.printers.len() {
             writeln!(

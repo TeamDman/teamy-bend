@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: Apache-2.0
  * Shared CPU/CUDA value bridges derived from Bend 2.0.5, Copyright 2026
  * HigherOrderCO. Changes: TeamDman. See NOTICE and licenses/Apache-2.0.txt. */
-OUTLINE TB_NOINLINE Term tb_c_construct(const Env *e, u32 cid, u32 count, const Term *fields, bool packed, const Term *box_mask) {
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_construct(const Env *e, u32 cid, u32 count, const Term *fields, bool packed, const Term *box_mask) {
   Term value = tb_construct(*e, cid, count, fields, packed);
   if (!packed && box_mask != NULL) {
     Loc at = term_peek(*e, value);
@@ -10,19 +10,19 @@ OUTLINE TB_NOINLINE Term tb_c_construct(const Env *e, u32 cid, u32 count, const 
   }
   return value;
 }
-OUTLINE TB_NOINLINE void tb_c_fields(const Env *e, Term value, u32 cid, u32 count, bool packed, Term *out) {
+TB_OPTIONAL OUTLINE TB_NOINLINE void tb_c_fields(const Env *e, Term value, u32 cid, u32 count, bool packed, Term *out) {
   tb_fields(*e, value, cid, count, packed, out);
 }
-OUTLINE TB_NOINLINE void tb_c_borrow_fields(const Env *e, Term value, u32 cid, u32 count, bool packed, Term *out) {
+TB_OPTIONAL OUTLINE TB_NOINLINE void tb_c_borrow_fields(const Env *e, Term value, u32 cid, u32 count, bool packed, Term *out) {
   tb_borrow_fields(*e, value, cid, count, packed, out);
 }
-OUTLINE TB_NOINLINE Term tb_c_duplicate(const Env *e, Term *value) { return tb_duplicate(*e, value); }
-OUTLINE TB_NOINLINE void tb_c_drop(const Env *e, Term value) { term_drop(*e, value); }
-OUTLINE TB_NOINLINE Loc tb_c_peek(const Env *e, Term value) { return term_peek(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_tail_apply(const Env *e, Term closure, Term argument) {
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_duplicate(const Env *e, Term *value) { return tb_duplicate(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE void tb_c_drop(const Env *e, Term value) { term_drop(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Loc tb_c_peek(const Env *e, Term value) { return term_peek(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_tail_apply(const Env *e, Term closure, Term argument) {
   return tb_tail_apply(*e, closure, argument);
 }
-OUTLINE TB_NOINLINE Term tb_c_word_task(const Env *e, u32 fid, u32 count,
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_word_task(const Env *e, u32 fid, u32 count,
     const Term *words, const Term *owned) {
   return tb_word_task(*e, fid, count, words, owned);
 }
@@ -71,7 +71,7 @@ INLINE Loc tb_device_task_node_reserved(const Env *e, Fid fid, Term continuation
  * validates the full layout and reserves the parent plus each child's exact
  * task class as one allocator transaction. The host keeps the established
  * per-child construction path and uses caller-owned frame storage for tasks. */
-OUTLINE TB_NOINLINE Term tb_c_word_join_build(const Env *e, u32 fid,
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_word_join_build(const Env *e, u32 fid,
     u32 held_count, const Term *held, const Term *held_owned, u32 children,
     const Term *child_fids, u32 argument_count, const Term *arguments,
     const Term *argument_owned, Term *tasks) {
@@ -171,7 +171,7 @@ INLINE Loc tb_device_task_node_reserved(const Env *e, Fid fid, Term continuation
   return at;
 }
 #endif
-OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const Term *held,
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const Term *held,
     u32 children, const Term *applications) {
   Loc at;
   Term join;
@@ -207,23 +207,23 @@ OUTLINE TB_NOINLINE Term tb_c_join(const Env *e, u32 fid, u32 held_count, const 
 #endif
   return join;
 }
-OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_closure(const Env *e, u32 fid, u32 count, const Term *captures) {
   return tb_closure(*e, fid, count, captures);
 }
-OUTLINE TB_NOINLINE Term tb_c_word(const Env *e, u32 value) { return tb_word(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_term_word(const Env *e, Term value) { return term_word(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_nat_chk(const Env *e, Nat value) { return nat_chk(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_nat_mul(const Env *e, Nat left, Nat right) { return nat_mul(*e, left, right); }
-OUTLINE TB_NOINLINE Term tb_c_blk_node(const Env *e, Term left, Term right) { return blk_node(*e, left, right); }
-OUTLINE TB_NOINLINE Term tb_c_blk_new(const Env *e, bool array, Nat depth, u32 lgs, u32 count, Term *values, const Term *box_mask) {
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_word(const Env *e, u32 value) { return tb_word(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_term_word(const Env *e, Term value) { return term_word(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_nat_chk(const Env *e, Nat value) { return nat_chk(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_nat_mul(const Env *e, Nat left, Nat right) { return nat_mul(*e, left, right); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_node(const Env *e, Term left, Term right) { return blk_node(*e, left, right); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_new(const Env *e, bool array, Nat depth, u32 lgs, u32 count, Term *values, const Term *box_mask) {
   return tb_blk_new_masked(*e, array, depth, lgs, count, values, box_mask);
 }
-OUTLINE TB_NOINLINE Term tb_c_blk_half(const Env *e, Term value, u32 high) { return blk_half(*e, value, high); }
-OUTLINE TB_NOINLINE Term tb_c_blk_copy(const Env *e, Term value) { return blk_copy(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_blk_unique(const Env *e, Term value) { return blk_unique(*e, value); }
-OUTLINE TB_NOINLINE Term tb_c_blk_keep(const Env *e, Loc at) { return blk_keep(*e, at); }
-OUTLINE TB_NOINLINE void tb_c_blk_free(const Env *e, Term value) { blk_free(*e, value); }
-OUTLINE TB_NOINLINE void tb_c_blk_write(const Env *e, bool array, Loc at, u32 index, Term value, bool owned, bool discard) {
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_half(const Env *e, Term value, u32 high) { return blk_half(*e, value, high); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_copy(const Env *e, Term value) { return blk_copy(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_unique(const Env *e, Term value) { return blk_unique(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE Term tb_c_blk_keep(const Env *e, Loc at) { return blk_keep(*e, at); }
+TB_OPTIONAL OUTLINE TB_NOINLINE void tb_c_blk_free(const Env *e, Term value) { blk_free(*e, value); }
+TB_OPTIONAL OUTLINE TB_NOINLINE void tb_c_blk_write(const Env *e, bool array, Loc at, u32 index, Term value, bool owned, bool discard) {
   if (array && discard && tb_cell_owned(*e, at + index)) term_drop(*e, e->mem[at + index]);
   blk_write(e->mem, array, at, index, value);
   if (array) {

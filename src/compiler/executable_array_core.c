@@ -23,7 +23,7 @@ INLINE void blk_write(Corpus memory, bool array, Loc at, u32 index, Term value) 
   if (array) memory[at + index] = value;
   else memory[at + index / 2] = (memory[at + index / 2] & ~(UINT64_C(0xffffffff) << shift)) | ((u64)(u32)value << shift);
 }
-INLINE u32 blk_at(Term block, U32 index, u32 lgs) {
+TB_OPTIONAL INLINE u32 blk_at(Term block, U32 index, u32 lgs) {
   Cls cls = blk_cls(block);
   if (cls < lgs || cls > 17) err_fail("invalid array layout");
   return ((u32)index & ((1u << (cls - lgs)) - 1)) << lgs;
@@ -49,7 +49,7 @@ INLINE Term tb_blk_new_masked(Env e, bool array, Nat depth, u32 lgs, u32 count, 
   }
   return term_blk(array, cls, at);
 }
-INLINE Term blk_new(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values) {
+TB_OPTIONAL INLINE Term blk_new(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values) {
   return tb_blk_new_masked(e, array, depth, lgs, count, values, NULL);
 }
 INLINE Term blk_copy(Env e, Term block) {

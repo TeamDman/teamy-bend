@@ -62,6 +62,8 @@ function $tbFileBytes(text) {
 
 function $tbGetEnv(name) {
   $tbFileBytes(name);
+  // Node can truncate NUL keys; match the native/C environment-name contract.
+  if (name.includes('\0') || name.includes('=')) return io_fail(2);
   const value = Object.hasOwn(process.env, name) ? process.env[name] : undefined;
   if (value === undefined) return io_fail(2);
   $tbFileBytes(value);

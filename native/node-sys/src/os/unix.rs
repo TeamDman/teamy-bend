@@ -52,11 +52,11 @@ pub(crate) fn set_nonblocking(fd: Raw, value: bool) -> HostResult<()> {
 }
 pub(crate) fn bind(fd: Raw, address: &SockAddr) -> HostResult<i32> {
     // SAFETY: SockAddr owns the initialized native address for the call.
-    result(unsafe { libc::bind(fd, address.as_ptr(), address.len()) })
+    result(unsafe { libc::bind(fd, address.as_ptr().cast(), address.len()) })
 }
 pub(crate) fn connect(fd: Raw, address: &SockAddr) -> HostResult<i32> {
     // SAFETY: SockAddr owns the initialized native address for the call.
-    let value = unsafe { libc::connect(fd, address.as_ptr(), address.len()) };
+    let value = unsafe { libc::connect(fd, address.as_ptr().cast(), address.len()) };
     if value == -1 {
         Err(last(true))
     } else {
@@ -169,7 +169,7 @@ pub(crate) fn send_to(
             data.cast(),
             length,
             flags,
-            address.as_ptr(),
+            address.as_ptr().cast(),
             address.len(),
         )
     };

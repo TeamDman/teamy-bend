@@ -158,7 +158,7 @@ static Term tb_file_open_pack(Env e, IoWork *work) {
   tb_host_free(work->data); work->data = NULL;
   return work->code != 0 ? io_fail(e, work->code, NULL) : io_done(e, io_hand((u64)work->made));
 }
-static Term tb_file_open_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_file_open_run(Env e, Term *fields, IoWork *work) {
   u64 path_length, mode_length;
   char *mode;
   int flags;
@@ -217,10 +217,10 @@ static Term tb_file_read_start(Env e, Term *fields, IoWork *work, IoPack pack) {
   if (!tb_file_lease((IoAct *)work)) { work->code = EBADF; return pack(e, work); }
   return io_work(work, tb_file_read_call, pack);
 }
-static Term tb_file_read_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_file_read_run(Env e, Term *fields, IoWork *work) {
   return tb_file_read_start(e, fields, work, tb_file_read_pack);
 }
-static Term tb_file_read_bytes_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_file_read_bytes_run(Env e, Term *fields, IoWork *work) {
   return tb_file_read_start(e, fields, work, tb_file_read_bytes_pack);
 }
 static void tb_file_write_call(IoWork *work) {
@@ -240,7 +240,7 @@ static Term tb_file_write_pack(Env e, IoWork *work) {
   return io_tup(e, io_hand((u64)work->hand), work->code != 0
       ? io_fail(e, work->code, NULL) : io_done(e, term_pak(CID_UNIT, 0)));
 }
-static Term tb_file_write_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_file_write_run(Env e, Term *fields, IoWork *work) {
   u64 handle = io_hand_v(fields[0]);
   if (handle > INTPTR_MAX) err_fail("file descriptor exceeds host pointer range");
   work->hand = (intptr_t)handle;
@@ -251,7 +251,7 @@ static Term tb_file_write_run(Env e, Term *fields, IoWork *work) {
   }
   return io_work(work, tb_file_write_call, tb_file_write_pack);
 }
-static Term tb_file_close_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_file_close_run(Env e, Term *fields, IoWork *work) {
   TBHost *host = tb_host_current;
   u64 handle = io_hand_v(fields[0]);
   bool owned = false;
@@ -269,7 +269,7 @@ static Term tb_file_close_run(Env e, Term *fields, IoWork *work) {
   return term_pak(CID_UNIT, 0);
 }
 
-static Term tb_get_env_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_get_env_run(Env e, Term *fields, IoWork *work) {
   u64 length;
   char *name = io_cstr(e, fields[0], &length);
   Term result;

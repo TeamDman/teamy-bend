@@ -103,18 +103,15 @@ fn environment_distinguishes_empty_missing_and_existing_values() {
     c : Result<&1, &1, U32 & String, String> <- IO.get_env("TEAMY_BEND_FILE_ENV_MISSING")
     Unit <- IO.print(text(c))
     d : Result<&1, &1, U32 & String, String> <- IO.get_env("TEAMY_BEND_FILE_ENV_VALUE\0tail")
-    IO.print(text(d))
+    Unit <- IO.print(text(d))
+    e : Result<&1, &1, U32 & String, String> <- IO.get_env("TEAMY_BEND_FILE_ENV_VALUE=tail")
+    IO.print(text(e))
 "#,
         "",
     );
-    let nul_result = if cfg!(windows) {
-        "value-é"
-    } else {
-        "error:No such file or directory"
-    };
     success(
         &output,
-        &format!("value-é\nempty:\nerror:No such file or directory\n{nul_result}\n"),
+        "value-é\nempty:\nerror:No such file or directory\nerror:No such file or directory\nerror:No such file or directory\n",
     );
 }
 

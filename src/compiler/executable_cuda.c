@@ -14,6 +14,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <wchar.h>
+/* The host transport is also compiled standalone by the CPU cache probes. */
+#ifndef TB_OPTIONAL
+#if defined(__GNUC__) || defined(__clang__)
+#define TB_OPTIONAL __attribute__((unused))
+#else
+#define TB_OPTIONAL
+#endif
+#endif
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -370,10 +378,10 @@ done:
   else tb_cuda.initialized = true;
   return success;
 }
-static inline bool tb_cuda_initialize(const char *source) {
+TB_OPTIONAL static inline bool tb_cuda_initialize(const char *source) {
   return tb_cuda_initialize_kernels(source, false, NULL, 0);
 }
-static inline bool tb_cuda_build_cache(const char *source) {
+TB_OPTIONAL static inline bool tb_cuda_build_cache(const char *source) {
   bool success = tb_cuda_initialize_kernels(source, true, NULL, 0);
   return success || tb_cuda.error_class == TB_CUDA_ERROR_UNAVAILABLE;
 }
@@ -381,7 +389,7 @@ static inline bool tb_cuda_synchronize(void) {
   if (!tb_cuda_push()) return false;
   return tb_cuda_pop(tb_cuda_status(tb_cuda.cuStreamSynchronize(tb_cuda.stream), "cuStreamSynchronize", TB_CUDA_ERROR_RUNTIME));
 }
-static inline bool tb_cuda_set_allocation_limit(uint64_t bytes) {
+TB_OPTIONAL static inline bool tb_cuda_set_allocation_limit(uint64_t bytes) {
   uint64_t used = 0;
   if (bytes == 0) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "invalid CUDA allocation limit");
 #if TB_CUDA_GPU_ALLOC_EXPLICIT
@@ -430,7 +438,7 @@ static bool tb_cuda_span(unsigned int slot, size_t offset, size_t bytes, const v
     return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "CUDA transfer span is invalid");
   return true;
 }
-static inline bool tb_cuda_upload(unsigned int slot, size_t offset, const void *host, size_t bytes) {
+TB_OPTIONAL static inline bool tb_cuda_upload(unsigned int slot, size_t offset, const void *host, size_t bytes) {
   bool success;
   if (!tb_cuda_span(slot, offset, bytes, host) || !tb_cuda_push()) return false;
   /* Blocking copies accept ordinary pageable host storage. Drain our explicit

@@ -664,6 +664,7 @@ typedef int TestSocket;
 typedef socklen_t TestSockLen;
 #define TEST_BAD_SOCKET (-1)
 #endif
+#ifdef CID_OPEN_LISTENER
 static Term open_listener_run(Env e, Term *fields, IoWork *work) {
   struct sockaddr_in address = {0};
   TestSocket listener = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -680,6 +681,7 @@ static Term open_listener_run(Env e, Term *fields, IoWork *work) {
 #endif
   return io_hand((u64)(uintptr_t)listener);
 }
+#endif
 static Term announce_run(Env e, Term *fields, IoWork *work) {
   struct sockaddr_in address = {0}; TestSockLen length = sizeof(address);
   TestSocket listener = (TestSocket)(uintptr_t)io_hand_v(fields[0]);
@@ -1042,9 +1044,8 @@ def main() -> IO(Unit):
 "#;
 
 const BACKPRESSURE_C: &str = r#"
-static intptr_t sending_handle;
 static Term tune_run(Env e, Term *fields, IoWork *work) {
-  int size = 1024; (void)e; (void)work;
+  int size = 1024 * 1024; (void)e; (void)work;
   sending_handle = (intptr_t)io_hand_v(fields[0]);
 #ifdef _WIN32
   if (setsockopt((SOCKET)(uintptr_t)sending_handle, SOL_SOCKET, SO_SNDBUF, (const char *)&size, sizeof(size)) != 0) abort();
@@ -1084,10 +1085,13 @@ static void __attribute__((constructor)) backpressure_use(void) {
 "#;
 
 const SCRIPTED_SEND: &str = r"
+static intptr_t sending_handle = -1;
 static u32 test_send_count;
 static bool test_send_released;
 static intptr_t test_send_system(intptr_t descriptor, const char *data, u32 size, int flags) {
   intptr_t count;
+  /* Wake-pipe traffic must not consume the payload's controlled prefix. */
+  if (descriptor != sending_handle) return send((TBNetRaw)descriptor, data, (int)size, flags);
   if (!test_send_released) {
     if (test_send_count == 32768) {
 #ifdef _WIN32
@@ -1110,13 +1114,13 @@ fn tcp_send_retains_its_offset_after_a_controlled_short_send_and_would_block() {
     const BYTES: usize = 512 * 1024;
     let peer = listener();
     socket2::SockRef::from(&peer)
-        .set_recv_buffer_size(1024)
+        .set_recv_buffer_size(1024 * 1024)
         .unwrap();
     let fixture =
         Fixture::new(&BACKPRESSURE.replace("PORT", &peer.local_addr().unwrap().port().to_string()));
     std::fs::write(fixture.0.join("effect.c"), BACKPRESSURE_C).unwrap();
-    // Winsock can buffer the whole payload despite small requested buffers.
-    // This seam sends the first 32 KiB on the real connection, then reports
+    // Keep host buffers larger than the controlled prefix: Linux can otherwise
+    // park before 32 KiB. This seam sends 32 KiB on the real connection, then reports
     // WouldBlock until the timer observes the parked action and saved offset.
     // Every remaining byte still travels through the real socket to EOF.
     let running = fixture.start_with_source_edit(&[], |source| {
@@ -1125,16 +1129,16 @@ fn tcp_send_retains_its_offset_after_a_controlled_short_send_and_would_block() {
         assert_eq!(source.matches(declaration).count(), 1);
         assert_eq!(source.matches(send).count(), 1);
         source
-            .replacen(declaration, &format!("{SCRIPTED_SEND}\n{declaration}"), 1)
             .replacen(
                 send,
                 "return test_send_system(descriptor, data, size, flags);",
                 1,
             )
+            .replacen(declaration, &format!("{SCRIPTED_SEND}\n{declaration}"), 1)
     });
     let mut socket = accept(&peer);
     socket2::SockRef::from(&socket)
-        .set_recv_buffer_size(1024)
+        .set_recv_buffer_size(1024 * 1024)
         .unwrap();
     socket.write_all(b"r").unwrap();
     assert_eq!(running.line(), "text:r\n");
@@ -1154,9 +1158,6 @@ fn tcp_send_retains_its_offset_after_a_controlled_short_send_and_would_block() {
         .parse::<usize>()
         .unwrap();
     assert_eq!(offset, 32 * 1024);
-    socket2::SockRef::from(&socket)
-        .set_recv_buffer_size(1024 * 1024)
-        .unwrap();
     let mut received = Vec::new();
     socket.read_to_end(&mut received).unwrap();
     let expected = (0..BYTES)

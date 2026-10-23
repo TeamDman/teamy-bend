@@ -4,7 +4,7 @@
 #include <math.h>
 #include <inttypes.h>
 
-INLINE Term tb_impossible(void) { err_fail("entered an impossible match"); }
+TB_OPTIONAL INLINE Term tb_impossible(void) { err_fail("entered an impossible match"); }
 
 INLINE int tb_f32_text(char *buf, f32 value) {
   int n = 0;
@@ -59,7 +59,7 @@ INLINE void tb_show_write(const char *text, size_t length) {
 
 INLINE void tb_show_text(const char *text) { tb_show_write(text, strlen(text)); }
 
-INLINE void tb_show_step(unsigned depth) {
+TB_OPTIONAL INLINE void tb_show_step(unsigned depth) {
   tb_tick();
   if (depth > 96 || ++tb_show_nodes > 16384) err_fail("pure output budget exhausted");
 }

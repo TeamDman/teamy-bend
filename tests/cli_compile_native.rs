@@ -211,6 +211,39 @@ fn native_c_compiler_errors_do_not_replace_existing_output() {
     fixture.assert_no_staging();
 }
 
+#[cfg(unix)]
+#[test]
+fn optional_runtime_helpers_do_not_disable_foreign_c_warnings() {
+    let fixture = Fixture::new(
+        "import Base\ndef effect() -> IO(U32): import \"effect.c\"\ndef main() -> IO(U32): effect()\n",
+    );
+    let effect = r"
+static Term effect_run(Env e, Term *fields, IoWork *work) {
+  (void)e; (void)fields; (void)work;
+  return 7;
+}
+static void __attribute__((constructor)) effect_use(void) { io_eff(CID_EFFECT, effect_run, 0); }
+";
+    fs::write(fixture.0.join("effect.c"), effect).unwrap();
+    fixture.success(&["--executable"]);
+    let previous = fs::read(fixture.binary()).unwrap();
+    for warning in [
+        "static int unused_foreign_helper(void) { return 0; }\n",
+        "static void extra_use(void) { int unused_foreign_local; }\nstatic void __attribute__((constructor)) extra_init(void) { extra_use(); }\n",
+    ] {
+        fs::write(fixture.0.join("effect.c"), format!("{effect}{warning}")).unwrap();
+        let output = fixture
+            .command(&fixture.binary())
+            .args(["--executable", "--force"])
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(1));
+        assert!(String::from_utf8_lossy(&output.stderr).contains("unused_foreign_"));
+        assert_eq!(fs::read(fixture.binary()).unwrap(), previous);
+        fixture.assert_no_staging();
+    }
+}
+
 #[test]
 fn force_cannot_replace_bend_inputs_imports_or_their_hard_links() {
     let fixture =

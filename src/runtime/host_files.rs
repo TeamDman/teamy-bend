@@ -15,6 +15,8 @@ use std::fs::OpenOptions;
 use std::io;
 use std::io::Read;
 use std::io::Write;
+#[cfg(unix)]
+use std::os::unix::fs::OpenOptionsExt;
 
 /// Host work has no VM references and may move into a worker thread.
 #[derive(Debug)]
@@ -85,10 +87,7 @@ pub(super) fn open(path: &[u8], mode: &[u8]) -> HostResult<NativeFile> {
         }
     }
     #[cfg(unix)]
-    {
-        use std::os::unix::fs::OpenOptionsExt;
-        options.mode(0o644);
-    }
+    options.mode(0o644);
     options
         .open(path)
         .map(|file| NativeFile { file, mode })

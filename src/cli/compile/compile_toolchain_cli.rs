@@ -2,6 +2,7 @@
 #[cfg(windows)]
 use super::compile_process_cli::capture_process;
 use super::compile_process_cli::run_process;
+#[cfg(windows)]
 use eyre::Context;
 use eyre::Result;
 use eyre::eyre;

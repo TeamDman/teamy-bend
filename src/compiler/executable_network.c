@@ -268,7 +268,7 @@ static u32 tb_network_wake_drain(TBHost *host) {
   return tb_net_again(code) ? 0 : code;
 }
 
-static Term tb_tcp_listen_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_tcp_listen_run(Env e, Term *fields, IoWork *work) {
   intptr_t descriptor = tb_net_created(socket(AF_INET, SOCK_STREAM, 0));
   struct sockaddr_in address; int one = 1; u32 code;
   (void)work;
@@ -289,7 +289,7 @@ static Term tb_tcp_accept_more(Env e, IoWork *work) {
   if (tb_net_again(code)) return io_wait_on(work, work->hand, POLLIN, tb_tcp_accept_more);
   return io_tup(e, io_hand((u64)work->hand), code != 0 ? tb_net_fail(e, code) : io_done(e, io_hand((u64)accepted)));
 }
-static Term tb_tcp_accept_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_tcp_accept_run(Env e, Term *fields, IoWork *work) {
   work->hand = tb_net_handle(fields[0]); return tb_tcp_accept_more(e, work);
 }
 static Term tb_tcp_connect_more(Env e, IoWork *work) {
@@ -301,7 +301,7 @@ static Term tb_tcp_connect_more(Env e, IoWork *work) {
   if (error != 0) { tb_net_close(work->made); return tb_net_fail(e, (u32)error); }
   return io_done(e, io_hand((u64)work->made));
 }
-static Term tb_tcp_connect_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_tcp_connect_run(Env e, Term *fields, IoWork *work) {
   struct sockaddr_in address;
   work->data = io_cstr(e, fields[0], &work->size); work->made = -1;
   work->code = EINVAL;
@@ -332,7 +332,7 @@ static Term tb_tcp_send_more(Env e, IoWork *work) {
   tb_host_free(work->data); work->data = NULL;
   return io_tup(e, io_hand((u64)work->hand), work->code != 0 ? tb_net_fail(e, work->code) : io_done(e, term_pak(CID_UNIT, 0)));
 }
-static Term tb_tcp_send_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_tcp_send_run(Env e, Term *fields, IoWork *work) {
   work->hand = tb_net_handle(fields[0]); work->data = io_cstr(e, fields[1], &work->size);
   work->made = 0; work->code = 0; return tb_tcp_send_more(e, work);
 }
@@ -345,11 +345,11 @@ static Term tb_tcp_recv_more(Env e, IoWork *work) {
   tb_host_free(work->data); work->data = NULL;
   return io_tup(e, io_hand((u64)work->hand), result);
 }
-static Term tb_tcp_recv_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_tcp_recv_run(Env e, Term *fields, IoWork *work) {
   work->hand = tb_net_handle(fields[0]); work->made = tb_net_receive_count(fields[1]);
   work->data = tb_net_receive_buffer((u32)work->made); return tb_tcp_recv_more(e, work);
 }
-static Term tb_udp_bind_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_udp_bind_run(Env e, Term *fields, IoWork *work) {
   intptr_t descriptor = tb_net_created(socket(AF_INET, SOCK_DGRAM, 0));
   struct sockaddr_in address; u32 code;
   (void)work;
@@ -371,7 +371,7 @@ static Term tb_udp_send_to_more(Env e, IoWork *work) {
   tb_host_free(work->text); tb_host_free(work->data); work->text = NULL; work->data = NULL;
   return io_tup(e, io_hand((u64)work->hand), code != 0 ? tb_net_fail(e, code) : io_done(e, term_pak(CID_UNIT, 0)));
 }
-static Term tb_udp_send_to_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_udp_send_to_run(Env e, Term *fields, IoWork *work) {
   u64 length;
   work->hand = tb_net_handle(fields[0]); work->text = io_cstr(e, fields[1], &length);
   work->made = (intptr_t)(u32)fields[2]; work->data = io_cstr(e, fields[3], &work->size);
@@ -391,11 +391,11 @@ static Term tb_udp_recv_from_more(Env e, IoWork *work) {
   tb_host_free(work->data); work->data = NULL;
   return io_tup(e, io_hand((u64)work->hand), result);
 }
-static Term tb_udp_recv_from_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_udp_recv_from_run(Env e, Term *fields, IoWork *work) {
   work->hand = tb_net_handle(fields[0]); work->made = tb_net_receive_count(fields[1]);
   work->data = tb_net_receive_buffer((u32)work->made); return tb_udp_recv_from_more(e, work);
 }
-static Term tb_udp_poll_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_udp_poll_run(Env e, Term *fields, IoWork *work) {
   intptr_t descriptor = tb_net_handle(fields[0]);
   u32 capacity = tb_net_receive_count(fields[1]);
   char *data = tb_net_receive_buffer(capacity);
@@ -409,7 +409,7 @@ static Term tb_udp_poll_run(Env e, Term *fields, IoWork *work) {
   else result = io_done(e, io_box(e, CID_SOME, tb_net_packet(e, &address, data, (u64)count), IO_HOTS & 32));
   tb_host_free(data); return io_tup(e, fields[0], result);
 }
-static Term tb_socket_close_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_socket_close_run(Env e, Term *fields, IoWork *work) {
   (void)e; (void)work; tb_net_close(tb_net_handle(fields[0])); return term_pak(CID_UNIT, 0);
 }
 static void tb_register_network(void) {

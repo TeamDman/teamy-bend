@@ -45,6 +45,15 @@
 #define INLINE static inline
 #endif
 #define OUTLINE static
+/* Optional ABI entry points are embedded once, but referenced only by some
+ * generated programs, foreign imports, or effect registrations. Annotate those
+ * declarations individually; keep unused-function checks on internal helpers,
+ * generated bodies and foreign source. No diagnostic pragma changes scope. */
+#if defined(__GNUC__) || defined(__clang__)
+#define TB_OPTIONAL __attribute__((unused))
+#else
+#define TB_OPTIONAL
+#endif
 #ifdef _MSC_VER
 #define TB_NORETURN __declspec(noreturn)
 #define TB_NOINLINE __declspec(noinline)
@@ -393,14 +402,14 @@ INLINE void *io_mem(void *memory) {
  * Small non-inlined wrappers allocate before entering a body and release after
  * every normal return. The host owner releases frames abandoned by longjmp.
  * Count conversion/printer/definition calls as well as closure applications. */
-OUTLINE Term *tb_frame_push(size_t slots) {
+TB_OPTIONAL OUTLINE Term *tb_frame_push(size_t slots) {
   if (tb_frames >= BEND_MAX_FRAMES) err_fail("generated frame depth budget exhausted");
   ++tb_frames;
   if (slots == 0) return NULL;
   if (slots > SIZE_MAX / sizeof(Term)) err_fail("generated frame allocation overflow");
   return (Term *)io_mem(tb_host_calloc(slots, sizeof(Term)));
 }
-OUTLINE void tb_frame_pop(Term *values) {
+TB_OPTIONAL OUTLINE void tb_frame_pop(Term *values) {
   if (tb_frames == 0) err_fail("unbalanced generated frame");
   tb_host_free(values);
   --tb_frames;
@@ -427,7 +436,7 @@ INLINE TBOutcome tb_segment_words(const Term *words, const Term *owned, u32 coun
 }
 /* A direct call borrows its argument span until the dispatcher copies it.
  * Only this outcome stores a plain function ID in the task field. */
-INLINE TBOutcome tb_segment_call(Fid fid, u32 count, const Term *words, const Term *owned) {
+TB_OPTIONAL INLINE TBOutcome tb_segment_call(Fid fid, u32 count, const Term *words, const Term *owned) {
   TBOutcome outcome = {fid, words, owned, count, TB_OUTCOME_CALL}; return outcome;
 }
 /* Scalar representation changes compose without retaining identity frames.
@@ -455,7 +464,7 @@ INLINE u32 tb_result_compose(u32 outer, u32 inner) {
     err_fail("invalid scalar tail result adapter");
   return outer == 0 ? inner : (outer & 3u) | ((outer | inner) & 4u);
 }
-INLINE Term tb_tail_result(TBCallFrame *frame, Term task, u32 mode) {
+TB_OPTIONAL INLINE Term tb_tail_result(TBCallFrame *frame, Term task, u32 mode) {
   if (frame == NULL || frame->waiting || mode == TB_RESULT_NONE)
     err_fail("invalid scalar tail result adapter");
   frame->tail_result = tb_result_compose(frame->tail_result, mode);
@@ -495,10 +504,10 @@ INLINE void tb_register_closure_locked(u32 fid, BendClosureFn function, u32 coun
   tb_closure_captures[fid] = count;
   tb_parallel_functions[fid] = false;
 }
-OUTLINE void tb_register_closure(u32 fid, BendClosureFn function, u32 count) {
+TB_OPTIONAL OUTLINE void tb_register_closure(u32 fid, BendClosureFn function, u32 count) {
   tb_vm_acquire(); tb_register_closure_locked(fid, function, count); tb_vm_release();
 }
-OUTLINE void tb_register_generated(u32 fid, BendClosureFn function, BendResumeFn resume, u32 count, size_t slots) {
+TB_OPTIONAL OUTLINE void tb_register_generated(u32 fid, BendClosureFn function, BendResumeFn resume, u32 count, size_t slots) {
   tb_vm_acquire(); tb_registry_guard();
   if (fid < 2 || fid >= 65536 || resume == NULL || slots > SIZE_MAX / sizeof(Term))
     err_fail("invalid generated closure registration");
@@ -510,7 +519,7 @@ OUTLINE void tb_register_generated(u32 fid, BendClosureFn function, BendResumeFn
   tb_resume_slots[fid] = slots;
   tb_vm_release();
 }
-OUTLINE void tb_register_segment(u32 fid, BendSegmentFn function, u32 arity, u32 result_width, size_t slots) {
+TB_OPTIONAL OUTLINE void tb_register_segment(u32 fid, BendSegmentFn function, u32 arity, u32 result_width, size_t slots) {
   tb_vm_acquire(); tb_registry_guard();
   if (fid < 2 || fid >= 65536 || function == NULL || arity > 255 || result_width == 0
       || result_width > 255 || slots > SIZE_MAX / sizeof(Term))
@@ -525,7 +534,7 @@ OUTLINE void tb_register_segment(u32 fid, BendSegmentFn function, u32 arity, u32
   tb_parallel_functions[fid] = false;
   tb_vm_release();
 }
-OUTLINE void tb_register_parallel(u32 fid) {
+TB_OPTIONAL OUTLINE void tb_register_parallel(u32 fid) {
   tb_vm_acquire(); tb_registry_guard();
   if (fid < 2 || fid >= 65536 || (tb_resume_functions[fid] == NULL && tb_segment_functions[fid] == NULL))
     err_fail("invalid parallel registration");
@@ -628,8 +637,8 @@ OUTLINE void tb_call_frame_free(TBCallFrame *frame) {
   tb_host_free(frame);
 }
 OUTLINE Term tb_apply(Env e, Term closure, Term argument);
-OUTLINE Term corpus_eval(Corpus memory, Term task);
-OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity);
+TB_OPTIONAL OUTLINE Term corpus_eval(Corpus memory, Term task);
+TB_OPTIONAL OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity);
 
 /* TB_SHARED_ARRAYS */
 /* Implemented by executable_io.c after this core. */

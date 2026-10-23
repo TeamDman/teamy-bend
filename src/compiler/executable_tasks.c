@@ -68,7 +68,7 @@ INLINE bool root_done(Corpus memory) {
     err_fail("task root context is unavailable");
   return tb_task_current->done;
 }
-INLINE u32 root_take(Corpus memory, Term *values) {
+TB_OPTIONAL INLINE u32 root_take(Corpus memory, Term *values) {
   TBTaskContext *context = tb_task_current;
   if (!root_done(memory)) err_fail("task root result is missing");
   u32 count = context->root_count;
@@ -790,13 +790,13 @@ OUTLINE Term tb_apply(Env e, Term closure, Term argument) {
   if (packet.count != 1) err_fail("boxed task result width is unsupported");
   Term result = packet.words[0]; tb_task_packet_free(packet); return result;
 }
-OUTLINE Term corpus_eval(Corpus memory, Term task) {
+TB_OPTIONAL OUTLINE Term corpus_eval(Corpus memory, Term task) {
   Env e = {memory, NULL};
   TBOutcome packet = tb_task_execute(e, 0, 0, task, true);
   if (packet.count != 1) err_fail("boxed task result width is unsupported");
   Term result = packet.words[0]; tb_task_packet_free(packet); return result;
 }
-OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity) {
+TB_OPTIONAL OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity) {
   Env e = {memory, NULL};
   TBOutcome packet = tb_task_execute(e, 0, 0, task, true);
   if (packet.count > capacity || (packet.count != 0 && (words == NULL || owned == NULL)))

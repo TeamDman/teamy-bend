@@ -60,13 +60,13 @@ static void tb_register_network(void);
 static void tb_network_wake_prepare(TBIOState *owner);
 static void tb_network_notify_locked(TBHost *host);
 static u32 tb_network_wake_drain(TBHost *host);
-static Term tb_get_env_run(Env e, Term *fields, IoWork *work);
+TB_OPTIONAL static Term tb_get_env_run(Env e, Term *fields, IoWork *work);
 #ifdef _WIN32
 static int tb_stdout_mode = -1;
 static int tb_stderr_mode = -1;
 #endif
 
-INLINE void io_eff(u32 cid, Effect run, u32 need) {
+TB_OPTIONAL INLINE void io_eff(u32 cid, Effect run, u32 need) {
   tb_vm_acquire(); tb_registry_guard();
   if (cid >= BEND_CID_COUNT || run == NULL || (need & ~(IO_READ | IO_TIME)) != 0 || need == (IO_READ | IO_TIME))
     err_fail("invalid foreign effect registration");
@@ -78,7 +78,7 @@ INLINE void io_eff(u32 cid, Effect run, u32 need) {
 INLINE void tb_require_effect(u32 cid) {
   if (cid >= BEND_CID_COUNT || io_eff_rows[cid].run == NULL) err_fail("unregistered foreign effect");
 }
-INLINE void tb_reject_request(Term term) {
+TB_OPTIONAL INLINE void tb_reject_request(Term term) {
   u64 tag = term_tag(term), cid = term_aux(term);
   if (tag == TAG_CTR && cid < BEND_CID_COUNT && io_eff_rows[cid].run != NULL)
     err_fail("foreign request inspected as ordinary data");
@@ -115,7 +115,7 @@ OUTLINE u64 io_tick(void) {
   return (u64)now.tv_sec * UINT64_C(1000000000) + (u64)now.tv_nsec;
 #endif
 }
-INLINE u64 io_sys_end(IoWork *work, intptr_t count) {
+TB_OPTIONAL INLINE u64 io_sys_end(IoWork *work, intptr_t count) {
   work->code = count < 0 ? (u32)errno : 0;
   return count < 0 ? 0 : (u64)count;
 }
@@ -523,29 +523,29 @@ static void tb_io_release(Env e) {
   io_owned = NULL;
 }
 
-static Term tb_print_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_print_run(Env e, Term *fields, IoWork *work) {
   u64 length; char *text = io_cstr(e, fields[0], &length); (void)work;
   io_out(stdout, text, length); io_out(stdout, "\n", 1); tb_host_free(text); return term_pak(CID_UNIT, 0);
 }
-static Term tb_write_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_write_run(Env e, Term *fields, IoWork *work) {
   u64 length; char *text = io_cstr(e, fields[0], &length); (void)work;
   io_out(stdout, text, length); tb_host_free(text); return term_pak(CID_UNIT, 0);
 }
-static Term tb_print_err_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_print_err_run(Env e, Term *fields, IoWork *work) {
   (void)work; io_errs(e, fields[0]); return term_pak(CID_UNIT, 0);
 }
-static Term tb_spawn_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; io_spawn(fields[0]); return term_pak(CID_UNIT, 0); }
-static Term tb_sleep_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return term_pak(CID_UNIT, 0); }
-static Term tb_now_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return io_tick() / 1000000; }
-static Term tb_chan_new_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; return chan_open((u32)fields[0]); }
-static Term tb_chan_send_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_spawn_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; io_spawn(fields[0]); return term_pak(CID_UNIT, 0); }
+TB_OPTIONAL static Term tb_sleep_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return term_pak(CID_UNIT, 0); }
+TB_OPTIONAL static Term tb_now_run(Env e, Term *fields, IoWork *work) { (void)e; (void)fields; (void)work; return io_tick() / 1000000; }
+TB_OPTIONAL static Term tb_chan_new_run(Env e, Term *fields, IoWork *work) { (void)e; (void)work; return chan_open((u32)fields[0]); }
+TB_OPTIONAL static Term tb_chan_send_run(Env e, Term *fields, IoWork *work) {
   ChanRow *row = chan_at(fields[0]);
   if (row == NULL || row->shut) { term_drop(e, fields[1]); return chan_bool(false); }
   if (row->wait.head != NULL && row->wait.head->item == TERM_HOLE) { (void)chan_wake(row, chan_some(e, fields[1])); return chan_bool(true); }
   if (row->size < row->room) { row->ring[(row->head + row->size) % row->room] = fields[1]; ++row->size; return chan_bool(true); }
   return chan_park(row, work, fields[1]);
 }
-static Term tb_chan_recv_run(Env e, Term *fields, IoWork *work) {
+TB_OPTIONAL static Term tb_chan_recv_run(Env e, Term *fields, IoWork *work) {
   ChanRow *row = chan_at(fields[0]);
   if (row == NULL) return term_pak(CID_NONE, 0);
   if (row->size != 0) { Term value = chan_take(row); if (row->shut && row->size == 0) chan_free(row); return chan_some(e, value); }
@@ -553,7 +553,7 @@ static Term tb_chan_recv_run(Env e, Term *fields, IoWork *work) {
   if (row->shut) { chan_free(row); return term_pak(CID_NONE, 0); }
   return chan_park(row, work, TERM_HOLE);
 }
-static Term tb_chan_close_run(Env e, Term *fields, IoWork *work) { ChanRow *row = chan_at(fields[0]); (void)work; if (row != NULL) chan_shut(e, row); return term_pak(CID_UNIT, 0); }
+TB_OPTIONAL static Term tb_chan_close_run(Env e, Term *fields, IoWork *work) { ChanRow *row = chan_at(fields[0]); (void)work; if (row != NULL) chan_shut(e, row); return term_pak(CID_UNIT, 0); }
 OUTLINE void tb_register_builtins(void) {
   tb_register_files();
   tb_register_network();

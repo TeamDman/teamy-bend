@@ -55,7 +55,12 @@ impl Fixture {
             generated = generated.replace(commit, &format!("{commit}\n{COMMIT_FAILURE}"));
         }
         // Keep the real runtime and generated program; only replace its outer CLI.
-        let source = format!("#define TB_NO_MAIN 1\n{generated}\n{COMMON}\n{probe}");
+        let mapping = if probe.contains("storage_test_mapping(") {
+            MAPPING
+        } else {
+            ""
+        };
+        let source = format!("#define TB_NO_MAIN 1\n{generated}\n{COMMON}\n{mapping}\n{probe}");
         let executable = executable_c_compiler::compile(
             &self.0,
             &source,
@@ -110,6 +115,19 @@ static inline bool storage_test_cleanup(void) {
     && tb_live_words == 0 && tb_live_blocks == 0 && tb_tasks == 0
     && tb_continuations == 0 && tb_frames == 0 && tb_depth == 0;
 }
+static inline void storage_test_released(void *address) {
+#ifdef _WIN32
+  MEMORY_BASIC_INFORMATION info;
+  if (address == NULL) return;
+  STORAGE_REQUIRE(VirtualQuery(address, &info, sizeof(info)) == sizeof(info));
+  STORAGE_REQUIRE(info.State == MEM_FREE);
+#else
+  (void)address;
+#endif
+}
+"#;
+
+const MAPPING: &str = r"
 static inline void storage_test_mapping(const TBHostStorage *storage, size_t offset, bool committed) {
 #ifdef _WIN32
   MEMORY_BASIC_INFORMATION info;
@@ -122,17 +140,7 @@ static inline void storage_test_mapping(const TBHostStorage *storage, size_t off
   (void)storage; (void)offset; (void)committed;
 #endif
 }
-static inline void storage_test_released(void *address) {
-#ifdef _WIN32
-  MEMORY_BASIC_INFORMATION info;
-  if (address == NULL) return;
-  STORAGE_REQUIRE(VirtualQuery(address, &info, sizeof(info)) == sizeof(info));
-  STORAGE_REQUIRE(info.State == MEM_FREE);
-#else
-  (void)address;
-#endif
-}
-"#;
+";
 
 #[test]
 fn large_virtual_reservation_commits_only_stable_zeroed_page_prefixes() {

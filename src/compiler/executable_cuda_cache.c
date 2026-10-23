@@ -214,7 +214,7 @@ static bool tb_cache_replace(const char *from, const char *to) { return rename(f
 static unsigned long tb_cache_pid(void) { return (unsigned long)getpid(); }
 #endif
 
-static inline bool tb_cuda_set_cache_path(const char *path) {
+TB_OPTIONAL static inline bool tb_cuda_set_cache_path(const char *path) {
   if (tb_cuda.initialized) return tb_cuda_message(TB_CUDA_ERROR_RUNTIME, "cannot change an active CUDA cache path");
   char *copy = NULL;
   if (path != NULL) {
