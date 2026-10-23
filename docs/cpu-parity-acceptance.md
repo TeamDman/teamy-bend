@@ -111,11 +111,14 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `b26ca5e` identifies the
-[Nat diagnostic correction](cpu-nat-failure-contract.md); all 39 linked fixtures
+gate selection, not a port exception. Engine commit `7549f54` identifies the
+[native Nat add/double correction](cpu-native-nat-add-double.md); all 39 linked fixtures
 were renewed on that engine. Authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
-open. The newly observed native add/double work-limit gaps are not passed cells.
+open. Fully demanded add/double controls now match; the new partial-demand and
+wildcard-request oracle disagreements remain unqualified, outside this ledger's
+upstream-fixture rows. Authored agreement with one conflicting oracle cannot
+qualify the case or increase the inventory coverage count.
 Private receipt hashes and binary snapshots are retained with the checkpoint
 evidence; no machine paths appear here.
 
@@ -140,10 +143,15 @@ The [Nat-overflow diagnostic](cpu-nat-failure-contract.md) also matches all five
 runtimes twice. The six-fixture matrix still has 18 unresolved observations: six
 diagnostic, eight resource-policy, two native foreign and two oracle-host failures.
 Array depth (native/JS) and scalar marshalling (JS) are the remaining diagnostic
-cases. Separate authored controls expose native large Nat.add/double work-budget
-gaps; those need demand-preserving arithmetic work. Keep all limits and treat C's
-allocation ceiling separately. Do not classify runtime negatives as checker
-rejections or count phase-only agreement as exact parity.
+cases and are the next independent bounded failure-contract correction.
+The [native add/double optimization](cpu-native-nat-add-double.md) closes the
+fully demanded arithmetic budget gaps while preserving lazy operands. Three
+partial-demand cases still differ from compiled upstream; two wildcard-request
+cases additionally expose a C/JS upstream disagreement. Those contracts need
+review before changing eagerness or safe refusal, and remain required unresolved
+work. Keep all limits and treat C's allocation ceiling separately. Do not classify
+runtime negatives as checker rejections or count phase-only agreement as exact
+parity.
 
 In parallel with later bounded families, complete lane/API review, resolve the
 upstream direct-IO host requirement, and qualify multiworker/host-specific cases.

@@ -3194,3 +3194,25 @@ The [checkpoint](cpu-nat-failure-contract.md) reviews actual Rust API consumers,
 documents the KernelError source break and run_main nonzero Ok contract, and
 records the newly explicit arithmetic gaps. No dependency/toolchain/pin change
 or publication occurred. Full CPU parity remains open.
+
+### [x] 5.28 Preserve native demand while optimizing Nat.add and Nat.double
+
+Sealed native add/double bodies now retain compact successor runs and lazy tails.
+Complete consumers reach valid results or the exact overflow diagnostic without
+recursive work exhaustion. Ordinary fallback, source-order demand, collection,
+cleanup, strict proof separation and unchanged safety budgets remain covered.
+Six new tests and stronger boundary/cleanup cases pass: full gate 767 passed,
+zero failed, 49 ignored; strict all-target Clippy passes.
+
+The seven-case authored Nat matrix matches 70/70. An expanded thirteen-case
+matrix has eight cases matching all five runtimes twice, but exposes three
+pre-existing native partial-demand differences and two C/JS oracle disagreements
+at wildcard/private-request matches. Those are explicit unresolved contracts,
+not qualified arithmetic parity. All 39 upstream ledger fixtures were renewed
+with previous outcomes retained; worker/order/cleanup probes pass without timeout.
+
+The [checkpoint](cpu-native-nat-add-double.md) preserves the acceptance criterion,
+exact results and prior downstream API caveat. Next independent bounded CPU work
+is array/scalar diagnostic closure; demand and oracle disagreements need review
+before changing semantics. Dependencies, toolchains and the upstream pin remain
+frozen. No push occurred; full CPU parity remains open.

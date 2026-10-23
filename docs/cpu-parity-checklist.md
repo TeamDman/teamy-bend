@@ -346,6 +346,34 @@ overflow law. These are newly explicit algorithmic compatibility gaps, not fixes
 provided by the diagnostic boundary. Keep them unqualified pending bounded,
 demand-preserving arithmetic work. Exact array/scalar diagnostics also remain.
 
+## Native Nat add/double follow-up
+
+The [demand-preserving arithmetic correction](cpu-native-nat-add-double.md) stores
+bounded successor runs with lazy tails for the exact sealed Base bodies. Ordinary
+constructor fallback, first-error order, collection and safety limits remain.
+The existing authored Nat matrix now matches 70/70, closing four repeated native
+work refusals. The expanded matrix closes twelve additional work refusals across
+six large/boundary/composition cases; eight of its thirteen cases match all five
+runtimes twice.
+
+Three partial-demand overflow cases retain native lazy success where compiled
+upstream rejects: six repeated semantic differences, not diagnostic differences.
+Two wildcard/private-request cases expose different upstream C and JS outcomes;
+port C/JS refuse safely, while native preserves lazy success. Neither agreeing
+with one oracle nor preserving a local regression establishes parity there.
+The checkpoint records every status/stream and the lowering distinction. These
+pre-existing contracts remain open; no eager forcing or weakened refusal was
+introduced to disguise them.
+
+Full gate: **767 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
+All 39 upstream ledger fixtures were renewed on `7549f54`, with previous
+negative/positive/comptime outcomes intact. Worker/order/cleanup probes pass;
+no timeout. Authored controls add no upstream inventory rows. The earlier
+KernelError source-compatibility break and run_main nonzero Ok caveat remain
+explicit; this change adds no public API. Next independent bounded CPU work:
+native/JS array-depth and JS scalar-marshalling diagnostics. Demand/oracle
+contracts need review before choosing a behavior change.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -360,8 +388,8 @@ CPU work.
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Passed, bounded | Out-of-band request failure contract | Original fixture matches all five runtimes twice; exact streams/status/order, cleanup, lookalikes and worker forwarding covered. Other failure classes remain open. |
-| Passed, bounded | Nat overflow diagnostics | Original overflow matches five runtimes twice; compiled add/double/successor and native reconstructed-prefix guards share exact diagnostics. Native large add/double remain unqualified. |
-| Missing | Native large Nat.add/Nat.double | Authored boundary cases exhaust the work budget before the Nat law; both upstream compiled lanes complete. Preserve demand and limits when correcting the recursive expansion. |
+| Passed, bounded | Nat overflow diagnostics and fully demanded add/double | Original overflow and authored large/boundary controls match five runtimes twice; native successor runs preserve lazy tails and unchanged limits. Partial demand remains separately unqualified. |
+| Missing | Arithmetic demand and wildcard-request contracts | Native unused/partial overflow succeeds where compiled upstream rejects in three cases. Two more cases disagree between upstream C/JS at a private-request wildcard match. Preserve safe refusal while deciding the applicable contract; do not count one-oracle agreement as parity. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; six-family diagnostic/budget/foreign gaps remain explicit. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
