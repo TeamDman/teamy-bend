@@ -437,6 +437,23 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
+Latest bounded checkpoint: [function-valued main normalization](cpu-function-normalization.md)
+at `f1bbf98`. The three original computed-operator functions now normalize in
+eval/run; all core structures match upstream twice. One raw output is exact and
+two retain only rendering differences, still open under the acceptance contract.
+Argument-taking APIs, executable proof separation, cancellation and safety limits
+are unchanged. Full gate: **784 passed, zero failed, 49 ignored**; strict Clippy
+passes. The renewed positive matrix is **308/320 exact**, with twelve known Bun
+host failures. Earlier negative/comptime and multiworker profiles are retained
+at their own commits, not silently renewed.
+
+The separate interpretation ledger plus the runtime ledger link 54 distinct
+fixtures; 1,248 lack either kind of execution receipt (439 checker negatives,
+twelve check-only, 161 interpretation-only, 636 compiled candidates). Linked
+rows may still have failed/blocked cells. Next independent coverage is
+`flatten/computed_recursion_002`, `_003` and `_004`; no normalized-result receipt
+exists for them yet. The acceptance criterion and pending demand choices stand.
+
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
 CPU work.
@@ -444,6 +461,7 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
+| Structural agreement; two raw differences open | Function-valued normalization | Three original operator-match functions match the pinned interpreter's core structure. One output is byte-identical; nested match layout and parentheses differ in two. Recursive-function normal forms remain the next unqualified family. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |

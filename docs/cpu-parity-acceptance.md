@@ -115,6 +115,25 @@ classification maps existing strict-audit and exact-fixture test evidence withou
 turning status-only results, source hints or related regression suites into parity
 passes. Full per-lane applicability/printability and API review remain required.
 
+The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
+three of those 164 interpreter-only cases at candidate `f1bbf98`. The
+[function normalization checkpoint](cpu-function-normalization.md) fixes their
+parameterized-entry refusal: all three match the pinned interpreter's core
+structure twice, one also matches raw output, and two retain presentation-only
+differences. Compiled lanes are not selected by the pinned gate for these
+originals. Across both ledgers, 54 distinct rows have some execution evidence and
+1,248 have none linked: 439 checker negatives, twelve check-only modules, 161
+interpreter-only cases and 636 compiled candidates. These are evidence categories,
+not a common runtime denominator or a completeness claim. The historical
+applicability CSV remains tied to its recorded runtime-ledger inputs.
+
+`pass_structural` means equality of the qualified parsed core vocabulary; it
+does not resolve a `presentation_difference` in raw bytes. The rendering
+contract remains open for both rows. This adds no exception to the acceptance
+criterion. The positive runtime matrix is renewed on `f1bbf98` (308/320 exact,
+twelve known Bun-host failures); earlier negative/comptime and multiworker
+receipts remain at their recorded commits and are not relabelled as current.
+
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
@@ -170,8 +189,9 @@ only and does not approve a semantics change or an oracle exception. Independent
 CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
 five runtimes twice after a packed native division/modulo optimization; the
 operator/representation group now also passes all five runtimes twice. A bounded
-pure-interpretation family from the 163 unlinked cases already accepted by the
-strict checker is a useful next step; normalized results remain unqualified. The sleep_order and
+pure-interpretation family now has three qualified core results with two raw
+rendering gaps. Next: `flatten/computed_recursion_002`, `_003` and `_004`, whose
+recursive function normal forms remain unqualified. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

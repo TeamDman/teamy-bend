@@ -3308,3 +3308,29 @@ The [checkpoint](cpu-word-representation.md) records results, source evidence an
 commands. A bounded pure interpretation family among 163 already accepted cases
 is a useful next CPU step. No installation, dependency/toolchain/pin change or push;
 full CPU parity and the pending demand choices remain open.
+
+### [x] 5.33 Normalize function-valued mains against the pinned interpreter
+
+Three unchanged computed-operator fixtures exposed an entry-point defect: eval
+attempted a call with zero arguments and run rejected declared parameters,
+where upstream normalizes the function body. The additive checked-book definition
+normalizer and pure run entry now do that. Strict argument-taking APIs, executable
+proof separation, IO classification, printer behavior and safety budgets remain
+intact. Focused arity/type, non-executed IO, recursive-limit/cancellation and
+compiled-printer refusal controls pass.
+
+All three results match the actual pinned interpreter's core structure twice;
+only one is also byte-identical. Nested match syntax and parentheses account for
+the other two raw differences, which remain explicit rendering-contract gaps.
+The bounded structural comparator fails closed outside its tested vocabulary.
+Full gate: 784 passed, zero failed, 49 ignored; strict all-target Clippy passes.
+The renewed positive runtime matrix is 308/320 exact with twelve known Bun gaps.
+
+The [checkpoint](cpu-function-normalization.md) and separate
+[interpretation ledger](cpu-interpretation-evidence.csv) preserve raw versus
+structural qualification. The two ledgers link 54 distinct fixtures; 1,248 lack
+linked execution/interpretation receipts and retain their different applicability
+categories. Next: the three computed-recursion function normal forms. Prior
+negative/comptime and multiworker receipts retain their original identities;
+pending demand choices and all broader acceptance gaps remain open. No dependency,
+toolchain/pin change, installation or push.
