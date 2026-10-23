@@ -91,58 +91,59 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **60 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **63 distinct
 upstream fixtures**: sixteen comptime, ten run, eighteen IO, five Base, two
-representation and nine parse originals. Linked rows include unresolved negative
-and oracle-host cells. Two recovered port-only regressions, an authored zero-timer
-control and a float-bit/pattern control supplement the suites without adding
-upstream inventory rows. Only passed cells qualify their recorded runtime/profile;
-this is not category, checker-diagnostic, API or multiworker completion.
+representation, nine parse and three compile originals. Linked rows include
+unresolved negative and oracle-host cells. Five authored controls supplement the
+suites without adding upstream inventory rows. Only passed cells qualify their
+recorded runtime/profile; this is not category, checker-diagnostic, API or
+multiworker completion.
 
-There are **1,242 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 627 compiled
-candidates. These are distinct required modes, not 1,242 missing CPU runtime
+There are **1,239 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 624 compiled
+candidates. These are distinct required modes, not 1,239 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) renews eighteen
+The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
 originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **78 originals**
-have receipts and **1,224** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 620 compiled candidates.
+controls add no inventory rows. Across runtime and interpretation, **81 originals**
+have receipts and **1,221** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 617 compiled candidates.
 
-The [float syntax/pattern checkpoint](cpu-parse-floats.md), `bd6a228`, fixes
-bounded Word-pattern compilation, complete U32 term printing and source-literal
-binary64-to-binary32 rounding. Actual upstream C/JS generation succeeds for all
-three new originals, despite a stale float-pattern comment. They match five
-primary runtimes twice: 30 exact observations; the authored bit/pattern control
-adds ten. Direct pure entry succeeds; both direct IO entries remain host-blocked.
-Full gate: **810 passed, zero failed, 49 ignored**; 54 focused tests and strict
-all-target Clippy pass. No safety budget or approved demand rule changed.
+The [float-runtime checkpoint](cpu-float-runtime.md), `47a5096`, qualifies three
+original rounding/accumulation/storage programs: 30 exact observations across
+five primary runtimes twice, with ten more for an authored bit/text control.
+Actual upstream C/JS generation succeeds. All three direct IO entries remain
+host-blocked. Finite values, signed zero and adjacent infinity/NaN classifications
+are distinguished; no arithmetic-NaN payload parity is assumed. No production
+code, safety budget or approved demand rule changed. Full gate: **811 passed,
+zero failed, 49 ignored**; 29 focused tests and strict all-target Clippy pass.
 
-All sixty runtime originals, eighteen interpretation originals and ten authored
-demand controls now have current `bd6a228` receipts. The positive matrix has
-**408/420 exact** primary executions and twelve Bun-FFI failures; separate direct
-entries give four exact and fourteen import.meta.require failures. Negative
-results remain **44/56 exact**, with eight resource-policy, two native-foreign and
-two Bun-host gaps. Demand results remain **92/100 exact**, six approved wildcard
-exceptions and two unwaived Nat-first diagnostic-order differences. Comptime has
-**156/160 exact** primary observations: default upstream JS still fails hand/tmpl
-four times; four supplemental stack-4096 observations pass. Negative, demand and
-comptime runners retain exit 1. All repeated results are stable; no timeouts.
+Forty-one positive runtime originals now have `47a5096` receipts. The positive
+matrix has **448/460 exact** primary executions and twelve Bun-FFI failures;
+separate direct entries give four exact and twenty import.meta.require failures.
+All repeats are stable; no timeouts. Six negative originals, sixteen comptime
+originals, eighteen interpretation originals and ten authored demand controls
+retain `bd6a228`. Negative results remain **44/56 exact**, with eight resource-policy,
+two native-foreign and two Bun-host gaps. Demand remains **92/100 exact**, six
+approved wildcard exceptions and two unwaived Nat-first diagnostic-order
+differences. Comptime retains **156/160 primary exact**: default upstream JS
+fails hand/tmpl four times; four supplemental stack-4096 observations pass.
+Their runners retain exit 1. These unaffected matrices were not rerun or relabelled.
 
-Every current C matrix uses pinned Linux O3/link flags, including comptime.
-Older no-optimization-flag, O2, worker, checking, platform and failure-order
-investigation receipts retain their actual commits. The renewed status-only
-strict audit accepts 366 expected positives and refuses 487, while rejecting all
-449 nonzero-expectation fixtures, including all 439 checker negatives. There are
-no abnormal exits, unexpected checker-negative acceptances or timeouts. Newly
-accepted float_pattern and let_opaque_match do not imply runtime or diagnostic
-parity for unexecuted cells; historical applicability metadata stays unchanged.
+All latest C matrices use pinned Linux O3/link flags. Older no-optimization-flag,
+O2, worker, checking, platform and failure-order investigation receipts retain
+their actual commits. The latest status-only strict audit, at `bd6a228`, accepts
+366 expected positives and refuses 487 while rejecting all 449 nonzero-expectation
+fixtures, including all 439 checker negatives. No abnormal exits, unexpected
+checker-negative acceptances or timeouts. Its newly accepted float_pattern and
+let_opaque_match statuses do not imply runtime or diagnostic parity for unexecuted
+cells; historical applicability metadata stays unchanged.
 
 The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
 module with exact acceptance/report agreement and three negatives with matching
@@ -206,9 +207,10 @@ a function`, even though separately emitted CommonJS programs pass. The
 success does not erase them. The parse-chain renewal separately records one
 successful pure direct entry and two more blocked IO entries; operator-chain
 adds three blocked IO entries and float syntax adds one pure and two blocked IO
-entries. All nine parse direct-entry rows were renewed at `bd6a228`. No Bun install
-or upstream edit was made. This is an oracle-host blocker for that lane, not a reason to stop unrelated
-CPU verification or require a GPU desktop.
+entries. The float-runtime group adds three blocked IO entries. All twelve
+parse/compile direct-entry rows were renewed at `47a5096`. No Bun install or
+upstream edit was made. This is an oracle-host blocker for that lane, not a reason
+to stop unrelated CPU verification or require a GPU desktop.
 
 ## Next bounded work
 
@@ -248,13 +250,14 @@ No C compilation/execution profile applies after that generation refusal. The
 [brace/numeric operator chains](cpu-parse-operators.md) have exact five-runtime
 results with verified generation applicability and separate direct-IO host
 refusals. Their proof-check exclusions did not predict executable failure.
-The [float syntax/pattern group](cpu-parse-floats.md) now has exact five-runtime
-results after three scoped corrections. Next is `compile/float_builtin_agreement`,
-`compile/float_accumulation`, `compile/float_unboxed_ctor`: source-inspected
-Base/IO candidates covering rounding intrinsics, accumulation and F32 storage.
-Their five-runtime original-fixture qualification is unrun. Verify actual
-upstream generation rather than relying on comments or strict-proof exclusions.
-New applicable C-oracle builds retain pinned Linux O3/link flags; older profiles
+The [float syntax/pattern group](cpu-parse-floats.md) retains its three scoped
+corrections. The [float-runtime group](cpu-float-runtime.md) adds exact five-runtime
+results for rounding, accumulation and F32 storage, with paired bit/text controls.
+Next is `compile/float_unary_math`, `compile/float_trig`, `compile/float_tanh`:
+source-inspected Base/IO candidates whose five-runtime original-fixture
+qualification is unrun. Verify actual generation and distinguish host math bits
+from text; comments or existing unit witnesses cannot establish cross-oracle
+agreement. New C-oracle builds retain pinned Linux O3/link flags; older profiles
 remain separate.
 The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
@@ -285,5 +288,5 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
 includes baseline, effects, control, collections, scheduler, word,
-representation and parse-chain/operator/float checks. Frozen
+representation, parse-chain/operator/float and float-runtime checks. Frozen
 toolchains, lockfile, pin and all previous evidence remain unchanged.

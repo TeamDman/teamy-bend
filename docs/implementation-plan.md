@@ -3585,3 +3585,30 @@ source/binary hashes and the initial failed parser expectation. Ledgers link
 Next independent family is float_builtin_agreement, float_accumulation and
 float_unboxed_ctor, source-inspected but runtime-unqualified. Full parity and
 consumer/API gaps remain open. Frozen inputs, all history preserved; no push.
+
+### [x] 5.43 Qualify float rounding, accumulation and storage
+
+Coverage source `47a5096` adds unchanged compile/float_builtin_agreement,
+float_accumulation and float_unboxed_ctor. Both upstream targets generate; five
+primary runtimes match exact stdout, empty stderr and exit 0 twice: 30 observations.
+Three direct IO entries retain the Node import.meta.require host limitation.
+An authored control adds ten exact executions comparing finite bits/text,
+inexact accumulation, negative-zero constructor/array storage and nonfinite
+classifications for the relevant rounding intrinsics. It asserts no NaN payload
+parity. One invalid authored computed destructure was corrected after both
+implementations refused it; that failed receipt remains preserved.
+
+No production defect was demonstrated or production source changed. Full gate:
+**811 passed, zero failed, 49 ignored**; 29 focused tests and strict all-target
+Clippy pass. Positive O3 renewal gives 448/460 exact observations and twelve
+existing Bun-host failures; direct-entry outcomes are four exact and twenty
+host-blocked. No timeouts; repeated results are stable. Unaffected negative,
+demand, normalization, comptime and audit receipts retain bd6a228 and every open
+resource/foreign/host/order cell. Historical O0/O2 and platform identities remain.
+
+The [checkpoint](cpu-float-runtime.md) records commands, sources, exact results
+and hashes. Ledgers link 81 originals; 1,221 lack runtime/interpretation receipts,
+classified by applicable mode. Next is float_unary_math, float_trig and float_tanh,
+source-inspected but runtime-unqualified. Full parity, lane/API review and the
+downstream consumer caveat remain open. Dependencies, tools, pin, safety limits
+and all earlier checkpoints are preserved. No installation or push.
