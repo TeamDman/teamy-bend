@@ -35,6 +35,7 @@ fn checked_program(source: &str, origins: &[&str]) -> Program {
 #[test]
 fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
     for operation in [
+        PureOptimization::Inc,
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
@@ -65,14 +66,15 @@ fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
 fn optimization_requires_a_filled_ordinary_body_and_exact_affine_signature() {
     let program = checked_program(
         include_str!("../syntax/base.bend"),
-        &["U32", "U32.add", "U32.mul", "U32.shl"],
+        &["U32", "U32.inc", "U32.add", "U32.mul", "U32.shl"],
     );
-    assert_eq!(program.optimizations.len(), 3);
+    assert_eq!(program.optimizations.len(), 4);
     assert!(program.numeric.is_empty());
     assert!(program.foreign.is_empty());
     let strict = Program::from_checked(&program.definitions, &program.datatypes);
     assert!(strict.optimizations.is_empty());
     for operation in [
+        PureOptimization::Inc,
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
@@ -134,8 +136,8 @@ fn packed_program() -> Program {
     checked_program(
         include_str!("../syntax/base.bend"),
         &[
-            "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.add", "U32.mul",
-            "U32.shl",
+            "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.inc", "U32.add",
+            "U32.mul", "U32.shl",
         ],
     )
 }
@@ -145,6 +147,8 @@ fn ordinary_word_optimizations_wrap_at_the_declared_width() {
     let program = packed_program();
     assert!(program.packed);
     for (name, arguments, expected) in [
+        ("U32.inc", vec![0], 1),
+        ("U32.inc", vec![u32::MAX], 0),
         ("U32.add", vec![u32::MAX, 1], 0),
         ("U32.mul", vec![0, u32::MAX], 0),
         ("U32.mul", vec![3, 7], 21),
@@ -571,4 +575,96 @@ fn collection_preserves_original_arguments_when_ordinary_optimization_falls_back
         parse_term("3").unwrap().to_string()
     );
     assert!(machine.gc.collections > 1);
+}
+
+#[test]
+fn available_words_fold_only_sealed_operations_and_never_force_suspended_values() {
+    let program = packed_program();
+    let mut machine = Machine::new(&program);
+    let packed = machine.numeric_word_value("U32", u32::MAX).unwrap();
+    let alias = machine.allocate(Thunk::Alias(packed)).unwrap();
+    let scope = machine.environment(0, vec![(0, alias)]).unwrap();
+    let variable = term(Term::Var {
+        id: 0,
+        name: "x".into(),
+    });
+    let call = term(Term::App(term(Term::Ref("U32.inc".into())), variable));
+    assert_eq!(machine.available_numeric(&call, scope).unwrap(), Some(0));
+    let result = machine.expression(Rc::clone(&call), scope).unwrap();
+    assert!(matches!(
+        machine.arena[result],
+        Some(Thunk::Ready(Value::PackedWord { bits: 0, .. }))
+    ));
+
+    for suspended in [
+        Thunk::Expression(term(Term::Ref("unavailable".into())), 0),
+        Thunk::Evaluating,
+        Thunk::Ready(Value::Request {
+            name: "must not execute".into(),
+            arguments: vec![],
+            continuation: alias,
+        }),
+    ] {
+        machine.arena[packed] = Some(suspended);
+        assert_eq!(machine.available_numeric(&call, scope).unwrap(), None);
+        let result = machine.expression(Rc::clone(&call), scope).unwrap();
+        assert!(matches!(machine.arena[result], Some(Thunk::Expression(..))));
+    }
+    let strict = Program::from_checked(&program.definitions, &program.datatypes);
+    assert_eq!(
+        Machine::new(&strict)
+            .available_numeric(&parse_term("U32.inc(1)").unwrap(), 0)
+            .unwrap(),
+        None
+    );
+}
+
+#[test]
+fn available_word_inspection_bounds_cycles_and_environment_walks_and_observes_cancellation() {
+    let program = packed_program();
+    let mut machine = Machine::new(&program);
+    let root = machine.numeric_word_value("U32", 7).unwrap();
+    machine.arena[root] = Some(Thunk::Alias(root));
+    let mut scope = machine.environment(0, vec![(0, root)]).unwrap();
+    let variable = term(Term::Var {
+        id: 0,
+        name: "x".into(),
+    });
+    let call = term(Term::App(term(Term::Ref("U32.inc".into())), variable));
+    let before = machine.remaining;
+    assert_eq!(machine.available_numeric(&call, scope).unwrap(), None);
+    assert!(
+        before - machine.remaining <= 64,
+        "cyclic inspection must have a small fixed bound"
+    );
+    machine.arena[root] = Some(Thunk::Ready(Value::PackedWord {
+        wrapper: Wrapper::U32,
+        bits: 7,
+    }));
+    for _ in 0..128 {
+        scope = machine.environment(scope, vec![]).unwrap();
+    }
+    assert_eq!(machine.available_numeric(&call, scope).unwrap(), None);
+    let result = machine.expression(Rc::clone(&call), scope).unwrap();
+    assert_eq!(
+        machine.materialize(result, 0).unwrap().to_string(),
+        parse_term("8").unwrap().to_string()
+    );
+    machine.cancelled = Some(&|| true);
+    assert!(
+        machine
+            .available_numeric(&call, scope)
+            .unwrap_err()
+            .to_string()
+            .contains("cancelled")
+    );
+    machine.cancelled = None;
+    machine.remaining = 0;
+    assert!(
+        machine
+            .available_numeric(&call, scope)
+            .unwrap_err()
+            .to_string()
+            .contains("step budget")
+    );
 }

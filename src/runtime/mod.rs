@@ -25,6 +25,7 @@ mod host_network;
 mod nat;
 mod network;
 mod numeric;
+mod numeric_available;
 mod packed;
 mod runtime_clock;
 mod scheduler;
@@ -250,6 +251,29 @@ impl<'program> Machine<'program> {
         expression: TermRef,
         environment: EnvId,
     ) -> Result<ThunkId, KernelError> {
+        if self.program.packed
+            && let Term::Var { id, .. } = expression.as_ref()
+            && let Some(target) = self.available_binding(environment, *id)?
+        {
+            return Ok(target);
+        }
+        if self.program.packed
+            && let Term::Ref(name) | Term::GpuRef(name) = expression.as_ref()
+        {
+            // A global name does not capture the caller's local environment.
+            // Reuse an existing thunk without forcing it; unresolved references
+            // stay suspended so their errors retain the original demand order.
+            if let Some(target) = self.globals.get(name) {
+                return Ok(*target);
+            }
+            return self.allocate(Thunk::Expression(expression, 0));
+        }
+        if let Some(bits) = self.available_numeric(&expression, environment)? {
+            return self.allocate(Thunk::Ready(Value::PackedWord {
+                wrapper: packed::Wrapper::U32,
+                bits,
+            }));
+        }
         self.allocate(Thunk::Expression(expression, environment))
     }
 

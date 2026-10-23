@@ -27,6 +27,7 @@ mod tests;
 /// An optimization of a checked ordinary body, never an opaque assumption.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum PureOptimization {
+    Inc,
     Add,
     Mul,
     Shl,
@@ -35,16 +36,26 @@ pub(super) enum PureOptimization {
 impl PureOptimization {
     pub(super) const fn name(self) -> &'static str {
         match self {
+            Self::Inc => "U32.inc",
             Self::Add => "U32.add",
             Self::Mul => "U32.mul",
             Self::Shl => "U32.shl",
         }
     }
 
-    const fn arity(self) -> usize {
+    pub(super) const fn arity(self) -> usize {
         match self {
             Self::Add | Self::Mul => 2,
-            Self::Shl => 1,
+            Self::Inc | Self::Shl => 1,
+        }
+    }
+
+    pub(super) fn result(self, words: &[u32]) -> u32 {
+        match self {
+            Self::Inc => words[0].wrapping_add(1),
+            Self::Add => words[0].wrapping_add(words[1]),
+            Self::Mul => words[0].wrapping_mul(words[1]),
+            Self::Shl => words[0].wrapping_shl(1),
         }
     }
 }
@@ -86,6 +97,7 @@ pub(super) fn checked_optimizations(
 ) -> BTreeSet<PureOptimization> {
     let mut result = BTreeSet::new();
     for operation in [
+        PureOptimization::Inc,
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
@@ -482,9 +494,7 @@ impl Machine<'_> {
         }
         let result = match operation {
             NumericOperation::Intrinsic(intrinsic) => intrinsic_result(intrinsic, words),
-            NumericOperation::Optimized(PureOptimization::Add) => words[0].wrapping_add(words[1]),
-            NumericOperation::Optimized(PureOptimization::Mul) => words[0].wrapping_mul(words[1]),
-            NumericOperation::Optimized(PureOptimization::Shl) => words[0].wrapping_shl(1),
+            NumericOperation::Optimized(operation) => operation.result(words),
         };
         if operation.output_type() == "Bool" {
             return self.ready_constructor(if result == 0 { "False" } else { "True" }, vec![]);

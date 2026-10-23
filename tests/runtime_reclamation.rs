@@ -91,6 +91,16 @@ def main() -> IO(Unit):
 }
 
 #[test]
+fn original_comptime_numeric_chains_fit_the_unchanged_native_limits() {
+    for source in [
+        include_str!("fixtures/cpu-comptime/hand.bend"),
+        include_str!("fixtures/cpu-comptime/tmpl.bend"),
+    ] {
+        assert_run(source, 0, "50005000\n", "");
+    }
+}
+
+#[test]
 fn shared_closures_and_simultaneous_let_environments_survive_collection() {
     assert_run(
         &format!(

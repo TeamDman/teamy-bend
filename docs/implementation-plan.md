@@ -3063,6 +3063,27 @@ audit refusal. Frozen dependencies, toolchains and the upstream pin are unchange
 The [coverage checklist](cpu-parity-checklist.md) records limits and the next
 native demand/retention investigation separately from this completed correction.
 
+### [x] 5.22 Propagate available native numeric values without changing demand
+
+Both original `comptime/hand.bend` and `comptime/tmpl.bend` now complete native
+execution with the unchanged step/frame/arena limits. Sealed U32 operations fold
+only already available packed values or closed literals; ordinary Word fields
+remain lazy. Increment joins the checked-body optimizations with an ordinary
+fallback. Variables and cached globals reuse existing thunk identities, and
+uncached global references retain no irrelevant local environment. Inspection
+is bounded, cancellable and charged to the existing work budget.
+
+New regressions cover both unchanged whole programs, unused invalid fields and
+subsequent error/effect order, wrapping/origin guards, cyclic/deep inspection,
+work exhaustion and cancellation. The standard gate passes 738 tests, zero
+failures and 49 existing ignores; strict all-target Clippy passes. Focused native
+checks pass 237 tests with one profiler ignored. The repeated 16-case comptime
+matrix has 160 matches across 164 executions: only four upstream-default-JS stack
+failures remain, with all supplemental upstream JS oracle runs passing. No port
+failure or timeout remains in that family. This completes the isolated numeric
+milestone, not whole-engine CPU parity; the [coverage checklist](cpu-parity-checklist.md)
+retains missing areas and the frozen pin/dependency boundaries.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or

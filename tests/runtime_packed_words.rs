@@ -213,6 +213,7 @@ fn ordinary_arithmetic_optimizations_preserve_demand_for_unused_input_bits() {
     // native release already returned the shift/multiply values but exposed
     // an eager Add bug; an ordinary Word.add wrapper returned True there.
     for (expression, expected) in [
+        ("Bool.show(low(U32.inc(lazy_word())))", "False\n"),
         ("Bool.show(low(U32.shl(lazy_word())))", "False\n"),
         ("Bool.show(low(U32.shln(lazy_word(), 1n)))", "False\n"),
         ("U32.show(U32.mul(0, lazy_word()))", "0\n"),
@@ -253,6 +254,80 @@ fn recognizing_a_word_does_not_force_its_unused_tail() {
         assert!(stdout.is_empty());
         assert!(stderr.is_empty());
     }
+}
+
+#[test]
+fn available_numeric_values_do_not_demand_error_fields_or_reorder_effects() {
+    let helper = format!(
+        r#"{WORD_HELPERS}
+def reject(op: IO.OP<Unit>) -> Word(31n):
+  match op:
+    case Emit{{value}}: Word.zero(31n)
+    case rest: Word.zero(31n)
+def invalid_word() -> U32:
+  U32{{WCon{{True{{}}, reject(IO.print("must not execute")(Unit, value => Emit{{value}}))}}}}
+"#
+    );
+    assert_output(
+        &format!(
+            "{helper}def main() -> IO(Unit): IO.print(Bool.show(low(U32.inc(invalid_word()))))\n"
+        ),
+        "False\n",
+    );
+    let fixture = Fixture::new(&format!(
+        r#"{helper}
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.print("before")
+    Unit <- IO.print(U32.show(U32.inc(invalid_word())))
+    IO.print("after")
+"#
+    ));
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let error = fixture
+        .checked()
+        .run_main(&mut stdout, &mut stderr, &|| false)
+        .unwrap_err();
+    assert!(
+        error.to_string().contains("foreign effect request"),
+        "{error}"
+    );
+    assert_eq!(stdout, b"before\n");
+    assert!(stderr.is_empty());
+}
+
+#[test]
+fn ready_accumulator_loops_still_obey_work_and_cancellation_limits() {
+    let fixture = Fixture::new(
+        r"import Base
+def count(n: Nat, acc: U32) -> U32:
+  match n:
+    case 0n: acc
+    case 1n+p: count(p, U32.inc(acc))
+def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 0)))
+",
+    );
+    let checked = fixture.checked();
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let error = checked
+        .run_main(&mut stdout, &mut stderr, &|| false)
+        .unwrap_err();
+    assert!(
+        error.to_string().contains("step budget exhausted"),
+        "{error}"
+    );
+    assert!(stdout.is_empty() && stderr.is_empty());
+    let calls = Cell::new(0);
+    let error = checked
+        .run_main(&mut stdout, &mut stderr, &|| {
+            calls.set(calls.get() + 1);
+            calls.get() > 200
+        })
+        .unwrap_err();
+    assert!(error.to_string().contains("cancelled"), "{error}");
+    assert!(stdout.is_empty() && stderr.is_empty());
 }
 
 #[test]

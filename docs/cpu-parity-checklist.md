@@ -98,8 +98,8 @@ does not mean executable template support is absent.
 
 The next bounded change starts from local commit
 `eb6c5902a1bb9d070907dcdb80455584aa1a735d`; the earlier receipts above remain
-historical evidence. The standard Linux gate now passes **733 tests, zero
-failures and 49 existing ignores**. Strict Clippy over all test targets also
+historical evidence. That checkpoint passed **733 tests, zero failures and
+49 existing ignores** in the standard Linux gate. Strict Clippy over all test targets also
 passes. Its extra check found one trait-parameter naming lint in the previous
 deadlock regression; renaming that parameter changes no assertion or behavior.
 
@@ -169,6 +169,52 @@ float-parity claim. The new constructor-tail regression uses signed zero for
 exact field-bit preservation; existing NaN tests remain unchanged. The broader
 NaN/host representation question needs separate oracle qualification.
 
+## Native numeric-chain follow-up
+
+Starting from `f085f0b85057decf4c360ff586e34445c1ba1dee`, both original
+10,000-element programs now also pass native execution. The correction propagates
+already available U32 values: closed literal words and packed values can satisfy
+sealed `U32.inc`, `U32.add`, `U32.mul` and `U32.shl` operations without building
+another deferred arithmetic chain. Increment joins the existing checked-body
+optimizations and uses the ordinary body whenever its argument is not packed.
+No general argument evaluation or ordinary Word-field decoding is performed by
+this inspection. Unknown, partial, cyclic or non-value arguments retain the
+existing lazy path; strict proof programs never enable this optimization.
+
+Bound variables reuse their existing thunk identities. Cached global references
+do likewise, while an uncached global reference stays suspended without retaining
+the caller's local environment. This avoids unnecessary retention and collection
+work in the template version. It does not unfold an unresolved reference or
+execute a request early. Inspection walks have a 32-transition cutoff and charge
+the same work budget; reaching the cutoff falls back to normal evaluation.
+The 2,000,000-step, 4,096-frame and 131,072-slot arena bounds are unchanged.
+Diagnostic evaluator counts were 1,463,168 work units for `hand` and 1,858,579 for
+`tmpl`; these are implementation work counts, not elapsed-time benchmarks.
+
+New tests preserve an unused invalid Word tail, then demand it after printing
+`before`: the original request-matching error occurs, without executing the
+request or printing `after`. Other controls cover increment wrapping and sealed
+origins, suspended errors/requests, cyclic inspection, deep environment fallback,
+a million-iteration ready accumulator, cancellation, and both unchanged whole
+fixtures. Existing non-tail numeric depth, lazy arithmetic, forced collection,
+proof refusal and output-bound checks remain intact.
+
+| Check | Result |
+| --- | --- |
+| Standard Linux gate | 738 passed, zero failed, 49 existing ignores |
+| Strict Clippy across all test targets | Passed without suppression |
+| Focused native checks | 237 passed, zero failed, one existing profiler ignore |
+| All 16 positive comptime fixtures, two repetitions | Native, port C, port JS and upstream C each match 32/32 executions |
+| Upstream JS | 28/32 with default stack; four supplemental 4 MiB-stack executions match |
+| Whole `hand` and `tmpl`, all qualified runtimes | Exactly `50005000\n`, empty stderr, exit 0 in both repetitions |
+| Existing baseline/effects/control suites, twice each | 154 exact matches; six known upstream Node `bun:ffi` failures; zero timeouts |
+
+The matrix has 160 exact matches among 164 executions, with four classified
+upstream default-stack failures and zero timeouts. All repeated outputs and
+statuses are deterministic. This closes the identified native numeric-chain gap
+for these fixtures; it does not establish full CPU parity. Unrelated corpus,
+foreign-effect, host and hardware qualifications below remain open.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -180,7 +226,7 @@ CPU work.
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
-| Missing | Native whole-program resource parity | The two unchanged 10,000-element workloads still exhaust the work budget. Tail-update coalescing is verified but does not eliminate lazy numeric/match continuations. Retain fail-closed bounds and demand semantics. |
+| Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
@@ -193,12 +239,12 @@ CPU work.
 | Unrun, hardware-dependent | CUDA/Metal/sanitizers | Desktop or suitable GPU hardware is needed for these checks. They are not prerequisites for the CPU tasks above. |
 | Unrun here | New Windows/macOS qualification of this change | Historical Windows results qualify older commits, not this candidate. |
 
-The next small CPU step is to reduce the now-isolated deferred numeric chains
-in native `range`/`incs`/`total` without changing lazy Word-field semantics. An eagerly forced accumulator is not an established equivalent
-transformation. Keep whole-program qualification separate from smaller diagnostic
-successes and retain cancellation, collection and exhaustion controls. This
-remaining implementation work needs no GPU or new dependency; it is not an
-executor/setup blocker or permission to adopt newer upstream code.
+The isolated native numeric-chain milestone is complete. Before claiming CPU
+parity, continue the missing coverage above with a separately bounded set of
+upstream executable fixtures and exact negative outcomes. Larger lazy graphs,
+arbitrary foreign calls and host-specific effects remain distinct requirements.
+This checkpoint adopts no newer upstream code or dependency and needs no GPU
+hardware to continue CPU work.
 
 ## Reproduction and retained evidence
 
@@ -240,10 +286,14 @@ scaled and isolated native diagnostics, List-fold and NaN probes, and initial fa
 checks as well as final passing logs. Diagnostic instrumentation is absent from
 the committed runtime. Original evidence directories are intact.
 
-To reproduce the remaining native gap, run either whole fixture under
+The numeric follow-up evidence is retained separately in the private
+`cpu-ready-numeric` directory: full/focused/Clippy logs, exact commands and
+hashes, repeated comptime and existing-suite receipts, and diagnostic work
+counts. Temporary diagnostic instrumentation was removed before qualification.
+To reproduce the now-passing native cases, run either whole fixture under
 `teamy-bend run`; compare with `compile --executable --target javascript|c`.
-For the upstream JS oracle only, use `node --stack-size=4096`; C uses
-`--threads 1 --gpu off`. Do not change port resource budgets.
+Only the upstream JS oracle needs `node --stack-size=4096`; C uses
+`--threads 1 --gpu off`. Keep port resource budgets unchanged.
 
 The frozen `Cargo.lock` SHA256 is
 `d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4`.
