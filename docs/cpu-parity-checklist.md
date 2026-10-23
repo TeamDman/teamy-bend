@@ -302,6 +302,27 @@ explicit safety policies, native foreign support is missing implementation, and
 Bun/default-Node-stack limitations belong to the oracle host/profile. None silently
 waives an acceptance cell. Next: the existing request-out-of-band failure contract.
 
+## Request fail-stop follow-up
+
+The [bounded failure-contract correction](cpu-request-fail-stop.md) gives genuine
+out-of-band requests a structured failure category in native/C execution and
+uses JS's authenticated request identity. Raw stdout/stderr and status now match
+upstream; unrelated host errors retain their diagnostics. Output order, collection,
+channel cleanup, lazy demand and C worker error forwarding remain tested.
+
+Full gate: **755 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
+The original request fixture matches all five runtimes twice. An authored fork
+control matches all 18 observations, including both C implementations at 1, 2 and
+4 workers. Eleven supplemental cleanup probes pass. These are bounded profiles,
+not general scheduler parity. All 39 ledger fixtures were renewed on `b640bf5`;
+positive/comptime outcomes are unchanged, with zero timeouts.
+
+The negative matrix now has 32 exact matches, 12 diagnostic differences, eight
+safe resource-policy refusals, two unsupported native foreign calls and two
+upstream Bun failures over 56 executions. Its exit remains 1. Next: exact Nat
+and array diagnostic contracts, treating C's lower array ceiling separately.
+Dependencies, toolchains, reference pins and all earlier evidence are preserved.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -315,6 +336,7 @@ CPU work.
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
+| Passed, bounded | Out-of-band request failure contract | Original fixture matches all five runtimes twice; exact streams/status/order, cleanup, lookalikes and worker forwarding covered. Other failure classes remain open. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; six-family diagnostic/budget/foreign gaps remain explicit. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |

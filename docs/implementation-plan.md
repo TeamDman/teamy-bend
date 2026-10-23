@@ -3153,3 +3153,23 @@ rejecting unsupported constructs and testing false proofs. Model correspondence
 risk is controlled by independent conformance and negative controls. Reference
 contamination is controlled by read-only checkouts and tracked template selection.
 Hardware-dependent coverage must be marked unverified when unavailable.
+
+### [x] 5.26 Preserve the out-of-band request failure contract
+
+Actual private requests now reach a structured language-failure boundary in
+native/C execution; JS uses its existing authenticated identity. The original
+request fixture matches upstream stdout, stderr and status without running the
+effect. Native cleanup precedes reporting, and C preserves the kind through CPU
+worker cancellation/completion. Ordinary host errors, writer failures, budgets,
+proof checks and lazy demand retain their existing behavior.
+
+Five new regressions and stronger adjacent assertions cover exact output order,
+lookalikes, collection/channel cleanup, diagnostic writer errors and multiworker
+propagation. Full gate: 755 passed, zero failed, 49 ignored; strict all-target
+Clippy passes. All 39 ledger fixtures were renewed. The negative matrix improves
+to 32 exact matches out of 56, retaining 12 diagnostic, eight resource-policy,
+two foreign and two oracle-host gaps. Positive/comptime outcomes are unchanged;
+18 authored worker observations and 11 cleanup probes pass, with no timeout.
+See [request fail-stop](cpu-request-fail-stop.md) for API implications, exact
+commands and remaining requirements. Full CPU parity remains open; no dependency,
+toolchain, GPU or upstream-source change was made.

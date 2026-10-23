@@ -111,8 +111,10 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `099ffd2` identifies the
-Nat multiplication correction; all 39 linked fixtures were measured on that engine.
+gate selection, not a port exception. Engine commit `b640bf5` identifies the
+[request fail-stop correction](cpu-request-fail-stop.md); all 39 linked fixtures
+were renewed on that engine. The authored worker control separately qualifies
+this request outcome at one, two and four C workers; broader profiles remain open.
 Private receipt hashes and binary snapshots are retained with the checkpoint
 evidence; no machine paths appear here.
 
@@ -131,11 +133,14 @@ CPU verification or require a GPU desktop.
 The [runtime-negative checkpoint](cpu-runtime-negatives.md) records all ten
 runtime-negative fixtures across the ledger. Its native array-depth acceptance
 defect and the [native Nat.mul budget gap](cpu-native-nat-mul.md) are corrected.
-Diagnostic, explicit resource-policy, native foreign and oracle-host cells remain
-unqualified. The next small CPU step is an exact language fail-stop contract for
-`io/request_out_of_band.bend`, preserving stream order and cleanup without changing
-host/tool error reporting globally. Do not classify runtime negatives as checker
-rejections or count phase-only agreement as exact parity.
+The [request fail-stop contract](cpu-request-fail-stop.md) now matches all five
+runtimes twice, including exact streams/status and adjacent worker/cleanup checks.
+The six-fixture matrix still has 24 unresolved observations: 12 diagnostic, eight
+resource-policy, two native foreign and two oracle-host failures. The next small
+CPU step is exact Nat-overflow/array-depth diagnostic qualification, preserving
+bounds and keeping C's allocation ceiling a separate unresolved policy. Do not
+classify runtime negatives as checker rejections or count phase-only agreement
+as exact parity.
 
 In parallel with later bounded families, complete lane/API review, resolve the
 upstream direct-IO host requirement, and qualify multiworker/host-specific cases.
