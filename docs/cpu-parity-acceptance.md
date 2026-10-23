@@ -116,23 +116,27 @@ turning status-only results, source hints or related regression suites into pari
 passes. Full per-lane applicability/printability and API review remain required.
 
 The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
-three of those 164 interpreter-only cases at candidate `f1bbf98`. The
-[function normalization checkpoint](cpu-function-normalization.md) fixes their
-parameterized-entry refusal: all three match the pinned interpreter's core
-structure twice, one also matches raw output, and two retain presentation-only
-differences. Compiled lanes are not selected by the pinned gate for these
-originals. Across both ledgers, 54 distinct rows have some execution evidence and
-1,248 have none linked: 439 checker negatives, twelve check-only modules, 161
+six of those 164 interpreter-only cases at candidate `3354e60`. The earlier
+[entry correction](cpu-function-normalization.md) fixed parameterized-entry
+refusal; the [recursive normalization checkpoint](cpu-recursive-normalization.md)
+qualifies three more originals and closes both earlier presentation differences
+with the pinned match-printer rules. All six core structures and raw results
+match twice. Compiled lanes are not selected by the pinned gate for these
+originals. Across both ledgers, 57 distinct rows have some execution evidence and
+1,245 have none linked: 439 checker negatives, twelve check-only modules, 158
 interpreter-only cases and 636 compiled candidates. These are evidence categories,
 not a common runtime denominator or a completeness claim. The historical
 applicability CSV remains tied to its recorded runtime-ledger inputs.
 
 `pass_structural` means equality of the qualified parsed core vocabulary; it
-does not resolve a `presentation_difference` in raw bytes. The rendering
-contract remains open for both rows. This adds no exception to the acceptance
-criterion. The positive runtime matrix is renewed on `f1bbf98` (308/320 exact,
-twelve known Bun-host failures); earlier negative/comptime and multiworker
-receipts remain at their recorded commits and are not relabelled as current.
+does not resolve a `presentation_difference` in raw bytes. All six rows now also
+have independent `pass_exact` evidence. This adds no exception to the acceptance
+criterion. The positive matrix is renewed on `3354e60` (308/320 exact, twelve
+known Bun-host failures), as is the six-fixture negative matrix (44/56 exact;
+eight resource-policy, two native-foreign and two Bun-host gaps). Earlier
+comptime and multiworker receipts retain their recorded commits. A separate
+authored rewrite-term rendering defect is reproduced on baseline and candidate;
+it remains open and does not increase inventory coverage.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
@@ -189,9 +193,11 @@ only and does not approve a semantics change or an oracle exception. Independent
 CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
 five runtimes twice after a packed native division/modulo optimization; the
 operator/representation group now also passes all five runtimes twice. A bounded
-pure-interpretation family now has three qualified core results with two raw
-rendering gaps. Next: `flatten/computed_recursion_002`, `_003` and `_004`, whose
-recursive function normal forms remain unqualified. The sleep_order and
+pure-interpretation family now has six exact normalized results, including the
+three recursive mains. Next: the source-level rewrite printer, which currently
+exposes internal motive binders in a small checked program. Qualify named/unnamed
+motive binders and selected original rewrite fixtures without treating unsupported
+comparison forms as opaque text. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

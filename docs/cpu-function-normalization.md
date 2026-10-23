@@ -1,5 +1,11 @@
 # Function-valued main normalization checkpoint
 
+Historical evidence for `f1bbf98` follows. The subsequent
+[recursive normalization checkpoint](cpu-recursive-normalization.md) at `3354e60`
+closes both raw presentation differences with the pinned match-printer rules and
+adds three original recursive fixtures. The original receipts below remain tied
+to their recorded candidate; they are not rewritten as later passes.
+
 Candidate `f1bbf98ac5c5c42b16ee6746991b1d3c04d1013c` fixes entry interpretation
 for three unchanged `flatten/computed_operator_match_002*.bend` fixtures against
 [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).

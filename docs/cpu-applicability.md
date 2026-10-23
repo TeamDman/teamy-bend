@@ -9,14 +9,15 @@ references, both ledger snapshots and existing evidence. Its
 [metadata](cpu-applicability.json) records input hashes and aggregate counts.
 Classification is not qualification or a compatibility exception.
 
-**Follow-up:** the [interpretation ledger](cpu-interpretation-evidence.csv) adds
-three original operator-match fixtures at `f1bbf98`: three structural agreements,
-one exact raw-output agreement and two presentation differences still open.
+**Follow-up:** the [interpretation ledger](cpu-interpretation-evidence.csv) links
+six original operator/recursive-match fixtures at `3354e60`: six structural and
+exact raw-output agreements, twice. The earlier two presentation differences
+are closed by source-backed match rendering, not waived by structural comparison.
 The tables/CSV below remain the historical runtime-ledger classification;
-their 1,251 runtime-unlinked count includes these three interpreter-only rows.
-Across both ledgers, 1,248 rows have no linked execution/interpretation receipt,
-including 161 interpretation-only cases. See the
-[normalization checkpoint](cpu-function-normalization.md) for exact contracts;
+their 1,251 runtime-unlinked count includes these six interpreter-only rows.
+Across both ledgers, 1,245 rows have no linked execution/interpretation receipt,
+including 158 interpretation-only cases. See the
+[normalization checkpoint](cpu-recursive-normalization.md) for exact contracts;
 no category or gate is waived by this additional evidence.
 
 ## What the unlinked entries actually require
@@ -50,9 +51,10 @@ Of the 163 accepted interpretation-only cases, 129 are in `flatten`. For example
 `flatten/computed_operator_match_002.bend` and its `_dbl` / `_sel` companions
 have function-valued mains; their goldens are normalized lambdas/match functions,
 not IO output or a machine executable result. They were only source-reviewed at
-the classification checkpoint; the follow-up above now records actual normalized
-results and keeps the two raw rendering gaps explicit. The next independent
-family is `flatten/computed_recursion_002`, `_003` and `_004`.
+the classification checkpoint; the follow-up above records actual normalized
+results and the correction of their raw rendering gaps. The three original
+computed-recursion mains also now match exactly. A separate authored rewrite-term
+reproducer exposes the next independent rendering gap; it adds no inventory row.
 
 The upstream gate [enumerates every test directory](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/gates/test.ts#L210).
 Names such as `page`, `rfc` and `gfx` do not make their fixtures optional examples.

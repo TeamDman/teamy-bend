@@ -437,22 +437,23 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [function-valued main normalization](cpu-function-normalization.md)
-at `f1bbf98`. The three original computed-operator functions now normalize in
-eval/run; all core structures match upstream twice. One raw output is exact and
-two retain only rendering differences, still open under the acceptance contract.
-Argument-taking APIs, executable proof separation, cancellation and safety limits
-are unchanged. Full gate: **784 passed, zero failed, 49 ignored**; strict Clippy
-passes. The renewed positive matrix is **308/320 exact**, with twelve known Bun
-host failures. Earlier negative/comptime and multiworker profiles are retained
-at their own commits, not silently renewed.
+Latest bounded checkpoint: [recursive normalization and match rendering](cpu-recursive-normalization.md)
+at `3354e60`. All six original operator/recursive functions match upstream's core
+structures and raw output twice; the two earlier presentation differences are
+corrected by the pinned match-printer rules. Argument-taking APIs, proof
+separation, cancellation and safety limits are unchanged. Full gate: **787 passed,
+zero failed, 49 ignored**; strict Clippy passes. Renewed positive matrix:
+**308/320 exact**, twelve Bun-host gaps. Renewed negative matrix: **44/56 exact**,
+eight resource-policy, two native-foreign and two Bun-host gaps. Earlier comptime
+and multiworker profiles retain their own commits.
 
-The separate interpretation ledger plus the runtime ledger link 54 distinct
-fixtures; 1,248 lack either kind of execution receipt (439 checker negatives,
-twelve check-only, 161 interpretation-only, 636 compiled candidates). Linked
-rows may still have failed/blocked cells. Next independent coverage is
-`flatten/computed_recursion_002`, `_003` and `_004`; no normalized-result receipt
-exists for them yet. The acceptance criterion and pending demand choices stand.
+The separate interpretation ledger plus the runtime ledger link 57 distinct
+fixtures; 1,245 lack either kind of execution receipt (439 checker negatives,
+twelve check-only, 158 interpretation-only, 636 compiled candidates). Linked rows
+may still have failed/blocked cells. Next independent gap: a checked rewrite
+function prints internal motive binders, reproduced on baseline and candidate.
+Its authored reproducer adds no inventory row. The acceptance criterion and
+pending demand choices stand.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -461,7 +462,8 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
-| Structural agreement; two raw differences open | Function-valued normalization | Three original operator-match functions match the pinned interpreter's core structure. One output is byte-identical; nested match layout and parentheses differ in two. Recursive-function normal forms remain the next unqualified family. |
+| Passed, bounded | Function-valued normalization | Six original operator/recursive functions match pinned core structure and raw output twice. No normalization defect was demonstrated in the recursive family; match-printer correction closes the prior two presentation gaps. |
+| Missing | Rewrite-term rendering | A small checked function prints internal motive binders instead of upstream source syntax on both baseline and candidate. Named/unnamed motives and selected original rewrite fixtures need a bounded correction and qualification. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |

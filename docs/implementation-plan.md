@@ -3334,3 +3334,30 @@ categories. Next: the three computed-recursion function normal forms. Prior
 negative/comptime and multiworker receipts retain their original identities;
 pending demand choices and all broader acceptance gaps remain open. No dependency,
 toolchain/pin change, installation or push.
+
+### [x] 5.34 Qualify recursive normal forms and close match rendering gaps
+
+The unchanged computed_recursion_002/003/004 mains already normalize to the
+pinned interpreter's core structures. Source-backed match formatting now emits
+consecutive fallback arms in one ordered match, omits its empty final fallback
+and groups low-precedence branches. All six operator/recursive originals match
+raw output and structure twice; the prior two presentation gaps are corrected,
+not waived. The structural comparator, evaluation rules and safety limits are
+unchanged. Nested-arm/default, let-scope and complete recursive-call controls pass.
+
+Full gate: 787 passed, zero failed, 49 ignored; strict all-target Clippy passes.
+Renewed positive matrix: 308/320 exact, twelve known Bun gaps. Renewed negative
+matrix: 44/56 exact, eight resource-policy, two native-foreign and two Bun gaps;
+its required-parity exit remains 1. A disk-full interruption was recovered by
+removing only rebuildable incremental cache; complete receipts use fresh retry
+directories, with all original logs and source preserved.
+
+The [checkpoint](cpu-recursive-normalization.md) records exact terms, commands,
+hashes and six interpretation-ledger rows. Both ledgers now link 57 originals;
+1,245 lack execution/interpretation receipts with their applicability categories
+intact. A separate checked rewrite reproducer exposes internal motive binders in
+both baseline and candidate output. That pre-existing rendering gap is the next
+independent bounded correction; it adds no inventory row and is not hidden by
+extending the structural comparator. Earlier comptime and multiworker receipts
+retain their recorded commits. Pending demand contracts and broader CPU parity
+remain open. Frozen dependencies/toolchains/pins; local commits only, no push.
