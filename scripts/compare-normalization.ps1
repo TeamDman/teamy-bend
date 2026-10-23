@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'rewrite', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'rewrite', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -85,6 +85,9 @@ if ($Suite -in @('operator', 'all')) {
 }
 if ($Suite -in @('recursion', 'all')) {
     $names += @('computed_recursion_002', 'computed_recursion_003', 'computed_recursion_004')
+}
+if ($Suite -in @('companions', 'all')) {
+    $names += @('computed_recursion_002_sel', 'computed_recursion_003_flip', 'computed_recursion_004_sel')
 }
 $cases = @($names | ForEach-Object { @{ name = $_; fixture = "flatten/$_.bend"; original = Join-Path $Reference "tests/flatten/$_.bend"; origin = 'upstream'; function_printer = $false } })
 if ($Suite -in @('rewrite', 'all')) {

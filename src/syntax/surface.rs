@@ -139,14 +139,16 @@ pub(super) fn flatten(
     body: &Body,
     vars: &[Variable],
     fresh: &mut usize,
+    display_fresh: &mut usize,
 ) -> Result<TermRef, String> {
-    flatten_at(body, vars, fresh, 0)
+    flatten_at(body, vars, fresh, display_fresh, 0)
 }
 
 fn flatten_at(
     body: &Body,
     vars: &[Variable],
     fresh: &mut usize,
+    display_fresh: &mut usize,
     depth: usize,
 ) -> Result<TermRef, String> {
     if depth >= 64 {
@@ -154,7 +156,9 @@ fn flatten_at(
     }
     match body {
         Body::Reply(value) => Ok(vars.iter().rev().fold(Rc::clone(value), |v, b| b.lambda(v))),
-        Body::Match { scrutinees, rows } => flatten_match(scrutinees, rows, vars, fresh, depth + 1),
+        Body::Match { scrutinees, rows } => {
+            flatten_match(scrutinees, rows, vars, fresh, display_fresh, depth + 1)
+        }
         Body::Local {
             patterns,
             quant,
@@ -170,6 +174,7 @@ fn flatten_at(
                     }],
                     vars,
                     fresh,
+                    display_fresh,
                     depth + 1,
                 );
             }
@@ -182,7 +187,7 @@ fn flatten_at(
                     }
                 })
                 .collect::<Result<Vec<_>, _>>()?;
-            let mut tail = flatten_at(body, &bindings, fresh, depth + 1)?;
+            let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1)?;
             for _ in &bindings {
                 match tail.as_ref() {
                     Term::Lam { body, .. } => tail = Rc::clone(body),
@@ -221,6 +226,7 @@ fn flatten_match(
     rows: &[Row],
     vars: &[Variable],
     fresh: &mut usize,
+    display_fresh: &mut usize,
     depth: usize,
 ) -> Result<TermRef, String> {
     if depth >= 64 {
@@ -229,7 +235,7 @@ fn flatten_match(
     if scrutinees.is_empty() {
         return rows.first().map_or_else(
             || Err("a match needs a case to return".to_owned()),
-            |r| flatten_at(&r.body, vars, fresh, depth + 1),
+            |r| flatten_at(&r.body, vars, fresh, display_fresh, depth + 1),
         );
     }
     let Some(first) = vars.first() else {
@@ -255,7 +261,14 @@ fn flatten_match(
                 }
             })
             .collect::<Vec<_>>();
-        return flatten_match(&scrutinees[1..], &rows, vars, fresh, depth + 1);
+        return flatten_match(
+            &scrutinees[1..],
+            &rows,
+            vars,
+            fresh,
+            display_fresh,
+            depth + 1,
+        );
     }
     if binder.is_some_and(|v| v.id == first.id) {
         let Some((name, fields)) = constructor else {
@@ -268,8 +281,10 @@ fn flatten_match(
                 Pattern::Constructor(_, _) => {
                     let id = *fresh;
                     *fresh += 1;
+                    let display = *display_fresh;
+                    *display_fresh += 1;
                     Variable {
-                        name: format!("_{id}"),
+                        name: format!("_{display}"),
                         id,
                     }
                 }
@@ -318,8 +333,15 @@ fn flatten_match(
         next_scrutinees.extend_from_slice(&scrutinees[1..]);
         let mut next_vars = field_vars;
         next_vars.extend_from_slice(&vars[1..]);
-        let arm = flatten_match(&next_scrutinees, &positive, &next_vars, fresh, depth + 1)?;
-        let fallback = flatten_match(scrutinees, &negative, vars, fresh, depth + 1)?;
+        let arm = flatten_match(
+            &next_scrutinees,
+            &positive,
+            &next_vars,
+            fresh,
+            display_fresh,
+            depth + 1,
+        )?;
+        let fallback = flatten_match(scrutinees, &negative, vars, fresh, display_fresh, depth + 1)?;
         Ok(term(Term::Mat {
             constructor: name.clone(),
             arm,
@@ -331,6 +353,7 @@ fn flatten_match(
             rows,
             &vars[1..],
             fresh,
+            display_fresh,
             depth + 1,
         )?))
     }

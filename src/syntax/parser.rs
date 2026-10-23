@@ -259,6 +259,9 @@ struct Parser<'a> {
     aliases: BTreeMap<String, String>,
     scope: Vec<Variable>,
     fresh: &'a mut usize,
+    // Upstream resets display numbering per declaration. Semantic IDs remain
+    // unique across the whole book to preserve capture-free substitution.
+    display_fresh: usize,
     book: &'a mut Book,
     depth: usize,
     reusable: Vec<(Variable, TermRef)>,
@@ -330,7 +333,11 @@ impl Parser<'_> {
         }
         Ok(self.bump())
     }
+    fn flatten_body(&mut self, body: &Body, vars: &[Variable]) -> Result<TermRef, ParseError> {
+        flatten(body, vars, self.fresh, &mut self.display_fresh).map_err(|error| self.error(error))
+    }
     fn fresh_variable(&mut self, name: String) -> Variable {
+        self.display_fresh += 1;
         let id = *self.fresh;
         *self.fresh += 1;
         Variable { name, id }
@@ -443,6 +450,7 @@ impl Parser<'_> {
     fn declarations(&mut self) -> Result<(), ParseError> {
         while !self.is("") {
             self.scope.clear();
+            self.display_fresh = 0;
             self.compile_bindings.clear();
             if self.take("type") {
                 self.datatype()?;
@@ -576,7 +584,7 @@ impl Parser<'_> {
             clauses.push((all, b));
         }
         let body = self.body(0)?;
-        let mut ty = flatten(&body, &[], self.fresh).map_err(|e| self.error(e))?;
+        let mut ty = self.flatten_body(&body, &[])?;
         for (all, b) in clauses.into_iter().rev() {
             ty = if all {
                 arrows(&[b], ty)
@@ -691,7 +699,7 @@ impl Parser<'_> {
             foreign: false,
         }));
         let body = self.body(0)?;
-        let value = flatten(&body, &vars, self.fresh).map_err(|e| self.error(e))?;
+        let value = self.flatten_body(&body, &vars)?;
         // Specializations minted in the body precede their caller. Removing
         // only the temporary event preserves those separately checked defs.
         self.book.declarations.remove(temporary);
@@ -965,6 +973,7 @@ impl Parser<'_> {
             aliases: snapshot.aliases,
             scope: Vec::new(),
             fresh: self.fresh,
+            display_fresh: self.display_fresh,
             book: self.book,
             depth: 0,
             reusable: Vec::new(),
@@ -1105,7 +1114,7 @@ impl Parser<'_> {
                 let reusable = self.is_reusable(&out);
                 let v = self.bind_variable(name.clone(), reusable);
                 let body = self.body(self.current().column.saturating_sub(1))?;
-                out = flatten(&body, &[v], self.fresh).map_err(|e| self.error(e))?;
+                out = self.flatten_body(&body, &[v])?;
                 self.scope.truncate(old);
                 continue;
             }
@@ -1292,7 +1301,7 @@ impl Parser<'_> {
         }
         if self.take("(") {
             let body = self.body(self.current().column.saturating_sub(1))?;
-            let mut out = flatten(&body, &[], self.fresh).map_err(|e| self.error(e))?;
+            let mut out = self.flatten_body(&body, &[])?;
             if self.take(",") {
                 let mut values = vec![out];
                 loop {
@@ -1368,7 +1377,7 @@ impl Parser<'_> {
             self.scope.truncate(old);
             self.take(";");
             let body = self.body(self.current().column.saturating_sub(1))?;
-            let body = flatten(&body, &[], self.fresh).map_err(|e| self.error(e))?;
+            let body = self.flatten_body(&body, &[])?;
             return Ok(term(Term::Rwt {
                 evidence,
                 motive: term(Term::Lam {
@@ -1446,7 +1455,11 @@ impl Parser<'_> {
                 .find(|d| matches!(d,Declaration::Adt(a) if a.name==name))
             else {
                 if matches!(value.as_ref(), Term::Ref(_) | Term::Var { .. }) {
-                    let marker = self.fresh_variable(name);
+                    // The + marker has a sentinel identity upstream, not a
+                    // fresh display number. Our semantic ID still stays unique.
+                    let id = *self.fresh;
+                    *self.fresh += 1;
+                    let marker = Variable { name, id };
                     self.reusable_markers.insert(marker.id);
                     return Ok(marker.term());
                 }
@@ -1526,6 +1539,16 @@ impl Parser<'_> {
                 args,
             }))
         } else {
+            // The pinned parser allocates an identity for an unresolved simple
+            // name before it becomes a binder or a global reference. Track that
+            // display event without manufacturing a semantic variable here.
+            if !self.scope.iter().any(|v| v.name == name)
+                && self.resolve(&name) == name
+                && !name.contains('.')
+                && !self.templates.declarations.contains_key(&name)
+            {
+                self.display_fresh += 1;
+            }
             Ok(self.variable(&name))
         }
     }
@@ -1595,12 +1618,7 @@ impl Parser<'_> {
         );
         let rebindings = std::mem::take(&mut self.reusable);
         let tail = self.do_statement(module, types, result, column)?;
-        let tail = flatten(
-            &Body::Reply(tail).with_reusable(&rebindings),
-            &[],
-            self.fresh,
-        )
-        .map_err(|e| self.error(e))?;
+        let tail = self.flatten_body(&Body::Reply(tail).with_reusable(&rebindings), &[])?;
         self.scope.truncate(old);
         if assignment {
             Ok(term(Term::Let {
@@ -2374,6 +2392,7 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
         aliases: BTreeMap::new(),
         scope: Vec::new(),
         fresh: &mut fresh,
+        display_fresh: 0,
         book: &mut book,
         depth: 0,
         reusable: Vec::new(),
@@ -2409,6 +2428,7 @@ fn parse_into(
         aliases: input.aliases,
         scope: Vec::new(),
         fresh,
+        display_fresh: 0,
         book,
         depth: 0,
         reusable: Vec::new(),

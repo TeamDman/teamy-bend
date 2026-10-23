@@ -13,13 +13,16 @@ use teamy_bend::syntax::load;
 use teamy_bend::syntax::parse;
 use teamy_bend::syntax::parse_term;
 
-const CASES: [&str; 6] = [
+const CASES: [&str; 9] = [
     include_str!("fixtures/cpu-normalization/computed_operator_match_002.bend"),
     include_str!("fixtures/cpu-normalization/computed_operator_match_002_dbl.bend"),
     include_str!("fixtures/cpu-normalization/computed_operator_match_002_sel.bend"),
     include_str!("fixtures/cpu-normalization/computed_recursion_002.bend"),
     include_str!("fixtures/cpu-normalization/computed_recursion_003.bend"),
     include_str!("fixtures/cpu-normalization/computed_recursion_004.bend"),
+    include_str!("fixtures/cpu-normalization/computed_recursion_002_sel.bend"),
+    include_str!("fixtures/cpu-normalization/computed_recursion_003_flip.bend"),
+    include_str!("fixtures/cpu-normalization/computed_recursion_004_sel.bend"),
 ];
 
 #[test]
@@ -67,6 +70,74 @@ fn recursive_function_normalization_preserves_complete_application_results() {
             );
         }
     }
+}
+
+#[test]
+fn selector_and_flip_companions_preserve_nested_and_default_application_results() {
+    for (source, cases) in [
+        (
+            CASES[6],
+            vec![
+                ("Z{}", "S{Z{}}"),
+                ("S{Z{}}", "Z{}"),
+                ("S{S{Z{}}}", "S{Z{}}"),
+            ],
+        ),
+        (CASES[7], vec![("T{}", "F{}"), ("F{}", "T{}")]),
+        (
+            CASES[8],
+            vec![("Z{}", "S{Z{}}"), ("S{Z{}}", "Z{}"), ("S{S{Z{}}}", "Z{}")],
+        ),
+    ] {
+        let checked = check_book(&parse(source).unwrap()).unwrap();
+        for (argument, expected) in cases {
+            assert_eq!(
+                checked
+                    .evaluate("main", &[parse_term(argument).unwrap()])
+                    .unwrap()
+                    .to_string(),
+                expected
+            );
+        }
+    }
+}
+
+#[test]
+fn generated_pattern_names_are_local_while_semantic_binder_ids_stay_global() {
+    let prefix =
+        "type Noise is Data: Quiet{} Loud{next: Noise}\ndef unused(x: Noise) -> Noise: x\n";
+    let book = parse(&format!("{prefix}{}", CASES[6])).unwrap();
+    let parameters = |name: &str| {
+        book.declarations
+            .iter()
+            .find_map(|declaration| match declaration {
+                teamy_bend::kernel::Declaration::Def(definition) if definition.name == name => {
+                    Some(definition.parameters[0].id)
+                }
+                _ => None,
+            })
+            .unwrap()
+    };
+    assert_ne!(parameters("unused"), parameters("main"));
+    let checked = check_book(&book).unwrap();
+    assert_eq!(
+        checked.normalize_definition("main").unwrap().to_string(),
+        r"\{S: \{Z: Z{}; (_3 => S{Z{}})}; (r => S{Z{}})}"
+    );
+    assert_eq!(
+        checked
+            .evaluate("unused", &[parse_term("Quiet{}").unwrap()])
+            .unwrap()
+            .to_string(),
+        "Quiet{}"
+    );
+    assert_eq!(
+        checked
+            .evaluate("main", &[parse_term("S{Z{}}").unwrap()])
+            .unwrap()
+            .to_string(),
+        "Z{}"
+    );
 }
 
 #[test]

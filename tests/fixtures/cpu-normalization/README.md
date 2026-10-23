@@ -5,6 +5,9 @@ These six unchanged `tests/flatten/computed_operator_match_002*.bend` and
 come from [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/flatten).
 Copyright 2026 HigherOrderCO; Apache-2.0. See NOTICE and `licenses/Apache-2.0.txt`.
 
+Three selector/flip companions (`computed_recursion_002_sel`, `_003_flip` and
+`_004_sel`) are also unchanged copies from the same flatten directory.
+
 Three further unchanged fixtures come from the same pinned repository:
 `eval/stuck_rewrite_print.bend`, `proof/context_rewrite_hypothesis.bend` and
 `proof/context_rewrite_value.bend`. They preserve stuck rewrites and checked
