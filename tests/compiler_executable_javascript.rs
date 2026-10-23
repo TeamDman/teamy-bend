@@ -40,6 +40,36 @@ impl Fixture {
             .output()
             .expect("executable compiler tests require Node.js")
     }
+    fn run_bounded(&self, source: &str) -> Output {
+        let generated = self.compile(source).unwrap();
+        let script = self.write("bounded.cjs", &generated);
+        let stdout = self.0.join("bounded.stdout");
+        let stderr = self.0.join("bounded.stderr");
+        let mut child =
+            Command::new(std::env::var_os("TEAMY_BEND_NODE").unwrap_or_else(|| "node".into()))
+                .arg(script)
+                .stdout(fs::File::create(&stdout).unwrap())
+                .stderr(fs::File::create(&stderr).unwrap())
+                .spawn()
+                .expect("constructor-tail tests require Node.js");
+        let started = std::time::Instant::now();
+        let status = loop {
+            if let Some(status) = child.try_wait().unwrap() {
+                break status;
+            }
+            if started.elapsed() > std::time::Duration::from_secs(30) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("constructor-tail program exceeded its 30-second deadline");
+            }
+            std::thread::sleep(std::time::Duration::from_millis(10));
+        };
+        Output {
+            status,
+            stdout: fs::read(stdout).unwrap(),
+            stderr: fs::read(stderr).unwrap(),
+        }
+    }
     fn expect(&self, source: &str, expected: &str) {
         let output = self.run(source);
         assert!(
@@ -140,6 +170,77 @@ def main() -> IO(Unit):
     assert!(!output.status.success());
     assert!(String::from_utf8_lossy(&output.stderr).contains("step budget exhausted"));
     assert!(output.stdout.is_empty());
+}
+
+#[test]
+fn upstream_whole_list_programs_complete_with_the_default_node_stack() {
+    let fixture = Fixture::new();
+    for source in [
+        include_str!("fixtures/cpu-comptime/hand.bend"),
+        include_str!("fixtures/cpu-comptime/tmpl.bend"),
+    ] {
+        let output = fixture.run_bounded(source);
+        assert_eq!(output.status.code(), Some(0), "{output:?}");
+        assert_eq!(output.stdout, b"50005000\n");
+        assert!(output.stderr.is_empty(), "{output:?}");
+    }
+}
+
+#[test]
+fn constructor_tails_preserve_erased_fields_closures_and_float_bits() {
+    let fixture = Fixture::new();
+    let output = fixture.run_bounded(
+        r"
+import Base
+type Chain is Type:
+  End{}
+  Link{-tag: Nat, value: F32, callback: U32 -> U32, tail: Chain}
+def make_float(value: U32) -> F32:
+  match value:
+    case U32{word}: F32{word}
+def make(n: Nat) -> Chain:
+  match n:
+    case 0n: End{}
+    case 1n+p:
+      Link{0n, make_float(2147483648), x => U32.add(x, 1), make(p)}
+def consume(chain: Chain, acc: U32) -> U32:
+  match chain:
+    case End{}: acc
+    case Link{tag, value, callback, tail}:
+      consume(tail, callback(U32.add(acc, U32.sub(F32.bits(value), 2147483648))))
+def main() -> IO(Unit):
+  IO.print(U32.show(consume(make(U32.to_nat(10000)), 0)))
+",
+    );
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(output.stdout, b"10000\n");
+    assert!(output.stderr.is_empty(), "{output:?}");
+}
+
+#[test]
+fn infinite_constructor_tails_fail_closed_and_prefix_errors_keep_their_order() {
+    let fixture = Fixture::new();
+    let source = r#"
+import Base
+type Chain is Data: Link{head: Char, tail: Chain}
+@unsafe
+def forever(n: Nat) -> Chain: Link{'a', forever(n)}
+def discard(chain: Chain) -> IO(Unit): IO.print("unreachable")
+def main() -> IO(Unit): discard(forever(0n))
+"#;
+    let output = fixture.run_bounded(source);
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        output.stderr,
+        b"teamy-bend generated program: executable JavaScript constructor chain budget exhausted\n"
+    );
+    let output = fixture.run_bounded(&source.replace("'a'", "Char.from_u32(1114112)"));
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    let error = String::from_utf8(output.stderr).unwrap();
+    assert!(error.contains("not a Unicode scalar"), "{error}");
+    assert!(!error.contains("budget"), "{error}");
 }
 
 #[test]

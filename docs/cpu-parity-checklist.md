@@ -94,6 +94,81 @@ No port limit was raised and no fixture was shortened to manufacture parity.
 The old statement that all comptime fixtures reject in the strict audit therefore
 does not mean executable template support is absent.
 
+## Continuation follow-up
+
+The next bounded change starts from local commit
+`eb6c5902a1bb9d070907dcdb80455584aa1a735d`; the earlier receipts above remain
+historical evidence. The standard Linux gate now passes **733 tests, zero
+failures and 49 existing ignores**. Strict Clippy over all test targets also
+passes. Its extra check found one trait-parameter naming lint in the previous
+deadlock regression; renaming that parameter changes no assertion or behavior.
+
+Generated JavaScript now uses the existing trampoline for the last live field
+of an ordinary tagged constructor. Earlier fields evaluate in source order;
+erased fields stay omitted. A private construction marker carries the unfinished
+record, and only its completed value can return to Bend or a foreign callback.
+Native scalar/string/array constructors keep their existing representation and
+non-tail call guard. Constructor chains have a 131,072-node bound per trampoline
+invocation, in addition to the unchanged 2,000,000-transition budget and
+512-call guard. An infinite constructor producer fails explicitly rather than
+exhausting the JavaScript stack. Tests cover both unchanged upstream workloads,
+erased fields, closure fields, signed-zero bits, prefix-error order, and the
+existing genuine non-tail, string and transition bounds.
+
+The native interpreter already uses explicit continuations. Its initial failure
+had 4,090 memoization updates among 4,096 frames. Adjacent updates now share a
+memoized target through a collector-traced alias. A checked chain of 2,200 tail
+calls and a 10,000-step list builder now complete; the retained pre-change binary
+fails the latter at the continuation bound. Forced collection, sharing, cyclic
+evaluation, cancellation and
+nested numeric depth regressions pass. No step, frame, arena or output limit
+changed. This does **not** finish the two native workloads: deferred arithmetic
+and pattern matching still retain real pending work. The whole programs now
+reach the work budget; scaled 500/1,000-element diagnostic versions still reach
+the continuation bound. The 100-element version returns `5050` before and after.
+The native evaluator's documented lazy behavior must not be replaced with eager
+argument forcing merely to make this benchmark pass.
+
+Reduced native cases isolate the remaining work: at 10,000 steps, a constant-head
+builder followed by `first` returns `1`, but demanding the incremented range
+head or summing even constant heads reaches the continuation bound. Each reduced
+500-element case succeeds. Combining mapping and summing still fails at that
+smaller size. These are diagnostic variants, not replacements for the unchanged
+upstream workloads. They identify deferred numeric chains as the next target;
+list-tail construction alone no longer requires an update frame per call.
+
+All 16 positive comptime fixtures were regenerated and executed twice:
+
+| Runtime | Exact output/status matches | Remaining observations |
+| --- | --- | --- |
+| Upstream C | 32/32 | CPU, one worker, GPU disabled. |
+| Port C | 32/32 | Strict C11 warnings remain errors. |
+| Upstream JS, default Node stack | 28/32 | Both repetitions of `hand` and `tmpl` hit the upstream stack failure. |
+| Upstream JS, supplemental 4 MiB stack | 4/4 | Both whole programs print `50005000\n`, exit 0, empty stderr. |
+| Port JS, default Node stack | 32/32 | Includes both whole programs; no Node stack flag. |
+| Native Rust | 28/32 | Both repetitions of the whole programs hit the unchanged work budget. |
+
+That is 156 matching and eight classified nonmatching executions, including the
+four supplemental oracle runs, with zero timeouts. Repetitions have identical
+stdout, stderr and status. The existing baseline/effects/control suites also
+ran twice: 154 exact matches and six previously classified upstream-JS
+`bun:ffi` failures, zero timeouts. All three port runtimes match their C oracle.
+
+One further audit candidate, unchanged `base/list_fold.bend`, passes all five
+executable runtimes, including filtering, both folds, predicates, search, stable
+sorting and IO iteration. Its strict-audit refusal is not evidence of an absent
+executable List template implementation. This was a single bounded coverage
+probe, not a full Base-library qualification.
+
+A supplemental 100-record float/closure probe exposes a pre-existing reference
+backend difference: both C emitters print `100`, while both JS emitters under
+this Node version print `99` for the checksum of quiet-NaN payload bits. The retained
+pre-change port JS binary reproduces `99` three times; native execution reaches
+its work budget. This is not a new constructor-tail regression or a resolved
+float-parity claim. The new constructor-tail regression uses signed zero for
+exact field-bit preservation; existing NaN tests remain unchanged. The broader
+NaN/host representation question needs separate oracle qualification.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -104,8 +179,9 @@ CPU work.
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
-| Missing | Native and JS whole-program depth/resource parity | Two unchanged 10,000-element comptime workloads fail while upstream C and qualified upstream JS succeed. Reduce the continuation growth before changing representation; retain fail-closed budgets. |
-| Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps; e.g. `base/list_fold.bend` reports a template-position limitation. Validate each candidate in its intended mode. |
+| Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
+| Missing | Native whole-program resource parity | The two unchanged 10,000-element workloads still exhaust the work budget. Tail-update coalescing is verified but does not eliminate lazy numeric/match continuations. Retain fail-closed bounds and demand semantics. |
+| Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |
@@ -117,11 +193,12 @@ CPU work.
 | Unrun, hardware-dependent | CUDA/Metal/sanitizers | Desktop or suitable GPU hardware is needed for these checks. They are not prerequisites for the CPU tasks above. |
 | Unrun here | New Windows/macOS qualification of this change | Historical Windows results qualify older commits, not this candidate. |
 
-The next small CPU step is to reduce the shared `comptime/hand.bend` and
-`comptime/tmpl.bend` continuation-depth failure, identify where bounded explicit
-traversal can replace growing recursive continuations, and validate the original
-whole programs across native/JS/C. Do not simply increase the safety limits or
-start newer-upstream adoption before the pinned behavior is understood.
+The next small CPU step is to reduce the now-isolated deferred numeric chains
+in native `range`/`incs`/`total` without changing lazy Word-field semantics. An eagerly forced accumulator is not an established equivalent
+transformation. Keep whole-program qualification separate from smaller diagnostic
+successes and retain cancellation, collection and exhaustion controls. This
+remaining implementation work needs no GPU or new dependency; it is not an
+executor/setup blocker or permission to adopt newer upstream code.
 
 ## Reproduction and retained evidence
 
@@ -146,11 +223,27 @@ private `cpu-parity-review` evidence directory, along with the bounded comptime
 probe and negative harness controls. Every original evidence directory remains
 intact. Do not publish raw diagnostics containing machine-specific paths.
 
-To reproduce the remaining gap directly, run the unchanged `hand.bend` and
-`tmpl.bend` under `teamy-bend run`, then generate executable JavaScript and C
-with `compile --executable --target javascript|c`. Compare against the pinned
-upstream emitter; use `node --stack-size=4096` for the upstream JS oracle and
-`--threads 1 --gpu off` for C. Do not change the port's resource budgets.
+The follow-up adds these checks with the same activated, offline tools:
+
+```powershell
+cargo test --locked --features extended_observability --no-fail-fast --lib --test runtime_review --test runtime_numeric --test runtime_reclamation --test compiler_executable_javascript --test compiler_executable_app
+cargo clippy --locked --all-targets --features extended_observability -- -D warnings
+pwsh -NoProfile -File scripts/compare-cpu.ps1 -Reference <reference> -OutputDirectory <fresh-all-dir> -Suite all -Repetitions 2
+```
+
+The unchanged `hand.bend` and `tmpl.bend` copies in
+`tests/fixtures/cpu-comptime` retain upstream attribution. Their JS regression
+runs in the standard gate with a 30-second child deadline. The private
+`cpu-continuation-depth` evidence directory retains exact commands, source and
+binary hashes, output bytes, statuses, timeouts, the twice-run 16-case probe,
+scaled and isolated native diagnostics, List-fold and NaN probes, and initial failed focused
+checks as well as final passing logs. Diagnostic instrumentation is absent from
+the committed runtime. Original evidence directories are intact.
+
+To reproduce the remaining native gap, run either whole fixture under
+`teamy-bend run`; compare with `compile --executable --target javascript|c`.
+For the upstream JS oracle only, use `node --stack-size=4096`; C uses
+`--threads 1 --gpu off`. Do not change port resource budgets.
 
 The frozen `Cargo.lock` SHA256 is
 `d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4`.

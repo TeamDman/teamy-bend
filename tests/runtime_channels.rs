@@ -331,11 +331,11 @@ fn deadlock_diagnostic_write_and_flush_failures_remain_host_errors() {
         fail_write: bool,
     }
     impl Write for FailingDiagnostic {
-        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
             if self.fail_write {
                 Err(io::Error::other("diagnostic write failed"))
             } else {
-                Ok(bytes.len())
+                Ok(buf.len())
             }
         }
 

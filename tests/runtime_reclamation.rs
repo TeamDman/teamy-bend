@@ -68,6 +68,29 @@ fn discarded_intermediates_are_reclaimed_without_changing_the_workload() {
 }
 
 #[test]
+fn long_constructor_accumulator_shares_tail_updates_within_existing_budgets() {
+    // The first element demands the entire recursive builder, but not its
+    // discarded tail. Tail calls must not retain one update frame per step.
+    assert_run(
+        r"import Base
+def build(n: Nat, xs: List<U32>) -> List<U32>:
+  match n:
+    case 0n: xs
+    case 1n+p: build(p, 1 <> xs)
+def first(xs: List<U32>) -> U32:
+  match xs:
+    case Nil{}: 0
+    case h <> t: h
+def main() -> IO(Unit):
+  IO.print(U32.show(first(build(U32.to_nat(10000), Nil{}))))
+",
+        0,
+        "1\n",
+        "",
+    );
+}
+
+#[test]
 fn shared_closures_and_simultaneous_let_environments_survive_collection() {
     assert_run(
         &format!(

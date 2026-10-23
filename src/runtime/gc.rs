@@ -241,6 +241,7 @@ impl Machine<'_> {
                             marks.thunk(*function)?;
                             marks.thunk(*argument)?;
                         }
+                        Thunk::Alias(target) => marks.thunk(*target)?,
                         Thunk::Ready(value) => marks.value(value)?,
                         Thunk::Evaluating => {}
                     }
@@ -522,6 +523,43 @@ mod tests {
                 .to_string()
                 .contains("cancelled")
         );
+    }
+
+    #[test]
+    fn aliases_keep_memoized_targets_live_and_shared_black_holes_fail_closed() {
+        let program = program();
+        let mut machine = Machine::new(&program);
+        let target = erased(&mut machine);
+        let alias = machine.allocate(Thunk::Alias(target)).unwrap();
+        let root = machine.allocate(Thunk::Alias(alias)).unwrap();
+        let garbage = erased(&mut machine);
+        machine.collect(root, &[]).unwrap();
+        assert!(machine.arena[target].is_some());
+        assert!(machine.arena[alias].is_some());
+        assert!(machine.arena[garbage].is_none());
+        assert!(matches!(machine.force(root).unwrap(), Value::Erased));
+
+        // Two distinct suspended expressions depend on the same unfinished
+        // value. Coalescing their updates must not hide the black hole.
+        let environment = machine.environment(0, vec![(0, root)]).unwrap();
+        machine.arena[root] = Some(Thunk::Expression(
+            term(Term::Var {
+                id: 0,
+                name: "cycle".into(),
+            }),
+            environment,
+        ));
+        machine.environments[environment].as_mut().unwrap().bindings[0].1 = alias;
+        machine.arena[alias] = Some(Thunk::Expression(
+            term(Term::Var {
+                id: 0,
+                name: "cycle".into(),
+            }),
+            machine.environment(0, vec![(0, root)]).unwrap(),
+        ));
+        machine.gc_mode = Mode::EverySafePoint;
+        let error = machine.force(root).err().expect("cycle must fail closed");
+        assert!(error.to_string().contains("cyclic data runtime evaluation"));
     }
 
     #[test]

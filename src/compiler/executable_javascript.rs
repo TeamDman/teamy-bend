@@ -323,6 +323,26 @@ impl Generator<'_> {
                     .map(|field| quote(&field.binder.name))
                     .collect::<Vec<_>>()
                     .join(",");
+                if tail
+                    && !live.is_empty()
+                    && !matches!(
+                        native,
+                        "Nat" | "Bool" | "U32" | "F32" | "Char" | "String" | "Array"
+                    )
+                {
+                    let (last, prefix) = live.split_last().expect("nonempty live fields");
+                    let values = prefix
+                        .iter()
+                        .map(|field| self.expression(&field.value, false))
+                        .collect::<Result<Vec<_>, _>>()?
+                        .join(",");
+                    return Ok(format!(
+                        "$tb.constructTail({},{},[{names}],[{values}],()=>{})",
+                        quote(native),
+                        quote(tag),
+                        self.expression(&last.value, true)?,
+                    ));
+                }
                 let values = live
                     .iter()
                     .map(|field| self.expression(&field.value, false))

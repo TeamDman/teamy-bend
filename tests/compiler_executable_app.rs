@@ -248,7 +248,9 @@ def tick(events: List<Event>, state: State) -> IO(Maybe<State>):
         .run_main(&mut stdout, &mut stderr, &|| false)
         .expect_err("an invoked view must retain the existing execution budget")
         .to_string();
-    assert!(error.contains("continuation depth exhausted"), "{error}");
+    // Tail calls now share memoization updates; this expensive loop must
+    // still stop at the unchanged work budget.
+    assert!(error.contains("step budget exhausted"), "{error}");
     assert!(stdout.is_empty() && stderr.is_empty());
     let output = fixture.javascript(&checked);
     assert_eq!(output.status.code(), Some(1));

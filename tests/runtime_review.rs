@@ -161,7 +161,7 @@ def work0(n: Nat) -> Nat: n
 }
 
 #[test]
-fn long_checked_definition_chain_stops_at_continuation_budget() {
+fn long_checked_tail_chain_shares_updates_without_growing_continuations() {
     use std::fmt::Write;
 
     let mut source = String::from("def step0(n: Nat) -> Nat: n\n");
@@ -174,11 +174,11 @@ fn long_checked_definition_chain_stops_at_continuation_budget() {
         .expect("append definition");
     }
     let book = checked(&source);
-    assert!(
+    assert_eq!(
         book.evaluate_data("step2200", &[parse_term("0n").expect("natural")])
-            .expect_err("checked function chain exceeds bounded continuations")
-            .to_string()
-            .contains("continuation depth exhausted")
+            .expect("tail calls share their memoized result")
+            .to_string(),
+        "Zero{}"
     );
     assert_eq!(
         book.evaluate_data("step1", &[parse_term("0n").expect("natural")])

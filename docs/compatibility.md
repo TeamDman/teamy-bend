@@ -90,7 +90,9 @@ Execution uses the existing 2,000,000-step, 131,072-thunk/environment and
 thunks and environments are reclaimed at evaluator safe points using stable IDs
 and explicitly retained caller values. Collection consumes the same step budget;
 the arena caps now bound retained slots rather than cumulative allocation.
-A full live graph still fails. U32.show uses
+Adjacent memoization updates share a collector-traced target, so plain tail
+chains do not accumulate redundant update frames. Pending numeric and match
+continuations remain bounded; a full live graph still fails. U32.show uses
 ordinary checked decimal doubling over bits to avoid repeated division exhausting
 that arena; its upstream helper names retain truncation/accumulator behavior.
 Boundary/sample and helper tests cover zero, every bit boundary and u32::MAX.
@@ -228,8 +230,10 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 The 2026-10-23 cloud review reran this complete strict audit and reproduced the
 364/489/449 acceptance counts below. It separately ran all 16 positive comptime
-fixtures in executable mode: generated C passes all 16, while native/JS still
-hit depth limits on two whole programs. The current Linux gate is 728 passed,
+fixtures in executable mode: generated C and JS now pass all 16, while native
+execution still reaches resource limits on two whole programs. JS constructor
+tails use bounded explicit traversal; native tail updates share memoization
+targets without changing lazy demand or budgets. The current Linux gate is 733 passed,
 zero failed and 49 ignored. See the [CPU coverage checklist](cpu-parity-checklist.md)
 for current evidence and remaining work; the historical receipts below retain
 their original platform, scope and test counts.

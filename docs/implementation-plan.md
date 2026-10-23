@@ -3040,6 +3040,29 @@ do not relax limits merely to obtain a pass. The
 [coverage checklist](cpu-parity-checklist.md) separates passed, missing and
 host-blocked work, retains the dependency freeze and gives reproduction commands.
 
+### [x] 5.21 Bound JS constructor tails and share native tail updates
+
+The unchanged 10,000-element `comptime/hand.bend` and `comptime/tmpl.bend`
+workloads now pass generated JavaScript on the default Node stack. Ordinary
+constructor tails are completed by the trampoline; prefix order, erased fields,
+closure fields and native representations remain intact. A per-invocation
+constructor-chain bound complements the unchanged transition and non-tail limits.
+The native evaluator shares adjacent memoization updates through traced aliases;
+a 2,200-call checked tail chain and a 10,000-step list-builder regression now
+complete, and cycle/collection regressions pass. Genuine pending numeric work still obeys the original continuation bound.
+
+The standard Linux gate passes 733 tests, zero failures and 49 existing ignores.
+Strict all-target Clippy passes after one parameter-only test-lint correction.
+The twice-run positive comptime matrix has 156 matches and eight classified
+failures across 164 executions, including four supplemental upstream-JS stack
+runs. The two native whole workloads remain resource-limit failures; this step
+does not close native CPU parity. Existing differential suites retain 154 exact
+matches and six known upstream-JS host failures across 160 executions.
+`base/list_fold.bend` also passes all five executable runtimes despite its strict
+audit refusal. Frozen dependencies, toolchains and the upstream pin are unchanged.
+The [coverage checklist](cpu-parity-checklist.md) records limits and the next
+native demand/retention investigation separately from this completed correction.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or

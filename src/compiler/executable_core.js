@@ -6,6 +6,7 @@
 const $tb = (() => {
   const raw = Symbol('Bend raw closure');
   const jumping = Symbol('Bend tail call');
+  const building = Symbol('Bend constructor tail');
   let steps = 2000000;
   let depth = 0;
   const maxArray = 131072;
@@ -15,11 +16,37 @@ const $tb = (() => {
   }
   function jump(fn, args) { return { [jumping]: true, fn, args }; }
   function run(value) {
-    while (value !== null && typeof value === 'object' && value[jumping] === true) {
+    let root;
+    let destination = null;
+    let constructed = 0;
+    while (value !== null && typeof value === 'object') {
+      if (value[building] === true) {
+        tick();
+        if (++constructed > maxArray) throw new Error('executable JavaScript constructor chain budget exhausted');
+        if (destination === null) root = value.node;
+        else destination.node[destination.field] = value.node;
+        destination = value;
+        value = value.tail();
+        continue;
+      }
+      if (value[jumping] !== true) break;
       tick();
       value = value.fn(...value.args);
     }
+    if (destination !== null) {
+      destination.node[destination.field] = value;
+      return root;
+    }
     return value;
+  }
+  function constructTail(owner, tag, fields, values, tail) {
+    // Only ordinary tagged records use this path. Native scalars, strings and
+    // arrays need a completed child to construct their representation.
+    // The unfinished record never escapes run; previous fields were evaluated
+    // in source order and the last field is filled exactly once.
+    values.push(undefined);
+    return { [building]: true, node: construct(owner, tag, fields, values),
+      field: fields[fields.length - 1], tail };
   }
   function invoke(fn, args) {
     if (++depth > 512) { --depth; throw new Error('executable JavaScript call depth budget exhausted'); }
@@ -326,7 +353,7 @@ const $tb = (() => {
     go(root,value,0,0);
     return parts.join('');
   }
-  return {tick,jump,run,closure,apply,forceCall,curry,construct,matches,field,native,show,fromBits};
+  return {tick,jump,run,closure,apply,forceCall,curry,construct,constructTail,matches,field,native,show,fromBits};
 })();
 function $tbTick() { $tb.tick(); }
 function $tbForceCall(fn,args) { return $tb.forceCall(fn,args); }

@@ -151,7 +151,14 @@ contracts. Scope and remaining limitations are recorded in
 
 Generated Bend evaluation shares a 2,000,000-transition budget, allows 512
 nested non-tail calls and limits native arrays to 131,072 elements. Tail calls
-use a trampoline. Pure output limits are 96 levels, 16,384 visited nodes and
+use a trampoline. The last live field of an ordinary tagged constructor also
+uses that trampoline, with at most 131,072 constructed nodes per invocation.
+Earlier fields evaluate in order and unfinished records stay private until the
+last field completes. Native scalar, string and array constructors retain their
+existing representation and non-tail guard. Whole upstream `comptime/hand` and
+`comptime/tmpl` programs now pass with the default Node stack; see the
+[CPU parity checklist](cpu-parity-checklist.md) for remaining native limits.
+Pure output limits are 96 levels, 16,384 visited nodes and
 8 MiB of text; string construction and each console write also have an 8 MiB
 byte limit. These are fail-closed execution limits, not upstream performance
 parity. The scheduler shares the transition budget and permits at most 131,072

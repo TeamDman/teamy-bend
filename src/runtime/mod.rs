@@ -161,6 +161,7 @@ enum Value {
 enum Thunk {
     Expression(TermRef, EnvId),
     Application(ThunkId, ThunkId),
+    Alias(ThunkId),
     Evaluating,
     Ready(Value),
 }
@@ -355,6 +356,20 @@ impl<'program> Machine<'program> {
         Ok(())
     }
 
+    fn push_update(&mut self, frames: &mut Vec<Frame>, id: ThunkId) -> Result<(), KernelError> {
+        // Adjacent updates demand the same value, with no intervening work.
+        // Share their black hole and eventual memoized result instead of retaining
+        // one continuation for every alias or tail call. Aliases remain bounded
+        // arena entries and are traced by the collector like other thunk edges.
+        if let Some(Frame::Update(target)) = frames.last() {
+            self.arena[id] = Some(Thunk::Alias(*target));
+        } else {
+            self.arena[id] = Some(Thunk::Evaluating);
+            Self::push(frames, Frame::Update(id))?;
+        }
+        Ok(())
+    }
+
     #[expect(
         clippy::too_many_lines,
         reason = "the explicit evaluation machine keeps every continuation transition visible together"
@@ -371,19 +386,21 @@ impl<'program> Machine<'program> {
                 .ok_or_else(|| KernelError::new("invalid runtime thunk reference"))?
             {
                 Thunk::Ready(value) => value,
+                Thunk::Alias(target) => {
+                    current = target;
+                    continue;
+                }
                 Thunk::Evaluating => {
                     return Err(KernelError::new("cyclic data runtime evaluation"));
                 }
                 Thunk::Application(function, argument) => {
-                    self.arena[current] = Some(Thunk::Evaluating);
-                    Self::push(&mut frames, Frame::Update(current))?;
+                    self.push_update(&mut frames, current)?;
                     Self::push(&mut frames, Frame::Apply(argument))?;
                     current = function;
                     continue;
                 }
                 Thunk::Expression(expression, environment) => {
-                    self.arena[current] = Some(Thunk::Evaluating);
-                    Self::push(&mut frames, Frame::Update(current))?;
+                    self.push_update(&mut frames, current)?;
                     match expression.as_ref() {
                         Term::Var { id, .. } => {
                             current = self.variable(environment, *id)?;
