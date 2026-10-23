@@ -25,6 +25,8 @@ pub(super) const MAX: u64 = (1 << 48) - 1;
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum Operation {
     ArrayNew,
+    Add,
+    Double,
     Mul,
     Sub,
     Cmp,
@@ -37,6 +39,8 @@ impl Operation {
     pub(super) const fn name(self) -> &'static str {
         match self {
             Self::ArrayNew => "Array.new",
+            Self::Add => "Nat.add",
+            Self::Double => "Nat.double",
             Self::Mul => "Nat.mul",
             Self::Sub => "Nat.sub",
             Self::Cmp => "Nat.cmp",
@@ -49,8 +53,8 @@ impl Operation {
     const fn arity(self) -> usize {
         match self {
             Self::ArrayNew => 3,
-            Self::Mul | Self::Sub | Self::Cmp => 2,
-            Self::Show | Self::FromU32 | Self::ToU32 => 1,
+            Self::Add | Self::Mul | Self::Sub | Self::Cmp => 2,
+            Self::Double | Self::Show | Self::FromU32 | Self::ToU32 => 1,
         }
     }
 }
@@ -89,6 +93,8 @@ pub(super) fn checked_optimizations(
     BASE.with(|(base_definitions, base_datatypes)| {
         [
             Operation::ArrayNew,
+            Operation::Add,
+            Operation::Double,
             Operation::Mul,
             Operation::Sub,
             Operation::Cmp,
@@ -418,6 +424,13 @@ pub(super) struct Evaluation {
     prefix: u64,
 }
 
+pub(super) fn prefix_count(count: u64) -> Result<u64, KernelError> {
+    if count == 0 || count > MAX {
+        return Err(KernelError::new("invalid native Nat prefix"));
+    }
+    Ok(count)
+}
+
 impl Evaluation {
     pub(super) fn visit_roots(
         &self,
@@ -431,6 +444,72 @@ impl Evaluation {
 }
 
 impl Machine<'_> {
+    /// Keep successor runs lazy. At most two bounded chunks are needed for
+    /// doubling one packed natural/prefix; neither allocation demands the tail.
+    pub(super) fn nat_prefix(
+        &mut self,
+        count: u64,
+        mut tail: ThunkId,
+    ) -> Result<ThunkId, KernelError> {
+        if !self.program.packed || count > 2 * MAX {
+            return Err(KernelError::new("invalid native Nat prefix construction"));
+        }
+        if count == 0 {
+            return Ok(tail);
+        }
+        if count > MAX {
+            tail = self.allocate(Thunk::Ready(Value::NatPrefix {
+                count: count - MAX,
+                tail,
+            }))?;
+        }
+        self.allocate(Thunk::Ready(Value::NatPrefix {
+            count: count.min(MAX),
+            tail,
+        }))
+    }
+
+    fn deferred_nat(
+        &mut self,
+        operation: Operation,
+        arguments: &[ThunkId],
+    ) -> Result<ThunkId, KernelError> {
+        let mut function = self.reference(operation.name())?;
+        for argument in arguments {
+            function = self.allocate(Thunk::Application(function, *argument))?;
+        }
+        Ok(function)
+    }
+
+    fn prefix_arithmetic(
+        &mut self,
+        state: &Evaluation,
+        value: &Value,
+    ) -> Result<ThunkId, KernelError> {
+        let (count, tail) = match value {
+            Value::PackedNat(count) if *count <= MAX => (*count, None),
+            Value::NatPrefix { count, tail } => (prefix_count(*count)?, Some(*tail)),
+            _ => return self.ordinary_nat(state.operation, &state.arguments),
+        };
+        match state.operation {
+            Operation::Add => {
+                let tail = match tail {
+                    Some(tail) => self.deferred_nat(Operation::Add, &[tail, state.arguments[1]])?,
+                    None => state.arguments[1],
+                };
+                self.nat_prefix(count, tail)
+            }
+            Operation::Double => {
+                let tail = match tail {
+                    Some(tail) => self.deferred_nat(Operation::Double, &[tail])?,
+                    None => self.nat(0)?,
+                };
+                self.nat_prefix(count * 2, tail)
+            }
+            _ => unreachable!("only add/double preserve a successor prefix"),
+        }
+    }
+
     pub(super) fn nat(&mut self, value: u64) -> Result<ThunkId, KernelError> {
         if !self.program.packed {
             return Err(KernelError::new("native Nat requires sealed Base layouts"));
@@ -482,6 +561,9 @@ impl Machine<'_> {
         if state.operation == Operation::ArrayNew {
             return self.array_depth_step(state, value, frames);
         }
+        if matches!(state.operation, Operation::Add | Operation::Double) {
+            return self.prefix_arithmetic(&state, &value);
+        }
         let value = match (state.operation, value) {
             (
                 Operation::FromU32,
@@ -494,6 +576,17 @@ impl Machine<'_> {
                 .checked_add(state.prefix)
                 .filter(|value| *value <= MAX)
                 .ok_or_else(|| KernelError::nat_overflow("native Nat exceeds the 48-bit bound"))?,
+            (Operation::Show | Operation::ToU32, Value::NatPrefix { count, tail }) => {
+                state.prefix = state
+                    .prefix
+                    .checked_add(prefix_count(count)?)
+                    .filter(|value| *value <= MAX)
+                    .ok_or_else(|| {
+                        KernelError::nat_overflow("native Nat exceeds the 48-bit bound")
+                    })?;
+                Self::push(frames, Frame::Natural(state))?;
+                return Ok(tail);
+            }
             // Both bodies consume the complete natural before yielding their
             // result. Decode a reconstructed unary prefix on the bounded
             // machine stack, stopping as soon as its compact tail is found.
@@ -532,7 +625,9 @@ impl Machine<'_> {
             return Ok(next);
         }
         match state.operation {
-            Operation::ArrayNew => unreachable!("array depth uses its own demand path"),
+            Operation::ArrayNew | Operation::Add | Operation::Double => {
+                unreachable!("operation uses its own demand path")
+            }
             Operation::Mul => {
                 let product = state.values[0]
                     .checked_mul(state.values[1])
@@ -578,6 +673,14 @@ impl Machine<'_> {
         const MAX_DEPTH: u64 = 31;
         let depth = match value {
             Value::PackedNat(depth) => state.prefix.saturating_add(depth),
+            Value::NatPrefix { count, tail } => {
+                state.prefix = state.prefix.saturating_add(prefix_count(count)?);
+                if state.prefix <= MAX_DEPTH {
+                    Self::push(frames, Frame::Natural(state))?;
+                    return Ok(tail);
+                }
+                state.prefix
+            }
             Value::Constructor { name, fields } if name == "Zero" && fields.is_empty() => {
                 state.prefix
             }

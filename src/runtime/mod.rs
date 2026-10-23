@@ -114,6 +114,12 @@ enum Value {
     Socket(network::Handle),
     Listener(network::Handle),
     PackedNat(u64),
+    // A nonzero run of successors with an unevaluated tail. Unlike PackedNat,
+    // this does not claim the whole natural has been demanded or fits in 48 bits.
+    NatPrefix {
+        count: u64,
+        tail: ThunkId,
+    },
     PackedWord {
         wrapper: packed::Wrapper,
         bits: u32,
@@ -622,6 +628,7 @@ impl<'program> Machine<'program> {
         match self.force(thunk)? {
             value @ (Value::Constructor { .. }
             | Value::PackedNat(_)
+            | Value::NatPrefix { .. }
             | Value::PackedWord { .. }
             | Value::PackedBits { .. }) => {
                 let (name, fields) = self.constructor_value(value)?;

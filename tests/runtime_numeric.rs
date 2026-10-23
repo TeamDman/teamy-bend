@@ -542,25 +542,16 @@ fn original_nat_overflow_reaches_the_language_bound_before_the_work_limit() {
 }
 
 #[test]
-fn natural_failure_boundaries_preserve_prefix_and_distinguish_unqualified_work_limits() {
-    for (expression, resource_limited) in nat_failure_cases::cases() {
+fn natural_failure_boundaries_preserve_prefix_and_reach_the_language_limit() {
+    for expression in nat_failure_cases::cases() {
         let fixture = Fixture::new(&nat_failure_cases::source(expression));
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
         let result = fixture
             .checked()
             .run_main(&mut stdout, &mut stderr, &|| false);
-        if resource_limited {
-            let error = result.unwrap_err();
-            assert!(
-                error.to_string().contains("step budget exhausted"),
-                "{expression}: {error}"
-            );
-            assert!(stderr.is_empty());
-        } else {
-            assert_eq!(result.unwrap(), 1, "{expression}");
-            assert_eq!(stderr, b"bend: a Nat past the largest immediate 2^48-1\n");
-        }
+        assert_eq!(result.unwrap(), 1, "{expression}");
+        assert_eq!(stderr, b"bend: a Nat past the largest immediate 2^48-1\n");
         assert_eq!(stdout, b"before");
     }
 }
@@ -606,6 +597,83 @@ def invalid() -> Nat: reject(IO.print("SECRET")(Unit, x => Emit{x}))
         assert_eq!(stdout, b"before");
         assert_eq!(stderr, diagnostic.as_bytes());
     }
+}
+
+#[test]
+fn large_add_double_and_partial_calls_preserve_exact_boundary_results() {
+    let helpers =
+        "import Base\ndef limit() -> Nat: Nat.mul(U32.to_nat(16777215), U32.to_nat(16777217))\n";
+    for (expression, expected) in [
+        ("Nat.add(U32.to_nat(4294967295), 1n)", "4294967296\n"),
+        ("Nat.add(Nat.sub(limit(), 1n), 1n)", "281474976710655\n"),
+        ("Nat.double(U32.to_nat(4294967295))", "8589934590\n"),
+        (
+            "Nat.double(Nat.sub(Nat.mul(U32.to_nat(8388608), U32.to_nat(16777216)), 1n))",
+            "281474976710654\n",
+        ),
+        (
+            "Nat.add(Nat.double(U32.to_nat(2147483647)), 1n)",
+            "4294967295\n",
+        ),
+        ("Nat.add(U32.to_nat(4294967295))(1n)", "4294967296\n"),
+        ("Nat.add(3n, Nat.double(4n))", "11\n"),
+    ] {
+        assert_eq!(
+            output(&format!(
+                "{helpers}def main() -> IO(Unit): IO.print(Nat.show({expression}))\n"
+            )),
+            expected
+        );
+    }
+}
+
+#[test]
+fn add_double_keep_partial_observations_lazy_and_demand_errors_in_source_order() {
+    let helpers = r#"import Base
+def reject(op: IO.OP<Unit>) -> Nat:
+  match op:
+    case Emit{x}: 0n
+    case _: 0n
+def invalid() -> Nat: reject(IO.print("SECRET")(Unit, x => Emit{x}))
+def head(n: Nat) -> String:
+  match n:
+    case 0n: "zero"
+    case 1n+p: "positive"
+"#;
+    for expression in [
+        "Nat.add(U32.to_nat(4294967295), invalid())",
+        "Nat.add(Succ{invalid()}, invalid())",
+        "Nat.double(Succ{invalid()})",
+    ] {
+        let fixture = Fixture::new(&format!(
+            "{helpers}def main() -> IO(Unit):\n  +value = {expression}\n  do IO<Unit>:\n    Unit <- IO.print(head(value))\n    Unit <- IO.print(Nat.show(value))\n    IO.print(\"after\")\n"
+        ));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            fixture
+                .checked()
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap(),
+            1
+        );
+        assert_eq!(stdout, b"positive\n");
+        assert_eq!(stderr, b"bend: runtime fail-stop\n");
+    }
+    let fixture = Fixture::new(&format!(
+        "{helpers}def main() -> IO(Unit): IO.print(Nat.show(Nat.add(invalid(), Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216)))))\n"
+    ));
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    assert_eq!(
+        fixture
+            .checked()
+            .run_main(&mut stdout, &mut stderr, &|| false)
+            .unwrap(),
+        1
+    );
+    assert!(stdout.is_empty());
+    assert_eq!(stderr, b"bend: runtime fail-stop\n");
 }
 
 #[test]

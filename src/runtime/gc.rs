@@ -103,6 +103,7 @@ impl Marks<'_> {
 
     fn value(&mut self, value: &Value) -> Result<(), KernelError> {
         match value {
+            Value::NatPrefix { tail, .. } => self.thunk(*tail)?,
             Value::Constructor { fields, .. } => {
                 for id in fields {
                     self.thunk(*id)?;

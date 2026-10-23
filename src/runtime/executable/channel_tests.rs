@@ -434,8 +434,14 @@ fn request_refusal_and_diagnostic_writer_errors_discard_parked_channels() {
 
 #[test]
 fn nat_overflow_and_diagnostic_writer_errors_discard_parked_channels() {
-    language_failure_discard_parked_channels(
+    for terminal in [
         "IO.print(Nat.show(Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216))))",
-        b"bend: a Nat past the largest immediate 2^48-1\n",
-    );
+        "IO.print(Nat.show(Nat.add(Nat.mul(U32.to_nat(16777215), U32.to_nat(16777217)), 1n)))",
+        "IO.print(Nat.show(Nat.double(Nat.mul(U32.to_nat(8388608), U32.to_nat(16777216)))))",
+    ] {
+        language_failure_discard_parked_channels(
+            terminal,
+            b"bend: a Nat past the largest immediate 2^48-1\n",
+        );
+    }
 }

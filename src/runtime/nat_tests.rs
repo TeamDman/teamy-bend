@@ -38,7 +38,7 @@ fn poisoned(machine: &mut Machine<'_>, name: &str) -> ThunkId {
 #[test]
 fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
     let program = program();
-    assert_eq!(program.nat_optimizations.len(), 7);
+    assert_eq!(program.nat_optimizations.len(), 9);
     let origins = program
         .definitions
         .keys()
@@ -51,6 +51,8 @@ fn optimizations_require_exact_transitive_bodies_and_sealed_origins() {
     );
     for (name, operation) in [
         ("Array.new", Operation::ArrayNew),
+        ("Nat.add", Operation::Add),
+        ("Nat.double", Operation::Double),
         ("Nat.mul", Operation::Mul),
         ("Nat.add", Operation::Mul),
         ("Nat.sub", Operation::Sub),
@@ -121,7 +123,7 @@ fn body_guards_compare_binding_identity_instead_of_printed_variable_names() {
         .collect();
     assert_eq!(
         checked_optimizations(&definitions, &datatypes, &origins).len(),
-        7
+        9
     );
 }
 
@@ -275,7 +277,14 @@ fn sampled_optimized_results_equal_checked_ordinary_bodies() {
                 parse_term(&format!("{a}n")).unwrap(),
                 parse_term(&format!("{b}n")).unwrap(),
             ];
-            for name in ["Nat.mul", "Nat.sub", "Nat.cmp", "Nat.is_lt", "Nat.is_ge"] {
+            for name in [
+                "Nat.add",
+                "Nat.mul",
+                "Nat.sub",
+                "Nat.cmp",
+                "Nat.is_lt",
+                "Nat.is_ge",
+            ] {
                 assert_eq!(
                     program.evaluate(name, &arguments).unwrap().to_string(),
                     strict.evaluate(name, &arguments).unwrap().to_string(),
@@ -283,6 +292,19 @@ fn sampled_optimized_results_equal_checked_ordinary_bodies() {
                 );
             }
         }
+    }
+    for a in 0..=31 {
+        let arguments = [parse_term(&format!("{a}n")).unwrap()];
+        assert_eq!(
+            program
+                .evaluate("Nat.double", &arguments)
+                .unwrap()
+                .to_string(),
+            strict
+                .evaluate("Nat.double", &arguments)
+                .unwrap()
+                .to_string()
+        );
     }
     for a in [0, 1, 9, 10, 31, 63] {
         let arguments = [parse_term(&format!("{a}n")).unwrap()];
@@ -663,5 +685,204 @@ fn multiplication_partial_calls_budget_and_cancellation_remain_bounded() {
         }
         let error = machine.force(product).err().unwrap().to_string();
         assert!(error.contains(if cancel { "cancel" } else { "step budget" }));
+    }
+}
+
+#[test]
+fn compact_add_double_boundaries_and_nested_prefixes_survive_collection() {
+    let program = program();
+    for (name, left, right) in [
+        ("Nat.add", 0, MAX),
+        ("Nat.add", MAX, 0),
+        ("Nat.add", MAX - 1, 1),
+        ("Nat.add", MAX, 1),
+        ("Nat.add", MAX, MAX),
+        ("Nat.double", 0, 0),
+        ("Nat.double", 7, 0),
+        ("Nat.double", MAX / 2, 0),
+        ("Nat.double", MAX / 2 + 1, 0),
+        ("Nat.double", MAX, 0),
+    ] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let a = machine.nat(left).unwrap();
+        let b = machine.nat(right).unwrap();
+        let arguments = if name == "Nat.add" {
+            vec![a, b]
+        } else {
+            vec![a]
+        };
+        let result = call(&mut machine, name, &arguments);
+        let result = call(&mut machine, "U32.from_nat", &[result]);
+        let expected = if name == "Nat.add" {
+            left + right
+        } else {
+            left * 2
+        };
+        if expected <= MAX {
+            assert!(
+                matches!(machine.force(result).unwrap(), Value::PackedWord { bits, .. } if u64::from(bits) == expected & u64::from(u32::MAX))
+            );
+        } else {
+            assert_eq!(
+                machine
+                    .force(result)
+                    .err()
+                    .unwrap()
+                    .language_failure()
+                    .unwrap()
+                    .0,
+                "nat_overflow"
+            );
+        }
+        assert!(machine.gc.collections > 0);
+    }
+    let mut machine = Machine::new(&program);
+    machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+    let left = machine.nat((1 << 32) - 1).unwrap();
+    let one = machine.nat(1).unwrap();
+    let sum = call(&mut machine, "Nat.add", &[left, one]);
+    let doubled = call(&mut machine, "Nat.double", &[sum]);
+    let result = call(&mut machine, "Nat.add", &[doubled, one]);
+    let result = call(&mut machine, "U32.from_nat", &[result]);
+    assert!(matches!(
+        machine.force(result).unwrap(),
+        Value::PackedWord { bits: 1, .. }
+    ));
+}
+
+#[test]
+fn add_double_preserve_lazy_shells_and_first_error_with_ordinary_fallback() {
+    let optimized = program();
+    let mut ordinary = optimized.clone();
+    Rc::make_mut(&mut ordinary.nat_optimizations).remove(&Operation::Add);
+    Rc::make_mut(&mut ordinary.nat_optimizations).remove(&Operation::Double);
+    for program in [&optimized, &ordinary] {
+        for (name, ordinary_left, shells) in [
+            ("Nat.add", false, 2),
+            ("Nat.add", true, 1),
+            ("Nat.double", true, 2),
+        ] {
+            let mut machine = Machine::new(program);
+            machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+            let first = poisoned(&mut machine, "left_tail");
+            let second = poisoned(&mut machine, "right_tail");
+            let left = if ordinary_left {
+                machine.ready_constructor("Succ", vec![first]).unwrap()
+            } else {
+                machine.nat(2).unwrap()
+            };
+            let args = if name == "Nat.add" {
+                vec![left, second]
+            } else {
+                vec![left]
+            };
+            let mut result = call(&mut machine, name, &args);
+            for _ in 0..shells {
+                let value = machine.force(result).unwrap();
+                let (name, fields) = machine.constructor_value(value).unwrap();
+                assert_eq!(name, "Succ");
+                result = fields[0];
+            }
+            let error = machine.force(result).err().unwrap().to_string();
+            assert!(
+                error.contains(if ordinary_left {
+                    "left_tail"
+                } else {
+                    "right_tail"
+                }),
+                "{error}"
+            );
+        }
+        let mut machine = Machine::new(program);
+        let first = poisoned(&mut machine, "first_error");
+        let second = poisoned(&mut machine, "second_error");
+        let result = call(&mut machine, "Nat.add", &[first, second]);
+        assert!(
+            machine
+                .force(result)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("first_error")
+        );
+    }
+}
+
+#[test]
+fn prefix_views_retain_malformed_cycle_work_and_cancellation_bounds() {
+    let program = program();
+    for count in [0, MAX + 1] {
+        let mut machine = Machine::new(&program);
+        let tail = machine.nat(0).unwrap();
+        machine
+            .constructor_value(Value::NatPrefix { count, tail })
+            .expect_err("malformed prefix views must fail closed");
+    }
+    for cancel in [false, true] {
+        let mut machine = Machine::new(&program);
+        let tail = machine.nat(0).unwrap();
+        let cycle = machine.nat_prefix(1, tail).unwrap();
+        machine.arena[cycle] = Some(Thunk::Ready(Value::NatPrefix {
+            count: 1,
+            tail: cycle,
+        }));
+        let result = call(&mut machine, "Nat.show", &[cycle]);
+        let cancelled = || cancel;
+        machine.cancelled = Some(&cancelled);
+        machine.remaining = 100;
+        let error = machine.force(result).err().unwrap().to_string();
+        assert!(
+            error.contains(if cancel { "cancel" } else { "step budget" }),
+            "{error}"
+        );
+    }
+    let strict = Program::from_checked(&program.definitions, &program.datatypes);
+    Machine::new(&strict)
+        .nat_prefix(1, 0)
+        .expect_err("strict proof execution cannot manufacture native prefixes");
+}
+
+#[test]
+fn prefix_array_depth_stops_at_the_wall_before_demanding_its_tail() {
+    let program = program();
+    for count in [31, 32] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = super::super::gc::Mode::EverySafePoint;
+        let erased = poisoned(&mut machine, "erased_type");
+        let element = poisoned(&mut machine, "unused_element");
+        let tail = poisoned(&mut machine, "depth_tail");
+        let first = machine.nat(count).unwrap();
+        let depth = call(&mut machine, "Nat.add", &[first, tail]);
+        let array = call(&mut machine, "Array.new", &[erased, depth, element]);
+        let error = machine.force(array).err().unwrap().to_string();
+        assert!(
+            error.contains(if count == 31 {
+                "depth_tail"
+            } else {
+                "deepest block class 31"
+            }),
+            "{error}"
+        );
+    }
+    for name in ["Nat.add", "Nat.double"] {
+        for cancel in [false, true] {
+            let mut machine = Machine::new(&program);
+            let a = machine.nat(2).unwrap();
+            let args = if name == "Nat.add" {
+                vec![a, a]
+            } else {
+                vec![a]
+            };
+            let value = call(&mut machine, name, &args);
+            let cancelled = || cancel;
+            machine.cancelled = Some(&cancelled);
+            machine.remaining = 0;
+            let error = machine.force(value).err().unwrap().to_string();
+            assert!(
+                error.contains(if cancel { "cancel" } else { "step budget" }),
+                "{error}"
+            );
+        }
     }
 }

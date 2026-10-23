@@ -183,6 +183,12 @@ impl Machine<'_> {
         value: Value,
     ) -> Result<(String, Vec<ThunkId>), KernelError> {
         match value {
+            Value::NatPrefix { count, tail } => {
+                self.tick()?;
+                let count = super::nat::prefix_count(count)?;
+                let tail = self.nat_prefix(count - 1, tail)?;
+                Ok(("Succ".into(), vec![tail]))
+            }
             Value::Constructor { name, fields } => Ok((name, fields)),
             Value::PackedNat(value) => {
                 self.tick()?;

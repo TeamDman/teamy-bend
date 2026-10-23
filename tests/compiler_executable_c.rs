@@ -116,7 +116,7 @@ fn native_natural_overflow_fails_instead_of_wrapping_at_the_upstream_48_bit_boun
 
 #[test]
 fn natural_multiply_add_double_and_successor_share_the_language_failure_contract() {
-    for (expression, _) in nat_failure_cases::cases() {
+    for expression in nat_failure_cases::cases() {
         let output = Fixture::new().run(&nat_failure_cases::source(expression), &[]);
         assert_eq!(output.status.code(), Some(1), "{expression}");
         assert_eq!(output.stdout, b"before");

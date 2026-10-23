@@ -488,9 +488,10 @@ impl Machine<'_> {
     fn console_constructor(&mut self, value: Value) -> Result<(String, Vec<ThunkId>), KernelError> {
         match value {
             Value::Constructor { name, fields } => Ok((name, fields)),
-            Value::PackedWord { .. } | Value::PackedBits { .. } | Value::PackedNat(_) => {
-                self.constructor_value(value)
-            }
+            Value::PackedWord { .. }
+            | Value::PackedBits { .. }
+            | Value::PackedNat(_)
+            | Value::NatPrefix { .. } => self.constructor_value(value),
             Value::Request { .. } => Err(KernelError::request_out_of_band(
                 "runtime fail-stop: a foreign effect request escaped the IO driver",
             )),
