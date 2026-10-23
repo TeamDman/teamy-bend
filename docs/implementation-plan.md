@@ -3284,3 +3284,27 @@ The [word checkpoint](cpu-word-operations.md) records exact outputs, commands,
 initial failures, resource/host limits and the next operator/representation group.
 No pending demand choice or public API change was implemented. Dependencies,
 toolchains and pin are frozen; local commits only, no push.
+
+### [x] 5.32 Qualify word representations and classify remaining applicability
+
+The unchanged modulo-operator, shared-word and structural-view fixtures match
+all five runtimes twice (30/30). The claimed upstream C structural-view refusal
+does not reproduce: generation, compilation and execution pass with output 14.
+Pinned C source explicitly decomposes and repacks word fields. No runtime defect
+or production-source change was needed. The expanded suite matches 308/320;
+twelve existing Bun gaps remain. Full gate: 776 passed, zero failed, 49 ignored;
+strict all-target Clippy passes. Prior matrices and contract choices are preserved.
+
+The [applicability report](cpu-applicability.md) and reproducible CSV classify the
+original 1,254 unlinked rows into 439 checker negatives, twelve check-only modules,
+164 interpreter-only cases and 639 compiled candidates. Three candidates are now
+linked, leaving 1,251 entries with distinct requirements. The complete strict audit
+was rerun with unchanged status-only counts; no diagnostic or executable parity
+is inferred from proof-mode acceptance/refusal. Existing suite mappings distinguish
+representative controls from exact original-fixture inclusion. Device/host and
+CPU-offload references are orthogonal review profiles, never automatic waivers.
+
+The [checkpoint](cpu-word-representation.md) records results, source evidence and
+commands. A bounded pure interpretation family among 163 already accepted cases
+is a useful next CPU step. No installation, dependency/toolchain/pin change or push;
+full CPU parity and the pending demand choices remain open.

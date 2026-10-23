@@ -91,21 +91,29 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **48 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **51 distinct
 upstream fixtures** to source-hash-checked runtime receipts. It covers 16 positive
-comptime programs, nine run fixtures, eighteen IO fixtures and five Base
-fixtures, including explicitly unresolved runtime-negative and oracle-host cells.
+comptime programs, ten run fixtures, eighteen IO fixtures, five Base
+fixtures and two representation regressions, including explicitly unresolved runtime-negative and oracle-host cells.
 Two recovered port-only regressions and an authored zero-timer control supplement
 the suites but do not increase the upstream
 fixture count. This ledger qualifies only cells marked passed in their recorded
 runtime/profile, not entire categories, every checker diagnostic, the module
 surface or multiworker execution.
 
-There are **1,254 inventory rows without a linked current runtime receipt in
+There are **1,251 inventory rows without a linked current runtime receipt in
 this ledger**. Many require checking/evaluation rather than a compiled runtime;
 that number is neither a bug count nor a count of runnable programs. Older
 library and audit evidence remains useful history and is not silently relabelled
 as a current complete lane review. Missing ledger cells stay unverified.
+
+The [applicability classification](cpu-applicability.md) separates the remaining
+1,251 entries into 439 checker negatives, twelve check-only modules, 164
+interpreter-only cases and 636 compiled candidates. All require their proper
+checking/evaluation lanes; they are not 1,251 missing CPU runtime tests. The
+classification maps existing strict-audit and exact-fixture test evidence without
+turning status-only results, source hints or related regression suites into parity
+passes. Full per-lane applicability/printability and API review remain required.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
@@ -114,10 +122,11 @@ host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 contracts, not successes. `not_required_js_only_companion` follows the pinned
 gate selection, not a port exception. Candidate `cc0f3e8` identifies the
 [U32 operation qualification](cpu-word-operations.md), which corrects native
-packed division/modulo work exhaustion. All 48 linked fixtures have current
-receipts. The seven new word rows pass the five recorded runtime lanes twice;
-direct CLI and broader checker/API coverage remain unverified. The two timer
-rows still retain blocked upstream-JS lanes. Their renewed C profile includes
+packed division/modulo work exhaustion; its 48 rows retain their exact receipts.
+Candidate `8e803a9` adds three [word representation](cpu-word-representation.md)
+rows with all five runtime lanes passing twice. Production source is unchanged.
+Direct CLI and broader checker/API coverage remain unverified. The two timer
+rows still retain blocked upstream-JS lanes. Their retained C profile includes
 one, two and four workers at three repetitions.
 Earlier authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
@@ -160,7 +169,9 @@ reproducers, exact results, pinned sources and a recommendation; it is research
 only and does not approve a semantics change or an oracle exception. Independent
 CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
 five runtimes twice after a packed native division/modulo optimization; the
-operator/representation group is the next bounded unlinked family. The sleep_order and
+operator/representation group now also passes all five runtimes twice. A bounded
+pure-interpretation family from the 163 unlinked cases already accepted by the
+strict checker is a useful next step; normalized results remain unqualified. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating
@@ -188,5 +199,6 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
-includes baseline, effects, control, collections, scheduler and word checks. Frozen
+includes baseline, effects, control, collections, scheduler, word and
+representation checks. Frozen
 toolchains, lockfile, pin and all previous evidence remain unchanged.

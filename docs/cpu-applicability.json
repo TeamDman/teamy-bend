@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "inventory_sha256": "04378ce0661f27c819cbe99860b7f11539b634e40308a6a8d14f86e85c038fb0",
+  "baseline_ledger_sha256": "a21b2803610f034ed285d671b530e619f04094658036cc817220cbaecb8a56d0",
+  "current_ledger_sha256": "4d817c50af7160555c1f92597c5d64077efc4b3d87abf0e434e5e2e41bc164c8",
+  "strict_audit_sha256": "b6d4a015dbdd8965a97082689c82dfa9923ea202a1da343dd6d8f49f78949970",
+  "upstream_gate_sha256": "7f2ae6ead3e77bbee166ea076cff2977c162bf08847b1c870788b47302983433",
+  "all": {
+    "rows": 1302,
+    "categories": {
+      "checker_rejection": 439,
+      "interpretation_and_compiled_candidates": 687,
+      "interpretation_only": 164,
+      "checking_without_main": 12
+    },
+    "profiles": {
+      "filesystem": 11,
+      "window_surface": 1,
+      "audio_surface": 1,
+      "foreign_companion": 20,
+      "clock_or_timer": 11,
+      "environment": 4,
+      "network": 14
+    },
+    "cpu_offload_review": 13,
+    "strict_audit_status_only": {
+      "nonzero_expectation_refused": 449,
+      "positive_refused": 489,
+      "accepted": 364
+    },
+    "exact_fixture_gate_references": 9,
+    "examples_or_other": 0
+  },
+  "baseline_unlinked": {
+    "rows": 1254,
+    "categories": {
+      "checker_rejection": 439,
+      "interpretation_and_compiled_candidates": 639,
+      "interpretation_only": 164,
+      "checking_without_main": 12
+    },
+    "profiles": {
+      "filesystem": 9,
+      "window_surface": 1,
+      "audio_surface": 1,
+      "foreign_companion": 19,
+      "clock_or_timer": 8,
+      "environment": 3,
+      "network": 14
+    },
+    "cpu_offload_review": 11,
+    "strict_audit_status_only": {
+      "nonzero_expectation_refused": 439,
+      "positive_refused": 451,
+      "accepted": 364
+    },
+    "exact_fixture_gate_references": 0,
+    "examples_or_other": 0
+  },
+  "current_unlinked": {
+    "rows": 1251,
+    "categories": {
+      "checker_rejection": 439,
+      "interpretation_and_compiled_candidates": 636,
+      "interpretation_only": 164,
+      "checking_without_main": 12
+    },
+    "profiles": {
+      "filesystem": 9,
+      "window_surface": 1,
+      "audio_surface": 1,
+      "foreign_companion": 19,
+      "clock_or_timer": 8,
+      "environment": 3,
+      "network": 14
+    },
+    "cpu_offload_review": 11,
+    "strict_audit_status_only": {
+      "nonzero_expectation_refused": 439,
+      "positive_refused": 448,
+      "accepted": 364
+    },
+    "exact_fixture_gate_references": 0,
+    "examples_or_other": 0
+  },
+  "qualification": "Applicability and existing evidence only. Every fixture is a gate-selected test, not an example waiver. Profiles are source references, not reachability or platform qualification. Strict audit is proof-mode status only, never exact diagnostic/executable parity. Literal include_str references are test coverage, not differential qualification."
+}

@@ -11,14 +11,18 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 48-row runtime ledger expose missing evidence;
+1,302-fixture inventory and 51-row runtime ledger expose missing evidence;
 neither is a completion percentage.
-The latest [U32 checkpoint](cpu-word-operations.md) verifies all inventory hashes,
-closes native packed division/modulo work exhaustion, and adds seven fixtures
-with 70/70 exact five-runtime observations. The renewed gate passes 776 tests
-with zero failures and 49 ignored. All 48 linked rows have current evidence,
-including unchanged explicit failures; 1,254 rows remain unlinked. Pending demand
-choices, resource/host gaps and complete lane/API review remain required.
+The [U32 checkpoint](cpu-word-operations.md) closes native packed division/modulo
+work exhaustion. The subsequent [representation checkpoint](cpu-word-representation.md)
+adds three fixtures with 30/30 exact five-runtime observations; the reported
+upstream C structural-view refusal does not reproduce. The renewed gate passes
+776 tests with zero failures and 49 ignored. Prior receipt limitations remain.
+The [applicability report](cpu-applicability.md) classifies the 1,251 remaining
+unlinked entries: 439 checker negatives, twelve check-only modules, 164
+interpreter-only cases and 636 compiled candidates. Those are different acceptance
+requirements, not a count of missing CPU execution tests. Pending demand choices,
+resource/host gaps and complete lane/API review remain required.
 
 ## Passed in this review
 
