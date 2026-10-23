@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -186,6 +186,12 @@ $floatMath = @(
     @{ name = 'float_tanh'; source = "$Reference/tests/compile/float_tanh.bend"; expected = "1.1752012 1.5430807 0.7615942 1`n"; direct_mode = 'io' },
     @{ name = 'float-math-observations'; source = "$port/tests/fixtures/cpu-float-math/float-math-observations.bend"; expected = "1076754516 2.7182817`n1065353215 0.99999994`n1077936128 3`n1077936128 3`n1068827891 1.4142135`n1062693540 0.84147096`n1057640768 0.5403023`n1070029091 1.5574077`n1066822910 1.1752012`n1069908907 1.5430807`n1061353430 0.7615942`n1065353216 1`n2147483648 -0`n4286578688 -inf`n2139095040 inf`nnan`n" }
 )
+$floatText = @(
+    @{ name = 'float_ops'; source = "$Reference/tests/run/float_ops.bend"; expected = "1.5 -1.25 1024 0.7853982 1.5707964 0 0.7853982 3 7`n"; direct_mode = 'io' },
+    @{ name = 'float_printing'; source = "$Reference/tests/run/float_printing.bend"; expected = "2 100.25 0.33333334 0.0009765625 123456`n"; direct_mode = 'io' },
+    @{ name = 'float_text'; source = "$Reference/tests/run/float_text.bend"; expected = "2.5 0.1 none none 1.25`n"; direct_mode = 'io' },
+    @{ name = 'float-text-observations'; source = "$port/tests/fixtures/cpu-float-text/float-text-observations.bend"; expected = "1069547520 1.5`n3214934016 -1.25`n1149239296 1024`n1061752795 0.7853982`n1070141403 1.5707964`n0 0`n1061752795 0.7853982`n1088421888 7`n3`n1051372203 0.33333334`n981467136 0.0009765625`n1036831949`n2147483648`n1056964608`nnone`nnone`nnone`n1067450368`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -199,7 +205,8 @@ $fixtures = switch ($Suite) {
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath }
+    'float-text' { $floatText }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
