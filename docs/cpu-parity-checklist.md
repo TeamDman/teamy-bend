@@ -11,7 +11,7 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 33-row runtime ledger expose missing evidence;
+1,302-fixture inventory and 39-row runtime ledger expose missing evidence;
 neither is a completion percentage.
 
 ## Passed in this review
@@ -257,6 +257,29 @@ checked. All 1,302 rows also agree with the pinned gate's actual selection helpe
 a deliberately wrong expected output makes the comparison runner fail.
 Private `cpu-collections` evidence retains all receipts and exact commands.
 
+## Runtime-negative follow-up
+
+The [six-fixture failure comparison](cpu-runtime-negatives.md) exposed and fixed
+native acceptance of the depth-32 array program. The sealed executable Array.new
+path now rejects before printing its element, preserves lazy fields/erased types,
+and leaves proof mode and safety limits intact. Six new regressions include
+boundaries, demand, origins, work/cancellation and parked-channel cleanup.
+
+The repeated matrix has 56 applicable executions: 26 exact matches, 16 diagnostic
+mismatches, ten safety refusals, two unsupported native foreign calls and two
+upstream-JS bun:ffi failures. Four C observations are inapplicable because the
+scalar fixture has only a JS companion. No timeout or residual execution file
+occurred; all observations were deterministic. Phase-only agreement remains open.
+Eleven supplemental port C/JS ownership probes pass; native cleanup is directly
+regression-tested. Full gate: 744 passed, zero failed, 49 ignored; strict all-target
+Clippy passes. All prior 19-case and 16-comptime comparisons were refreshed on
+engine d20c904 with their known upstream host/stack limits retained.
+
+The ledger now links 39 fixtures, including unresolved negative cells. The next
+small CPU correction is the native Nat.mul work-budget gap. Lower C allocation
+bounds, exact runtime diagnostics, foreign support and broader coverage remain
+open, not certified by this correction.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -271,7 +294,7 @@ CPU work.
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
-| Missing | Exact negative diagnostics and execution of accepted proofs/data | Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
+| Missing | Exact negative diagnostics and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; six-family diagnostic/budget/foreign gaps remain explicit. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |
 | Missing | Broader network/file/error comparisons | The gate covers loopback and host adapters. Independently qualify selected upstream socket readiness, partial transfer and error fixtures without blindly executing the whole effect corpus. |
@@ -279,7 +302,7 @@ CPU work.
 | Missing | Upstream loader/CLI/module parity | JS module marshalling, imports, browser loader and command-surface behavior need their own inventory. The Rust CLI's typed wrappers are not upstream language equivalence. |
 | Missing / host-dependent | Window/audio/interactive effects | The rewrite's documented unfinished effects are separate from headless CPU checking and computation. Device integration needs an appropriate host and any dependency additions require approval. |
 | Blocked on current direct-IO oracle host | Upstream `io_run` entry | Three collection direct-CLI probes fail on Node because upstream uses Bun `import.meta.require`; standalone emitted JS passes. A direct-entry receipt still needs a supported host. |
-| Blocked on current JS host | Three existing upstream task/file fixtures | `bun:ffi` cannot load in Node; Bun is not installed. Exact failed outputs are retained. No dependency installation was requested or performed. Upstream C remains available for their CPU oracle. |
+| Blocked on current JS host | Three existing upstream task/file fixtures and stderr failure | `bun:ffi` cannot load in Node; Bun is not installed. Exact failed outputs are retained. No dependency installation was requested or performed. Upstream C remains available for their CPU oracle. |
 | Unrun, hardware-dependent | CUDA/Metal/sanitizers | Desktop or suitable GPU hardware is needed for these checks. They are not prerequisites for the CPU tasks above. |
 | Unrun here | New Windows/macOS qualification of this change | Historical Windows results qualify older commits, not this candidate. |
 

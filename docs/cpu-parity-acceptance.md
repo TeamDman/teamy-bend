@@ -91,15 +91,16 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **33 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **39 distinct
 upstream fixtures** to source-hash-checked runtime receipts. It covers 16 positive
-comptime programs, three run fixtures, eleven IO fixtures and three collection
-fixtures. Two recovered port-only regressions supplement the suites but do not
-increase the upstream-fixture count. This ledger qualifies only its recorded
-runtime/profile cells, not entire categories, every checker diagnostic, the
-module surface or multiworker execution.
+comptime programs, four run fixtures, sixteen IO fixtures and three collection
+fixtures, including explicitly unresolved runtime-negative cells. Two recovered
+port-only regressions supplement the suites but do not increase the upstream
+fixture count. This ledger qualifies only cells marked passed in their recorded
+runtime/profile, not entire categories, every checker diagnostic, the module
+surface or multiworker execution.
 
-There are **1,269 inventory rows without a linked current runtime receipt in
+There are **1,263 inventory rows without a linked current runtime receipt in
 this ledger**. Many require checking/evaluation rather than a compiled runtime;
 that number is neither a bug count nor a count of runnable programs. Older
 library and audit evidence remains useful history and is not silently relabelled
@@ -107,10 +108,13 @@ as a current complete lane review. Missing ledger cells stay unverified.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
-host flag; `blocked_bun_ffi` is missing upstream host support, not a pass. Engine
-commit `1eeb3e4` identifies the unchanged runtime being measured in this
-script/documentation checkpoint. Private receipt hashes and binary snapshots
-are retained with the checkpoint evidence; no machine paths appear here.
+host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
+`diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
+contracts, not successes. `not_required_js_only_companion` follows the pinned
+gate selection, not a port exception. Engine commit `d20c904` identifies the
+array-depth correction; all 39 linked fixtures were measured on that engine.
+Private receipt hashes and binary snapshots are retained with the checkpoint
+evidence; no machine paths appear here.
 
 A direct upstream IO-CLI probe adds another distinct host limit: its
 [`io_run`](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/bend2/comp.ts#L1271)
@@ -124,13 +128,14 @@ CPU verification or require a GPU desktop.
 
 ## Next bounded work
 
-The next useful family is the six runtime-negative fixtures without a current
-ledger receipt: `io/array_depth_bound.bend`, `io/marshal_char_scalar.bend`,
-`io/request_out_of_band.bend`, `io/stack_fault_trap.bend`,
-`io/stderr_failure.bend` and `run/nat_overflow.bend`. Review each source and foreign
-companion before execution; distinguish checking, generation, execution failure
-and host support. The other four runtime-negative fixtures already have control
-receipts. Do not classify all ten as expected checker rejections.
+The [runtime-negative checkpoint](cpu-runtime-negatives.md) now records all ten
+runtime-negative fixtures across the ledger. The six newly compared fixtures
+produced one corrected native array-depth acceptance defect, plus unresolved
+diagnostic, safety-budget, native foreign and oracle-host cells. The next small
+CPU correction is the demonstrated native `Nat.mul` budget gap: investigate a
+sealed compact-number path that preserves demand and fails at the actual Nat
+bound without raising resource limits. Do not classify runtime negatives as
+expected checker rejections or count phase-only agreement as exact parity.
 
 In parallel with later bounded families, complete lane/API review, resolve the
 upstream direct-IO host requirement, and qualify multiworker/host-specific cases.
@@ -146,6 +151,7 @@ review the result, then copy the two inventory files into `docs/` deliberately:
 ```powershell
 pwsh -NoProfile -File scripts/inventory-cpu.ps1 -Reference <reference> -OutputDirectory <fresh-inventory-dir>
 pwsh -NoProfile -File scripts/compare-cpu.ps1 -Reference <reference> -OutputDirectory <fresh-results-dir> -Suite collections -Repetitions 2
+pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -OutputDirectory <fresh-negative-dir> -Repetitions 2
 ```
 
 The comparison runner snapshots and hashes the port binary before execution.
