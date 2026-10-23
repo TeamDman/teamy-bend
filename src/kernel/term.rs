@@ -386,7 +386,7 @@ impl fmt::Display for Term {
                 ..
             } => write!(f, "@{quant}{name}:{domain} -> {body}"),
             Self::Lam { name, body, .. } => write!(f, "{name} => {body}"),
-            Self::App(a, b) => write!(f, "{a}({b})"),
+            Self::App(..) => application(f, self),
             Self::Adt {
                 name,
                 args,
@@ -452,6 +452,39 @@ impl fmt::Display for Term {
             }
         }
     }
+}
+
+fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+    // Pinned term_show un-applies only the function spine, then prints its
+    // arguments in source order. An annotation is a boundary, not another App.
+    let mut head = value;
+    let mut arguments = Vec::new();
+    while let Term::App(function, argument) = head {
+        arguments.push(argument.as_ref());
+        head = function;
+    }
+    // The head uses precedence 2; lambda/let/rewrite/arrow heads need grouping.
+    if matches!(
+        head,
+        Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
+    ) {
+        write!(f, "({head})")?;
+    } else {
+        write!(f, "{head}")?;
+    }
+    f.write_str("(")?;
+    for (index, argument) in arguments.into_iter().rev().enumerate() {
+        if index != 0 {
+            f.write_str(", ")?;
+        }
+        // Arguments use precedence 0: only a let requires these parentheses.
+        if matches!(argument, Term::Let { .. }) {
+            write!(f, "({argument})")?;
+        } else {
+            write!(f, "{argument}")?;
+        }
+    }
+    f.write_str(")")
 }
 
 fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Term) -> fmt::Result {

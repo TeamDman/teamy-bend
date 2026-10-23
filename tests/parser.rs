@@ -96,11 +96,11 @@ fn literals_and_operator_namespaces_are_structural() {
         parse_term("(a + b * c : U32)")
             .expect("operators")
             .to_string(),
-        "U32.add(a)(U32.mul(b)(c))"
+        "U32.add(a, U32.mul(b, c))"
     );
     assert_eq!(
         parse_term("a + b").expect("Nat operators").to_string(),
-        "Nat.add(a)(b)"
+        "Nat.add(a, b)"
     );
     parse_term("'ab'").expect_err("character literal has one scalar");
     parse_term("?TODO").expect("holes remain explicit syntax for checker rejection");
@@ -212,11 +212,11 @@ fn array_sugar_and_nested_type_closers_parse() {
         parse_term("[0n: Nat * 4n]")
             .expect("power of two")
             .to_string(),
-        "Array.new(Nat)(Succ{Succ{Zero{}}})(Zero{})"
+        "Array.new(Nat, Succ{Succ{Zero{}}}, Zero{})"
     );
     assert_eq!(
         parse_term("[0n: Nat ^ 2n]").expect("depth").to_string(),
-        "Array.new(Nat)(Succ{Succ{Zero{}}})(Zero{})"
+        "Array.new(Nat, Succ{Succ{Zero{}}}, Zero{})"
     );
     parse_term("[0n: Nat * 3n]").expect_err("array count must be a power of two");
     assert_eq!(

@@ -4,6 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
+    [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
     [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
@@ -179,7 +180,7 @@ foreach ($fixture in $fixtures) {
     $row = [ordered]@{
         fixture = $fixture.name; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $referenceHead; port_revision = $portHead; port_dirty = [bool]$portStatus
-        port_binary_sha256 = $binaryHash; c_arguments = @('--threads', '1', '--gpu', 'off')
+        port_binary_sha256 = $binaryHash; c_arguments = @('--threads', '1', '--gpu', 'off'); upstream_c_optimization = $OracleOptimization
         timeout_seconds = 60; repetitions = $Repetitions; steps = [ordered]@{}; matched = $false
         completed_runtimes_match = $false; deterministic = $null; environmental_limits = @()
     }
@@ -196,6 +197,7 @@ foreach ($fixture in $fixtures) {
             $c = Join-Path $fixtureDirectory "$implementation.c"
             $exe = Join-Path $fixtureDirectory $implementation
             $flags = @('-std=c11')
+            if ($implementation -eq 'upstream') { $flags += "-$OracleOptimization" }
             if ($implementation -eq 'port') { $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic') }
             $null = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($c, '-pthread', '-lm', '-ldl', '-o', $exe)) $port
         }

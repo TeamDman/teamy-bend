@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
+    [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
     [ValidateSet('negatives', 'demand')][string]$Suite = 'negatives',
     [ValidateRange(1, 3)][int]$Repetitions = 2
 )
@@ -109,7 +110,7 @@ foreach ($fixture in $fixtures) {
     $row = [ordered]@{
         fixture = "$($fixture.name).bend"; source_sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $pin; port_revision = $revision; port_dirty = $dirty; port_binary_sha256 = $binaryHash
-        timeout_seconds = 60; repetitions = $Repetitions; c_arguments = @('--threads', '1', '--gpu', 'off')
+        timeout_seconds = 60; repetitions = $Repetitions; c_arguments = @('--threads', '1', '--gpu', 'off'); upstream_c_optimization = $OracleOptimization
         expected = @{ exit = $fixture.exit; stdout = $fixture.stdout; stderr = $fixture.stderr }
         fixture_origin = $(if ($Suite -eq 'demand') { 'authored_contract_control' } else { 'pinned_upstream' })
         steps = [ordered]@{}; lanes = [ordered]@{}; deterministic = $true
@@ -138,6 +139,7 @@ foreach ($fixture in $fixtures) {
                 if ($target -eq 'c') {
                     $program = Join-Path $directoryRoot $implementation
                     $flags = @('-std=c11')
+                    if ($implementation -eq 'upstream') { $flags += "-$OracleOptimization" }
                     if ($implementation -eq 'port') { $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic') }
                     $result = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($output, '-pthread', '-lm', '-ldl', '-o', $program)) $port
                     if ($result.exit -ne 0 -or $result.timed_out) { $row.lanes[$runtime] = 'compilation_failed'; $openCells++; continue }

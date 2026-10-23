@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'rewrite', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -92,6 +92,11 @@ if ($Suite -in @('companions', 'all')) {
 $cases = @($names | ForEach-Object { @{ name = $_; fixture = "flatten/$_.bend"; original = Join-Path $Reference "tests/flatten/$_.bend"; origin = 'upstream'; function_printer = $false } })
 if ($Suite -in @('base-functions', 'all')) {
     foreach ($name in @('computed_recursion_001_main_dec', 'computed_recursion_001_not', 'computed_recursion_001_par')) {
+        $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
+}
+if ($Suite -in @('nat-fuel', 'all')) {
+    foreach ($name in @('computed_recursion_000', 'computed_recursion_000_big', 'computed_recursion_001')) {
         $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; function_printer = $true }
     }
 }

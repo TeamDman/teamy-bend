@@ -108,6 +108,9 @@ fn base_function_companions_preserve_normalized_structure_and_exact_text() {
         "computed_recursion_001_main_dec",
         "computed_recursion_001_not",
         "computed_recursion_001_par",
+        "computed_recursion_000",
+        "computed_recursion_000_big",
+        "computed_recursion_001",
     ] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-normalization")
@@ -175,6 +178,95 @@ fn base_function_companions_preserve_captured_values_and_recursive_parity() {
                 "{name}"
             );
         }
+    }
+}
+
+#[test]
+fn nat_fuel_and_reusable_bindings_preserve_complete_application_results() {
+    for (name, cases) in [
+        (
+            "computed_recursion_000",
+            vec![
+                (vec!["0n", "Sn{Sn{Zn{}}}"], "Z{}"),
+                (vec!["1n", "Zn{}"], "Z{}"),
+                (vec!["1n", "Sn{Zn{}}"], "Z{}"),
+                (vec!["1n", "Sn{Sn{Sn{Sn{Zn{}}}}}"], "S{S{Z{}}}"),
+                (vec!["2n", "Sn{Sn{Sn{Sn{Zn{}}}}}"], "S{S{S{S{Z{}}}}}"),
+            ],
+        ),
+        (
+            "computed_recursion_000_big",
+            vec![
+                (vec!["Zn{}"], "F{}"),
+                (vec!["Sn{Zn{}}"], "F{}"),
+                (vec!["Sn{Sn{Zn{}}}"], "T{}"),
+                (vec!["Sn{Sn{Sn{Zn{}}}}"], "T{}"),
+            ],
+        ),
+        (
+            "computed_recursion_001",
+            vec![
+                (vec!["0n", "S{S{S{Z{}}}}"], "Z{}"),
+                (vec!["1n", "Z{}"], "Z{}"),
+                (vec!["1n", "S{Z{}}"], "S{Z{}}"),
+                (vec!["1n", "S{S{Z{}}}"], "Z{}"),
+                (vec!["2n", "S{S{Z{}}}"], "S{Z{}}"),
+                (vec!["3n", "S{S{S{Z{}}}}"], "S{S{Z{}}}"),
+            ],
+        ),
+    ] {
+        let book = load(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures/cpu-normalization")
+                .join(format!("{name}.bend")),
+        )
+        .unwrap();
+        let checked = check_book(&book).unwrap();
+        for (arguments, expected) in cases {
+            let args = arguments
+                .into_iter()
+                .map(|argument| parse_term(argument).unwrap())
+                .collect::<Vec<_>>();
+            assert_eq!(
+                checked.evaluate("main", &args).unwrap().to_string(),
+                expected,
+                "{name}"
+            );
+        }
+    }
+}
+
+#[test]
+fn application_rendering_preserves_spines_argument_nesting_and_binding() {
+    for (source, expected) in [
+        ("f(a)(b)(c)", "f(a, b, c)"),
+        ("f(g(a)(b))(c)", "f(g(a, b), c)"),
+        ("(x => g(x))(a)(b)", "(x => g(x))(a, b)"),
+        ("f(x => g(x))(a)", "f(x => g(x), a)"),
+        ("(%{==} : N; f)(a)(b)", "(%{==} : N; f)(a, b)"),
+        ("f(%{==} : N; a)(b)", "f(%{==} : N; a, b)"),
+    ] {
+        let parsed = parse_term(source).unwrap();
+        assert_eq!(parsed.to_string(), expected);
+        assert_eq!(
+            shape(&parsed).unwrap(),
+            shape(&parse_term(expected).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+    // Keep annotations and let scope instead of flattening through their bodies.
+    for (source, expected) in [
+        ("{f(a) : T}(b)(c)", "{f(a) : T}(b, c)"),
+        ("(x = A{}; f(x))(b)(c)", "(x = A{}; f(x))(b, c)"),
+        ("f((x = A{}; x))(b)", "f((x = A{}; x), b)"),
+    ] {
+        let parsed = parse_term(source).unwrap();
+        assert_eq!(parsed.to_string(), expected);
+        assert_eq!(parse_term(expected).unwrap().to_string(), expected);
+        let Term::App(function, _) = parsed.as_ref() else {
+            panic!("outer application must survive");
+        };
+        assert!(matches!(function.as_ref(), Term::App(..)));
     }
 }
 

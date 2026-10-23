@@ -14,6 +14,10 @@ upstream C and JS generation refuses their function-valued results before any
 output file is produced; the comparison runner verifies this applicability
 boundary before comparing normalized values.
 
+The unchanged `computed_recursion_000`, `_000_big` and `_001` originals add Nat
+fuel, nested patterns and reusable bindings. Their actual upstream C/JS printer
+refusals are checked before interpretation comparisons as well.
+
 Three further unchanged fixtures come from the same pinned repository:
 `eval/stuck_rewrite_print.bend`, `proof/context_rewrite_hypothesis.bend` and
 `proof/context_rewrite_value.bend`. They preserve stuck rewrites and checked
