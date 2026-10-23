@@ -6,6 +6,7 @@ use normalization_shape::shape;
 use normalization_shape::shape_in_book;
 use std::path::Path;
 use std::rc::Rc;
+use teamy_bend::kernel as normalization_kernel;
 use teamy_bend::kernel::Term;
 use teamy_bend::kernel::check_book;
 use teamy_bend::kernel::term;

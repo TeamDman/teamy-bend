@@ -23,6 +23,10 @@ use std::io::Write;
 use std::path::Path;
 use std::rc::Rc;
 
+#[cfg(test)]
+#[path = "executable_normalization_tests.rs"]
+mod normalization_tests;
+
 /// The execution behavior of a filled `main` definition.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ExecutableEntry {

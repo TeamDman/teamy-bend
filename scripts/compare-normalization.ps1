@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -108,10 +108,16 @@ if ($Suite -in @('rewrite', 'all')) {
         $cases += @{ name = "rewrite-$name"; fixture = "authored/rewrite-$name.bend"; original = Join-Path $port "tests/fixtures/cpu-rewrite/$name.bend"; origin = 'authored'; function_printer = $false }
     }
 }
+if ($Suite -in @('float-suffix', 'all')) {
+    foreach ($name in @('chain_suffix_f32_f', 'chain_suffix_f32_g', 'chain_suffix_f32_h')) {
+        $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true; executable_function = $true }
+    }
+}
 foreach ($case in $cases) {
     $name = $case.name
     $caseDirectory = (New-Item -ItemType Directory -Path (Join-Path $outputPath $name)).FullName
     $original = $case.original
+    $executableFunction = [bool]$case.executable_function
     $source = Join-Path $caseDirectory 'main.bend'
     Copy-Item -LiteralPath $original -Destination $source
     $golden = (@([regex]::Matches([IO.File]::ReadAllText($source), '(?m)^#\|([^\r\n]*)') | ForEach-Object { $_.Groups[1].Value }) -join "`n") + "`n"
@@ -121,6 +127,8 @@ foreach ($case in $cases) {
         port_binary_sha256 = $binaryHash; probe_binary_sha256 = $probeHash
         timeout_seconds = 60; repetitions = $Repetitions; require_exact_text = [bool]$RequireExactText; steps = [ordered]@{}
         structural_match = $false; exact_text_match = $false; deterministic = $null
+        structure_source = if ($executableFunction) { 'parsed_executable_output_with_core_regression' } else { 'checked_kernel_term' }
+        port_eval_applicability = if ($executableFunction) { 'strict_proof_exclusion' } else { 'required' }
         compiled_lanes = if ($case.function_printer) { 'unverified_function_printer_refusal' } elseif ($case.origin -eq 'authored') { 'authored_interpreter_control' } else { 'not_selected_by_upstream_gate_no_Base' }
     }
     $rows.Add($row)
@@ -140,17 +148,29 @@ foreach ($case in $cases) {
             }
             $upstream = Invoke-Bounded "upstream-$repeat" $node @('main.ts', $source) (Join-Path $Reference 'bend2')
             $run = Invoke-Bounded "port-run-$repeat" $binary @('run', $source) $caseDirectory
-            $eval = Invoke-Bounded "port-eval-$repeat" $binary @('--output-format', 'json', 'eval', $source) $caseDirectory
+            $eval = Invoke-Bounded "port-eval-$repeat" $binary @('--output-format', 'json', 'eval', $source) $caseDirectory -AllowFailure:$executableFunction
             $oracle = Join-Path $caseDirectory "upstream-$repeat.stdout"
-            $comparison = Invoke-Bounded "structure-$repeat" $probe @($source, $oracle) $caseDirectory
-            foreach ($result in @($upstream, $run, $eval, $comparison)) {
+            $comparisonArgs = @($source, $oracle)
+            if ($executableFunction) { $comparisonArgs += '--executable-function' }
+            $comparison = Invoke-Bounded "structure-$repeat" $probe $comparisonArgs $caseDirectory
+            $successful = @($upstream, $run, $comparison)
+            if ($executableFunction) {
+                $diagnostic = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($eval.stderr_base64))
+                if ($eval.exit -ne 1 -or $eval.stdout_base64 -cne '' -or -not $diagnostic.Contains('undefined name F32.add')) {
+                    throw 'Strict proof-mode exclusion changed; it is not an executable parity result.'
+                }
+            } else { $successful += $eval }
+            foreach ($result in $successful) {
                 if ($result.stderr_base64 -cne '') { throw 'Unexpected stderr.' }
             }
             $text = { param($result) [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($result.stdout_base64)) }
             if ((& $text $upstream) -cne $golden) { throw 'Pinned interpreter differs from original expectation.' }
             $report = (& $text $comparison) | ConvertFrom-Json
-            $value = (& $text $eval) | ConvertFrom-Json
-            if (-not $report.structural_match -or $value.entry -cne 'main' -or $value.value -cne $report.port_value -or
+            if (-not $executableFunction) {
+                $value = (& $text $eval) | ConvertFrom-Json
+                if ($value.entry -cne 'main' -or $value.value -cne $report.port_value) { throw 'Strict eval CLI contract differs.' }
+            }
+            if (-not $report.structural_match -or $report.core_term_observed -eq $executableFunction -or
                 (& $text $run) -cne "$($report.port_value)`n" -or (& $text $upstream) -cne "$($report.upstream_value)`n") {
                 throw 'Core structure or CLI contract differs.'
             }

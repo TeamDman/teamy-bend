@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MPL-2.0
 //! A deliberately bounded structural comparison vocabulary for this family.
 //! It performs no evaluation, reordering, text replacement or eta conversion.
+use super::normalization_kernel::Book;
+use super::normalization_kernel::Declaration;
+use super::normalization_kernel::Term;
+use super::normalization_kernel::TermRef;
 use facet::Facet;
 use std::collections::BTreeSet;
-use teamy_bend::kernel::Book;
-use teamy_bend::kernel::Declaration;
-use teamy_bend::kernel::Term;
-use teamy_bend::kernel::TermRef;
 
 #[derive(Debug, Eq, PartialEq, Facet)]
 #[repr(u8)]

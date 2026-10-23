@@ -27,3 +27,11 @@ Qualification uses the interpreter/normalizer. The upstream gate omits compiled
 lanes without Base; the Base-importing stuck-rewrite function is independently
 verified to be unprintable by upstream C/JS data printers. Core-structure and
 exact-output comparisons are separate checks.
+
+The three unchanged `parse/chain_suffix_f32_f.bend`, `_g` and `_h` fixtures
+come from the same pin and retain their Apache-2.0 attribution above. They
+normalize executable F32 functions; strict proof mode deliberately excludes
+their runtime primitives. Both upstream data printers reject the function
+results. The executable comparison observes parsed output, while the in-crate
+regression separately compares the actual normalized core against the pinned
+expectation. No executable contract becomes a strict proof certificate.
