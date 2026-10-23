@@ -1,5 +1,9 @@
 # Recursive function normalization and match rendering
 
+Historical evidence follows. The subsequent [rewrite-printer checkpoint](cpu-rewrite-printing.md)
+at `571d1ce` closes the rewrite rendering gap identified here; the receipts below
+remain tied to `3354e60`.
+
 Candidate `3354e6078255c00752a1ca9f452ef60ae0b9a9ef` qualifies the unchanged
 `flatten/computed_recursion_002`, `_003` and `_004` fixtures against
 [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).

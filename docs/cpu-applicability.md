@@ -9,16 +9,16 @@ references, both ledger snapshots and existing evidence. Its
 [metadata](cpu-applicability.json) records input hashes and aggregate counts.
 Classification is not qualification or a compatibility exception.
 
-**Follow-up:** the [interpretation ledger](cpu-interpretation-evidence.csv) links
-six original operator/recursive-match fixtures at `3354e60`: six structural and
-exact raw-output agreements, twice. The earlier two presentation differences
-are closed by source-backed match rendering, not waived by structural comparison.
-The tables/CSV below remain the historical runtime-ledger classification;
-their 1,251 runtime-unlinked count includes these six interpreter-only rows.
-Across both ledgers, 1,245 rows have no linked execution/interpretation receipt,
-including 158 interpretation-only cases. See the
-[normalization checkpoint](cpu-recursive-normalization.md) for exact contracts;
-no category or gate is waived by this additional evidence.
+**Follow-up:** the [interpretation ledger](cpu-interpretation-evidence.csv) now
+links nine originals at `571d1ce`, all exact twice. Eight are interpreter-only;
+the ninth imports Base but actual upstream C/JS generation refuses its function
+result. The historical CSV/table below retain their original runtime-ledger inputs.
+Across runtime and interpretation ledgers, 1,242 rows lack those receipts,
+including 156 interpreter-only cases and 635 compiled candidates. The separate
+[checking ledger](cpu-checking-evidence.csv) adds one exact check-only acceptance
+and three phase/construct agreements whose raw diagnostics remain unqualified.
+See the [rewrite checkpoint](cpu-rewrite-printing.md); no missing implementation
+or unavailable host is waived by a classification hint.
 
 ## What the unlinked entries actually require
 

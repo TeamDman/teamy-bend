@@ -116,27 +116,33 @@ turning status-only results, source hints or related regression suites into pari
 passes. Full per-lane applicability/printability and API review remain required.
 
 The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
-six of those 164 interpreter-only cases at candidate `3354e60`. The earlier
-[entry correction](cpu-function-normalization.md) fixed parameterized-entry
-refusal; the [recursive normalization checkpoint](cpu-recursive-normalization.md)
-qualifies three more originals and closes both earlier presentation differences
-with the pinned match-printer rules. All six core structures and raw results
-match twice. Compiled lanes are not selected by the pinned gate for these
-originals. Across both ledgers, 57 distinct rows have some execution evidence and
-1,245 have none linked: 439 checker negatives, twelve check-only modules, 158
-interpreter-only cases and 636 compiled candidates. These are evidence categories,
-not a common runtime denominator or a completeness claim. The historical
-applicability CSV remains tied to its recorded runtime-ledger inputs.
+nine originals at candidate `571d1ce`: eight interpreter-only cases and one
+compiled candidate whose function-valued result is actually refused by upstream
+C/JS generation. All nine match normalized core structure and raw output twice.
+The [rewrite-printer checkpoint](cpu-rewrite-printing.md) also qualifies four
+authored controls, which add no inventory rows. Across the runtime and
+interpretation ledgers, 60 distinct originals have execution evidence; 1,242
+lack those receipt kinds: 439 checker negatives, twelve check-only modules,
+156 interpreter-only cases and 635 compiled candidates. These are distinct
+requirements, not one runtime denominator. The historical applicability CSV
+remains tied to its recorded inputs.
 
-`pass_structural` means equality of the qualified parsed core vocabulary; it
-does not resolve a `presentation_difference` in raw bytes. All six rows now also
-have independent `pass_exact` evidence. This adds no exception to the acceptance
-criterion. The positive matrix is renewed on `3354e60` (308/320 exact, twelve
-known Bun-host failures), as is the six-fixture negative matrix (44/56 exact;
-eight resource-policy, two native-foreign and two Bun-host gaps). Earlier
-comptime and multiworker receipts retain their recorded commits. A separate
-authored rewrite-term rendering defect is reproduced on baseline and candidate;
-it remains open and does not increase inventory coverage.
+The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
+module with exact acceptance/report agreement and three negatives with matching
+phase/offending construct but differing raw diagnostics. The latter remain
+unqualified. No proof-only rejection is substituted for execution or diagnostic
+parity. Structural equality retains every supported rewrite field and binding;
+raw `pass_exact` is an independent requirement.
+
+The positive matrix is renewed on `571d1ce` (308/320 exact, twelve known Bun-host
+failures), as is the six-fixture negative matrix (44/56 exact; eight resource-policy,
+two native-foreign and two Bun-host gaps). Earlier comptime and multiworker
+receipts retain their recorded commits. The presentation correction changes no
+runtime demand policy. The user has separately approved strict live executable
+arguments, Nat bounds before shallow observation and continued private-request
+refusal with a named upstream-C wildcard exception. Implementation and renewed
+evidence are still required; this approval does not turn the old comparisons
+into exact matches or waive other differences.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
@@ -193,11 +199,11 @@ only and does not approve a semantics change or an oracle exception. Independent
 CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
 five runtimes twice after a packed native division/modulo optimization; the
 operator/representation group now also passes all five runtimes twice. A bounded
-pure-interpretation family now has six exact normalized results, including the
-three recursive mains. Next: the source-level rewrite printer, which currently
-exposes internal motive binders in a small checked program. Qualify named/unnamed
-motive binders and selected original rewrite fixtures without treating unsupported
-comparison forms as opaque text. The sleep_order and
+pure-interpretation family now has nine exact normalized results, including the
+recursive and rewrite fixtures. Next is the separately approved executable demand
+contract. Implement it with erasure, branch, order and budget regressions, and
+retain the upstream-C wildcard anomaly as an explicit exception rather than a
+byte-parity pass. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

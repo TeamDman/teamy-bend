@@ -3361,3 +3361,23 @@ independent bounded correction; it adds no inventory row and is not hidden by
 extending the structural comparator. Earlier comptime and multiworker receipts
 retain their recorded commits. Pending demand contracts and broader CPU parity
 remain open. Frozen dependencies/toolchains/pins; local commits only, no push.
+
+### [x] 5.35 Print source-level rewrite motives without changing evaluation
+
+The printer now opens the two internal motive binders, preserves the optional
+named-equation spelling and groups low-precedence terms according to pinned
+term_show. Tests retain scope, inner lambdas, annotations, fallback motives and
+all structural evidence/motive/body fields. Nine original normalization fixtures
+plus four authored controls match core structure and exact text twice. The Base
+function fixture's C/JS exclusions are confirmed by actual upstream refusal.
+One adjacent no-main module reports exact checking success; three rejected cases
+agree on phase/construct but retain unresolved raw diagnostic differences.
+
+Full gate: 791 passed, zero failed, 49 ignored; strict all-target Clippy passes.
+Positive/negative renewals retain 308/320 and 44/56 exact observations with all
+known host/resource/foreign gaps explicit. Incremental cache uses the existing
+temporary volume to preserve disk headroom without changing build flags or
+removing evidence. The [checkpoint](cpu-rewrite-printing.md) records source hashes,
+commands, receipts and the updated interpretation/checking ledgers. Dependencies,
+toolchains and pins stay frozen; no push. The separately approved executable
+demand contract is next and remains unimplemented by this presentation commit.
