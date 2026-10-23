@@ -2956,7 +2956,7 @@ rules or global notification settings.
 Completion: named-pipe runs retain sanitizer diagnostics and successful GPU
 execution, with durable instructions preventing accidental TCP launches.
 
-### [~] 5.18 Establish the resumed Linux CPU baseline
+### [x] 5.18 Establish the resumed Linux CPU baseline
 
 The unpublished desktop candidate is preserved in a separate branch together
 with remote documentation commit `969561f`. The desktop checkout was left
@@ -2975,11 +2975,23 @@ semantic failure. Upstream generation must run from its `bend2` directory so
 relative effect companions resolve. The upstream reference is clean at
 `e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`.
 
-Linux execution is pending. Qualify the existing Unix adapters and compare the
-complete untouched upstream-generated POSIX C runtime against this port's C
-for bounded representative programs. Existing Windows/JavaScript evidence does
-not establish this comparison. GPU validation and environment publication are
-separate actions, not completed by preserving this branch.
+Linux qualification passes at `9c9e2f5`: pinned formatting, strict all-feature
+Clippy, all-feature build, real Node-provider contracts, and 726 workspace tests
+with zero failures and 49 explicit ignores. The original 183 root-test failures
+comprised 177 strict generated-C compilation failures, five missing-provider
+failures and one environment-name mismatch. Scoped portability and test-harness
+fixes preserve warning flags, proof rules, resource bounds and runtime algorithms.
+
+All five recovered/unchanged fixtures agree across the complete untouched
+upstream POSIX C runtime, upstream JavaScript, port C, port JavaScript and native
+Rust: 25 executions with identical stdout, empty stderr and exit 0. A reusable
+bounded comparison script records input hashes, commands and byte-level results.
+The [Linux CPU receipt](linux-cpu-validation.md) records exact commands, tools,
+source identities and the explicit upstream C/JS NUL-key inconsistency.
+
+Next CPU work: add bounded upstream task/channel and file-effect fixtures and
+reduce a concrete semantic difference. Whole-engine parity, the remaining
+Poche formalization and fresh GPU/local-platform validation remain open.
 
 ## Completion and risks
 

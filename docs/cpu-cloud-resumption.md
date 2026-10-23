@@ -4,7 +4,9 @@ Updated 2026-10-23. Development was parked because other work took priority.
 The resumed objective is still the Bend 2 rewrite, followed by the remaining
 Poche formalization; the first new milestone is a reproducible Linux CPU
 baseline. GPU execution and sanitizer runs are deferred to a local hardware
-session. No cloud environment has been qualified by this document alone.
+session. The first Linux milestone now passes; see the
+[Linux CPU validation receipt](linux-cpu-validation.md) for source identity,
+exact commands, counts and remaining boundaries.
 
 ## Preserved work and evidence boundary
 
@@ -32,8 +34,9 @@ Fresh Windows CPU validation on 2026-10-23 passed `./check-all.ps1`: formatting,
 strict Clippy, all-feature build, the real Node socket-provider contract suite,
 and 728 tests with 49 explicit ignores and zero failures. GPU hardware tests and
 optional profilers were not enabled. The separately pinned
-`nightly-2026-05-24` formatting check also passes. Linux qualification remains
-pending; these results must not be relabeled as Linux or GPU evidence.
+`nightly-2026-05-24` formatting check also passes. Linux qualification is recorded
+separately in the linked receipt; these Windows results must not be relabeled
+as Linux or GPU evidence.
 
 Plan items 5.15.7.4.g/h retain their historical September validation; those
 receipts do not qualify the later nested-layout changes. The existing strict

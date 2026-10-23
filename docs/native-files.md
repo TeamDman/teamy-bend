@@ -27,8 +27,11 @@ Generated JavaScript retains upstream's raw descriptor representation for foreig
 interoperability, including descriptors supplied by trusted foreign code.
 
 Environment lookup distinguishes an existing empty value from a missing name.
-Native lookup rejects embedded NUL with ENOENT. Names and values use native OS
-byte representation on Unix and UTF-8 conversion on Windows.
+Native Rust, generated C and generated JavaScript reject embedded NUL and `=`
+in names with ENOENT. Native names and values use OS byte representation on Unix
+and UTF-8 conversion on Windows. Upstream JavaScript can truncate a NUL-suffixed
+name in Node; the port explicitly follows upstream C's rejection contract.
+See the [Linux CPU validation receipt](linux-cpu-validation.md).
 
 ## Native scheduling and cleanup
 
@@ -62,7 +65,7 @@ also cover these cancelled but still-running operations.
 | Error numbers | Unix native errno; explicit Windows CRT-style mapping | Upstream JS/libuv numbers, including Windows differences |
 | Error text | Native strerror/CRT strerror_s | Common file-error strings and Node/libuv fallback; supplied BEND_SYS remains authoritative |
 | Malformed UTF-8 | Exact native C io_str reverse decoding into raw Char codes | Fresh TextDecoder replacement/BOM handling for each read |
-| NUL environment names | ENOENT | Actual Windows Node lookup can resolve the name before NUL, as upstream JS does |
+| NUL environment names | ENOENT | ENOENT, checked before Node lookup; intentional alignment with upstream C |
 | NUL path | Native EILSEQ (Windows CRT 42, Linux 84, macOS 92) | Upstream hardcoded 84 except macOS 92 |
 
 Native effect output uses the matching C io_utf8 algorithm for all U32 Char codes,
