@@ -562,6 +562,7 @@ typedef struct {
   TBTaskRun *head, *tail, *completed_head, *completed_tail;
   u32 desired, created;
   bool stop, failed;
+  TBFailureKind failure_kind;
   char error[256];
 #ifdef _WIN32
   HANDLE threads[TB_CPU_LIMIT];
@@ -574,12 +575,13 @@ static TBMutex tb_cpu_mutex = TB_MUTEX_INIT;
 static u32 tb_cpu_pending; /* Coordinator-owned; workers publish only queues. */
 static u32 tb_cpu_live_workers; /* Protected by tb_cpu_mutex until joined. */
 static TB_NORETURN void tb_cpu_cancel_error(void) {
-  char error[256];
+  char error[256]; TBFailureKind kind;
   if (tb_worker_failure_capture) err_fail("CPU execution cancelled");
   tb_lock(&tb_cpu_mutex);
+  kind = tb_cpu.failed ? tb_cpu.failure_kind : TB_FAILURE_INTERNAL;
   (void)snprintf(error, sizeof(error), "%s", tb_cpu.failed ? tb_cpu.error : "CPU execution cancelled");
   tb_unlock(&tb_cpu_mutex);
-  err_fail(error);
+  tb_fail(kind, error);
 }
 #ifdef _WIN32
 static CONDITION_VARIABLE tb_cpu_changed = CONDITION_VARIABLE_INIT;
@@ -625,7 +627,7 @@ static void *tb_cpu_worker(void *opaque)
   TBHost *host = (TBHost *)opaque;
   jmp_buf guard;
   tb_host_current = host; tb_failure_guard = &guard;
-  tb_worker_failure_capture = true; tb_failure_message[0] = '\0';
+  tb_worker_failure_capture = true; tb_failure_message[0] = '\0'; tb_failure_kind = TB_FAILURE_INTERNAL;
   tb_lock(&tb_cpu_mutex); ++tb_cpu_live_workers; tb_unlock(&tb_cpu_mutex);
   if (setjmp(guard) == 0) {
     for (;;) {
@@ -652,7 +654,7 @@ static void *tb_cpu_worker(void *opaque)
   } else {
     tb_lock(&tb_cpu_mutex);
     if (!tb_cpu.failed) {
-      tb_cpu.failed = true;
+      tb_cpu.failed = true; tb_cpu.failure_kind = tb_failure_kind;
       (void)snprintf(tb_cpu.error, sizeof(tb_cpu.error), "%s", tb_failure_message);
     }
     tb_cpu.stop = true; tb_cpu_notify_locked(); tb_unlock(&tb_cpu_mutex);
@@ -694,7 +696,7 @@ OUTLINE void tb_cpu_submit(TBTaskRun *run, u32 frontier) {
 }
 OUTLINE TBTaskRun *tb_cpu_complete(void) {
   TBTaskRun *run;
-  char error[256];
+  char error[256]; TBFailureKind kind;
   tb_lock(&tb_cpu_mutex);
   while (tb_cpu.completed_head == NULL && !tb_cpu.failed) {
     if (!tb_cpu_wait_locked()) {
@@ -702,8 +704,9 @@ OUTLINE TBTaskRun *tb_cpu_complete(void) {
     }
   }
   if (tb_cpu.failed) {
+    kind = tb_cpu.failure_kind;
     (void)snprintf(error, sizeof(error), "%s", tb_cpu.error);
-    tb_unlock(&tb_cpu_mutex); err_fail(error);
+    tb_unlock(&tb_cpu_mutex); tb_fail(kind, error);
   }
   run = tb_cpu.completed_head; tb_cpu.completed_head = run->next;
   if (tb_cpu.completed_head == NULL) tb_cpu.completed_tail = NULL;

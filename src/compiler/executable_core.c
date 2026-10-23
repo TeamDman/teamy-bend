@@ -226,6 +226,8 @@ struct TBHost {
   bool winsock;
 #endif
 };
+typedef enum { TB_FAILURE_INTERNAL, TB_FAILURE_REQUEST_OUT_OF_BAND } TBFailureKind;
+static TB_THREAD_LOCAL TBFailureKind tb_failure_kind;
 static TB_THREAD_LOCAL TBHost *tb_host_current;
 static TB_THREAD_LOCAL jmp_buf *tb_failure_guard;
 static TB_THREAD_LOCAL char tb_failure_message[256];
@@ -266,11 +268,12 @@ static void tb_gpu_shutdown(void);
 #endif
 static TB_NORETURN void tb_cpu_cancel_error(void);
 
-OUTLINE TB_NORETURN void err_fail(const char *message) {
+OUTLINE TB_NORETURN void tb_fail(TBFailureKind kind, const char *message) {
   /* No longjmp may strand the VM lock. The lock protects only short core
    * operations; generated bodies and callbacks never execute while held. */
   if (tb_vm_held) { tb_vm_held = false; tb_unlock(&tb_vm_mutex); }
   if (tb_worker_failure_capture) {
+    tb_failure_kind = kind;
     (void)snprintf(tb_failure_message, sizeof(tb_failure_message), "%s", message);
     if (tb_failure_guard != NULL) longjmp(*tb_failure_guard, 1);
     abort();
@@ -285,9 +288,19 @@ OUTLINE TB_NORETURN void err_fail(const char *message) {
     tb_host_current->worker_failed = true;
     tb_unlock(&tb_host_current->mutex);
   }
-  (void)fprintf(stderr, "teamy-bend executable C: %s\n", message);
+  /* A language failure preserves pending program bytes before its diagnostic.
+   * Flush failures keep the internal-error path rather than claiming parity. */
+  if (kind == TB_FAILURE_REQUEST_OUT_OF_BAND && fflush(stdout) != 0) {
+    kind = TB_FAILURE_INTERNAL; message = "standard stream flush failed";
+  }
+  if (kind == TB_FAILURE_REQUEST_OUT_OF_BAND)
+    (void)fputs("bend: runtime fail-stop\n", stderr);
+  else (void)fprintf(stderr, "teamy-bend executable C: %s\n", message);
   if (tb_failure_guard != NULL) longjmp(*tb_failure_guard, 1);
   exit(1);
+}
+OUTLINE TB_NORETURN void err_fail(const char *message) {
+  tb_fail(TB_FAILURE_INTERNAL, message);
 }
 INLINE void tb_vm_acquire(void) {
   if (tb_vm_held) err_fail("recursive VM lock acquisition");
@@ -659,7 +672,7 @@ OUTLINE int tb_run(Term (*entry)(Env), int is_io, void (*show)(Env, Term), void 
 #endif
   host->references = 1;
   tb_host_current = host; tb_failure_guard = &guard;
-  tb_failure_message[0] = '\0'; tb_worker_failure_capture = false;
+  tb_failure_message[0] = '\0'; tb_failure_kind = TB_FAILURE_INTERNAL; tb_worker_failure_capture = false;
   tb_vm_held = false; tb_vm_cancelled = false; tb_cpu_active = false;
   tb_capacity = (tb_cli_gpu_active && tb_cli_gpu_span != 0
     ? tb_cli_gpu_span : BEND_MAX_ALLOC) / sizeof(Term);

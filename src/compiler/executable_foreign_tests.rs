@@ -183,7 +183,7 @@ fn request_lookalikes_are_data_and_thrown_requests_fail_without_effects() {
     );
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("request inspected outside"));
+    assert_eq!(output.stderr, b"bend: runtime fail-stop\n");
     let output = driver("[]", "()=>k=>k({index:0,args:[],continuation:k})");
     assert!(output.status.success());
     assert!(output.stdout.is_empty());

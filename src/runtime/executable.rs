@@ -123,7 +123,27 @@ impl Machine<'_> {
         self.jobs = super::host_jobs::State::default();
         self.files = super::file_handles::State::default();
         self.network = super::network::State::default();
-        result
+        match result {
+            Err(error) if error.is_request_out_of_band() => {
+                tracing::debug!(
+                    operation = "run", phase = "execute", failure = "request_out_of_band",
+                    detail = %error, "Bend execution failed"
+                );
+                // Cleanup is complete. This language outcome owns its raw
+                // program diagnostic; writer failures remain internal errors.
+                stdout
+                    .flush()
+                    .map_err(|error| KernelError::new(format!("stdout flush failed: {error}")))?;
+                stderr
+                    .write_all(b"bend: runtime fail-stop\n")
+                    .map_err(|error| KernelError::new(format!("stderr write failed: {error}")))?;
+                stderr
+                    .flush()
+                    .map_err(|error| KernelError::new(format!("stderr flush failed: {error}")))?;
+                Ok(1)
+            }
+            result => result,
+        }
     }
 
     fn drive_tasks(
@@ -471,7 +491,7 @@ impl Machine<'_> {
             Value::PackedWord { .. } | Value::PackedBits { .. } | Value::PackedNat(_) => {
                 self.constructor_value(value)
             }
-            Value::Request { .. } => Err(KernelError::new(
+            Value::Request { .. } => Err(KernelError::request_out_of_band(
                 "runtime fail-stop: a foreign effect request escaped the IO driver",
             )),
             _ => Err(KernelError::new("console argument is not constructor data")),
@@ -947,15 +967,10 @@ mod collection_tests {
             .unwrap();
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let error = machine
-            .drive_io(call, &mut stdout, &mut stderr)
-            .unwrap_err()
-            .to_string();
-        assert!(
-            error.contains("foreign effect request cannot be matched"),
-            "{error}"
-        );
-        assert!(stdout.is_empty() && stderr.is_empty());
+        let code = machine.drive_io(call, &mut stdout, &mut stderr).unwrap();
+        assert_eq!(code, 1);
+        assert!(stdout.is_empty());
+        assert_eq!(stderr, b"bend: runtime fail-stop\n");
         assert!(machine.gc.collections > 0);
     }
 }

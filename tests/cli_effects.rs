@@ -158,8 +158,7 @@ def main() -> IO(Unit):
     let output = fixture.invoke("run");
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("request"));
-    assert!(!String::from_utf8_lossy(&output.stderr).contains("SECRET"));
+    assert_eq!(output.stderr, b"bend: runtime fail-stop\n");
 }
 
 #[test]

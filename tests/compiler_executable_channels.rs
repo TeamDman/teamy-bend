@@ -314,7 +314,7 @@ def main() -> IO(Unit): IO.bind(Chan(IO.OP<U32>), Unit, Chan.new(IO.OP<U32>, 1),
     );
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("request inspected outside"));
+    assert_eq!(output.stderr, b"bend: runtime fail-stop\n");
 }
 
 #[test]

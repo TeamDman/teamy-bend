@@ -70,7 +70,7 @@ impl Machine<'_> {
     fn read_channel(&mut self, thunk: ThunkId) -> Result<Handle, KernelError> {
         match self.force(thunk)? {
             Value::Channel(handle) => Ok(handle),
-            Value::Request { .. } => Err(KernelError::new(
+            Value::Request { .. } => Err(KernelError::request_out_of_band(
                 "runtime fail-stop: a foreign effect request escaped the IO driver",
             )),
             _ => Err(KernelError::new("expected a sealed native channel handle")),

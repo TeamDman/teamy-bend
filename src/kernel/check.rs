@@ -27,10 +27,17 @@ use std::rc::Rc;
 type Uses = BTreeMap<usize, Quant>;
 type Context = BTreeMap<usize, Binder>;
 
-/// A rejected or resource-limited proof check.
+/// A rejected check or execution, retaining internal diagnostic context.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct KernelError {
     pub message: String,
+    kind: FailureKind,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum FailureKind {
+    Internal,
+    RequestOutOfBand,
 }
 impl fmt::Display for KernelError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -42,7 +49,19 @@ impl KernelError {
     pub(crate) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
+            kind: FailureKind::Internal,
         }
+    }
+
+    pub(crate) fn request_out_of_band(message: impl Into<String>) -> Self {
+        Self {
+            message: message.into(),
+            kind: FailureKind::RequestOutOfBand,
+        }
+    }
+
+    pub(crate) fn is_request_out_of_band(&self) -> bool {
+        self.kind == FailureKind::RequestOutOfBand
     }
 }
 

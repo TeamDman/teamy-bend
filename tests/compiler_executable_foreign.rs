@@ -104,7 +104,7 @@ fn matching_a_request_fails_before_its_foreign_implementation_runs() {
         .run();
         assert_eq!(output.status.code(), Some(1));
         assert!(output.stdout.is_empty());
-        assert!(String::from_utf8_lossy(&output.stderr).contains("request"));
+        assert_eq!(output.stderr, b"bend: runtime fail-stop\n");
     }
 }
 
@@ -117,4 +117,18 @@ fn undefined_foreign_return_without_a_resumer_reports_deadlock() {
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
     assert!(String::from_utf8_lossy(&output.stderr).contains("deadlock"));
+}
+
+#[test]
+fn ordinary_host_errors_cannot_impersonate_request_failures() {
+    let output = Fixture::new(
+        "import Base\ndef fail() -> IO(Unit): import \"./effect.js\"\ndef main() -> IO(Unit): fail()\n",
+        "function fail(){throw Error('foreign request inspected outside the IO driver')}",
+    ).run();
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        output.stderr,
+        b"teamy-bend generated program: foreign request inspected outside the IO driver\n"
+    );
 }

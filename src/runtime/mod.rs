@@ -591,7 +591,7 @@ impl<'program> Machine<'program> {
                         argument,
                     }) => {
                         if matches!(value, Value::Request { .. }) {
-                            return Err(KernelError::new(
+                            return Err(KernelError::request_out_of_band(
                                 "runtime fail-stop: a foreign effect request cannot be matched as constructor data",
                             ));
                         }

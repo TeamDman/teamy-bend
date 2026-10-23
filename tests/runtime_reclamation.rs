@@ -210,14 +210,13 @@ def main() -> IO(Unit):
     ));
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
-    let error = fixture
+    let code = fixture
         .checked()
         .run_main(&mut stdout, &mut stderr, &|| false)
-        .unwrap_err()
-        .to_string();
-    assert!(error.contains("foreign effect request"), "{error}");
+        .unwrap();
+    assert_eq!(code, 1);
     assert_eq!(stdout, b"8192\n");
-    assert!(stderr.is_empty());
+    assert_eq!(stderr, b"bend: runtime fail-stop\n");
 }
 
 #[test]

@@ -462,15 +462,11 @@ def main() -> IO(Unit): IO.bind(Chan(IO.OP<U32>), Unit, Chan.new(IO.OP<U32>, 1),
     );
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
-    let error = fixture
+    let code = fixture
         .checked()
         .run_main(&mut stdout, &mut stderr, &|| false)
-        .unwrap_err();
-    assert!(
-        error
-            .to_string()
-            .contains("foreign effect request cannot be matched as constructor data"),
-        "{error}"
-    );
-    assert!(stdout.is_empty() && stderr.is_empty());
+        .unwrap();
+    assert_eq!(code, 1);
+    assert!(stdout.is_empty());
+    assert_eq!(stderr, b"bend: runtime fail-stop\n");
 }

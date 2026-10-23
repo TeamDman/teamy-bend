@@ -216,7 +216,7 @@ impl Machine<'_> {
                 }))?;
                 Ok(("WCon".into(), vec![head, tail]))
             }
-            Value::Request { .. } => Err(KernelError::new(
+            Value::Request { .. } => Err(KernelError::request_out_of_band(
                 "runtime fail-stop: a foreign effect request cannot be inspected as constructor data",
             )),
             _ => Err(KernelError::new("runtime match expected constructor data")),
@@ -482,9 +482,10 @@ mod tests {
                 arguments: vec![],
                 continuation: 0,
             })
-            .unwrap_err()
-            .to_string();
-        assert!(error.contains("foreign effect request"));
+            .unwrap_err();
+        assert!(error.is_request_out_of_band());
+        assert!(error.to_string().contains("foreign effect request"));
+        assert!(!KernelError::new(error.to_string()).is_request_out_of_band());
         let id = machine
             .allocate(Thunk::Ready(Value::PackedWord {
                 wrapper: Wrapper::U32,

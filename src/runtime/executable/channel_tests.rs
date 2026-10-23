@@ -337,3 +337,89 @@ def main() -> IO(Unit):
     assert!(machine.gc.collections > 20);
     assert_clean(&machine);
 }
+
+#[test]
+fn request_refusal_and_diagnostic_writer_errors_discard_parked_channels() {
+    #[derive(Default)]
+    struct Sink {
+        bytes: Vec<u8>,
+        fail_write: bool,
+        fail_flush: bool,
+    }
+    impl Write for Sink {
+        fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+            if self.fail_write {
+                return Err(std::io::Error::other("runtime fail-stop"));
+            }
+            self.bytes.extend_from_slice(buf);
+            Ok(buf.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            if self.fail_flush && !self.bytes.is_empty() {
+                return Err(std::io::Error::other("runtime fail-stop"));
+            }
+            Ok(())
+        }
+    }
+    let program = program(
+        r#"def send(c: Chan(String)) -> IO(Unit):
+  do IO<Unit>:
+    ok : Bool <- Chan.send(String, c, "pending")
+    IO.print("BAD child")
+def inspect(op: IO.OP<Unit>) -> IO(Unit):
+  match op:
+    case Emit{x}: IO.print("BAD emit")
+    case _: IO.print("BAD fallback")
+def main() -> IO(Unit):
+  do IO<Unit>:
+    c : Chan(String) <- Chan.new(String, 0)
+    Unit <- IO.spawn(Unit, send(c))
+    Unit <- IO.sleep(0)
+    Unit <- IO.write("before")
+    inspect(IO.print("SECRET")(Unit, x => Emit{x}))
+"#,
+    );
+    for failure in [
+        None,
+        Some("stdout flush"),
+        Some("stderr write"),
+        Some("stderr flush"),
+    ] {
+        let mut machine = Machine::new(&program);
+        machine.gc_mode = gc::Mode::EverySafePoint;
+        let main = machine.reference("main").unwrap();
+        let first = machine.io_action(main).unwrap();
+        let mut stdout = Sink {
+            fail_flush: failure == Some("stdout flush"),
+            ..Sink::default()
+        };
+        let mut stderr = Sink {
+            fail_write: failure == Some("stderr write"),
+            fail_flush: failure == Some("stderr flush"),
+            ..Sink::default()
+        };
+        let result =
+            machine.drive_io_with_clock(first, &mut stdout, &mut stderr, &mut TestClock::default());
+        if let Some(failure) = failure {
+            let error = result.unwrap_err();
+            assert_eq!(
+                error.to_string(),
+                format!("{failure} failed: runtime fail-stop")
+            );
+            assert!(!error.is_request_out_of_band());
+        } else {
+            assert_eq!(result.unwrap(), 1);
+        }
+        assert_eq!(stdout.bytes, b"before");
+        assert_eq!(
+            stderr.bytes,
+            if failure.is_none() || failure == Some("stderr flush") {
+                &b"bend: runtime fail-stop\n"[..]
+            } else {
+                &b""[..]
+            }
+        );
+        assert!(machine.gc.collections > 20);
+        assert_clean(&machine);
+    }
+}

@@ -138,16 +138,13 @@ fn matching_a_foreign_request_fails_before_performing_the_effect() {
         ));
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let error = fixture
+        let code = fixture
             .checked()
             .run_main(&mut stdout, &mut stderr, &|| false)
-            .unwrap_err();
-        assert!(
-            error.to_string().contains("foreign effect request"),
-            "{error}"
-        );
+            .unwrap();
+        assert_eq!(code, 1);
         assert!(stdout.is_empty());
-        assert!(stderr.is_empty());
+        assert_eq!(stderr, b"bend: runtime fail-stop\n");
     }
 }
 

@@ -82,6 +82,14 @@ int main(void) {{
     (void)fputs("CPU workers survived runtime shutdown\n", stderr);
     return 90;
   }}
+#if BEND_TEST_REQUIRE_REQUEST_FAILURE
+  if (!tb_cpu.failed || tb_cpu.failure_kind != TB_FAILURE_REQUEST_OUT_OF_BAND ||
+      tb_host_current != NULL || tb_failure_guard != NULL || tb_io != NULL ||
+      tb_task_current != NULL || tb_memory != NULL || tb_cpu_active || tb_vm_held) {{
+    (void)fputs("request failure did not cross a worker boundary and clean up\n", stderr);
+    return 96;
+  }}
+#endif
 #if BEND_TEST_REQUIRE_DIRECT_REUSE
   if (tb_test_worker_reused < 128) {{
     (void)fputs("worker failure did not exercise repeated direct self calls\n", stderr);
@@ -405,6 +413,39 @@ def main() -> U32 & U32:
   left right = spin(0n) count(Nat.mul(64n, 4n))
   (left, right)
 ";
+
+#[test]
+fn request_failure_crosses_cpu_workers_without_running_or_reclassifying_it() {
+    let source = r#"import Base
+def inspect(op: IO.OP<U32>) -> U32:
+  match op:
+    case Emit{x}: x
+    case Halt{code, message}: code
+def identity(n: U32) -> U32: n
+def pair(op: IO.OP<U32>) -> U32:
+  left right = inspect(op) identity(2)
+  U32.add(left, right)
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    IO.print(U32.show(pair(IO.print("SECRET")(U32, x => Emit{7}))))
+"#;
+    for workers in [1, 2, 4] {
+        let definitions: &[&str] = if workers == 1 {
+            &[]
+        } else {
+            &["BEND_TEST_REQUIRE_REQUEST_FAILURE=1"]
+        };
+        let output = Fixture::new().run(source, "", workers, false, definitions);
+        assert_eq!(
+            output.status.code(),
+            Some(1),
+            "workers={workers}: {output:?}"
+        );
+        assert_eq!(output.stdout, b"before");
+        assert_eq!(output.stderr, b"bend: runtime fail-stop\n");
+    }
+}
 
 #[test]
 fn worker_budget_failure_cancels_and_joins_the_other_children() {

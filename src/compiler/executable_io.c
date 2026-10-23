@@ -81,7 +81,7 @@ INLINE void tb_require_effect(u32 cid) {
 TB_OPTIONAL INLINE void tb_reject_request(Term term) {
   u64 tag = term_tag(term), cid = term_aux(term);
   if (tag == TAG_CTR && cid < BEND_CID_COUNT && io_eff_rows[cid].run != NULL)
-    err_fail("foreign request inspected as ordinary data");
+    tb_fail(TB_FAILURE_REQUEST_OUT_OF_BAND, "foreign request inspected as ordinary data");
 }
 INLINE void io_push(IoQue *queue, IoAct *action) {
   action->next = NULL;

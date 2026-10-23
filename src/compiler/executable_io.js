@@ -482,17 +482,20 @@ function $tbRunMain(mainThunk, isIo, purePrinter) {
     }
     const main = $tbSynchronous($tbForceCall(mainThunk, []));
     if (!isIo) {
-      if ($tbIsRequest(main)) throw new Error('foreign request outside the IO driver');
+      if ($tbIsRequest(main)) throw main;
       $tbOutput(1, purePrinter(main) + '\n');
       return 0;
     }
     return $tbRunTasks(main);
   } catch (error) {
-    const message = $tbIsRequest(error)
-      ? 'foreign request inspected outside the IO driver'
-      : String(error && error.message !== undefined ? error.message : error);
+    // Only an authenticated request has the language fail-stop contract.
+    // Ordinary host exceptions retain their internal diagnostic, even if their
+    // message happens to describe a request.
+    const diagnostic = $tbIsRequest(error)
+      ? 'bend: runtime fail-stop'
+      : 'teamy-bend generated program: ' + String(error && error.message !== undefined ? error.message : error);
     // Reporting must still work after the evaluation budget has been exhausted.
-    try { require('fs').writeSync(2, 'teamy-bend generated program: ' + message + '\n'); }
+    try { require('fs').writeSync(2, diagnostic + '\n'); }
     catch (_) { /* A failed diagnostic stream cannot turn failure into success. */ }
     return 1;
   }

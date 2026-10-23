@@ -594,10 +594,10 @@ def costly(n: Nat) -> Nat:
         );
     }
     for (expression, diagnostic) in [
-        ("Nat.show(Nat.mul(2n, lazy()))", "foreign effect request"),
+        ("Nat.show(Nat.mul(2n, lazy()))", None),
         (
             "Nat.show(Nat.mul(1n, costly(U32.to_nat(1000000))))",
-            "step budget exhausted",
+            Some("step budget exhausted"),
         ),
     ] {
         let fixture = Fixture::new(&format!(
@@ -611,12 +611,17 @@ def main() -> IO(Unit):
         ));
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let error = fixture
+        let result = fixture
             .checked()
-            .run_main(&mut stdout, &mut stderr, &|| false)
-            .unwrap_err();
-        assert!(error.to_string().contains(diagnostic), "{error}");
+            .run_main(&mut stdout, &mut stderr, &|| false);
+        if let Some(diagnostic) = diagnostic {
+            let error = result.unwrap_err();
+            assert!(error.to_string().contains(diagnostic), "{error}");
+            assert!(stderr.is_empty());
+        } else {
+            assert_eq!(result.unwrap(), 1);
+            assert_eq!(stderr, b"bend: runtime fail-stop\n");
+        }
         assert_eq!(stdout, b"before\n");
-        assert!(stderr.is_empty());
     }
 }
