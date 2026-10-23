@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -198,6 +198,19 @@ $floatArithmetic = @(
     @{ name = 'float_arithmetic'; source = "$Reference/tests/run/float_arithmetic.bend"; expected = "8`n"; direct_mode = 'io' },
     @{ name = 'float-arithmetic-observations'; source = "$port/tests/fixtures/cpu-float-arithmetic/float-arithmetic-observations.bend"; expected = "1082130432 4`n1096810496 14`n1089470464 7.5`n1110704128 45`n1050253722 0.3`n1050253722 0.3`n1266679808 16777216`n1266679808 16777216`n1266679810 16777220`n1081711002 3.9`n3`n1206984704 123456`n1217559552 300000`n" }
 )
+$floatSpecialExpected = "1077936128 3`n1077936128 3`n1075838976 2.5`n2`n1073741660 1.9999804`n1240736612 1999980.5`n5`n2139095040 inf`n4286578688 -inf`n2147483648 -0`nnan`n0 1 0 0 0 0`n0 1 0 0 0 0`n0 1 0 0 1 1`n0 1 1 1 0 0`n1 0 0 1 0 1`n0 0 0 0 0 0 1 4294967040 0`n"
+$floatSpecials = @(
+    @{ name = 'float_text_roundtrip'; source = "$Reference/tests/run/float_text_roundtrip.bend"; expected = "233`n"; direct_mode = 'io' },
+    @{ name = 'float_compare'; source = "$Reference/tests/compile/float_compare.bend"; expected = "1999985`n"; direct_mode = 'io' },
+    @{ name = 'float_specials'; source = "$Reference/tests/run/float_specials.bend"; expected = "12`n"; direct_mode = 'io' },
+    @{ name = 'float-special-observations'; source = "$port/tests/fixtures/cpu-float-specials/float-special-observations.bend"; expected = $floatSpecialExpected }
+)
+# Open checker resource gap: this combined spelling passes upstream but the
+# port refuses it before execution. Keep the separate probe failing; the
+# factored control above does not qualify this original authored program.
+$floatSpecialsDepth = @(
+    @{ name = 'float-specials-combined-depth'; source = "$port/tests/fixtures/cpu-float-specials/float-specials-combined-depth.bend"; expected = $floatSpecialExpected }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -213,7 +226,9 @@ $fixtures = switch ($Suite) {
     'float-math' { $floatMath }
     'float-text' { $floatText }
     'float-arithmetic' { $floatArithmetic }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic }
+    'float-specials' { $floatSpecials }
+    'float-specials-depth' { $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
