@@ -3673,3 +3673,36 @@ run/float_arithmetic; source-inspected but runtime-unqualified. Full CPU parity,
 three new read contracts and complete lane/API review remain open. All inputs,
 budgets, dependencies, toolchains and prior checkpoints are preserved. No install
 or push.
+
+### [x] 5.46 Qualify finite float arithmetic and conversions
+
+Coverage source `8ad7f43` adds unchanged base/float_roundtrip,
+compile/float_roundtrip and run/float_arithmetic. Both upstream targets generate;
+five primary runtimes match exact stdout 144, 45 and 8 (each LF-terminated),
+empty stderr and exit 0 twice: 30 observations. The authored bit/text control
+adds ten exact executions, exposing arithmetic intermediates, precision at 2^24,
+both adjacent even-tie integer conversions and positive finite truncation.
+Three direct IO entries retain Node's import.meta.require limitation.
+
+No production defect was demonstrated. The separate F32.read probe is renewed
+and still exits 1: native/port C match upstream C, port JS matches upstream JS,
+but the three cross-backend contracts remain unresolved. The
+[checkpoint](cpu-float-arithmetic.md) distinguishes source-literal parsing from
+runtime-read grammar and proves the selected decimal's double-rounding cause.
+Guide/type declarations do not resolve those boundary choices; strtof/whole-
+string comment intent conflicts with implemented behavior. No parsing policy,
+tolerance, NaN payload guarantee or new exception is introduced.
+
+Full gate **814 passed, zero failed, 49 ignored**; 32 focused tests, strict
+all-target Clippy and clean build pass. Positive O3 renewal gives 568/580 exact
+primary observations and twelve Bun-host failures, plus four exact and 38
+host-blocked direct observations. All repeats are stable, with zero timeouts.
+Unaffected negative/demand/normalization/comptime/audit receipts retain bd6a228
+and every open cell; historical profiles and downstream API caveats remain.
+
+Ledgers link 90 originals; 1,212 lack runtime/interpretation receipts, classified
+by mode. Next independent family: run/float_text_roundtrip,
+compile/float_compare and run/float_specials; source-inspected but
+runtime-unqualified. Full CPU parity, read/error-order decisions and complete
+lane/API review remain open. Dependencies, tools, pin, budgets, approved demand
+semantics and all prior checkpoints are preserved. No install or push.
