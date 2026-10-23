@@ -1,9 +1,16 @@
-# Function-valued normalization fixtures
+# Normalization fixtures
 
 These six unchanged `tests/flatten/computed_operator_match_002*.bend` and
 `tests/flatten/computed_recursion_00{2,3,4}.bend` fixtures
 come from [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/flatten).
 Copyright 2026 HigherOrderCO; Apache-2.0. See NOTICE and `licenses/Apache-2.0.txt`.
-Their mains are functions, so qualification uses the interpreter/normalizer,
-not a generated executable printer. Original comments and expectation records
-are retained. Core-structure and exact-output comparisons are separate checks.
+
+Three further unchanged fixtures come from the same pinned repository:
+`eval/stuck_rewrite_print.bend`, `proof/context_rewrite_hypothesis.bend` and
+`proof/context_rewrite_value.bend`. They preserve stuck rewrites and checked
+transport proofs. Their original comments and expectation records are retained.
+
+Qualification uses the interpreter/normalizer. The upstream gate omits compiled
+lanes without Base; the Base-importing stuck-rewrite function is independently
+verified to be unprintable by upstream C/JS data printers. Core-structure and
+exact-output comparisons are separate checks.

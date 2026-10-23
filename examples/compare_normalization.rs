@@ -5,7 +5,7 @@ mod normalization_shape;
 
 use facet::Facet;
 use normalization_shape::Shape;
-use normalization_shape::shape;
+use normalization_shape::shape_in_book;
 use std::io::Write;
 use std::path::Path;
 use teamy_bend::kernel::check_book;
@@ -27,14 +27,15 @@ fn main() -> eyre::Result<()> {
     if args.len() != 2 {
         eyre::bail!("usage: compare_normalization <source.bend> <oracle-stdout>");
     }
-    let checked = check_book(&load(Path::new(&args[0]))?)?;
+    let book = load(Path::new(&args[0]))?;
+    let checked = check_book(&book)?;
     let value = checked.normalize_definition("main")?;
     let raw = std::fs::read_to_string(&args[1])?;
     let upstream = raw
         .strip_suffix('\n')
         .ok_or_else(|| eyre::eyre!("oracle output needs a final newline"))?;
-    let port_shape = shape(&value).map_err(eyre::Report::msg)?;
-    let upstream_shape = shape(&parse_term(upstream)?).map_err(eyre::Report::msg)?;
+    let port_shape = shape_in_book(&value, &book).map_err(eyre::Report::msg)?;
+    let upstream_shape = shape_in_book(&parse_term(upstream)?, &book).map_err(eyre::Report::msg)?;
     let port_value = value.to_string();
     let report = Report {
         structural_match: port_shape == upstream_shape,

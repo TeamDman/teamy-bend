@@ -441,7 +441,7 @@ impl fmt::Display for Term {
                 evidence,
                 motive,
                 body,
-            } => write!(f, "%{evidence}: {motive}; {body}"),
+            } => rewrite(f, evidence, motive, body),
             Self::Hole(name) => write!(f, "?{name}"),
             Self::Ann(x, t) => write!(f, "{{{x} : {t}}}"),
             Self::Let { bindings, body } => {
@@ -452,6 +452,37 @@ impl fmt::Display for Term {
             }
         }
     }
+}
+
+fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Term) -> fmt::Result {
+    // A surface rewrite stores two motive binders: the endpoint `_`, then the
+    // optional equation name. Print under them without evaluating the motive.
+    f.write_str("%")?;
+    let outer = without_annotations(motive);
+    let inner = if let Term::Lam { body, .. } = outer {
+        without_annotations(body)
+    } else {
+        outer
+    };
+    let printed_motive = if let (Term::Lam { .. }, Term::Lam { name, body, .. }) = (outer, inner) {
+        if !name.is_empty() {
+            write!(f, "{name}@")?;
+        }
+        body.as_ref()
+    } else {
+        motive
+    };
+    match_branch(f, evidence)?;
+    f.write_str(" : ")?;
+    match_branch(f, printed_motive)?;
+    write!(f, "; {body}")
+}
+
+fn without_annotations(mut value: &Term) -> &Term {
+    while let Term::Ann(inner, _) = value {
+        value = inner;
+    }
+    value
 }
 
 fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {

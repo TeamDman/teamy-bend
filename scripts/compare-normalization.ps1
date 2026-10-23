@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'rewrite', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -86,19 +86,29 @@ if ($Suite -in @('operator', 'all')) {
 if ($Suite -in @('recursion', 'all')) {
     $names += @('computed_recursion_002', 'computed_recursion_003', 'computed_recursion_004')
 }
-foreach ($name in $names) {
+$cases = @($names | ForEach-Object { @{ name = $_; fixture = "flatten/$_.bend"; original = Join-Path $Reference "tests/flatten/$_.bend"; origin = 'upstream'; function_printer = $false } })
+if ($Suite -in @('rewrite', 'all')) {
+    foreach ($fixture in @('eval/stuck_rewrite_print.bend', 'proof/context_rewrite_hypothesis.bend', 'proof/context_rewrite_value.bend')) {
+        $cases += @{ name = [IO.Path]::GetFileNameWithoutExtension($fixture); fixture = $fixture; original = Join-Path $Reference "tests/$fixture"; origin = 'upstream'; function_printer = ($fixture -eq 'eval/stuck_rewrite_print.bend') }
+    }
+    foreach ($name in @('unnamed', 'named', 'shadow', 'nested')) {
+        $cases += @{ name = "rewrite-$name"; fixture = "authored/rewrite-$name.bend"; original = Join-Path $port "tests/fixtures/cpu-rewrite/$name.bend"; origin = 'authored'; function_printer = $false }
+    }
+}
+foreach ($case in $cases) {
+    $name = $case.name
     $caseDirectory = (New-Item -ItemType Directory -Path (Join-Path $outputPath $name)).FullName
-    $original = Join-Path $Reference "tests/flatten/$name.bend"
+    $original = $case.original
     $source = Join-Path $caseDirectory 'main.bend'
     Copy-Item -LiteralPath $original -Destination $source
     $golden = (@([regex]::Matches([IO.File]::ReadAllText($source), '(?m)^#\|([^\r\n]*)') | ForEach-Object { $_.Groups[1].Value }) -join "`n") + "`n"
     $row = [ordered]@{
-        fixture = "flatten/$name.bend"; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
+        fixture = $case.fixture; origin = $case.origin; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $head; port_revision = $revision; port_dirty = [bool]$dirty
         port_binary_sha256 = $binaryHash; probe_binary_sha256 = $probeHash
         timeout_seconds = 60; repetitions = $Repetitions; require_exact_text = [bool]$RequireExactText; steps = [ordered]@{}
         structural_match = $false; exact_text_match = $false; deterministic = $null
-        compiled_lanes = 'not_selected_by_upstream_gate_no_Base'
+        compiled_lanes = if ($case.function_printer) { 'unverified_function_printer_refusal' } elseif ($case.origin -eq 'authored') { 'authored_interpreter_control' } else { 'not_selected_by_upstream_gate_no_Base' }
     }
     $rows.Add($row)
     try {
@@ -124,12 +134,30 @@ foreach ($name in $names) {
             if ($RequireExactText -and -not $row.exact_text_match) {
                 throw 'Core structure matches but raw term text differs.'
             }
+            if ($case.function_printer) {
+                foreach ($target in @('c', 'js')) {
+                    $outFile = Join-Path $caseDirectory "unprintable-$repeat.$target"
+                    $refusal = Invoke-Bounded "upstream-printer-$target-$repeat" $node @('main.ts', $source, '-o', $outFile) (Join-Path $Reference 'bend2') -AllowFailure
+                    $diagnostic = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($refusal.stderr_base64))
+                    if ($refusal.exit -ne 1 -or $refusal.stdout_base64 -cne '' -or $diagnostic -notmatch 'cannot be printed \(a function, a Type, an erased or dependent field\)' -or (Test-Path -LiteralPath $outFile)) {
+                        throw 'Upstream function-printer refusal did not match the reviewed contract.'
+                    }
+                }
+                $row.compiled_lanes = 'not_required_upstream_function_printer_refusal'
+            }
             if ($repeat -gt 1) {
                 foreach ($prefix in @('upstream', 'port-run', 'port-eval', 'structure')) {
                     foreach ($field in @('exit', 'stdout_base64', 'stderr_base64')) {
                         if ($row.steps["$prefix-$repeat"][$field] -cne $row.steps["$prefix-1"][$field]) {
                             $row.deterministic = $false
                             throw 'Repeated observation changed.'
+                        }
+                    }
+                }
+                if ($case.function_printer) {
+                    foreach ($target in @('c', 'js')) {
+                        foreach ($field in @('exit', 'stdout_base64', 'stderr_base64')) {
+                            if ($row.steps["upstream-printer-$target-$repeat"][$field] -cne $row.steps["upstream-printer-$target-1"][$field]) { throw 'Function-printer refusal changed between repetitions.' }
                         }
                     }
                 }
