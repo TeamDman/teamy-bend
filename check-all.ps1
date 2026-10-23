@@ -1,3 +1,5 @@
+param([string]$FormatterToolchain = 'nightly')
+
 function Invoke-Step {
 	param(
 		[Parameter(Mandatory = $true)]
@@ -36,7 +38,7 @@ function Get-NonTracyTestFeatureArgs {
 }
 
 Invoke-Step -Label "format check" -Action {
-	rustup run nightly -- cargo fmt --all
+	rustup run $FormatterToolchain -- cargo fmt --all
 }
 
 Invoke-Step -Label "clippy lint check" -Action {

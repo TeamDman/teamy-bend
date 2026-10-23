@@ -13,6 +13,8 @@ Development resumed on 2026-10-23 after other work took priority. The next
 milestone is reproducible Linux CPU validation against the pinned upstream
 runtime. The preserved GPU continuation candidate remains experimental;
 fresh GPU hardware validation is deferred to a separate local session.
+See the [CPU cloud handoff](docs/cpu-cloud-resumption.md) for pinned tools,
+preservation boundaries and the first Linux acceptance milestone.
 
 A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).

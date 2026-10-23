@@ -2,8 +2,13 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-09-23
+**Last updated:** 2026-10-23
 **Intent audit:** Updated 2026-09-22 against the original request and available scope/GPU/firewall follow-ups
+
+**Resumption:** The user confirmed the pause was due to other priorities and
+authorized preserving/publishing the unfinished desktop work. Continue with a
+dedicated headless Linux CPU environment; defer fresh GPU hardware testing to a
+local session. See [CPU cloud resumption](cpu-cloud-resumption.md) and 5.18.
 
 ## How to update this plan
 
@@ -2838,6 +2843,22 @@ This closes only scope and argument release. Synchronous boxed conversion and
 unboxing, borrowed field extraction, other constructor conversions, closure/task
 creation, and broader GPU allocation parity remain open.
 
+###### [~] 5.15.7.4.i Qualify resumable finite-layout conversion
+
+The preserved candidate expands nested finite-layout boxing and destructive
+unboxing into the generated suspendable body, reusing its constructor,
+field-extraction and drop continuations. The new CPU regression initially
+failed because the candidate read a discriminator from a single-constructor
+layout. Such a layout begins with its first field. Emitting a discriminator
+switch only for multiple constructors repairs the existing regression, which
+now returns `17` through generated C with GPU disabled.
+
+The candidate and its tests are preserved, but this milestone remains in
+progress. The earlier g/h hardware receipts predate this conversion work; no
+CUDA or sanitizer run was performed in the 2026-10-23 resumption. Fresh hardware
+qualification and the remaining borrowed/synchronous allocation chains are
+still required before declaring that boundary complete.
+
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
 Work: preserve the two upstream `@unsafe` exceptions using an explicit local
@@ -2934,6 +2955,31 @@ rules or global notification settings.
 
 Completion: named-pipe runs retain sanitizer diagnostics and successful GPU
 execution, with durable instructions preventing accidental TCP launches.
+
+### [~] 5.18 Establish the resumed Linux CPU baseline
+
+The unpublished desktop candidate is preserved in a separate branch together
+with remote documentation commit `969561f`. The desktop checkout was left
+intact. Rust 1.96.0 is pinned, and the standard gate accepts a pinned formatting
+toolchain. The [handoff](cpu-cloud-resumption.md) defines setup and acceptance.
+The fresh Windows portable gate passes formatting, strict Clippy, the
+all-feature build, real Node socket-provider contracts and 728 tests, with
+49 explicit ignores and zero failures. Pinned nightly formatting also passes.
+CUDA hardware and optional profiler tests were not enabled.
+
+Two recovered fixtures, with identical console wrappers, match pinned upstream
+JavaScript, Rust native execution and generated JavaScript exactly: outputs
+`16` and `17`, empty stderr and exit 0. The initial direct comparison exposed
+the documented canonical-constructor output of pure native `run`; it was not a
+semantic failure. Upstream generation must run from its `bend2` directory so
+relative effect companions resolve. The upstream reference is clean at
+`e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`.
+
+Linux execution is pending. Qualify the existing Unix adapters and compare the
+complete untouched upstream-generated POSIX C runtime against this port's C
+for bounded representative programs. Existing Windows/JavaScript evidence does
+not establish this comparison. GPU validation and environment publication are
+separate actions, not completed by preserving this branch.
 
 ## Completion and risks
 

@@ -236,6 +236,10 @@ quantum-one executable passes Compute Sanitizer memcheck with zero errors. All
 14 core and 10 primitive CUDA tests pass on the installed device. The portable
 `./check-all.ps1` and a release build pass; CUDA hardware cases remain ignored by
 the portable gate. Exact-release Poche gates were not rerun for this change.
+These are historical September results for the field/drop slices. The later
+finite-layout boxing/unboxing candidate is preserved with a corrected CPU
+regression, but its CUDA qualification remains open. The 2026-10-23 resumption
+runs CPU validation only; see [CPU cloud resumption](cpu-cloud-resumption.md).
 Other synchronous allocation chains remain open: boxed constructor conversion
 and unboxing wrappers, borrowed field extraction, closure and task creation, and
 the remaining unqualified access paths. Raw and boxed
