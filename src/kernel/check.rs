@@ -43,6 +43,7 @@ enum FailureKind {
     Internal,
     RequestOutOfBand,
     NatOverflow,
+    ArrayDepth,
 }
 impl fmt::Display for KernelError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -72,6 +73,13 @@ impl KernelError {
         }
     }
 
+    pub(crate) fn array_depth(message: impl Into<String>) -> Self {
+        Self {
+            message: message.into(),
+            kind: FailureKind::ArrayDepth,
+        }
+    }
+
     pub(crate) const fn language_failure(&self) -> Option<(&'static str, &'static [u8])> {
         match self.kind {
             FailureKind::Internal => None,
@@ -81,6 +89,10 @@ impl KernelError {
             FailureKind::NatOverflow => Some((
                 "nat_overflow",
                 b"bend: a Nat past the largest immediate 2^48-1\n",
+            )),
+            FailureKind::ArrayDepth => Some((
+                "array_depth",
+                b"bend: an array past the deepest block class 31\n",
             )),
         }
     }

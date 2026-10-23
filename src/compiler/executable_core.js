@@ -86,12 +86,13 @@ const $tb = (() => {
       return curry(arity, fn, next);
     });
   }
+  function failLanguage(message) {
+    const error = new Error(message);
+    languageFailures.set(error, 'bend: ' + message);
+    throw error;
+  }
   function nat(value) {
-    if (value > 0xFFFFFFFFFFFFn) {
-      const error = new Error('a Nat past the largest immediate 2^48-1');
-      languageFailures.set(error, 'bend: a Nat past the largest immediate 2^48-1');
-      throw error;
-    }
+    if (value > 0xFFFFFFFFFFFFn) failLanguage('a Nat past the largest immediate 2^48-1');
     return value;
   }
   function languageDiagnostic(error) { return languageFailures.get(error); }
@@ -118,7 +119,7 @@ const $tb = (() => {
   }
   function charNew(code) {
     if (code > 0x10FFFF || code >= 0xD800 && code <= 0xDFFF) {
-      throw new Error(String(code) + ' is not a Unicode scalar value');
+      failLanguage(String(code) + ' is not a Unicode scalar value');
     }
     return String.fromCodePoint(code);
   }
@@ -260,7 +261,7 @@ const $tb = (() => {
       case 'Bool.xor': return a !== b;
       case 'String.append': return appendText(a,b);
       case 'Array.new': {
-        if (a > 31n) throw new Error('an array past the deepest block class 31');
+        if (a > 31n) failLanguage('an array past the deepest block class 31');
         const size = 2 ** Number(a);
         if (size > maxArray) throw new Error('executable JavaScript array element budget exhausted');
         return Array(size).fill(b);

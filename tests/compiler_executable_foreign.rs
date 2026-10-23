@@ -124,6 +124,8 @@ fn ordinary_host_errors_cannot_impersonate_language_failures() {
     for message in [
         "foreign request inspected outside the IO driver",
         "a Nat past the largest immediate 2^48-1",
+        "an array past the deepest block class 31",
+        "55296 is not a Unicode scalar value",
     ] {
         let output = Fixture::new(
             "import Base\ndef fail() -> IO(Unit): import \"./effect.js\"\ndef main() -> IO(Unit): fail()\n",

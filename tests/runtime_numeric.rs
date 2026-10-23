@@ -512,12 +512,51 @@ fn original_upstream_array_depth_wall_refuses_before_printing_the_element() {
         assert_eq!(
             checked
                 .run_main(&mut stdout, &mut stderr, &|| false)
-                .unwrap_err()
-                .to_string(),
-            "an array past the deepest block class 31"
+                .unwrap(),
+            1
         );
         assert!(stdout.is_empty());
-        assert!(stderr.is_empty());
+        assert_eq!(stderr, b"bend: an array past the deepest block class 31\n");
+    }
+}
+
+#[test]
+fn array_depth_failure_preserves_output_and_unselected_branches_remain_lazy() {
+    for (flag, status, expected) in [("True", 0, "beforekept\n"), ("False", 1, "before")] {
+        let fixture = Fixture::new(&format!(
+            r#"import Base
+def show_array(r: Array<U32> & U32) -> IO(Unit):
+  (a, x) = r
+  IO.print(U32.show(x))
+def choose(flag: Bool) -> IO(Unit):
+  match flag:
+    case True{{}}: IO.print("kept")
+    case False{{}}:
+      show_array(Array.get(U32, Array.new(U32, 32n, 7), 0))
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    choose({flag}{{}})
+"#
+        ));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            fixture
+                .checked()
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap(),
+            status
+        );
+        assert_eq!(stdout, expected.as_bytes());
+        assert_eq!(
+            stderr,
+            if status == 0 {
+                &b""[..]
+            } else {
+                &b"bend: an array past the deepest block class 31\n"[..]
+            }
+        );
     }
 }
 

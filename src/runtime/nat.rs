@@ -696,7 +696,9 @@ impl Machine<'_> {
             _ => return self.ordinary_nat(state.operation, &state.arguments),
         };
         if depth > MAX_DEPTH {
-            return Err(KernelError::new("an array past the deepest block class 31"));
+            return Err(KernelError::array_depth(
+                "an array past the deepest block class 31",
+            ));
         }
         // Use the original checked constructor body after validation. This
         // preserves sharing and does not force the array's element or children.

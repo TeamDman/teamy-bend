@@ -429,9 +429,16 @@ fn array_depth_guard_preserves_lazy_elements_and_the_inclusive_boundary() {
         let element = poisoned(&mut machine, "unused_array_element");
         let array = call(&mut machine, "Array.new", &[erased, depth_value, element]);
         if depth > 31 {
+            let error = machine.force(array).err().unwrap();
             assert_eq!(
-                machine.force(array).err().unwrap().to_string(),
+                error.to_string(),
                 "an array past the deepest block class 31"
+            );
+            assert_eq!(error.language_failure().unwrap().0, "array_depth");
+            assert!(
+                KernelError::new(error.to_string())
+                    .language_failure()
+                    .is_none()
             );
         } else {
             let value = machine.force(array).unwrap();

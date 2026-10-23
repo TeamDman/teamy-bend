@@ -325,15 +325,12 @@ def main() -> IO(Unit):
     let first = machine.io_action(main).unwrap();
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
-    let error = machine
+    let code = machine
         .drive_io_with_clock(first, &mut stdout, &mut stderr, &mut TestClock::default())
-        .unwrap_err();
-    assert_eq!(
-        error.to_string(),
-        "an array past the deepest block class 31"
-    );
+        .unwrap();
+    assert_eq!(code, 1);
     assert!(stdout.is_empty());
-    assert!(stderr.is_empty());
+    assert_eq!(stderr, b"bend: an array past the deepest block class 31\n");
     assert!(machine.gc.collections > 20);
     assert_clean(&machine);
 }
@@ -369,6 +366,9 @@ def inspect(op: IO.OP<Unit>) -> IO(Unit):
   match op:
     case Emit{x}: IO.print("BAD emit")
     case _: IO.print("BAD fallback")
+def show_array(r: Array<U32> & U32) -> IO(Unit):
+  (a, x) = r
+  IO.print(U32.show(x))
 def main() -> IO(Unit):
   do IO<Unit>:
     c : Chan(String) <- Chan.new(String, 0)
@@ -444,4 +444,12 @@ fn nat_overflow_and_diagnostic_writer_errors_discard_parked_channels() {
             b"bend: a Nat past the largest immediate 2^48-1\n",
         );
     }
+}
+
+#[test]
+fn array_depth_and_diagnostic_writer_errors_discard_parked_channels() {
+    language_failure_discard_parked_channels(
+        "show_array(Array.get(U32, Array.new(U32, 32n, 7), 0))",
+        b"bend: an array past the deepest block class 31\n",
+    );
 }

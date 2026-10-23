@@ -26,6 +26,127 @@ fn natural_multiply_add_double_and_successor_share_the_language_failure_contract
     }
 }
 
+#[test]
+fn array_depth_language_wall_stays_distinct_from_the_element_budget() {
+    let fixture = Fixture::new();
+    let original = fixture.run_bounded(include_str!(
+        "fixtures/cpu-runtime-negatives/array_depth_bound.bend"
+    ));
+    assert_eq!(original.status.code(), Some(1));
+    assert!(original.stdout.is_empty());
+    assert_eq!(
+        original.stderr,
+        b"bend: an array past the deepest block class 31\n"
+    );
+    for depth in [0, 17, 18, 31, 32, 33] {
+        let output = fixture.run_bounded(&format!(
+            r#"import Base
+def observe(r: Array<U32> & U32) -> IO(Unit):
+  (a, x) = r
+  IO.print(U32.show(x))
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    observe(Array.get(U32, Array.new(U32, {depth}n, 7), 0))
+"#
+        ));
+        assert_eq!(
+            output.status.code(),
+            Some(i32::from(depth > 17)),
+            "{depth}: {output:?}"
+        );
+        assert_eq!(
+            output.stdout,
+            if depth <= 17 {
+                &b"before7\n"[..]
+            } else {
+                &b"before"[..]
+            }
+        );
+        assert_eq!(
+            output.stderr,
+            if depth > 31 {
+                &b"bend: an array past the deepest block class 31\n"[..]
+            } else if depth > 17 {
+                &b"teamy-bend generated program: executable JavaScript array element budget exhausted\n"[..]
+            } else {
+                &b""[..]
+            }
+        );
+    }
+}
+
+#[test]
+fn scalar_boundaries_preserve_exact_language_failures_and_first_error_order() {
+    let fixture = Fixture::new();
+    for code in [55_295, 55_296, 57_343, 57_344, 1_114_111, 1_114_112] {
+        let invalid = matches!(code, 55_296 | 57_343 | 1_114_112);
+        let output = fixture.run_bounded(&format!(
+            r#"import Base
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    Unit <- IO.print(U32.show(Char.to_u32(Chr{{{code}}})))
+    IO.print("after")
+"#
+        ));
+        assert_eq!(
+            output.status.code(),
+            Some(i32::from(invalid)),
+            "{code}: {output:?}"
+        );
+        assert_eq!(
+            output.stdout,
+            if invalid {
+                b"before".to_vec()
+            } else {
+                format!("before{code}\nafter\n").into_bytes()
+            }
+        );
+        assert_eq!(
+            output.stderr,
+            if invalid {
+                format!("bend: {code} is not a Unicode scalar value\n").into_bytes()
+            } else {
+                Vec::new()
+            }
+        );
+    }
+    for (expression, diagnostic) in [
+        (
+            "Char.to_u32(Chr{55296})",
+            "bend: 55296 is not a Unicode scalar value\n",
+        ),
+        (
+            "U32.from_nat(Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216)))",
+            "bend: a Nat past the largest immediate 2^48-1\n",
+        ),
+    ] {
+        let output = fixture.run_bounded(&format!("import Base\ndef observe(r: Array<U32> & U32) -> IO(Unit):\n  (a, x) = r\n  IO.print(U32.show(x))\ndef main() -> IO(Unit):\n  observe(Array.get(U32, Array.new(U32, 32n, {expression}), 0))\n"));
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+        assert_eq!(output.stderr, diagnostic.as_bytes());
+    }
+}
+
+#[test]
+fn original_foreign_scalar_marshalling_has_the_exact_failure_contract() {
+    let fixture = Fixture::new();
+    fixture.write(
+        "marshal_char_scalar.js",
+        include_str!("fixtures/cpu-runtime-negatives/marshal_char_scalar.js"),
+    );
+    let output = fixture.run_bounded(include_str!(
+        "fixtures/cpu-runtime-negatives/marshal_char_scalar.bend"
+    ));
+    assert_eq!(output.status.code(), Some(1));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        output.stderr,
+        b"bend: 55296 is not a Unicode scalar value\n"
+    );
+}
+
 struct Fixture(PathBuf);
 impl Fixture {
     fn new() -> Self {
@@ -253,9 +374,10 @@ def main() -> IO(Unit): discard(forever(0n))
     let output = fixture.run_bounded(&source.replace("'a'", "Char.from_u32(1114112)"));
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    let error = String::from_utf8(output.stderr).unwrap();
-    assert!(error.contains("not a Unicode scalar"), "{error}");
-    assert!(!error.contains("budget"), "{error}");
+    assert_eq!(
+        output.stderr,
+        b"bend: 1114112 is not a Unicode scalar value\n"
+    );
 }
 
 #[test]
@@ -362,8 +484,11 @@ fn pure_function_and_erased_dependent_results_fail_explicitly() {
 fn source_char_construction_checks_even_when_io_discards_the_value() {
     let fixture = Fixture::new();
     let output = fixture.run("import Base\ndef main() -> IO(Char): IO.pure(Char, Chr{55296})\n");
-    assert!(!output.status.success());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("not a Unicode scalar"));
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(
+        output.stderr,
+        b"bend: 55296 is not a Unicode scalar value\n"
+    );
     assert!(output.stdout.is_empty());
 }
 
