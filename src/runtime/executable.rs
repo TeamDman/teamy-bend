@@ -42,6 +42,11 @@ enum TaskOutcome {
     Halt(u32),
 }
 
+enum WaitOutcome {
+    Ready,
+    Deadlocked,
+}
+
 impl Program {
     pub(crate) fn from_executable(
         definitions: &Rc<BTreeMap<String, DefDecl>>,
@@ -149,7 +154,15 @@ impl Machine<'_> {
                 self.flush(stdout, "stdout")?;
                 return Ok(0);
             }
-            self.wait_for_task(stdout, clock)?;
+            if let WaitOutcome::Deadlocked = self.wait_for_task(stdout, clock)? {
+                self.write_bytes(
+                    stderr,
+                    b"bend: deadlock: every computation waits on a channel\n",
+                    "stderr",
+                )?;
+                self.flush(stderr, "stderr")?;
+                return Ok(1);
+            }
         }
     }
 
@@ -157,7 +170,7 @@ impl Machine<'_> {
         &mut self,
         stdout: &mut dyn Write,
         clock: &mut dyn Clock,
-    ) -> Result<(), KernelError> {
+    ) -> Result<WaitOutcome, KernelError> {
         // Upstream flushes before entering its poller, including zero-time
         // waits. Buffered output must be visible while every task is parked.
         self.flush(stdout, "stdout")?;
@@ -186,7 +199,7 @@ impl Machine<'_> {
             let now = clock.now()?;
             self.resume_network(&ready, now)?;
             if self.scheduler.has_ready() {
-                return Ok(());
+                return Ok(WaitOutcome::Ready);
             }
             let wait = self
                 .scheduler
@@ -203,9 +216,7 @@ impl Machine<'_> {
             } else if let Some(wait) = wait {
                 clock.wait(wait)?;
             } else {
-                return Err(KernelError::new(
-                    "native IO scheduler deadlock: no runnable task, timer or host job",
-                ));
+                return Ok(WaitOutcome::Deadlocked);
             }
         }
     }

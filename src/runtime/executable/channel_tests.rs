@@ -272,7 +272,7 @@ def main() -> IO(Unit):
 }
 
 #[test]
-fn deadlock_error_drops_pending_payloads_and_continuations() {
+fn deadlock_exit_drops_pending_payloads_and_continuations() {
     let program = program(
         r#"def send(c: Chan(String)) -> IO(Unit):
   do IO<Unit>:
@@ -288,11 +288,15 @@ def main() -> IO(Unit): IO.bind(Chan(String), Unit, Chan.new(String, 0), send)
     let first = machine.io_action(main).unwrap();
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
-    let error = machine
+    let code = machine
         .drive_io_with_clock(first, &mut stdout, &mut stderr, &mut TestClock::default())
-        .unwrap_err();
-    assert!(error.to_string().contains("deadlock"), "{error}");
-    assert!(stdout.is_empty() && stderr.is_empty());
+        .unwrap();
+    assert_eq!(code, 1);
+    assert!(stdout.is_empty());
+    assert_eq!(
+        stderr,
+        b"bend: deadlock: every computation waits on a channel\n"
+    );
     assert!(machine.gc.collections > 20);
     assert_clean(&machine);
 }

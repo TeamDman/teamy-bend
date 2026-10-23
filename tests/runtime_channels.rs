@@ -312,12 +312,57 @@ fn channel_waits_report_deadlock_for_both_sender_and_receiver() {
     ] {
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
-        let error = Fixture::new(source)
+        let code = Fixture::new(source)
+            .checked()
+            .run_main(&mut stdout, &mut stderr, &|| false)
+            .unwrap();
+        assert_eq!(code, 1);
+        assert!(stdout.is_empty());
+        assert_eq!(
+            stderr,
+            b"bend: deadlock: every computation waits on a channel\n"
+        );
+    }
+}
+
+#[test]
+fn deadlock_diagnostic_write_and_flush_failures_remain_host_errors() {
+    struct FailingDiagnostic {
+        fail_write: bool,
+    }
+    impl Write for FailingDiagnostic {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            if self.fail_write {
+                Err(io::Error::other("diagnostic write failed"))
+            } else {
+                Ok(bytes.len())
+            }
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            if self.fail_write {
+                Ok(())
+            } else {
+                Err(io::Error::other("diagnostic flush failed"))
+            }
+        }
+    }
+
+    let fixture = Fixture::new(
+        "def main() -> IO(Maybe<&1, U32>): IO.bind(Chan(U32), Maybe<&1, U32>, Chan.new(U32, 0), c => Chan.recv(U32, c))\n",
+    );
+    for (fail_write, expected) in [
+        (true, "cannot write stderr"),
+        (false, "cannot flush stderr"),
+    ] {
+        let mut stdout = Vec::new();
+        let mut stderr = FailingDiagnostic { fail_write };
+        let error = fixture
             .checked()
             .run_main(&mut stdout, &mut stderr, &|| false)
             .unwrap_err();
-        assert!(error.to_string().contains("deadlock"), "{error}");
-        assert!(stdout.is_empty() && stderr.is_empty());
+        assert!(error.to_string().contains(expected), "{error}");
+        assert!(stdout.is_empty());
     }
 }
 

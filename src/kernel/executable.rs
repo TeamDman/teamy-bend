@@ -187,8 +187,9 @@ impl ExecutableBook {
 
     /// Run the nullary main while preserving separate stdout and stderr streams.
     ///
-    /// IO payloads are discarded at successful completion; only Halt supplies a
-    /// nonzero program exit code. Pure output is the canonical core term syntax.
+    /// IO payloads are discarded at successful completion. Halt supplies its
+    /// program exit code; channel deadlock writes its diagnostic and returns 1.
+    /// Pure output is the canonical core term syntax.
     ///
     /// # Errors
     /// Rejects invalid entry points, unsupported effects, cancellation, write

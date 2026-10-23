@@ -226,6 +226,14 @@ for proof/type results; the constructor-only data protocol rejects such results.
 
 ## Reproduce the upstream audit
 
+The 2026-10-23 cloud review reran this complete strict audit and reproduced the
+364/489/449 acceptance counts below. It separately ran all 16 positive comptime
+fixtures in executable mode: generated C passes all 16, while native/JS still
+hit depth limits on two whole programs. The current Linux gate is 728 passed,
+zero failed and 49 ignored. See the [CPU coverage checklist](cpu-parity-checklist.md)
+for current evidence and remaining work; the historical receipts below retain
+their original platform, scope and test counts.
+
 The completed resumable-GPU candidate audit on 2026-09-22 covered all 1,302
 fixtures: 364 expected-positive programs checked, 489 expected-positive programs
 were rejected, and all 449 expected failures were rejected. There were zero abnormal exits and zero accepted

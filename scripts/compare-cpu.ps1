@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
-    [ValidateSet('baseline', 'effects', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -117,10 +117,19 @@ $effects = @(
        effect_file = '/tmp/bend_io_mode.txt'; effect_contents = '' }
 )
 foreach ($fixture in $effects) { $fixture.source = "$Reference/tests/io/$($fixture.name).bend" }
+$control = @(
+    @{ name = 'chan_close_send'; expected = "TrueFalse`n" },
+    @{ name = 'fiber_single_join'; expected = ''; expected_exit = 1; expected_stderr = "IO.join: the channel was closed`n" },
+    @{ name = 'halt_utf8_law'; expected = ''; expected_exit = 7; expected_stderr = "è❁`n" },
+    @{ name = 'text_utf8'; expected = "eéé`n"; expected_exit = 7; expected_stderr = "é`né`n" },
+    @{ name = 'deadlock'; expected = "waiting`n"; expected_exit = 1; expected_stderr = "bend: deadlock: every computation waits on a channel`n" }
+)
+foreach ($fixture in $control) { $fixture.source = "$Reference/tests/io/$($fixture.name).bend" }
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
-    'all' { $baseline + $effects }
+    'control' { $control }
+    'all' { $baseline + $effects + $control }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
@@ -154,18 +163,23 @@ foreach ($fixture in $fixtures) {
             $null = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($c, '-pthread', '-lm', '-ldl', '-o', $exe)) $port
         }
         $expected = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fixture.expected))
+        $expectedExit = if ($fixture.ContainsKey('expected_exit')) { $fixture.expected_exit } else { 0 }
+        $expectedStderr = if ($fixture.ContainsKey('expected_stderr')) { $fixture.expected_stderr } else { '' }
+        $expectedError = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($expectedStderr))
+        $row['expected'] = @{ exit = $expectedExit; stdout_base64 = $expected; stderr_base64 = $expectedError }
         for ($repeat = 1; $repeat -le $Repetitions; $repeat++) {
             foreach ($runtime in @('upstream-c', 'port-c', 'upstream-js', 'port-js', 'native')) {
                 $label = "$runtime-$repeat"
                 $allowFfiFailure = $runtime -eq 'upstream-js' -and $fixture.ContainsKey('node_ffi_prefix')
+                $allowFailure = $allowFfiFailure -or $expectedExit -ne 0
                 if ($runtime -eq 'native') {
-                    $result = Invoke-Execution $label $binary @('run', $source)
+                    $result = Invoke-Execution $label $binary @('run', $source) -AllowFailure:$allowFailure
                 } elseif ($runtime.EndsWith('-js')) {
                     $js = Join-Path $fixtureDirectory ($runtime.Replace('-js', '.js'))
-                    $result = Invoke-Execution $label $node @($js) -AllowFailure:$allowFfiFailure
+                    $result = Invoke-Execution $label $node @($js) -AllowFailure:$allowFailure
                 } else {
                     $exe = Join-Path $fixtureDirectory ($runtime.Replace('-c', ''))
-                    $result = Invoke-Execution $label $exe @()
+                    $result = Invoke-Execution $label $exe @() -AllowFailure:$allowFailure
                 }
                 if ($repeat -gt 1) {
                     $first = $row.steps["$runtime-1"]
@@ -187,7 +201,7 @@ foreach ($fixture in $fixtures) {
                         continue
                     }
                 }
-                if ($result.exit -ne 0 -or $result.stdout_base64 -cne $expected -or $result.stderr_base64 -cne '') {
+                if ($result.exit -ne $expectedExit -or $result.stdout_base64 -cne $expected -or $result.stderr_base64 -cne $expectedError) {
                     throw "$($fixture.name) $label differs from expected output."
                 }
             }

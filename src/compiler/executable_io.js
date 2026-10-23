@@ -323,7 +323,10 @@ function $tbRunTasks(main) {
         io.runs.length = 0;
         io.head = 0;
         if (io.live === 0) return 0;
-        if (io.waits.length === 0) throw new Error('IO deadlock: no runnable task, timer or descriptor');
+        if (io.waits.length === 0) {
+          $tbOutput(2, 'bend: deadlock: every computation waits on a channel\n');
+          return 1;
+        }
         $tbWait(io);
         continue;
       }

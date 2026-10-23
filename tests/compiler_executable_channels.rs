@@ -230,7 +230,10 @@ def receiver(c: Chan(P)) -> IO(Unit):
         if deadlock {
             assert_eq!(output.status.code(), Some(1));
             assert!(output.stdout.is_empty());
-            assert!(String::from_utf8_lossy(&output.stderr).contains("deadlock"));
+            assert_eq!(
+                output.stderr,
+                b"bend: deadlock: every computation waits on a channel\n"
+            );
         } else {
             success(&output, "sent\nreceived\n");
         }
@@ -320,7 +323,10 @@ fn channel_waits_deadlock_and_halt_cancels_a_blocked_child() {
     let output = fixture.run("def main() -> IO(Maybe<&1, U32>): IO.bind(Chan(U32), Maybe<&1, U32>, Chan.new(U32, 0), c => Chan.recv(U32, c))\n", "");
     assert_eq!(output.status.code(), Some(1));
     assert!(output.stdout.is_empty());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("deadlock"));
+    assert_eq!(
+        output.stderr,
+        b"bend: deadlock: every computation waits on a channel\n"
+    );
     let output = fixture.run(
         r#"def child(c: Chan(U32)) -> IO(Unit):
   do IO<Unit>:

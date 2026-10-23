@@ -3015,6 +3015,31 @@ gate remains 726 passed, zero failed and 49 ignored. Next bounded CPU work can
 cover close-wakeup and Halt/cancellation behavior; upstream-JS host qualification
 and the existing GPU/Poche milestones remain separate.
 
+### [x] 5.20 Review CPU parity coverage and preserve deadlock exits
+
+The 2026-10-23 cloud review refreshed the complete pinned strict audit without
+changing its counts: 364 expected-positive acceptances, 489 positive refusals,
+449 nonzero-exit expectation refusals and no abnormal exits across 1,302 fixtures.
+First diagnostics identify 430 effect/numeric strict-mode exclusions; these are
+not a count of missing executable CPU features.
+
+Five unchanged upstream channel/exit fixtures now compare exact stdout, stderr
+and status across upstream C/JS and port C/JS/native, twice each. This exposed
+and fixed native/JS deadlock being reported as a host exception instead of the
+upstream language diagnostic and status 1. All 50 executions match; cleanup,
+cancellation and writer-failure regressions remain. The standard Linux gate
+passes 728 tests, with zero failures and 49 existing ignores. Prior baseline
+and effects comparisons retain their results.
+
+All 16 positive comptime fixtures pass actual upstream and port C execution.
+Native and port JS pass 14; `hand` and `tmpl` still exhaust continuation/call-depth
+limits. Upstream JS also needs a per-process 4 MiB Node stack for those two,
+after which it matches upstream C. CPU parity remains incomplete and does not
+require GPU hardware to advance. Reduce these whole-program depth failures next;
+do not relax limits merely to obtain a pass. The
+[coverage checklist](cpu-parity-checklist.md) separates passed, missing and
+host-blocked work, retains the dependency freeze and gives reproduction commands.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or

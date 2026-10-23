@@ -88,6 +88,25 @@ def main() -> IO(Unit):
 }
 
 #[test]
+fn deadlock_preserves_output_and_reports_only_the_language_diagnostic() {
+    for (result, operation) in [
+        ("Maybe<&1, U32>", "Chan.recv(U32, c)"),
+        ("Bool", "Chan.send(U32, c, 42)"),
+    ] {
+        let fixture = Fixture::new(&format!(
+            "import Base\ndef main() -> IO({result}):\n  do IO<{result}>:\n    IO.write(\"waiting\")\n    IO.bind(Chan(U32), {result}, Chan.new(U32, 0), c => {operation})\n"
+        ));
+        let output = fixture.invoke("run");
+        assert_eq!(output.status.code(), Some(1));
+        assert_eq!(output.stdout, b"waiting");
+        assert_eq!(
+            output.stderr,
+            b"bend: deadlock: every computation waits on a channel\n"
+        );
+    }
+}
+
+#[test]
 fn main_aliases_run_effects_but_a_user_io_name_remains_pure() {
     let alias = Fixture::new(
         r#"
