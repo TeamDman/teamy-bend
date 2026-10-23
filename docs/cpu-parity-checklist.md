@@ -11,18 +11,18 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 51-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `20170de` qualifies
-the [Nat-fuel functions](cpu-nat-fuel-functions.md), with **805 passed,
-zero failed, 49 ignored** in the full gate. The approved demand contract is
-implemented. The [failure-order research](cpu-failure-order.md) keeps the separate
-competing-error discrepancy open and distinguishes the O0 oracle build failure
-from matching Word results at the pinned CLI's O3 profile.
+1,302-fixture inventory and 54-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `ffebc4a` qualifies
+[parser application/grouping/spacing](cpu-parse-chains.md), with **807 passed,
+zero failed, 49 ignored** in the full gate and strict all-target Clippy passing.
+The approved demand contract remains implemented; the separate competing-error
+discrepancy remains open. O0's oracle build failure is distinct from matching
+Word results at the pinned CLI's O3 profile.
 
-The historical [applicability report](cpu-applicability.md) retains its original
-inputs. Current runtime/interpretation ledgers link 69 originals; the 1,233
-remaining entries comprise 439 checker negatives, twelve check-only modules,
-153 interpreter-only cases and 629 compiled candidates. These are distinct
+The historical [applicability report](cpu-applicability.md) retains its inputs.
+Current runtime/interpretation ledgers link 72 originals; the 1,230 remaining
+entries comprise 439 checker negatives, twelve check-only modules, 153
+interpreter-only cases and 626 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. The intervening
 milestones below are historical; the final checklist describes the current state.
@@ -440,28 +440,30 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [Nat-fuel functions](cpu-nat-fuel-functions.md)
-at `20170de`. Eighteen original normalization fixtures and four authored controls
-match structure and raw text twice, preserving all rewrite fields and binder
-identities. Full gate: **805 passed, zero failed, 49 ignored**; strict Clippy
-passes. The application printer now emits one ordered argument list while
-preserving core terms and evaluation. Current O3 positive renewal:
-**308/320 exact**, twelve Bun-host gaps; negative renewal:
-**44/56 exact**, eight resource-policy, two native-foreign and two Bun-host gaps.
-Earlier comptime and multiworker profiles retain their source commits.
+Latest bounded checkpoint: [parser chains](cpu-parse-chains.md), `ffebc4a`.
+Three unchanged originals match all five primary runtimes twice: 30 exact
+observations. Direct upstream CLI passes the pure Boolean fixture but its two IO
+entries remain blocked by missing `import.meta.require`. The strict proof Base
+still rejects IO, independently of successful executable-mode behavior. No
+production implementation, demand rule, budget or error ordering changed.
+Full gate: **807 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
 
-The runtime and interpretation ledgers link 69 distinct originals; 1,233 lack
-those execution receipt kinds (439 checker negatives, twelve check-only,
-153 interpreter-only, 629 compiled candidates). A separate checking ledger has
-one exact check-only acceptance and three phase/construct agreements whose raw
-diagnostics still differ. Linked never means every applicable lane has passed.
-The approved strict executable argument/Nat-bound contract and explicit C
-wildcard exception remain implemented and tested. This presentation change
-alters none of those semantics. `_000`, `_000_big`, `_001` now have verified
-printer exclusions and exact interpretation evidence. Next is the application,
-grouping and spacing family named in the checkpoint, selected from the
-applicability ledger as compiled candidates, not presumed executable from their
-file count. The separate competing-error diagnostic requirement remains open.
+The renewed primary C profile uses pinned cli_build's Linux O3/link flags.
+Positive matrix: **338/350 exact**, twelve Bun-host gaps. Negative matrix:
+**44/56 exact**, eight resource-policy, two native-foreign and two Bun-host gaps.
+Demand matrix: **92/100 exact**, six accepted wildcard exceptions and two unwaived
+Nat-first error-order differences. Eighteen original normalization cases retain
+their `20170de` exact structural/text receipts; older comptime/multiworker and O2
+profiles retain their source commits. Current gate and historical receipts are
+not interchangeable.
+
+The runtime and interpretation ledgers link 72 distinct originals; 1,230 lack
+those receipt kinds (439 checker negatives, twelve check-only, 153 interpreter-only,
+626 compiled candidates). A separate checking ledger has one exact check-only
+acceptance and three phase/construct agreements with differing raw diagnostics.
+Linked does not mean every applicable lane passed. Next independent family:
+`parse/chain_brace_suffix`, `parse/chain_default_nat`, `parse/chain_suffix_u32`.
+Their source/ledger selection is not yet executable or printer qualification.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -470,6 +472,7 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
+| Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and spacing | Three original parse fixtures match five runtimes twice. Pure direct CLI agrees; two direct IO entries need import.meta.require. Strict proof IO refusals remain separate from executable qualification. |
 | Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |

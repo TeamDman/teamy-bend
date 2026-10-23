@@ -3501,3 +3501,30 @@ or interpretation receipts, with applicability categories preserved. Next is
 compiled candidates whose historical audit statuses are not runtime results.
 Older comptime/multiworker/checking/platform evidence keeps its actual commits.
 Dependencies, tools, pin and prior history remain frozen; local commits, no push.
+
+### [x] 5.40 Qualify application, grouping and spacing CPU fixtures
+
+Coverage source `ffebc4a` adds three unchanged upstream parse fixtures. Actual
+upstream C/JS generation succeeds; all five primary runtime lanes match exact
+stdout, empty stderr and exit 0 twice: 30 observations. Direct upstream pure
+entry agrees; two IO entries remain host-blocked under Node with an exact
+import.meta.require diagnostic. Strict proof checking's IO exclusion remains
+intentional and separately tested. No production defect was demonstrated or
+source semantics, safety budgets, dependencies or toolchains changed.
+
+Both runtime runners now use and record pinned cli_build's actual Linux CPU
+O3/link flags. Full gate **807 passed, zero failed, 49 ignored**; strict all-target
+Clippy passes. Positive renewal gives 338/350 exact observations and twelve
+Bun-FFI failures; negative renewal gives 44/56 exact, retaining eight resource,
+two native-foreign and two Bun-host gaps. Demand renewal remains 92/100 exact,
+six accepted wildcard exceptions and two unwaived competing-error differences.
+Repetitions are stable; no timeouts. Initial lint and mixed-build version-test
+failures are retained with their successful corrected/isolated runs.
+
+The [checkpoint](cpu-parse-chains.md) records exact outcomes, commands, hashes and
+scope. Ledgers link 72 originals, leaving 1,230 without those execution receipt
+kinds, with applicability categories preserved. Historical interpretation,
+comptime, O2, worker and platform receipts retain their actual commits. Next is
+brace annotations, default Nat chains and U32 suffix propagation, selected from
+the ledger but not yet qualified. Full parity remains incomplete. Local commits
+only; no push, new dependency, upstream change or unreviewed exception.
