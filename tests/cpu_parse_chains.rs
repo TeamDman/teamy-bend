@@ -4,10 +4,13 @@ use std::process::Command;
 use teamy_bend::kernel::check_book;
 use teamy_bend::syntax::load;
 
-const CASES: [(&str, &[u8]); 3] = [
+const CASES: [(&str, &[u8]); 6] = [
     ("adjacent_application", b"True{}\n"),
     ("chain_paren_group", b"7\n"),
     ("chain_spacing_rules", b"2\n"),
+    ("chain_brace_suffix", b"5\n"),
+    ("chain_default_nat", b"7\n"),
+    ("chain_suffix_u32", b"16\n"),
 ];
 
 #[test]

@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -163,6 +163,11 @@ $parseChains = @(
     @{ name = 'chain_paren_group'; source = "$Reference/tests/parse/chain_paren_group.bend"; expected = "7`n"; direct_mode = 'io' },
     @{ name = 'chain_spacing_rules'; source = "$Reference/tests/parse/chain_spacing_rules.bend"; expected = "2`n"; direct_mode = 'io' }
 )
+$parseOperators = @(
+    @{ name = 'chain_brace_suffix'; source = "$Reference/tests/parse/chain_brace_suffix.bend"; expected = "5`n"; direct_mode = 'io' },
+    @{ name = 'chain_default_nat'; source = "$Reference/tests/parse/chain_default_nat.bend"; expected = "7`n"; direct_mode = 'io' },
+    @{ name = 'chain_suffix_u32'; source = "$Reference/tests/parse/chain_suffix_u32.bend"; expected = "16`n"; direct_mode = 'io' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -172,7 +177,8 @@ $fixtures = switch ($Suite) {
     'words' { $words }
     'representation' { $representation }
     'parse-chains' { $parseChains }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains }
+    'parse-operators' { $parseOperators }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
