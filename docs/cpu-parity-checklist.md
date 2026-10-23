@@ -12,19 +12,19 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `2f349c8` repairs
-[duplicate checker-depth accounting](cpu-checker-depth.md): the unchanged
-combined observation program now matches all five runtimes twice without raising
-the 128-level guard or work budget. Full gate: **818 passed, zero failed,
-49 ignored**; strict all-target Clippy and 32 focused tests pass. The three
-F32.read splits and competing-error ordering remain open. No new parsing policy
-or exception is chosen; approved demand rules and safety budgets remain intact.
+neither is a completion percentage. Current checkpoint `09df250` qualifies
+[three float-suffix function values](cpu-float-suffix-functions.md), with exact
+normalized output and separately verified upstream printer refusals. Full gate:
+**819 passed, zero failed, 49 ignored**; 33 focused tests and strict all-target
+Clippy pass. The preceding checker-depth repair still qualifies the unchanged
+combined control without raising limits. F32.read splits and competing-error
+ordering remain open; no demand-policy extension or new exception is introduced.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 93 originals; the 1,209 remaining
+Current runtime/interpretation ledgers link 96 originals; the 1,206 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 605 compiled candidates. These are distinct
+interpreter-only cases and 602 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -442,7 +442,17 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [checker-depth accounting](cpu-checker-depth.md),
+Latest bounded checkpoint: [float-suffix function normalization](cpu-float-suffix-functions.md),
+`09df250`. Three originals add twelve exact interpreter/native value outputs,
+six structural-output comparisons, twelve actual upstream printer refusals and
+six explicit strict-proof exclusions, all repeated without timeouts. The new
+in-crate regression separately compares actual normalized core. Strict proof
+mode is not broadened; no production language change is made. Full gate:
+**819 passed, zero failed, 49 ignored**; 33 focused checks and strict Clippy pass.
+The renewed normalization suite covers 21 originals and four authored controls:
+194 successful observations, 40 printer refusals and six strict-proof exclusions.
+
+Previous production checkpoint: [checker-depth accounting](cpu-checker-depth.md),
 `2f349c8`. Checking no longer enters an extra depth frame merely to infer the
 same term; its work charge and recursive-child guards remain. The exact combined
 source is unchanged and now matches native, port C/JS and pinned C/JS twice:
@@ -451,7 +461,7 @@ positive suite. The [depth ledger](cpu-float-specials-depth-evidence.csv) retain
 both historical refusals and current passing rows. Full gate: **818 passed,
 zero failed, 49 ignored**; strict all-target Clippy and 32 focused tests pass.
 
-All affected primary matrices are renewed at `2f349c8`. Positive:
+The production-change primary receipts remain at `2f349c8`. Positive:
 **618/630 exact**, twelve Bun-FFI gaps. Direct entries: four exact and 44
 host-blocked observations in that matrix, plus six separately renewed collection
 host failures. Negative: **44/56 exact**, eight resource-policy, two native-foreign
@@ -471,14 +481,14 @@ nonzero-expectation fixtures rejected, including all 439 checker negatives.
 No acceptance status changed, and no timeout or abnormal exit occurred. These
 are status-only results, not raw-diagnostic or executable parity.
 
-The current primary ledgers still link 93 distinct originals; 1,209 lack
+The current primary ledgers link 96 distinct originals; 1,206 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 605 compiled candidates). The renewed checking ledger
+153 interpreter-only, 602 compiled candidates). The renewed checking ledger
 retains one exact check-only acceptance and three phase/construct agreements
 with differing raw diagnostics. Linked does not mean every lane passed. The
 combined authored regression adds no upstream inventory row. Next independent
-family: `parse/chain_suffix_f32_f`, `_g`, `_h`; normalized structure/text and actual
-function-printer applicability remain unqualified. These cases need neither
+family: `parse/chain_suffix_u32_f`, `_g`, `_h`; nested suffixes, shift/bitwise
+normalization and actual function-printer applicability remain unqualified. These cases need neither
 GPU hardware nor a runtime F32.read contract decision.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -490,6 +500,7 @@ CPU work.
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
 | Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |
+| Passed in interpreter/native function mode; upstream printers inapplicable | F32 suffix function companions | Three unchanged originals preserve normalized structure and exact text. Core regression and parsed-output probe are distinguished; strict proof F32 exclusions stay recorded. No numeric execution or parsing-policy claim. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Float rounding, accumulation and storage | Three original runtime fixtures and a focused bit/text control match five runtimes twice, including signed-zero field/array storage and adjacent infinity/NaN classifications. No production fix or NaN payload-parity claim. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Unary/trig/hyperbolic float math | Three originals and a bit/text control match five runtimes twice. All twelve original expressions agree in exact binary32 bits; no tolerance or math-library exception. Other host profiles and NaN payload observations remain unqualified. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Float operations, printing and shared text inputs | Three exact originals and a bit/text control match five runtimes twice. Read None is an ordinary value, not a process error. No tolerance or NaN payload claim. |

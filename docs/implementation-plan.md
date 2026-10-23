@@ -3770,3 +3770,34 @@ Next independent family: parse/chain_suffix_f32_f, _g and _h normalization and
 actual printer applicability. Full CPU parity, complete lane/API review and
 existing resource/host/foreign/error-order gaps remain open. Frozen dependencies,
 toolchains, upstream pin, approved demand rules and safety budgets; no push.
+
+
+### [x] 5.49 Qualify executable float-suffix function normalization
+
+Coverage source `09df250` adds unchanged parse/chain_suffix_f32_f, _g and _h.
+Native run and pinned interpreter match the exact returned function values twice;
+actual upstream C/JS generation refuses their function types without artifacts.
+These are normalized functions, not numeric calls or new float-bit observations.
+No production parser/checker/runtime/printer defect was demonstrated.
+
+The comparison example gains an explicit executable-function observation mode.
+It preserves raw text and compares parsed structure; its report marks that it
+has not observed an internal core term. A separate in-crate regression compares
+the actual normalized core against the same pinned expectations. Strict proof
+mode still rejects the F32 runtime primitives, and no public proof API is added.
+Controls distinguish a wrong primitive, alpha-equivalent binding and exact text.
+
+Full gate **819 passed, zero failed, 49 ignored**; 33 focused tests and strict
+all-target Clippy pass. The complete normalization renewal covers 25 fixtures:
+194 successful observations, 40 expected printer refusals and six strict-proof
+exclusions, with stable repeats and zero timeouts. Runtime/negative/demand/read/
+audit/comptime receipts remain at 2f349c8 with all existing open cells; they are
+not relabelled. The [checkpoint](cpu-float-suffix-functions.md) records modes,
+commands, source/binary hashes and the actual-core versus output distinction.
+
+The interpretation ledger now has 21 originals; with 75 runtime originals,
+96 are linked and 1,206 remain unlinked by these modes, classified by applicability.
+Next independent family: parse/chain_suffix_u32_f, _g and _h normalization and
+actual printer applicability. Full parity, API/lane review, F32.read contracts,
+error ordering and resource/foreign/host gaps remain open. Frozen dependencies,
+toolchains, pin and budgets; no demand-policy extension, install or push.

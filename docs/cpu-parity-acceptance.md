@@ -107,15 +107,31 @@ its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
-originals at `2f349c8`: eleven interpreter-only cases and seven compiled candidates
-whose function-valued results are actually refused by upstream C/JS generation.
-All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **93 originals**
-have receipts and **1,209** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 605 compiled candidates.
+The [interpretation ledger](cpu-interpretation-evidence.csv) now links 21 originals
+at `09df250`: eleven interpreter-only cases and ten compiled candidates whose
+function results are actually refused by upstream C/JS generation. Four authored
+controls add no inventory rows. Across runtime and interpretation, **96 originals**
+have receipts and **1,206** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 602 compiled candidates.
 
-The [checker-depth checkpoint](cpu-checker-depth.md), `2f349c8`, repairs redundant
+The [float-suffix function checkpoint](cpu-float-suffix-functions.md), `09df250`,
+qualifies three unchanged returned functions. Native `run` and the pinned
+interpreter match exact output twice. Both upstream data printers actually
+refuse each function type, without an artifact. The strict proof `eval` refusals
+remain explicit exclusions; executable numeric contracts are not proof evidence.
+Actual normalized core is checked in an in-crate regression, while the differential
+probe explicitly records parsed executable output. Existing strict cases retain
+direct core comparisons. Structural agreement and raw text are separate checks.
+
+The expanded normalization suite has 194 successful observations, 40 expected
+printer refusals and six strict-proof exclusions across 25 fixtures; repeats are
+stable and no timeout occurred. Full gate: **819 passed, zero failed, 49 ignored**;
+33 focused tests and strict all-target Clippy pass. No production normalization,
+parser, demand, numeric or printer defect was demonstrated. Remaining runtime,
+negative/demand/read/audit/comptime receipts retain `2f349c8`, without relabelling.
+
+The preceding production [checker-depth checkpoint](cpu-checker-depth.md),
+`2f349c8`, repairs redundant
 checking-to-inference phase accounting. The unchanged combined float observation
 source now matches all five primary runtimes twice: ten exact stream/status
 observations, repeated in the complete suite. The depth/input guards and work
@@ -124,8 +140,9 @@ both historical refusals and current passes. Helper factoring was not substitute
 for qualifying the original. Full gate: **818 passed, zero failed, 49 ignored**;
 32 focused tests and strict all-target Clippy pass.
 
-All 75 runtime originals, eighteen interpretation originals and ten authored
-demand controls have renewed primary receipts at `2f349c8`. Positive matrix:
+At that production checkpoint, all 75 runtime originals, the then-eighteen
+interpretation originals and ten authored demand controls received primary
+receipts at `2f349c8`. Positive matrix:
 **618/630 exact** executions and twelve Bun-FFI failures, across 53 originals and
 ten authored controls. Separate direct entries give four exact and 44 host
 failures, plus six independently renewed collection host failures. Negative:
