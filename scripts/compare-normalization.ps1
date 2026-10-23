@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'rewrite', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'rewrite', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -90,6 +90,11 @@ if ($Suite -in @('companions', 'all')) {
     $names += @('computed_recursion_002_sel', 'computed_recursion_003_flip', 'computed_recursion_004_sel')
 }
 $cases = @($names | ForEach-Object { @{ name = $_; fixture = "flatten/$_.bend"; original = Join-Path $Reference "tests/flatten/$_.bend"; origin = 'upstream'; function_printer = $false } })
+if ($Suite -in @('base-functions', 'all')) {
+    foreach ($name in @('computed_recursion_001_main_dec', 'computed_recursion_001_not', 'computed_recursion_001_par')) {
+        $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
+}
 if ($Suite -in @('rewrite', 'all')) {
     foreach ($fixture in @('eval/stuck_rewrite_print.bend', 'proof/context_rewrite_hypothesis.bend', 'proof/context_rewrite_value.bend')) {
         $cases += @{ name = [IO.Path]::GetFileNameWithoutExtension($fixture); fixture = $fixture; original = Join-Path $Reference "tests/$fixture"; origin = 'upstream'; function_printer = ($fixture -eq 'eval/stuck_rewrite_print.bend') }
@@ -116,6 +121,18 @@ foreach ($case in $cases) {
     $rows.Add($row)
     try {
         for ($repeat = 1; $repeat -le $Repetitions; $repeat++) {
+            # Establish compiled-printer applicability before comparing values.
+            if ($case.function_printer) {
+                foreach ($target in @('c', 'js')) {
+                    $outFile = Join-Path $caseDirectory "unprintable-$repeat.$target"
+                    $refusal = Invoke-Bounded "upstream-printer-$target-$repeat" $node @('main.ts', $source, '-o', $outFile) (Join-Path $Reference 'bend2') -AllowFailure
+                    $diagnostic = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($refusal.stderr_base64))
+                    if ($refusal.exit -ne 1 -or $refusal.stdout_base64 -cne '' -or $diagnostic -notmatch 'cannot be printed \(a function, a Type, an erased or dependent field\)' -or (Test-Path -LiteralPath $outFile)) {
+                        throw 'Upstream function-printer refusal did not match the reviewed contract.'
+                    }
+                }
+                $row.compiled_lanes = 'not_required_upstream_function_printer_refusal'
+            }
             $upstream = Invoke-Bounded "upstream-$repeat" $node @('main.ts', $source) (Join-Path $Reference 'bend2')
             $run = Invoke-Bounded "port-run-$repeat" $binary @('run', $source) $caseDirectory
             $eval = Invoke-Bounded "port-eval-$repeat" $binary @('--output-format', 'json', 'eval', $source) $caseDirectory
@@ -136,17 +153,6 @@ foreach ($case in $cases) {
             $row.exact_text_match = $report.exact_text_match
             if ($RequireExactText -and -not $row.exact_text_match) {
                 throw 'Core structure matches but raw term text differs.'
-            }
-            if ($case.function_printer) {
-                foreach ($target in @('c', 'js')) {
-                    $outFile = Join-Path $caseDirectory "unprintable-$repeat.$target"
-                    $refusal = Invoke-Bounded "upstream-printer-$target-$repeat" $node @('main.ts', $source, '-o', $outFile) (Join-Path $Reference 'bend2') -AllowFailure
-                    $diagnostic = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($refusal.stderr_base64))
-                    if ($refusal.exit -ne 1 -or $refusal.stdout_base64 -cne '' -or $diagnostic -notmatch 'cannot be printed \(a function, a Type, an erased or dependent field\)' -or (Test-Path -LiteralPath $outFile)) {
-                        throw 'Upstream function-printer refusal did not match the reviewed contract.'
-                    }
-                }
-                $row.compiled_lanes = 'not_required_upstream_function_printer_refusal'
             }
             if ($repeat -gt 1) {
                 foreach ($prefix in @('upstream', 'port-run', 'port-eval', 'structure')) {

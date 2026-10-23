@@ -103,6 +103,82 @@ fn selector_and_flip_companions_preserve_nested_and_default_application_results(
 }
 
 #[test]
+fn base_function_companions_preserve_normalized_structure_and_exact_text() {
+    for name in [
+        "computed_recursion_001_main_dec",
+        "computed_recursion_001_not",
+        "computed_recursion_001_par",
+    ] {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-normalization")
+            .join(format!("{name}.bend"));
+        let source = std::fs::read_to_string(&path).unwrap();
+        let book = load(&path).unwrap();
+        let checked = check_book(&book).unwrap();
+        let expected = source
+            .lines()
+            .filter_map(|line| line.strip_prefix("#|"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let actual = checked.normalize_definition("main").unwrap();
+        assert_eq!(actual.to_string(), expected, "{name}");
+        assert_eq!(
+            shape_in_book(&actual, &book).unwrap(),
+            shape_in_book(&parse_term(&expected).unwrap(), &book).unwrap(),
+            "{name}"
+        );
+    }
+}
+
+#[test]
+fn base_function_companions_preserve_captured_values_and_recursive_parity() {
+    for (name, cases) in [
+        (
+            "computed_recursion_001_main_dec",
+            vec![
+                (vec!["S{Z{}}", "T{}", "T{}"], "S{S{Z{}}}"),
+                (vec!["S{Z{}}", "T{}", "F{}"], "Z{}"),
+                (vec!["S{Z{}}", "F{}", "T{}"], "S{Z{}}"),
+                (vec!["S{Z{}}", "F{}", "F{}"], "S{Z{}}"),
+            ],
+        ),
+        (
+            "computed_recursion_001_not",
+            vec![(vec!["T{}"], "F{}"), (vec!["F{}"], "T{}")],
+        ),
+        (
+            "computed_recursion_001_par",
+            vec![
+                (vec!["Z{}"], "T{}"),
+                (vec!["S{Z{}}"], "F{}"),
+                (vec!["S{S{Z{}}}"], "T{}"),
+                (vec!["S{S{S{Z{}}}}"], "F{}"),
+            ],
+        ),
+    ] {
+        let book = load(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures/cpu-normalization")
+                .join(format!("{name}.bend")),
+        )
+        .unwrap();
+        let checked = check_book(&book).unwrap();
+        checked.normalize_definition("main").unwrap();
+        for (arguments, expected) in cases {
+            let args = arguments
+                .into_iter()
+                .map(|argument| parse_term(argument).unwrap())
+                .collect::<Vec<_>>();
+            assert_eq!(
+                checked.evaluate("main", &args).unwrap().to_string(),
+                expected,
+                "{name}"
+            );
+        }
+    }
+}
+
+#[test]
 fn generated_pattern_names_are_local_while_semantic_binder_ids_stay_global() {
     let prefix =
         "type Noise is Data: Quiet{} Loud{next: Noise}\ndef unused(x: Noise) -> Noise: x\n";

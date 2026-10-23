@@ -8,6 +8,12 @@ Copyright 2026 HigherOrderCO; Apache-2.0. See NOTICE and `licenses/Apache-2.0.tx
 Three selector/flip companions (`computed_recursion_002_sel`, `_003_flip` and
 `_004_sel`) are also unchanged copies from the same flatten directory.
 
+Three Base-importing function companions (`computed_recursion_001_main_dec`,
+`_001_not`, `_001_par`) are unchanged copies from that directory as well. Actual
+upstream C and JS generation refuses their function-valued results before any
+output file is produced; the comparison runner verifies this applicability
+boundary before comparing normalized values.
+
 Three further unchanged fixtures come from the same pinned repository:
 `eval/stuck_rewrite_print.bend`, `proof/context_rewrite_hypothesis.bend` and
 `proof/context_rewrite_value.bend`. They preserve stuck rewrites and checked
