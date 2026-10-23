@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -174,6 +174,12 @@ $parseFloats = @(
     @{ name = 'float_pattern'; source = "$Reference/tests/parse/float_pattern.bend"; expected = "1`n"; direct_mode = 'pure' },
     @{ name = 'float-bits-and-patterns'; source = "$port/tests/fixtures/cpu-parse-floats/float-bits-and-patterns.bend"; expected = "992204554`n1065353216`n1065353218`n1065353216`n10`n2147483648`n20`n1071644672`n7`n99`n1`n4294967295`n" }
 )
+$floatRuntime = @(
+    @{ name = 'float_builtin_agreement'; source = "$Reference/tests/compile/float_builtin_agreement.bend"; expected = "-2 -1 -1 1.5`n"; direct_mode = 'io' },
+    @{ name = 'float_accumulation'; source = "$Reference/tests/compile/float_accumulation.bend"; expected = "2775`n"; direct_mode = 'io' },
+    @{ name = 'float_unboxed_ctor'; source = "$Reference/tests/compile/float_unboxed_ctor.bend"; expected = "375`n"; direct_mode = 'io' },
+    @{ name = 'float-runtime-observations'; source = "$port/tests/fixtures/cpu-float-runtime/float-runtime-observations.bend"; expected = "3221225472 -2`n3212836864 -1`n3212836864 -1`n1069547520 1.5`n2147483648 -0`n2147483648 -0`n2147483648 -0`n0 0`n1065353217 1.0000001`n2147483648 -0`n2147483648 -0`n1067450368 1.25`n2139095040 inf`n4286578688 -inf`nnan`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -185,7 +191,8 @@ $fixtures = switch ($Suite) {
     'parse-chains' { $parseChains }
     'parse-operators' { $parseOperators }
     'parse-floats' { $parseFloats }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats }
+    'float-runtime' { $floatRuntime }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
