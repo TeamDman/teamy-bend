@@ -11,8 +11,14 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 39-row runtime ledger expose missing evidence;
+1,302-fixture inventory and 48-row runtime ledger expose missing evidence;
 neither is a completion percentage.
+The latest [U32 checkpoint](cpu-word-operations.md) verifies all inventory hashes,
+closes native packed division/modulo work exhaustion, and adds seven fixtures
+with 70/70 exact five-runtime observations. The renewed gate passes 776 tests
+with zero failures and 49 ignored. All 48 linked rows have current evidence,
+including unchanged explicit failures; 1,254 rows remain unlinked. Pending demand
+choices, resource/host gaps and complete lane/API review remain required.
 
 ## Passed in this review
 

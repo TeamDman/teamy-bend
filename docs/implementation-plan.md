@@ -3263,3 +3263,24 @@ examples and observed outputs. All five original cases are unchanged; a forced
 control isolates the upstream C wildcard inconsistency. No semantics proposal
 or oracle exception was implemented. Dependencies, toolchains and pin remain
 frozen; local commits only, no push. Full CPU parity remains open.
+
+### [x] 5.31 Qualify U32 operations and bound native division work
+
+The inventory audit verifies all 1,302 source/expectation hashes and prior ledger
+links. Seven unqualified word fixtures exposed two native work-budget failures:
+word_div_mod and u32_divmod. Sealed ordinary U32.div/mod operations now use the
+existing packed-value optimization with exact divisor quantities and total
+zero-divisor results. Ordinary constructor fallback, lazy fields, error ordering,
+collection, proof separation and all safety limits remain unchanged.
+
+Four new tests and extended controls pass. Full gate: 776 passed, zero failed,
+49 ignored; focused checks: 235 passed, zero failed, one ignored; strict all-target
+Clippy passes. New word observations match 70/70 across five runtimes twice.
+All previous ledger receipts, scheduler profiles, comptime and demand controls
+were renewed with their explicit gaps unchanged. The ledger links 48 fixtures;
+1,254 remain unlinked, and full CPU parity is open.
+
+The [word checkpoint](cpu-word-operations.md) records exact outputs, commands,
+initial failures, resource/host limits and the next operator/representation group.
+No pending demand choice or public API change was implemented. Dependencies,
+toolchains and pin are frozen; local commits only, no push.

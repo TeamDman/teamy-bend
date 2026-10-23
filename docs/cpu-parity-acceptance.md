@@ -91,9 +91,9 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **41 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **48 distinct
 upstream fixtures** to source-hash-checked runtime receipts. It covers 16 positive
-comptime programs, four run fixtures, eighteen IO fixtures and three collection
+comptime programs, nine run fixtures, eighteen IO fixtures and five Base
 fixtures, including explicitly unresolved runtime-negative and oracle-host cells.
 Two recovered port-only regressions and an authored zero-timer control supplement
 the suites but do not increase the upstream
@@ -101,7 +101,7 @@ fixture count. This ledger qualifies only cells marked passed in their recorded
 runtime/profile, not entire categories, every checker diagnostic, the module
 surface or multiworker execution.
 
-There are **1,261 inventory rows without a linked current runtime receipt in
+There are **1,254 inventory rows without a linked current runtime receipt in
 this ledger**. Many require checking/evaluation rather than a compiled runtime;
 that number is neither a bug count nor a count of runnable programs. Older
 library and audit evidence remains useful history and is not silently relabelled
@@ -112,11 +112,13 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Candidate `6bfc10a` identifies the
-[timer qualification](cpu-timer-order.md), with production runtimes unchanged;
-all 41 linked fixtures have current receipts. Two new timer rows pass four
-runtimes but retain blocked upstream-JS lanes, so neither is fully qualified.
-Their C profile includes one, two and four workers at three repetitions.
+gate selection, not a port exception. Candidate `cc0f3e8` identifies the
+[U32 operation qualification](cpu-word-operations.md), which corrects native
+packed division/modulo work exhaustion. All 48 linked fixtures have current
+receipts. The seven new word rows pass the five recorded runtime lanes twice;
+direct CLI and broader checker/API coverage remain unverified. The two timer
+rows still retain blocked upstream-JS lanes. Their renewed C profile includes
+one, two and four workers at three repetitions.
 Earlier authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
 open. Fully demanded add/double controls now match; the new partial-demand and
@@ -156,7 +158,9 @@ review before changing eagerness or safe refusal, and remain required unresolved
 work. The [demand contract proposal](cpu-demand-contract.md) gives five minimal
 reproducers, exact results, pinned sources and a recommendation; it is research
 only and does not approve a semantics change or an oracle exception. Independent
-timer/host-error coverage can proceed while it is reviewed. The sleep_order and
+CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
+five runtimes twice after a packed native division/modulo optimization; the
+operator/representation group is the next bounded unlinked family. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating
@@ -184,5 +188,5 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
-adds the collection family to existing baseline/effects/control checks. Frozen
+includes baseline, effects, control, collections, scheduler and word checks. Frozen
 toolchains, lockfile, pin and all previous evidence remain unchanged.
