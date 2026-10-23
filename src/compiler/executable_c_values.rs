@@ -211,9 +211,14 @@ impl Generator<'_> {
         let arms = arms.clone();
         let result = self.hold(output, "0")?;
         output.push_str("  /* resumable finite-layout boxing */\n");
-        writeln!(output, "  switch (({input})[0]) {{").unwrap();
+        // Single-constructor layouts begin with their first field, not a tag.
+        if arms.len() > 1 {
+            writeln!(output, "  switch (({input})[0]) {{").unwrap();
+        }
         for (arm_index, arm) in arms.iter().enumerate() {
-            writeln!(output, "  case {arm_index}: {{").unwrap();
+            if arms.len() > 1 {
+                writeln!(output, "  case {arm_index}: {{").unwrap();
+            }
             let mut fields = Vec::with_capacity(arm.fields.len());
             for field in &arm.fields {
                 fields.push(self.box_value(
@@ -223,13 +228,18 @@ impl Generator<'_> {
                 )?);
             }
             let term = self.construct(&arm.name, &fields, output)?;
-            writeln!(output, "  {result} = {term};\n  break;\n  }}").unwrap();
+            writeln!(output, "  {result} = {term};").unwrap();
+            if arms.len() > 1 {
+                output.push_str("  break;\n  }\n");
+            }
         }
-        writeln!(
-            output,
-            "  default: err_fail(\"invalid finite C layout discriminator\");\n  }}"
-        )
-        .unwrap();
+        if arms.len() > 1 {
+            output
+                .push_str("  default: err_fail(\"invalid finite C layout discriminator\");\n  }\n");
+        }
+        if arms.is_empty() {
+            output.push_str("  err_fail(\"empty C layout\");\n");
+        }
         Ok(result)
     }
 
