@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -152,6 +152,11 @@ $words = @(
     @{ name = 'u32_divmod_zero'; source = "$Reference/tests/base/u32_divmod_zero.bend"; expected = "6n`n" },
     @{ name = 'u32_divmod'; source = "$Reference/tests/base/u32_divmod.bend"; expected = "14n`n" }
 )
+$representation = @(
+    @{ name = 'u32_mod_operator'; source = "$Reference/tests/run/u32_mod_operator.bend"; expected = "2 17 1.5`n" },
+    @{ name = 'word_copy_native'; source = "$Reference/tests/reg/word_copy_native.bend"; expected = "22`n" },
+    @{ name = 'u32_structural_view'; source = "$Reference/tests/reg/u32_structural_view.bend"; expected = "14`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -159,7 +164,8 @@ $fixtures = switch ($Suite) {
     'collections' { $collections }
     'scheduler' { $scheduler }
     'words' { $words }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words }
+    'representation' { $representation }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
