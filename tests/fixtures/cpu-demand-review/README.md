@@ -13,3 +13,9 @@ bounded execution. No program should print the synthetic `SECRET` request text.
 The diagnostic correction does not change their behavior. The decision and
 measured results are recorded in `docs/cpu-demand-contract.md` at the repository
 root. Do not silently accept one oracle when the two upstream lanes disagree.
+
+`forced_request_wildcard.bend` is an additional isolation control: Nat.show forces
+the wildcard match, so native lazy arithmetic cannot conceal its request guard.
+It separates the private-request decision from the five original demand cases.
+Its actual cross-runtime results are documented with that decision; it does not
+approve a semantics change.

@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -135,12 +135,21 @@ $collections = @(
     @{ name = 'map_set_array_kit'; expected = "3`n[1, 2, 3]`n2`n[x, y]`n[0, 5, 0, 7]`n[1, 6, 1, 8]`n" }
 )
 foreach ($fixture in $collections) { $fixture.source = "$Reference/tests/base/$($fixture.name).bend" }
+$scheduler = @(
+    @{ name = 'sleep_order'; source = "$Reference/tests/io/sleep_order.bend"; expected = "a`nb`nc`nd`n"; node_ffi_prefix = '' },
+    @{ name = 'sleep_timer'; source = "$Reference/tests/io/sleep_timer.bend"; expected = "woke`n"; node_ffi_prefix = '' },
+    @{ name = 'ready_before_timers'; source = "$port/tests/fixtures/cpu-scheduler/ready-before-timers.bend"; expected = "main`nready`na`nb`n"; node_ffi_prefix = "main`nready`n" }
+)
+# Assert ordering, not elapsed duration. Different-duration timers can all be
+# overdue after host descheduling, when registration order takes precedence;
+# such timing-dependent goldens (for example spawn_sleep) do not belong here.
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
     'control' { $control }
     'collections' { $collections }
-    'all' { $baseline + $effects + $control + $collections }
+    'scheduler' { $scheduler }
+    'all' { $baseline + $effects + $control + $collections + $scheduler }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
