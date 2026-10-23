@@ -189,7 +189,8 @@ impl ExecutableBook {
     ///
     /// IO payloads are discarded at successful completion. Halt supplies its
     /// program exit code; channel deadlock, out-of-band request inspection and
-    /// executable Nat overflow write their language diagnostic and return 1.
+    /// executable Nat overflow or array-depth violations write their language
+    /// diagnostic and return 1.
     /// `Ok(code)` describes a completed driver invocation, not necessarily a
     /// successful Bend program: callers must inspect the returned exit code.
     /// Pure output is the canonical core term syntax.

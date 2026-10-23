@@ -374,6 +374,31 @@ explicit; this change adds no public API. Next independent bounded CPU work:
 native/JS array-depth and JS scalar-marshalling diagnostics. Demand/oracle
 contracts need review before choosing a behavior change.
 
+## Array-depth and scalar diagnostic follow-up
+
+The [diagnostic correction](cpu-array-scalar-diagnostics.md) classifies native
+array-depth and authentic JS array/scalar failures through the existing boundary.
+Guards, budgets, evaluation order, arithmetic demand and ordinary host diagnostics
+are unchanged. Five new tests plus stronger originals cover boundaries, prior
+output, first-error order, lazy branches, lookalikes, cleanup and writer failures.
+
+Full gate: **772 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
+The six-fixture matrix improves to 44 exact out of 56: all six diagnostic-only
+differences closed, with eight resource-policy, two native foreign and two Bun
+observations still open. Runner exit 1 remains intentional. Additional guards
+match 66/74 with eight explicit resource refusals. Nat controls remain 70/70;
+worker/order/cleanup and previous positive/comptime outcomes are retained.
+All 39 upstream ledger fixtures were renewed on `76038aa`, without adding an
+inventory row; no timeout occurred.
+
+The [demand-contract proposal](cpu-demand-contract.md) adds five independent
+reproducers and 50 repeated observations. Three native demand differences and
+two upstream C/JS wildcard-request disagreements remain unchanged. Pinned paper,
+guide, compiler and regression sources support the proposed strict live-value
+and private-request contracts. This is awaiting review: no semantics change or
+conflicting-oracle exception was adopted. The downstream API caveat remains;
+array language failures now use the existing nonzero Ok status convention.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -389,9 +414,10 @@ CPU work.
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Passed, bounded | Out-of-band request failure contract | Original fixture matches all five runtimes twice; exact streams/status/order, cleanup, lookalikes and worker forwarding covered. Other failure classes remain open. |
 | Passed, bounded | Nat overflow diagnostics and fully demanded add/double | Original overflow and authored large/boundary controls match five runtimes twice; native successor runs preserve lazy tails and unchanged limits. Partial demand remains separately unqualified. |
+| Passed, bounded | Native/JS array-depth and JS scalar diagnostics | Original supported lanes now preserve exact stderr/status; boundary/order/cleanup controls pass. C allocation and JS element budgets remain separate refusals. |
 | Missing | Arithmetic demand and wildcard-request contracts | Native unused/partial overflow succeeds where compiled upstream rejects in three cases. Two more cases disagree between upstream C/JS at a private-request wildcard match. Preserve safe refusal while deciding the applicable contract; do not count one-oracle agreement as parity. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
-| Missing | Exact negative diagnostics and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; six-family diagnostic/budget/foreign gaps remain explicit. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
+| Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |
 | Missing | Broader network/file/error comparisons | The gate covers loopback and host adapters. Independently qualify selected upstream socket readiness, partial transfer and error fixtures without blindly executing the whole effect corpus. |

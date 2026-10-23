@@ -111,8 +111,8 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `7549f54` identifies the
-[native Nat add/double correction](cpu-native-nat-add-double.md); all 39 linked fixtures
+gate selection, not a port exception. Engine commit `76038aa` identifies the
+[array/scalar diagnostic correction](cpu-array-scalar-diagnostics.md); all 39 linked fixtures
 were renewed on that engine. Authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
 open. Fully demanded add/double controls now match; the new partial-demand and
@@ -140,16 +140,21 @@ defect and the [native Nat.mul budget gap](cpu-native-nat-mul.md) are corrected.
 The [request fail-stop contract](cpu-request-fail-stop.md) now matches all five
 runtimes twice, including exact streams/status and adjacent worker/cleanup checks.
 The [Nat-overflow diagnostic](cpu-nat-failure-contract.md) also matches all five
-runtimes twice. The six-fixture matrix still has 18 unresolved observations: six
-diagnostic, eight resource-policy, two native foreign and two oracle-host failures.
-Array depth (native/JS) and scalar marshalling (JS) are the remaining diagnostic
-cases and are the next independent bounded failure-contract correction.
+runtimes twice. The [array/scalar correction](cpu-array-scalar-diagnostics.md)
+closes all six diagnostic-only differences in the six-fixture matrix. Twelve
+observations remain unresolved: eight resource-policy, two native foreign and
+two oracle-host failures. These are not waivers or passes.
 The [native add/double optimization](cpu-native-nat-add-double.md) closes the
 fully demanded arithmetic budget gaps while preserving lazy operands. Three
 partial-demand cases still differ from compiled upstream; two wildcard-request
 cases additionally expose a C/JS upstream disagreement. Those contracts need
 review before changing eagerness or safe refusal, and remain required unresolved
-work. Keep all limits and treat C's allocation ceiling separately. Do not classify
+work. The [demand contract proposal](cpu-demand-contract.md) gives five minimal
+reproducers, exact results, pinned sources and a recommendation; it is research
+only and does not approve a semantics change or an oracle exception. Independent
+timer/host-error coverage can proceed while it is reviewed; the unlinked upstream
+`io/sleep_order.bend` is a bounded registration-order candidate. Keep all limits
+and treat C's allocation ceiling separately. Do not classify
 runtime negatives as checker rejections or count phase-only agreement as exact
 parity.
 

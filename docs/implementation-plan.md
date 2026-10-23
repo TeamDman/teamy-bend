@@ -3216,3 +3216,27 @@ exact results and prior downstream API caveat. Next independent bounded CPU work
 is array/scalar diagnostic closure; demand and oracle disagreements need review
 before changing semantics. Dependencies, toolchains and the upstream pin remain
 frozen. No push occurred; full CPU parity remains open.
+
+### [x] 5.29 Preserve array-depth and scalar diagnostic contracts
+
+Native array-depth and generated-JS array/scalar guards now enter the existing
+structured/authenticated language-failure boundary. All six diagnostic-only
+differences in the six-fixture negative matrix close: 44 exact of 56, retaining
+eight resource-policy, two native foreign and two Bun gaps. Evaluation, arithmetic
+demand and all safety budgets remain unchanged; ordinary host errors keep their
+diagnostics. Native array failures follow the documented nonzero Ok convention.
+
+Five new tests plus strengthened originals pass. Full gate: 772 passed, zero
+failed, 49 ignored; strict all-target Clippy passes. Additional guard controls
+match 66/74 with eight unchanged resource refusals; Nat controls remain 70/70.
+All 39 upstream ledger fixtures were renewed with previous positive/comptime
+outcomes retained, and worker/order/cleanup controls pass without timeouts.
+
+The separate [demand contract proposal](cpu-demand-contract.md) supplies five
+standalone reproducers and 50 observations, with pinned sources and explicit
+tradeoffs. It recommends strict live executable values and safe private-request
+refusal while recording the conflicting C wildcard oracle. No proposed semantics
+or oracle exception is implemented. The [diagnostic checkpoint](cpu-array-scalar-diagnostics.md)
+retains remaining requirements, API caveats and exact evidence. Dependencies,
+toolchains and pin remain frozen; local commits only, no push. Full CPU parity
+remains open and independent CPU coverage can continue.
