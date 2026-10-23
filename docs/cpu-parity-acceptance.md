@@ -91,17 +91,17 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **72 distinct
-upstream fixtures**: sixteen comptime, fourteen run, eighteen IO, six Base, two
-representation, nine parse and seven compile originals. Linked rows include
-unresolved negative and oracle-host cells. Eight positive authored controls and
-a separate four-input read probe supplement the suites without adding inventory
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **75 distinct
+upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
+representation, nine parse and eight compile originals. Linked rows include
+unresolved negative and oracle-host cells. Nine positive authored controls and
+separate read/depth probes supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
 
-There are **1,230 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 615 compiled
-candidates. These are distinct required modes, not 1,230 missing CPU runtime
+There are **1,227 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 612 compiled
+candidates. These are distinct required modes, not 1,227 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
@@ -111,18 +111,25 @@ The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
 originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **90 originals**
-have receipts and **1,212** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 608 compiled candidates.
+controls add no inventory rows. Across runtime and interpretation, **93 originals**
+have receipts and **1,209** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 605 compiled candidates.
 
-The [float-arithmetic checkpoint](cpu-float-arithmetic.md), `8ad7f43`, qualifies
-three original finite arithmetic/conversion programs: 30 exact observations
-across five primary runtimes twice, plus ten for an authored bit/text control.
-Both targets actually generate; three direct IO entries remain host-blocked.
-The control exposes binary32 precision at 2^24, adjacent even-tie integer
-conversions and finite truncation. No production defect was demonstrated.
-Full gate: **814 passed, zero failed, 49 ignored**; 32 focused tests and strict
-all-target Clippy pass. Approved demand rules and safety budgets remain intact.
+The [float-specials checkpoint](cpu-float-specials.md), `9b18fbb`, qualifies
+three original arithmetic/comparison/special-value programs: 30 exact observations
+across five primary runtimes twice, plus ten for a factored authored control.
+Both upstream targets actually generate; three direct IO entries remain
+host-blocked. Exact finite/infinity/zero bits and text are distinguished from
+NaN classification; no NaN payload bits are compared. Full gate: **815 passed,
+zero failed, 49 ignored**; 33 focused tests and strict all-target Clippy pass.
+No production correction, limit increase or approved-demand change is made.
+
+A valid combined form of the control exposes a new required
+[checker-depth resource cell](cpu-float-specials-depth-evidence.csv). Upstream
+C/JS execute it twice, but all three port paths refuse it during checking at
+the existing 128-level nesting guard: six refusals, no program output. Its
+separate probes retain exit 1. The factored control's agreement does not qualify
+this source. The exact reproducer is preserved; no resource exception is granted.
 
 A separate [read ledger](cpu-float-read-evidence.csv) records three unresolved
 upstream C/JS contracts: decimal double-rounding, hexadecimal input and embedded
@@ -130,15 +137,15 @@ NUL. Native Rust/port C match C; port JS matches JS. A fourth final-newline inpu
 returns None everywhere. All ten executions are stable with exit 0 and empty
 stderr, but the comparison runner retains exit 1 for upstream disagreement.
 These authored cases add no inventory rows or accepted exceptions. The renewed
-probe retains `8ad7f43`. Pinned guide/type declarations do not settle lexical
+probe retains `9b18fbb`. Pinned guide/type declarations do not settle lexical
 or rounding details; the strtof/whole-string fixture comment conflicts with
 implemented boundary behavior. Source literals use a separate shared frontend.
 Full CPU parity needs a contract decision; backend agreement alone does not
 close these cells. No parsing policy is chosen.
 
-Fifty positive runtime originals now have `8ad7f43` receipts. The positive
-matrix has **568/580 exact** primary executions and twelve Bun-FFI failures;
-separate direct entries give four exact and 38 import.meta.require failures.
+Fifty-three positive runtime originals now have `9b18fbb` receipts. The positive
+matrix has **608/620 exact** primary executions and twelve Bun-FFI failures;
+separate direct entries give four exact and 44 import.meta.require failures.
 All repeats are stable; no timeouts. Six negative originals, sixteen comptime
 originals, eighteen interpretation originals and ten authored demand controls
 retain `bd6a228`. Negative results remain **44/56 exact**, with eight resource-policy,
@@ -219,11 +226,11 @@ a function`, even though separately emitted CommonJS programs pass. The
 success does not erase them. The parse-chain renewal separately records one
 successful pure direct entry and two more blocked IO entries; operator-chain
 adds three blocked IO entries and float syntax adds one pure and two blocked IO
-entries. The float-runtime, float-math, float-text and float-arithmetic groups
-each add three blocked IO entries. All twenty-one parse/compile/base/run-float
-direct-entry rows were renewed at `8ad7f43`. No Bun install or upstream edit was
-made. This is an oracle-host blocker for that lane, not a reason to stop unrelated
-CPU verification or require a GPU desktop.
+entries. The float-runtime, float-math, float-text, float-arithmetic and
+float-specials groups each add three blocked IO entries. All twenty-four
+parse/compile/base/run-float direct-entry rows were renewed at `9b18fbb`.
+No Bun install or upstream edit was made. This is an oracle-host blocker for
+that lane, not a reason to stop unrelated CPU verification or require a GPU desktop.
 
 ## Next bounded work
 
@@ -272,12 +279,14 @@ now qualifies run/float_ops, float_printing and float_text, separating exact
 original results from three unresolved runtime-read contracts. The
 [arithmetic group](cpu-float-arithmetic.md) now qualifies base/float_roundtrip,
 compile/float_roundtrip and run/float_arithmetic, with exact bit/text controls.
-Next is `run/float_text_roundtrip`, `compile/float_compare`, `run/float_specials`:
-source-inspected Base/IO candidates whose original-fixture qualification is
-unrun. They do not depend on resolving runtime F32.read; the specials fixture
-observes comparisons/conversions rather than NaN payloads. Verify actual
-generation and output. New C-oracle builds retain pinned Linux O3/link flags;
-older profiles remain separate.
+The [specials group](cpu-float-specials.md) now qualifies run/float_text_roundtrip,
+compile/float_compare and run/float_specials, without a NaN payload claim.
+Its combined authored control remains blocked by checker depth and needs a
+bounded traversal/expansion investigation. An independent next family is
+`parse/chain_suffix_f32_f`, `_g`, `_h`: function-valued mains whose normalized
+structure/text and actual printer applicability remain unqualified. Candidate
+compiled hints do not establish runnable results. New C-oracle builds retain
+pinned Linux O3/link flags; older profiles remain separate.
 The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
@@ -307,8 +316,12 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
 includes baseline, effects, control, collections, scheduler, word,
-representation, parse-chain/operator/float, float-runtime, float-math, float-text
-and float-arithmetic checks. The separate `scripts/compare-float-read.py` probe
-records backend matches and cross-oracle disagreement independently; it keeps
-exit 1 until the read contract is resolved.
+representation, parse-chain/operator/float, float-runtime, float-math, float-text,
+float-arithmetic and float-specials checks. The separate
+`scripts/compare-float-read.py` probe records backend matches and cross-oracle
+disagreement independently; it keeps exit 1 until the read contract is resolved.
 Frozen toolchains, lockfile, pin and all previous evidence remain unchanged.
+
+The `-Suite float-specials-depth` probe retains a failure for the combined
+authored checker-depth reproducer. Its exclusion from the positive suite is not
+a waiver; the separate depth ledger remains a required open resource cell.

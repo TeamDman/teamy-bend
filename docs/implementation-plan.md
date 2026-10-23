@@ -3706,3 +3706,36 @@ compile/float_compare and run/float_specials; source-inspected but
 runtime-unqualified. Full CPU parity, read/error-order decisions and complete
 lane/API review remain open. Dependencies, tools, pin, budgets, approved demand
 semantics and all prior checkpoints are preserved. No install or push.
+
+### [x] 5.47 Qualify float comparisons and preserve the combined checker gap
+
+Coverage source `9b18fbb` adds unchanged run/float_text_roundtrip,
+compile/float_compare and run/float_specials. Five primary runtimes match
+233, 1999985 and 12 (LF-terminated), empty stderr and exit 0 twice: 30 observations.
+An authored factored control adds ten exact executions, separating finite,
+infinity and signed-zero bits/text from NaN classification and comparison
+predicates. U32 conversion boundaries agree. No NaN payload claim is made.
+Three direct IO entries retain Node's import.meta.require limitation.
+
+The valid combined control exposes an unresolved checker resource gap: upstream
+C/JS run it twice, all three port paths refuse during checking at the unchanged
+128-level guard. Both its source and failing probes remain; helper factoring
+does not qualify the original program. An earlier invalid control omitted
+reusable Nat binders; both implementations refused it, and that receipt remains.
+No production change, limit increase or exception is introduced.
+
+Full gate **815 passed, zero failed, 49 ignored**; 33 focused tests, strict
+all-target Clippy and clean build pass. Positive O3 renewal: 608/620 exact primary
+observations plus twelve Bun-host failures; four exact and 44 host-blocked direct
+observations. Repeats are stable, zero timeouts. Separate depth and F32.read
+probes remain exit 1; read corresponding-backend matches are not cross-backend
+passes. Unaffected matrices retain bd6a228 and all existing open cells.
+
+The [checkpoint](cpu-float-specials.md) preserves exact commands, sources, phases,
+bytes and hashes. Ledgers link 93 originals; 1,209 lack runtime/interpretation
+receipts, classified by mode. Next targeted work is checker-depth isolation;
+the independent next family is parse/chain_suffix_f32_f, _g and _h, whose
+function-valued normalization and printer applicability are unqualified.
+Full parity, read/error-order contracts and lane/API review remain incomplete.
+Frozen inputs, approved demand rules and all prior checkpoints are preserved;
+no installation or push.
