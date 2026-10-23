@@ -6,6 +6,14 @@ The diagnostic engine `76038aa090780ea42976361b0e2f7b0de5412d00` retains native
 laziness and the port's private-request refusal. These five cases remain open
 under the [CPU acceptance criterion](cpu-parity-acceptance.md).
 
+The [plain-language choice brief](cpu-demand-choice-brief.md) separates unused
+arguments, shallow Nat inspection and wildcard requests, with one complete
+example per decision. The timer checkpoint renewed the original 50 observations
+unchanged on `6bfc10a` and added ten forced-wildcard observations: upstream C
+prints `0\n`, while native, port C/JS and upstream JS refuse with the exact request
+diagnostic. This isolation control confirms that the original native positive
+results come from laziness, not acceptance of a demanded private request.
+
 ## Reproducers and exact observations
 
 Each linked file is a complete, independent, authored Bend program requiring

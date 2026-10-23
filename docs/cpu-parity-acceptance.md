@@ -91,16 +91,17 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **39 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **41 distinct
 upstream fixtures** to source-hash-checked runtime receipts. It covers 16 positive
-comptime programs, four run fixtures, sixteen IO fixtures and three collection
-fixtures, including explicitly unresolved runtime-negative cells. Two recovered
-port-only regressions supplement the suites but do not increase the upstream
+comptime programs, four run fixtures, eighteen IO fixtures and three collection
+fixtures, including explicitly unresolved runtime-negative and oracle-host cells.
+Two recovered port-only regressions and an authored zero-timer control supplement
+the suites but do not increase the upstream
 fixture count. This ledger qualifies only cells marked passed in their recorded
 runtime/profile, not entire categories, every checker diagnostic, the module
 surface or multiworker execution.
 
-There are **1,263 inventory rows without a linked current runtime receipt in
+There are **1,261 inventory rows without a linked current runtime receipt in
 this ledger**. Many require checking/evaluation rather than a compiled runtime;
 that number is neither a bug count nor a count of runnable programs. Older
 library and audit evidence remains useful history and is not silently relabelled
@@ -111,9 +112,12 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `76038aa` identifies the
-[array/scalar diagnostic correction](cpu-array-scalar-diagnostics.md); all 39 linked fixtures
-were renewed on that engine. Authored worker controls separately qualify request
+gate selection, not a port exception. Candidate `6bfc10a` identifies the
+[timer qualification](cpu-timer-order.md), with production runtimes unchanged;
+all 41 linked fixtures have current receipts. Two new timer rows pass four
+runtimes but retain blocked upstream-JS lanes, so neither is fully qualified.
+Their C profile includes one, two and four workers at three repetitions.
+Earlier authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
 open. Fully demanded add/double controls now match; the new partial-demand and
 wildcard-request oracle disagreements remain unqualified, outside this ledger's
@@ -152,8 +156,11 @@ review before changing eagerness or safe refusal, and remain required unresolved
 work. The [demand contract proposal](cpu-demand-contract.md) gives five minimal
 reproducers, exact results, pinned sources and a recommendation; it is research
 only and does not approve a semantics change or an oracle exception. Independent
-timer/host-error coverage can proceed while it is reviewed; the unlinked upstream
-`io/sleep_order.bend` is a bounded registration-order candidate. Keep all limits
+timer/host-error coverage can proceed while it is reviewed. The sleep_order and
+sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
+upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
+remains unqualified: source-backed overdue registration order prevents treating
+its normal-host golden as unconditional. Keep all limits
 and treat C's allocation ceiling separately. Do not classify
 runtime negatives as checker rejections or count phase-only agreement as exact
 parity.

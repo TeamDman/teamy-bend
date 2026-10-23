@@ -3240,3 +3240,26 @@ or oracle exception is implemented. The [diagnostic checkpoint](cpu-array-scalar
 retains remaining requirements, API caveats and exact evidence. Dependencies,
 toolchains and pin remain frozen; local commits only, no push. Full CPU parity
 remains open and independent CPU coverage can continue.
+
+### [x] 5.30 Qualify timer ordering without wall-clock races
+
+The differential runner gains a scheduler suite with unchanged sleep_order and
+sleep_timer plus an authored zero-timer control. Registration order, ready-task
+priority and child completion match native, port C/JS and upstream C: 72 exact
+of 81 serial/multiworker observations, nine upstream-JS Bun failures. Existing
+controlled-clock regressions distinguish earliest-deadline and overdue queue
+order. No production source or elapsed-time assertion changed; no timer defect
+was demonstrated. Mixed-duration spawn_sleep remains explicitly unqualified.
+
+Full gate: 772 passed, zero failed, 49 ignored; strict all-target Clippy passes.
+Focused checks pass 217 tests with one profiler ignored. Positive, negative and
+comptime receipts are renewed without hiding host/resource gaps. The ledger now
+links 41 upstream fixtures, with both new rows retaining blocked JS cells.
+
+The [timer checkpoint](cpu-timer-order.md) records exact profiles and commands.
+A [plain-language decision brief](cpu-demand-choice-brief.md) explains unused
+arguments, shallow Nat inspection and wildcard private requests with independent
+examples and observed outputs. All five original cases are unchanged; a forced
+control isolates the upstream C wildcard inconsistency. No semantics proposal
+or oracle exception was implemented. Dependencies, toolchains and pin remain
+frozen; local commits only, no push. Full CPU parity remains open.

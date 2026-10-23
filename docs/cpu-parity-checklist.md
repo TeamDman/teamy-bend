@@ -399,6 +399,32 @@ and private-request contracts. This is awaiting review: no semantics change or
 conflicting-oracle exception was adopted. The downstream API caveat remains;
 array language failures now use the existing nonzero Ok status convention.
 
+## Timer-order qualification follow-up
+
+The [scheduler checkpoint](cpu-timer-order.md) adds unchanged sleep_order and
+sleep_timer fixtures plus an authored zero-timer control to the differential
+runner. It changes no production runtime. Required registration/ready order
+matches in native, port C/JS and upstream C; the unmodified upstream-JS poller
+needs unavailable Bun, even for zero timers. Three repetitions at serial C plus
+additional C profiles 2/4 yield 72 exact of 81 observations, nine host-blocked.
+No elapsed-time assertion was added. Controlled-clock tests retain distinct
+deadline-order and overdue-registration-order results; mixed-duration spawn_sleep
+is not silently qualified by its usual wall-clock golden.
+
+Full gate remains **772 passed, zero failed, 49 ignored**; strict all-target
+Clippy passes. Focused scheduler checks pass 217 tests with one profiler ignored.
+The expanded positive suite records 208 exact of 220, twelve Bun failures;
+negative/comptime outcomes are unchanged. No timeout or timer defect was observed.
+The ledger now links 41 upstream fixtures at `6bfc10a`, leaving 1,261 unlinked
+inventory rows; both new rows retain blocked JS cells. The authored control adds
+no upstream inventory row. The acceptance criterion is unchanged.
+
+The [decision brief](cpu-demand-choice-brief.md) explains the five pending
+arithmetic cases in plain language. An additional forced-wildcard control proves
+that native already refuses demanded private requests while upstream C swallows
+its wildcard case. All original 50 outcomes remain unchanged. No proposed demand
+policy or conflicting-oracle exception was implemented; API caveats remain.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -409,6 +435,7 @@ CPU work.
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
+| Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
@@ -425,7 +452,7 @@ CPU work.
 | Missing | Upstream loader/CLI/module parity | JS module marshalling, imports, browser loader and command-surface behavior need their own inventory. The Rust CLI's typed wrappers are not upstream language equivalence. |
 | Missing / host-dependent | Window/audio/interactive effects | The rewrite's documented unfinished effects are separate from headless CPU checking and computation. Device integration needs an appropriate host and any dependency additions require approval. |
 | Blocked on current direct-IO oracle host | Upstream `io_run` entry | Three collection direct-CLI probes fail on Node because upstream uses Bun `import.meta.require`; standalone emitted JS passes. A direct-entry receipt still needs a supported host. |
-| Blocked on current JS host | Three existing upstream task/file fixtures and stderr failure | `bun:ffi` cannot load in Node; Bun is not installed. Exact failed outputs are retained. No dependency installation was requested or performed. Upstream C remains available for their CPU oracle. |
+| Blocked on current JS host | Existing task/file fixtures, stderr failure and timer poller | `bun:ffi` cannot load in Node; Bun is not installed. Original sleep_order/sleep_timer and the authored zero-timer control add explicit blocked observations. Exact partial streams/statuses are retained. Upstream C remains available; no dependency installation was attempted. |
 | Unrun, hardware-dependent | CUDA/Metal/sanitizers | Desktop or suitable GPU hardware is needed for these checks. They are not prerequisites for the CPU tasks above. |
 | Unrun here | New Windows/macOS qualification of this change | Historical Windows results qualify older commits, not this candidate. |
 
