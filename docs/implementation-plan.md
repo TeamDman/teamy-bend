@@ -3105,6 +3105,27 @@ emitted JS passes. Missing/unreviewed/blocked lanes never count as passed.
 The next bounded family is the six runtime-negative fixtures without current
 control receipts; newer-upstream adoption and dependencies remain frozen.
 
+### [x] 5.24 Compare runtime-negative contracts and enforce native array depth
+
+Six unchanged runtime-negative fixtures were compared twice across eligible CPU
+runtimes. Native Array.new previously accepted the forbidden depth-32 program;
+its sealed executable path now validates depth before using the checked body,
+without forcing the element or changing strict proofs or safety limits. Six
+regressions cover boundaries, lazy demand, guards, budgets and channel cleanup.
+
+The full gate passes 744 tests, zero failures, 49 ignored; strict all-target
+Clippy passes. The matrix records 26 exact matches, 16 diagnostic mismatches,
+ten safe budget refusals, two unsupported native foreign calls and two upstream
+JS host failures across 56 executions. Four C observations are inapplicable due
+to a JS-only companion. No timeout; 11 supplemental cleanup probes pass. The
+19-case positive/control and 16-positive-comptime matrices retain their outcomes
+on this engine. See [runtime negatives](cpu-runtime-negatives.md).
+
+The ledger records 39 fixtures including unresolved cells. Exact diagnostic
+contracts, native Nat.mul resource behavior, C allocation bounds, native foreign
+support and broader CPU coverage remain open. This completes the bounded
+comparison/correction, not negative-contract or whole-engine parity.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or
