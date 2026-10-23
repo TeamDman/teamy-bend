@@ -164,18 +164,53 @@ fn entry_detection_unfolds_aliases_and_ignores_forged_io_names() {
     assert_eq!(stdout, b"Forged{}\n");
     assert!(stderr.is_empty());
 
-    for (body, expected) in [
-        (
-            "import Base\ndef main() -> IO(Unit):\n  import \"foreign.js\"\n",
-            "foreign main",
-        ),
-        (
-            "import Base\ndef main(n: Nat) -> Nat: n\n",
-            "no declared parameters",
-        ),
+    let foreign = executable("import Base\ndef main() -> IO(Unit):\n  import \"foreign.js\"\n");
+    let error = foreign.entry_kind().expect_err("invalid foreign entry");
+    assert!(error.to_string().contains("foreign main"), "{error}");
+}
+
+#[test]
+fn parameterized_mains_are_values_even_when_their_result_is_io() {
+    for body in [
+        "import Base\ndef main(n: Nat) -> Nat: n\n",
+        "import Base\ndef main(u: Unit) -> IO(Unit): IO.print(\"effect\")\n",
     ] {
-        let error = executable(body).entry_kind().expect_err("invalid entry");
+        let checked = executable(body);
+        assert_eq!(checked.entry_kind().unwrap(), ExecutableEntry::Pure);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        assert_eq!(
+            checked
+                .run_main(&mut stdout, &mut stderr, &|| false)
+                .unwrap(),
+            0
+        );
+        let text = String::from_utf8(stdout).unwrap();
+        assert!(
+            text.starts_with("n => n\n") || text.starts_with("u => IO.print("),
+            "{text}"
+        );
+        assert_ne!(text, "effect\n", "a returned IO function must not run");
+        assert!(stderr.is_empty());
+    }
+}
+
+#[test]
+fn unsafe_function_normalization_keeps_limits_and_emits_no_partial_value() {
+    let checked = executable("import Base\n@unsafe\ndef main(n: Nat) -> Nat: main(n)\n");
+    for cancelled in [false, true] {
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| cancelled)
+            .unwrap_err();
+        let expected = if cancelled {
+            "cancelled"
+        } else {
+            "kernel nesting limit exhausted"
+        };
         assert!(error.to_string().contains(expected), "{error}");
+        assert!(stdout.is_empty() && stderr.is_empty());
     }
 }
 

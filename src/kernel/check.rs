@@ -106,6 +106,19 @@ pub struct CheckedBook {
 }
 
 impl CheckedBook {
+    /// Normalize a checked definition as a value, retaining its parameters.
+    ///
+    /// This does not call the definition. Argument-taking APIs continue to
+    /// require complete, well-typed applications.
+    ///
+    /// # Errors
+    /// Rejects unknown definitions and exhausted normalization limits.
+    pub fn normalize_definition(&self, name: &str) -> Result<TermRef, KernelError> {
+        let mut engine = self.engine.clone();
+        engine.reset();
+        engine.normalize_definition(name)
+    }
+
     /// Look up a checked definition's complete dependent function type.
     #[must_use]
     pub fn definition_type(&self, name: &str) -> Option<&TermRef> {
@@ -289,6 +302,21 @@ pub(crate) struct Engine {
 }
 
 impl Engine {
+    pub(super) fn normalize_definition(&mut self, name: &str) -> Result<TermRef, KernelError> {
+        let definition = self
+            .defs
+            .get(name)
+            .ok_or_else(|| KernelError::new(format!("undefined definition {name}")))?;
+        let body = definition
+            .body
+            .clone()
+            .ok_or_else(|| KernelError::new(format!("unfilled definition {name}")))?;
+        // Like upstream book_run, normalize the stored function body, not an
+        // application with missing arguments. References inside it retain the
+        // ordinary normalizer's unfolding and recursion rules.
+        self.normalize(&body)
+    }
+
     pub(super) fn reset(&mut self) {
         self.fuel = 2_000_000;
         self.depth = 0;

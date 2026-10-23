@@ -471,6 +471,7 @@ fn pure_function_and_erased_dependent_results_fail_explicitly() {
     let fixture = Fixture::new();
     for source in [
         "import Base\ndef main() -> Nat -> Nat: n => n\n",
+        "import Base\ndef main(n: Nat) -> Nat: n\n",
         "import Base\ntype Pack is Type:\n  Pack{-A:Type, value:A}\ndef main() -> Pack: Pack{Nat, 1n}\n",
     ] {
         let error = fixture

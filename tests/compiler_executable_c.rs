@@ -175,6 +175,20 @@ fn pure_printer_preserves_boxed_data_aliases_and_escaped_text() {
 }
 
 #[test]
+fn function_main_remains_unprintable_by_the_generated_c_data_printer() {
+    let fixture = Fixture::new();
+    for source in [
+        "import Base\ndef main() -> Nat -> Nat: n => n\n",
+        "import Base\ndef main(n: Nat) -> Nat: n\n",
+    ] {
+        let error = fixture
+            .generate(source)
+            .expect_err("function is not printable data");
+        assert!(error.to_string().contains("cannot be printed"), "{error}");
+    }
+}
+
+#[test]
 fn user_nat_and_u32_names_without_base_keep_their_checked_datatypes_and_functions() {
     success(
         &Fixture::new().run(

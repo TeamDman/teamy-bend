@@ -9,13 +9,13 @@ use facet::Facet;
 use figue as args;
 use teamy_cancellation::CancellationToken;
 
-/// Normalize a closed definition after checking the entire source program.
+/// Normalize a definition as a value after checking the entire source program.
 #[derive(Facet, Arbitrary, Debug, PartialEq)]
 pub struct EvalArgs {
     /// Bend source file to evaluate.
     #[facet(args::positional)]
     pub file: String,
-    /// Name of the closed definition, defaulting to main.
+    /// Name of the definition, defaulting to main; parameters remain bound.
     #[facet(args::named)]
     pub entry: Option<String>,
 }
@@ -38,7 +38,7 @@ impl EvalArgs {
         let checked = check_book(&book).map_err(|error| eyre!("{error}"))?;
         let entry = self.entry.unwrap_or_else(|| "main".to_owned());
         let value = checked
-            .evaluate(&entry, &[])
+            .normalize_definition(&entry)
             .map_err(|error| eyre!("{error}"))?;
         cancellation.bail_if_cancelled()?;
         Ok(CliOutput::facet(EvalReport {

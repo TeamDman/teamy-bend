@@ -12,7 +12,6 @@ use super::TermRef;
 use super::check::Engine;
 use super::check::empty_engine;
 use super::reduce::spine;
-use super::term;
 use crate::syntax::ExecutableSource;
 use crate::syntax::executable::ForeignDefinition;
 use crate::syntax::executable::ForeignTarget;
@@ -24,7 +23,7 @@ use std::io::Write;
 use std::path::Path;
 use std::rc::Rc;
 
-/// The execution behavior of a filled, nullary `main` definition.
+/// The execution behavior of a filled `main` definition.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ExecutableEntry {
     /// There is no `main`; running reports successful checking.
@@ -55,6 +54,13 @@ pub enum ExecutableEntry {
 /// use teamy_bend::kernel::ExecutableBook;
 /// fn invalid_proof_evaluation(executable: ExecutableBook) {
 ///     executable.evaluate("foreign_proof", &[]);
+/// }
+/// ```
+///
+/// ```compile_fail
+/// use teamy_bend::kernel::ExecutableBook;
+/// fn invalid_definition_normalization(executable: ExecutableBook) {
+///     executable.normalize_definition("foreign_proof");
 /// }
 /// ```
 #[derive(Clone, Debug)]
@@ -149,7 +155,7 @@ impl ExecutableBook {
     /// Classify `main`, unfolding type aliases while keeping actual Base IO opaque.
     ///
     /// # Errors
-    /// Rejects foreign, unfilled or parameterized entry definitions, and exhausted
+    /// Rejects foreign or unfilled entry definitions, and exhausted
     /// reduction limits while identifying the return type.
     pub fn entry_kind(&self) -> Result<ExecutableEntry, KernelError> {
         let Some(main) = self.engine.defs.get("main") else {
@@ -159,9 +165,6 @@ impl ExecutableBook {
             return Err(KernelError::new(
                 "main must be a filled ordinary definition; a foreign main cannot anchor execution",
             ));
-        }
-        if !main.parameters.is_empty() {
-            return Err(KernelError::new("main must have no declared parameters"));
         }
         if !self.base_names.contains("IO") {
             return Ok(ExecutableEntry::Pure);
@@ -185,7 +188,7 @@ impl ExecutableBook {
         }
     }
 
-    /// Run the nullary main while preserving separate stdout and stderr streams.
+    /// Interpret main while preserving separate stdout and stderr streams.
     ///
     /// IO payloads are discarded at successful completion. Halt supplies its
     /// program exit code; channel deadlock, out-of-band request inspection and
@@ -193,7 +196,8 @@ impl ExecutableBook {
     /// diagnostic and return 1.
     /// `Ok(code)` describes a completed driver invocation, not necessarily a
     /// successful Bend program: callers must inspect the returned exit code.
-    /// Pure output is the canonical core term syntax.
+    /// Pure output is the canonical core term syntax, including function-valued
+    /// mains. A function returning IO is a value, not an IO action to execute.
     ///
     /// # Errors
     /// Rejects invalid entry points, unsupported effects, cancellation, write
@@ -217,7 +221,7 @@ impl ExecutableBook {
             ExecutableEntry::Pure => {
                 let mut engine = self.engine.clone();
                 engine.reset();
-                let result = engine.normalize(&term(Term::Ref("main".into())))?;
+                let result = engine.normalize_definition("main")?;
                 if cancelled() {
                     return Err(KernelError::new("execution cancelled"));
                 }

@@ -166,3 +166,38 @@ fn malformed_batch_data_and_wrong_arity_are_errors() {
         assert!(result.stdout.is_empty());
     }
 }
+
+#[test]
+fn eval_and_run_normalize_function_mains_without_changing_the_output_envelope() {
+    #[derive(facet::Facet)]
+    struct Report {
+        entry: String,
+        value: String,
+    }
+    for (source, expected) in [
+        (
+            include_str!("fixtures/cpu-normalization/computed_operator_match_002.bend"),
+            "x => sel(dbl(x))",
+        ),
+        (
+            include_str!("fixtures/cpu-normalization/computed_operator_match_002_dbl.bend"),
+            r"\{Z: Z{}; \{S: p => S{S{main(p)}}; \{}}}",
+        ),
+        (
+            include_str!("fixtures/cpu-normalization/computed_operator_match_002_sel.bend"),
+            r"\{Z: R1{}; y => RK{y}}",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        let result = invoke("eval", &fixture.source(), &[]);
+        assert_eq!(result.status.code(), Some(0), "{:?}", result.stderr);
+        assert!(result.stderr.is_empty());
+        let report: Report = facet_json::from_slice(&result.stdout).unwrap();
+        assert_eq!(report.entry, "main");
+        assert_eq!(report.value, expected);
+        let result = invoke("run", &fixture.source(), &[]);
+        assert_eq!(result.status.code(), Some(0), "{:?}", result.stderr);
+        assert!(result.stderr.is_empty());
+        assert_eq!(result.stdout, format!("{expected}\n").as_bytes());
+    }
+}
