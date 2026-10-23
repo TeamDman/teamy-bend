@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -192,6 +192,12 @@ $floatText = @(
     @{ name = 'float_text'; source = "$Reference/tests/run/float_text.bend"; expected = "2.5 0.1 none none 1.25`n"; direct_mode = 'io' },
     @{ name = 'float-text-observations'; source = "$port/tests/fixtures/cpu-float-text/float-text-observations.bend"; expected = "1069547520 1.5`n3214934016 -1.25`n1149239296 1024`n1061752795 0.7853982`n1070141403 1.5707964`n0 0`n1061752795 0.7853982`n1088421888 7`n3`n1051372203 0.33333334`n981467136 0.0009765625`n1036831949`n2147483648`n1056964608`nnone`nnone`nnone`n1067450368`n" }
 )
+$floatArithmetic = @(
+    @{ name = 'base-float-roundtrip'; source = "$Reference/tests/base/float_roundtrip.bend"; expected = "144`n"; direct_mode = 'io' },
+    @{ name = 'compile-float-roundtrip'; source = "$Reference/tests/compile/float_roundtrip.bend"; expected = "45`n"; direct_mode = 'io' },
+    @{ name = 'float_arithmetic'; source = "$Reference/tests/run/float_arithmetic.bend"; expected = "8`n"; direct_mode = 'io' },
+    @{ name = 'float-arithmetic-observations'; source = "$port/tests/fixtures/cpu-float-arithmetic/float-arithmetic-observations.bend"; expected = "1082130432 4`n1096810496 14`n1089470464 7.5`n1110704128 45`n1050253722 0.3`n1050253722 0.3`n1266679808 16777216`n1266679808 16777216`n1266679810 16777220`n1081711002 3.9`n3`n1206984704 123456`n1217559552 300000`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -206,7 +212,8 @@ $fixtures = switch ($Suite) {
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
     'float-text' { $floatText }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText }
+    'float-arithmetic' { $floatArithmetic }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
