@@ -181,11 +181,23 @@ fn eval_and_run_normalize_function_mains_without_changing_the_output_envelope() 
         ),
         (
             include_str!("fixtures/cpu-normalization/computed_operator_match_002_dbl.bend"),
-            r"\{Z: Z{}; \{S: p => S{S{main(p)}}; \{}}}",
+            r"\{Z: Z{}; S: (p => S{S{main(p)}})}",
         ),
         (
             include_str!("fixtures/cpu-normalization/computed_operator_match_002_sel.bend"),
-            r"\{Z: R1{}; y => RK{y}}",
+            r"\{Z: R1{}; (y => RK{y})}",
+        ),
+        (
+            include_str!("fixtures/cpu-normalization/computed_recursion_002.bend"),
+            r"\{Zn: S{Z{}}; Sn: (p => sel(main(p)))}",
+        ),
+        (
+            include_str!("fixtures/cpu-normalization/computed_recursion_003.bend"),
+            r"\{Zn: T{}; Sn: (p => flip(main(p)))}",
+        ),
+        (
+            include_str!("fixtures/cpu-normalization/computed_recursion_004.bend"),
+            r"\{Zn: S{Z{}}; Sn: (p => sel(main(p)))}",
         ),
     ] {
         let fixture = Fixture::new(source);

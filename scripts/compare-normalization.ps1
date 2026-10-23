@@ -3,7 +3,9 @@
 param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
-    [ValidateRange(1, 3)][int]$Repetitions = 2
+    [ValidateRange(1, 3)][int]$Repetitions = 2,
+    [ValidateSet('operator', 'recursion', 'all')][string]$Suite = 'all',
+    [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
 $port = Split-Path $PSScriptRoot -Parent
@@ -77,7 +79,14 @@ function Invoke-Bounded {
     }
 }
 
-foreach ($name in @('computed_operator_match_002', 'computed_operator_match_002_dbl', 'computed_operator_match_002_sel')) {
+$names = @()
+if ($Suite -in @('operator', 'all')) {
+    $names += @('computed_operator_match_002', 'computed_operator_match_002_dbl', 'computed_operator_match_002_sel')
+}
+if ($Suite -in @('recursion', 'all')) {
+    $names += @('computed_recursion_002', 'computed_recursion_003', 'computed_recursion_004')
+}
+foreach ($name in $names) {
     $caseDirectory = (New-Item -ItemType Directory -Path (Join-Path $outputPath $name)).FullName
     $original = Join-Path $Reference "tests/flatten/$name.bend"
     $source = Join-Path $caseDirectory 'main.bend'
@@ -87,7 +96,7 @@ foreach ($name in @('computed_operator_match_002', 'computed_operator_match_002_
         fixture = "flatten/$name.bend"; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $head; port_revision = $revision; port_dirty = [bool]$dirty
         port_binary_sha256 = $binaryHash; probe_binary_sha256 = $probeHash
-        timeout_seconds = 60; repetitions = $Repetitions; steps = [ordered]@{}
+        timeout_seconds = 60; repetitions = $Repetitions; require_exact_text = [bool]$RequireExactText; steps = [ordered]@{}
         structural_match = $false; exact_text_match = $false; deterministic = $null
         compiled_lanes = 'not_selected_by_upstream_gate_no_Base'
     }
@@ -112,6 +121,9 @@ foreach ($name in @('computed_operator_match_002', 'computed_operator_match_002_
             }
             $row.structural_match = $true
             $row.exact_text_match = $report.exact_text_match
+            if ($RequireExactText -and -not $row.exact_text_match) {
+                throw 'Core structure matches but raw term text differs.'
+            }
             if ($repeat -gt 1) {
                 foreach ($prefix in @('upstream', 'port-run', 'port-eval', 'structure')) {
                     foreach ($field in @('exit', 'stdout_base64', 'stderr_base64')) {

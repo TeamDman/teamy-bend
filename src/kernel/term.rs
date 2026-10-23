@@ -408,11 +408,32 @@ impl fmt::Display for Term {
                 list(f, args)?;
                 f.write_str("}")
             }
-            Self::Mat {
-                constructor,
-                arm,
-                fallback,
-            } => write!(f, "\\{{{constructor}: {arm}; {fallback}}}"),
+            Self::Mat { .. } => {
+                // Upstream term_show prints a consecutive fallback chain as
+                // ordered arms in one match. An empty final fallback is implicit.
+                f.write_str("\\{")?;
+                let mut current = self;
+                let mut first = true;
+                while let Self::Mat {
+                    constructor,
+                    arm,
+                    fallback,
+                } = current
+                {
+                    if !first {
+                        f.write_str("; ")?;
+                    }
+                    write!(f, "{constructor}: ")?;
+                    match_branch(f, arm)?;
+                    current = fallback;
+                    first = false;
+                }
+                if !matches!(current, Self::Efq) {
+                    f.write_str("; ")?;
+                    match_branch(f, current)?;
+                }
+                f.write_str("}")
+            }
             Self::Efq => f.write_str("\\{}"),
             Self::Eql { left, right, ty } => write!(f, "{{{left} == {right} : {ty}}}"),
             Self::Rfl => f.write_str("{==}"),
@@ -430,6 +451,19 @@ impl fmt::Display for Term {
                 write!(f, "{body}")
             }
         }
+    }
+}
+
+fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+    // Match branches use upstream precedence 1. These low-precedence forms
+    // need parentheses; nested matches retain their own explicit delimiters.
+    if matches!(
+        value,
+        Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. }
+    ) {
+        write!(f, "({value})")
+    } else {
+        write!(f, "{value}")
     }
 }
 
