@@ -1,5 +1,8 @@
 # Base function companion qualification
 
+Historical checkpoint follows. The subsequent [Nat-fuel qualification](cpu-nat-fuel-functions.md)
+completes the next function group proposed here; these receipts remain at `4117071`.
+
 Source checkpoint: `4117071081164cb250f8f919159ca45929327f02`, on local branch
 `qualify/cpu-base-function-companions-20261023`, based on `c5573dc`.
 Target remains [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).

@@ -116,19 +116,20 @@ turning status-only results, source hints or related regression suites into pari
 passes. Full per-lane applicability/printability and API review remain required.
 
 The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
-fifteen originals at candidate `4117071`: eleven interpreter-only cases and four
+eighteen originals at candidate `20170de`: eleven interpreter-only cases and seven
 compiled candidates whose function-valued results are actually refused by upstream
-C/JS generation. All fifteen match normalized core structure and raw output twice.
-The [Base-function checkpoint](cpu-base-function-companions.md) also renews four
+C/JS generation. All eighteen match normalized core structure and raw output twice.
+The [Nat-fuel checkpoint](cpu-nat-fuel-functions.md) also renews four
 authored controls, which add no inventory rows. Across the runtime and
-interpretation ledgers, 66 distinct originals have execution evidence; 1,236
+interpretation ledgers, 69 distinct originals have execution evidence; 1,233
 lack those receipt kinds: 439 checker negatives, twelve check-only modules,
-153 interpreter-only cases and 632 compiled candidates. These are distinct
+153 interpreter-only cases and 629 compiled candidates. These are distinct
 requirements, not one runtime denominator. The historical applicability CSV
 remains tied to its recorded inputs. Runtime receipt renewal covers 35 originals
-at `6e5bd61`; the sixteen comptime originals retain their `208b343` receipts.
-The `4117071` coverage-only change renews interpretation and the full repository
-gate (803 passed, zero failed, 49 ignored), not those runtime matrices.
+at `20170de` with explicit upstream C O3 optimization; the sixteen comptime
+originals retain their `208b343` receipts and no-optimization-flag profile.
+The full gate passes 805 tests, zero failed, 49 ignored. Runtime and demand
+ledgers identify optimization and historical profile provenance explicitly.
 
 The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
 module with exact acceptance/report agreement and three negatives with matching
@@ -155,8 +156,11 @@ exact matches. It does not waive the newly reproduced `nat_first` diagnostic-ord
 difference or the unoptimized harness profile's Clang register-allocation failure
 for `word_live_tail`. The latter now agrees twice at O1/O2/O3, including pinned
 cli_build's O3 profile; O0 remains a separate build limitation. See the
-[source/profile investigation](cpu-failure-order.md). The unchanged demand
-runner retains exit 1 for open cells. No exception extends to unreviewed failures.
+[source/profile investigation](cpu-failure-order.md). The new primary O3 demand
+receipt at `20170de` has 92/100 exact observations, six accepted wildcard
+exceptions and two unresolved Nat-first diagnostic differences. Its runner
+retains exit 1. Historical O2 columns keep their source/receipt identities;
+earlier O0 failures remain separate. No exception extends to unreviewed failures.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
@@ -219,14 +223,16 @@ numeric/foreign diagnostic cases, so it does not close that contract gap.
 The Word control matches the pinned CLI-equivalent O3 build profile twice;
 the separate O0 register-allocation failure remains an oracle build limitation.
 Seven U32 fixtures and the operator/representation group retain exact five-runtime
-results, with historical runtime receipts retained. Fifteen original interpretation cases retain exact
+results, renewed with an explicit O3 oracle profile. Eighteen original interpretation cases retain exact
 structural and textual agreement, with four additional authored controls.
-The `_001_main_dec`, `_001_not` and `_001_par` Base companions are now qualified,
+The `_000`, `_000_big` and `_001` Nat-fuel functions are now qualified,
 including actual upstream C/JS function-printer refusals before value comparisons.
 No C compilation/execution profile applies after that generation refusal. The
-next independent group is `_000`, `_000_big` and `_001`, including printer
-applicability and Nat-fuel/reusable-binding coverage. New applicable C-oracle
-builds should use pinned cli_build's O3 profile; earlier O0 receipts stay distinct.
+next independent group is `parse/adjacent_application`, `parse/chain_paren_group`
+and `parse/chain_spacing_rules`. The applicability ledger selects interpretation
+plus compiled candidates; their historical strict-audit status alone is not
+runtime evidence. New applicable C-oracle builds use O3, matching the pinned
+CLI's optimization; earlier O0 receipts stay distinct.
 The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep

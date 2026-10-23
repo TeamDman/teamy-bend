@@ -12,17 +12,17 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 51-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current coverage checkpoint `4117071` qualifies
-the [Base function companions](cpu-base-function-companions.md), with **803 passed,
+neither is a completion percentage. Current checkpoint `20170de` qualifies
+the [Nat-fuel functions](cpu-nat-fuel-functions.md), with **805 passed,
 zero failed, 49 ignored** in the full gate. The approved demand contract is
 implemented. The [failure-order research](cpu-failure-order.md) keeps the separate
 competing-error discrepancy open and distinguishes the O0 oracle build failure
 from matching Word results at the pinned CLI's O3 profile.
 
 The historical [applicability report](cpu-applicability.md) retains its original
-inputs. Current runtime/interpretation ledgers link 66 originals; the 1,236
+inputs. Current runtime/interpretation ledgers link 69 originals; the 1,233
 remaining entries comprise 439 checker negatives, twelve check-only modules,
-153 interpreter-only cases and 632 compiled candidates. These are distinct
+153 interpreter-only cases and 629 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. The intervening
 milestones below are historical; the final checklist describes the current state.
@@ -440,26 +440,28 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [Base function companions](cpu-base-function-companions.md)
-at `4117071`. Fifteen original normalization fixtures and four authored controls
+Latest bounded checkpoint: [Nat-fuel functions](cpu-nat-fuel-functions.md)
+at `20170de`. Eighteen original normalization fixtures and four authored controls
 match structure and raw text twice, preserving all rewrite fields and binder
-identities. Full gate: **803 passed, zero failed, 49 ignored**; strict Clippy
-passes. Production source is unchanged in this coverage checkpoint. Historical
-`6e5bd61` positive renewal: **308/320 exact**, twelve Bun-host gaps; negative renewal:
+identities. Full gate: **805 passed, zero failed, 49 ignored**; strict Clippy
+passes. The application printer now emits one ordered argument list while
+preserving core terms and evaluation. Current O3 positive renewal:
+**308/320 exact**, twelve Bun-host gaps; negative renewal:
 **44/56 exact**, eight resource-policy, two native-foreign and two Bun-host gaps.
 Earlier comptime and multiworker profiles retain their source commits.
 
-The runtime and interpretation ledgers link 66 distinct originals; 1,236 lack
+The runtime and interpretation ledgers link 69 distinct originals; 1,233 lack
 those execution receipt kinds (439 checker negatives, twelve check-only,
-153 interpreter-only, 632 compiled candidates). A separate checking ledger has
+153 interpreter-only, 629 compiled candidates). A separate checking ledger has
 one exact check-only acceptance and three phase/construct agreements whose raw
 diagnostics still differ. Linked never means every applicable lane has passed.
 The approved strict executable argument/Nat-bound contract and explicit C
-wildcard exception remain implemented and tested. This coverage checkpoint
-changes none of those semantics. `_001_main_dec`, `_001_not`, `_001_par` now have
-verified printer exclusions and exact interpretation evidence. Next is `_000`,
-`_000_big`, `_001`, including Nat-fuel/reusable-binding behavior and actual printer
-applicability. The separate competing-error diagnostic requirement remains open.
+wildcard exception remain implemented and tested. This presentation change
+alters none of those semantics. `_000`, `_000_big`, `_001` now have verified
+printer exclusions and exact interpretation evidence. Next is the application,
+grouping and spacing family named in the checkpoint, selected from the
+applicability ledger as compiled candidates, not presumed executable from their
+file count. The separate competing-error diagnostic requirement remains open.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -468,7 +470,7 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
-| Passed, bounded | Function-valued normalization | Twelve original operator/recursive functions match pinned core structure and raw output twice. The three Base companions have verified upstream C/JS printer exclusions, plus captured-value, flip and recursive-parity regression coverage. Structural comparison is unchanged. |
+| Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |

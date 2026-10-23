@@ -3469,3 +3469,35 @@ kept distinct. The next bounded group is `_000`, `_000_big`, `_001`, covering
 Nat fuel and reusable bindings with actual printer applicability checks.
 Competing-error ordering remains unresolved and unwaived. Dependencies, tools,
 budgets, pin and approved demand semantics are unchanged; local commits, no push.
+
+### [x] 5.39 Qualify Nat-fuel functions and print complete application spines
+
+Implementation `20170de` qualifies unchanged `_000`, `_000_big` and `_001`.
+Actual C/JS generation refuses their function-valued mains before producing a
+target; checking/interpretation remain applicable. Baseline core structures
+agreed, but two originals printed `f(a)(b)` where pinned term_show emits `f(a, b)`.
+The printer now gathers only the function spine, preserves argument order and
+annotation boundaries, and groups low-precedence heads/let arguments correctly.
+No evaluator, demand rule, safety budget or structural comparator changed.
+
+All three originals now match exact text and structure twice. Fifteen bounded
+application controls cover Nat fuel, nested patterns and reusable bindings;
+adjacent printer roundtrips preserve scope and grouping. Full gate **805 passed,
+zero failed, 49 ignored**; strict all-target/all-feature Clippy passes. Twenty-two
+normalization cases yield 176 successes and 28 expected printer refusals. Initial
+test-input/type-spelling failures and their corrections remain in the evidence.
+
+The runtime runners now name and record upstream C optimization, defaulting to
+pinned cli_build's O3 level. Port strict warning flags are unchanged. O3 renewals
+retain 308/320 positive exact observations and 44/56 negative exact observations.
+Demand controls give 92/100 exact, six accepted wildcard exceptions, two unwaived
+first-error differences. Word runs and matches in O3; historical O0 build failure
+and O2 profile results retain separate source/receipt provenance. No timeouts.
+
+The [checkpoint](cpu-nat-fuel-functions.md) records commands, hashes, exact terms,
+profiles and all remaining cells. Ledgers link 69 originals; 1,233 lack execution
+or interpretation receipts, with applicability categories preserved. Next is
+`parse/adjacent_application`, `parse/chain_paren_group`, `parse/chain_spacing_rules`:
+compiled candidates whose historical audit statuses are not runtime results.
+Older comptime/multiworker/checking/platform evidence keeps its actual commits.
+Dependencies, tools, pin and prior history remain frozen; local commits, no push.
