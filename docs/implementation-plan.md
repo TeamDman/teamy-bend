@@ -3640,3 +3640,36 @@ but runtime-unqualified. Actual behavior must settle their stale printing
 comments. Full CPU parity, lane/API review and the downstream-consumer caveat
 remain open. All checkpoints, frozen inputs, safety limits and approved demand
 rules are preserved. No installation or push.
+
+### [x] 5.45 Qualify float operations, printing and runtime text inputs
+
+Coverage source `2dd113e` adds unchanged run/float_ops, float_printing and
+float_text. Actual C/JS generation succeeds; five primary runtimes match exact
+stdout, empty stderr and exit 0 twice: 30 observations. An authored control adds
+ten exact executions, pairing operation bits/text, signed-zero read bits,
+finite round-tripping and invalid reads returning None. Three direct IO entries
+retain Node's import.meta.require limitation. Original comments are preserved;
+actual pinned rendering supersedes their stale six-digit claims.
+
+A separate authored boundary probe demonstrates three upstream F32.read splits:
+decimal rounding, hexadecimal acceptance and embedded-NUL handling. Native Rust
+and port C match upstream C; port JS matches upstream JS. Final-newline input
+returns None everywhere. All ten executions succeed deterministically, but the
+new comparison runner keeps exit 1 for the unresolved cross-oracle contract.
+The [checkpoint](cpu-float-text.md) and [read ledger](cpu-float-read-evidence.csv)
+retain exact inputs, bits/results, source evidence and tradeoffs. No production
+change, parsing-policy decision, tolerance or accepted exception is introduced.
+
+Full gate **813 passed, zero failed, 49 ignored**; 31 focused tests, strict
+all-target Clippy and clean build pass. Positive O3 renewal gives 528/540 exact
+primary observations and twelve existing Bun-host failures, plus four exact and
+32 host-blocked direct observations. No timeouts; all repeats are stable.
+Unaffected negative/demand/normalization/comptime/audit receipts retain bd6a228
+and all open cells. Historical profiles and downstream API caveats remain intact.
+
+Ledgers link 87 originals; 1,215 lack runtime/interpretation evidence, classified
+by mode. Next independent family: base/float_roundtrip, compile/float_roundtrip,
+run/float_arithmetic; source-inspected but runtime-unqualified. Full CPU parity,
+three new read contracts and complete lane/API review remain open. All inputs,
+budgets, dependencies, toolchains and prior checkpoints are preserved. No install
+or push.

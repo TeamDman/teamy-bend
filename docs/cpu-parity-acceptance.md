@@ -91,17 +91,18 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **66 distinct
-upstream fixtures**: sixteen comptime, ten run, eighteen IO, five Base, two
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **69 distinct
+upstream fixtures**: sixteen comptime, thirteen run, eighteen IO, five Base, two
 representation, nine parse and six compile originals. Linked rows include
-unresolved negative and oracle-host cells. Six authored controls supplement the
-suites without adding upstream inventory rows. Only passed cells qualify their
-recorded runtime/profile; this is not category, checker-diagnostic, API or
+unresolved negative and oracle-host cells. Seven positive authored controls and
+a separate four-input read probe supplement the suites without adding inventory
+rows. Only passed cells qualify their recorded runtime/profile; this is not
+category, checker-diagnostic, API or
 multiworker completion.
 
-There are **1,236 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 621 compiled
-candidates. These are distinct required modes, not 1,236 missing CPU runtime
+There are **1,233 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 618 compiled
+candidates. These are distinct required modes, not 1,233 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
@@ -111,24 +112,30 @@ The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
 originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **84 originals**
-have receipts and **1,218** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 614 compiled candidates.
+controls add no inventory rows. Across runtime and interpretation, **87 originals**
+have receipts and **1,215** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 611 compiled candidates.
 
-The [float-math checkpoint](cpu-float-math.md), `8540287`, qualifies three original
-unary/trig/hyperbolic programs: 30 exact observations across five primary runtimes
-twice, plus ten for an authored bit/text control. All twelve original result
-expressions match exact binary32 bits and text on this host. Actual upstream C/JS
-generation succeeds; three direct IO entries remain host-blocked. No production
-defect or math-library discrepancy was demonstrated, and no tolerance or new
-exception was introduced. Host math delegation does not qualify unrun platforms
-or waive future differences. Full gate: **812 passed, zero failed, 49 ignored**;
-30 focused tests and strict all-target Clippy pass. Approved semantics and all
-safety budgets remain intact.
+The [float-text checkpoint](cpu-float-text.md), `2dd113e`, qualifies three original
+operation/printing/read programs: 30 exact observations across five primary
+runtimes twice, plus ten for an authored bit/text control. Actual upstream C/JS
+generation succeeds; three direct IO entries remain host-blocked. Actual pinned
+rendering supersedes stale six-digit comments. No production defect was
+demonstrated or parsing policy changed. Full gate: **813 passed, zero failed,
+49 ignored**; 31 focused tests and strict all-target Clippy pass. Approved demand
+semantics and safety budgets remain intact.
 
-Forty-four positive runtime originals now have `8540287` receipts. The positive
-matrix has **488/500 exact** primary executions and twelve Bun-FFI failures;
-separate direct entries give four exact and 26 import.meta.require failures.
+A separate [read ledger](cpu-float-read-evidence.csv) records three unresolved
+upstream C/JS contracts: decimal double-rounding, hexadecimal input and embedded
+NUL. Native Rust/port C match C; port JS matches JS. A fourth final-newline input
+returns None everywhere. All ten executions are stable with exit 0 and empty
+stderr, but the comparison runner retains exit 1 for upstream disagreement.
+These authored cases add no inventory rows or accepted exceptions. Full CPU
+parity needs a contract decision; backend agreement alone does not close them.
+
+Forty-seven positive runtime originals now have `2dd113e` receipts. The positive
+matrix has **528/540 exact** primary executions and twelve Bun-FFI failures;
+separate direct entries give four exact and 32 import.meta.require failures.
 All repeats are stable; no timeouts. Six negative originals, sixteen comptime
 originals, eighteen interpretation originals and ten authored demand controls
 retain `bd6a228`. Negative results remain **44/56 exact**, with eight resource-policy,
@@ -209,11 +216,11 @@ a function`, even though separately emitted CommonJS programs pass. The
 success does not erase them. The parse-chain renewal separately records one
 successful pure direct entry and two more blocked IO entries; operator-chain
 adds three blocked IO entries and float syntax adds one pure and two blocked IO
-entries. The float-runtime and float-math groups each add three blocked IO
-entries. All fifteen parse/compile direct-entry rows were renewed at `8540287`.
-No Bun install or upstream edit was made. This is an oracle-host blocker for that
-lane, not a reason
-to stop unrelated CPU verification or require a GPU desktop.
+entries. The float-runtime, float-math and float-text groups each add three
+blocked IO entries. All eighteen parse/compile/run-float direct-entry rows were
+renewed at `2dd113e`. No Bun install or upstream edit was made. This is an
+oracle-host blocker for that lane, not a reason to stop unrelated CPU verification
+or require a GPU desktop.
 
 ## Next bounded work
 
@@ -257,12 +264,14 @@ The [float syntax/pattern group](cpu-parse-floats.md) retains its three scoped
 corrections. The [float-runtime group](cpu-float-runtime.md) covers rounding,
 accumulation and F32 storage. The [math group](cpu-float-math.md) now has exact
 text and bit observations for twelve unary/trig/hyperbolic result expressions,
-with no tolerance or cross-platform precision claim. Next is `run/float_ops`,
-`run/float_printing`, `run/float_text`: source-inspected Base/IO candidates whose
-five-runtime original-fixture qualification is unrun. Verify generation and
-actual rendering/read behavior; stale six-digit/percent-g comments and existing
-unit witnesses cannot establish the contract. New C-oracle builds retain pinned
-Linux O3/link flags; older profiles remain separate.
+with no tolerance or cross-platform precision claim. The [text group](cpu-float-text.md)
+now qualifies run/float_ops, float_printing and float_text, separating exact
+original results from three new unresolved runtime-read contracts. Next is
+`base/float_roundtrip`, `compile/float_roundtrip`, `run/float_arithmetic`:
+source-inspected Base/IO candidates whose original-fixture qualification is
+unrun. Their finite arithmetic/conversions do not depend on resolving F32.read.
+Verify actual generation and output before qualifying them. New C-oracle builds
+retain pinned Linux O3/link flags; older profiles remain separate.
 The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
@@ -292,5 +301,8 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
 includes baseline, effects, control, collections, scheduler, word,
-representation, parse-chain/operator/float, float-runtime and float-math checks.
+representation, parse-chain/operator/float, float-runtime, float-math and
+float-text checks. The separate `scripts/compare-float-read.py` probe records
+backend matches and cross-oracle disagreement independently; it keeps exit 1
+until the read contract is resolved.
 Frozen toolchains, lockfile, pin and all previous evidence remain unchanged.

@@ -11,18 +11,19 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 66-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `8540287` qualifies
-[float unary/trig/hyperbolic math](cpu-float-math.md), with **812 passed,
+1,302-fixture inventory and 69-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `2dd113e` qualifies
+[float operations and text](cpu-float-text.md), with **813 passed,
 zero failed, 49 ignored** in the full gate and strict all-target Clippy passing.
-No production change or tolerance was needed. The approved demand contract and
-safety budgets remain intact; competing-error ordering stays open and unwaived.
+No production change was needed. Three new upstream F32.read contract splits
+remain open alongside competing-error ordering. No parsing policy or exception
+is chosen; approved demand rules and safety budgets remain intact.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 84 originals; the 1,218 remaining
+Current runtime/interpretation ledgers link 87 originals; the 1,215 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 614 compiled candidates. These are distinct
+interpreter-only cases and 611 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -440,21 +441,26 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [float unary/trig/hyperbolic math](cpu-float-math.md),
-`8540287`. Three unchanged originals match five primary runtimes twice: 30 exact
+Latest bounded checkpoint: [float operations and text](cpu-float-text.md),
+`2dd113e`. Three unchanged originals match five primary runtimes twice: 30 exact
 observations; an authored bit/text control adds ten. Actual upstream generation
 succeeds; three direct IO entries retain import.meta.require host failures.
-All twelve original result expressions have exact binary32-bit and text agreement
-on this host. Adjacent sqrt negative zero, log-zero/exp-overflow infinities and
-sqrt-domain NaN text agree; NaN payload bits remain unobserved. No production
-defect or cross-oracle math difference was demonstrated. No tolerance or new
-exception was introduced. Full gate: **812 passed, zero failed, 49 ignored**;
-strict all-target Clippy and 30 focused tests pass. Approved demand and all
-safety limits remain unchanged; other host math profiles remain unqualified.
+Operations, shortest text and shared read results agree exactly, including
+signed-zero read bits and invalid input returning None without process failure.
+No production defect was demonstrated. Full gate: **813 passed, zero failed,
+49 ignored**; strict all-target Clippy and 31 focused tests pass. Approved demand
+and all safety limits remain unchanged; other host profiles are unqualified.
 
-Renewed positive matrix: **488/500 exact** under pinned Linux C O3/link flags,
-twelve Bun-FFI gaps. Thirty separate direct entries produce four exact and 26
-host-blocked observations. Forty-four positive original rows identify `8540287`.
+The separate [read probe](cpu-float-read-evidence.csv) records decimal rounding,
+hexadecimal grammar and embedded-NUL disagreements between pinned upstream C
+and JS. Native Rust/port C match C; port JS matches JS. All ten executions are
+stable, exit 0, empty stderr; a fourth final-newline input returns None everywhere.
+The runner exits 1 for the unresolved contracts. No common policy, tolerance or
+new exception is imposed. These authored cells do not increase inventory coverage.
+
+Renewed positive matrix: **528/540 exact** under pinned Linux C O3/link flags,
+twelve Bun-FFI gaps. Thirty-six separate direct entries produce four exact and 32
+host-blocked observations. Forty-seven positive original rows identify `2dd113e`.
 Unaffected negative/demand receipts retain `bd6a228`: **44/56 negative exact**,
 eight resource-policy, two native-foreign and two Bun-host gaps; **92/100 demand
 exact**, six approved wildcard exceptions and two unwaived Nat-first error-order
@@ -470,14 +476,14 @@ No unexpected checker-negative acceptance, abnormal exit or timeout. These are
 checking statuses, not blanket runtime parity; the historical applicability
 snapshot and counts remain unchanged.
 
-The ledgers link 84 distinct originals; 1,218 lack runtime/interpretation receipts
-(439 checker negatives, twelve check-only, 153 interpreter-only, 614 compiled
+The ledgers link 87 distinct originals; 1,215 lack runtime/interpretation receipts
+(439 checker negatives, twelve check-only, 153 interpreter-only, 611 compiled
 candidates). The checking ledger retains one exact check-only acceptance and
 three phase/construct agreements with differing raw diagnostics. Linked does not
-mean every lane passed. Next independent family: `run/float_ops`,
-`run/float_printing`, `run/float_text`. Sources are inspected; original-fixture
-runtime qualification and actual target applicability are unrun. Check actual
-rendering/read behavior rather than relying on stale six-digit/percent-g comments.
+mean every lane passed. Next independent family: `base/float_roundtrip`,
+`compile/float_roundtrip`, `run/float_arithmetic`. Sources are inspected;
+original-fixture runtime qualification and actual target applicability are unrun.
+These finite arithmetic/conversion cases do not depend on the F32.read decision.
 No new dependency or semantic exception is assumed.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -491,6 +497,8 @@ CPU work.
 | Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Float rounding, accumulation and storage | Three original runtime fixtures and a focused bit/text control match five runtimes twice, including signed-zero field/array storage and adjacent infinity/NaN classifications. No production fix or NaN payload-parity claim. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Unary/trig/hyperbolic float math | Three originals and a bit/text control match five runtimes twice. All twelve original expressions agree in exact binary32 bits; no tolerance or math-library exception. Other host profiles and NaN payload observations remain unqualified. |
+| Passed in primary runtimes; direct IO oracle-host blocked | Float operations, printing and shared text inputs | Three exact originals and a bit/text control match five runtimes twice. Read None is an ordinary value, not a process error. No tolerance or NaN payload claim. |
+| Missing; unresolved upstream contracts | Runtime F32.read rounding, hexadecimal and embedded-NUL inputs | Three authored inputs differ between pinned C and JS; ports match their respective backends, native follows C. The separate runner retains exit 1. Choose a uniform contract or explicitly reviewed backend exception before closing these cells; no decision is made here. |
 | Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
