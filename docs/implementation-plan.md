@@ -2989,9 +2989,31 @@ bounded comparison script records input hashes, commands and byte-level results.
 The [Linux CPU receipt](linux-cpu-validation.md) records exact commands, tools,
 source identities and the explicit upstream C/JS NUL-key inconsistency.
 
-Next CPU work: add bounded upstream task/channel and file-effect fixtures and
-reduce a concrete semantic difference. Whole-engine parity, the remaining
-Poche formalization and fresh GPU/local-platform validation remain open.
+The task/channel and file-effect follow-on is recorded separately in 5.19.
+Whole-engine parity, the remaining Poche formalization and fresh GPU/local-platform
+validation remain open.
+
+### [x] 5.19 Extend bounded CPU comparison to task and file effects
+
+Runner commit `652765d`, on a new branch from `23747901`, adds six unchanged
+upstream fixtures for detached-child lifetime, fork/join, rendezvous ordering,
+bounded channel draining, file round-trip and mode rejection. The original
+portability branch remains fixed for independent desktop verification.
+
+Two repetitions across five runtimes yield 54 successful matching executions
+and six explicitly classified upstream-JavaScript environment failures. Upstream
+C and all three port runtimes agree for every fixture; upstream JavaScript also
+agrees for all three channel fixtures. Its timer and error-text paths require
+`bun:ffi`, unavailable in Node. No port semantic mismatch was found and no engine
+correction was invented. Upstream source and fixture bytes remain unchanged.
+
+The [effects receipt](cpu-effects-validation.md) records exact outputs, partial
+failure output, hashes, deadlines, repeated observations and file payloads.
+Runner negative checks preserve pre-existing files and reject unexpected output.
+The original five-case comparison still passes all 25 executions; the standard
+gate remains 726 passed, zero failed and 49 ignored. Next bounded CPU work can
+cover close-wakeup and Halt/cancellation behavior; upstream-JS host qualification
+and the existing GPU/Poche milestones remain separate.
 
 ## Completion and risks
 
