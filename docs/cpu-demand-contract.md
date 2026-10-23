@@ -1,6 +1,9 @@
 # Proposed executable demand and private-request contract
 
-**Proposal only; no semantics change is approved or implemented here.**
+**Historical proposal and pre-change measurements.** The user subsequently
+approved these three choices. Implementation and renewed evidence are recorded
+in the [approved-demand checkpoint](cpu-approved-demand.md); the observations
+below retain their original commits and are not current-candidate results.
 This review targets [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).
 The diagnostic engine `76038aa090780ea42976361b0e2f7b0de5412d00` retains native
 laziness and the port's private-request refusal. These five cases remain open

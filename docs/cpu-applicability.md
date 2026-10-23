@@ -10,14 +10,16 @@ references, both ledger snapshots and existing evidence. Its
 Classification is not qualification or a compatibility exception.
 
 **Follow-up:** the [interpretation ledger](cpu-interpretation-evidence.csv) now
-links nine originals at `571d1ce`, all exact twice. Eight are interpreter-only;
+links nine originals, renewed at `208b343`, all exact twice. Eight are interpreter-only;
 the ninth imports Base but actual upstream C/JS generation refuses its function
 result. The historical CSV/table below retain their original runtime-ledger inputs.
 Across runtime and interpretation ledgers, 1,242 rows lack those receipts,
 including 156 interpreter-only cases and 635 compiled candidates. The separate
 [checking ledger](cpu-checking-evidence.csv) adds one exact check-only acceptance
 and three phase/construct agreements whose raw diagnostics remain unqualified.
-See the [rewrite checkpoint](cpu-rewrite-printing.md); no missing implementation
+The [approved-demand checkpoint](cpu-approved-demand.md) renews those runtime
+and interpretation profiles without changing applicability or inventory counts.
+See also the [rewrite checkpoint](cpu-rewrite-printing.md); no missing implementation
 or unavailable host is waived by a classification hint.
 
 ## What the unlinked entries actually require

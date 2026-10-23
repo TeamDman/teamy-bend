@@ -1,6 +1,8 @@
 # Three executable-contract choices
 
-**For review only. Nothing below changes runtime behavior.** The five open cases
+**Historical decision brief; the three choices were subsequently approved.**
+See the [implementation checkpoint](cpu-approved-demand.md) for current results
+and the separate new ordering question. The five originally open cases
 are measured against Bend pin `e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`, with
 port candidate `6bfc10ac69cf523dd0fb1c302e92c9ee63e26362`. Each original case ran
 twice across native Rust, port C/JS and upstream C/JS; all 50 results are unchanged.

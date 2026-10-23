@@ -466,12 +466,13 @@ CPU work.
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
-| Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
+| Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs match under unchanged limits, twice each, renewed after approved strict executable demand. Constructor-tail compression and available-value propagation retain bounded non-tail recursion and error controls. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Passed, bounded | Out-of-band request failure contract | Original fixture matches all five runtimes twice; exact streams/status/order, cleanup, lookalikes and worker forwarding covered. Other failure classes remain open. |
-| Passed, bounded | Nat overflow diagnostics and fully demanded add/double | Original overflow and authored large/boundary controls match five runtimes twice; native successor runs preserve lazy tails and unchanged limits. Partial demand remains separately unqualified. |
+| Passed, bounded | Nat overflow diagnostics and fully demanded add/double | Original overflow and authored large/boundary controls match five runtimes twice. Approved strict executable demand now validates before shallow observation; proof/data laziness and fixed limits remain separate. |
 | Passed, bounded | Native/JS array-depth and JS scalar diagnostics | Original supported lanes now preserve exact stderr/status; boundary/order/cleanup controls pass. C allocation and JS element budgets remain separate refusals. |
-| Missing | Arithmetic demand and wildcard-request contracts | Native unused/partial overflow succeeds where compiled upstream rejects in three cases. Two more cases disagree between upstream C/JS at a private-request wildcard match. Preserve safe refusal while deciding the applicable contract; do not count one-oracle agreement as parity. |
+| Implemented; narrow accepted exception | Approved arithmetic demand and wildcard refusal | Three Nat cases now agree across all five runtimes twice. Three private-wildcard controls preserve refusal and explicitly label the accepted upstream C exception. This is not byte parity with that C behavior. |
+| Missing / profile-dependent | Competing failures and upstream Word compilation | New `nat_first` chooses a different first error in upstream C; no exception is approved. `word_live_tail` fails default Clang register allocation, but agrees under separately recorded `-O2`. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
@@ -545,3 +546,17 @@ The frozen `Cargo.lock` SHA256 is
 `d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4`.
 No source in upstream or teamy-docs was modified. This review does not establish
 full CPU parity, new GPU evidence, or permission to adopt newer dependencies.
+
+## Approved demand checkpoint
+
+`208b343a286a8501fc3a479a4eb7b40bb01832d1` implements the reviewed contract
+on a separate local branch after the clean rewrite-printer checkpoint. The
+[checkpoint and commands](cpu-approved-demand.md) record **799 passed, zero
+failed, 49 ignored**, strict Clippy, all 16 comptime originals, 13 normalization
+controls and renewed positive/negative matrices. All ten authored demand controls
+are recorded separately; no upstream inventory count is increased. The original
+resource/host/foreign gaps remain open, as does the newly demonstrated C error-order
+difference. No dependency, toolchain, pin or safety limit changed, and no push
+occurred. The next independent small CPU family is the three recursive-normalization
+companions identified in the checkpoint; a separate review is needed before
+changing first-error order or waiving that difference.

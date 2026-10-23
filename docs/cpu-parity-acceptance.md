@@ -134,15 +134,24 @@ unqualified. No proof-only rejection is substituted for execution or diagnostic
 parity. Structural equality retains every supported rewrite field and binding;
 raw `pass_exact` is an independent requirement.
 
-The positive matrix is renewed on `571d1ce` (308/320 exact, twelve known Bun-host
-failures), as is the six-fixture negative matrix (44/56 exact; eight resource-policy,
-two native-foreign and two Bun-host gaps). Earlier comptime and multiworker
-receipts retain their recorded commits. The presentation correction changes no
-runtime demand policy. The user has separately approved strict live executable
-arguments, Nat bounds before shallow observation and continued private-request
-refusal with a named upstream-C wildcard exception. Implementation and renewed
-evidence are still required; this approval does not turn the old comparisons
-into exact matches or waive other differences.
+The [approved-demand checkpoint](cpu-approved-demand.md), `208b343`, renews
+all 51 runtime rows and nine interpretation rows at their recorded serial/host
+profiles. The positive matrix remains 308/320 exact (twelve Bun-host failures),
+and the six-fixture negative matrix remains 44/56 exact (eight resource-policy,
+two native-foreign and two Bun-host gaps). All sixteen comptime originals pass
+in the three port lanes and upstream C; default upstream JS retains four stack
+failures, with exact supplemental stack-4096 results. Earlier multiworker and
+direct-CLI observations retain their original receipts.
+
+The user-approved strict live-argument, bounded-Nat and private-request rules
+are implemented. The [authored demand ledger](cpu-demand-evidence.csv) distinguishes
+exact results from the narrow accepted upstream-C wildcard exception. That
+exception applies to `unused_rhs_error`, `ordinary_rhs_error` and the isolation
+control `forced_request_wildcard`; their six C observations are explicitly not
+exact matches. It does not waive the newly reproduced `nat_first` diagnostic-order
+difference or the default Clang register-allocation failure for `word_live_tail`.
+The latter agrees in a separately recorded upstream-C `-O2` profile. The demand
+runner retains exit 1 for open cells. No exception extends to unreviewed failures.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
 matched in the named profile; `pass_stack4096` names an explicit upstream JS
@@ -188,22 +197,20 @@ runtimes twice. The [array/scalar correction](cpu-array-scalar-diagnostics.md)
 closes all six diagnostic-only differences in the six-fixture matrix. Twelve
 observations remain unresolved: eight resource-policy, two native foreign and
 two oracle-host failures. These are not waivers or passes.
-The [native add/double optimization](cpu-native-nat-add-double.md) closes the
-fully demanded arithmetic budget gaps while preserving lazy operands. Three
-partial-demand cases still differ from compiled upstream; two wildcard-request
-cases additionally expose a C/JS upstream disagreement. Those contracts need
-review before changing eagerness or safe refusal, and remain required unresolved
-work. The [demand contract proposal](cpu-demand-contract.md) gives five minimal
-reproducers, exact results, pinned sources and a recommendation; it is research
-only and does not approve a semantics change or an oracle exception. Independent
-CPU coverage can proceed while it is reviewed. Seven U32 fixtures now pass all
-five runtimes twice after a packed native division/modulo optimization; the
-operator/representation group now also passes all five runtimes twice. A bounded
-pure-interpretation family now has nine exact normalized results, including the
-recursive and rewrite fixtures. Next is the separately approved executable demand
-contract. Implement it with erasure, branch, order and budget regressions, and
-retain the upstream-C wildcard anomaly as an explicit exception rather than a
-byte-parity pass. The sleep_order and
+The [native add/double optimization](cpu-native-nat-add-double.md) originally
+closed fully demanded arithmetic budget gaps while preserving lazy operands.
+The subsequent [approved-demand implementation](cpu-approved-demand.md) now
+closes the three unused/shallow overflow disagreements and applies private-request
+refusal to the two formerly lazy RHS cases. Erasure, unselected branches, IO
+ordering, first errors and fixed resource limits have regression coverage. Its
+new constructor-tail compression keeps the original 10,000-element workloads
+within those limits. The separately observed upstream-C competing-error order
+remains unresolved; it has not been folded into the accepted wildcard exception.
+Seven U32 fixtures and the operator/representation group retain exact five-runtime
+results, renewed twice. Nine original pure-interpretation cases retain exact
+structural and textual agreement, with four additional authored controls.
+The next independent small interpretation group is the recursive `_002_sel`,
+`_003_flip` and `_004_sel` companions. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

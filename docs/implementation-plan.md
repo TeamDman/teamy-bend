@@ -3381,3 +3381,34 @@ removing evidence. The [checkpoint](cpu-rewrite-printing.md) records source hash
 commands, receipts and the updated interpretation/checking ledgers. Dependencies,
 toolchains and pins stay frozen; no push. The separately approved executable
 demand contract is next and remains unimplemented by this presentation commit.
+
+
+### [x] 5.36 Apply the approved native executable demand contract
+
+Saved the separate presentation checkpoint first, then implemented strict live
+arguments and constructor fields for native IO through the existing checked
+executable lowering. Erased positions remain inert and preserve adapter arities;
+closures/unselected branches and pure/proof-data normalization retain their
+separate semantics. Nat bounds are checked before observation, private requests
+remain unmatchable, and the approved C wildcard inconsistency is explicitly
+labelled as an exception rather than an exact pass.
+
+Constructor-tail continuation compression stores unfinished results in existing
+bounded arena slots and keeps them inaccessible until complete. It restores
+both original 10,000-element comptime workloads under unchanged limits, with
+collection, first-error, non-tail recursion, work/cancellation and no-partial-value
+regressions. Existing API compatibility caveats remain explicit.
+
+Implementation `208b343` passes the standard gate (799 passed, zero failed,
+49 ignored) and strict all-target/all-feature Clippy. Renewed receipts cover
+51 upstream runtime rows, nine interpretation rows, four authored normalization
+controls and ten authored demand controls. Positive/negative and default upstream
+JS host limitations remain explicit. A new upstream-C competing-error ordering
+difference and default Clang register-allocation failure are not silently waived;
+the Word control agrees with a separately recorded `-O2` oracle profile.
+
+See [the checkpoint](cpu-approved-demand.md) for exact counts, commands, hashes,
+accepted-exception scope and next independent recursive-normalization companions.
+No newer upstream, dependency/toolchain change, GPU requirement or push. This
+bounded family is implemented; full CPU parity and the separate ordering decision
+remain open under the existing acceptance criterion.
