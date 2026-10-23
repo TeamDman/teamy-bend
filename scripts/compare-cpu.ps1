@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
-    [ValidateSet('baseline', 'effects', 'control', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -27,7 +27,11 @@ if ($outputPath -eq $Reference -or $outputPath.StartsWith("$Reference/", [String
 }
 if (Test-Path $OutputDirectory) { throw 'Choose a new output directory to preserve prior evidence.' }
 $OutputDirectory = (New-Item -ItemType Directory -Path $OutputDirectory).FullName
-$binary = Join-Path $port 'target/debug/teamy-bend'
+$builtBinary = Join-Path $port 'target/debug/teamy-bend'
+$binary = Join-Path $OutputDirectory 'teamy-bend'
+[IO.File]::Copy($builtBinary, $binary)
+[IO.File]::SetUnixFileMode($binary, [IO.File]::GetUnixFileMode($builtBinary))
+$binaryHash = (Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash.ToLowerInvariant()
 $node = if ($env:TEAMY_BEND_NODE) { $env:TEAMY_BEND_NODE } else { 'node' }
 $rows = [System.Collections.Generic.List[object]]::new()
 
@@ -125,11 +129,18 @@ $control = @(
     @{ name = 'deadlock'; expected = "waiting`n"; expected_exit = 1; expected_stderr = "bend: deadlock: every computation waits on a channel`n" }
 )
 foreach ($fixture in $control) { $fixture.source = "$Reference/tests/io/$($fixture.name).bend" }
+$collections = @(
+    @{ name = 'map_ops'; expected = "7`n" },
+    @{ name = 'map_prefix_keys'; expected = "a=2,ab=1,b=3,.`na=20,ab=1,b=3,c=30,.`na=2,ab=1,b=3,c=30,.`nLTGTLT`n" },
+    @{ name = 'map_set_array_kit'; expected = "3`n[1, 2, 3]`n2`n[x, y]`n[0, 5, 0, 7]`n[1, 6, 1, 8]`n" }
+)
+foreach ($fixture in $collections) { $fixture.source = "$Reference/tests/base/$($fixture.name).bend" }
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
     'control' { $control }
-    'all' { $baseline + $effects + $control }
+    'collections' { $collections }
+    'all' { $baseline + $effects + $control + $collections }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
@@ -143,6 +154,7 @@ foreach ($fixture in $fixtures) {
     $row = [ordered]@{
         fixture = $fixture.name; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $referenceHead; port_revision = $portHead; port_dirty = [bool]$portStatus
+        port_binary_sha256 = $binaryHash; c_arguments = @('--threads', '1', '--gpu', 'off')
         timeout_seconds = 60; repetitions = $Repetitions; steps = [ordered]@{}; matched = $false
         completed_runtimes_match = $false; deterministic = $null; environmental_limits = @()
     }
@@ -179,7 +191,7 @@ foreach ($fixture in $fixtures) {
                     $result = Invoke-Execution $label $node @($js) -AllowFailure:$allowFailure
                 } else {
                     $exe = Join-Path $fixtureDirectory ($runtime.Replace('-c', ''))
-                    $result = Invoke-Execution $label $exe @() -AllowFailure:$allowFailure
+                    $result = Invoke-Execution $label $exe @('--threads', '1', '--gpu', 'off') -AllowFailure:$allowFailure
                 }
                 if ($repeat -gt 1) {
                     $first = $row.steps["$runtime-1"]

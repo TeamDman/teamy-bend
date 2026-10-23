@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "fixture_count": 1302,
+  "expected_checker_errors": 439,
+  "with_main": 1196,
+  "candidate_js": 687,
+  "candidate_c": 671,
+  "upstream_gate_sha256": "7f2ae6ead3e77bbee166ea076cff2977c162bf08847b1c870788b47302983433",
+  "inventory_sha256": "04378ce0661f27c819cbe99860b7f11539b634e40308a6a8d14f86e85c038fb0",
+  "qualification": "Inventory only. Every unlinked/unreviewed lane remains missing evidence; hints never waive a lane."
+}

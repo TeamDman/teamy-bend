@@ -3084,6 +3084,27 @@ failure or timeout remains in that family. This completes the isolated numeric
 milestone, not whole-engine CPU parity; the [coverage checklist](cpu-parity-checklist.md)
 retains missing areas and the frozen pin/dependency boundaries.
 
+### [x] 5.23 Qualify persistent collections and define CPU acceptance
+
+Three unchanged map/set/array fixtures match upstream C/JS and all port runtimes,
+twice each: 30 exact executions, zero timeouts. No engine mismatch was found.
+The runner retains a collections suite, a binary snapshot/hash, and an explicit
+serial CPU C profile. The expanded suite has 184 matches and six established
+upstream-JS host failures across 190 executions. The standard gate remains
+738 passed, zero failed, 49 ignored. A negative absent-Deque control rejects in
+the correct phase; its diagnostic bytes are not claimed equivalent.
+
+The [CPU acceptance criterion](cpu-parity-acceptance.md) introduces a reproducible
+1,302-fixture inventory and a source-hash-checked ledger for 33 upstream runtime
+fixtures. It separates execution modes, host/profile qualification, required
+negative outcomes, API coverage, resource bounds and current evidence. 439
+checker-error expectations differ from the 449 nonzero-exit expectations;
+ten cases require runtime-negative qualification. Direct upstream IO execution
+on this Node host additionally needs Bun's `import.meta.require`, although
+emitted JS passes. Missing/unreviewed/blocked lanes never count as passed.
+The next bounded family is the six runtime-negative fixtures without current
+control receipts; newer-upstream adoption and dependencies remain frozen.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or

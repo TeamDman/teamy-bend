@@ -9,6 +9,11 @@ were unchanged. The earlier Linux portability and task/file milestones retain
 their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
+The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
+mode/profile evidence before the pin can be called matched. Its reproducible
+1,302-fixture inventory and 33-row runtime ledger expose missing evidence;
+neither is a completion percentage.
+
 ## Passed in this review
 
 | Evidence | Result | Boundary |
@@ -215,6 +220,43 @@ statuses are deterministic. This closes the identified native numeric-chain gap
 for these fixtures; it does not establish full CPU parity. Unrelated corpus,
 foreign-effect, host and hardware qualifications below remain open.
 
+## Persistent-collections coverage follow-up
+
+The next bounded family exercises map replacement/default reads/deletion/size,
+prefix-key ordering, right-biased union in both operand orders, set deduplication
+and written-array mapping. All sources below are unchanged pinned fixtures.
+
+| Fixture | Exact stdout (empty stderr, exit 0) |
+| --- | --- |
+| `base/map_ops.bend` | `7\n` |
+| `base/map_prefix_keys.bend` | `a=2,ab=1,b=3,.\na=20,ab=1,b=3,c=30,.\na=2,ab=1,b=3,c=30,.\nLTGTLT\n` |
+| `base/map_set_array_kit.bend` | `3\n[1, 2, 3]\n2\n[x, y]\n[0, 5, 0, 7]\n[1, 6, 1, 8]\n` |
+
+Upstream C/JS and all three port runtimes match twice each: 30/30 exact executions,
+zero timeouts, deterministic statuses and both streams. No runtime correction
+was warranted. `compare-cpu.ps1 -Suite collections` preserves this comparison;
+`-Suite all` now contains 19 fixtures and yields 184 exact matches plus six known
+upstream-JS `bun:ffi` failures across 190 executions. C now receives explicit
+`--threads 1 --gpu off`; the runner snapshots and hashes its input binary.
+This qualifies a serial C profile, not the remaining multiworker family.
+The unchanged engine still passes the standard gate: 738/0/49.
+
+The negative control `base/heap_queue_deque.bend` is deliberately rejected by
+upstream: Deque is absent from this pin's Base. Upstream direct checking, port
+execution checking and port C generation all reject `Deque.push_front` with
+status 1, twice each, and no C artifact is produced. The raw diagnostics differ;
+only rejection phase/name agreement is established, not exact diagnostic parity.
+Implementing Deque to make this fixture succeed would contradict its expectation.
+
+Direct upstream IO execution of the three positive programs is separately
+blocked on this Node host by `import.meta.require`, while their emitted CommonJS
+programs pass. The acceptance document records this direct-entry lane separately;
+no reference source or host dependency was changed to conceal the distinction.
+Inventory generation was repeated byte-for-byte and its wrong-pin refusal was
+checked. All 1,302 rows also agree with the pinned gate's actual selection helper;
+a deliberately wrong expected output makes the comparison runner fail.
+Private `cpu-collections` evidence retains all receipts and exact commands.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -227,6 +269,7 @@ CPU work.
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed, bounded | JS ordinary constructor tails | All 16 positive comptime programs now match under default Node, twice each; adversarial chain and non-tail bounds remain enforced. |
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
+| Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
@@ -235,6 +278,7 @@ CPU work.
 | Missing | Large pure-library programs and optimization | Existing whole-program string/number kits hit bounds despite passing shorter chunks. Native/JS storage/traversal and compiler specialization remain open; chunk comparisons are not whole-program parity. |
 | Missing | Upstream loader/CLI/module parity | JS module marshalling, imports, browser loader and command-surface behavior need their own inventory. The Rust CLI's typed wrappers are not upstream language equivalence. |
 | Missing / host-dependent | Window/audio/interactive effects | The rewrite's documented unfinished effects are separate from headless CPU checking and computation. Device integration needs an appropriate host and any dependency additions require approval. |
+| Blocked on current direct-IO oracle host | Upstream `io_run` entry | Three collection direct-CLI probes fail on Node because upstream uses Bun `import.meta.require`; standalone emitted JS passes. A direct-entry receipt still needs a supported host. |
 | Blocked on current JS host | Three existing upstream task/file fixtures | `bun:ffi` cannot load in Node; Bun is not installed. Exact failed outputs are retained. No dependency installation was requested or performed. Upstream C remains available for their CPU oracle. |
 | Unrun, hardware-dependent | CUDA/Metal/sanitizers | Desktop or suitable GPU hardware is needed for these checks. They are not prerequisites for the CPU tasks above. |
 | Unrun here | New Windows/macOS qualification of this change | Historical Windows results qualify older commits, not this candidate. |
