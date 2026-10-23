@@ -404,6 +404,12 @@ impl fmt::Display for Term {
                 Ok(())
             }
             Self::Ctr { name, args } => {
+                if name == "U32"
+                    && let [word] = args.as_slice()
+                    && let Some(value) = literal_word(word)
+                {
+                    return write!(f, "{value}");
+                }
                 write!(f, "{name}{{")?;
                 list(f, args)?;
                 f.write_str("}")
@@ -452,6 +458,42 @@ impl fmt::Display for Term {
             }
         }
     }
+}
+
+// Recognize the pinned term_show numeric spelling only for complete structural
+// words. A partial, malformed or differently named constructor keeps its syntax;
+// printing never evaluates a field or drops a nonliteral tail.
+fn literal_word(mut word: &TermRef) -> Option<u32> {
+    fn strip(mut value: &TermRef) -> &Term {
+        while let Term::Ann(inner, _) = value.as_ref() {
+            value = inner;
+        }
+        value.as_ref()
+    }
+    let mut value = 0_u32;
+    for bit in 0..32 {
+        let Term::Ctr { name, args } = strip(word) else {
+            return None;
+        };
+        let [head, tail] = args.as_slice() else {
+            return None;
+        };
+        if name != "WCon" {
+            return None;
+        }
+        let Term::Ctr { name, args } = strip(head) else {
+            return None;
+        };
+        if !args.is_empty() || !matches!(name.as_str(), "True" | "False") {
+            return None;
+        }
+        if name == "True" {
+            value |= 1 << bit;
+        }
+        word = tail;
+    }
+    matches!(strip(word), Term::Ctr { name, args } if name == "WNil" && args.is_empty())
+        .then_some(value)
 }
 
 fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {

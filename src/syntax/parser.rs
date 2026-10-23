@@ -1694,8 +1694,7 @@ impl Parser<'_> {
             }
             Ok(value)
         } else if raw.contains('.') {
-            let value = raw
-                .parse::<f32>()
+            let value = float_literal(&raw)
                 .map_err(|error| self.error(format!("invalid F32 literal: {error}")))?;
             if !value.is_finite() {
                 return Err(self.error("F32 literal must be finite"));
@@ -1903,6 +1902,14 @@ fn type_head(ty: &TermRef) -> Option<String> {
         _ => None,
     }
 }
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "Pinned parse_term_num uses Math.fround(Number(token)): binary64 then binary32"
+)]
+fn float_literal(raw: &str) -> Result<f32, std::num::ParseFloatError> {
+    raw.parse::<f64>().map(|value| value as f32)
+}
+
 fn word_term(value: u32) -> TermRef {
     let mut out = term(Term::Ctr {
         name: "WNil".into(),

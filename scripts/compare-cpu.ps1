@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -168,6 +168,12 @@ $parseOperators = @(
     @{ name = 'chain_default_nat'; source = "$Reference/tests/parse/chain_default_nat.bend"; expected = "7`n"; direct_mode = 'io' },
     @{ name = 'chain_suffix_u32'; source = "$Reference/tests/parse/chain_suffix_u32.bend"; expected = "16`n"; direct_mode = 'io' }
 )
+$parseFloats = @(
+    @{ name = 'chain_suffix_f32'; source = "$Reference/tests/parse/chain_suffix_f32.bend"; expected = "7.5`n"; direct_mode = 'io' },
+    @{ name = 'float_exponent'; source = "$Reference/tests/parse/float_exponent.bend"; expected = "0.0025 1000 150`n"; direct_mode = 'io' },
+    @{ name = 'float_pattern'; source = "$Reference/tests/parse/float_pattern.bend"; expected = "1`n"; direct_mode = 'pure' },
+    @{ name = 'float-bits-and-patterns'; source = "$port/tests/fixtures/cpu-parse-floats/float-bits-and-patterns.bend"; expected = "992204554`n1065353216`n1065353218`n1065353216`n10`n2147483648`n20`n1071644672`n7`n99`n1`n4294967295`n" }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -178,7 +184,8 @@ $fixtures = switch ($Suite) {
     'representation' { $representation }
     'parse-chains' { $parseChains }
     'parse-operators' { $parseOperators }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators }
+    'parse-floats' { $parseFloats }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {

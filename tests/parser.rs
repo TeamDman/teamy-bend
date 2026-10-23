@@ -405,18 +405,49 @@ fn imported_base_names_cannot_be_redeclared() {
 }
 
 #[test]
-fn structural_word_patterns_fail_cleanly_when_compilation_is_too_deep() {
+fn deeply_nested_patterns_still_fail_cleanly_after_word_pattern_optimization() {
     let fixture = Fixture::new();
     let entry = fixture.write(
         "pattern.bend",
-        "import Base\ndef f(x: U32) -> U32:\n  match x:\n    case 0: 1\n    case x: 0\n",
+        "import Base\ndef f(x: Nat) -> U32:\n  match x:\n    case 65n: 1\n    case x: 0\n",
     );
     assert!(
         load(entry)
-            .expect_err("structural word depth bound")
+            .expect_err("recursive pattern depth bound")
             .message
             .contains("pattern compilation exceeds")
     );
+}
+
+#[test]
+fn long_nullary_pattern_rows_retain_a_bounded_compilation_limit() {
+    let fixture = Fixture::new();
+    for count in [8, 65] {
+        let binders = (0..count)
+            .map(|i| format!("x{i}: Bool"))
+            .collect::<Vec<_>>()
+            .join(", ");
+        let names = (0..count)
+            .map(|i| format!("x{i}"))
+            .collect::<Vec<_>>()
+            .join(", ");
+        let patterns = vec!["True{}"; count].join(", ");
+        let source = format!(
+            "import Base\ndef f({binders}) -> U32:\n  match {names}:\n    case {patterns}: 1\n"
+        );
+        let entry = fixture.write(&format!("columns{count}.bend"), &source);
+        let result = load(entry);
+        if count == 8 {
+            assert!(result.is_ok(), "a short constructor row compiles");
+        } else {
+            assert!(
+                result
+                    .expect_err("pending columns stay bounded")
+                    .message
+                    .contains("pattern compilation exceeds")
+            );
+        }
+    }
 }
 
 #[test]

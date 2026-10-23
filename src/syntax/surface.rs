@@ -217,10 +217,21 @@ fn flatten_at(
     }
 }
 
-#[expect(
-    clippy::too_many_lines,
-    reason = "Direct translation of upstream's first-row pattern compilation algorithm"
-)]
+struct MatchState {
+    scrutinees: Vec<TermRef>,
+    rows: Vec<Row>,
+    vars: Vec<Variable>,
+}
+
+enum MatchStep {
+    Done(TermRef),
+    Nullary {
+        constructor: String,
+        next: MatchState,
+        fallback: MatchState,
+    },
+}
+
 fn flatten_match(
     scrutinees: &[TermRef],
     rows: &[Row],
@@ -229,13 +240,74 @@ fn flatten_match(
     display_fresh: &mut usize,
     depth: usize,
 ) -> Result<TermRef, String> {
+    // A nullary constructor consumes a column without introducing field
+    // binders. Continue that arm iteratively: a fixed-width word has one Bool
+    // column per bit, which need not double its Rust recursion depth. Retain
+    // bounded pending work and compile fallbacks only after their arms, keeping
+    // the original term, fresh-name sequence and first-error ordering.
+    let mut state: Option<MatchState> = None;
+    let mut pending: Vec<(String, MatchState)> = Vec::new();
+    loop {
+        if depth + pending.len() >= 64 {
+            return Err("pattern compilation exceeds the resource limit of 64 levels".into());
+        }
+        let (scrutinees, rows, vars) = state.as_ref().map_or((scrutinees, rows, vars), |s| {
+            (
+                s.scrutinees.as_slice(),
+                s.rows.as_slice(),
+                s.vars.as_slice(),
+            )
+        });
+        match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth)? {
+            MatchStep::Done(mut value) => {
+                for (constructor, fallback) in pending.into_iter().rev() {
+                    let fallback = flatten_match(
+                        &fallback.scrutinees,
+                        &fallback.rows,
+                        &fallback.vars,
+                        fresh,
+                        display_fresh,
+                        depth + 1,
+                    )?;
+                    value = term(Term::Mat {
+                        constructor,
+                        arm: value,
+                        fallback,
+                    });
+                }
+                return Ok(value);
+            }
+            MatchStep::Nullary {
+                constructor,
+                next,
+                fallback,
+            } => {
+                pending.push((constructor, fallback));
+                state = Some(next);
+            }
+        }
+    }
+}
+
+#[expect(
+    clippy::too_many_lines,
+    reason = "Direct translation of upstream's first-row pattern compilation algorithm"
+)]
+fn flatten_match_step(
+    scrutinees: &[TermRef],
+    rows: &[Row],
+    vars: &[Variable],
+    fresh: &mut usize,
+    display_fresh: &mut usize,
+    depth: usize,
+) -> Result<MatchStep, String> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     if scrutinees.is_empty() {
         return rows.first().map_or_else(
             || Err("a match needs a case to return".to_owned()),
-            |r| flatten_at(&r.body, vars, fresh, display_fresh, depth + 1),
+            |r| flatten_at(&r.body, vars, fresh, display_fresh, depth + 1).map(MatchStep::Done),
         );
     }
     let Some(first) = vars.first() else {
@@ -268,11 +340,12 @@ fn flatten_match(
             fresh,
             display_fresh,
             depth + 1,
-        );
+        )
+        .map(MatchStep::Done);
     }
     if binder.is_some_and(|v| v.id == first.id) {
         let Some((name, fields)) = constructor else {
-            return Ok(term(Term::Efq));
+            return Ok(MatchStep::Done(term(Term::Efq)));
         };
         let field_vars = fields
             .iter()
@@ -333,6 +406,21 @@ fn flatten_match(
         next_scrutinees.extend_from_slice(&scrutinees[1..]);
         let mut next_vars = field_vars;
         next_vars.extend_from_slice(&vars[1..]);
+        if fields.is_empty() {
+            return Ok(MatchStep::Nullary {
+                constructor: name.clone(),
+                next: MatchState {
+                    scrutinees: next_scrutinees,
+                    rows: positive,
+                    vars: next_vars,
+                },
+                fallback: MatchState {
+                    scrutinees: scrutinees.to_vec(),
+                    rows: negative,
+                    vars: vars.to_vec(),
+                },
+            });
+        }
         let arm = flatten_match(
             &next_scrutinees,
             &positive,
@@ -342,19 +430,19 @@ fn flatten_match(
             depth + 1,
         )?;
         let fallback = flatten_match(scrutinees, &negative, vars, fresh, display_fresh, depth + 1)?;
-        Ok(term(Term::Mat {
+        Ok(MatchStep::Done(term(Term::Mat {
             constructor: name.clone(),
             arm,
             fallback,
-        }))
+        })))
     } else {
-        Ok(first.lambda(flatten_match(
+        Ok(MatchStep::Done(first.lambda(flatten_match(
             scrutinees,
             rows,
             &vars[1..],
             fresh,
             display_fresh,
             depth + 1,
-        )?))
+        )?)))
     }
 }
