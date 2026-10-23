@@ -6,7 +6,9 @@ use super::DEVICE_ARRAY_COPY_STATE_WORDS;
 use super::DEVICE_ARRAY_JOIN_STATE_WORDS;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
 use super::DEVICE_ARRAY_SPLIT_STATE_WORDS;
+use super::DEVICE_DROP_STATE_WORDS;
 use super::DEVICE_DUPLICATE_STATE_WORDS;
+use super::DEVICE_FIELDS_STATE_WORDS;
 use super::DEVICE_PAYLOAD_STATE_WORDS;
 use super::DefinitionBody;
 use super::ExecutableProgram;
@@ -27,6 +29,8 @@ fn push_device_state_layout_checks(source: &mut String) {
     writeln!(source, "#if TB_DEVICE_ARRAY_NEW_STATE_WORDS != {DEVICE_ARRAY_NEW_STATE_WORDS}\n#error incompatible generated Array.new state layout\n#endif").unwrap();
     writeln!(source, "#if TB_DEVICE_PAYLOAD_STATE_WORDS != {DEVICE_PAYLOAD_STATE_WORDS}\n#error incompatible generated payload state layout\n#endif").unwrap();
     writeln!(source, "#if TB_DEVICE_DUPLICATE_STATE_WORDS != {DEVICE_DUPLICATE_STATE_WORDS}\n#error incompatible generated duplication state layout\n#endif").unwrap();
+    writeln!(source, "#if TB_DEVICE_DROP_STATE_WORDS != {DEVICE_DROP_STATE_WORDS}\n#error incompatible generated drop state layout\n#endif").unwrap();
+    writeln!(source, "#if TB_DEVICE_FIELDS_STATE_WORDS != {DEVICE_FIELDS_STATE_WORDS}\n#error incompatible generated fields state layout\n#endif").unwrap();
 }
 
 /// Scheduling marks are global definition properties in upstream's reachable

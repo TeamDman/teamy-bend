@@ -10,7 +10,9 @@ use super::DEVICE_ARRAY_COPY_STATE_WORDS;
 use super::DEVICE_ARRAY_JOIN_STATE_WORDS;
 use super::DEVICE_ARRAY_NEW_STATE_WORDS;
 use super::DEVICE_ARRAY_SPLIT_STATE_WORDS;
+use super::DEVICE_DROP_STATE_WORDS;
 use super::DEVICE_DUPLICATE_STATE_WORDS;
+use super::DEVICE_FIELDS_STATE_WORDS;
 use super::DEVICE_PAYLOAD_STATE_WORDS;
 use super::ExecutableProgram;
 use super::FunctionResult;
@@ -55,13 +57,25 @@ impl Generator<'_> {
             &vec!["0".to_owned(); constructor.layout.words.len()],
         )?;
         for (field, value) in fields.iter().zip(values) {
-            let conversion = self.conversion_use(&field.layout, output)?;
-            writeln!(
-                output,
-                "  tb_unbox_{conversion}(e, {value}, {array} + {});",
-                field.offset
-            )
-            .unwrap();
+            if output.can_suspend && field.layout.arms.is_some() && !packed(&field.layout) {
+                let unboxed = self.unbox_value(&field.layout, value, output)?;
+                for index in 0..field.layout.words.len() {
+                    writeln!(
+                        output,
+                        "  {array}[{}] = {unboxed}[{index}];",
+                        field.offset + index
+                    )
+                    .unwrap();
+                }
+            } else {
+                let conversion = self.conversion_use(&field.layout, output)?;
+                writeln!(
+                    output,
+                    "  tb_unbox_{conversion}(e, {value}, {array} + {});",
+                    field.offset
+                )
+                .unwrap();
+            }
         }
         let mask = self.ownership_mask(&constructor.layout, &array, output)?;
         let synchronous = format!(
@@ -117,34 +131,159 @@ impl Generator<'_> {
             output,
             &vec!["0".to_owned(); constructor.layout.words.len()],
         )?;
-        writeln!(
-            output,
-            "  {}(e, {value}, {}, {}, {}, {array});",
-            if borrowed {
-                "tb_c_borrow_fields"
+        if output.can_suspend && !borrowed && !packed(&constructor.layout) {
+            let owner = self.hold(output, value)?;
+            let duplicate_owner = self.hold(output, "0")?;
+            let duplicate_result = self.hold(output, "0")?;
+            let duplicate_state =
+                self.array(output, &vec!["0".to_owned(); DEVICE_DUPLICATE_STATE_WORDS])?;
+            let drop_state = self.array(output, &vec!["0".to_owned(); DEVICE_DROP_STATE_WORDS])?;
+            let state = self.array(output, &vec!["0".to_owned(); DEVICE_FIELDS_STATE_WORDS])?;
+            output.resumes += 1;
+            let pc = output.resumes;
+            let yielded = if output.words {
+                "tb_segment_yield()"
             } else {
-                "tb_c_fields"
-            },
-            constructor.cid,
-            constructor.layout.words.len(),
-            packed(&constructor.layout)
-        )
-        .unwrap();
-        constructor
+                "0"
+            };
+            writeln!(
+                output,
+                "/* resumable constructor field extraction */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_fields_raw(e, tb_frame, &{owner}, {}, {}, {array}, &{duplicate_owner}, {duplicate_state}, &{duplicate_result}, {drop_state}, {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  tb_c_fields(e, {owner}, {}, {}, {}, {array});\n#endif",
+                constructor.cid,
+                constructor.layout.words.len(),
+                constructor.cid,
+                constructor.layout.words.len(),
+                packed(&constructor.layout)
+            )
+            .unwrap();
+        } else {
+            writeln!(
+                output,
+                "  {}(e, {value}, {}, {}, {}, {array});",
+                if borrowed {
+                    "tb_c_borrow_fields"
+                } else {
+                    "tb_c_fields"
+                },
+                constructor.cid,
+                constructor.layout.words.len(),
+                packed(&constructor.layout)
+            )
+            .unwrap();
+        }
+        let fields = constructor
             .layout
             .arms
             .as_ref()
             .ok_or_else(|| CompileError::new("missing C node fields"))?[0]
             .fields
-            .iter()
-            .map(|field| {
-                let conversion = self.conversion_use(&field.layout, output)?;
-                self.hold(
+            .clone();
+        let mut values = Vec::with_capacity(fields.len());
+        for field in &fields {
+            values.push(self.box_value(
+                &field.layout,
+                &format!("{array} + {}", field.offset),
+                output,
+            )?);
+        }
+        Ok(values)
+    }
+
+    /// Box a finite inline layout into the native constructor representation.
+    /// Suspendable bodies expand the layout in place so nested constructors use
+    /// the caller's persistent CUDA continuation instead of synchronous helper
+    /// recursion. Scalar, packed, and synchronous paths keep their shared ABI
+    /// conversion function.
+    pub(super) fn box_value(
+        &mut self,
+        layout: &Layout,
+        input: &str,
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let conversion = self.conversion_use(layout, output)?;
+        let Some(arms) = layout
+            .arms
+            .as_ref()
+            .filter(|_| output.can_suspend && !packed(layout))
+        else {
+            return self.hold(output, &format!("tb_box_{conversion}(e, {input})"));
+        };
+        let arms = arms.clone();
+        let result = self.hold(output, "0")?;
+        output.push_str("  /* resumable finite-layout boxing */\n");
+        writeln!(output, "  switch (({input})[0]) {{").unwrap();
+        for (arm_index, arm) in arms.iter().enumerate() {
+            writeln!(output, "  case {arm_index}: {{").unwrap();
+            let mut fields = Vec::with_capacity(arm.fields.len());
+            for field in &arm.fields {
+                fields.push(self.box_value(
+                    &field.layout,
+                    &format!("{input} + {}", field.offset),
                     output,
-                    &format!("tb_box_{conversion}(e, {array} + {})", field.offset),
-                )
-            })
-            .collect()
+                )?);
+            }
+            let term = self.construct(&arm.name, &fields, output)?;
+            writeln!(output, "  {result} = {term};\n  break;\n  }}").unwrap();
+        }
+        writeln!(
+            output,
+            "  default: err_fail(\"invalid finite C layout discriminator\");\n  }}"
+        )
+        .unwrap();
+        Ok(result)
+    }
+
+    /// Destructively unbox one finite layout. Constructor extraction and every
+    /// nested conversion share the current resumable body, so a shared child is
+    /// duplicated and its parent released through the bounded device helpers.
+    pub(super) fn unbox_value(
+        &mut self,
+        layout: &Layout,
+        value: &str,
+        output: &mut Body,
+    ) -> Result<String, CompileError> {
+        let conversion = self.conversion_use(layout, output)?;
+        let result = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
+        let Some(arms) = layout
+            .arms
+            .as_ref()
+            .filter(|_| output.can_suspend && !packed(layout))
+        else {
+            writeln!(output, "  tb_unbox_{conversion}(e, {value}, {result});").unwrap();
+            return Ok(result);
+        };
+        let arms = arms.clone();
+        let owner = self.hold(output, value)?;
+        output.push_str("  /* resumable finite-layout unboxing */\n");
+        writeln!(output, "  switch (term_aux({owner})) {{").unwrap();
+        for (arm_index, arm) in arms.iter().enumerate() {
+            let constructor = self.table.get(&arm.name)?.clone();
+            writeln!(output, "  case {}: {{", constructor.cid).unwrap();
+            if arms.len() > 1 {
+                writeln!(output, "  {result}[0] = {arm_index};").unwrap();
+            }
+            let fields = self.fields(&arm.name, &owner, output)?;
+            if fields.len() != arm.fields.len() {
+                return Err(CompileError::new(format!(
+                    "C layout unboxing field count differs for {}",
+                    arm.name
+                )));
+            }
+            for (field, field_value) in arm.fields.iter().zip(fields) {
+                let unboxed = self.unbox_value(&field.layout, &field_value, output)?;
+                for index in 0..field.layout.words.len() {
+                    writeln!(
+                        output,
+                        "  {result}[{}] = {unboxed}[{index}];",
+                        field.offset + index
+                    )
+                    .unwrap();
+                }
+            }
+            writeln!(output, "  break;\n  }}").unwrap();
+        }
+        output.push_str("  default: err_fail(\"constructor does not match its C layout\");\n  }\n");
+        Ok(result)
     }
 
     /// A merged finite layout can put a raw W64 and a reference in the same
@@ -334,14 +473,7 @@ impl Generator<'_> {
             return self.hold(output, &format!("tb_c_blk_node(e, {left}, {right})"));
         }
         let (arr, lgs, layout) = self.array_layout(ty)?;
-        let conversion = self.conversion_use(&layout, output)?;
-        let array = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
-        writeln!(
-            output,
-            "  tb_unbox_{conversion}(e, {}, {array});",
-            values[0]
-        )
-        .unwrap();
+        let array = self.unbox_value(&layout, &values[0], output)?;
         let mask = self.ownership_mask(&layout, &array, output)?;
         self.hold(
             output,
@@ -393,11 +525,7 @@ impl Generator<'_> {
             .collect::<Vec<_>>();
         let array = self.array(output, &values)?;
         writeln!(output, "  tb_c_blk_free(e, {value});").unwrap();
-        let conversion = self.conversion_use(&layout, output)?;
-        Ok(vec![self.hold(
-            output,
-            &format!("tb_box_{conversion}(e, {array})"),
-        )?])
+        Ok(vec![self.box_value(&layout, &array, output)?])
     }
 
     pub(super) fn array_operation(
@@ -428,7 +556,6 @@ impl Generator<'_> {
                 output,
             );
         }
-        let conversion = self.conversion_use(&layout, output)?;
         let offset = self.hold(output, &format!("blk_at({a}, {}, {lgs})", arguments[1]))?;
         let previous = if name == "Array.get" || name == "Array.swap" {
             let array = if name == "Array.get" {
@@ -444,18 +571,12 @@ impl Generator<'_> {
                     .collect::<Vec<_>>();
                 self.array(output, &cells)?
             };
-            Some(self.hold(output, &format!("tb_box_{conversion}(e, {array})"))?)
+            Some(self.box_value(&layout, &array, output)?)
         } else {
             None
         };
         if name != "Array.get" {
-            let array = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
-            writeln!(
-                output,
-                "  tb_unbox_{conversion}(e, {}, {array});",
-                arguments[2]
-            )
-            .unwrap();
+            let array = self.unbox_value(&layout, &arguments[2], output)?;
             let mask = self.ownership_mask(&layout, &array, output)?;
             for index in 0..layout.words.len() {
                 writeln!(output, "  tb_c_blk_write(e, {arr}, term_loc({a}), (u32){offset} + {index}, {array}[{index}], {mask}[{index}] != 0, {});", name == "Array.set").unwrap();
@@ -568,14 +689,7 @@ impl Generator<'_> {
     ) -> Result<String, CompileError> {
         let (arr, lgs, layout) = self.array_layout(array_ty)?;
         let depth = self.hold(output, &arguments[0])?;
-        let conversion = self.conversion_use(&layout, output)?;
-        let values = self.array(output, &vec!["0".to_owned(); layout.words.len()])?;
-        writeln!(
-            output,
-            "  tb_unbox_{conversion}(e, {}, {values});",
-            arguments[1]
-        )
-        .unwrap();
+        let values = self.unbox_value(&layout, &arguments[1], output)?;
         let mask = self.ownership_mask(&layout, &values, output)?;
         let operands = format!("e, {arr}, {depth}, {lgs}, {}, {values}", layout.words.len());
         let synchronous = format!("tb_c_blk_new({operands}, {mask})");

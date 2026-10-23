@@ -2775,6 +2775,69 @@ controls also pass. Poche remains at HEAD
 paths; no Poche source was edited. Further allocation chains, full device
 backing, default sizing, residency and broader GPU parity remain open.
 
+###### [x] 5.15.7.4.g Resume direct ADT field extraction in generated CUDA matches
+
+**Work:** Replace synchronous `tb_c_fields` in resumable generated CUDA bodies
+for non-packed direct ADT matches with a continuation-backed extraction. Claim
+unique parents once and transfer their fields in bounded slices. For shared
+parents, duplicate owned fields through the persistent duplicate operation,
+write rewritten owners back to the source shell, and consume the parent with a
+resumable pointer-reversal drop so a last-owner release cannot synchronously
+traverse an arbitrarily deep value. Preserve packed constructors, synchronous
+conversion/unboxing wrappers, and CPU behavior.
+
+**Completion:** `tb_device_fields_raw` retains the source shell, cursor, output
+fields and nested duplicate/drop state in the generated call frame. Unique
+parents transfer without duplicating children; shared parents reuse
+`tb_device_duplicate` and the new `tb_device_drop`, whose heap-resident
+pointer-reversal cursor preserves `term_drop` child order and language ticks.
+Both nested operations share the primitive scheduler without replaying a field
+or parent release across yields. `node_fields` selects the helper only for
+resumable non-packed direct matches; its host fallback remains `tb_c_fields`.
+
+The generated-call regression and CPU fallback pass. Actual CUDA at primitive
+quanta 1 and 1,024 returns the same nested boxed-tree result and language steps,
+with more quantum-one yields. Aggregate primitive work may differ because
+different slice schedules can encounter unique transfer versus shared
+duplicate/drop ownership paths; operation-specific array work remains covered
+by the primitive observers. All 13 ignored core CUDA tests and all 10 ignored
+primitive CUDA tests pass on the RTX 4090. The retained quantum-one nested-match
+executable passes Compute Sanitizer memcheck through
+`scripts/compute-sanitizer.ps1`, output `16`, zero errors. `./check-all.ps1`,
+strict Clippy, formatting and a release build pass. The first full-gate attempt
+had one concurrent cache-writer subprocess failure; that test passed alone and
+the complete gate passed on rerun. Poche sources and architecture were not
+changed; its exact-release gates were not rerun for this CUDA-only change.
+
+Synchronous boxed layout conversion/unboxing, borrowed field extraction, other
+constructor conversions, closure/task creation, and remaining unqualified GPU
+allocation chains stay open.
+
+###### [x] 5.15.7.4.h Resume generated GPU scope and argument cleanup
+
+**Work:** Route local scope cleanup, unused owned values, and initial/fork body
+argument drops in resumable generated CUDA functions through `tb_device_drop`.
+Retain its pointer-reversal cursor and ownership state across bounded launches so
+deep values do not require an unbounded synchronous release. Keep CPU and
+non-suspendable cleanup on the existing synchronous path, preserving drop order
+and language-step accounting.
+
+**Completion:** The generated `drop_owned`, `drop_unused` and let-scope cleanup
+paths use the resumable helper when the emitted function is suspendable. Program
+and fork arguments use it before their existing dispatch tick. A 16-node owned
+recursive chain passed to an otherwise-unused GPU argument is released across
+slices. Primitive quanta 1 and 1,024 return `16` with equal language steps, and
+quantum 1 yields more often. The CPU fallback and generated-helper regressions
+pass. All 14 ignored core CUDA tests and all 10 ignored primitive CUDA tests pass
+on the installed GPU; the quantum-one executable passes Compute Sanitizer
+memcheck with output `16` and zero errors through
+`scripts/compute-sanitizer.ps1`. `./check-all.ps1` and `cargo build --release`
+pass. Exact-release Poche checks were not rerun for this CUDA-only change.
+
+This closes only scope and argument release. Synchronous boxed conversion and
+unboxing, borrowed field extraction, other constructor conversions, closure/task
+creation, and broader GPU allocation parity remain open.
+
 ### [x] 5.16 Support upstream unsafe definitions only in executable checking
 
 Work: preserve the two upstream `@unsafe` exceptions using an explicit local

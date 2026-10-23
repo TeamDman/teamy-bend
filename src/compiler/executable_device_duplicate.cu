@@ -3,6 +3,8 @@
  * Copyright 2026 HigherOrderCO. Persistent CUDA traversal: TeamDman.
  * See NOTICE and licenses/Apache-2.0.txt. Include after device primitives. */
 #define TB_DEVICE_DUPLICATE_STATE_WORDS 4
+#define TB_DEVICE_DROP_STATE_WORDS 5
+#define TB_DEVICE_FIELDS_STATE_WORDS 7
 #define TB_DEVICE_DUPLICATE_MAGIC UINT64_C(0x445550)
 enum {
   TB_DEVICE_DUPLICATE_ENTER, TB_DEVICE_DUPLICATE_START,
@@ -285,5 +287,291 @@ OUTLINE bool tb_device_duplicate(const Env *e, TBCallFrame *call,
   *result = root->output;
   tb_host_free(root);
   memset(state, 0, TB_DEVICE_DUPLICATE_STATE_WORDS * sizeof(Term));
+  return true;
+}
+
+enum {
+  TB_DEVICE_DROP_IDLE = 0, TB_DEVICE_DROP_TERM = 1, TB_DEVICE_DROP_SCAN = 2
+};
+
+/* Persistent equivalent of term_drop's pointer-reversal walk. The heap itself
+ * retains the parent cursor, so destruction does not need an input-sized C or
+ * scratch stack. One examined field is one language tick and one work unit. */
+OUTLINE bool tb_device_drop(const Env *e, TBCallFrame *call, Term *owner,
+    Term *state) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL)
+    err_fail("invalid device drop environment");
+  TBDupRef owner_ref = tb_device_dup_root_ref(call, owner, 1);
+  TBDupRef state_ref = tb_device_dup_root_ref(call, state, TB_DEVICE_DROP_STATE_WORDS);
+  if (owner_ref.index >= state_ref.index
+      && owner_ref.index - state_ref.index < TB_DEVICE_DROP_STATE_WORDS)
+    err_fail("overlapping device drop frame storage");
+  if (state[0] == TB_DEVICE_DROP_IDLE) {
+    for (u32 index = 1; index < TB_DEVICE_DROP_STATE_WORDS; ++index)
+      if (state[index] != 0) err_fail("invalid device drop operation state");
+    state[3] = *owner;
+    state[4] = owner_ref.base;
+    state[0] = TB_DEVICE_DROP_TERM;
+    *owner = 0;
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts;
+    ++tb_device_control->primitive_live;
+    tb_device_unlock();
+  } else if ((state[0] != TB_DEVICE_DROP_TERM && state[0] != TB_DEVICE_DROP_SCAN)
+      || state[4] != owner_ref.base || *owner != 0) {
+    err_fail("invalid device drop operation state");
+  }
+
+  u64 work = 0;
+  bool done = false;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM && !done) {
+    tb_device_check_cancelled();
+    if (state[0] == TB_DEVICE_DROP_TERM) {
+      Term term = state[3];
+      if (!term_triv(term) && term_rfc(term)) {
+        Loc at = rfc_release(*e, term_loc(term));
+        term = at == 0 ? 0 : (term & ~(RFC_BIT | LOC_MASK)) | at;
+      }
+      if (!term_triv(term)) {
+        u32 tag = (u32)term_tag(term), aux = (u32)term_aux(term), count = 0;
+        Loc at = term_loc(term);
+        Cls cls;
+        if (tag == TAG_BUF || tag == TAG_ARR) {
+          if (aux > 17) err_fail("invalid array layout");
+          cls = tag == TAG_ARR ? aux : aux == 0 ? 0 : aux - 1;
+        } else if (tag == TAG_CTR) {
+          count = cid_arity(aux); cls = cls_fit(count);
+        } else if (tag == TAG_CLO) {
+          count = tb_closure_captures[aux];
+          if (aux < 2 || count == 0) err_fail("invalid closure destruction");
+          cls = cls_fit(count);
+        } else if (tag == TAG_TSK) {
+          count = fid_arity(aux) + 2; cls = cls_fit(count);
+        } else {
+          err_fail("invalid native term tag");
+        }
+        tb_allocation(*e, at, cls);
+        if (tag == TAG_BUF) {
+          heap_free(*e, cls, at);
+          state[3] = 0;
+        } else {
+          state[2] = e->mem[at];
+          e->mem[at] = state[1];
+          state[1] = at | ((u64)count << 48)
+              | ((u64)(tag == TAG_ARR ? cls | 64 : cls) << 56);
+          state[3] = 0;
+          state[0] = TB_DEVICE_DROP_SCAN;
+        }
+      } else {
+        state[3] = 0;
+      }
+      ++work;
+      if (state[0] == TB_DEVICE_DROP_TERM) {
+        if (state[1] == 0) done = true;
+        else state[0] = TB_DEVICE_DROP_SCAN;
+      }
+    } else if (state[0] == TB_DEVICE_DROP_SCAN) {
+      if (state[1] == 0) {
+        done = true;
+        continue;
+      }
+      Loc at = state[1] & LOC_MASK;
+      u32 index = (u8)(state[1] >> 40);
+      u32 count = (u8)(state[1] >> 48);
+      Cls cls = (Cls)(state[1] >> 56);
+      bool array = cls >= 64;
+      u32 position = index;
+      if (array) {
+        cls &= 63;
+        count = 1u << cls;
+        if (index == 2) position = (u32)e->mem[at + 1];
+      }
+      tb_tick();
+      if (position < count) {
+        Term child = position == 0 ? state[2] : e->mem[at + position];
+        bool owned = tb_cell_owned(*e, at + position);
+        if (array && position > 0) e->mem[at + 1] = position + 1;
+        if (!array || index < 2) state[1] += UINT64_C(1) << 40;
+        if (owned && !term_triv(child)) {
+          state[3] = child;
+          state[0] = TB_DEVICE_DROP_TERM;
+        }
+      } else {
+        u64 previous = e->mem[at];
+        heap_free(*e, cls, at);
+        state[1] = previous;
+        if (previous == 0) done = true;
+      }
+      ++work;
+    } else {
+      err_fail("invalid device drop phase");
+    }
+  }
+
+  tb_device_lock();
+  if (work == 0 || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  if (!done) return false;
+  memset(state, 0, TB_DEVICE_DROP_STATE_WORDS * sizeof(Term));
+  return true;
+}
+
+enum {
+  TB_DEVICE_FIELDS_IDLE = 0, TB_DEVICE_FIELDS_TRANSFER = 1,
+  TB_DEVICE_FIELDS_DUPLICATE = 2
+};
+
+INLINE bool tb_device_fields_ranges_overlap(TBDupRef left, u64 left_count,
+    TBDupRef right, u64 right_count) {
+  if (left.arena != right.arena || left.base != right.base) return false;
+  return left.index < right.index + right_count
+      && right.index < left.index + left_count;
+}
+
+/* Destructive constructor extraction preserves ctr_take's ownership rules.
+ * Unique payloads transfer fields and release the shell; shared payloads
+ * duplicate owned fields into retained frame slots before asynchronously
+ * consuming the parent reference, including its possible final deep drop. */
+OUTLINE bool tb_device_fields_raw(const Env *e, TBCallFrame *call, Term *owner,
+    u32 cid, u32 count, Term *fields, Term *duplicate_owner,
+    Term *duplicate_state, Term *duplicate_result, Term *drop_state,
+    Term *state) {
+  tb_device_check_cancelled();
+  if (e == NULL || e->mem != tb_memory || tb_heap_meta == NULL
+      || cid >= BEND_CID_COUNT || count != cid_arity(cid))
+    err_fail("invalid device constructor fields");
+
+  TBDupRef refs[7];
+  u64 sizes[7] = {1, count == 0 ? 1 : count, 1, 1,
+      TB_DEVICE_DUPLICATE_STATE_WORDS, TB_DEVICE_DROP_STATE_WORDS,
+      TB_DEVICE_FIELDS_STATE_WORDS};
+  refs[0] = tb_device_dup_root_ref(call, owner, 1);
+  refs[1] = tb_device_dup_root_ref(call, fields, sizes[1]);
+  refs[2] = tb_device_dup_root_ref(call, duplicate_owner, 1);
+  refs[3] = tb_device_dup_root_ref(call, duplicate_result, 1);
+  refs[4] = tb_device_dup_root_ref(call, duplicate_state,
+      TB_DEVICE_DUPLICATE_STATE_WORDS);
+  refs[5] = tb_device_dup_root_ref(call, drop_state, TB_DEVICE_DROP_STATE_WORDS);
+  refs[6] = tb_device_dup_root_ref(call, state, TB_DEVICE_FIELDS_STATE_WORDS);
+  for (u32 left = 0; left < 7; ++left)
+    for (u32 right = left + 1; right < 7; ++right)
+      if (tb_device_fields_ranges_overlap(refs[left], sizes[left],
+          refs[right], sizes[right]))
+        err_fail("overlapping device constructor field storage");
+
+  if (state[0] == TB_DEVICE_FIELDS_IDLE) {
+    for (u32 index = 1; index < TB_DEVICE_FIELDS_STATE_WORDS; ++index)
+      if (state[index] != 0) err_fail("invalid device constructor fields state");
+    for (u32 index = 0; index < TB_DEVICE_DUPLICATE_STATE_WORDS; ++index)
+      if (duplicate_state[index] != 0)
+        err_fail("invalid nested duplicate state for constructor fields");
+    for (u32 index = 0; index < TB_DEVICE_DROP_STATE_WORDS; ++index)
+      if (drop_state[index] != 0)
+        err_fail("invalid nested drop state for constructor fields");
+    if (*duplicate_owner != 0 || *duplicate_result != 0)
+      err_fail("invalid nested values for constructor fields");
+
+    Term value = *owner;
+    if (term_tag(value) != TAG_CTR || term_aux(value) != cid)
+      err_fail("constructor representation mismatch");
+    Loc at = term_peek(*e, value);
+    tb_allocation(*e, at, cls_fit(count));
+    bool shared = term_rfc(value) && !rfc_claim_unique(*e, term_loc(value));
+    state[0] = shared ? TB_DEVICE_FIELDS_DUPLICATE : TB_DEVICE_FIELDS_TRANSFER;
+    state[1] = at;
+    state[2] = 0;
+    state[3] = count;
+    state[4] = cid;
+    state[5] = value;
+    state[6] = shared;
+    tb_device_lock();
+    if (tb_device_control->primitive_starts == UINT64_MAX
+        || tb_device_control->primitive_live == UINT32_MAX)
+      err_fail("device primitive progress overflow");
+    ++tb_device_control->primitive_starts;
+    ++tb_device_control->primitive_live;
+    tb_device_unlock();
+  } else if ((state[0] != TB_DEVICE_FIELDS_TRANSFER
+          && state[0] != TB_DEVICE_FIELDS_DUPLICATE)
+      || state[2] > count || state[3] != count || state[4] != cid
+      || state[6] != (state[0] == TB_DEVICE_FIELDS_DUPLICATE)
+      || (state[0] == TB_DEVICE_FIELDS_TRANSFER && *owner != state[5])
+      || (state[0] == TB_DEVICE_FIELDS_DUPLICATE
+          && ((drop_state[0] == 0 && *owner != state[5])
+              || (drop_state[0] != 0 && *owner != 0)))) {
+    err_fail("invalid device constructor fields state");
+  }
+  tb_allocation(*e, state[1], cls_fit(count));
+
+  u64 work = 0;
+  bool nested_waiting = false;
+  while (work < BEND_GPU_PRIMITIVE_QUANTUM && state[0] != TB_DEVICE_FIELDS_IDLE) {
+    tb_device_check_cancelled();
+    if (state[0] == TB_DEVICE_FIELDS_TRANSFER) {
+      if (state[2] < count) {
+        fields[state[2]] = e->mem[state[1] + state[2]];
+        ++state[2]; ++work;
+      } else {
+        tb_set_sealed(*e, state[1], false);
+        spare_free(*e, cls_fit(count), state[1]);
+        *owner = 0;
+        state[0] = TB_DEVICE_FIELDS_IDLE;
+        if (work == 0) ++work;
+      }
+    } else if (state[0] == TB_DEVICE_FIELDS_DUPLICATE) {
+      if (state[2] < count) {
+        Loc cell = state[1] + state[2];
+        if (tb_cell_owned(*e, cell)) {
+          if (duplicate_state[0] == 0) *duplicate_owner = e->mem[cell];
+          if (!tb_device_duplicate(e, call, duplicate_owner, duplicate_state,
+              duplicate_result)) {
+            nested_waiting = true;
+            break;
+          }
+          e->mem[cell] = *duplicate_owner;
+          fields[state[2]] = *duplicate_result;
+          *duplicate_owner = 0;
+          *duplicate_result = 0;
+        } else {
+          fields[state[2]] = e->mem[cell];
+        }
+        ++state[2]; ++work;
+      } else {
+        if (!tb_device_drop(e, call, owner, drop_state)) {
+          nested_waiting = true;
+          break;
+        }
+        state[0] = TB_DEVICE_FIELDS_IDLE;
+        ++work;
+      }
+    } else {
+      err_fail("invalid device constructor fields phase");
+    }
+  }
+
+  bool done = state[0] == TB_DEVICE_FIELDS_IDLE;
+  tb_device_lock();
+  if ((work == 0 && !nested_waiting)
+      || work > UINT64_MAX - tb_device_control->primitive_progress
+      || (!done && !nested_waiting
+          && tb_device_control->primitive_yields == UINT64_MAX)
+      || tb_device_control->primitive_live == 0)
+    err_fail("device primitive progress overflow");
+  tb_device_control->primitive_progress += work;
+  if (done) --tb_device_control->primitive_live;
+  else if (!nested_waiting) ++tb_device_control->primitive_yields;
+  tb_device_unlock();
+  if (!done) return false;
+  memset(state, 0, TB_DEVICE_FIELDS_STATE_WORDS * sizeof(Term));
   return true;
 }

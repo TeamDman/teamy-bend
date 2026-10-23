@@ -45,6 +45,8 @@ const DEVICE_ARRAY_COPY_STATE_WORDS: usize = 9;
 const DEVICE_ARRAY_JOIN_STATE_WORDS: usize = 10;
 const DEVICE_ARRAY_SPLIT_STATE_WORDS: usize = 9;
 const DEVICE_DUPLICATE_STATE_WORDS: usize = 4;
+const DEVICE_DROP_STATE_WORDS: usize = 5;
+const DEVICE_FIELDS_STATE_WORDS: usize = 7;
 const DEVICE_PAYLOAD_STATE_WORDS: usize = 6;
 
 #[derive(Clone)]
@@ -554,7 +556,9 @@ impl Generator<'_> {
             .get(name)
             .ok_or_else(|| CompileError::new(format!("missing executable definition {name}")))?
             .clone();
-        let mut output = Body::new_resumable("  tb_c_drop(e, argument);\n  tb_tick();\n");
+        let mut output = Body::new_resumable("");
+        emit_drop("argument", &mut output);
+        output.push_str("  tb_tick();\n");
         let live = definition
             .parameters
             .iter()
@@ -1085,7 +1089,7 @@ impl Generator<'_> {
                     if let Some(local) = scope.remove(&id)
                         && local.owned
                     {
-                        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+                        emit_drop(&local.value, output);
                     }
                 }
                 Ok(result)
@@ -1171,7 +1175,8 @@ impl Generator<'_> {
         let id = self.reserve_closure(captures.len() + bindings.len())?;
         output.dependencies.fids.insert(id);
         let mut inner = Scope::new();
-        let mut body = Body::new_resumable("  tb_c_drop(e, argument);\n");
+        let mut body = Body::new_resumable("");
+        emit_drop("argument", &mut body);
         for (index, variable) in captures
             .iter()
             .copied()
@@ -1437,7 +1442,7 @@ fn branch_scope(
 
 fn drop_owned(scope: &mut Scope, output: &mut Body) {
     for local in scope.values_mut().filter(|local| local.owned) {
-        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+        emit_drop(&local.value, output);
         local.owned = false;
     }
 }
@@ -1447,9 +1452,34 @@ fn drop_unused(scope: &mut Scope, output: &mut Body) {
         .values_mut()
         .filter(|local| local.owned && local.remaining == 0)
     {
-        writeln!(output, "  tb_c_drop(e, {});", local.value).unwrap();
+        emit_drop(&local.value, output);
         local.owned = false;
     }
+}
+
+fn emit_drop(value: &str, output: &mut Body) {
+    if !output.can_suspend {
+        writeln!(output, "  tb_c_drop(e, {value});").unwrap();
+        return;
+    }
+    let owner = output.reserve(1);
+    writeln!(output, "  tb_values[{owner}] = {value};").unwrap();
+    let state = output.reserve(DEVICE_DROP_STATE_WORDS);
+    for index in 0..DEVICE_DROP_STATE_WORDS {
+        writeln!(output, "  tb_values[{}] = 0;", state + index).unwrap();
+    }
+    output.resumes += 1;
+    let pc = output.resumes;
+    let yielded = if output.words {
+        "tb_segment_yield()"
+    } else {
+        "0"
+    };
+    writeln!(
+        output,
+        "/* resumable owned-value drop */\ntb_resume_{pc}: ;\n#ifdef __CUDA_ARCH__\n  if (!tb_device_drop(e, tb_frame, &tb_values[{owner}], tb_values + {state})) {{\n    tb_frame->pc = {pc};\n    tb_frame->yielded = true;\n    return {yielded};\n  }}\n#else\n  tb_c_drop(e, tb_values[{owner}]);\n#endif"
+    )
+    .unwrap();
 }
 
 fn replace_type(ty: &TermRef, substitutions: &Substitutions) -> TermRef {

@@ -222,9 +222,23 @@ network server still needs its own deliberate bind address and firewall policy.
 
 The [implementation plan](implementation-plan.md) retains these requirements.
 The explicit generated sealing and duplication paths now retain traversal state
-and owner transitions across yields. Other synchronous allocation chains remain
-open: boxed constructor conversions, shared field extraction, closure and task
-creation, and the remaining unqualified access paths. Raw and boxed
+and owner transitions across yields. Direct non-packed ADT matches in resumable
+CUDA bodies now extract fields through a bounded cursor: unique parents transfer
+their fields, while shared parents resume nested duplication and consume the
+parent through a persistent pointer-reversal drop. Packed constructors, borrowed
+conversion fields and the synchronous CPU path keep their current helpers.
+Generated GPU scope cleanup and initial/fork argument cleanup also use that
+resumable pointer-reversal drop, so releasing a deep unused value does not recurse
+through its entire graph in one launch. CPU and non-suspendable cleanup retain
+their synchronous path. A 16-node recursive-value test returns `16` at primitive
+quanta 1 and 1,024 with equal language steps and more quantum-one yields; its
+quantum-one executable passes Compute Sanitizer memcheck with zero errors. All
+14 core and 10 primitive CUDA tests pass on the installed device. The portable
+`./check-all.ps1` and a release build pass; CUDA hardware cases remain ignored by
+the portable gate. Exact-release Poche gates were not rerun for this change.
+Other synchronous allocation chains remain open: boxed constructor conversion
+and unboxing wrappers, borrowed field extraction, closure and task creation, and
+the remaining unqualified access paths. Raw and boxed
 `Array.new` initialization, `Array.clone`, `Array.get` value duplication,
 shared-array copy-on-write for `Array.get`, `Array.size`, `Array.set` and
 `Array.swap`, and GPU `ANode` concatenation/split now resume across yields for

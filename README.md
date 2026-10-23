@@ -1,9 +1,15 @@
 # teamy-bend
 
+## On hold: work in progress, not ready
+
+Development is paused. This unfinished Rust rewrite is not ready for general
+use or as a replacement for Bend 2. The repository preserves the experimental
+implementation and its progress record; the overall rewrite is incomplete.
+
 A Rust rewrite of the Bend 2 proof language, started from
 [teamy-rust-cli](https://github.com/TeamDman/teamy-rust-cli).
 
-Status: working proof-language subset; full rewrite in progress. Native
+The implemented subset described below is retained for reference. Native
 checking, pure evaluation, persistent typed calls and JavaScript/C generation work.
 Native console IO, tasks, timers, channels, environment lookup, files and TCP/UDP
 use a separate execution contract checker.

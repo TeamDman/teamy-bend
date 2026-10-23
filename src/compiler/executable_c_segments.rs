@@ -287,11 +287,8 @@ impl Generator<'_> {
             });
         }
         let input = self.array(output, &value.words)?;
-        let from = self.conversion_use(&value.layout, output)?;
-        let word = self.hold(output, &format!("tb_box_{from}(e, {input})"))?;
-        let to = self.conversion_use(layout, output)?;
-        let array = self.array(output, &vec!["0".into(); layout.words.len()])?;
-        writeln!(output, "  tb_unbox_{to}(e, {word}, {array});").unwrap();
+        let word = self.box_value(&value.layout, &input, output)?;
+        let array = self.unbox_value(layout, &word, output)?;
         let words = (0..layout.words.len())
             .map(|i| format!("{array}[{i}]"))
             .map(|word| self.hold(output, &word))
