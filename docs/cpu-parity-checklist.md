@@ -323,6 +323,29 @@ upstream Bun failures over 56 executions. Its exit remains 1. Next: exact Nat
 and array diagnostic contracts, treating C's lower array ceiling separately.
 Dependencies, toolchains, reference pins and all earlier evidence are preserved.
 
+## Nat diagnostic follow-up
+
+The [Nat failure-contract correction](cpu-nat-failure-contract.md) extends the
+structured boundary to actual Nat overflow. Generated arithmetic shares its
+existing guard; native multiplication and reconstructed-prefix bounds now own
+exact language diagnostics. Host errors with identical text stay internal.
+Cleanup, first-error ordering, lazy unused operands and safety limits are retained.
+
+Full gate: **761 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
+The six-fixture matrix now has 38 exact matches, six diagnostic differences, eight
+safe resource-policy refusals, two native foreign failures and two upstream Bun
+failures over 56 executions. Its exit remains 1. All 39 ledger fixtures were
+renewed on `b26ca5e`; positive/comptime outcomes are unchanged. Worker/order/cleanup
+probes pass, with zero timeout. The API review identifies the CLI as the sole
+production run_main caller and documents the prior KernelError source break.
+
+An authored Nat family improves from 34 to 66 exact observations out of 70.
+Four repeated native refusals remain: large-left Nat.add and large Nat.double
+consume work through recursive checked bodies while compiled runtimes reach the
+overflow law. These are newly explicit algorithmic compatibility gaps, not fixes
+provided by the diagnostic boundary. Keep them unqualified pending bounded,
+demand-preserving arithmetic work. Exact array/scalar diagnostics also remain.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -337,6 +360,8 @@ CPU work.
 | Passed, bounded | Native numeric-chain workloads | Both original 10,000-element programs now match under unchanged limits, twice each. Available-value propagation and reference sharing preserve lazy/error controls; arbitrary non-tail/deeper workloads remain bounded. |
 | Passed, bounded | Persistent Map/Set/Array observations | Three unchanged collection programs, five runtimes, two repetitions: exact lookup/update/order/union/deduplication/mapping outputs. This does not certify all collection operations or large inputs. |
 | Passed, bounded | Out-of-band request failure contract | Original fixture matches all five runtimes twice; exact streams/status/order, cleanup, lookalikes and worker forwarding covered. Other failure classes remain open. |
+| Passed, bounded | Nat overflow diagnostics | Original overflow matches five runtimes twice; compiled add/double/successor and native reconstructed-prefix guards share exact diagnostics. Native large add/double remain unqualified. |
+| Missing | Native large Nat.add/Nat.double | Authored boundary cases exhaust the work budget before the Nat law; both upstream compiled lanes complete. Preserve demand and limits when correcting the recursive expansion. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Exact negative diagnostics and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; six-family diagnostic/budget/foreign gaps remain explicit. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |

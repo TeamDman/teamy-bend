@@ -3173,3 +3173,24 @@ two foreign and two oracle-host gaps. Positive/comptime outcomes are unchanged;
 See [request fail-stop](cpu-request-fail-stop.md) for API implications, exact
 commands and remaining requirements. Full CPU parity remains open; no dependency,
 toolchain, GPU or upstream-source change was made.
+
+### [x] 5.27 Classify Nat overflow through the language failure boundary
+
+Native multiplication/reconstructed-prefix guards, generated C Nat checks and JS
+numeric guards now preserve the exact upstream overflow diagnostic and status.
+Error identity is structured/authenticated; ordinary host messages cannot acquire
+language status by matching text. Cleanup, worker propagation, lazy demand and
+existing budgets remain. The shared C device fallback is unchanged in behavior.
+
+Six new tests and strengthened controls pass. Full gate: 761 passed, zero failed,
+49 ignored; strict all-target Clippy passes. The renewed six-fixture matrix has
+38 exact observations out of 56, retaining six diagnostic, eight resource-policy,
+two foreign and two oracle-host gaps. Authored Nat controls improve from 34 to
+66 exact out of 70; native large add/double still consume their work budget.
+All 39 upstream ledger fixtures were renewed, with prior positive/comptime
+outcomes retained; worker/order/cleanup probes pass and no timeout occurred.
+
+The [checkpoint](cpu-nat-failure-contract.md) reviews actual Rust API consumers,
+documents the KernelError source break and run_main nonzero Ok contract, and
+records the newly explicit arithmetic gaps. No dependency/toolchain/pin change
+or publication occurred. Full CPU parity remains open.

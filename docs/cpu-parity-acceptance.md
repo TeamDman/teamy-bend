@@ -111,10 +111,11 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `b640bf5` identifies the
-[request fail-stop correction](cpu-request-fail-stop.md); all 39 linked fixtures
-were renewed on that engine. The authored worker control separately qualifies
-this request outcome at one, two and four C workers; broader profiles remain open.
+gate selection, not a port exception. Engine commit `b26ca5e` identifies the
+[Nat diagnostic correction](cpu-nat-failure-contract.md); all 39 linked fixtures
+were renewed on that engine. Authored worker controls separately qualify request
+and Nat failure outcomes at one, two and four C workers; broader profiles remain
+open. The newly observed native add/double work-limit gaps are not passed cells.
 Private receipt hashes and binary snapshots are retained with the checkpoint
 evidence; no machine paths appear here.
 
@@ -135,12 +136,14 @@ runtime-negative fixtures across the ledger. Its native array-depth acceptance
 defect and the [native Nat.mul budget gap](cpu-native-nat-mul.md) are corrected.
 The [request fail-stop contract](cpu-request-fail-stop.md) now matches all five
 runtimes twice, including exact streams/status and adjacent worker/cleanup checks.
-The six-fixture matrix still has 24 unresolved observations: 12 diagnostic, eight
-resource-policy, two native foreign and two oracle-host failures. The next small
-CPU step is exact Nat-overflow/array-depth diagnostic qualification, preserving
-bounds and keeping C's allocation ceiling a separate unresolved policy. Do not
-classify runtime negatives as checker rejections or count phase-only agreement
-as exact parity.
+The [Nat-overflow diagnostic](cpu-nat-failure-contract.md) also matches all five
+runtimes twice. The six-fixture matrix still has 18 unresolved observations: six
+diagnostic, eight resource-policy, two native foreign and two oracle-host failures.
+Array depth (native/JS) and scalar marshalling (JS) are the remaining diagnostic
+cases. Separate authored controls expose native large Nat.add/double work-budget
+gaps; those need demand-preserving arithmetic work. Keep all limits and treat C's
+allocation ceiling separately. Do not classify runtime negatives as checker
+rejections or count phase-only agreement as exact parity.
 
 In parallel with later bounded families, complete lane/API review, resolve the
 upstream direct-IO host requirement, and qualify multiworker/host-specific cases.
