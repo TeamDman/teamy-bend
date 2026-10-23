@@ -119,7 +119,7 @@ Historical low-level lazy evaluator controls remain separate from IO execution.
 With the already activated tools and fresh `<out>` directories:
 
 ```text
-CARGO_NET_OFFLINE=true BEND_GPU=off
+export CARGO_NET_OFFLINE=true BEND_GPU=off
 pwsh -NoProfile -File check-all.ps1 -FormatterToolchain nightly-2026-05-24
 cargo clippy --locked --all-targets --all-features -- -D warnings
 cargo build --locked --all-features
