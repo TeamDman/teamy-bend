@@ -3739,3 +3739,34 @@ function-valued normalization and printer applicability are unqualified.
 Full parity, read/error-order contracts and lane/API review remain incomplete.
 Frozen inputs, approved demand rules and all prior checkpoints are preserved;
 no installation or push.
+
+
+### [x] 5.48 Repair duplicate checker-depth accounting
+
+Source fix `2f349c8` removes the redundant depth entry when checking delegates
+inference of the same term. It retains the inference work charge, 128-level
+recursive guard, input inspection bound and 2,000,000-step budget. No typing,
+quantity, dependent-substitution or runtime demand rule changes. The exact
+combined float source is preserved and now matches all five runtimes twice;
+helper factoring is not used to qualify it. The full differential suite includes
+it. New regressions cover deep valid/invalid applications, affine duplication,
+work exhaustion and bounded nonterminating beta expansion.
+
+Full gate **818 passed, zero failed, 49 ignored**; 32 focused tests and strict
+all-target Clippy pass. All 1,302 strict-audit statuses are unchanged, including
+439 rejected checker negatives. Renewed O3 positive matrix: **618/630 exact**,
+twelve Bun-host failures. Direct entries retain four exact and 50 host-blocked
+observations including separately renewed collection probes. Negative **44/56**,
+demand **92/100**, normalization 176 successful observations/28 printer refusals,
+and comptime **156/160** retain their existing open cells; no timeout or new
+mismatch. F32.read's three cross-backend differences remain unresolved.
+
+The [checkpoint](cpu-checker-depth.md) records exact commands, hashes and guard
+reasoning. Ledgers retain 75 runtime and eighteen interpretation originals,
+with 1,209 remaining entries classified by applicability. Historical receipts,
+failed controls and consumer/API caveats remain. Hash-verified deduplication
+preserved all evidence paths and freed build headroom; no build setting changed.
+Next independent family: parse/chain_suffix_f32_f, _g and _h normalization and
+actual printer applicability. Full CPU parity, complete lane/API review and
+existing resource/host/foreign/error-order gaps remain open. Frozen dependencies,
+toolchains, upstream pin, approved demand rules and safety budgets; no push.

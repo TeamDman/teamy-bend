@@ -1,5 +1,9 @@
 # Float comparisons, special values and an open checker resource gap
 
+Historical checkpoint: the later [checker-depth fix](cpu-checker-depth.md),
+`2f349c8`, now qualifies the unchanged combined program with the same limits.
+The findings and receipt identities below describe `9b18fbb`.
+
 Coverage source `9b18fbbede02e8653b99644db881699470d251b1`, local branch
 `qualify/cpu-float-specials-20261023`, based on `49a37bc`.
 Target: [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).

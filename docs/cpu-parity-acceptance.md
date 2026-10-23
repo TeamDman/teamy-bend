@@ -94,8 +94,8 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 The [runtime evidence ledger](cpu-runtime-evidence.csv) links **75 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
 representation, nine parse and eight compile originals. Linked rows include
-unresolved negative and oracle-host cells. Nine positive authored controls and
-separate read/depth probes supplement the suites without adding inventory
+unresolved negative and oracle-host cells. Ten positive authored controls and
+a separate read probe supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
 
@@ -108,63 +108,51 @@ source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
 The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
-originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
+originals at `2f349c8`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
 controls add no inventory rows. Across runtime and interpretation, **93 originals**
 have receipts and **1,209** lack those kinds: 439 checker negatives, twelve
 check-only modules, 153 interpreter-only cases and 605 compiled candidates.
 
-The [float-specials checkpoint](cpu-float-specials.md), `9b18fbb`, qualifies
-three original arithmetic/comparison/special-value programs: 30 exact observations
-across five primary runtimes twice, plus ten for a factored authored control.
-Both upstream targets actually generate; three direct IO entries remain
-host-blocked. Exact finite/infinity/zero bits and text are distinguished from
-NaN classification; no NaN payload bits are compared. Full gate: **815 passed,
-zero failed, 49 ignored**; 33 focused tests and strict all-target Clippy pass.
-No production correction, limit increase or approved-demand change is made.
+The [checker-depth checkpoint](cpu-checker-depth.md), `2f349c8`, repairs redundant
+checking-to-inference phase accounting. The unchanged combined float observation
+source now matches all five primary runtimes twice: ten exact stream/status
+observations, repeated in the complete suite. The depth/input guards and work
+budget are unchanged. Its [ledger](cpu-float-specials-depth-evidence.csv) retains
+both historical refusals and current passes. Helper factoring was not substituted
+for qualifying the original. Full gate: **818 passed, zero failed, 49 ignored**;
+32 focused tests and strict all-target Clippy pass.
 
-A valid combined form of the control exposes a new required
-[checker-depth resource cell](cpu-float-specials-depth-evidence.csv). Upstream
-C/JS execute it twice, but all three port paths refuse it during checking at
-the existing 128-level nesting guard: six refusals, no program output. Its
-separate probes retain exit 1. The factored control's agreement does not qualify
-this source. The exact reproducer is preserved; no resource exception is granted.
+All 75 runtime originals, eighteen interpretation originals and ten authored
+demand controls have renewed primary receipts at `2f349c8`. Positive matrix:
+**618/630 exact** executions and twelve Bun-FFI failures, across 53 originals and
+ten authored controls. Separate direct entries give four exact and 44 host
+failures, plus six independently renewed collection host failures. Negative:
+**44/56 exact**, with eight resource-policy, two native-foreign and two Bun-host
+gaps. Demand: **92/100 exact**, six approved wildcard exceptions and two unwaived
+Nat-first diagnostic-order differences. Comptime: **156/160 primary exact**;
+default upstream JS fails hand/tmpl four times, while four supplemental
+stack-4096 observations pass. Negative/demand/comptime runners retain exit 1.
+All repeats are stable; no comparison timeout occurred.
 
-A separate [read ledger](cpu-float-read-evidence.csv) records three unresolved
-upstream C/JS contracts: decimal double-rounding, hexadecimal input and embedded
-NUL. Native Rust/port C match C; port JS matches JS. A fourth final-newline input
-returns None everywhere. All ten executions are stable with exit 0 and empty
-stderr, but the comparison runner retains exit 1 for upstream disagreement.
-These authored cases add no inventory rows or accepted exceptions. The renewed
-probe retains `9b18fbb`. Pinned guide/type declarations do not settle lexical
-or rounding details; the strtof/whole-string fixture comment conflicts with
-implemented boundary behavior. Source literals use a separate shared frontend.
-Full CPU parity needs a contract decision; backend agreement alone does not
-close these cells. No parsing policy is chosen.
+The renewed [read ledger](cpu-float-read-evidence.csv) still records three
+unresolved upstream C/JS contracts: decimal double-rounding, hexadecimal input
+and embedded NUL. Native/port C match C; port JS matches JS. A fourth final-newline
+input returns None everywhere. All ten executions exit 0 with empty stderr, but
+the probe retains exit 1. Corresponding-backend agreement does not close these
+cross-backend cells. No parsing policy, tolerance or new exception is chosen.
 
-Fifty-three positive runtime originals now have `9b18fbb` receipts. The positive
-matrix has **608/620 exact** primary executions and twelve Bun-FFI failures;
-separate direct entries give four exact and 44 import.meta.require failures.
-All repeats are stable; no timeouts. Six negative originals, sixteen comptime
-originals, eighteen interpretation originals and ten authored demand controls
-retain `bd6a228`. Negative results remain **44/56 exact**, with eight resource-policy,
-two native-foreign and two Bun-host gaps. Demand remains **92/100 exact**, six
-approved wildcard exceptions and two unwaived Nat-first diagnostic-order
-differences. Comptime retains **156/160 primary exact**: default upstream JS
-fails hand/tmpl four times; four supplemental stack-4096 observations pass.
-Their runners retain exit 1. These unaffected matrices were not rerun or relabelled.
+Current C matrices use pinned Linux O3/link flags. Historical O0/O2, multiworker,
+platform and failure-order investigations retain their actual commits and do
+not qualify this new source. The renewed status-only strict audit accepts 366
+expected positives, refuses 487 and rejects all 449 nonzero-expectation fixtures,
+including all 439 checker negatives. No acceptance status changed from bd6a228;
+no abnormal exit or timeout occurred. Historical applicability metadata stays
+unchanged; these statuses do not qualify unexecuted runtime or raw diagnostic cells.
 
-All latest C matrices use pinned Linux O3/link flags. Older no-optimization-flag,
-O2, worker, checking, platform and failure-order investigation receipts retain
-their actual commits. The latest status-only strict audit, at `bd6a228`, accepts
-366 expected positives and refuses 487 while rejecting all 449 nonzero-expectation
-fixtures, including all 439 checker negatives. No abnormal exits, unexpected
-checker-negative acceptances or timeouts. Its newly accepted float_pattern and
-let_opaque_match statuses do not imply runtime or diagnostic parity for unexecuted
-cells; historical applicability metadata stays unchanged.
-
-The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
+The separate [checking ledger](cpu-checking-evidence.csv), also renewed at
+`2f349c8`, records one check-only
 module with exact acceptance/report agreement and three negatives with matching
 phase/offending construct but differing raw diagnostics. The latter remain
 unqualified. No proof-only rejection is substituted for execution or diagnostic
@@ -190,7 +178,7 @@ difference or the unoptimized harness profile's Clang register-allocation failur
 for `word_live_tail`. The latter now agrees twice at O1/O2/O3, including pinned
 cli_build's O3 profile; O0 remains a separate build limitation. See the
 [source/profile investigation](cpu-failure-order.md). The new primary O3 demand
-receipt renewed at `bd6a228` has 92/100 exact observations, six accepted wildcard
+receipt renewed at `2f349c8` has 92/100 exact observations, six accepted wildcard
 exceptions and two unresolved Nat-first diagnostic differences. Its runner
 retains exit 1. Historical O2 columns keep their source/receipt identities;
 earlier O0 failures remain separate. No exception extends to unreviewed failures.
