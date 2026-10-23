@@ -65,6 +65,7 @@ impl Program {
                 base_names,
             )),
             packed: super::packed::checked_layouts(datatypes, base_names),
+            strict: false,
             nat_optimizations: Rc::new(super::nat::checked_optimizations(
                 definitions,
                 datatypes,

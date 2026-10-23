@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Call-by-need execution of checked bodies and execution contracts. Proof
-//! checking never uses this runtime. An explicit continuation stack bounds evaluation
-//! without recursive host calls, and each invocation owns its complete arena.
+//! Bounded execution of checked bodies and execution contracts. Native IO
+//! applies by-value demand after erasure; proof-data evaluation keeps its lazy
+//! machine. Proof checking never uses this runtime. Explicit continuations
+//! avoid recursive host calls, and each invocation owns its complete arena.
 
 use crate::kernel::AdtDecl;
 use crate::kernel::DefDecl;
@@ -16,6 +17,7 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 
 mod channels;
+mod demand;
 mod executable;
 mod file_handles;
 mod gc;
@@ -48,6 +50,7 @@ pub(crate) struct Program {
     optimizations: Rc<BTreeSet<numeric::PureOptimization>>,
     nat_optimizations: Rc<BTreeSet<nat::Operation>>,
     packed: bool,
+    strict: bool,
 }
 
 #[cfg(test)]
@@ -93,6 +96,7 @@ impl Program {
             optimizations: Rc::new(BTreeSet::new()),
             nat_optimizations: Rc::new(BTreeSet::new()),
             packed: false,
+            strict: false,
         }
     }
 
@@ -170,6 +174,11 @@ enum Thunk {
     Application(ThunkId, ThunkId),
     Alias(ThunkId),
     Evaluating,
+    PendingConstructor {
+        name: String,
+        fields: Vec<ThunkId>,
+        parent: Option<ThunkId>,
+    },
     Ready(Value),
 }
 
@@ -181,6 +190,17 @@ struct Environment {
 enum Frame {
     Update(ThunkId),
     Apply(ThunkId),
+    Call(ThunkId),
+    ResumeCall {
+        function: Value,
+        argument: ThunkId,
+    },
+    Constructor {
+        name: String,
+        fields: Vec<ThunkId>,
+        next: usize,
+    },
+    CompleteConstructorChain(ThunkId),
     Numeric(numeric::NumericFrame),
     Natural(nat::Evaluation),
     Match {
@@ -409,7 +429,7 @@ impl<'program> Machine<'program> {
         'evaluate: loop {
             self.collection_safe_point(current, &frames)?;
             self.tick()?;
-            let value = match self
+            let mut value = match self
                 .arena
                 .get(current)
                 .and_then(Clone::clone)
@@ -420,7 +440,7 @@ impl<'program> Machine<'program> {
                     current = target;
                     continue;
                 }
-                Thunk::Evaluating => {
+                Thunk::Evaluating | Thunk::PendingConstructor { .. } => {
                     return Err(KernelError::new("cyclic data runtime evaluation"));
                 }
                 Thunk::Application(function, argument) => {
@@ -462,10 +482,23 @@ impl<'program> Machine<'program> {
                             {
                                 value
                             } else {
-                                let fields = args
+                                let fields: Vec<_> = args
                                     .iter()
                                     .map(|arg| self.expression(Rc::clone(arg), environment))
                                     .collect::<Result<_, _>>()?;
+                                if self.program.strict && !fields.is_empty() {
+                                    self.compress_constructor_tail(&mut frames)?;
+                                    current = fields[0];
+                                    Self::push(
+                                        &mut frames,
+                                        Frame::Constructor {
+                                            name: name.clone(),
+                                            fields,
+                                            next: 1,
+                                        },
+                                    )?;
+                                    continue;
+                                }
                                 Value::Constructor {
                                     name: name.clone(),
                                     fields,
@@ -528,7 +561,43 @@ impl<'program> Machine<'program> {
                         current = self.nat_step(frame, value, &mut frames)?;
                         continue 'evaluate;
                     }
-                    Some(Frame::Apply(argument)) => match value {
+                    Some(Frame::Apply(argument))
+                        if self.program.strict
+                            && !matches!(self.arena[argument], Some(Thunk::Ready(_))) =>
+                    {
+                        Self::push(
+                            &mut frames,
+                            Frame::ResumeCall {
+                                function: value,
+                                argument,
+                            },
+                        )?;
+                        current = argument;
+                        continue 'evaluate;
+                    }
+                    Some(Frame::ResumeCall { function, argument }) => {
+                        value = function;
+                        Self::push(&mut frames, Frame::Call(argument))?;
+                    }
+                    Some(Frame::Constructor { name, fields, next }) => {
+                        if let Some(field) = fields.get(next) {
+                            current = *field;
+                            Self::push(
+                                &mut frames,
+                                Frame::Constructor {
+                                    name,
+                                    fields,
+                                    next: next + 1,
+                                },
+                            )?;
+                            continue 'evaluate;
+                        }
+                        value = self.strict_constructor(name, fields, &value)?;
+                    }
+                    Some(Frame::CompleteConstructorChain(head)) => {
+                        value = self.complete_constructor_chain(head, value)?;
+                    }
+                    Some(Frame::Apply(argument) | Frame::Call(argument)) => match value {
                         Value::Closure {
                             binder,
                             body,

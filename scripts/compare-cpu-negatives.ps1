@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
+    [ValidateSet('negatives', 'demand')][string]$Suite = 'negatives',
     [ValidateRange(1, 3)][int]$Repetitions = 2
 )
 $ErrorActionPreference = 'Stop'
@@ -68,6 +69,14 @@ function Get-Outcome {
     $out = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($Result.stdout_base64))
     $err = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($Result.stderr_base64))
     if ($Result.exit -eq $fixture.exit -and $out -ceq $fixture.stdout -and $err -ceq $fixture.stderr) { return 'pass' }
+    if ($Suite -eq 'demand' -and $Runtime -eq 'upstream-c' -and $fixture.c_wildcard_stdout -and
+        $Result.exit -eq 0 -and $out -ceq $fixture.c_wildcard_stdout -and $err -ceq '') {
+        return 'accepted_upstream_c_wildcard_exception'
+    }
+    if ($Suite -eq 'demand' -and $Runtime -eq 'upstream-c' -and $fixture.c_order_stderr -and
+        $Result.exit -eq 1 -and $out -ceq $fixture.stdout -and $err -ceq $fixture.c_order_stderr) {
+        return 'diagnostic_order_difference'
+    }
     if ($Runtime -eq 'upstream-js' -and $fixture.name -eq 'io/stderr_failure') {
         $js = Join-Path $directoryRoot 'upstream.js'
         if ($Result.exit -eq 1 -and $out -ceq "to-stdout`n" -and $err -ceq "to-stderr`nError: Cannot find module 'bun:ffi'`nRequire stack:`n- $js`n") { return 'blocked_bun_ffi' }
@@ -90,15 +99,19 @@ $fixtures = @(
     @{ name = 'io/stderr_failure'; stdout = "to-stdout`n"; stderr = "to-stderr`nNo such file or directory`n"; exit = 2 },
     @{ name = 'run/nat_overflow'; message = 'a Nat past the largest immediate 2^48-1'; stdout = ''; stderr = "bend: a Nat past the largest immediate 2^48-1`n"; exit = 1 }
 )
+if ($Suite -eq 'demand') {
+    $fixtures = Get-Content -Raw (Join-Path $port 'tests/fixtures/cpu-demand-review/manifest.json') | ConvertFrom-Json -AsHashtable
+}
 foreach ($fixture in $fixtures) {
     $directoryRoot = (New-Item -ItemType Directory -Path (Join-Path $OutputDirectory ($fixture.name.Split('/')[-1]))).FullName
-    $original = Join-Path $Reference "tests/$($fixture.name).bend"
+    $original = if ($Suite -eq 'demand') { Join-Path $port "tests/fixtures/cpu-demand-review/$($fixture.name).bend" } else { Join-Path $Reference "tests/$($fixture.name).bend" }
     $source = Join-Path $directoryRoot 'main.bend'; Copy-Item -LiteralPath $original -Destination $source
     $row = [ordered]@{
         fixture = "$($fixture.name).bend"; source_sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $pin; port_revision = $revision; port_dirty = $dirty; port_binary_sha256 = $binaryHash
         timeout_seconds = 60; repetitions = $Repetitions; c_arguments = @('--threads', '1', '--gpu', 'off')
         expected = @{ exit = $fixture.exit; stdout = $fixture.stdout; stderr = $fixture.stderr }
+        fixture_origin = $(if ($Suite -eq 'demand') { 'authored_contract_control' } else { 'pinned_upstream' })
         steps = [ordered]@{}; lanes = [ordered]@{}; deterministic = $true
     }
     $rows.Add($row)
@@ -155,7 +168,7 @@ foreach ($fixture in $fixtures) {
                     # A later repetition cannot overwrite an earlier failed cell.
                     $row.lanes[$runtime] = 'mixed_outcomes'
                 }
-                if ($result.outcome -ne 'pass') { $openCells++ }
+                if ($result.outcome -notin @('pass', 'accepted_upstream_c_wildcard_exception')) { $openCells++ }
             }
         }
         Write-Host "$($row.fixture): $($row.lanes | ConvertTo-Json -Compress)"

@@ -147,7 +147,19 @@ impl Marks<'_> {
 
     fn frame(&mut self, frame: &Frame) -> Result<(), KernelError> {
         match frame {
-            Frame::Update(id) | Frame::Apply(id) => self.thunk(*id)?,
+            Frame::Update(id)
+            | Frame::Apply(id)
+            | Frame::Call(id)
+            | Frame::CompleteConstructorChain(id) => self.thunk(*id)?,
+            Frame::ResumeCall { function, argument } => {
+                self.value(function)?;
+                self.thunk(*argument)?;
+            }
+            Frame::Constructor { fields, .. } => {
+                for field in fields {
+                    self.thunk(*field)?;
+                }
+            }
             Frame::Numeric(frame) => frame.visit_roots(|id| self.thunk(id))?,
             Frame::Natural(frame) => frame.visit_roots(|id| self.thunk(id))?,
             Frame::Match {
@@ -243,6 +255,14 @@ impl Machine<'_> {
                             marks.thunk(*argument)?;
                         }
                         Thunk::Alias(target) => marks.thunk(*target)?,
+                        Thunk::PendingConstructor { fields, parent, .. } => {
+                            for field in fields {
+                                marks.thunk(*field)?;
+                            }
+                            if let Some(parent) = parent {
+                                marks.thunk(*parent)?;
+                            }
+                        }
                         Thunk::Ready(value) => marks.value(value)?,
                         Thunk::Evaluating => {}
                     }
@@ -404,6 +424,60 @@ mod tests {
             machine.environment(0, Vec::new()).unwrap(),
             dead_environment
         );
+    }
+
+    #[test]
+    fn traces_strict_call_constructor_and_pending_tail_roots() {
+        let program = program();
+        let mut machine = Machine::new(&program);
+        let required: Vec<_> = (0..7).map(|_| erased(&mut machine)).collect();
+        let parent = machine
+            .allocate(Thunk::PendingConstructor {
+                name: "Outer".into(),
+                fields: vec![required[4]],
+                parent: None,
+            })
+            .unwrap();
+        let child = machine
+            .allocate(Thunk::PendingConstructor {
+                name: "Inner".into(),
+                fields: vec![required[5]],
+                parent: Some(parent),
+            })
+            .unwrap();
+        let environment = machine.environment(0, vec![(1, required[6])]).unwrap();
+        let frames = [
+            Frame::Call(required[0]),
+            Frame::ResumeCall {
+                function: Value::Closure {
+                    binder: 0,
+                    body: term(Term::Rfl),
+                    environment,
+                },
+                argument: required[1],
+            },
+            Frame::Constructor {
+                name: "Building".into(),
+                fields: vec![required[2], required[3]],
+                next: 1,
+            },
+            Frame::CompleteConstructorChain(child),
+        ];
+        let garbage = erased(&mut machine);
+        machine.collect(child, &frames).unwrap();
+        for id in required.into_iter().chain([parent, child]) {
+            assert!(
+                machine.arena[id].is_some(),
+                "lost strict continuation root {id}"
+            );
+        }
+        assert!(machine.arena[garbage].is_none());
+        assert!(machine.environments[environment].is_some());
+        let error = machine
+            .force(child)
+            .err()
+            .expect("an unfinished constructor stays a black hole");
+        assert!(error.to_string().contains("cyclic data runtime evaluation"));
     }
 
     #[test]

@@ -596,7 +596,7 @@ fn natural_failure_boundaries_preserve_prefix_and_reach_the_language_limit() {
 }
 
 #[test]
-fn natural_overflow_remains_lazy_and_first_demanded_failure_wins() {
+fn natural_overflow_is_strict_and_first_live_argument_failure_wins() {
     let helpers = r#"import Base
 def overflow() -> Nat: Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216))
 def reject(op: IO.OP<Unit>) -> Nat:
@@ -605,13 +605,11 @@ def reject(op: IO.OP<Unit>) -> Nat:
     case _: 0n
 def invalid() -> Nat: reject(IO.print("SECRET")(Unit, x => Emit{x}))
 "#;
-    assert_eq!(
-        output(&format!(
-            "{helpers}def main() -> IO(Unit): IO.print(Nat.show(Nat.mul(0n, overflow())))\n"
-        )),
-        "0\n"
-    );
     for (expression, diagnostic) in [
+        (
+            "Nat.mul(0n, overflow())",
+            "bend: a Nat past the largest immediate 2^48-1\n",
+        ),
         (
             "Nat.mul(invalid(), overflow())",
             "bend: runtime fail-stop\n",
@@ -667,7 +665,7 @@ fn large_add_double_and_partial_calls_preserve_exact_boundary_results() {
 }
 
 #[test]
-fn add_double_keep_partial_observations_lazy_and_demand_errors_in_source_order() {
+fn add_double_validate_before_partial_observation_and_fail_in_source_order() {
     let helpers = r#"import Base
 def reject(op: IO.OP<Unit>) -> Nat:
   match op:
@@ -696,7 +694,7 @@ def head(n: Nat) -> String:
                 .unwrap(),
             1
         );
-        assert_eq!(stdout, b"positive\n");
+        assert!(stdout.is_empty());
         assert_eq!(stderr, b"bend: runtime fail-stop\n");
     }
     let fixture = Fixture::new(&format!(
@@ -738,7 +736,7 @@ def main() -> IO(Unit): IO.print(Nat.show(apply(Nat.mul(U32.to_nat({a})), U32.to
 }
 
 #[test]
-fn natural_multiplication_preserves_unused_errors_effect_order_and_demanded_budgets() {
+fn natural_multiplication_checks_live_arguments_effect_order_and_fixed_budgets() {
     let helpers = r#"import Base
 def reject(op: IO.OP<Nat>) -> Nat:
   match op:
@@ -755,20 +753,14 @@ def costly(n: Nat) -> Nat:
     case 0n: 1n
     case 1n+p: costly(p)
 "#;
-    for (expression, expected) in [
-        ("Nat.show(Nat.mul(0n, invalid()))", "0\n"),
-        ("nonzero(Nat.mul(2n, lazy()))", "positive\n"),
-        ("nonzero(Nat.mul(lazy(), lazy()))", "positive\n"),
-        ("Nat.show(Nat.mul(0n, costly(U32.to_nat(1000000))))", "0\n"),
-    ] {
-        assert_eq!(
-            output(&format!(
-                "{helpers}def main() -> IO(Unit): IO.print({expression})\n"
-            )),
-            expected
-        );
-    }
     for (expression, diagnostic) in [
+        ("Nat.show(Nat.mul(0n, invalid()))", None),
+        ("nonzero(Nat.mul(2n, lazy()))", None),
+        ("nonzero(Nat.mul(lazy(), lazy()))", None),
+        (
+            "Nat.show(Nat.mul(0n, costly(U32.to_nat(1000000))))",
+            Some("step budget exhausted"),
+        ),
         ("Nat.show(Nat.mul(2n, lazy()))", None),
         (
             "Nat.show(Nat.mul(1n, costly(U32.to_nat(1000000))))",

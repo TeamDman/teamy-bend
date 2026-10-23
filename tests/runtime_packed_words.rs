@@ -245,38 +245,19 @@ def expensive_whole(n: Nat) -> U32:
 ";
 
 #[test]
-fn ordinary_arithmetic_optimizations_preserve_demand_for_unused_input_bits() {
-    // Independently checked with the upstream pure normalizer. The previous
-    // native release already returned the shift/multiply values but exposed
-    // an eager Add bug; an ordinary Word.add wrapper returned True there.
-    for (expression, expected) in [
-        ("Bool.show(low(U32.inc(lazy_word())))", "False\n"),
-        ("Bool.show(low(U32.shl(lazy_word())))", "False\n"),
-        ("Bool.show(low(U32.shln(lazy_word(), 1n)))", "False\n"),
-        ("U32.show(U32.mul(0, lazy_word()))", "0\n"),
-        ("Bool.show(low(U32.add(lazy_word(), 0)))", "True\n"),
-        ("U32.show(U32.div(lazy_word(), 0))", "0\n"),
-        ("Bool.show(low(U32.mod(lazy_word(), 0)))", "True\n"),
-    ] {
-        assert_output(
-            &format!("{WORD_HELPERS}{LAZY_WORD}def main() -> IO(Unit): IO.print({expression})\n"),
-            expected,
-        );
-    }
-}
-
-#[test]
-fn recognizing_a_word_does_not_force_its_unused_tail() {
-    assert_output(
-        &format!(
-            "{WORD_HELPERS}{LAZY_WORD}def main() -> IO(Unit): IO.print(Bool.show(low(lazy_word())))\n"
-        ),
-        "True\n",
-    );
+fn live_word_arguments_force_computed_tails_within_fixed_work_limits() {
+    // Executable by-value demand includes live Word fields. The proof/pure
+    // normalizer remains lazy; its observations are not an executable oracle.
     for expression in [
+        "Bool.show(low(lazy_word()))",
+        "Bool.show(low(U32.inc(lazy_word())))",
+        "Bool.show(low(U32.shl(lazy_word())))",
+        "Bool.show(low(U32.shln(lazy_word(), 1n)))",
+        "U32.show(U32.mul(0, lazy_word()))",
+        "Bool.show(low(U32.add(lazy_word(), 0)))",
+        "U32.show(U32.div(lazy_word(), 0))",
+        "Bool.show(low(U32.mod(lazy_word(), 0)))",
         "U32.show(lazy_word())",
-        // Multiplication still demands both outer U32 constructors, even when
-        // its first operand is zero. This also refused in the previous release.
         "U32.show(U32.mul(0, expensive_whole(U32.to_nat(1000000))))",
         "U32.show(U32.div(expensive_whole(U32.to_nat(1000000)), 0))",
         "U32.show(U32.div(0, lazy_word()))",
@@ -290,16 +271,27 @@ fn recognizing_a_word_does_not_force_its_unused_tail() {
         let error = fixture
             .checked()
             .run_main(&mut stdout, &mut stderr, &|| false)
-            .expect_err("demanding an expensive field must retain resource limits")
+            .expect_err("live expensive fields must retain resource limits")
             .to_string();
-        assert!(error.contains("exhausted"), "{error}");
+        assert!(
+            error.contains("step budget exhausted"),
+            "{expression}: {error}"
+        );
         assert!(stdout.is_empty());
         assert!(stderr.is_empty());
     }
 }
 
 #[test]
-fn available_numeric_values_do_not_demand_error_fields_or_reorder_effects() {
+fn pure_word_observation_retains_the_pinned_interpreters_lazy_semantics() {
+    assert_output(
+        &format!("{WORD_HELPERS}{LAZY_WORD}def main() -> Bool: low(lazy_word())\n"),
+        "True{}\n",
+    );
+}
+
+#[test]
+fn live_numeric_fields_fail_before_shallow_observation_without_reordering_effects() {
     let helper = format!(
         r#"{WORD_HELPERS}
 def reject(op: IO.OP<Unit>) -> Word(31n):
@@ -310,18 +302,12 @@ def invalid_word() -> U32:
   U32{{WCon{{True{{}}, reject(IO.print("must not execute")(Unit, value => Emit{{value}}))}}}}
 "#
     );
-    assert_output(
-        &format!(
-            "{helper}def main() -> IO(Unit): IO.print(Bool.show(low(U32.inc(invalid_word()))))\n"
-        ),
-        "False\n",
-    );
     let fixture = Fixture::new(&format!(
         r#"{helper}
 def main() -> IO(Unit):
   do IO<Unit>:
     Unit <- IO.print("before")
-    Unit <- IO.print(U32.show(U32.inc(invalid_word())))
+    Unit <- IO.print(Bool.show(low(U32.inc(invalid_word()))))
     IO.print("after")
 "#
     ));

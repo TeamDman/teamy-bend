@@ -1,0 +1,66 @@
+[
+  {
+    "name": "unused_argument",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+  },
+  {
+    "name": "partial_add_overflow",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+  },
+  {
+    "name": "partial_double_overflow",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+  },
+  {
+    "name": "unused_rhs_error",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: runtime fail-stop\n",
+    "c_wildcard_stdout": "positive\n"
+  },
+  {
+    "name": "ordinary_rhs_error",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: runtime fail-stop\n",
+    "c_wildcard_stdout": "positive\n"
+  },
+  {
+    "name": "forced_request_wildcard",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: runtime fail-stop\n",
+    "c_wildcard_stdout": "0\n"
+  },
+  {
+    "name": "nat_first",
+    "exit": 1,
+    "stdout": "before",
+    "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+    "c_order_stderr": "bend: runtime fail-stop\n"
+  },
+  {
+    "name": "request_first",
+    "exit": 1,
+    "stdout": "before",
+    "stderr": "bend: runtime fail-stop\n"
+  },
+  {
+    "name": "word_live_tail",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "bend: runtime fail-stop\n"
+  },
+  {
+    "name": "erased_and_unselected",
+    "exit": 0,
+    "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+    "stderr": ""
+  }
+]

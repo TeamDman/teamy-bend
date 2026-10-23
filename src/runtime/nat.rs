@@ -561,7 +561,7 @@ impl Machine<'_> {
         if state.operation == Operation::ArrayNew {
             return self.array_depth_step(state, value, frames);
         }
-        if matches!(state.operation, Operation::Add | Operation::Double) {
+        if !self.program.strict && matches!(state.operation, Operation::Add | Operation::Double) {
             return self.prefix_arithmetic(&state, &value);
         }
         let value = match (state.operation, value) {
@@ -624,9 +624,27 @@ impl Machine<'_> {
             Self::push(frames, Frame::Natural(state))?;
             return Ok(next);
         }
+        self.finish_nat(&state, value)
+    }
+
+    fn finish_nat(&mut self, state: &Evaluation, value: u64) -> Result<ThunkId, KernelError> {
         match state.operation {
-            Operation::ArrayNew | Operation::Add | Operation::Double => {
+            Operation::ArrayNew => {
                 unreachable!("operation uses its own demand path")
+            }
+            Operation::Add | Operation::Double => {
+                let right = if state.operation == Operation::Double {
+                    state.values[0]
+                } else {
+                    state.values[1]
+                };
+                let sum = state.values[0]
+                    .checked_add(right)
+                    .filter(|sum| *sum <= MAX)
+                    .ok_or_else(|| {
+                        KernelError::nat_overflow("a Nat past the largest immediate 2^48-1")
+                    })?;
+                self.nat(sum)
             }
             Operation::Mul => {
                 let product = state.values[0]

@@ -229,7 +229,10 @@ impl ExecutableBook {
                     .map_err(|error| KernelError::new(format!("stdout write failed: {error}")))?;
                 Ok(0)
             }
-            ExecutableEntry::Io => self.runtime.run_io("main", stdout, stderr, cancelled),
+            ExecutableEntry::Io => self
+                .runtime
+                .with_executable_demand(&self.lower_for_compilation()?)
+                .run_io("main", stdout, stderr, cancelled),
         }
     }
 }
