@@ -280,6 +280,28 @@ small CPU correction is the native Nat.mul work-budget gap. Lower C allocation
 bounds, exact runtime diagnostics, foreign support and broader coverage remain
 open, not certified by this correction.
 
+## Native Nat multiplication follow-up
+
+The [bounded correction](cpu-native-nat-mul.md) replaces needless Peano expansion
+for demanded packed operands with checked 48-bit multiplication. Zero-left demand,
+ordinary constructor fallback, partial calls, origin guards, proof separation and
+all safety limits remain intact. The original overflow now reaches its Nat law;
+its Eyre diagnostic still differs, so the native cell remains unqualified.
+
+Six new regressions pass. Full gate: 750 passed, zero failed, 49 ignored; strict
+all-target Clippy passes. The repeated negative family now has 26 exact matches,
+18 diagnostic mismatches, eight policy/budget refusals, two unsupported native
+foreign calls and two upstream-JS host failures over 56 executions. All 39 ledger
+fixtures were renewed; prior positive/comptime results are retained. An authored
+product/boundary control adds 10/10 exact five-runtime executions without changing
+the upstream-fixture count. No timeout; old evidence is retained.
+
+Remaining differences are not all correctness bugs or all policy exceptions.
+Diagnostic byte differences are contract gaps; C class/deep-stack limits are
+explicit safety policies, native foreign support is missing implementation, and
+Bun/default-Node-stack limitations belong to the oracle host/profile. None silently
+waives an acceptance cell. Next: the existing request-out-of-band failure contract.
+
 ## Remaining coverage checklist
 
 `Missing` below means incomplete implementation or qualification. `Blocked`

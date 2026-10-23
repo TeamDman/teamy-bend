@@ -3126,6 +3126,24 @@ contracts, native Nat.mul resource behavior, C allocation bounds, native foreign
 support and broader CPU coverage remain open. This completes the bounded
 comparison/correction, not negative-contract or whole-engine parity.
 
+### [x] 5.25 Multiply packed native Naturals without changing demand
+
+The original Nat-overflow fixture now reaches the 48-bit law instead of exhausting
+work on recursive multiply/add expansion. The exact sealed native body gains a
+checked compact-operand path; zero-left demand, ordinary constructor fallback,
+partial applications, proof separation and original safety limits are preserved.
+Six new tests cover overflow/boundaries, ordinary results, unused tails and errors,
+side-effect order, guards, collection, cancellation and work limits.
+
+The full gate passes 750 tests, zero failed, 49 ignored; strict all-target Clippy
+passes. An authored product control matches all five runtimes twice. All 39 ledger
+fixtures were renewed: positive/comptime outcomes are unchanged, while the negative
+matrix now records 26 exact matches, 18 diagnostic differences, eight safety-policy
+refusals and four foreign/oracle-host failures over 56 executions. The Nat cell
+remains a diagnostic mismatch, not an exact pass. See the
+[Nat multiplication checkpoint](cpu-native-nat-mul.md) for source-grounded semantics,
+remaining gap categories and the next bounded failure-contract work.
+
 ## Completion and risks
 
 The goal is complete only when U1–U14 are delivered and no required rewrite or

@@ -111,8 +111,8 @@ matched in the named profile; `pass_stack4096` names an explicit upstream JS
 host flag; `blocked_bun_ffi` is missing upstream host support, not a pass.
 `diagnostic_mismatch`, `safety_limit` and `unsupported_foreign` are unresolved
 contracts, not successes. `not_required_js_only_companion` follows the pinned
-gate selection, not a port exception. Engine commit `d20c904` identifies the
-array-depth correction; all 39 linked fixtures were measured on that engine.
+gate selection, not a port exception. Engine commit `099ffd2` identifies the
+Nat multiplication correction; all 39 linked fixtures were measured on that engine.
 Private receipt hashes and binary snapshots are retained with the checkpoint
 evidence; no machine paths appear here.
 
@@ -128,14 +128,14 @@ CPU verification or require a GPU desktop.
 
 ## Next bounded work
 
-The [runtime-negative checkpoint](cpu-runtime-negatives.md) now records all ten
-runtime-negative fixtures across the ledger. The six newly compared fixtures
-produced one corrected native array-depth acceptance defect, plus unresolved
-diagnostic, safety-budget, native foreign and oracle-host cells. The next small
-CPU correction is the demonstrated native `Nat.mul` budget gap: investigate a
-sealed compact-number path that preserves demand and fails at the actual Nat
-bound without raising resource limits. Do not classify runtime negatives as
-expected checker rejections or count phase-only agreement as exact parity.
+The [runtime-negative checkpoint](cpu-runtime-negatives.md) records all ten
+runtime-negative fixtures across the ledger. Its native array-depth acceptance
+defect and the [native Nat.mul budget gap](cpu-native-nat-mul.md) are corrected.
+Diagnostic, explicit resource-policy, native foreign and oracle-host cells remain
+unqualified. The next small CPU step is an exact language fail-stop contract for
+`io/request_out_of_band.bend`, preserving stream order and cleanup without changing
+host/tool error reporting globally. Do not classify runtime negatives as checker
+rejections or count phase-only agreement as exact parity.
 
 In parallel with later bounded families, complete lane/API review, resolve the
 upstream direct-IO host requirement, and qualify multiworker/host-specific cases.

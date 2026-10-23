@@ -3,6 +3,8 @@
 Target: unchanged [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).
 Engine candidate: `d20c904d6e9ef563ca186c5ed1dcceec938e0bfc`.
 This is a bounded failure-contract checkpoint, not complete CPU parity.
+The later [native Nat multiplication checkpoint](cpu-native-nat-mul.md) corrects
+its work-budget gap; this document retains the original d20c904 measurements.
 Dependencies, toolchains, safety limits and reference sources remain frozen.
 
 ## Demonstrated defect and correction
@@ -105,7 +107,7 @@ commands, source/binary hashes, supplemental cleanup probes and prior checkpoint
 The [ledger](cpu-runtime-evidence.csv) now links 39 upstream fixtures, including
 these unresolved cells; it is not a count of fully qualified fixtures.
 
-The next small CPU correction is the native `Nat.mul` resource gap demonstrated
+At this checkpoint the next small CPU correction was the native `Nat.mul` gap demonstrated
 by the unchanged overflow fixture. Investigate a sealed, demand-preserving
 compact-number path with zero/unused-operand, boundary, error-order and work-limit
 controls. Do not raise the work budget to obtain the expected error. Diagnostic
