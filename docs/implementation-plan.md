@@ -3612,3 +3612,31 @@ classified by applicable mode. Next is float_unary_math, float_trig and float_ta
 source-inspected but runtime-unqualified. Full parity, lane/API review and the
 downstream consumer caveat remain open. Dependencies, tools, pin, safety limits
 and all earlier checkpoints are preserved. No installation or push.
+
+### [x] 5.44 Qualify unary, trigonometric and hyperbolic float math
+
+Coverage source `8540287` adds unchanged compile/float_unary_math, float_trig
+and float_tanh. Both upstream targets generate; five primary runtimes match
+exact text, empty stderr and exit 0 twice: 30 observations. An authored control
+adds ten executions with paired binary32-bit/text observations for all twelve
+original result expressions and adjacent sqrt/log/exp boundaries. NaN payload
+bits are unobserved, not treated as matching. Three direct IO entries remain
+blocked by Node's unavailable import.meta.require.
+
+No production or cross-oracle math defect was demonstrated. Pinned source
+requires binary32 rounding at each operation, exposes bits and compares fixture
+text exactly; its C/JS lowering delegates math functions to host libraries.
+The [checkpoint](cpu-float-math.md) distinguishes exact host-profile evidence
+from unqualified portability. No tolerance, new exception or precision claim
+for unrun libraries was introduced. Full gate **812 passed, zero failed,
+49 ignored**; 30 focused tests and strict all-target Clippy pass. Positive O3
+renewal gives 488/500 primary exact observations with twelve existing Bun-host
+failures, plus four exact and 26 host-blocked direct observations. No timeouts;
+repeats are stable. Unaffected matrices retain bd6a228 and every unresolved cell.
+
+Ledgers link 84 originals; 1,218 lack runtime/interpretation evidence, classified
+by mode. Next is run/float_ops, float_printing and float_text, source-inspected
+but runtime-unqualified. Actual behavior must settle their stale printing
+comments. Full CPU parity, lane/API review and the downstream-consumer caveat
+remain open. All checkpoints, frozen inputs, safety limits and approved demand
+rules are preserved. No installation or push.

@@ -91,17 +91,17 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **63 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **66 distinct
 upstream fixtures**: sixteen comptime, ten run, eighteen IO, five Base, two
-representation, nine parse and three compile originals. Linked rows include
-unresolved negative and oracle-host cells. Five authored controls supplement the
+representation, nine parse and six compile originals. Linked rows include
+unresolved negative and oracle-host cells. Six authored controls supplement the
 suites without adding upstream inventory rows. Only passed cells qualify their
 recorded runtime/profile; this is not category, checker-diagnostic, API or
 multiworker completion.
 
-There are **1,239 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 624 compiled
-candidates. These are distinct required modes, not 1,239 missing CPU runtime
+There are **1,236 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 621 compiled
+candidates. These are distinct required modes, not 1,236 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
@@ -111,22 +111,24 @@ The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
 originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **81 originals**
-have receipts and **1,221** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 617 compiled candidates.
+controls add no inventory rows. Across runtime and interpretation, **84 originals**
+have receipts and **1,218** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 614 compiled candidates.
 
-The [float-runtime checkpoint](cpu-float-runtime.md), `47a5096`, qualifies three
-original rounding/accumulation/storage programs: 30 exact observations across
-five primary runtimes twice, with ten more for an authored bit/text control.
-Actual upstream C/JS generation succeeds. All three direct IO entries remain
-host-blocked. Finite values, signed zero and adjacent infinity/NaN classifications
-are distinguished; no arithmetic-NaN payload parity is assumed. No production
-code, safety budget or approved demand rule changed. Full gate: **811 passed,
-zero failed, 49 ignored**; 29 focused tests and strict all-target Clippy pass.
+The [float-math checkpoint](cpu-float-math.md), `8540287`, qualifies three original
+unary/trig/hyperbolic programs: 30 exact observations across five primary runtimes
+twice, plus ten for an authored bit/text control. All twelve original result
+expressions match exact binary32 bits and text on this host. Actual upstream C/JS
+generation succeeds; three direct IO entries remain host-blocked. No production
+defect or math-library discrepancy was demonstrated, and no tolerance or new
+exception was introduced. Host math delegation does not qualify unrun platforms
+or waive future differences. Full gate: **812 passed, zero failed, 49 ignored**;
+30 focused tests and strict all-target Clippy pass. Approved semantics and all
+safety budgets remain intact.
 
-Forty-one positive runtime originals now have `47a5096` receipts. The positive
-matrix has **448/460 exact** primary executions and twelve Bun-FFI failures;
-separate direct entries give four exact and twenty import.meta.require failures.
+Forty-four positive runtime originals now have `8540287` receipts. The positive
+matrix has **488/500 exact** primary executions and twelve Bun-FFI failures;
+separate direct entries give four exact and 26 import.meta.require failures.
 All repeats are stable; no timeouts. Six negative originals, sixteen comptime
 originals, eighteen interpretation originals and ten authored demand controls
 retain `bd6a228`. Negative results remain **44/56 exact**, with eight resource-policy,
@@ -207,9 +209,10 @@ a function`, even though separately emitted CommonJS programs pass. The
 success does not erase them. The parse-chain renewal separately records one
 successful pure direct entry and two more blocked IO entries; operator-chain
 adds three blocked IO entries and float syntax adds one pure and two blocked IO
-entries. The float-runtime group adds three blocked IO entries. All twelve
-parse/compile direct-entry rows were renewed at `47a5096`. No Bun install or
-upstream edit was made. This is an oracle-host blocker for that lane, not a reason
+entries. The float-runtime and float-math groups each add three blocked IO
+entries. All fifteen parse/compile direct-entry rows were renewed at `8540287`.
+No Bun install or upstream edit was made. This is an oracle-host blocker for that
+lane, not a reason
 to stop unrelated CPU verification or require a GPU desktop.
 
 ## Next bounded work
@@ -251,14 +254,15 @@ No C compilation/execution profile applies after that generation refusal. The
 results with verified generation applicability and separate direct-IO host
 refusals. Their proof-check exclusions did not predict executable failure.
 The [float syntax/pattern group](cpu-parse-floats.md) retains its three scoped
-corrections. The [float-runtime group](cpu-float-runtime.md) adds exact five-runtime
-results for rounding, accumulation and F32 storage, with paired bit/text controls.
-Next is `compile/float_unary_math`, `compile/float_trig`, `compile/float_tanh`:
-source-inspected Base/IO candidates whose five-runtime original-fixture
-qualification is unrun. Verify actual generation and distinguish host math bits
-from text; comments or existing unit witnesses cannot establish cross-oracle
-agreement. New C-oracle builds retain pinned Linux O3/link flags; older profiles
-remain separate.
+corrections. The [float-runtime group](cpu-float-runtime.md) covers rounding,
+accumulation and F32 storage. The [math group](cpu-float-math.md) now has exact
+text and bit observations for twelve unary/trig/hyperbolic result expressions,
+with no tolerance or cross-platform precision claim. Next is `run/float_ops`,
+`run/float_printing`, `run/float_text`: source-inspected Base/IO candidates whose
+five-runtime original-fixture qualification is unrun. Verify generation and
+actual rendering/read behavior; stale six-digit/percent-g comments and existing
+unit witnesses cannot establish the contract. New C-oracle builds retain pinned
+Linux O3/link flags; older profiles remain separate.
 The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
@@ -288,5 +292,5 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
 includes baseline, effects, control, collections, scheduler, word,
-representation, parse-chain/operator/float and float-runtime checks. Frozen
-toolchains, lockfile, pin and all previous evidence remain unchanged.
+representation, parse-chain/operator/float, float-runtime and float-math checks.
+Frozen toolchains, lockfile, pin and all previous evidence remain unchanged.

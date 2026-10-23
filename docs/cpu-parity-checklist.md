@@ -11,18 +11,18 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 63-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `47a5096` qualifies
-[float runtime operations/storage](cpu-float-runtime.md), with **811 passed,
+1,302-fixture inventory and 66-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `8540287` qualifies
+[float unary/trig/hyperbolic math](cpu-float-math.md), with **812 passed,
 zero failed, 49 ignored** in the full gate and strict all-target Clippy passing.
-No production change was needed. The approved demand contract and safety budgets
-remain intact; competing-error ordering stays open and unwaived. O0's oracle
-build failure remains distinct from matching Word results at pinned O3.
+No production change or tolerance was needed. The approved demand contract and
+safety budgets remain intact; competing-error ordering stays open and unwaived.
+O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 81 originals; the 1,221 remaining
+Current runtime/interpretation ledgers link 84 originals; the 1,218 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 617 compiled candidates. These are distinct
+interpreter-only cases and 614 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -440,28 +440,29 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [float runtime operations/storage](cpu-float-runtime.md),
-`47a5096`. Three unchanged originals match five primary runtimes twice: 30 exact
+Latest bounded checkpoint: [float unary/trig/hyperbolic math](cpu-float-math.md),
+`8540287`. Three unchanged originals match five primary runtimes twice: 30 exact
 observations; an authored bit/text control adds ten. Actual upstream generation
-succeeds; all three direct IO entries retain import.meta.require host failures.
-The controls distinguish finite binary32 bits, printed text, negative-zero
-storage and adjacent nonfinite classifications without asserting NaN payload
-parity. No production defect was demonstrated. Full gate: **811 passed, zero
-failed, 49 ignored**; strict all-target Clippy and 29 focused tests pass.
-Approved demand semantics and all safety budgets remain unchanged.
+succeeds; three direct IO entries retain import.meta.require host failures.
+All twelve original result expressions have exact binary32-bit and text agreement
+on this host. Adjacent sqrt negative zero, log-zero/exp-overflow infinities and
+sqrt-domain NaN text agree; NaN payload bits remain unobserved. No production
+defect or cross-oracle math difference was demonstrated. No tolerance or new
+exception was introduced. Full gate: **812 passed, zero failed, 49 ignored**;
+strict all-target Clippy and 30 focused tests pass. Approved demand and all
+safety limits remain unchanged; other host math profiles remain unqualified.
 
-Renewed positive matrix: **448/460 exact** under pinned Linux C O3/link flags,
-twelve Bun-FFI gaps. Twenty-four separate direct entries produce four exact and
-twenty host-blocked observations. Forty-one positive original rows identify
-`47a5096`. Unaffected negative/demand receipts retain `bd6a228`: **44/56 negative
-exact**, eight resource-policy, two native-foreign and two Bun-host gaps;
-**92/100 demand exact**, six approved wildcard exceptions and two unwaived
-Nat-first error-order differences. Normalization retains 176 successful
-observations and 28 expected printer refusals, with exact text and structure.
-Comptime retains **156/160 primary exact**, four default upstream-JS stack
-failures and four supplemental stack-4096 passes. These matrices were not rerun
-or relabelled. Historical O2, worker, checking, platform and order-investigation
-identities remain.
+Renewed positive matrix: **488/500 exact** under pinned Linux C O3/link flags,
+twelve Bun-FFI gaps. Thirty separate direct entries produce four exact and 26
+host-blocked observations. Forty-four positive original rows identify `8540287`.
+Unaffected negative/demand receipts retain `bd6a228`: **44/56 negative exact**,
+eight resource-policy, two native-foreign and two Bun-host gaps; **92/100 demand
+exact**, six approved wildcard exceptions and two unwaived Nat-first error-order
+differences. Normalization retains 176 successful observations and 28 expected
+printer refusals, with exact text and structure. Comptime retains **156/160
+primary exact**, four default upstream-JS stack failures and four supplemental
+stack-4096 passes. These matrices were not rerun or relabelled. Historical O2,
+worker, checking, platform and order-investigation identities remain.
 
 The latest strict audit, at `bd6a228`, accepts 366 positives, refuses 487 and
 rejects all 449 nonzero-expectation fixtures, including all 439 checker negatives.
@@ -469,14 +470,14 @@ No unexpected checker-negative acceptance, abnormal exit or timeout. These are
 checking statuses, not blanket runtime parity; the historical applicability
 snapshot and counts remain unchanged.
 
-The ledgers link 81 distinct originals; 1,221 lack runtime/interpretation receipts
-(439 checker negatives, twelve check-only, 153 interpreter-only, 617 compiled
+The ledgers link 84 distinct originals; 1,218 lack runtime/interpretation receipts
+(439 checker negatives, twelve check-only, 153 interpreter-only, 614 compiled
 candidates). The checking ledger retains one exact check-only acceptance and
 three phase/construct agreements with differing raw diagnostics. Linked does not
-mean every lane passed. Next independent family: `compile/float_unary_math`,
-`compile/float_trig`, `compile/float_tanh`. Sources are inspected; original-fixture
-runtime qualification and actual target applicability are unrun. Host math bits,
-printed output and possible oracle differences need distinct comparisons.
+mean every lane passed. Next independent family: `run/float_ops`,
+`run/float_printing`, `run/float_text`. Sources are inspected; original-fixture
+runtime qualification and actual target applicability are unrun. Check actual
+rendering/read behavior rather than relying on stale six-digit/percent-g comments.
 No new dependency or semantic exception is assumed.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -489,6 +490,7 @@ CPU work.
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
 | Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Float rounding, accumulation and storage | Three original runtime fixtures and a focused bit/text control match five runtimes twice, including signed-zero field/array storage and adjacent infinity/NaN classifications. No production fix or NaN payload-parity claim. |
+| Passed in primary runtimes; direct IO oracle-host blocked | Unary/trig/hyperbolic float math | Three originals and a bit/text control match five runtimes twice. All twelve original expressions agree in exact binary32 bits; no tolerance or math-library exception. Other host profiles and NaN payload observations remain unqualified. |
 | Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
