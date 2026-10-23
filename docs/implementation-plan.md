@@ -3441,3 +3441,31 @@ independent bounded group is `_001_main_dec`, `_001_not`, `_001_par`, including
 verified function-printer applicability. Full CPU parity remains incomplete.
 Approved demand semantics, fixed budgets, dependencies/toolchains/pin and prior
 history are preserved. Local commits only; no push.
+
+### [x] 5.38 Qualify Base-importing recursive function companions
+
+Coverage checkpoint `4117071` adds unchanged `_001_main_dec`, `_001_not` and
+`_001_par`. Actual upstream C/JS generation refuses each function-valued main,
+with exact repeated diagnostics and no target file. The pinned gate therefore
+selects checking/interpretation, not compiled execution. The runner now verifies
+that applicability before value comparison. No O3/O0 C execution claim is made
+for a program whose generation is refused; applicable future oracle builds use
+the pinned CLI's O3 profile while older profile evidence remains distinct.
+
+All three original normalized terms agree exactly and structurally twice. New
+regressions cover captured values across four nested decision branches, both
+Boolean flips and recursive parity at depths zero through three. No production
+defect was demonstrated or production code changed. Full gate: **803 passed,
+zero failed, 49 ignored**; strict all-target/all-feature Clippy passes. Nineteen
+normalization cases (fifteen original, four authored) yield 152 successful
+observations and sixteen expected generation refusals, with no timeouts.
+
+The [checkpoint](cpu-base-function-companions.md) records exact commands, source,
+hashes, diagnostics and applicable modes. Runtime/order/comptime/platform receipts
+retain their original commits; only interpretation and repository gates were
+renewed. Sixty-six originals have runtime or interpretation evidence, leaving
+1,236 without those receipt kinds, with checking and execution applicability
+kept distinct. The next bounded group is `_000`, `_000_big`, `_001`, covering
+Nat fuel and reusable bindings with actual printer applicability checks.
+Competing-error ordering remains unresolved and unwaived. Dependencies, tools,
+budgets, pin and approved demand semantics are unchanged; local commits, no push.

@@ -116,17 +116,19 @@ turning status-only results, source hints or related regression suites into pari
 passes. Full per-lane applicability/printability and API review remain required.
 
 The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
-twelve originals at candidate `6e5bd61`: eleven interpreter-only cases and one
-compiled candidate whose function-valued result is actually refused by upstream
-C/JS generation. All twelve match normalized core structure and raw output twice.
-The [recursive-companion checkpoint](cpu-recursive-companions.md) also renews four
+fifteen originals at candidate `4117071`: eleven interpreter-only cases and four
+compiled candidates whose function-valued results are actually refused by upstream
+C/JS generation. All fifteen match normalized core structure and raw output twice.
+The [Base-function checkpoint](cpu-base-function-companions.md) also renews four
 authored controls, which add no inventory rows. Across the runtime and
-interpretation ledgers, 63 distinct originals have execution evidence; 1,239
+interpretation ledgers, 66 distinct originals have execution evidence; 1,236
 lack those receipt kinds: 439 checker negatives, twelve check-only modules,
-153 interpreter-only cases and 635 compiled candidates. These are distinct
+153 interpreter-only cases and 632 compiled candidates. These are distinct
 requirements, not one runtime denominator. The historical applicability CSV
 remains tied to its recorded inputs. Runtime receipt renewal covers 35 originals
 at `6e5bd61`; the sixteen comptime originals retain their `208b343` receipts.
+The `4117071` coverage-only change renews interpretation and the full repository
+gate (803 passed, zero failed, 49 ignored), not those runtime matrices.
 
 The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
 module with exact acceptance/report agreement and three negatives with matching
@@ -217,11 +219,15 @@ numeric/foreign diagnostic cases, so it does not close that contract gap.
 The Word control matches the pinned CLI-equivalent O3 build profile twice;
 the separate O0 register-allocation failure remains an oracle build limitation.
 Seven U32 fixtures and the operator/representation group retain exact five-runtime
-results, renewed twice. Twelve original interpretation cases retain exact
+results, with historical runtime receipts retained. Fifteen original interpretation cases retain exact
 structural and textual agreement, with four additional authored controls.
-The recursive `_002_sel`, `_003_flip` and `_004_sel` companions are now qualified.
-The next independent group is `_001_main_dec`, `_001_not` and `_001_par`, with
-actual upstream function-printer applicability checks still required. The sleep_order and
+The `_001_main_dec`, `_001_not` and `_001_par` Base companions are now qualified,
+including actual upstream C/JS function-printer refusals before value comparisons.
+No C compilation/execution profile applies after that generation refusal. The
+next independent group is `_000`, `_000_big` and `_001`, including printer
+applicability and Nat-fuel/reusable-binding coverage. New applicable C-oracle
+builds should use pinned cli_build's O3 profile; earlier O0 receipts stay distinct.
+The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

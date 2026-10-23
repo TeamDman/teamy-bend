@@ -1,5 +1,8 @@
 # Recursive companion normalization checkpoint
 
+Historical checkpoint follows. The later [Base-function qualification](cpu-base-function-companions.md)
+completes the three next cases proposed here; these receipts remain at `6e5bd61`.
+
 Implementation: `6e5bd61b5f2cf7e1e4de7c398f17cfe04a0150cb`, local branch
 `qualify/cpu-recursive-companions-20261023`, based on `d74f6a6`.
 Target remains [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).
