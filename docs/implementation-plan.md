@@ -3528,3 +3528,28 @@ comptime, O2, worker and platform receipts retain their actual commits. Next is
 brace annotations, default Nat chains and U32 suffix propagation, selected from
 the ledger but not yet qualified. Full parity remains incomplete. Local commits
 only; no push, new dependency, upstream change or unreviewed exception.
+
+### [x] 5.41 Qualify brace, default Nat and U32 operator chains
+
+Coverage source `ef48b99` adds unchanged `parse/chain_brace_suffix`,
+`parse/chain_default_nat`, `parse/chain_suffix_u32`. Both upstream targets generate
+successfully. Five primary runtimes give exact stdout 5, 7 and 16 with LF, empty
+stderr and exit 0 twice: 30 observations. All three direct upstream IO entries
+remain host-blocked under Node by missing import.meta.require; generated JS works.
+Strict proof IO exclusions are separately preserved in the expanded regression
+cases. Uncalled helpers and companion fixtures are not implicitly qualified.
+
+No production defect was demonstrated. The full gate passes **807 tests, zero
+failed, 49 ignored**; strict all-target Clippy and 31 focused tests pass. The
+positive O3 matrix has 368/380 exact primary observations, twelve known Bun-FFI
+failures, and separate direct-entry outcomes: two exact and ten host-blocked.
+All repeats are stable; no timeouts. Negative/demand matrices were unaffected
+and keep `ffebc4a` receipts and every unresolved resource/foreign/host/order cell.
+Interpretation, comptime, O2, worker and platform receipts keep their identities.
+
+The [checkpoint](cpu-parse-operators.md) records commands, hashes, applicability
+and exact outcomes. Ledgers link 75 originals; 1,227 lack those execution receipt
+kinds, separated by applicable mode. Next is F32 suffixes, exponent literals and
+float patterns, whose source comments do not replace actual compiler probes.
+Full CPU parity remains incomplete. Dependencies, tools, pin, safety limits,
+approved demand semantics and all previous history are preserved. No push.

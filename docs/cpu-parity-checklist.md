@@ -11,20 +11,20 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 54-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `ffebc4a` qualifies
-[parser application/grouping/spacing](cpu-parse-chains.md), with **807 passed,
+1,302-fixture inventory and 57-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `ef48b99` qualifies
+[brace and numeric operator chains](cpu-parse-operators.md), with **807 passed,
 zero failed, 49 ignored** in the full gate and strict all-target Clippy passing.
-The approved demand contract remains implemented; the separate competing-error
-discrepancy remains open. O0's oracle build failure is distinct from matching
-Word results at the pinned CLI's O3 profile.
+Existing test functions were expanded. The approved demand contract remains
+implemented; competing-error ordering stays open and unwaived. O0's oracle build
+failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 72 originals; the 1,230 remaining
+Current runtime/interpretation ledgers link 75 originals; the 1,227 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 626 compiled candidates. These are distinct
+interpreter-only cases and 623 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
-resource/host gaps and cross-oracle requirements remain open. The intervening
+resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
 
 ## Passed in this review
@@ -440,30 +440,31 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [parser chains](cpu-parse-chains.md), `ffebc4a`.
-Three unchanged originals match all five primary runtimes twice: 30 exact
-observations. Direct upstream CLI passes the pure Boolean fixture but its two IO
-entries remain blocked by missing `import.meta.require`. The strict proof Base
-still rejects IO, independently of successful executable-mode behavior. No
-production implementation, demand rule, budget or error ordering changed.
-Full gate: **807 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
+Latest bounded checkpoint: [brace and numeric chains](cpu-parse-operators.md),
+`ef48b99`. Three unchanged originals match five primary runtimes twice: 30 exact
+observations. All three direct upstream IO entries remain blocked by missing
+import.meta.require. Strict proof checking still excludes IO independently of
+successful executable behavior. No production, demand, budget or error-order
+change was needed. Full gate: **807 passed, zero failed, 49 ignored**; strict
+all-target Clippy and 31 focused tests pass. Existing regression cases expanded
+without adding test functions.
 
-The renewed primary C profile uses pinned cli_build's Linux O3/link flags.
-Positive matrix: **338/350 exact**, twelve Bun-host gaps. Negative matrix:
-**44/56 exact**, eight resource-policy, two native-foreign and two Bun-host gaps.
-Demand matrix: **92/100 exact**, six accepted wildcard exceptions and two unwaived
-Nat-first error-order differences. Eighteen original normalization cases retain
-their `20170de` exact structural/text receipts; older comptime/multiworker and O2
-profiles retain their source commits. Current gate and historical receipts are
-not interchangeable.
+Renewed positive matrix: **368/380 exact** under pinned Linux C O3/link flags,
+twelve Bun-FFI gaps. Twelve separate direct entries produce two exact and ten
+host-blocked observations. Unchanged negative/demand receipts stay at `ffebc4a`:
+**44/56 negative exact** plus eight resource-policy, two native-foreign and two
+Bun-host gaps; **92/100 demand exact**, six accepted wildcard exceptions and two
+unwaived Nat-first error-order differences. Eighteen normalization originals keep
+`20170de`; comptime, O2, worker, checking and platform receipts keep their commits.
 
-The runtime and interpretation ledgers link 72 distinct originals; 1,230 lack
-those receipt kinds (439 checker negatives, twelve check-only, 153 interpreter-only,
-626 compiled candidates). A separate checking ledger has one exact check-only
-acceptance and three phase/construct agreements with differing raw diagnostics.
-Linked does not mean every applicable lane passed. Next independent family:
-`parse/chain_brace_suffix`, `parse/chain_default_nat`, `parse/chain_suffix_u32`.
-Their source/ledger selection is not yet executable or printer qualification.
+The ledgers link 75 distinct originals; 1,227 lack runtime/interpretation receipts
+(439 checker negatives, twelve check-only, 153 interpreter-only, 623 compiled
+candidates). The checking ledger retains one exact check-only acceptance and
+three phase/construct agreements with differing raw diagnostics. Linked does not
+mean every lane passed. Next independent family: `parse/chain_suffix_f32`,
+`parse/float_exponent`, `parse/float_pattern`. Confirm actual generated-target
+applicability, including the float-pattern structural-word comment, before
+qualifying results. No new dependency or semantic exception is assumed.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -472,7 +473,7 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
-| Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and spacing | Three original parse fixtures match five runtimes twice. Pure direct CLI agrees; two direct IO entries need import.meta.require. Strict proof IO refusals remain separate from executable qualification. |
+| Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
 | Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
