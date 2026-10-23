@@ -91,46 +91,58 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **57 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **60 distinct
 upstream fixtures**: sixteen comptime, ten run, eighteen IO, five Base, two
-representation and six parse originals. Linked rows include unresolved negative
-and oracle-host cells. Two recovered port-only regressions and an authored
-zero-timer control supplement the suites without adding upstream inventory rows.
-Only passed cells qualify their recorded runtime/profile; this is not category,
-checker-diagnostic, API or multiworker completion.
+representation and nine parse originals. Linked rows include unresolved negative
+and oracle-host cells. Two recovered port-only regressions, an authored zero-timer
+control and a float-bit/pattern control supplement the suites without adding
+upstream inventory rows. Only passed cells qualify their recorded runtime/profile;
+this is not category, checker-diagnostic, API or multiworker completion.
 
-There are **1,245 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 630 compiled
-candidates. These are distinct required modes, not 1,245 missing CPU runtime
+There are **1,242 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 627 compiled
+candidates. These are distinct required modes, not 1,242 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) retains eighteen
-originals at `20170de`: eleven interpreter-only cases and seven compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) renews eighteen
+originals at `bd6a228`: eleven interpreter-only cases and seven compiled candidates
 whose function-valued results are actually refused by upstream C/JS generation.
 All eighteen match normalized core structure and raw output twice; four authored
-controls add no inventory rows. Across runtime and interpretation, **75 originals**
-have receipts and **1,227** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 623 compiled candidates.
+controls add no inventory rows. Across runtime and interpretation, **78 originals**
+have receipts and **1,224** lack those kinds: 439 checker negatives, twelve
+check-only modules, 153 interpreter-only cases and 620 compiled candidates.
 
-The [brace/numeric chain checkpoint](cpu-parse-operators.md), `ef48b99`, renews
-35 positive runtime originals with pinned Linux C O3/link flags. Its three new
-originals match five primary runtimes twice: 30 exact observations. Their six
-direct upstream IO attempts remain host-blocked by missing import.meta.require.
-The wider positive matrix has **368/380 exact** primary executions and twelve
-Bun-FFI host failures, plus two exact and ten host-blocked direct observations.
-Full gate: **807 passed, zero failed, 49 ignored**; strict all-target Clippy passes.
-Existing regression functions were expanded, so their count did not increase.
+The [float syntax/pattern checkpoint](cpu-parse-floats.md), `bd6a228`, fixes
+bounded Word-pattern compilation, complete U32 term printing and source-literal
+binary64-to-binary32 rounding. Actual upstream C/JS generation succeeds for all
+three new originals, despite a stale float-pattern comment. They match five
+primary runtimes twice: 30 exact observations; the authored bit/pattern control
+adds ten. Direct pure entry succeeds; both direct IO entries remain host-blocked.
+Full gate: **810 passed, zero failed, 49 ignored**; 54 focused tests and strict
+all-target Clippy pass. No safety budget or approved demand rule changed.
 
-No production or shared runner logic changed. Six negative originals and the
-authored demand controls retain their `ffebc4a` receipts: 44/56 negative exact
-with eight resource-policy, two native-foreign and two Bun-host gaps; 92/100 demand
-exact with six accepted wildcard exceptions and two unwaived error-order gaps.
-Sixteen comptime originals retain `208b343` and their no-optimization-flag profile.
-Interpretation, historical O2, worker, checking and platform receipts were not
-rerun or relabelled. Earlier C link-profile provenance stays explicit.
+All sixty runtime originals, eighteen interpretation originals and ten authored
+demand controls now have current `bd6a228` receipts. The positive matrix has
+**408/420 exact** primary executions and twelve Bun-FFI failures; separate direct
+entries give four exact and fourteen import.meta.require failures. Negative
+results remain **44/56 exact**, with eight resource-policy, two native-foreign and
+two Bun-host gaps. Demand results remain **92/100 exact**, six approved wildcard
+exceptions and two unwaived Nat-first diagnostic-order differences. Comptime has
+**156/160 exact** primary observations: default upstream JS still fails hand/tmpl
+four times; four supplemental stack-4096 observations pass. Negative, demand and
+comptime runners retain exit 1. All repeated results are stable; no timeouts.
+
+Every current C matrix uses pinned Linux O3/link flags, including comptime.
+Older no-optimization-flag, O2, worker, checking, platform and failure-order
+investigation receipts retain their actual commits. The renewed status-only
+strict audit accepts 366 expected positives and refuses 487, while rejecting all
+449 nonzero-expectation fixtures, including all 439 checker negatives. There are
+no abnormal exits, unexpected checker-negative acceptances or timeouts. Newly
+accepted float_pattern and let_opaque_match do not imply runtime or diagnostic
+parity for unexecuted cells; historical applicability metadata stays unchanged.
 
 The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
 module with exact acceptance/report agreement and three negatives with matching
@@ -158,7 +170,7 @@ difference or the unoptimized harness profile's Clang register-allocation failur
 for `word_live_tail`. The latter now agrees twice at O1/O2/O3, including pinned
 cli_build's O3 profile; O0 remains a separate build limitation. See the
 [source/profile investigation](cpu-failure-order.md). The new primary O3 demand
-receipt at `ffebc4a` has 92/100 exact observations, six accepted wildcard
+receipt renewed at `bd6a228` has 92/100 exact observations, six accepted wildcard
 exceptions and two unresolved Nat-first diagnostic differences. Its runner
 retains exit 1. Historical O2 columns keep their source/receipt identities;
 earlier O0 failures remain separate. No exception extends to unreviewed failures.
@@ -192,9 +204,10 @@ three collection programs fail that direct path with `TypeError: require is not
 a function`, even though separately emitted CommonJS programs pass. The
 `upstream_direct_cli` column retains these blocked cells; generated-JS
 success does not erase them. The parse-chain renewal separately records one
-successful pure direct entry and two more blocked IO entries; the operator-chain
-checkpoint adds three blocked IO entries. No Bun install or upstream edit was
-made. This is an oracle-host blocker for that lane, not a reason to stop unrelated
+successful pure direct entry and two more blocked IO entries; operator-chain
+adds three blocked IO entries and float syntax adds one pure and two blocked IO
+entries. All nine parse direct-entry rows were renewed at `bd6a228`. No Bun install
+or upstream edit was made. This is an oracle-host blocker for that lane, not a reason to stop unrelated
 CPU verification or require a GPU desktop.
 
 ## Next bounded work
@@ -235,10 +248,12 @@ No C compilation/execution profile applies after that generation refusal. The
 [brace/numeric operator chains](cpu-parse-operators.md) have exact five-runtime
 results with verified generation applicability and separate direct-IO host
 refusals. Their proof-check exclusions did not predict executable failure.
-Next is `parse/chain_suffix_f32`, `parse/float_exponent`, `parse/float_pattern`.
-These are ledger-selected compiled candidates, not completed executions. Verify
-the float-pattern comment's claimed compiled refusal by actually generating each
-target; source comments and strict-proof exclusions do not establish that result.
+The [float syntax/pattern group](cpu-parse-floats.md) now has exact five-runtime
+results after three scoped corrections. Next is `compile/float_builtin_agreement`,
+`compile/float_accumulation`, `compile/float_unboxed_ctor`: source-inspected
+Base/IO candidates covering rounding intrinsics, accumulation and F32 storage.
+Their five-runtime original-fixture qualification is unrun. Verify actual
+upstream generation rather than relying on comments or strict-proof exclusions.
 New applicable C-oracle builds retain pinned Linux O3/link flags; older profiles
 remain separate.
 The sleep_order and
@@ -269,6 +284,6 @@ pwsh -NoProfile -File scripts/compare-cpu-negatives.ps1 -Reference <reference> -
 
 The comparison runner snapshots and hashes the port binary before execution.
 It retains raw receipts and enforces 60-second child deadlines. `-Suite all`
-includes baseline, effects, control, collections, scheduler, word and
-representation checks. Frozen
+includes baseline, effects, control, collections, scheduler, word,
+representation and parse-chain/operator/float checks. Frozen
 toolchains, lockfile, pin and all previous evidence remain unchanged.

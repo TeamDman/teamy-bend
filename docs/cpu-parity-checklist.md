@@ -11,18 +11,19 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 57-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `ef48b99` qualifies
-[brace and numeric operator chains](cpu-parse-operators.md), with **807 passed,
+1,302-fixture inventory and 60-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `bd6a228` qualifies
+[float syntax, patterns and printing](cpu-parse-floats.md), with **810 passed,
 zero failed, 49 ignored** in the full gate and strict all-target Clippy passing.
-Existing test functions were expanded. The approved demand contract remains
-implemented; competing-error ordering stays open and unwaived. O0's oracle build
-failure remains distinct from matching Word results at pinned O3.
+Pattern-depth accounting, U32 printing and source float rounding are corrected.
+The approved demand contract and safety budgets remain intact; competing-error
+ordering stays open and unwaived. O0's oracle build failure remains distinct
+from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 75 originals; the 1,227 remaining
+Current runtime/interpretation ledgers link 78 originals; the 1,224 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 623 compiled candidates. These are distinct
+interpreter-only cases and 620 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -440,31 +441,41 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [brace and numeric chains](cpu-parse-operators.md),
-`ef48b99`. Three unchanged originals match five primary runtimes twice: 30 exact
-observations. All three direct upstream IO entries remain blocked by missing
-import.meta.require. Strict proof checking still excludes IO independently of
-successful executable behavior. No production, demand, budget or error-order
-change was needed. Full gate: **807 passed, zero failed, 49 ignored**; strict
-all-target Clippy and 31 focused tests pass. Existing regression cases expanded
-without adding test functions.
+Latest bounded checkpoint: [float syntax and patterns](cpu-parse-floats.md),
+`bd6a228`. Three unchanged originals match five primary runtimes twice: 30 exact
+observations; an authored bit/pattern control adds ten. Actual upstream generation
+succeeds despite the stale float-pattern comment. Pure direct entry agrees; two
+IO entries retain import.meta.require host failures. Bounded pattern compilation,
+U32 term printing and binary64-to-binary32 literal conversion are corrected.
+Full gate: **810 passed, zero failed, 49 ignored**; strict all-target Clippy and
+54 focused tests pass. Approved demand semantics and all safety budgets remain.
 
-Renewed positive matrix: **368/380 exact** under pinned Linux C O3/link flags,
-twelve Bun-FFI gaps. Twelve separate direct entries produce two exact and ten
-host-blocked observations. Unchanged negative/demand receipts stay at `ffebc4a`:
+Renewed positive matrix: **408/420 exact** under pinned Linux C O3/link flags,
+twelve Bun-FFI gaps. Eighteen separate direct entries produce four exact and
+fourteen host-blocked observations. Current negative/demand receipts retain
 **44/56 negative exact** plus eight resource-policy, two native-foreign and two
-Bun-host gaps; **92/100 demand exact**, six accepted wildcard exceptions and two
-unwaived Nat-first error-order differences. Eighteen normalization originals keep
-`20170de`; comptime, O2, worker, checking and platform receipts keep their commits.
+Bun-host gaps; **92/100 demand exact**, six approved wildcard exceptions and two
+unwaived Nat-first error-order differences. Normalization gives 176 successful
+observations and 28 expected printer refusals, with exact text and structure.
+Comptime gives **156/160 exact** primary observations: four default upstream-JS
+stack failures remain; four supplemental stack-4096 observations pass. All three
+port lanes and upstream C pass 32/32. These matrices now identify `bd6a228`;
+historical O2, worker, checking, platform and order-investigation identities remain.
 
-The ledgers link 75 distinct originals; 1,227 lack runtime/interpretation receipts
-(439 checker negatives, twelve check-only, 153 interpreter-only, 623 compiled
+The renewed strict audit accepts 366 positives, refuses 487 and rejects all 449
+nonzero-expectation fixtures, including all 439 checker negatives. No unexpected
+checker-negative acceptance, abnormal exit or timeout. Newly accepted
+float_pattern and let_opaque_match are checking statuses, not blanket runtime
+parity; the historical applicability snapshot and counts remain unchanged.
+
+The ledgers link 78 distinct originals; 1,224 lack runtime/interpretation receipts
+(439 checker negatives, twelve check-only, 153 interpreter-only, 620 compiled
 candidates). The checking ledger retains one exact check-only acceptance and
 three phase/construct agreements with differing raw diagnostics. Linked does not
-mean every lane passed. Next independent family: `parse/chain_suffix_f32`,
-`parse/float_exponent`, `parse/float_pattern`. Confirm actual generated-target
-applicability, including the float-pattern structural-word comment, before
-qualifying results. No new dependency or semantic exception is assumed.
+mean every lane passed. Next independent family: `compile/float_builtin_agreement`,
+`compile/float_accumulation`, `compile/float_unboxed_ctor`. Sources are inspected;
+original-fixture runtime qualification and actual target applicability are unrun.
+No new dependency or semantic exception is assumed.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -474,6 +485,7 @@ CPU work.
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
+| Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |
 | Passed, bounded | Function-valued normalization | Fifteen original operator/recursive functions match pinned core structure and raw output twice. Nat-fuel/reusable-binding controls retain complete application results. Grouped application printing fixes two presentation differences; structural comparison and evaluation are unchanged. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
@@ -487,7 +499,7 @@ CPU work.
 | Implemented; narrow accepted exception | Approved arithmetic demand and wildcard refusal | Three Nat cases now agree across all five runtimes twice. Three private-wildcard controls preserve refusal and explicitly label the accepted upstream C exception. This is not byte parity with that C behavior. |
 | Missing | Competing failure diagnostics | `nat_first` chooses a different first error in upstream C at O0/O1/O2/O3. Source and closure/bound controls identify a C lowering difference. The core left-to-right model excludes runtime numeric/foreign errors; no new order or exception is imposed. |
 | Passed in CLI profile; oracle build limitation in O0 | Upstream Word compilation | `word_live_tail` matches at O1/O2/O3, including pinned cli_build's O3 flags. O0 fails Clang register allocation before execution; its failure stays recorded separately. |
-| Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
+| Missing | Parser/checker/base breadth | Renewed strict audit has 366 accepted positives, 487 refused and all 439 checker negatives refused. Status-only agreement does not qualify diagnostics or runtime behavior. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |

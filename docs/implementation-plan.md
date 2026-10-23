@@ -3553,3 +3553,35 @@ kinds, separated by applicable mode. Next is F32 suffixes, exponent literals and
 float patterns, whose source comments do not replace actual compiler probes.
 Full CPU parity remains incomplete. Dependencies, tools, pin, safety limits,
 approved demand semantics and all previous history are preserved. No push.
+
+### [x] 5.42 Qualify float syntax, literal patterns and numeric printing
+
+Implementation `bd6a228` qualifies unchanged `parse/chain_suffix_f32`,
+`parse/float_exponent` and `parse/float_pattern`. Upstream C/JS actually generate
+all three, contrary to the stale float-pattern comment. Nullary pattern columns
+now use bounded iterative continuation, complete U32 literals print as numerals,
+and decimal F32 source literals follow pinned Number-then-fround rounding.
+Ordinary constructor fallback, finite rejection, deep-pattern guards, raw output,
+approved demand rules and all safety limits are preserved. Authored bit controls
+expose and cover the baseline rounding mismatch without changing runtime F32.read.
+
+All three originals match five primary runtimes twice: 30 exact observations;
+one authored control adds ten. Full gate **810 passed, zero failed, 49 ignored**;
+54 focused tests and strict all-target Clippy pass. Renewed positive matrix:
+408/420 exact plus twelve Bun-host failures; separate direct entries give four
+exact and fourteen import.meta.require failures. Negatives remain 44/56 exact;
+demand controls 92/100 exact plus six approved wildcard exceptions and two
+unwaived competing-error differences. Comptime has 156/160 primary exact results
+and four default upstream-JS stack failures, with four exact supplemental runs.
+All applicable C matrices now use pinned O3/link flags. No timeouts.
+
+Eighteen original normalization cases retain exact structure/text agreement;
+strict audit now accepts 366 positives and refuses 487, rejecting all 439 checker
+negatives with no abnormal exit. The newly accepted let_opaque_match checking
+status is not promoted to runtime parity. Historical snapshots retain their
+identities. The [checkpoint](cpu-parse-floats.md) records commands, receipts,
+source/binary hashes and the initial failed parser expectation. Ledgers link
+78 originals; 1,224 lack runtime/interpretation evidence, classified by mode.
+Next independent family is float_builtin_agreement, float_accumulation and
+float_unboxed_ctor, source-inspected but runtime-unqualified. Full parity and
+consumer/API gaps remain open. Frozen inputs, all history preserved; no push.
