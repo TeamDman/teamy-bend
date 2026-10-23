@@ -3412,3 +3412,32 @@ accepted-exception scope and next independent recursive-normalization companions
 No newer upstream, dependency/toolchain change, GPU requirement or push. This
 bounded family is implemented; full CPU parity and the separate ordering decision
 remain open under the existing acceptance criterion.
+
+### [x] 5.37 Qualify recursive companions and investigate competing failures
+
+Candidate `6e5bd61` qualifies unchanged `_002_sel`, `_003_flip` and `_004_sel`
+against pinned interpretation. The sole discrepancy was generated pattern-name
+numbering; a per-declaration display counter now follows upstream while semantic
+binder IDs remain globally unique. Original-golden, structural, scope and nested
+application checks pass. Twelve originals plus four authored normalization
+controls agree twice; full gate **801 passed, zero failed, 49 ignored**, strict
+all-target/all-feature Clippy passes. Positive/negative renewals retain 308/320
+and 44/56 exact outcomes and their existing host/resource/foreign gaps.
+
+The [ordering investigation](cpu-failure-order.md) preserves exact outcomes across
+five controls and upstream C O0/O1/O2/O3. C's non-flat-call hoisting selects the
+private-request error before an inline Nat overflow; closure indirection and an
+explicit IO binding restore agreement. The core model states left-to-right weak
+reduction but excludes these runtime error mechanisms. The cross-backend
+diagnostic requirement stays open; no new exception or ordering change is made.
+Word matches O1/O2/O3, including pinned cli_build's O3 profile. Only O0 fails
+register allocation, before execution. There were no timeouts.
+
+The [checkpoint](cpu-recursive-companions.md) and ledgers record current source,
+hashes and commands; older comptime/multiworker/checking/platform receipts retain
+their commits. Sixty-three originals now have runtime or interpretation evidence;
+1,239 lack those receipt kinds with applicability categories preserved. The next
+independent bounded group is `_001_main_dec`, `_001_not`, `_001_par`, including
+verified function-printer applicability. Full CPU parity remains incomplete.
+Approved demand semantics, fixed budgets, dependencies/toolchains/pin and prior
+history are preserved. Local commits only; no push.

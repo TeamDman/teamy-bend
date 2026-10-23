@@ -1,5 +1,12 @@
 # Approved native executable demand checkpoint
 
+Historical implementation and receipts follow. The subsequent
+[recursive-companion checkpoint](cpu-recursive-companions.md) renews the affected
+matrices. Its [ordering research](cpu-failure-order.md) identifies C lowering as
+the competing-error cause and clarifies that the earlier unoptimized Clang
+failure used a comparison-harness profile; pinned cli_build uses O3, which passes
+the Word control. The older O2 receipt below remains tied to `208b343`.
+
 Implementation: `208b343a286a8501fc3a479a4eb7b40bb01832d1`, on
 `fix/cpu-approved-demand-20261023`, local and unpushed. The presentation-only
 checkpoint `571d1ce` / `20ffa42` was completed first and remains separate.

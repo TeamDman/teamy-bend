@@ -116,16 +116,17 @@ turning status-only results, source hints or related regression suites into pari
 passes. Full per-lane applicability/printability and API review remain required.
 
 The separate [interpretation ledger](cpu-interpretation-evidence.csv) now links
-nine originals at candidate `571d1ce`: eight interpreter-only cases and one
+twelve originals at candidate `6e5bd61`: eleven interpreter-only cases and one
 compiled candidate whose function-valued result is actually refused by upstream
-C/JS generation. All nine match normalized core structure and raw output twice.
-The [rewrite-printer checkpoint](cpu-rewrite-printing.md) also qualifies four
+C/JS generation. All twelve match normalized core structure and raw output twice.
+The [recursive-companion checkpoint](cpu-recursive-companions.md) also renews four
 authored controls, which add no inventory rows. Across the runtime and
-interpretation ledgers, 60 distinct originals have execution evidence; 1,242
+interpretation ledgers, 63 distinct originals have execution evidence; 1,239
 lack those receipt kinds: 439 checker negatives, twelve check-only modules,
-156 interpreter-only cases and 635 compiled candidates. These are distinct
+153 interpreter-only cases and 635 compiled candidates. These are distinct
 requirements, not one runtime denominator. The historical applicability CSV
-remains tied to its recorded inputs.
+remains tied to its recorded inputs. Runtime receipt renewal covers 35 originals
+at `6e5bd61`; the sixteen comptime originals retain their `208b343` receipts.
 
 The separate [checking ledger](cpu-checking-evidence.csv) records one check-only
 module with exact acceptance/report agreement and three negatives with matching
@@ -134,7 +135,7 @@ unqualified. No proof-only rejection is substituted for execution or diagnostic
 parity. Structural equality retains every supported rewrite field and binding;
 raw `pass_exact` is an independent requirement.
 
-The [approved-demand checkpoint](cpu-approved-demand.md), `208b343`, renews
+The historical [approved-demand checkpoint](cpu-approved-demand.md), `208b343`, renewed
 all 51 runtime rows and nine interpretation rows at their recorded serial/host
 profiles. The positive matrix remains 308/320 exact (twelve Bun-host failures),
 and the six-fixture negative matrix remains 44/56 exact (eight resource-policy,
@@ -149,8 +150,10 @@ exact results from the narrow accepted upstream-C wildcard exception. That
 exception applies to `unused_rhs_error`, `ordinary_rhs_error` and the isolation
 control `forced_request_wildcard`; their six C observations are explicitly not
 exact matches. It does not waive the newly reproduced `nat_first` diagnostic-order
-difference or the default Clang register-allocation failure for `word_live_tail`.
-The latter agrees in a separately recorded upstream-C `-O2` profile. The demand
+difference or the unoptimized harness profile's Clang register-allocation failure
+for `word_live_tail`. The latter now agrees twice at O1/O2/O3, including pinned
+cli_build's O3 profile; O0 remains a separate build limitation. See the
+[source/profile investigation](cpu-failure-order.md). The unchanged demand
 runner retains exit 1 for open cells. No exception extends to unreviewed failures.
 
 Ledger states are literal: `pass` means the recorded stream/status contract
@@ -168,10 +171,10 @@ rows still retain blocked upstream-JS lanes. Their retained C profile includes
 one, two and four workers at three repetitions.
 Earlier authored worker controls separately qualify request
 and Nat failure outcomes at one, two and four C workers; broader profiles remain
-open. Fully demanded add/double controls now match; the new partial-demand and
-wildcard-request oracle disagreements remain unqualified, outside this ledger's
-upstream-fixture rows. Authored agreement with one conflicting oracle cannot
-qualify the case or increase the inventory coverage count.
+open. Fully demanded add/double and the approved strict-demand controls are
+recorded separately from this ledger's upstream-fixture rows. Only the three
+named wildcard controls have an accepted C exception; competing-error order
+remains unresolved. Authored controls never increase the inventory coverage count.
 Private receipt hashes and binary snapshots are retained with the checkpoint
 evidence; no machine paths appear here.
 
@@ -206,11 +209,19 @@ ordering, first errors and fixed resource limits have regression coverage. Its
 new constructor-tail compression keeps the original 10,000-element workloads
 within those limits. The separately observed upstream-C competing-error order
 remains unresolved; it has not been folded into the accepted wildcard exception.
+The [source/profile investigation](cpu-failure-order.md) identifies C lowering
+as the demonstrated cause: all O0/O1/O2/O3 profiles choose the same different
+error, while a closure-call control and explicit IO binding restore agreement.
+The core model specifies left-to-right reduction but excludes the runtime
+numeric/foreign diagnostic cases, so it does not close that contract gap.
+The Word control matches the pinned CLI-equivalent O3 build profile twice;
+the separate O0 register-allocation failure remains an oracle build limitation.
 Seven U32 fixtures and the operator/representation group retain exact five-runtime
-results, renewed twice. Nine original pure-interpretation cases retain exact
+results, renewed twice. Twelve original interpretation cases retain exact
 structural and textual agreement, with four additional authored controls.
-The next independent small interpretation group is the recursive `_002_sel`,
-`_003_flip` and `_004_sel` companions. The sleep_order and
+The recursive `_002_sel`, `_003_flip` and `_004_sel` companions are now qualified.
+The next independent group is `_001_main_dec`, `_001_not` and `_001_par`, with
+actual upstream function-printer applicability checks still required. The sleep_order and
 sleep_timer fixtures now have bounded four-runtime and multiworker evidence;
 upstream JS needs its unavailable Bun poller. Different-duration spawn_sleep
 remains unqualified: source-backed overdue registration order prevents treating

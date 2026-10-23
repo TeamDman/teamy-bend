@@ -12,17 +12,20 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 51-row runtime ledger expose missing evidence;
-neither is a completion percentage.
-The [U32 checkpoint](cpu-word-operations.md) closes native packed division/modulo
-work exhaustion. The subsequent [representation checkpoint](cpu-word-representation.md)
-adds three fixtures with 30/30 exact five-runtime observations; the reported
-upstream C structural-view refusal does not reproduce. The renewed gate passes
-776 tests with zero failures and 49 ignored. Prior receipt limitations remain.
-The [applicability report](cpu-applicability.md) classifies the 1,251 remaining
-unlinked entries: 439 checker negatives, twelve check-only modules, 164
-interpreter-only cases and 636 compiled candidates. Those are different acceptance
-requirements, not a count of missing CPU execution tests. Pending demand choices,
-resource/host gaps and complete lane/API review remain required.
+neither is a completion percentage. Current source checkpoint `6e5bd61` qualifies
+the [recursive companions](cpu-recursive-companions.md), with **801 passed,
+zero failed, 49 ignored** in the full gate. The approved demand contract is
+implemented. The [failure-order research](cpu-failure-order.md) keeps the separate
+competing-error discrepancy open and distinguishes the O0 oracle build failure
+from matching Word results at the pinned CLI's O3 profile.
+
+The historical [applicability report](cpu-applicability.md) retains its original
+inputs. Current runtime/interpretation ledgers link 63 originals; the 1,239
+remaining entries comprise 439 checker negatives, twelve check-only modules,
+153 interpreter-only cases and 635 compiled candidates. These are distinct
+requirements, not a count of CPU runtime defects. Complete lane/API review,
+resource/host gaps and cross-oracle requirements remain open. The intervening
+milestones below are historical; the final checklist describes the current state.
 
 ## Passed in this review
 
@@ -437,22 +440,24 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [rewrite-term presentation](cpu-rewrite-printing.md)
-at `571d1ce`. Nine original normalization fixtures and four authored controls
+Latest bounded checkpoint: [recursive companions](cpu-recursive-companions.md)
+at `6e5bd61`. Twelve original normalization fixtures and four authored controls
 match structure and raw text twice, preserving all rewrite fields and binder
-identities. Full gate: **791 passed, zero failed, 49 ignored**; strict Clippy
+identities. Full gate: **801 passed, zero failed, 49 ignored**; strict Clippy
 passes. Positive renewal: **308/320 exact**, twelve Bun-host gaps; negative renewal:
 **44/56 exact**, eight resource-policy, two native-foreign and two Bun-host gaps.
 Earlier comptime and multiworker profiles retain their source commits.
 
-The runtime and interpretation ledgers link 60 distinct originals; 1,242 lack
+The runtime and interpretation ledgers link 63 distinct originals; 1,239 lack
 those execution receipt kinds (439 checker negatives, twelve check-only,
-156 interpreter-only, 635 compiled candidates). A separate checking ledger has
+153 interpreter-only, 635 compiled candidates). A separate checking ledger has
 one exact check-only acceptance and three phase/construct agreements whose raw
 diagnostics still differ. Linked never means every applicable lane has passed.
-Next is the now-approved strict executable argument/Nat-bound contract and the
-explicit upstream-C wildcard exception, with implementation and evidence still
-required. This presentation checkpoint changes none of those semantics.
+The approved strict executable argument/Nat-bound contract and explicit C
+wildcard exception remain implemented and tested. This presentation checkpoint
+changes none of those semantics. Next independent qualification is the Base
+function group `_001_main_dec`, `_001_not`, `_001_par`, including verified printer
+applicability. The separate competing-error diagnostic requirement remains open.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -461,7 +466,7 @@ CPU work.
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
-| Passed, bounded | Function-valued normalization | Six original operator/recursive functions match pinned core structure and raw output twice. No normalization defect was demonstrated in the recursive family; match-printer correction closes the prior two presentation gaps. |
+| Passed, bounded | Function-valued normalization | Nine original operator/recursive functions match pinned core structure and raw output twice. Match rendering and local generated-name numbering now match without changing semantic binder IDs or structural comparison. |
 | Passed, bounded | Rewrite-term rendering | Named/unnamed, shadowed and nested motives match pinned output with all core fields preserved. Three new original normalization fixtures and four authored controls pass. Adjacent negative raw diagnostics remain open. |
 | Passed, bounded | Channel terminal outcomes | New exact five-runtime control suite; cleanup and cancellation regressions retained. Broader close-wakeup scheduling has local tests but still needs selected upstream differential cases. |
 | Passed in four runtimes; oracle-host blocked | Equal-duration and zero-timer ordering | Original sleep_order/sleep_timer and authored ready-before-timers control match native, port C/JS and upstream C at declared C profiles. Upstream JS requires Bun; different-duration host-sensitive cases remain unqualified. |
@@ -472,7 +477,8 @@ CPU work.
 | Passed, bounded | Nat overflow diagnostics and fully demanded add/double | Original overflow and authored large/boundary controls match five runtimes twice. Approved strict executable demand now validates before shallow observation; proof/data laziness and fixed limits remain separate. |
 | Passed, bounded | Native/JS array-depth and JS scalar diagnostics | Original supported lanes now preserve exact stderr/status; boundary/order/cleanup controls pass. C allocation and JS element budgets remain separate refusals. |
 | Implemented; narrow accepted exception | Approved arithmetic demand and wildcard refusal | Three Nat cases now agree across all five runtimes twice. Three private-wildcard controls preserve refusal and explicitly label the accepted upstream C exception. This is not byte parity with that C behavior. |
-| Missing / profile-dependent | Competing failures and upstream Word compilation | New `nat_first` chooses a different first error in upstream C; no exception is approved. `word_live_tail` fails default Clang register allocation, but agrees under separately recorded `-O2`. |
+| Missing | Competing failure diagnostics | `nat_first` chooses a different first error in upstream C at O0/O1/O2/O3. Source and closure/bound controls identify a C lowering difference. The core left-to-right model excludes runtime numeric/foreign errors; no new order or exception is imposed. |
+| Passed in CLI profile; oracle build limitation in O0 | Upstream Word compilation | `word_live_tail` matches at O1/O2/O3, including pinned cli_build's O3 flags. O0 fails Clang register allocation before execution; its failure stays recorded separately. |
 | Missing | Parser/checker/base breadth | Full strict audit remains 364 accepted positives. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
