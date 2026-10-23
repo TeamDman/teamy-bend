@@ -3,7 +3,9 @@
 param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
-    [string]$Compiler = $env:TEAMY_BEND_CC
+    [string]$Compiler = $env:TEAMY_BEND_CC,
+    [ValidateSet('baseline', 'effects', 'all')][string]$Suite = 'baseline',
+    [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
 if (-not $IsLinux) { throw 'This receipt qualifies the Linux POSIX C runtime.' }
@@ -30,7 +32,7 @@ $node = if ($env:TEAMY_BEND_NODE) { $env:TEAMY_BEND_NODE } else { 'node' }
 $rows = [System.Collections.Generic.List[object]]::new()
 
 function Invoke-Bounded {
-    param([string]$Label, [string]$Program, [string[]]$Arguments, [string]$Directory)
+    param([string]$Label, [string]$Program, [string[]]$Arguments, [string]$Directory, [switch]$AllowFailure)
     $start = [System.Diagnostics.ProcessStartInfo]::new()
     $start.FileName = $Program
     $start.WorkingDirectory = $Directory
@@ -43,14 +45,15 @@ function Invoke-Bounded {
     $process.StartInfo = $start
     $stdout = [System.IO.MemoryStream]::new()
     $stderr = [System.IO.MemoryStream]::new()
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
     try {
         [void]$process.Start()
         $outTask = $process.StandardOutput.BaseStream.CopyToAsync($stdout)
         $errTask = $process.StandardError.BaseStream.CopyToAsync($stderr)
         $timedOut = -not $process.WaitForExit(60000)
         if ($timedOut) { $process.Kill($true); $process.WaitForExit() }
-        $outTask.GetAwaiter().GetResult()
-        $errTask.GetAwaiter().GetResult()
+        [void]$outTask.GetAwaiter().GetResult()
+        [void]$errTask.GetAwaiter().GetResult()
         $outBytes = $stdout.ToArray()
         $errBytes = $stderr.ToArray()
         [System.IO.File]::WriteAllBytes((Join-Path $fixtureDirectory "$Label.stdout"), $outBytes)
@@ -58,24 +61,72 @@ function Invoke-Bounded {
         $result = [ordered]@{
             command = @($Program) + $Arguments; cwd = $Directory
             exit = $process.ExitCode; timed_out = $timedOut
+            elapsed_ms = $timer.ElapsedMilliseconds
             stdout_base64 = [Convert]::ToBase64String($outBytes)
             stderr_base64 = [Convert]::ToBase64String($errBytes)
         }
         $row.steps[$Label] = $result
-        if ($timedOut -or $process.ExitCode -ne 0) { throw "$Label failed; inspect captured evidence." }
+        if ($timedOut -or ($process.ExitCode -ne 0 -and -not $AllowFailure)) { throw "$Label failed; inspect captured evidence." }
         return $result
     } finally {
         $process.Dispose(); $stdout.Dispose(); $stderr.Dispose()
     }
 }
 
-$fixtures = @(
+function Invoke-Execution {
+    param([string]$Label, [string]$Program, [string[]]$Arguments, [switch]$AllowFailure)
+    # Upstream's file fixtures use fixed absolute names. Never overwrite a
+    # pre-existing file; execute serially and retain each newly created payload.
+    $effectFile = $fixture.effect_file
+    if ($effectFile -and (Get-Item -LiteralPath $effectFile -Force -ErrorAction SilentlyContinue)) {
+        throw "Fixture path already exists; leave it intact: $effectFile"
+    }
+    $directory = (New-Item -ItemType Directory -Path (Join-Path $fixtureDirectory $Label)).FullName
+    try {
+        $result = Invoke-Bounded $Label $Program $Arguments $directory -AllowFailure:$AllowFailure
+        if ($effectFile) {
+            $bytes = [IO.File]::ReadAllBytes($effectFile)
+            [IO.File]::WriteAllBytes((Join-Path $directory 'effect-file.bin'), $bytes)
+            $result['artifact_base64'] = [Convert]::ToBase64String($bytes)
+            $expectedFile = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fixture.effect_contents))
+            if ($result.artifact_base64 -cne $expectedFile) { throw "$Label file contents differ." }
+        }
+        return $result
+    } finally {
+        if ($effectFile -and (Test-Path -LiteralPath $effectFile -PathType Leaf)) {
+            Remove-Item -LiteralPath $effectFile
+        }
+    }
+}
+
+$baseline = @(
     @{ name = 'drop-chain'; source = "$port/tests/fixtures/cpu-baseline/drop-chain.bend"; expected = "16`n" },
     @{ name = 'nested-layout'; source = "$port/tests/fixtures/cpu-baseline/nested-layout.bend"; expected = "17`n" },
     @{ name = 'word_arithmetic'; source = "$Reference/tests/run/word_arithmetic.bend"; expected = "63`n" },
     @{ name = 'array_boxed_get'; source = "$Reference/tests/run/array_boxed_get.bend"; expected = "777113`n" },
     @{ name = 'closures_hof'; source = "$Reference/tests/run/closures_hof.bend"; expected = "64180`n" }
 )
+$effects = @(
+    @{ name = 'spawn_outlives_main'; expected = "main returns`nlate`n"; node_ffi_prefix = "main returns`n" },
+    @{ name = 'channel_fork_join'; expected = "1122`n" },
+    @{ name = 'chan_rendezvous'; expected = "m0`ns0`ns1`nm1`nm2`ns2`n" },
+    @{ name = 'chan_pipe'; expected = "4`n3`n2`n1`n0`nend`n" },
+    @{ name = 'file_roundtrip'; expected = "No such file or directory`nbend-file`n"; node_ffi_prefix = '';
+       effect_file = '/tmp/bend_io_file.tmp'; effect_contents = 'bend-file' },
+    @{ name = 'file_open_mode'; expected = "opened`nopened`nInvalid argument`nInvalid argument`n"; node_ffi_prefix = "opened`nopened`n";
+       effect_file = '/tmp/bend_io_mode.txt'; effect_contents = '' }
+)
+foreach ($fixture in $effects) { $fixture.source = "$Reference/tests/io/$($fixture.name).bend" }
+$fixtures = switch ($Suite) {
+    'baseline' { $baseline }
+    'effects' { $effects }
+    'all' { $baseline + $effects }
+}
+foreach ($fixture in $fixtures) {
+    if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
+        throw "Fixture path already exists; leave it intact: $($fixture.effect_file)"
+    }
+}
 foreach ($fixture in $fixtures) {
     $fixtureDirectory = (New-Item -ItemType Directory -Path (Join-Path $OutputDirectory $fixture.name)).FullName
     $source = Join-Path $fixtureDirectory 'main.bend'
@@ -83,7 +134,8 @@ foreach ($fixture in $fixtures) {
     $row = [ordered]@{
         fixture = $fixture.name; source_sha256 = (Get-FileHash $source -Algorithm SHA256).Hash.ToLowerInvariant()
         reference = $referenceHead; port_revision = $portHead; port_dirty = [bool]$portStatus
-        timeout_seconds = 60; steps = [ordered]@{}; matched = $false
+        timeout_seconds = 60; repetitions = $Repetitions; steps = [ordered]@{}; matched = $false
+        completed_runtimes_match = $false; deterministic = $null; environmental_limits = @()
     }
     $rows.Add($row)
     try {
@@ -100,19 +152,54 @@ foreach ($fixture in $fixtures) {
             $flags = @('-std=c11')
             if ($implementation -eq 'port') { $flags += @('-Wall', '-Wextra', '-Werror', '-pedantic') }
             $null = Invoke-Bounded "$implementation-compile" $Compiler ($flags + @($c, '-pthread', '-lm', '-ldl', '-o', $exe)) $port
-            $null = Invoke-Bounded "$implementation-c" $exe @() $fixtureDirectory
-            $null = Invoke-Bounded "$implementation-js" $node @((Join-Path $fixtureDirectory "$implementation.js")) $fixtureDirectory
         }
-        $null = Invoke-Bounded 'native' $binary @('run', $source) $port
         $expected = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fixture.expected))
-        foreach ($label in @('upstream-c', 'port-c', 'upstream-js', 'port-js', 'native')) {
-            $result = $row.steps[$label]
-            if ($result.stdout_base64 -cne $expected -or $result.stderr_base64 -cne '') {
-                throw "$($fixture.name) $label differs from expected output."
+        for ($repeat = 1; $repeat -le $Repetitions; $repeat++) {
+            foreach ($runtime in @('upstream-c', 'port-c', 'upstream-js', 'port-js', 'native')) {
+                $label = "$runtime-$repeat"
+                $allowFfiFailure = $runtime -eq 'upstream-js' -and $fixture.ContainsKey('node_ffi_prefix')
+                if ($runtime -eq 'native') {
+                    $result = Invoke-Execution $label $binary @('run', $source)
+                } elseif ($runtime.EndsWith('-js')) {
+                    $js = Join-Path $fixtureDirectory ($runtime.Replace('-js', '.js'))
+                    $result = Invoke-Execution $label $node @($js) -AllowFailure:$allowFfiFailure
+                } else {
+                    $exe = Join-Path $fixtureDirectory ($runtime.Replace('-c', ''))
+                    $result = Invoke-Execution $label $exe @()
+                }
+                if ($repeat -gt 1) {
+                    $first = $row.steps["$runtime-1"]
+                    foreach ($field in @('exit', 'stdout_base64', 'stderr_base64', 'artifact_base64')) {
+                        if ($result[$field] -cne $first[$field]) {
+                            $row.deterministic = $false
+                            throw "$($fixture.name) $runtime changed $field between repetitions."
+                        }
+                    }
+                }
+                if ($allowFfiFailure -and $result.exit -eq 1) {
+                    # Classify only this exact missing-host-FFI failure, including
+                    # its partial stdout. Every other failure remains fatal.
+                    $errorText = "Error: Cannot find module 'bun:ffi'`nRequire stack:`n- $js`n"
+                    $errorBytes = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($errorText))
+                    $prefix = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($fixture.node_ffi_prefix))
+                    if ($result.stderr_base64 -ceq $errorBytes -and $result.stdout_base64 -ceq $prefix) {
+                        $row.environmental_limits += $label
+                        continue
+                    }
+                }
+                if ($result.exit -ne 0 -or $result.stdout_base64 -cne $expected -or $result.stderr_base64 -cne '') {
+                    throw "$($fixture.name) $label differs from expected output."
+                }
             }
         }
-        $row.matched = $true
-        Write-Host "$($fixture.name): all five runtimes match stdout, stderr and exit status"
+        $row.completed_runtimes_match = $true
+        if ($Repetitions -gt 1) { $row.deterministic = $true }
+        $row.matched = $row.environmental_limits.Count -eq 0
+        if ($row.matched) {
+            Write-Host "$($fixture.name): all five runtimes match, $Repetitions repetition(s)"
+        } else {
+            Write-Host "$($fixture.name): four runtimes match; upstream JS requires bun:ffi ($Repetitions repetition(s))"
+        }
     } finally {
         ConvertTo-Json -InputObject $rows.ToArray() -Depth 12 | Set-Content -Encoding utf8 (Join-Path $OutputDirectory 'receipt.json')
     }
