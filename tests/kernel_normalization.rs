@@ -269,8 +269,7 @@ fn complete_nat_rendering_preserves_core_structure_and_open_boundaries() {
             "{source}"
         );
     }
-    // Open or annotated tails are not complete literals. Keep their structure;
-    // this does not qualify upstream's separate NUMBER n+tail presentation.
+    // Open or annotated tails must retain their structure under NUMBER n+tail.
     for source in ["Succ{tail}", "Succ{f(Zero{})}"] {
         let value = parse_term(source).unwrap();
         assert_eq!(
@@ -280,6 +279,7 @@ fn complete_nat_rendering_preserves_core_structure_and_open_boundaries() {
         );
     }
     let hole = parse_term("Succ{?unknown}").unwrap();
+    assert_eq!(hole.to_string(), "1n+?unknown");
     let rendered = parse_term(&hole.to_string()).unwrap();
     let Term::Ctr { name, args } = rendered.as_ref() else {
         panic!("the open constructor must survive");
@@ -289,6 +289,7 @@ fn complete_nat_rendering_preserves_core_structure_and_open_boundaries() {
         matches!(args.as_slice(), [tail] if matches!(tail.as_ref(), Term::Hole(name) if name == "unknown"))
     );
     let annotated = parse_term("Succ{{Zero{} : Nat}}").unwrap();
+    assert_eq!(annotated.to_string(), "1n+{0n : Nat}");
     let rendered = parse_term(&annotated.to_string()).unwrap();
     let Term::Ctr { name, args } = rendered.as_ref() else {
         panic!("the annotated constructor must survive");
@@ -308,6 +309,150 @@ fn complete_nat_rendering_preserves_core_structure_and_open_boundaries() {
         shape(ty).unwrap(),
         shape(&parse_term("Nat").unwrap()).unwrap()
     );
+}
+
+#[test]
+fn open_nat_rendering_preserves_spines_precedence_and_binding() {
+    for (source, expected) in [
+        ("Succ{tail}", "1n+tail"),
+        ("Succ{Succ{tail}}", "2n+tail"),
+        ("x => Succ{x}", "x => 1n+x"),
+        ("Succ{x => x}", "1n+(x => x)"),
+        ("Succ{f(Zero{})}", "1n+f(0n)"),
+        ("f(Succ{tail})(Zero{})", "f(1n+tail, 0n)"),
+        ("Succ{tail}(Zero{})", "(1n+tail)(0n)"),
+        ("Succ{(%{==} : N; X{})}", "1n+(%{==} : N; X{})"),
+        (
+            "{Succ{tail} == Succ{other} : Nat}",
+            "{1n+tail == 1n+other : Nat}",
+        ),
+        ("Succ{Zero{tail}}", "1n+Zero{tail}"),
+        ("Succ{Succ{}}", "1n+Succ{}"),
+        ("Succ{Succ{a, b}}", "1n+Succ{a, b}"),
+        ("Local.Succ{Succ{tail}}", "Local.Succ{1n+tail}"),
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), expected, "{source}");
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(expected).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+    // An open chain is syntax, not addition or an evaluation request.
+    let source = format!("{}unresolved{}", "Succ{".repeat(64), "}".repeat(64));
+    assert!(
+        parse_term(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("parser resource limit of 64")
+    );
+    // Core values can contain a longer spine than the deeply nested input form.
+    // Construct it directly instead of changing the parser's input budget.
+    let mut value = parse_term("unresolved").unwrap();
+    for _ in 0..64 {
+        value = term(Term::Ctr {
+            name: "Succ".into(),
+            args: vec![value],
+        });
+    }
+    assert_eq!(value.to_string(), "64n+unresolved");
+    assert_eq!(
+        shape(&value).unwrap(),
+        shape(&parse_term(&value.to_string()).unwrap()).unwrap()
+    );
+
+    // A let tail keeps its scope, and an arrow domain must bind more tightly.
+    let value = parse_term("Succ{(x = Zero{}; x)}").unwrap();
+    assert_eq!(value.to_string(), "1n+(x = 0n; x)");
+    let rendered = parse_term(&value.to_string()).unwrap();
+    let Term::Ctr { args, .. } = rendered.as_ref() else {
+        panic!("successor survives")
+    };
+    let Term::Let { bindings, body } = args[0].as_ref() else {
+        panic!("let scope survives")
+    };
+    assert_eq!(bindings.len(), 1);
+    assert!(matches!(body.as_ref(), Term::Var { id, .. } if *id == bindings[0].id));
+    let domain = parse_term("@x:Succ{tail} -> x").unwrap();
+    assert_eq!(domain.to_string(), "@x:(1n+tail) -> x");
+    let rendered = parse_term(&domain.to_string()).unwrap();
+    let Term::All {
+        id, domain, body, ..
+    } = rendered.as_ref()
+    else {
+        panic!("arrow survives")
+    };
+    assert_eq!(
+        shape(domain).unwrap(),
+        shape(&parse_term("Succ{tail}").unwrap()).unwrap()
+    );
+    assert!(matches!(body.as_ref(), Term::Var { id: body_id, .. } if body_id == id));
+}
+
+#[test]
+fn sequence_literal_rendering_preserves_tuple_and_closed_list_structure() {
+    for (source, expected) in [
+        ("Nil{}", "[]"),
+        ("Con{1n, Con{2n, Nil{}}}", "[1n, 2n]"),
+        ("Con{x => Succ{x}, Nil{}}", "[x => 1n+x]"),
+        ("Tuple{1n, Tuple{2n, 3n}}", "(1n, 2n, 3n)"),
+        ("Tuple{Tuple{1n, 2n}, 3n}", "((1n, 2n), 3n)"),
+        ("Tuple{1n, Tuple{2n}}", "(1n, Tuple{2n})"),
+        (
+            "Tuple{1n, Local.Tuple{2n, 3n}}",
+            "(1n, Local.Tuple{2n, 3n})",
+        ),
+        ("Tuple{1n, 2n, 3n}", "Tuple{1n, 2n, 3n}"),
+        ("Nil{tail}", "Nil{tail}"),
+        ("Con{1n}", "Con{1n}"),
+        ("Local.Con{1n, Local.Nil{}}", "Local.Con{1n, Local.Nil{}}"),
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), expected, "{source}");
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(expected).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+    // No empty-list guess for a broken spine. Open-list shorthand is separate.
+    let value = parse_term("Con{1n, tail}").unwrap();
+    assert_eq!(
+        shape(&value).unwrap(),
+        shape(&parse_term(&value.to_string()).unwrap()).unwrap()
+    );
+}
+
+#[test]
+fn nat_literal_fixture_preserves_exact_core_and_computation() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-normalization/nat_literal_roundtrip.bend");
+    let source = std::fs::read_to_string(&path).unwrap();
+    let expected = source
+        .lines()
+        .find_map(|line| line.strip_prefix("#|"))
+        .unwrap();
+    let book = load(path).unwrap();
+    let checked = check_book(&book).unwrap();
+    let value = checked.normalize_definition("main").unwrap();
+    assert_eq!(value.to_string(), expected);
+    assert_eq!(
+        shape_in_book(&value, &book).unwrap(),
+        shape_in_book(&parse_term(expected).unwrap(), &book).unwrap()
+    );
+    for (argument, expected) in [("0n", "0n"), ("1n", "2n"), ("3n", "6n")] {
+        assert_eq!(
+            checked
+                .evaluate("dbl", &[parse_term(argument).unwrap()])
+                .unwrap()
+                .to_string(),
+            expected
+        );
+    }
+    checked
+        .evaluate_data("main", &[])
+        .expect_err("a function inside the tuple is not a data result");
 }
 
 #[test]

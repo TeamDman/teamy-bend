@@ -48,3 +48,8 @@ the same pinned attribution. They cover annotated U32 operators, a bare Nat
 chain inside braces and a Nat literal in an equality-type result. All three
 support strict checking and actual-core normalization. Both upstream compiled
 printers refuse their returned function types; the runner checks that boundary.
+
+The unchanged `eval/nat_literal_roundtrip.bend` comes from the same pin. It
+retains complete and open-tail Nat values inside tuple/list syntax. Actual
+upstream C and JS generation refuses the compound result containing a function;
+the source comment alone is not used to classify compiled applicability.

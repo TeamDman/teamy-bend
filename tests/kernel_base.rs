@@ -81,7 +81,7 @@ def find_two():
             .evaluate("find_two", &[])
             .expect("existential proof computes")
             .to_string(),
-        "Tuple{2n, {==}}"
+        "(2n, {==})"
     );
 }
 
@@ -122,7 +122,7 @@ fn structural_division_returns_quotient_and_remainder() {
             .evaluate("main", &[])
             .expect("division computes")
             .to_string(),
-        "Tuple{2n, 1n}"
+        "(2n, 1n)"
     );
 }
 

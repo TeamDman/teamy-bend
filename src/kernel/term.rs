@@ -377,14 +377,24 @@ impl fmt::Display for Term {
                     Quant::Many => 2,
                 }
             ),
-            Self::Min(a, b) => write!(f, "({a} <&> {b})"),
+            Self::Min(a, b) => {
+                f.write_str("(")?;
+                nat_operand(f, a)?;
+                f.write_str(" <&> ")?;
+                nat_operand(f, b)?;
+                f.write_str(")")
+            }
             Self::All {
                 quant,
                 name,
                 domain,
                 body,
                 ..
-            } => write!(f, "@{quant}{name}:{domain} -> {body}"),
+            } => {
+                write!(f, "@{quant}{name}:")?;
+                nat_operand(f, domain)?;
+                write!(f, " -> {body}")
+            }
             Self::Lam { name, body, .. } => write!(f, "{name} => {body}"),
             Self::App(..) => application(f, self),
             Self::Adt {
@@ -403,20 +413,7 @@ impl fmt::Display for Term {
                 }
                 Ok(())
             }
-            Self::Ctr { name, args } => {
-                if let Some(value) = literal_nat(self) {
-                    return write!(f, "{value}n");
-                }
-                if name == "U32"
-                    && let [word] = args.as_slice()
-                    && let Some(value) = literal_word(word)
-                {
-                    return write!(f, "{value}");
-                }
-                write!(f, "{name}{{")?;
-                list(f, args)?;
-                f.write_str("}")
-            }
+            Self::Ctr { name, args } => constructor(f, self, name, args),
             Self::Mat { .. } => {
                 // Upstream term_show prints a consecutive fallback chain as
                 // ordered arms in one match. An empty final fallback is implicit.
@@ -463,26 +460,117 @@ impl fmt::Display for Term {
     }
 }
 
-// Pinned term_show spells a complete, unqualified Succ/Zero chain as NUMBER n.
-// Walk existing syntax only: annotations, open tails and malformed constructors
-// remain boundaries. In particular, displaying a term must never demand a field.
-fn literal_nat(mut value: &Term) -> Option<usize> {
-    let mut count = 0_usize;
-    loop {
-        match value {
-            Term::Ctr { name, args } if name == "Zero" && args.is_empty() => {
-                return Some(count);
-            }
-            Term::Ctr { name, args } if name == "Succ" => {
-                let [tail] = args.as_slice() else {
-                    return None;
-                };
-                count = count.checked_add(1)?;
-                value = tail;
-            }
-            _ => return None,
+fn constructor(
+    f: &mut fmt::Formatter<'_>,
+    value: &Term,
+    name: &str,
+    args: &[TermRef],
+) -> fmt::Result {
+    if let Some((count, tail)) = nat_spine(value) {
+        write!(f, "{count}n")?;
+        if !empty_constructor(tail, "Zero") {
+            f.write_str("+")?;
+            match_branch(f, tail)?;
         }
+        return Ok(());
     }
+    if complete_list(value) {
+        return list_literal(f, value);
+    }
+    if name == "Tuple" && args.len() == 2 {
+        return tuple_literal(f, value);
+    }
+    if name == "U32"
+        && let [word] = args
+        && let Some(value) = literal_word(word)
+    {
+        return write!(f, "{value}");
+    }
+    write!(f, "{name}{{")?;
+    list(f, args)?;
+    f.write_str("}")
+}
+
+// Walk existing syntax only. Pinned term_show retains an open tail as NUMBER n+T,
+// using precedence 1 for T. An annotation or malformed constructor ends the spine;
+// displaying never evaluates a field or treats an open tail as Zero.
+fn nat_spine(mut value: &Term) -> Option<(usize, &Term)> {
+    let mut count = 0_usize;
+    while let Term::Ctr { name, args } = value {
+        if name != "Succ" {
+            break;
+        }
+        let [tail] = args.as_slice() else {
+            break;
+        };
+        count = count.checked_add(1)?;
+        value = tail;
+    }
+    (count != 0 || empty_constructor(value, "Zero")).then_some((count, value))
+}
+
+fn empty_constructor(value: &Term, expected: &str) -> bool {
+    matches!(value, Term::Ctr { name, args } if name == expected && args.is_empty())
+}
+
+fn open_nat(value: &Term) -> bool {
+    nat_spine(value).is_some_and(|(_, tail)| !empty_constructor(tail, "Zero"))
+}
+
+fn nat_operand(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+    // Arrow domains and quantitative-meet operands use upstream precedence 2.
+    if open_nat(value) {
+        write!(f, "({value})")
+    } else {
+        write!(f, "{value}")
+    }
+}
+
+fn complete_list(mut value: &Term) -> bool {
+    while let Term::Ctr { name, args } = value {
+        if name != "Con" {
+            break;
+        }
+        let [_, tail] = args.as_slice() else {
+            break;
+        };
+        value = tail;
+    }
+    empty_constructor(value, "Nil")
+}
+
+fn list_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+    f.write_str("[")?;
+    let mut first = true;
+    while let Term::Ctr { args, .. } = value {
+        let [head, tail] = args.as_slice() else {
+            break;
+        };
+        if !first {
+            f.write_str(", ")?;
+        }
+        argument(f, head)?;
+        value = tail;
+        first = false;
+    }
+    f.write_str("]")
+}
+
+fn tuple_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+    f.write_str("(")?;
+    while let Term::Ctr { name, args } = value {
+        if name != "Tuple" {
+            break;
+        }
+        let [head, tail] = args.as_slice() else {
+            break;
+        };
+        argument(f, head)?;
+        f.write_str(", ")?;
+        value = tail;
+    }
+    argument(f, value)?;
+    f.write_str(")")
 }
 
 // Recognize the pinned term_show numeric spelling only for complete structural
@@ -534,24 +622,29 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
     if matches!(
         head,
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
-    ) {
+    ) || open_nat(head)
+    {
         write!(f, "({head})")?;
     } else {
         write!(f, "{head}")?;
     }
     f.write_str("(")?;
-    for (index, argument) in arguments.into_iter().rev().enumerate() {
+    for (index, value) in arguments.into_iter().rev().enumerate() {
         if index != 0 {
             f.write_str(", ")?;
         }
-        // Arguments use precedence 0: only a let requires these parentheses.
-        if matches!(argument, Term::Let { .. }) {
-            write!(f, "({argument})")?;
-        } else {
-            write!(f, "{argument}")?;
-        }
+        argument(f, value)?;
     }
     f.write_str(")")
+}
+
+fn argument(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+    // Arguments and literal sequence elements use upstream precedence 0.
+    if matches!(value, Term::Let { .. }) {
+        write!(f, "({value})")
+    } else {
+        write!(f, "{value}")
+    }
 }
 
 fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Term) -> fmt::Result {

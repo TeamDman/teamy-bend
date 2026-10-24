@@ -443,7 +443,7 @@ def main() -> Report:
     ))
     .expect("closed template program parses");
     let checked = check_book(&book).expect("template instances remain checked");
-    let expected = "Report{Con{2n, Con{3n, Nil{}}}, 1n, 2n, 6n}";
+    let expected = "Report{[2n, 3n], 1n, 2n, 6n}";
     assert_eq!(checked.evaluate("main", &[]).unwrap().to_string(), expected);
     assert_eq!(
         checked.evaluate_data("main", &[]).unwrap().to_string(),
