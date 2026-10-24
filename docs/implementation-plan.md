@@ -5445,3 +5445,41 @@ toolchains, pins, budgets, guards and cancellation remain frozen. Reviewed
 feature-branch preservation is now authorized; no main merge or release. Private
 raw receipts, binaries and generated failures remain outside Git and must be
 retained separately. No installs, desktop or GPU work.
+
+### [x] 5.102 Qualify statement sequences and nullary reflexivity
+
+Tested source `6c8076a19225ae5cb7445b9752510d4a2db0bf9a` adds four unchanged
+`flatten/statement_sequence` originals/companions. Eight inputs separately check four sequential increments
+and one increment; two nullary observations check function and constructor
+reflexivity. Complete graphs, text, applications, projections and executable
+proof printing remain distinct. No production fix was needed.
+[Scope and receipts](cpu-statement-sequence.md).
+
+Full gate: **1,037 passed, zero failures, 49 ignored**; focused checks
+**36 / 0 / 0**. All **40 complete graph** and **124 normalization/applicability**
+observations complete, including 60 exact refusals without artifacts and
+20 successful proof-adapter generations. Runtime matrix: **68 exact executions,
+36 generation/build successes and 4 unresolved upstream-JS printer timeouts**;
+runner exit 1. Every required port observation passes. Proof printing does not
+mean the runtime checks a proof, and projection success does not qualify the
+field-bearing upstream-JS printers.
+
+Independent review found no issues. Aggregate sharing/work/native/C/JS,
+demand/error ordering, guards and existing cancellation controls pass. No
+mid-normalization cancellation is claimed. All 1,302 checking statuses/streams
+are unchanged, including 439 rejecting negatives. Fourteen positive controls
+pass; 18 observations retain three hole/TODO disagreements. External consumers
+of the no-IO executable-emitter Err change remain unaudited. Minimal-IO upstream
+C failures, foreign diagnostics, resource/host gaps, F32.read, competing failure
+order and the unfinished 688-vector exploration remain unwaived.
+
+Detailed evidence links **372 originals**, leaving **930 unlinked**: **357 checker
+negatives, one checking-only module, 35 interpreter cases and 537 compiled
+candidates**. Linked receipts include historical, partial and blocked evidence;
+they do not establish complete CPU parity or close the API/integration inventory.
+Next proposed batch: `nested_word_switch_000`, `_001`, `word_decrement_halt`
+and `joint_fused_canonical_le`, applicability first, then 53 bounded inputs.
+This is source/ledger selection only, without execution credit. Frozen inputs,
+budgets, guards and cancellation remain unchanged. Reviewed feature checkpoint
+publication is authorized; no main merge, release, installation, desktop or GPU
+work. Private evidence and binary captures remain outside Git.

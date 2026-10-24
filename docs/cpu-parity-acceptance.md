@@ -91,43 +91,41 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Tested source `39634e208333393e6cf0b47502eb4669ba2fd590` adds seven unchanged
-`flatten/annotated_computed_scrutinee_000` originals/companions and **77 bounded
-applications** covering annotated list length/selection, all Boolean cases and
-all 49 ordered pairs of seven lists. Original graphs/text, complete constructors,
-scalar projections and executable output remain separate. No production change
-was needed. [Scope and receipts](cpu-annotated-scrutinee.md).
+Tested source `6c8076a19225ae5cb7445b9752510d4a2db0bf9a` adds four unchanged
+`flatten/statement_sequence` originals/companions. Eight inputs separately check four sequential increments
+and one increment; two nullary observations check function and constructor
+reflexivity. Complete graphs, text, applications, projections and executable
+proof printing remain distinct. No production fix was needed.
+[Scope and receipts](cpu-statement-sequence.md).
 
-Full gate: **1,030 passed, zero failures, 49 ignored**. Focused controls:
-**35 / 0 / 0**. All **84 complete graph** and **210 normalization/applicability**
-observations complete, including 140 exact build refusals without artifacts.
-The runtime matrix records **162 exact executions, 84 successful generation/
-build checks and 6 unresolved upstream-JS printer timeouts**; runner exit
-**1**. All required port observations pass. Projection or nullary-result
-success does not qualify the field-bearing full-value upstream-JS printers.
+Full gate: **1,037 passed, zero failures, 49 ignored**; focused checks
+**36 / 0 / 0**. All **40 complete graph** and **124 normalization/applicability**
+observations complete, including 60 exact refusals without artifacts and
+20 successful proof-adapter generations. Runtime matrix: **68 exact executions,
+36 generation/build successes and 4 unresolved upstream-JS printer timeouts**;
+runner exit 1. Every required port observation passes. Proof printing does not
+mean the runtime checks a proof, and projection success does not qualify the
+field-bearing upstream-JS printers.
 
-Independent review found no blocking concerns or weakened comparisons. The source
-annotation is checked; its elimination from normal form agrees with upstream.
-Aggregate sharing/work/native/C/JS/demand/cancellation controls pass, with no
-mid-normalization cancellation claim. All 1,302 checking statuses/streams remain
-unchanged, including 439 rejecting negatives. Fourteen positive controls pass;
-18 observations preserve three hole/TODO disagreements. External consumers of
-the IO emitter correction remain unaudited: no-IO compilation may return Err
-where it previously produced source. Earlier minimal-IO upstream C failures,
-foreign diagnostics, resource/host gaps, F32.read, competing failure order and
-the incomplete 688-vector exploration remain unwaived.
+Independent review found no issues. Aggregate sharing/work/native/C/JS,
+demand/error ordering, guards and existing cancellation controls pass. No
+mid-normalization cancellation is claimed. All 1,302 checking statuses/streams
+are unchanged, including 439 rejecting negatives. Fourteen positive controls
+pass; 18 observations retain three hole/TODO disagreements. External consumers
+of the no-IO executable-emitter Err change remain unaudited. Minimal-IO upstream
+C failures, foreign diagnostics, resource/host gaps, F32.read, competing failure
+order and the unfinished 688-vector exploration remain unwaived.
 
-Detailed receipts link **368 originals**; **934 remain unlinked**: **357 checker
-negatives, one checking-only module, 39 interpreter cases and 537 compiled
-candidates**. Links include historical, partial and blocked results; they do not
-establish complete CPU parity or close the separate API/integration inventory.
-Next proposed batch: four `flatten/statement_sequence` originals/companions,
-applicability first, then eight closed function inputs and two nullary proof
-observations. No execution credit is assigned to that proposal. Dependencies,
-toolchains, pins, budgets, guards and cancellation remain frozen. Reviewed
-feature-branch preservation is now authorized; no main merge or release. Private
-raw receipts, binaries and generated failures remain outside Git and must be
-retained separately. No installs, desktop or GPU work.
+Detailed evidence links **372 originals**, leaving **930 unlinked**: **357 checker
+negatives, one checking-only module, 35 interpreter cases and 537 compiled
+candidates**. Linked receipts include historical, partial and blocked evidence;
+they do not establish complete CPU parity or close the API/integration inventory.
+Next proposed batch: `nested_word_switch_000`, `_001`, `word_decrement_halt`
+and `joint_fused_canonical_le`, applicability first, then 53 bounded inputs.
+This is source/ledger selection only, without execution credit. Frozen inputs,
+budgets, guards and cancellation remain unchanged. Reviewed feature checkpoint
+publication is authorized; no main merge, release, installation, desktop or GPU
+work. Private evidence and binary captures remain outside Git.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
