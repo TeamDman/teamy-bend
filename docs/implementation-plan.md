@@ -5161,3 +5161,42 @@ applicability, then compare graphs and bounded constructor applications. The
 local `Io` datatype in the continuation fixtures is not evidence of executing
 Base IO. These cases remain unqualified. Frozen inputs and local-only commits;
 no installations, new pushes, desktop or GPU work.
+
+### [x] 5.95 Qualify constructor continuations and independently review sharing
+
+Tested source `7209617167158e9fd6338e59f7ac73f505e4b88b` adds five unchanged
+constructor/continuation originals and seven regression tests, with no production
+change. An independent source review found no demonstrated blocking defect in
+the preceding sharing repair; the two recommended cache-hit/captured-binder and
+live weak-key ownership controls now pass. The exact 27-result aggregate stays
+under its unchanged budget. [Scope, commands and receipts](cpu-constructor-continuations.md).
+
+The full gate passes **997 tests, zero failures, 49 ignored**. Five originals
+match normalized graphs and text; 25 direct original applications, six nested
+continuation applications and 36 closed projected observations are distinct
+coverage. All 20 graph observations, 150 open/applicability observations and
+90 closed-runtime observations complete. The latter contain **60 exact
+status/stdout/stderr matches and 30 successful generation/build steps**, using
+upstream and port C O3 and generated JS separately. Original no-Base refusals
+and adapted function/Type printer refusals are exact; they are not executable
+passes. Local `Io` constructors do not execute Base IO. All 1,302 checking
+statuses and streams are unchanged; 439 expected negatives reject. Fourteen
+positive controls pass; 18 observations preserve three hole/TODO disagreements.
+
+Detailed evidence now links **344 originals**, including five new interpretation
+rows; **958** remain without detailed receipts: **357 checker negatives, one
+checking-only module, 63 interpreter cases and 537 compiled candidates**. The
+156 interpretation, 95 runtime and 93 checking links include historical,
+partial and blocked cells. They are not 344 fully qualified programs and do not
+establish CPU parity. Existing imported-constructor printing/JS timeout,
+erased-hole/TODO, resource/host/foreign gaps, F32.read, competing failure order,
+downstream API caveats and the incomplete 688-vector exploration remain unwaived.
+
+Next bounded work: renew the minimal imported-constructor printer reproducer
+from [ragged rows](cpu-ragged-rows.md#open-imported-constructor-printer-discrepancy).
+Historically the interpreter, upstream C and port pure CLI print `helper.Box{7}`,
+while port generated C/JS print `Box{7}` and upstream JS times out. This batch
+uses scalar projections and does not qualify that constructor spelling or
+waive its timeout. Preserve those controls before any targeted correction.
+Frozen dependencies, toolchains, pins, budgets, guards and cancellation remain;
+no installations, pushes, merges, desktop or GPU work.
