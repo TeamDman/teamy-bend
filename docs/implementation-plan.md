@@ -5524,3 +5524,46 @@ bounded list/Nat inputs. This is source/ledger selection only, without execution
 credit. Dependencies, toolchains, references, budgets, guards and cancellation
 remain frozen. Reviewed feature checkpoints may be pushed; no main merge,
 release, installation, desktop or GPU work. Private evidence stays outside Git.
+
+### [x] 5.104 Qualify type parameters and kind rejection
+
+Tested source `60c4ba15df3a2cb81d4378243fcf3540f8ae5920` adds two unchanged
+`flatten/type_param_match_000` and `_001` originals and **72 bounded applications**.
+Typed callers establish that Type, Data, the local datatype and a function type
+fit the leading Type parameter. A constructor value rejects identically even
+though that parameter is unused. Complete graphs, applications, projections,
+checking, artifact generation and execution remain distinct. No production
+change was needed. [Scope and receipts](cpu-type-parameter-matches.md).
+
+Full gate: **1,051 passed, zero failures, 49 ignored**; focused checks
+**37 / 0 / 0**. All **56 graph**, **60 original normalization/applicability** and
+**180 kind-boundary** observations pass. The kind matrix includes 80 successful
+artifact generations and 32 exact checking rejections, 20 without artifacts;
+its phase probes remain separately labeled. Runtime matrix: **44 exact
+executions, 24 generation/build successes and 4 unresolved upstream-JS printer
+timeouts**; runner exit 1. Passing projections do not qualify full-value printers.
+
+Independent review found no issues. Exact negative diagnostic bytes are stored
+losslessly as JSON; the earlier raw-fixture checkpoint and focused receipt remain
+historical. Aggregate sharing/work/native/C/JS, demand, guards and existing
+cancellation controls pass, with no mid-normalization cancellation claim.
+All 1,302 checking statuses/streams remain unchanged, including 439 rejecting
+negatives. Fourteen positive controls pass; 18 observations retain three hole/TODO
+disagreements. Earlier minimal-IO C failures, foreign diagnostics, resource/host
+gaps, F32.read, competing failure order, the unfinished 688-vector exploration
+and external executable-emitter API caveats remain unwaived.
+
+Detailed receipts link **378 originals**; **924 remain unlinked**: **357 checker
+negatives, one checking-only module, 29 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test
+counts. No flatten interpreter candidate remains unlinked, but flatten still has
+unqualified compiled/negative cases and blocked receipts. Links do not establish
+full CPU parity or close the separate API/integration inventory.
+
+Next proposed batch: `state/eval_case_tree_001`, `_002` and `eval_split_apply`.
+Establish dependent proof-function and printer applicability first, then 16
+bounded proof applications and 36 corresponding enum/record/recursive helper
+observations. This is source/ledger selection only, without execution credit.
+Frozen references, dependencies, toolchains, budgets, guards and cancellation
+remain unchanged. Reviewed isolated checkpoints may be pushed; no main merge,
+release, installation, desktop or GPU work. Private evidence remains outside Git.
