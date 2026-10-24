@@ -5567,3 +5567,50 @@ observations. This is source/ledger selection only, without execution credit.
 Frozen references, dependencies, toolchains, budgets, guards and cancellation
 remain unchanged. Reviewed isolated checkpoints may be pushed; no main merge,
 release, installation, desktop or GPU work. Private evidence remains outside Git.
+
+### [x] 5.105 Qualify proof case trees and closed equation output
+
+Tested source `6523d4654f81a427dc1bf30354deb7e0dd67bb91` adds three unchanged
+`state/eval_case_tree_001`, `_002` and `eval_split_apply` originals, **16 typed
+proof applications and 36 helper computations**. Original proof-function graphs
+retain named calls. Base-importing function adapters refuse printing, whereas
+closed equation proofs are printable as `{==}`. Strict proof checking remains
+separate from runtime output. No production change was needed.
+[Scope and receipts](cpu-proof-case-trees.md).
+
+Full gate: **1,059 passed, zero failures, 49 ignored**; focused checks
+**39 / 0 / 0**. All **100 complete graph** and **102 original normalization/
+applicability** observations pass. Negative matrix: **48 exact rejections** and
+six separately labeled checking-phase probes. Runtime matrix: **260 exact
+executions, 132 generation/build successes and four unresolved upstream-JS
+printer timeouts**; runner exit 1. Passing projections and closed proofs do not
+qualify the full imported-constructor printers.
+
+The initial focused test failed because the named-definition API received an
+argument for zero-parameter main(), which returns a proof lambda. The test-only
+correction uses the already checked typed H.main(arg) callers for all sixteen
+proof inputs; helpers still use the declared-entry API. Independent review
+confirmed complete coverage and found no remaining concerns. Initial failed
+receipts and the review correction remain historical evidence.
+
+Aggregate sharing/work/native/C/JS, demand, guards and existing cancellation
+controls pass; mid-normalization cancellation is not claimed. All 1,302 checking
+statuses/streams remain unchanged, including 439 rejecting negatives. Fourteen
+positive controls pass; eighteen observations retain three hole/TODO differences.
+Minimal-IO upstream C failures, foreign diagnostics, resource/host gaps, F32.read,
+competing failure order, incomplete 688-vector exploration and external
+executable-emitter API caveats remain unwaived.
+
+Detailed receipts link **381 originals**, leaving **921 unlinked**: **357 checker
+negatives, one checking-only module, 26 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test
+counts. Historical, partial and blocked links do not establish full CPU parity
+or close the separate API/integration inventory.
+
+Next proposed batch: `proof/dependent_pair`, `multi_column_match` and
+`shared_scrutinee`. Establish kind/printer applicability before bounded dependent
+pair validity, all four Bit pairs and Nat depths 0/1/2/4. Keep field refinement,
+strict proofs, recursive rewriting and executable proof output distinct. This is
+source/ledger selection only, with no execution credit. Frozen references,
+dependencies, toolchains, budgets, guards and cancellation remain unchanged.
+Reviewed isolated checkpoints may be pushed; no main merge or release.
