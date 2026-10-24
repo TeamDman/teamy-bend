@@ -1,0 +1,598 @@
+[
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Nl{}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_band",
+    "arguments": [
+      "T{}",
+      "T{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_band",
+    "arguments": [
+      "T{}",
+      "F{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_band",
+    "arguments": [
+      "F{}",
+      "T{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_band",
+    "arguments": [
+      "F{}",
+      "F{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_beq",
+    "arguments": [
+      "T{}",
+      "T{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_beq",
+    "arguments": [
+      "T{}",
+      "F{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_beq",
+    "arguments": [
+      "F{}",
+      "T{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_beq",
+    "arguments": [
+      "F{}",
+      "F{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_neg",
+    "arguments": [
+      "T{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_neg",
+    "arguments": [
+      "F{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_sel",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_sel",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_sel",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_sel",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "S{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Nl{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Nl{}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Nl{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_eq",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}",
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Nl{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{T{}}, Nl{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{F{}}, Nl{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{T{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{T{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "annotated_computed_scrutinee_000_str_len",
+    "arguments": [
+      "Cs{Ch{F{}}, Cs{Ch{F{}}, Nl{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  }
+]

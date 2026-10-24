@@ -1,0 +1,1 @@
+Error: main's type @a:../annotated_computed_scrutinee_000_band.Bl -> @b:../annotated_computed_scrutinee_000_band.Bl -> ../annotated_computed_scrutinee_000_band.Bl cannot be printed (a function, a Type, an erased or dependent field)

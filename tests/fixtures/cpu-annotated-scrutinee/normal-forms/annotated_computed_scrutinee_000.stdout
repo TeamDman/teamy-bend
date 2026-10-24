@@ -1,0 +1,1 @@
+s => sel(str_len(s))

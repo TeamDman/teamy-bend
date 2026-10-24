@@ -1,0 +1,1 @@
+Error: main's type @a:../annotated_computed_scrutinee_000_str_len.Lst<../annotated_computed_scrutinee_000_str_len.Ch> -> ../annotated_computed_scrutinee_000_str_len.W cannot be printed (a function, a Type, an erased or dependent field)

@@ -1,0 +1,1 @@
+Error: main's type @a:../annotated_computed_scrutinee_000_str_eq.Lst<../annotated_computed_scrutinee_000_str_eq.Ch> -> @b:../annotated_computed_scrutinee_000_str_eq.Lst<../annotated_computed_scrutinee_000_str_eq.Ch> -> ../annotated_computed_scrutinee_000_str_eq.Bl cannot be printed (a function, a Type, an erased or dependent field)
