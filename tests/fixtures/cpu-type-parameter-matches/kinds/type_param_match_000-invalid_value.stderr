@@ -1,0 +1,7 @@
+Error:
+- expected : Type
+- observed : ../type_param_match_000.Nat
+Location: main
+3 | 
+4>| def main() -> H.List<H.Nat>: H.main(H.Z{}, H.Nil{}, H.Nil{})
+5 | 

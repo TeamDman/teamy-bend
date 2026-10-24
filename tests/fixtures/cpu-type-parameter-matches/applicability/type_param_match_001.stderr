@@ -1,0 +1,1 @@
+Error: main's type @A:Type -> @b:../type_param_match_001.Nat -> @c:../type_param_match_001.Nat -> @d:../type_param_match_001.Nat -> ../type_param_match_001.R cannot be printed (a function, a Type, an erased or dependent field)
