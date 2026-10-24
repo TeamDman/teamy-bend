@@ -19,3 +19,8 @@ were confirmed against pinned interpreter, generated C at O3, and generated JS.
 
 Direct printing of imported datatypes has a separately retained oracle discrepancy;
 these observation wrappers do not qualify or waive that printer contract.
+
+The `io/` adapters call the same observation wrappers and print each value through
+`List.show` and `IO.print`. Their entry kind is asserted as IO, exercising the
+native executable runtime. Pure `run_main` instead normalizes a core term; it is
+covered separately and never used as evidence for the native effect driver.

@@ -8,6 +8,7 @@ use std::process::Command;
 use std::time::Duration;
 use teamy_bend::compiler::compile_executable_c;
 use teamy_bend::compiler::compile_executable_javascript;
+use teamy_bend::kernel::ExecutableEntry;
 use teamy_bend::kernel::check_executable;
 use teamy_bend::syntax::load_executable;
 
@@ -20,18 +21,30 @@ impl Drop for Artifacts {
 }
 
 #[test]
-fn ragged_row_observations_agree_in_native_c_and_javascript() {
-    let root =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-ragged-rows/wrappers");
-    let artifacts = Artifacts(
-        std::env::temp_dir().join(format!("teamy-bend-ragged-rows-{}", std::process::id())),
-    );
+fn ragged_row_pure_observations_agree_in_normalizer_c_and_javascript() {
+    qualify("wrappers", ExecutableEntry::Pure);
+}
+
+#[test]
+fn ragged_row_io_observations_agree_in_native_runtime_c_and_javascript() {
+    qualify("io", ExecutableEntry::Io);
+}
+
+fn qualify(profile: &str, entry: ExecutableEntry) {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-ragged-rows");
+    let artifacts = Artifacts(std::env::temp_dir().join(format!(
+        "teamy-bend-ragged-rows-{profile}-{}",
+        std::process::id()
+    )));
     std::fs::create_dir(&artifacts.0).unwrap();
     for index in 0..5 {
         let name = format!("ragged_rows_{index:03}");
-        let checked =
-            check_executable(&load_executable(root.join(format!("{name}.bend"))).unwrap()).unwrap();
-        let expected = std::fs::read(root.join(format!("{name}.stdout"))).unwrap();
+        let checked = check_executable(
+            &load_executable(root.join(profile).join(format!("{name}.bend"))).unwrap(),
+        )
+        .unwrap();
+        assert_eq!(checked.entry_kind().unwrap(), entry);
+        let expected = std::fs::read(root.join("wrappers").join(format!("{name}.stdout"))).unwrap();
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
         assert_eq!(
