@@ -5,7 +5,8 @@ use crate::kernel::LetBinding;
 use crate::kernel::Quant;
 use crate::kernel::Term;
 use crate::kernel::TermRef;
-use crate::kernel::substitute;
+use crate::kernel::origins::TermOrigins;
+use crate::kernel::origins::substitute_with_origins;
 use crate::kernel::term;
 use std::rc::Rc;
 
@@ -106,8 +107,8 @@ impl Body {
         }
     }
 
-    fn replace(&self, id: usize, replacement: &TermRef) -> Self {
-        let sub = |t: &TermRef| substitute(t, id, replacement);
+    fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
+        let sub = |t: &TermRef| substitute_with_origins(t, id, replacement, origins);
         match self {
             Self::Reply(value) => Self::Reply(sub(value)),
             Self::Local {
@@ -119,7 +120,7 @@ impl Body {
                 patterns: patterns.clone(),
                 quant: *quant,
                 values: values.iter().map(sub).collect(),
-                body: Box::new(body.replace(id, replacement)),
+                body: Box::new(body.replace(id, replacement, origins)),
             },
             Self::Match { scrutinees, rows } => Self::Match {
                 scrutinees: scrutinees.iter().map(sub).collect(),
@@ -127,7 +128,7 @@ impl Body {
                     .iter()
                     .map(|r| Row {
                         patterns: r.patterns.clone(),
-                        body: r.body.replace(id, replacement),
+                        body: r.body.replace(id, replacement, origins),
                     })
                     .collect(),
             },
@@ -140,8 +141,9 @@ pub(super) fn flatten(
     vars: &[Variable],
     fresh: &mut usize,
     display_fresh: &mut usize,
+    origins: Option<&TermOrigins>,
 ) -> Result<TermRef, String> {
-    flatten_at(body, vars, fresh, display_fresh, 0)
+    flatten_at(body, vars, fresh, display_fresh, 0, origins)
 }
 
 fn flatten_at(
@@ -150,15 +152,22 @@ fn flatten_at(
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
+    origins: Option<&TermOrigins>,
 ) -> Result<TermRef, String> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     match body {
         Body::Reply(value) => Ok(vars.iter().rev().fold(Rc::clone(value), |v, b| b.lambda(v))),
-        Body::Match { scrutinees, rows } => {
-            flatten_match(scrutinees, rows, vars, fresh, display_fresh, depth + 1)
-        }
+        Body::Match { scrutinees, rows } => flatten_match(
+            scrutinees,
+            rows,
+            vars,
+            fresh,
+            display_fresh,
+            depth + 1,
+            origins,
+        ),
         Body::Local {
             patterns,
             quant,
@@ -176,6 +185,7 @@ fn flatten_at(
                     fresh,
                     display_fresh,
                     depth + 1,
+                    origins,
                 );
             }
             let bindings = patterns
@@ -187,7 +197,7 @@ fn flatten_at(
                     }
                 })
                 .collect::<Result<Vec<_>, _>>()?;
-            let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1)?;
+            let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1, origins)?;
             for _ in &bindings {
                 match tail.as_ref() {
                     Term::Lam { body, .. } => tail = Rc::clone(body),
@@ -239,6 +249,7 @@ fn flatten_match(
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
+    origins: Option<&TermOrigins>,
 ) -> Result<TermRef, String> {
     // A nullary constructor consumes a column without introducing field
     // binders. Continue that arm iteratively: a fixed-width word has one Bool
@@ -258,7 +269,7 @@ fn flatten_match(
                 s.vars.as_slice(),
             )
         });
-        match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth)? {
+        match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins)? {
             MatchStep::Done(mut value) => {
                 for (constructor, fallback) in pending.into_iter().rev() {
                     let fallback = flatten_match(
@@ -268,6 +279,7 @@ fn flatten_match(
                         fresh,
                         display_fresh,
                         depth + 1,
+                        origins,
                     )?;
                     value = term(Term::Mat {
                         constructor,
@@ -300,6 +312,7 @@ fn flatten_match_step(
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
+    origins: Option<&TermOrigins>,
 ) -> Result<MatchStep, String> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
@@ -307,7 +320,10 @@ fn flatten_match_step(
     if scrutinees.is_empty() {
         return rows.first().map_or_else(
             || Err("a match needs a case to return".to_owned()),
-            |r| flatten_at(&r.body, vars, fresh, display_fresh, depth + 1).map(MatchStep::Done),
+            |r| {
+                flatten_at(&r.body, vars, fresh, display_fresh, depth + 1, origins)
+                    .map(MatchStep::Done)
+            },
         );
     }
     let Some(first) = vars.first() else {
@@ -329,7 +345,7 @@ fn flatten_match_step(
                 };
                 Row {
                     patterns: r.patterns[1..].to_vec(),
-                    body: r.body.replace(p.id, &v.term()),
+                    body: r.body.replace(p.id, &v.term(), origins),
                 }
             })
             .collect::<Vec<_>>();
@@ -340,6 +356,7 @@ fn flatten_match_step(
             fresh,
             display_fresh,
             depth + 1,
+            origins,
         )
         .map(MatchStep::Done);
     }
@@ -380,7 +397,7 @@ fn flatten_match_step(
                     patterns.extend_from_slice(&row.patterns[1..]);
                     positive.push(Row {
                         patterns,
-                        body: row.body.replace(first.id, &value),
+                        body: row.body.replace(first.id, &value, origins),
                     });
                 }
                 Pattern::Constructor(_, _) => negative.push(row.clone()),
@@ -395,8 +412,8 @@ fn flatten_match_step(
                         patterns,
                         body: row
                             .body
-                            .replace(v.id, &first.term())
-                            .replace(first.id, &value),
+                            .replace(v.id, &first.term(), origins)
+                            .replace(first.id, &value, origins),
                     });
                     negative.push(row.clone());
                 }
@@ -428,8 +445,17 @@ fn flatten_match_step(
             fresh,
             display_fresh,
             depth + 1,
+            origins,
         )?;
-        let fallback = flatten_match(scrutinees, &negative, vars, fresh, display_fresh, depth + 1)?;
+        let fallback = flatten_match(
+            scrutinees,
+            &negative,
+            vars,
+            fresh,
+            display_fresh,
+            depth + 1,
+            origins,
+        )?;
         Ok(MatchStep::Done(term(Term::Mat {
             constructor: name.clone(),
             arm,
@@ -443,6 +469,7 @@ fn flatten_match_step(
             fresh,
             display_fresh,
             depth + 1,
+            origins,
         )?)))
     }
 }

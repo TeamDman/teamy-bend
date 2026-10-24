@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
 use crate::kernel::Declaration;
-use crate::kernel::check_book;
+use crate::kernel::check_book_with_origins;
 use crate::syntax;
 use arbitrary::Arbitrary;
 use eyre::Result;
-use eyre::eyre;
 use facet::Facet;
 use figue as args;
 use teamy_cancellation::CancellationToken;
@@ -29,16 +28,19 @@ struct CheckReport {
 impl CheckArgs {
     /// Check a program and return counts only after complete validation.
     ///
-    /// Tracked reflexivity/constructor failures write a Bend diagnostic and return output with
+    /// Tracked checking/pattern-load failures write a Bend diagnostic and return output with
     /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
     /// Returns parse, import, type, proof or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let (book, origins) = syntax::load_with_diagnostics(std::path::Path::new(&self.file))
-            .map_err(|error| eyre!("{error}"))?;
-        if let Err(error) = check_book(&book) {
+        let (book, origins) = match syntax::load_with_diagnostics(std::path::Path::new(&self.file))
+        {
+            Ok(loaded) => loaded,
+            Err(error) => return crate::cli::checker_diagnostic::reject_load(&error, cancellation),
+        };
+        if let Err(error) = check_book_with_origins(&book, Some(origins.tracker.clone())) {
             return crate::cli::checker_diagnostic::reject(&error, &origins, cancellation);
         }
         cancellation.bail_if_cancelled()?;

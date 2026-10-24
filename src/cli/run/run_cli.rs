@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
-use crate::kernel::check_executable;
+use crate::kernel::check_executable_with_origins;
 use crate::syntax::load_executable_with_diagnostics;
 use arbitrary::Arbitrary;
 use eyre::Context;
@@ -21,7 +21,7 @@ pub struct RunArgs {
 impl RunArgs {
     /// Execute main and preserve its raw output and process status.
     ///
-    /// Tracked reflexivity/constructor failures write a Bend diagnostic and return output with
+    /// Tracked checking/pattern-load failures write a Bend diagnostic and return output with
     /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
@@ -29,9 +29,14 @@ impl RunArgs {
     /// limits, output errors and cancellation.
     pub fn invoke(self, cancellation: &CancellationToken) -> eyre::Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let (source, origins) = load_executable_with_diagnostics(std::path::Path::new(&self.file))
-            .map_err(|error| eyre!("{error}"))?;
-        let checked = match check_executable(&source) {
+        let (source, origins) =
+            match load_executable_with_diagnostics(std::path::Path::new(&self.file)) {
+                Ok(loaded) => loaded,
+                Err(error) => {
+                    return crate::cli::checker_diagnostic::reject_load(&error, cancellation);
+                }
+            };
+        let checked = match check_executable_with_origins(&source, Some(origins.tracker.clone())) {
             Ok(checked) => checked,
             Err(error) => {
                 return crate::cli::checker_diagnostic::reject(&error, &origins, cancellation);

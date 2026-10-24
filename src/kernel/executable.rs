@@ -436,7 +436,15 @@ fn numeric_contract(
 /// forged effect contracts and exhausted checking limits. Accepted unsafe
 /// definitions do not become strict proof evidence.
 pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, KernelError> {
+    check_executable_with_origins(source, None)
+}
+
+pub(crate) fn check_executable_with_origins(
+    source: &ExecutableSource,
+    origins: Option<super::origins::TermOrigins>,
+) -> Result<ExecutableBook, KernelError> {
     let mut engine = empty_engine(&source.book)?;
+    engine.origins = origins;
     // Upstream stores a law and its later body in one definition object. Its
     // eventual annotation also governs signature formation at the earlier law
     // event. Retain our source-order events: this pre-scan supplies no bodies,
@@ -519,6 +527,7 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
             "opaque metadata has no corresponding declaration",
         ));
     }
+    engine.origins = None;
     let runtime = crate::runtime::Program::from_executable(
         &engine.defs,
         &engine.adts,

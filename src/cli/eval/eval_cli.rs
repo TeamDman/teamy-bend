@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
-use crate::kernel::check_book;
+use crate::kernel::check_book_with_origins;
 use crate::syntax;
 use arbitrary::Arbitrary;
 use eyre::Result;
@@ -29,16 +29,19 @@ struct EvalReport {
 impl EvalArgs {
     /// Check and evaluate the selected entry point.
     ///
-    /// Tracked reflexivity/constructor failures write a Bend diagnostic and return output with
+    /// Tracked checking/pattern-load failures write a Bend diagnostic and return output with
     /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
     /// Returns parse, check, evaluation or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let (book, origins) = syntax::load_with_diagnostics(std::path::Path::new(&self.file))
-            .map_err(|error| eyre!("{error}"))?;
-        let checked = match check_book(&book) {
+        let (book, origins) = match syntax::load_with_diagnostics(std::path::Path::new(&self.file))
+        {
+            Ok(loaded) => loaded,
+            Err(error) => return crate::cli::checker_diagnostic::reject_load(&error, cancellation),
+        };
+        let checked = match check_book_with_origins(&book, Some(origins.tracker.clone())) {
             Ok(checked) => checked,
             Err(error) => {
                 return crate::cli::checker_diagnostic::reject(&error, &origins, cancellation);

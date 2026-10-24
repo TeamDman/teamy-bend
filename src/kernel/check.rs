@@ -329,6 +329,7 @@ mod benchmark {
 
 #[derive(Clone, Debug)]
 pub(crate) struct Engine {
+    pub(super) origins: Option<super::origins::TermOrigins>,
     // Declaration maps are immutable after checking. Evaluation clones only
     // these shared pointers; each call still owns its aliases and budgets.
     pub(crate) defs: Rc<BTreeMap<String, DefDecl>>,
@@ -347,6 +348,10 @@ pub(crate) struct Engine {
 }
 
 impl Engine {
+    fn substitute(&self, value: &TermRef, target: usize, replacement: &TermRef) -> TermRef {
+        super::origins::substitute_with_origins(value, target, replacement, self.origins.as_ref())
+    }
+
     fn reflexivity_diagnostic(
         &self,
         lhs: &Lhs,
@@ -387,8 +392,11 @@ impl Engine {
             })
             .collect::<Result<Vec<_>, KernelError>>()?;
         Ok(CheckerDiagnostic {
-            // Never dereferenced. The loader retains each tracked source node.
-            term_identity: Rc::as_ptr(value) as usize,
+            // Never dereferenced. The loader weakly anchors source allocation identities.
+            term_identity: self.origins.as_ref().map_or_else(
+                || Rc::as_ptr(value) as usize,
+                |origins| origins.source(value),
+            ),
             definition: lhs.name.clone(),
             expected,
             observed,
@@ -519,7 +527,15 @@ fn mismatch(expected: &TermRef, observed: &TermRef) -> KernelError {
 /// Rejects ill-typed programs, incomplete laws, holes, unsafe/foreign assumptions,
 /// invalid resource use or recursion, and exhausted checking limits.
 pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
+    check_book_with_origins(book, None)
+}
+
+pub(crate) fn check_book_with_origins(
+    book: &Book,
+    origins: Option<super::origins::TermOrigins>,
+) -> Result<CheckedBook, KernelError> {
     let mut engine = empty_engine(book)?;
+    engine.origins = origins;
     for declaration in &book.declarations {
         engine.fuel = 2_000_000;
         let result = match declaration {
@@ -546,6 +562,7 @@ pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
             open.join(", ")
         )));
     }
+    engine.origins = None;
     let runtime = crate::runtime::Program::from_checked(&engine.defs, &engine.adts);
     Ok(CheckedBook { engine, runtime })
 }
@@ -573,6 +590,7 @@ pub(super) fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
         }
     }
     Ok(Engine {
+        origins: None,
         defs: Rc::new(BTreeMap::new()),
         adts: Rc::new(BTreeMap::new()),
         aliases: BTreeMap::new(),
@@ -933,7 +951,13 @@ impl Engine {
             }
             Term::App(f, x) => {
                 if let Term::Lam { id, body, .. } = f.as_ref() {
-                    return self.infer(lhs, &substitute(body, *id, x), demand, context, arguments);
+                    return self.infer(
+                        lhs,
+                        &self.substitute(body, *id, x),
+                        demand,
+                        context,
+                        arguments,
+                    );
                 }
                 let mut args = vec![Rc::clone(x)];
                 args.extend(arguments.iter().map(Rc::clone));
@@ -952,7 +976,7 @@ impl Engine {
                     )));
                 };
                 let xu = self.check(lhs, x, quant.demand(demand), domain, context)?;
-                Ok((substitute(body, *id, x), add(fu, xu)))
+                Ok((self.substitute(body, *id, x), add(fu, xu)))
             }
             Term::Adt { name, args, .. } => {
                 let adt = self.adt(value)?;
@@ -1028,7 +1052,7 @@ impl Engine {
                 uses,
                 self.check(lhs, arg, quant.demand(demand), domain, context)?,
             );
-            tel = substitute(body, *id, arg);
+            tel = self.substitute(body, *id, arg);
         }
         Ok((tel, uses))
     }
@@ -1094,9 +1118,9 @@ impl Engine {
                 }
                 let mut uses = self.check(
                     &lhs,
-                    &substitute(body, *id, &x),
+                    &self.substitute(body, *id, &x),
                     demand,
-                    &substitute(codomain, *tid, &x),
+                    &self.substitute(codomain, *tid, &x),
                     &next,
                 )?;
                 check_usage(&binder, &mut uses)?;
@@ -1365,7 +1389,7 @@ impl Engine {
             };
             let mut domain = field.ty;
             for (old, replacement) in &substitutions {
-                domain = substitute(&domain, *old, replacement);
+                domain = self.substitute(&domain, *old, replacement);
             }
             fresh_fields.push(Binder {
                 quant: field.quant.product(*quant),
@@ -1380,7 +1404,10 @@ impl Engine {
             name: constructor.clone(),
             args: field_values,
         });
-        let arm_goal = arrows(&fresh_fields, substitute(body, *id, &constructor_value));
+        let arm_goal = arrows(
+            &fresh_fields,
+            self.substitute(body, *id, &constructor_value),
+        );
         let mut arm_lhs = lhs.clone();
         if lhs.remaining > 0 {
             arm_lhs.equation = lambdas(
@@ -1708,6 +1735,54 @@ mod depth_tests {
 #[cfg(test)]
 mod reflexivity_diagnostic_tests {
     use super::*;
+
+    #[test]
+    fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
+        for name in [
+            "cpu-constructors/context-open.bend",
+            "cpu-checking/list_reverse_sort.bend",
+        ] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures")
+                .join(name);
+            let (book, origins) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            let plain = crate::syntax::load(&path).unwrap();
+            assert_eq!(format!("{book:?}"), format!("{plain:?}"));
+            let mut ordinary = empty_engine(&book).unwrap();
+            let mut tracked = ordinary.clone();
+            tracked.origins = Some(origins.tracker.clone());
+            for declaration in &book.declarations {
+                let results = [&mut ordinary, &mut tracked].map(|engine| {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                });
+                assert_eq!(results[0], results[1]);
+                assert_eq!(
+                    (ordinary.fuel, ordinary.depth, ordinary.fresh_id),
+                    (tracked.fuel, tracked.depth, tracked.fresh_id)
+                );
+                if results[0].is_err() {
+                    break;
+                }
+            }
+            drop(tracked);
+            drop(ordinary);
+            if let Ok(checked) = check_book_with_origins(&book, Some(origins.tracker.clone())) {
+                assert!(checked.engine.origins.is_none());
+                drop(origins);
+                let baseline = check_book(&plain).unwrap();
+                for entry in ["l123", "l321", "rev", "srt"] {
+                    assert_eq!(
+                        checked.normalize_definition(entry).unwrap().to_string(),
+                        baseline.normalize_definition(entry).unwrap().to_string()
+                    );
+                }
+            }
+        }
+    }
 
     #[test]
     fn presentation_keeps_aliases_and_uses_only_remaining_allowance() {

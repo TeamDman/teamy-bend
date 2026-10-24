@@ -11,15 +11,18 @@ mod check;
 pub(crate) mod elaborate;
 mod executable;
 mod fresh;
+pub(crate) mod origins;
 mod reduce;
 mod term;
 
 pub use check::CheckedBook;
 pub use check::KernelError;
 pub use check::check_book;
+pub(crate) use check::check_book_with_origins;
 pub use executable::ExecutableBook;
 pub use executable::ExecutableEntry;
 pub use executable::check_executable;
+pub(crate) use executable::check_executable_with_origins;
 pub use term::AdtDecl;
 pub use term::Binder;
 pub use term::Book;

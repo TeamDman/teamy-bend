@@ -335,7 +335,21 @@ impl Parser<'_> {
         Ok(self.bump())
     }
     fn flatten_body(&mut self, body: &Body, vars: &[Variable]) -> Result<TermRef, ParseError> {
-        flatten(body, vars, self.fresh, &mut self.display_fresh).map_err(|error| self.error(error))
+        flatten(
+            body,
+            vars,
+            self.fresh,
+            &mut self.display_fresh,
+            self.templates.diagnostics.as_ref().map(|o| &o.tracker),
+        )
+        .map_err(|error| self.error(error))
+    }
+    fn qualify_operators(&self, value: &TermRef, namespace: &str) -> TermRef {
+        let result = qualify_operators(value, namespace);
+        if let Some(origins) = &self.templates.diagnostics {
+            origins.tracker.transformed(value, &result);
+        }
+        result
     }
     fn fresh_variable(&mut self, name: String) -> Variable {
         self.display_fresh += 1;
@@ -606,7 +620,7 @@ impl Parser<'_> {
         self.book.declarations.push(Declaration::Def(DefDecl {
             name,
             parameters,
-            ty: qualify_operators(&ty, &self.resolve("Nat")),
+            ty: self.qualify_operators(&ty, &self.resolve("Nat")),
             body: None,
             unsafe_: false,
             foreign: false,
@@ -710,8 +724,8 @@ impl Parser<'_> {
             self.book.declarations.push(Declaration::Def(DefDecl {
                 name,
                 parameters,
-                ty: qualify_operators(&ty, &self.resolve("Nat")),
-                body: Some(qualify_operators(&value, &self.resolve("Nat"))),
+                ty: self.qualify_operators(&ty, &self.resolve("Nat")),
+                body: Some(self.qualify_operators(&value, &self.resolve("Nat"))),
                 unsafe_,
                 foreign: false,
             }));
@@ -827,7 +841,7 @@ impl Parser<'_> {
         self.book.declarations.push(Declaration::Def(DefDecl {
             name,
             parameters,
-            ty: qualify_operators(ty, &self.resolve("Nat")),
+            ty: self.qualify_operators(ty, &self.resolve("Nat")),
             body: None,
             unsafe_,
             foreign: true,
@@ -905,7 +919,7 @@ impl Parser<'_> {
                 // Operators in a compile argument are fixed at that argument's
                 // boundary, before an enclosing caller annotation can name them.
                 let argument = self.expression(0)?;
-                compile_arguments.push(qualify_operators(&argument, &self.resolve("Nat")));
+                compile_arguments.push(self.qualify_operators(&argument, &self.resolve("Nat")));
                 self.take(",");
             }
         }
@@ -925,7 +939,12 @@ impl Parser<'_> {
             {
                 // Upstream Sub is resolved before live checking: duplicating a
                 // macro parameter duplicates caller syntax, not an affine Lam.
-                crate::kernel::substitute(body, *id, &argument)
+                crate::kernel::origins::substitute_with_origins(
+                    body,
+                    *id,
+                    &argument,
+                    self.templates.diagnostics.as_ref().map(|o| &o.tracker),
+                )
             } else {
                 term(Term::App(function, argument))
             };
@@ -1042,7 +1061,7 @@ impl Parser<'_> {
                 self.bump();
                 let index = self.expression(0)?;
                 self.expect("]")?;
-                let index = qualify_operators(&index, "U32");
+                let index = self.qualify_operators(&index, "U32");
                 if self.take("<-") {
                     let value = self.expression(2)?;
                     out = apply(
@@ -1345,7 +1364,7 @@ impl Parser<'_> {
                 let ty = self.expression(0)?;
                 let name = type_head(&ty)
                     .ok_or_else(|| self.error("operators need a named type after ':'"))?;
-                out = qualify_operators(&out, &name);
+                out = self.qualify_operators(&out, &name);
             }
             self.expect(")")?;
             return Ok(out);
@@ -1446,7 +1465,7 @@ impl Parser<'_> {
                 };
                 let namespace = type_head(&ty)
                     .ok_or_else(|| self.error("array operators need a named element type"))?;
-                let value = qualify_operators(&values.remove(0), &namespace);
+                let value = self.qualify_operators(&values.remove(0), &namespace);
                 return Ok(apply(
                     term(Term::Ref("Array.new".into())),
                     [ty, depth, value],
@@ -1755,6 +1774,9 @@ impl Parser<'_> {
                     Declaration::Def(_) => None,
                 });
                 let Some(c) = constructor else {
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.unknown_pattern(name, value);
+                    }
                     return Err(self.error(format!("unknown constructor pattern: {name}")));
                 };
                 if c.fields.len() != args.len() {
@@ -2718,7 +2740,8 @@ pub fn load(path: impl AsRef<Path>) -> Result<Book, ParseError> {
 
 pub(crate) fn load_with_diagnostics(
     path: impl AsRef<Path>,
-) -> Result<(Book, super::diagnostics::DiagnosticOrigins), ParseError> {
+) -> Result<(Book, super::diagnostics::DiagnosticOrigins), super::diagnostics::DiagnosticLoadError>
+{
     let mut loader = Loader {
         templates: Templates {
             diagnostics: Some(super::diagnostics::DiagnosticOrigins::default()),
@@ -2726,7 +2749,14 @@ pub(crate) fn load_with_diagnostics(
         },
         ..Loader::default()
     };
-    loader.file(path.as_ref(), "")?;
+    if let Err(error) = loader.file(path.as_ref(), "") {
+        return Err(loader
+            .templates
+            .diagnostics
+            .as_mut()
+            .expect("enabled origins")
+            .load_failure(error));
+    }
     Ok((
         loader.book,
         loader.templates.diagnostics.expect("enabled origins"),
@@ -2758,7 +2788,10 @@ pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, Parse
 
 pub(crate) fn load_executable_with_diagnostics(
     path: impl AsRef<Path>,
-) -> Result<(ExecutableSource, super::diagnostics::DiagnosticOrigins), ParseError> {
+) -> Result<
+    (ExecutableSource, super::diagnostics::DiagnosticOrigins),
+    super::diagnostics::DiagnosticLoadError,
+> {
     let mut loader = Loader {
         executable: true,
         templates: Templates {
@@ -2767,7 +2800,14 @@ pub(crate) fn load_executable_with_diagnostics(
         },
         ..Loader::default()
     };
-    loader.file(path.as_ref(), "")?;
+    if let Err(error) = loader.file(path.as_ref(), "") {
+        return Err(loader
+            .templates
+            .diagnostics
+            .as_mut()
+            .expect("enabled origins")
+            .load_failure(error));
+    }
     let source = ExecutableSource {
         book: loader.book,
         foreign: loader.foreign,

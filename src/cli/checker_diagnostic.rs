@@ -50,6 +50,36 @@ fn emit(
     write!(diagnostic, "\nLocation: {}\n{excerpt}\n", report.definition)
         .expect("String formatting");
     tracing::debug!(internal_error = %error, "Bend check rejected");
+    write_diagnostic(&diagnostic, stderr)
+}
+
+pub(super) fn reject_load(
+    failure: &crate::syntax::diagnostics::DiagnosticLoadError,
+    cancellation: &CancellationToken,
+) -> eyre::Result<CliOutput> {
+    emit_load(failure, cancellation, &mut std::io::stderr().lock())
+}
+
+fn emit_load(
+    failure: &crate::syntax::diagnostics::DiagnosticLoadError,
+    cancellation: &CancellationToken,
+    stderr: &mut impl Write,
+) -> eyre::Result<CliOutput> {
+    cancellation.bail_if_cancelled()?;
+    let Some(report) = &failure.pattern else {
+        return Err(eyre!("{}", failure.error));
+    };
+    tracing::debug!(internal_error = %failure.error, "Bend pattern load rejected");
+    write_diagnostic(
+        &format!(
+            "Error:\n- message  : a declared constructor (unknown: {})\nLocation:\n{}\n",
+            report.constructor, report.excerpt
+        ),
+        stderr,
+    )
+}
+
+fn write_diagnostic(diagnostic: &str, stderr: &mut impl Write) -> eyre::Result<CliOutput> {
     stderr
         .write_all(diagnostic.as_bytes())
         .wrap_err("cannot write Bend checker diagnostic")?;
@@ -107,6 +137,63 @@ mod tests {
             );
             assert!(bytes.is_empty());
         }
+    }
+
+    #[test]
+    fn pattern_load_boundary_preserves_cancellation_writer_errors_and_fallback() {
+        struct Writer(bool);
+        impl Write for Writer {
+            fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+                if self.0 {
+                    Err(io::Error::other("write failed"))
+                } else {
+                    Ok(buf.len())
+                }
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                Err(io::Error::other("flush failed"))
+            }
+        }
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-constructors/nested-pattern.bend");
+        let mut error = load_with_diagnostics(path)
+            .err()
+            .expect("pattern load rejects");
+        let mut output = Vec::new();
+        let token = CancellationToken::new();
+        token.request_cancel("stop load diagnostic");
+        assert!(
+            emit_load(&error, &token, &mut output)
+                .unwrap_err()
+                .to_string()
+                .contains("stop load diagnostic")
+        );
+        assert!(output.is_empty());
+        for fail_write in [true, false] {
+            let failure =
+                emit_load(&error, &CancellationToken::new(), &mut Writer(fail_write)).unwrap_err();
+            assert!(failure.to_string().contains(if fail_write {
+                "cannot write"
+            } else {
+                "cannot flush"
+            }));
+        }
+        let result = emit_load(&error, &CancellationToken::new(), &mut output).unwrap();
+        assert_eq!(result.exit_code(), 1);
+        assert!(
+            String::from_utf8(output)
+                .unwrap()
+                .contains("7>|       Missing{}")
+        );
+        error.pattern = None;
+        let mut bytes = Vec::new();
+        assert_eq!(
+            emit_load(&error, &CancellationToken::new(), &mut bytes)
+                .unwrap_err()
+                .to_string(),
+            error.error.to_string()
+        );
+        assert!(bytes.is_empty());
     }
 
     #[test]

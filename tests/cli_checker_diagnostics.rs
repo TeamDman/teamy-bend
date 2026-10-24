@@ -254,21 +254,83 @@ fn imported_nat_and_list_constructor_diagnostics_use_the_declared_family() {
 }
 
 #[test]
-fn reconstructed_open_constructor_keeps_rejection_without_guessing_source() {
+fn reconstructed_open_constructor_retains_exact_rejection_and_source() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-constructors/context-open.bend");
     let book = teamy_bend::syntax::load(&path).unwrap();
     teamy_bend::kernel::check_book(&book).unwrap_err();
-    for command in ["check", "eval", "run"] {
-        let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
-            .args([command])
-            .arg(&path)
-            .output()
-            .unwrap();
-        assert_eq!(output.status.code(), Some(1));
-        assert!(output.stdout.is_empty());
-        let stderr = String::from_utf8(output.stderr).unwrap();
-        assert!(stderr.contains("Wrong is not a remaining constructor of Nat"));
-        assert!(!stderr.contains("Location: bad"));
+    assert_diagnostic(
+        &path,
+        "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Wrong{n}\nContext:\n- n : Nat\nLocation: bad\n3 |   Succ{pred: Nat}\n4>| def bad(n: Nat) -> Nat: Wrong{n}\n5 | def main() -> Nat: bad(0n)\n",
+    );
+}
+
+#[test]
+fn transformed_and_pattern_origins_keep_nested_imported_and_template_locations() {
+    for (main, helper, phase, expected) in [
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  Succ{\n    Wrong{n}\n  }\ndef main() -> Nat: bad(0n)\n",
+            "",
+            "checking",
+            "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Wrong{n}\nContext:\n- n : Nat\nLocation: bad\n5 |   Succ{\n6>|     Wrong{n}\n7 |   }\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.Nat: H.bad(H.Zero{})\n",
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  Succ{\n    Wrong{n}\n  }\n",
+            "checking",
+            "Error:\n- expected : a declared constructor (helper.Nat declares helper.Zero, helper.Succ)\n- observed : Wrong{n}\nContext:\n- n : helper.Nat\nLocation: helper.bad\n5 |   Succ{\n6>|     Wrong{n}\n7 |   }\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      Wrong{p}\n    case Zero{}: Zero{}\ndef main() -> Nat: bad(0n)\n",
+            "",
+            "checking",
+            "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Wrong{p}\nContext:\n- p : Nat\nLocation: bad\n6 |     case Succ{p}:\n7>|       Wrong{p}\n8 |     case Zero{}: Zero{}\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef Nat.add(a: Nat, b: Nat) -> Nat: a\ndef bad(n: Nat) -> Nat: Wrong{n + 0n}\ndef main() -> Nat: bad(0n)\n",
+            "",
+            "checking",
+            "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Wrong{n}\nContext:\n- n : Nat\nLocation: bad\n4 | def Nat.add(a: Nat, b: Nat) -> Nat: a\n5>| def bad(n: Nat) -> Nat: Wrong{n + 0n}\n6 | def main() -> Nat: bad(0n)\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef wrap(~x: Nat) -> Nat: Wrong{x}\ndef main() -> Nat: wrap(0n)\n",
+            "",
+            "checking",
+            "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Wrong{x}\nContext:\n- x : Nat\nLocation: wrap~0\n3 |   Succ{pred: Nat}\n4>| def wrap(~x: Nat) -> Nat: Wrong{x}\n5 | def main() -> Nat: wrap(0n)\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{\n      Missing{}\n    }: Zero{}\n    case Zero{}: Zero{}\ndef main() -> Nat: bad(0n)\n",
+            "",
+            "parse_load",
+            "Error:\n- message  : a declared constructor (unknown: Missing)\nLocation:\n6 |     case Succ{\n7>|       Missing{}\n8 |     }: Zero{}\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.Nat: H.value(H.Zero{})\n",
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef value(n: Nat) -> Nat: 1n+n\n",
+            "checking",
+            "Error:\n- expected : a declared constructor (helper.Nat declares helper.Zero, helper.Succ)\n- observed : 1n+n\nContext:\n- n : helper.Nat\nLocation: helper.value\n3 |   Succ{pred: Nat}\n4>| def value(n: Nat) -> Nat: 1n+n\n5 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.Nat: H.value(H.Succ{H.Zero{}})\n",
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef value(n: Nat) -> Nat:\n  match n:\n    case 0n: Zero{}\n    case 1n+p: p\n",
+            "parse_load",
+            "Error:\n- message  : a declared constructor (unknown: Zero)\nLocation:\n5 |   match n:\n6>|     case 0n: Zero{}\n7 |     case 1n+p: p\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.List: H.value\n",
+            "type Item is Data:\n  Val{}\ntype List is Data:\n  Nil{}\n  Con{head: Item, tail: List}\ndef tail(xs: List) -> List:\n  match xs:\n    case []: Nil{}\n    case h <> t: t\ndef value() -> List: tail(Con{Val{}, Nil{}})\n",
+            "parse_load",
+            "Error:\n- message  : a declared constructor (unknown: Nil)\nLocation:\n7 |   match xs:\n8>|     case []: Nil{}\n9 |     case h <> t: t\n",
+        ),
+    ] {
+        let fixture = Fixture::new(main);
+        std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        if phase == "parse_load" {
+            teamy_bend::syntax::load(fixture.source()).unwrap_err();
+        } else {
+            teamy_bend::kernel::check_book(&teamy_bend::syntax::load(fixture.source()).unwrap())
+                .unwrap_err();
+        }
+        assert_diagnostic(&fixture.source(), expected);
     }
 }
