@@ -1651,3 +1651,53 @@ frozen. Disk preflight requires 11 GiB; only completed inactive rebuildable test
 caches are reclaimed. Source, raw receipts, historical failures and CLI snapshots
 remain intact; ignored raw evidence is outside Git preservation. Reviewed feature
 checkpoint publication is authorized, with no main merge or release.
+
+## Framed dependent worker checkpoint
+
+Tested source `d1adf2ae5291faa59a30f605982e4b0d069d05f9` qualifies unchanged
+`reg/framed_cell_dep`: two original worker graphs and four inputs (0, 1, 3, 8)
+through worker and caller. Every closed Nat graph child is checked. The erased
+evidence binder preserves its reference to the earlier Nat parameter. Two
+negative adapters reject misplaced dependent evidence and false reflexivity.
+No production correction was required. [Scope and exact receipts](cpu-framed-cell.md).
+
+The original IO main prints `3` with status 0/empty stderr in native Rust and
+both implementations' generated C/JS. Actual function printers refuse exactly;
+strict proof checking/evaluation excludes imported IO. These are distinct
+contracts. Upstream direct IO execution under Node still fails with `require`
+unavailable; generated JS success does not close that host lane. Function alias
+graph fixtures remain upstream-only observations; the original and eight closed
+port graphs are asserted by executable-core unit tests, not a public proof API.
+
+Full gate **1,109 / 0 / 49**; focused **51 / 0 / 0**; focused strict Clippy passes.
+The matrix records **298 observations**, including 106 exact runtime/interpreter
+matches, 54 successful generation/build checks, 48 exact diagnostic/printer
+refusals and 52 strict-proof IO exclusions. There are no timeouts or new port
+mismatches. Two direct-host failures remain unresolved; eight upstream function
+execution cells are unrun after verified printer refusal. All repeated process
+groups are deterministic. Independent review found no blocking concern.
+
+Forty renewed observations preserve all ten unresolved diagnostic/acceptance
+cells exactly, including `unsafe_many`. Fourteen positive controls pass; eighteen
+observations preserve three hole/TODO differences. The previous supplementary
+all-target Clippy failure is historical, unwaived and not rerun here; standard
+and focused lint success do not close it. The 1,302-status audit is also retained
+as historical, not mislabeled as a fresh census.
+
+Detailed links cover **393 originals**, with **909 unlinked**: **356 checker
+negatives, one checking-only module, 15 interpreter-profile cases and 537 compiled
+candidates**. Static source profiles are hints; this original now has demonstrated
+C/JS applicability despite its earlier interpreter-only classification. Links
+include partial/blocked/historical evidence and do not establish full CPU parity.
+Previous imported-JS, dependent-pair/minimal-IO C, F32.read, error-order,
+host/foreign/resource/API gaps and the incomplete 688-vector exploration remain
+unwaived. External DefDecl/emitter consumers remain unaudited. There is still no
+mid-normalization cancellation claim.
+
+Next proposed batch: `io/main_forged_io` and `import/base_prelude`, applicability
+first, to distinguish actual Base IO identity from a user family named IO and
+prelude-free constructor evaluation. No execution credit is assigned. Inputs,
+dependencies, toolchains, limits and cancellation remain frozen. Inactive test
+caches alone are reclaimable; unique evidence is retained. Raw receipts and CLI
+snapshots remain outside Git preservation. Reviewed feature checkpoint publication
+is authorized, without a main merge or release.
