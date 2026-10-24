@@ -87,7 +87,7 @@ def main() -> Nats: map(~inc, Cons{4n, Nil{}})
             .evaluate_data("main", &[])
             .expect("run map")
             .to_string(),
-        "Cons{5n, Nil{}}"
+        "Cons{5n, []}"
     );
 }
 
