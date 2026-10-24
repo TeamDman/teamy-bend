@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -136,9 +136,17 @@ if ($Suite -in @('spacing-functions', 'all')) {
         $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
     }
 }
-if ($Suite -in @('paren-functions', 'all')) {
+if ($Suite -in @('paren-functions', 'layout', 'all')) {
     foreach ($name in @('chain_paren_group_f', 'chain_paren_group_g', 'chain_paren_group_h', 'chain_paren_group_k', 'chain_paren_group_m')) {
         $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
+}
+if ($Suite -in @('layout', 'all')) {
+    foreach ($name in @('match_indent_column', 'ctor_row_layout', 'case_body_newline', 'tab_character')) {
+        $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; no_base_printer = $true }
+    }
+    foreach ($name in @('if_branch_newline', 'elif_alignment', 'do_line_depth')) {
+        $cases += @{ name = "$($name)_pure"; fixture = "authored/$($name)_pure.bend"; original = Join-Path $port "tests/fixtures/cpu-layout/$($name)_pure.bend"; origin = 'authored'; function_printer = $false }
     }
 }
 foreach ($case in $cases) {
@@ -173,6 +181,17 @@ foreach ($case in $cases) {
                     }
                 }
                 $row.compiled_lanes = 'not_required_upstream_function_printer_refusal'
+            }
+            if ($case.no_base_printer) {
+                foreach ($target in @('c', 'js')) {
+                    $outFile = Join-Path $caseDirectory "no-base-$repeat.$target"
+                    $refusal = Invoke-Bounded "upstream-printer-$target-$repeat" $node @('main.ts', $source, '-o', $outFile) (Join-Path $Reference 'bend2') -AllowFailure
+                    $diagnostic = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($refusal.stderr_base64))
+                    if ($refusal.exit -ne 1 -or $refusal.stdout_base64 -cne '' -or $diagnostic -cne "Error: a build needs import Base`n" -or (Test-Path -LiteralPath $outFile)) {
+                        throw 'Upstream no-Base build refusal did not match the reviewed contract.'
+                    }
+                }
+                $row.compiled_lanes = 'not_required_upstream_no_Base_refusal'
             }
             $upstream = Invoke-Bounded "upstream-$repeat" $node @('main.ts', $source) (Join-Path $Reference 'bend2')
             $run = Invoke-Bounded "port-run-$repeat" $binary @('run', $source) $caseDirectory

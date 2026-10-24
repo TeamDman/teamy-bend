@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-layout', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -238,6 +238,11 @@ $parseTypedList = @(
     @{ name = 'def_typed_pure'; source = "$port/tests/fixtures/cpu-typed-list/def_typed_pure.bend"; expected = "6`n"; direct_mode = 'pure' },
     @{ name = 'list_literal_sugar_pure'; source = "$port/tests/fixtures/cpu-typed-list/list_literal_sugar_pure.bend"; expected = "3510`n"; direct_mode = 'pure' }
 )
+$parseLayout = @(
+    @{ name = 'if_branch_newline'; source = "$Reference/tests/parse/if_branch_newline.bend"; expected = "7`n"; direct_mode = 'io' },
+    @{ name = 'elif_alignment'; source = "$Reference/tests/parse/elif_alignment.bend"; expected = "56`n"; direct_mode = 'io' },
+    @{ name = 'do_line_depth'; source = "$Reference/tests/parse/do_line_depth.bend"; expected = "1n`n"; direct_mode = 'io' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -253,6 +258,7 @@ $fixtures = switch ($Suite) {
     'parse-bitwise-braces' { $parseBitwiseBraces }
     'parse-cons' { $parseCons }
     'parse-typed-list' { $parseTypedList }
+    'parse-layout' { $parseLayout }
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
@@ -260,7 +266,7 @@ $fixtures = switch ($Suite) {
     'float-arithmetic' { $floatArithmetic }
     'float-specials' { $floatSpecials }
     'float-specials-depth' { $floatSpecialsDepth }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseLayout + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
