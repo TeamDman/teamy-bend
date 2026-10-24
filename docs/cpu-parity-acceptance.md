@@ -91,20 +91,17 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The latest [plus-binder checkpoint](cpu-plus-binders.md), source
-`e9d9b30c5029e18dc5600b407e5e0abab94a8b99`, records 93 runtime, 99 interpretation
-and 21 checking originals. Their union is 213, including historical/unresolved
-cells. There are 1,089 without detailed receipts: 429 checker negatives, one
-checking-only module, 106 interpreter cases and 553 compiled candidates.
-The [category summary](cpu-coverage-summary.csv) is current; these counts are not
-one denominator of missing CPU runtime tests.
+The latest [rewrite checking checkpoint](cpu-rewrite-checking.md), source
+`4c90907a78db96cc9e46da6d25659f10b4d978cc`, closes the three recorded original rewrite diagnostic cells.
+The detailed union remains 213, including historical/unresolved cells, with
+1,089 without detailed receipts across distinct applicable categories.
+Twenty checking, all 99 interpretation and seven runtime originals are renewed;
+one checking and 86 runtime rows retain historical commits. All 1,302 checking
+statuses are unchanged. The prior 688-vector exploration stays unqualified.
 
-This source renews seven runtime, all 99 interpretation and seventeen checking
-rows; 86 runtime and four checking rows retain historical commits. All 1,302
-checking statuses are unchanged. Direct IO/Bun, resource, foreign, F32.read,
-competing-error and complete API/lane requirements remain open. Three recorded
-rewrite diagnostics still differ. The prior 688-vector exploratory remainder
-is unqualified; no semantic exception is added and no GPU prerequisite inferred.
+Host/resource/foreign, F32.read, competing-error and complete API/lane requirements
+remain open. No semantic exception is added or GPU prerequisite inferred. Next:
+annotated non-equation evidence and generated proof-binder/missing-IH diagnostics.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -549,3 +546,24 @@ one checking-only module, 106 interpreter cases and 553 compiled candidates.
 Full parity remains incomplete. Next: the three recorded rewrite diagnostic
 differences. Shared snapshots reduce new evidence duplication; all historical
 and failure evidence survives. Frozen inputs/policies, no installs or pushes.
+
+## Rewrite checking checkpoint
+
+Source `4c90907a78db96cc9e46da6d25659f10b4d978cc` closes exact diagnostics for rewrite_non_equation,
+rewrite_ctor_brace and dead_motive_syntax without changing their failure phases.
+The first was already exact; the other two now retain normalized content and
+original source through the existing failure boundary. Equality printing uses
+pinned operand precedence. [Report](cpu-rewrite-checking.md).
+
+Full gate **901 passed, 0 failed, 49 ignored**. The new 260-observation
+matrix and renewed normalization/constructor/proof/no-main/runtime controls pass.
+All 1,302 checking statuses remain unchanged. Coverage stays 213 detailed originals
+and 1,089 without detailed receipts; linked rows include historical/unresolved
+cells. Twenty checking, 99 interpretation and seven runtime originals are renewed.
+The 688-vector exploration remains unqualified; existing host/resource/foreign,
+F32.read, error-order and API requirements remain open. External invoke callers
+must inspect exit_code; they are not audited here.
+
+Next: annotated non-equation evidence, generated rewrite proof-binder provenance,
+and missing-IH diagnostics. Frozen inputs/policies; historical evidence preserved;
+no installs or pushes.

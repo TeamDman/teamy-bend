@@ -9,16 +9,17 @@ were unchanged. The earlier Linux portability and task/file milestones retain
 their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
-The latest [plus-binder checkpoint](cpu-plus-binders.md) records source
-`e9d9b30c5029e18dc5600b407e5e0abab94a8b99`, full gate 896/0/49 and 213 detailed
-originals, including historical/unresolved cells. There are 1,089 originals without
-detailed receipts: 429 checker negatives, one checking-only module, 106 interpreter
-cases and 553 compiled candidates. These are distinct applicable contracts.
+The latest [rewrite checking checkpoint](cpu-rewrite-checking.md) records source
+`4c90907a78db96cc9e46da6d25659f10b4d978cc`, full gate 901/0/49, and 213 detailed originals,
+including historical/unresolved cells. There are 1,089 without detailed receipts:
+429 checker negatives, one checking-only module, 106 interpreter cases and 553
+compiled candidates. These are distinct applicable contracts. Twenty checking,
+99 interpretation and seven runtime originals are renewed; earlier receipts
+retain their historical identities. Full CPU parity remains incomplete.
 
-The [acceptance criterion](cpu-parity-acceptance.md) remains unmet. Earlier
-sections retain their historical identities; the latest checkpoint is at the end.
-The interrupted 688-vector exploratory remainder stays unqualified. No frozen
-input, guard, cancellation, resource or demand policy changed in this batch.
+The interrupted 688-vector exploration stays unqualified. No input, guard,
+cancellation, resource or demand policy changed. See the
+[acceptance criterion](cpu-parity-acceptance.md) and latest checkpoint below.
 
 ## Passed in this review
 
@@ -793,3 +794,24 @@ one checking-only module, 106 interpreter cases and 553 compiled candidates.
 Full parity remains incomplete. Next: the three recorded rewrite diagnostic
 differences. Shared snapshots reduce new evidence duplication; all historical
 and failure evidence survives. Frozen inputs/policies, no installs or pushes.
+
+## Rewrite checking checkpoint
+
+Source `4c90907a78db96cc9e46da6d25659f10b4d978cc` closes exact diagnostics for rewrite_non_equation,
+rewrite_ctor_brace and dead_motive_syntax without changing their failure phases.
+The first was already exact; the other two now retain normalized content and
+original source through the existing failure boundary. Equality printing uses
+pinned operand precedence. [Report](cpu-rewrite-checking.md).
+
+Full gate **901 passed, 0 failed, 49 ignored**. The new 260-observation
+matrix and renewed normalization/constructor/proof/no-main/runtime controls pass.
+All 1,302 checking statuses remain unchanged. Coverage stays 213 detailed originals
+and 1,089 without detailed receipts; linked rows include historical/unresolved
+cells. Twenty checking, 99 interpretation and seven runtime originals are renewed.
+The 688-vector exploration remains unqualified; existing host/resource/foreign,
+F32.read, error-order and API requirements remain open. External invoke callers
+must inspect exit_code; they are not audited here.
+
+Next: annotated non-equation evidence, generated rewrite proof-binder provenance,
+and missing-IH diagnostics. Frozen inputs/policies; historical evidence preserved;
+no installs or pushes.

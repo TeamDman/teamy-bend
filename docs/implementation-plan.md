@@ -4435,3 +4435,24 @@ one checking-only module, 106 interpreter cases and 553 compiled candidates.
 Full parity remains incomplete. Next: the three recorded rewrite diagnostic
 differences. Shared snapshots reduce new evidence duplication; all historical
 and failure evidence survives. Frozen inputs/policies, no installs or pushes.
+
+### [x] 5.73 Preserve rewrite checking and token diagnostics
+
+Source `4c90907a78db96cc9e46da6d25659f10b4d978cc` closes exact diagnostics for rewrite_non_equation,
+rewrite_ctor_brace and dead_motive_syntax without changing their failure phases.
+The first was already exact; the other two now retain normalized content and
+original source through the existing failure boundary. Equality printing uses
+pinned operand precedence. [Report](cpu-rewrite-checking.md).
+
+Full gate **901 passed, 0 failed, 49 ignored**. The new 260-observation
+matrix and renewed normalization/constructor/proof/no-main/runtime controls pass.
+All 1,302 checking statuses remain unchanged. Coverage stays 213 detailed originals
+and 1,089 without detailed receipts; linked rows include historical/unresolved
+cells. Twenty checking, 99 interpretation and seven runtime originals are renewed.
+The 688-vector exploration remains unqualified; existing host/resource/foreign,
+F32.read, error-order and API requirements remain open. External invoke callers
+must inspect exit_code; they are not audited here.
+
+Next: annotated non-equation evidence, generated rewrite proof-binder provenance,
+and missing-IH diagnostics. Frozen inputs/policies; historical evidence preserved;
+no installs or pushes.
