@@ -1,0 +1,195 @@
+[
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "A{Z{}, Z{}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "A{Z{}, S{Z{}}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{Z{}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "A{S{Z{}}, Z{}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "A{S{Z{}}, S{Z{}}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{S{Z{}}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "A{S{S{S{Z{}}}}, Z{}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "A{S{S{S{Z{}}}}, S{Z{}}}"
+  },
+  {
+    "name": "ctor_construct_000",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{S{S{S{Z{}}}}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "ctor_construct_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "ctor_default",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "A{}"
+  },
+  {
+    "name": "ctor_default",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "B{S{Z{}}}"
+  },
+  {
+    "name": "ctor_default",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "B{S{S{Z{}}}}"
+  },
+  {
+    "name": "ctor_default",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "B{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "ctor_continuation_go",
+    "arguments": [
+      "n => Done{n}"
+    ],
+    "value": "Done{S{Z{}}}"
+  },
+  {
+    "name": "ctor_continuation_go",
+    "arguments": [
+      "n => Done{S{n}}"
+    ],
+    "value": "Done{S{S{Z{}}}}"
+  },
+  {
+    "name": "ctor_continuation_go",
+    "arguments": [
+      "n => Print{n, x => Tick{t => Done{S{x}}}}"
+    ],
+    "value": "Print{S{Z{}}, x => Tick{t => Done{S{x}}}}"
+  }
+]

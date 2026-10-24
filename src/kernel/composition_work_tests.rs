@@ -86,6 +86,81 @@ fn constructor_memo_is_lazy_charged_and_still_checks_entry_guards() {
 }
 
 #[test]
+fn shared_constructor_continuations_keep_captures_and_fresh_binders_without_owning_keys() {
+    let captured = term(Term::Ctr {
+        name: "Captured".into(),
+        args: vec![],
+    });
+    let call = term(Term::App(
+        term(Term::Lam {
+            name: "captured".into(),
+            id: 100,
+            body: term(Term::Ctr {
+                name: "Box".into(),
+                args: vec![term(Term::Lam {
+                    name: "input".into(),
+                    id: 101,
+                    body: term(Term::Ctr {
+                        name: "Pair".into(),
+                        args: vec![
+                            term(Term::Var {
+                                name: "captured".into(),
+                                id: 100,
+                            }),
+                            term(Term::Var {
+                                name: "input".into(),
+                                id: 101,
+                            }),
+                        ],
+                    }),
+                })],
+            }),
+        }),
+        captured,
+    ));
+    let original = format!("{call:?}");
+    let owners = Rc::strong_count(&call);
+    let mut engine = empty();
+    engine.normalization_memo = Some(Default::default());
+    let first = engine.whnf(&call).unwrap();
+    assert_eq!(Rc::strong_count(&call), owners);
+    assert!(Rc::ptr_eq(&first, &engine.whnf(&call).unwrap()));
+    assert_eq!(Rc::strong_count(&call), owners);
+    engine.normalization_memo = None;
+    let pair = term(Term::Ctr {
+        name: "Both".into(),
+        args: vec![Rc::clone(&call), Rc::clone(&call)],
+    });
+    let result = engine.normalize(&pair).unwrap();
+    let Term::Ctr { args, .. } = result.as_ref() else {
+        unreachable!()
+    };
+    let mut ids = vec![];
+    for boxed in args {
+        let Term::Ctr { args, .. } = boxed.as_ref() else {
+            unreachable!()
+        };
+        let Term::Lam { id, body, .. } = args[0].as_ref() else {
+            unreachable!()
+        };
+        ids.push(*id);
+        let input = term(Term::Ctr {
+            name: "Input".into(),
+            args: vec![],
+        });
+        assert_eq!(
+            substitute(body, *id, &input).to_string(),
+            "Pair{Captured{}, Input{}}"
+        );
+    }
+    assert_eq!(ids.len(), 2);
+    assert_ne!(ids[0], ids[1]);
+    assert_eq!(format!("{call:?}"), original);
+    assert_eq!(engine.depth, 0);
+    assert!(engine.normalization_memo.is_none());
+}
+
+#[test]
 fn normalization_drops_memo_after_success_and_error_and_never_keeps_stale_aliases() {
     let mut engine = empty();
     let variable = term(Term::Var {

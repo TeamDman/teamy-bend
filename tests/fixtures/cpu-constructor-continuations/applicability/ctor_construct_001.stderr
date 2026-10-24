@@ -1,0 +1,1 @@
+Error: main's type @a:../ctor_construct_001.Nat -> @b:../ctor_construct_001.Nat -> ../ctor_construct_001.Nat cannot be printed (a function, a Type, an erased or dependent field)
