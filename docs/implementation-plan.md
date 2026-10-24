@@ -4414,3 +4414,24 @@ historical/unresolved cells. Category counts are 9/11/58/130 and remaining
 F32.read and competing-error requirements are unwaived. Next: the reusable
 plus-binder family with its negative companion. Final headroom 10.04 GiB;
 all evidence retained, frozen inputs/policies, no push.
+
+### [x] 5.72 Qualify reusable binders and preserve checking diagnostics
+
+Source `e9d9b30c5029e18dc5600b407e5e0abab94a8b99` qualifies four original plus-binder IO mains and their
+negative companion. Forty generated/native executions and ten helper core/text
+normal forms match. The shared diagnostic boundary now preserves marker spelling,
+import-filtered source excerpts and executable-compilation rejection without
+changing term identity, acceptance or safety budgets. [Report](cpu-plus-binders.md).
+
+Full gate **896 passed, zero failed, 49 ignored**. Renewed: 216 new negative,
+588 constructor/origin, 306 no-main, 144 proof, 60 local-binder and 60 rewrite
+observations; all 106 normalization cases and 50 baseline executions. All
+1,302 checking statuses are unchanged. Direct upstream IO remains host-blocked.
+The prior 688-vector exploratory remainder remains unqualified.
+
+Coverage: 213 detailed originals, including historical/unresolved cells, versus
+1,089 without detailed receipts. Remaining categories: 429 checker negatives,
+one checking-only module, 106 interpreter cases and 553 compiled candidates.
+Full parity remains incomplete. Next: the three recorded rewrite diagnostic
+differences. Shared snapshots reduce new evidence duplication; all historical
+and failure evidence survives. Frozen inputs/policies, no installs or pushes.

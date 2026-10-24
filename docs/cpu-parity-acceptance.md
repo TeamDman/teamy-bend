@@ -91,24 +91,20 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The latest [field-order/destructuring checkpoint](cpu-destructure.md), source
-`de31e54e8e35f35b1c0fa4c05415d8dd91ca9b10`, records 89 runtime, 99 interpretation
-and twenty checking originals. Their union is 208; linked rows include
-historical and unresolved cells. There are 1,094 originals without detailed
-receipts: 430 checker negatives, one checking-only module, 106 interpreter
-cases and 557 compiled candidates. These are applicability categories, not
-1,094 missing CPU runtime tests. The [category summary](cpu-coverage-summary.csv)
-is current; the static applicability inventory retains its original evidence.
+The latest [plus-binder checkpoint](cpu-plus-binders.md), source
+`e9d9b30c5029e18dc5600b407e5e0abab94a8b99`, records 93 runtime, 99 interpretation
+and 21 checking originals. Their union is 213, including historical/unresolved
+cells. There are 1,089 without detailed receipts: 429 checker negatives, one
+checking-only module, 106 interpreter cases and 553 compiled candidates.
+The [category summary](cpu-coverage-summary.csv) is current; these counts are not
+one denominator of missing CPU runtime tests.
 
-All 99 interpretation rows, eleven checking rows and four runtime originals
-are renewed at this source. Nine checking and 85 runtime rows retain their
-historical commits. All 1,302 checking statuses are unchanged; status agreement
-alone does not meet the acceptance criterion. Direct upstream IO/Bun lanes,
-resource-limit failures, native foreign support, F32.read, competing-error
-order and complete API/lane review remain open. No new semantic exception was
-introduced. The 399-vector application regression passes; 688 other exploratory
-oracle vectors are not fully port-grid-qualified. GPU is not required to
-continue independent CPU work.
+This source renews seven runtime, all 99 interpretation and seventeen checking
+rows; 86 runtime and four checking rows retain historical commits. All 1,302
+checking statuses are unchanged. Direct IO/Bun, resource, foreign, F32.read,
+competing-error and complete API/lane requirements remain open. Three recorded
+rewrite diagnostics still differ. The prior 688-vector exploratory remainder
+is unqualified; no semantic exception is added and no GPU prerequisite inferred.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -532,3 +528,24 @@ historical/unresolved cells. Category counts are 9/11/58/130 and remaining
 F32.read and competing-error requirements are unwaived. Next: the reusable
 plus-binder family with its negative companion. Final headroom 10.04 GiB;
 all evidence retained, frozen inputs/policies, no push.
+
+## Plus-binder checkpoint
+
+Source `e9d9b30c5029e18dc5600b407e5e0abab94a8b99` qualifies four original plus-binder IO mains and their
+negative companion. Forty generated/native executions and ten helper core/text
+normal forms match. The shared diagnostic boundary now preserves marker spelling,
+import-filtered source excerpts and executable-compilation rejection without
+changing term identity, acceptance or safety budgets. [Report](cpu-plus-binders.md).
+
+Full gate **896 passed, zero failed, 49 ignored**. Renewed: 216 new negative,
+588 constructor/origin, 306 no-main, 144 proof, 60 local-binder and 60 rewrite
+observations; all 106 normalization cases and 50 baseline executions. All
+1,302 checking statuses are unchanged. Direct upstream IO remains host-blocked.
+The prior 688-vector exploratory remainder remains unqualified.
+
+Coverage: 213 detailed originals, including historical/unresolved cells, versus
+1,089 without detailed receipts. Remaining categories: 429 checker negatives,
+one checking-only module, 106 interpreter cases and 553 compiled candidates.
+Full parity remains incomplete. Next: the three recorded rewrite diagnostic
+differences. Shared snapshots reduce new evidence duplication; all historical
+and failure evidence survives. Frozen inputs/policies, no installs or pushes.
