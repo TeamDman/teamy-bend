@@ -22,7 +22,7 @@ pub(crate) struct DiagnosticOrigins {
 #[derive(Debug)]
 pub(crate) struct DiagnosticLoadError {
     pub(crate) error: super::ParseError,
-    pub(crate) diagnostic: Option<LoadDiagnostic>,
+    pub(crate) diagnostic: Option<Box<LoadDiagnostic>>,
 }
 
 #[derive(Debug)]
@@ -119,7 +119,7 @@ impl DiagnosticOrigins {
     pub(super) fn load_failure(&mut self, error: super::ParseError) -> DiagnosticLoadError {
         DiagnosticLoadError {
             error,
-            diagnostic: self.load_failure.take(),
+            diagnostic: self.load_failure.take().map(Box::new),
         }
     }
 
