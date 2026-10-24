@@ -41,6 +41,18 @@ struct Origin {
     constructor_source: Option<usize>,
 }
 
+impl Origin {
+    fn with_node(&self, node: &TermRef) -> Self {
+        Self {
+            node: Rc::downgrade(node),
+            source: self.source,
+            child_origins: self.child_origins,
+            match_site: self.match_site,
+            constructor_source: self.constructor_source,
+        }
+    }
+}
+
 impl TermOrigins {
     pub(crate) fn reusable_marker(&self, id: usize) {
         self.0.borrow_mut().reusable_markers.insert(id);
@@ -177,20 +189,8 @@ impl TermOrigins {
                 continue;
             }
             if let Some(origin) = origins.nodes.get(&(Rc::as_ptr(before) as usize)) {
-                let source = origin.source;
-                let child_origins = origin.child_origins;
-                let match_site = origin.match_site;
-                let constructor_source = origin.constructor_source;
-                origins.nodes.insert(
-                    Rc::as_ptr(after) as usize,
-                    Origin {
-                        node: Rc::downgrade(after),
-                        source,
-                        child_origins,
-                        match_site,
-                        constructor_source,
-                    },
-                );
+                let next = origin.with_node(after);
+                origins.nodes.insert(Rc::as_ptr(after) as usize, next);
             }
             match (before.as_ref(), after.as_ref()) {
                 (Term::Typ(a), Term::Typ(b))
