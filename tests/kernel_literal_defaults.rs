@@ -96,10 +96,10 @@ fn complete_constructor_results_and_scalar_projections_keep_distinct_graphs() {
             let expected_graph = std::fs::read_to_string(path.with_extension("json")).unwrap();
             let value = checked.evaluate("main", &[]).unwrap();
             assert_eq!(format!("{value}\n"), expected);
-            // Compare the complete bounded graph, without recursively decoding the
-            // large Word/List oracle through the generic test JSON deserializer.
+            // Compare the complete bounded constructor graph with an explicit stack.
+            // Generic recursive JSON encoding can overflow the test-thread stack.
             let actual_graph =
-                facet_json::to_string(&shape_in_book(&value, &book).unwrap()).unwrap();
+                constructor_graph_json(&shape_in_book(&value, &book).unwrap()).unwrap();
             assert_eq!(actual_graph, expected_graph.strip_suffix('\n').unwrap());
             if folder == "wrappers" {
                 let outputs: Vec<Vec<u32>> = facet_json::from_str(expected.trim()).unwrap();
@@ -121,4 +121,62 @@ fn complete_constructor_results_and_scalar_projections_keep_distinct_graphs() {
         }
     }
     assert_eq!(count, 45);
+}
+
+// These closed wrapper graphs contain only constructors. Keep every name and
+// ordered child; reject any other node instead of silently changing vocabulary.
+fn constructor_graph_json(root: &Shape) -> Result<String, &'static str> {
+    enum Piece<'a> {
+        Node(&'a Shape),
+        Text(&'static str),
+    }
+    let mut output = String::new();
+    let mut pending = vec![Piece::Node(root)];
+    while let Some(piece) = pending.pop() {
+        match piece {
+            Piece::Text(text) => output.push_str(text),
+            Piece::Node(Shape::Constructor(name, children)) => {
+                output.push_str("{\"Constructor\":[");
+                output.push_str(&facet_json::to_string(name).map_err(|_| "invalid graph name")?);
+                output.push_str(",[");
+                pending.push(Piece::Text("]]}"));
+                for (index, child) in children.iter().enumerate().rev() {
+                    pending.push(Piece::Node(child));
+                    if index > 0 {
+                        pending.push(Piece::Text(","));
+                    }
+                }
+            }
+            Piece::Node(_) => return Err("non-constructor in closed wrapper graph"),
+        }
+    }
+    Ok(output)
+}
+
+#[test]
+fn iterative_constructor_graph_encoding_keeps_names_order_and_deep_children() {
+    let leaf = || Shape::Constructor("Z".into(), vec![]);
+    for node in [
+        leaf(),
+        Shape::Constructor(
+            "escaped\"\\é".into(),
+            vec![leaf(), Shape::Constructor("S".into(), vec![leaf()])],
+        ),
+    ] {
+        assert_eq!(
+            constructor_graph_json(&node).unwrap(),
+            facet_json::to_string(&node).unwrap()
+        );
+    }
+    let mut deep = leaf();
+    for _ in 0..96 {
+        deep = Shape::Constructor("S".into(), vec![deep]);
+    }
+    let expected =
+        "{\"Constructor\":[\"S\",[".repeat(96) + "{\"Constructor\":[\"Z\",[]]}" + &"]]}".repeat(96);
+    assert_eq!(constructor_graph_json(&deep).unwrap(), expected);
+    assert!(constructor_graph_json(&Shape::Bound(0)).is_err());
+    assert!(
+        constructor_graph_json(&Shape::Constructor("C".into(), vec![Shape::EmptyMatch])).is_err()
+    );
 }
