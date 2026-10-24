@@ -4305,3 +4305,35 @@ Next: explicit provenance for transformed constructors, with the nine ordinary
 no-main modules as the independent checking batch. The existing acceptance
 criterion stays unmet. Cache controls restored 10.45 GiB after all work; source
 and evidence are preserved. Inputs remain frozen; no installation or push.
+
+### [x] 5.67 Propagate constructor origins and close the pattern-load boundary
+
+Tested source `d986964` closes all four diagnostic cases left by 5.66.
+A private weak provenance table observes the existing substitution and operator
+qualification results, preserving original/replacement source locations through
+parser flattening and checking. No Term field, public substitution algorithm,
+strong ownership, evaluator input, serialized result or checking budget changes.
+Tracked engines release the table before evaluation. The separate private
+loader boundary renders generic unknown-pattern errors while retaining public
+ParseError and fail-closed behavior.
+
+The [provenance report](cpu-constructor-origins.md) records 42 cases / 588
+observations: 31 exact checking negatives, three exact parse/load negatives,
+eight unchanged positive controls and 84 phase probes. The scoped qualification
+summary now exits 0. Six new nested/imported/match/operator/template/pattern
+controls are authored; all 36 prior inputs and historical receipts survive.
+No new semantic exception is used.
+
+Full gate **871 passed, zero failed, 49 ignored**; 77 focused tests, five guards,
+ten diagnostic controls, five origin controls, 144 proof regression observations,
+49-case exact normalization and 50 C/JS/native baseline executions pass. All
+1,302 checking statuses match the preceding audit; all 439 expected negatives
+still reject. Other 366 acceptances / 497 rejections remain status-only evidence.
+The runtime-negative/demand receipts and broader unmet contracts stay historical.
+
+Coverage remains 140 linked originals / 1,162 without detailed receipts, with
+category counts 8/2/15/115 and remaining 431/10/149/572. CPU parity is incomplete.
+Next independent batch: nine ordinary no-main checking modules, with io/far_types
+reviewed separately for foreign applicability. Cache controls restored 10.30 GiB;
+all source/evidence is preserved. Frozen inputs/budgets/policies, no installs,
+pushes, desktop or GPU work.

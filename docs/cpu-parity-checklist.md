@@ -712,3 +712,15 @@ rejected. Detailed original receipts: 140; without detailed receipts: 1,162.
 Four constructor/pattern diagnostic controls remain unmet, along with the
 previous host/resource/API/semantic disagreements. No missing cell is a pass.
 The scoped source and later documentation checkpoints are local only.
+
+## Constructor provenance checkpoint
+
+Source `d986964456afaf7622628144da2e2745db740691` closes the four previously
+unmet constructor/pattern diagnostic controls. The
+[report](cpu-constructor-origins.md) records exact source provenance through
+substitution, generic pattern-load diagnostics and unchanged budgets/term
+semantics. Full gate: 871/0/49; all 1,302 checking statuses unchanged. Coverage
+remains 140 detailed originals / 1,162 without detailed receipts. The next
+independent category is ordinary no-main checking; broader host/resource/API/
+semantic disagreements remain open. No source or evidence was discarded, and
+nothing was pushed.

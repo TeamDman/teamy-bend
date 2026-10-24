@@ -469,3 +469,19 @@ cells; 1,162 lack detailed receipts. This does not meet complete lane/API review
 or establish full CPU parity. Existing resource, host, foreign, F32.read and
 first-error-order requirements remain open. The next bounded diagnostic step
 is explicit provenance for rebuilt constructors, not changed language policy.
+
+## Constructor provenance checkpoint
+
+Source `d986964456afaf7622628144da2e2745db740691` closes the four diagnostic
+controls left by the previous constructor checkpoint. The
+[provenance report](cpu-constructor-origins.md) records 34 exact negatives,
+eight unchanged positives and 84 phase probes across a 42-case matrix. The
+scoped summary exits 0; prior failing receipts remain historical evidence.
+Full gate: 871 passed, zero failed, 49 ignored; the 1,302-fixture status audit
+has zero transitions. Origin tracking leaves term structure, sharing, evaluation
+and budget accounting unchanged in the qualified private load/check path.
+
+The inventory has no new original rows: 140 detailed, including historical/
+unresolved cells, and 1,162 without detailed receipts. All broader lane/API,
+resource, host, foreign, F32.read and error-order requirements remain unmet where
+previously recorded. This diagnostic closure does not establish full CPU parity.
