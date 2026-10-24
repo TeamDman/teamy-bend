@@ -858,21 +858,19 @@ law Word.adc:
   for c: Bool
   Word(n)
 
-# The helper recursion is inlined so every live call targets a checked definition.
-# Sum = a xor b xor c; carry = (a and b) or (c and (a xor b)).
+# Inline the pinned pair-consuming helper so structural recursion stays visible.
+# Consume Bool.full_add once before building WCon; expanded sum/carry formulas
+# repeat reductions when word arithmetic is composed.
 def Word.adc(n, a, b, f, c):
   match n:
     case 0n:
       WNil{}
     case 1n+p:
-      match a b:
-        case WCon{+ab, at} WCon{+bb, bt}:
-          +carry = c
-          +flip = f
-          +bit = Bool.xor(bb, flip)
-          WCon{Bool.xor(Bool.xor(ab, bit), carry),
-            Word.adc(p, at, bt, flip,
-              Bool.or(Bool.and(ab, bit), Bool.and(carry, Bool.xor(ab, bit))))}
+      match a b f:
+        case WCon{ab, at} WCon{bb, bt} False{}:
+          {\{Tuple: (s => k => WCon{s, Word.adc(p, at, bt, False{}, k)})} : (Bool & Bool) -> Word(1n+p)}(Bool.full_add(ab, bb, c))
+        case WCon{ab, at} WCon{bb, bt} True{}:
+          {\{Tuple: (s => k => WCon{s, Word.adc(p, at, bt, True{}, k)})} : (Bool & Bool) -> Word(1n+p)}(Bool.full_add(ab, Bool.not(bb), c))
 
 def Word.adc.con(p: Nat, at: Word(p), bt: Word(p), f: Bool, sk: Bool & Bool) ->
   Word(1n+p):

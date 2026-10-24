@@ -93,7 +93,62 @@ fn pure_word_division_reduces_without_accumulating_tail_frames() {
 }
 
 #[test]
-fn inlined_full_adder_formula_has_an_exhaustive_checked_proof() {
+fn composed_word_arithmetic_preserves_carries_wrapping_and_subtraction() {
+    let book = check_book(
+        &parse(&format!(
+            "{}\n{}",
+            include_str!("../src/syntax/base.bend"),
+            r"
+def mul_add() -> U32: (9 * 10 + 7 : U32)
+def mul_sub() -> U32: (9 * 10 - 7 : U32)
+def carry() -> U32: (255 * 257 + 1 : U32)
+def wrapping() -> U32: (4294967295 * 2 + 3 : U32)
+"
+        ))
+        .unwrap(),
+    )
+    .unwrap();
+    for (name, expected) in [
+        ("mul_add", 97),
+        ("mul_sub", 83),
+        ("carry", 65536),
+        ("wrapping", 1),
+    ] {
+        assert_eq!(number(&evaluate(&book, name, &[])), expected, "{name}");
+    }
+}
+
+#[test]
+fn word_adder_preserves_zero_width_and_unobserved_tail_demand() {
+    let book = check_book(
+        &parse(&format!(
+            "{}\n{}",
+            include_str!("../src/syntax/base.bend"),
+            r"
+def zero_width(f: Bool, c: Bool) -> Word(0n):
+  Word.adc(0n, WNil{}, WNil{}, f, c)
+def first(w: Word(2n)) -> Bool:
+  match w:
+    case WCon{bit, tail}: bit
+def head_only(t: Word(1n)) -> Bool:
+  first(Word.adc(2n, WCon{False{}, t}, WCon{False{}, WCon{False{}, WNil{}}}, False{}, False{}))
+"
+        ))
+        .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(
+        book.normalize_definition("zero_width").unwrap().to_string(),
+        "f => c => WNil{}"
+    );
+    assert_eq!(
+        book.normalize_definition("head_only").unwrap().to_string(),
+        "t => False{}"
+    );
+}
+
+#[test]
+fn full_adder_formula_has_an_exhaustive_checked_proof() {
     let source = format!(
         "{}{}",
         include_str!("../src/syntax/base.bend"),

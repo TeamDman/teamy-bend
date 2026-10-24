@@ -17,6 +17,5 @@ display's bracket notation, which is also used for lists.
 The two `_pure.bend` derivatives retain their original helpers and replace only
 the IO main with `def main() -> U32: main.out()`. They are separately qualified
 Apache-2.0 derivatives, not substitutes for the originals' IO execution or their
-strict-proof exclusions. The read/write derivative remains a required pure-kernel
-work-budget failure with expected result 97 in the CPU comparison runner; it is
-not asserted as a passing resource-policy exception.
+strict-proof exclusions. The read/write derivative retains expected result 97
+as a regression for composed word arithmetic exhausting the kernel work budget.

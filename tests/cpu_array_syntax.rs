@@ -10,7 +10,7 @@ use teamy_bend::kernel::check_book;
 use teamy_bend::syntax::load;
 use teamy_bend::syntax::parse_term;
 
-const CASES: [(&str, &str, &str); 4] = [
+const CASES: [(&str, &str, &str); 5] = [
     (
         "array_literal",
         "([3, 3, 3, 3], [True{}, True{}])",
@@ -27,6 +27,7 @@ const CASES: [(&str, &str, &str); 4] = [
         "Tuple{ANode{ANode{ALeaf{0}, ALeaf{0}}, ANode{ALeaf{0}, ALeaf{0}}}, 0}",
     ),
     ("array_read_annotation_pure", "4", "4"),
+    ("array_read_write_pure", "97", "97"),
 ];
 
 #[test]
