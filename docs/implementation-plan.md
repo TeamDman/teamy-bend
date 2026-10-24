@@ -5483,3 +5483,44 @@ This is source/ledger selection only, without execution credit. Frozen inputs,
 budgets, guards and cancellation remain unchanged. Reviewed feature checkpoint
 publication is authorized; no main merge, release, installation, desktop or GPU
 work. Private evidence and binary captures remain outside Git.
+
+### [x] 5.103 Qualify nested word switches and canonical recursion
+
+Tested source `ad887a40b6c8acd092610b33fb29c9e1c89c5a2d` adds four unchanged
+`nested_word_switch_000`, `_001`, `word_decrement_halt` and
+`joint_fused_canonical_le` originals with **53 bounded applications**. Nested
+defaults retain whole matched values; recursive decrement reaches zero and
+canonical joint matching implements less-or-equal. Original graphs/text,
+complete results, projections and runtime execution remain separate evidence.
+No production change was needed. [Scope and receipts](cpu-word-switches.md).
+
+Full gate: **1,043 passed, zero failures, 49 ignored**; focused controls
+**36 / 0 / 0**. All **48 complete graph** and **120 normalization/applicability**
+observations pass, including 80 exact repeated refusals without artifacts.
+Runtime matrix: **94 exact executions, 48 successful generation/build checks
+and 2 unresolved upstream-JS printer timeouts**; runner exit 1. Required port
+observations pass. Projection or nullary-result success does not qualify the
+field-bearing upstream-JS printer.
+
+Independent review found no issues. Aggregate sharing/work/native/C/JS,
+demand/error ordering, guards and existing cancellation controls pass; no
+mid-normalization cancellation is claimed. All 1,302 checking statuses/streams
+are unchanged, including 439 rejecting negatives. Fourteen positive controls
+pass; 18 observations retain three hole/TODO disagreements. Minimal-IO upstream
+C failures, foreign diagnostics, resource/host gaps, F32.read, competing failure
+order and the unfinished 688-vector exploration remain unwaived. External
+consumers of the earlier no-IO emitter Err change remain unaudited.
+
+Detailed evidence links **376 originals**, leaving **926 unlinked**: **357 checker
+negatives, one checking-only module, 31 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test
+counts. Links include historical, partial and blocked evidence; they do not
+establish full CPU parity or close the API/integration inventory.
+
+Next proposed family: `flatten/type_param_match_000` and `_001`, the two remaining
+unlinked flatten interpreter candidates. Establish type/kind and actual printer
+applicability first, then validate the leading Type argument before choosing
+bounded list/Nat inputs. This is source/ledger selection only, without execution
+credit. Dependencies, toolchains, references, budgets, guards and cancellation
+remain frozen. Reviewed feature checkpoints may be pushed; no main merge,
+release, installation, desktop or GPU work. Private evidence stays outside Git.
