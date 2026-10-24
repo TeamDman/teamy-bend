@@ -4195,3 +4195,38 @@ parse/list_literal_sugar, beginning with actual printer applicability.
 Full CPU parity remains incomplete. Dependencies/toolchains/reference/Bend
 budgets/guards/cancellation and approved contracts are frozen; no installation,
 desktop/GPU work or push occurred.
+
+
+### [x] 5.64 Qualify typed definitions and fixed list sugar resolution
+
+Source `8218011` preserves unchanged def_typed and list_literal_sugar originals,
+with actual C/JS generation and exact available outputs 6 and 3510. Typed/erased
+telescopes, reusable lists, literal/cons construction and recursive folds are
+covered. Pure-entry derivatives retain the original expressions and add no
+inventory rows. Direct upstream IO is host-blocked; original IO strict-proof
+refusals are recorded separately from executable success.
+
+Thirteen authored shadowing cases confirm fixed global Nil/Con literal and cons
+constructors, with explicit local constructor/pattern and Base/root positives.
+Upstream direct/C/JS front ends agree. The port already matches acceptance/cause;
+raw constructor/parse diagnostics remain unqualified. No production fix,
+evaluation policy or semantic exception was introduced. Existing Nat controls
+are renewed without changing their sources or previous phase-probe identity.
+
+Full gate **858 passed, zero failed, 49 ignored**; 55 focused tests, five guards,
+strict Clippy, 50 baseline observations and the 42-case normalization suite pass.
+The new runtime family gives 44 exact observations plus four direct-IO blocks;
+normalization adds 18 exact core/report observations plus four proof exclusions.
+List shadowing gives 156 outcomes and 26 phase probes; Nat gives 132 outcomes.
+Full checking audit, runtime-negative/demand matrices and detailed checking
+controls retain their actual historical receipts and unresolved cells.
+
+See [typed/list evidence](cpu-typed-list.md) for exact commands, source/receipt
+hashes, host Rust debug=0 overrides versus C oracle O3, and preserved preflight
+failure. Reclaiming only inactive incremental artifacts restored the 10-GiB
+reserve; the 2/1-GiB stop floors and Bend budgets are unchanged. Full-gate minimum
+workspace headroom was 9.61 GiB. Five runtime rows and all interpretation rows
+are current; 80 runtime rows remain historical. Union: 123 originals; CPU parity
+remains incomplete. Next independent family: parse/match_indent_column and
+parse/ctor_row_layout. Dependencies/toolchains/reference/security/guards and
+cancellation stay frozen; no installs, desktop/GPU work or pushes.

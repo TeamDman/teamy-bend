@@ -10,36 +10,38 @@ their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) still requires complete
-mode/profile evidence. Current source `67cdcdf` includes the
-[imported-Nat correction and cons qualification](cpu-imported-nat-cons.md).
-Literal sugar must use fixed global Zero/Succ names; six wrongly accepted local
-Nat variants now reject. Upstream C and JS agree through their shared front end.
-Constructor/pattern diagnostic text remains unqualified; no new exception or
-evaluation policy was introduced. Production invoke callers correctly preserve
-exit_code, and actual-binary proof-failure regressions pass.
+mode/profile evidence. Current source `8218011` qualifies
+[typed definitions and list sugar](cpu-typed-list.md), preserving both original
+fixtures. Actual C/JS generation succeeds; outputs 6 and 3510 match in available
+generated/native lanes. Direct upstream IO remains host-blocked, separately from
+strict-proof exclusions. List literals and cons syntax already keep fixed global
+Nil/Con names under local shadowing; explicit local constructors work. No
+production correction or new semantic exception was needed.
 
-Full gate **852 passed, zero failed, 49 ignored**; 49 focused tests and five guards
-pass. The 1,302-case audit changes no acceptance status and rejects all 439 checker
-negatives. The old 144-observation diagnostic qualification is renewed. Cons has
-34 exact runtime/normalization observations, two direct-IO host blocks, 18 exact
-normalization/report/core observations and four strict-proof exclusions. The
-42-case normalization suite and baseline pass. Negative/demand matrices retain
-their existing gaps and both return 1.
+Full gate **858 passed, zero failed, 49 ignored**; 55 focused tests and five guards
+pass. The typed/list suite has 44 exact observations and four direct-IO host
+blocks, plus 18 exact normalization/report/core observations and four strict
+exclusions. Thirteen list-resolution controls give 156 outcomes and 26 phase
+probes; the eleven Nat controls give 132 renewed outcomes. Constructor/pattern
+raw diagnostics remain unqualified. Baseline and 42-case normalization pass.
+The full 1,302 checking audit, negative/demand and detailed checking-control
+receipts remain historical; their open cells are unchanged, not rerun here.
 
-Eleven runtime rows, all 38 interpretation rows, ten demand controls and three
-checking controls are renewed; the other 72 runtime rows retain historical
-receipts. Runtime/interpretation union is **121 originals**, with 1,181 unlinked:
-439 checker negatives, twelve checking-only, 153 interpreter-only and 577 compiled
-candidates. These are distinct requirements, not runtime defect counts. Next:
-parse/def_typed and parse/list_literal_sugar, with actual printer applicability
-first. Other diagnostics, host/resource/foreign, F32.read, competing-error,
-loader/API/platform and wider-corpus requirements remain open.
+Five runtime rows, all 38 interpretation rows and the authored Nat-resolution
+rows are current; the other 80 runtime rows retain historical receipts. Runtime/
+interpretation union is **123 originals**, with 1,179 unlinked: 439 checker
+negatives, twelve checking-only, 153 interpreter-only and 575 compiled candidates.
+These are distinct requirements, not runtime defect counts. Next independent
+family: parse/match_indent_column and parse/ctor_row_layout, beginning with mode
+applicability and normalization. Other diagnostics, host/resource/foreign,
+F32.read, competing-error, loader/API/platform and wider-corpus gaps remain open.
 
-Frozen dependencies, toolchains, lockfile, reference, Bend guards/budgets and
-approved demand policy are unchanged. Temporary dev/test debug=0 reduces build
-storage; a 10-GiB prebuild reserve and 2/1-GiB stop floors are recorded. The full
-gate retained at least 9.63 GiB workspace headroom. Source and historical evidence
-are preserved; no install, desktop/GPU work or push occurred.
+Dependencies, toolchains, lockfile, reference, Bend guards/budgets and approved
+demand policy remain frozen. Temporary Rust dev/test debug=0 is recorded
+separately from the upstream C oracle's O3 profile. The 10-GiB reserve and 2/1-GiB
+stop floors remain; preflight refused a build until inactive incremental cache
+was reclaimed. Full-gate minimum workspace headroom was 9.61 GiB. Source and
+historical evidence are preserved; no install, desktop/GPU work or push occurred.
 
 ## Passed in this review
 
