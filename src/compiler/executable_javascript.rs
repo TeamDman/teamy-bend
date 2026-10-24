@@ -26,16 +26,19 @@ use std::rc::Rc;
 /// IO uses native JavaScript values, curried callbacks, and the synchronous
 /// foreign-import protocol. Foreign source is read and embedded, never executed
 /// during compilation. Runtime contracts do not become strict proof evidence.
-/// Pure printable entries use Bend's textual value notation; a missing entry
-/// reports successful checking. The existing strict data compiler is unchanged.
+/// Pure printable entries use Bend's textual value notation. Standalone
+/// compilation requires main; the existing strict data compiler is unchanged.
 ///
 /// # Errors
-/// Rejects unsupported pure result types, unavailable reachable foreign imports,
-/// unsupported code generation and exhausted type-lowering resource limits.
+/// Rejects a missing main, unsupported pure result types, unavailable reachable
+/// foreign imports, unsupported code generation and exhausted lowering limits.
 pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, CompileError> {
     let program = book
         .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
+    if program.entry == ExecutableEntry::Missing {
+        return Err(CompileError::new("no main to run"));
+    }
     let foreign = executable_foreign::assemble(&program)?;
     let indices = program
         .definitions

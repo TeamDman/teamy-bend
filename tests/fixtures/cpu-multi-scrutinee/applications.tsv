@@ -1,0 +1,100 @@
+multi_scrutinee_000.bend	Z{};Z{}	A{Z{}}
+multi_scrutinee_000.bend	Z{};S{Z{}}	A{S{Z{}}}
+multi_scrutinee_000.bend	S{Z{}};Z{}	B{S{Z{}}, Z{}}
+multi_scrutinee_000.bend	S{Z{}};S{Z{}}	B{S{Z{}}, S{Z{}}}
+multi_scrutinee_001.bend	Z{};Z{}	C{Z{}, Z{}}
+multi_scrutinee_001.bend	Z{};S{Z{}}	C{Z{}, S{Z{}}}
+multi_scrutinee_001.bend	S{Z{}};Z{}	A{Z{}}
+multi_scrutinee_001.bend	S{Z{}};S{Z{}}	B{Z{}, S{Z{}}}
+multi_scrutinee_002.bend	Z{};Z{}	B{Z{}}
+multi_scrutinee_002.bend	Z{};S{Z{}}	B{S{Z{}}}
+multi_scrutinee_002.bend	S{Z{}};Z{}	C{S{Z{}}, Z{}}
+multi_scrutinee_002.bend	S{Z{}};S{Z{}}	A{Z{}, Z{}}
+multi_scrutinee_003.bend	Z{};Z{}	B{Z{}}
+multi_scrutinee_003.bend	Z{};S{Z{}}	A{Z{}, Z{}}
+multi_scrutinee_003.bend	S{Z{}};Z{}	B{S{Z{}}}
+multi_scrutinee_003.bend	S{Z{}};S{Z{}}	A{S{Z{}}, Z{}}
+multi_scrutinee_004.bend	Z{};Z{}	D{}
+multi_scrutinee_004.bend	Z{};S{Z{}}	C{Z{}}
+multi_scrutinee_004.bend	S{Z{}};Z{}	B{Z{}}
+multi_scrutinee_004.bend	S{Z{}};S{Z{}}	A{Z{}, Z{}}
+multi_scrutinee_005.bend	Z{};Z{};Z{}	H{}
+multi_scrutinee_005.bend	Z{};Z{};S{Z{}}	G{Z{}}
+multi_scrutinee_005.bend	Z{};S{Z{}};Z{}	F{Z{}}
+multi_scrutinee_005.bend	Z{};S{Z{}};S{Z{}}	E{Z{}, Z{}}
+multi_scrutinee_005.bend	S{Z{}};Z{};Z{}	D{Z{}}
+multi_scrutinee_005.bend	S{Z{}};Z{};S{Z{}}	C{Z{}, Z{}}
+multi_scrutinee_005.bend	S{Z{}};S{Z{}};Z{}	B{Z{}, Z{}}
+multi_scrutinee_005.bend	S{Z{}};S{Z{}};S{Z{}}	A{Z{}, Z{}, Z{}}
+multi_scrutinee_006.bend	Z{};Z{};Z{}	D{Z{}, Z{}, Z{}}
+multi_scrutinee_006.bend	Z{};Z{};S{Z{}}	D{Z{}, Z{}, S{Z{}}}
+multi_scrutinee_006.bend	Z{};S{Z{}};Z{}	C{Z{}, Z{}}
+multi_scrutinee_006.bend	Z{};S{Z{}};S{Z{}}	C{Z{}, S{Z{}}}
+multi_scrutinee_006.bend	S{Z{}};Z{};Z{}	B{Z{}, Z{}}
+multi_scrutinee_006.bend	S{Z{}};Z{};S{Z{}}	A{Z{}, Z{}}
+multi_scrutinee_006.bend	S{Z{}};S{Z{}};Z{}	B{Z{}, S{Z{}}}
+multi_scrutinee_006.bend	S{Z{}};S{Z{}};S{Z{}}	D{S{Z{}}, S{Z{}}, S{Z{}}}
+multi_scrutinee_007.bend	Z{};Z{};Z{}	A{}
+multi_scrutinee_007.bend	Z{};Z{};S{Z{}}	B{Z{}, S{Z{}}}
+multi_scrutinee_007.bend	Z{};S{Z{}};Z{}	A{}
+multi_scrutinee_007.bend	Z{};S{Z{}};S{Z{}}	B{Z{}, S{Z{}}}
+multi_scrutinee_007.bend	S{Z{}};Z{};Z{}	B{S{Z{}}, Z{}}
+multi_scrutinee_007.bend	S{Z{}};Z{};S{Z{}}	B{S{Z{}}, S{Z{}}}
+multi_scrutinee_007.bend	S{Z{}};S{Z{}};Z{}	B{S{Z{}}, Z{}}
+multi_scrutinee_007.bend	S{Z{}};S{Z{}};S{Z{}}	B{S{Z{}}, S{Z{}}}
+multi_scrutinee_008.bend	Z{};Z{};Z{}	A{}
+multi_scrutinee_008.bend	Z{};Z{};S{Z{}}	B{Z{}, Z{}}
+multi_scrutinee_008.bend	Z{};S{Z{}};Z{}	A{}
+multi_scrutinee_008.bend	Z{};S{Z{}};S{Z{}}	B{Z{}, S{Z{}}}
+multi_scrutinee_008.bend	S{Z{}};Z{};Z{}	C{Z{}, Z{}, Z{}}
+multi_scrutinee_008.bend	S{Z{}};Z{};S{Z{}}	C{Z{}, S{Z{}}, Z{}}
+multi_scrutinee_008.bend	S{Z{}};S{Z{}};Z{}	C{Z{}, Z{}, S{Z{}}}
+multi_scrutinee_008.bend	S{Z{}};S{Z{}};S{Z{}}	C{Z{}, S{Z{}}, S{Z{}}}
+multi_scrutinee_009.bend	Z{};Z{}	A{}
+multi_scrutinee_009.bend	Z{};S{Z{}}	B{Z{}, S{Z{}}}
+multi_scrutinee_009.bend	S{Z{}};Z{}	B{S{Z{}}, Z{}}
+multi_scrutinee_009.bend	S{Z{}};S{Z{}}	B{S{Z{}}, S{Z{}}}
+multi_scrutinee_010.bend	Z{};Z{};Z{}	A{}
+multi_scrutinee_010.bend	Z{};Z{};S{Z{}}	A{}
+multi_scrutinee_010.bend	Z{};S{Z{}};Z{}	A{}
+multi_scrutinee_010.bend	Z{};S{Z{}};S{Z{}}	A{}
+multi_scrutinee_010.bend	S{Z{}};Z{};Z{}	B{S{Z{}}, Z{}, Z{}}
+multi_scrutinee_010.bend	S{Z{}};Z{};S{Z{}}	B{S{Z{}}, Z{}, S{Z{}}}
+multi_scrutinee_010.bend	S{Z{}};S{Z{}};Z{}	B{S{Z{}}, S{Z{}}, Z{}}
+multi_scrutinee_010.bend	S{Z{}};S{Z{}};S{Z{}}	B{S{Z{}}, S{Z{}}, S{Z{}}}
+multi_scrutinee_011.bend	Z{};Z{}	Z{}
+multi_scrutinee_011.bend	Z{};S{Z{}}	S{Z{}}
+multi_scrutinee_011.bend	S{Z{}};Z{}	Z{}
+multi_scrutinee_011.bend	S{Z{}};S{Z{}}	Z{}
+multi_scrutinee_012.bend	Z{};Z{};Z{}	Z{}
+multi_scrutinee_012.bend	Z{};Z{};S{Z{}}	Z{}
+multi_scrutinee_012.bend	Z{};S{Z{}};Z{}	S{Z{}}
+multi_scrutinee_012.bend	Z{};S{Z{}};S{Z{}}	S{Z{}}
+multi_scrutinee_012.bend	S{Z{}};Z{};Z{}	Z{}
+multi_scrutinee_012.bend	S{Z{}};Z{};S{Z{}}	Z{}
+multi_scrutinee_012.bend	S{Z{}};S{Z{}};Z{}	S{Z{}}
+multi_scrutinee_012.bend	S{Z{}};S{Z{}};S{Z{}}	S{Z{}}
+multi_scrutinee_013.bend	Z{};Z{};Z{}	A{}
+multi_scrutinee_013.bend	Z{};Z{};S{Z{}}	A{}
+multi_scrutinee_013.bend	Z{};S{Z{}};Z{}	B{S{Z{}}}
+multi_scrutinee_013.bend	Z{};S{Z{}};S{Z{}}	B{S{Z{}}}
+multi_scrutinee_013.bend	S{Z{}};Z{};Z{}	C{S{Z{}}}
+multi_scrutinee_013.bend	S{Z{}};Z{};S{Z{}}	C{S{Z{}}}
+multi_scrutinee_013.bend	S{Z{}};S{Z{}};Z{}	D{S{Z{}}, S{Z{}}}
+multi_scrutinee_013.bend	S{Z{}};S{Z{}};S{Z{}}	D{S{Z{}}, S{Z{}}}
+multi_scrutinee_014.bend	Z{};Z{};Z{}	A{}
+multi_scrutinee_014.bend	Z{};Z{};S{Z{}}	A{}
+multi_scrutinee_014.bend	Z{};S{Z{}};Z{}	B{Z{}}
+multi_scrutinee_014.bend	Z{};S{Z{}};S{Z{}}	B{Z{}}
+multi_scrutinee_014.bend	S{Z{}};Z{};Z{}	C{Z{}}
+multi_scrutinee_014.bend	S{Z{}};Z{};S{Z{}}	C{Z{}}
+multi_scrutinee_014.bend	S{Z{}};S{Z{}};Z{}	D{S{Z{}}, S{Z{}}}
+multi_scrutinee_014.bend	S{Z{}};S{Z{}};S{Z{}}	D{S{Z{}}, S{Z{}}}
+multi_scrutinee_015.bend	None{};WZ{}	None{}
+multi_scrutinee_015.bend	None{};WS{WZ{}}	None{}
+multi_scrutinee_015.bend	Some{Z{}};WZ{}	Some{Z{}}
+multi_scrutinee_015.bend	Some{Z{}};WS{WZ{}}	Some{Z{}}
+multi_scrutinee_016.bend	O{};O{}	K0{}
+multi_scrutinee_016.bend	O{};I{}	K1{}
+multi_scrutinee_016.bend	I{};O{}	K2{}
+multi_scrutinee_016.bend	I{};I{}	K3{}

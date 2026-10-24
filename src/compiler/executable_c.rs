@@ -74,12 +74,15 @@ impl OwnedLocal {
 /// closures, with optional CUDA execution for marked calls.
 ///
 /// # Errors
-/// Rejects unsupported reachable contracts, invalid layouts, unavailable C
-/// imports and exhausted compiler budgets before producing an output program.
+/// Rejects a missing main, unsupported reachable contracts, invalid layouts,
+/// unavailable C imports and exhausted compiler budgets before producing output.
 pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileError> {
     let program = book
         .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
+    if program.entry == ExecutableEntry::Missing {
+        return Err(CompileError::new("no main to run"));
+    }
     let table = ConstructorTable::build(&program)?;
     let foreign = executable_c_foreign::assemble(&program, &table)?;
     let mut generator = Generator {

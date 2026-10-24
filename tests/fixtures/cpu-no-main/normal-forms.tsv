@@ -1,0 +1,30 @@
+page/compile_no_main.bend	f	1
+page/motive_binder_name.bend	add	\{NZ: (b => b); NS: (p => b => NS{add(p, b)})}
+page/motive_binder_name.bend	f	n => e => h2 => h3 => %e : N; NZ{}
+proof/ackermann_lower_bound.bend	LE	\{Zero: (b => Unit); Succ: (a1 => \{Zero: Empty; Succ: (b1 => LE(a1, b1))})}
+proof/ackermann_lower_bound.bend	ack	\{Zero: (n => 1n+n); Succ: (p => \{Zero: ack(p, 1n); Succ: (q => ack(p, ack(1n+p, q)))})}
+proof/ackermann_lower_bound.bend	le_refl	\{Zero: Unit{}; Succ: (p => le_refl(p))}
+proof/ackermann_lower_bound.bend	le_widen	\{Zero: (b => e => Unit{}); Succ: (c => \{Zero: \{}; Succ: (d => e => le_widen(c, d, e))})}
+proof/ackermann_lower_bound.bend	le_unstep	a => \{Zero: \{}; Succ: (c => e => le_widen(a, c, e))}
+proof/ackermann_lower_bound.bend	le_trans	\{Zero: (b => c => e1 => e2 => Unit{}); Succ: (a1 => \{Zero: (c => \{}); Succ: (b1 => \{Zero: (e1 => \{}); Succ: (c1 => e1 => e2 => le_trans(a1, b1, c1, e1, e2))})})}
+proof/ackermann_lower_bound.bend	ack_gt	\{Zero: (n => le_refl(n)); Succ: (p => \{Zero: le_unstep(1n, ack(p, 1n), ack_gt(p, 1n)); Succ: (q => le_trans(2n+q, 1n+ack(1n+p, q), ack(p, ack(1n+p, q)), ack_gt(1n+p, q), ack_gt(p, ack(1n+p, q))))})}
+proof/constructor_discriminate.bend	TF	\{T2: Uni; F2: Emp}
+proof/constructor_discriminate.bend	sym	A => a => b => e => %e : {_ == a : A}; {==}
+proof/constructor_discriminate.bend	t_ne_f	e => %e : TF(_); U{}
+proof/constructor_discriminate.bend	ne	e => %e : TF(_); U{}
+proof/function_congruence.bend	ap_eq	f => g => e => %e : {f(3) == _(3) : U32}; {==}
+proof/gadt_refutation.bend	NatD	\{Z: (zc => sc => zc); S: (p => zc => sc => sc)}
+proof/gadt_refutation.bend	z_ne_s	p => e => %e : NatD(_, Uni, Emp); U{}
+proof/gadt_refutation.bend	s_ne_z	p => e => %e : NatD(_, Emp, Uni); U{}
+proof/gadt_refutation.bend	pred	\{Z: Z{}; S: (p => p)}
+proof/gadt_refutation.bend	s_inj	a => b => e => %e : {a == pred(_) : N}; {==}
+proof/gadt_refutation.bend	two_even	ESS{Z{}, EZ{{==}}, {==}}
+proof/gadt_refutation.bend	one_odd	\{EZ: (eq => %eq : NatD(_, Emp, Uni); U{}); ESS: (p => e => eq => %(%eq : {Z{} == pred(_) : N}; {==}) : NatD(_, Uni, Emp); U{})}
+proof/map_fusion.bend	app	\{AddOne: (x => U32.add(x, 1)); MulTwo: (x => U32.mul(x, 2)); MulTwoAddOne: (x => U32.add(U32.mul(x, 2), 1))}
+proof/map_fusion.bend	map	f => \{Nil: []; Con: (h => t => app(f, h) <> map(f, t))}
+proof/map_fusion.bend	fuse	\{Nil: {==}; Con: (h => t => %fuse(t) : {U32.add(U32.mul(h, 2), 1) <> map(AddOne{}, map(MulTwo{}, t)) == U32.add(U32.mul(h, 2), 1) <> _ : List<&2, U32>}; {==})}
+state/clean_typecheck_000.bend	swap	A => B => \{Tuple: (a => b => (b, a))}
+state/clean_typecheck_000.bend	swap_swap	\{Tuple: (a => b => {==})}
+state/clean_typecheck_001.bend	Vec	\{Zero: Unit; Succ: (p => Sigma<&1, &1, Nat, _ => Vec(p)>)}
+state/clean_typecheck_001.bend	add_zero	\{Zero: {==}; Succ: (p => %add_zero(p) : {1n+p == 1n+_ : Nat}; {==})}
+state/clean_typecheck_001.bend	vpad	n => v => %add_zero(n) : Vec(_); v

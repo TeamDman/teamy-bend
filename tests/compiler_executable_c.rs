@@ -262,11 +262,11 @@ fn cli_compiles_executable_c_and_runs_without_a_socket_provider() {
 }
 
 #[test]
-fn checked_book_without_main_reports_success_without_calling_a_null_entry() {
-    success(
-        &Fixture::new().run("import Base\ndef helper() -> U32: 7\n", &[]),
-        "All terms check.\n",
-    );
+fn standalone_compilation_requires_main_after_successful_checking() {
+    let error = Fixture::new()
+        .generate("import Base\ndef helper() -> U32: 7\n")
+        .unwrap_err();
+    assert_eq!(error.to_string(), "no main to run");
 }
 
 #[test]

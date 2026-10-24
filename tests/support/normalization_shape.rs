@@ -3,6 +3,7 @@
 //! It performs no evaluation, reordering, text replacement or eta conversion.
 use super::normalization_kernel::Book;
 use super::normalization_kernel::Declaration;
+use super::normalization_kernel::Quant;
 use super::normalization_kernel::Term;
 use super::normalization_kernel::TermRef;
 use facet::Facet;
@@ -13,6 +14,7 @@ use std::collections::BTreeSet;
 pub enum Shape {
     Bound(usize),
     Reference(String),
+    Multiplicity(u8),
     Lambda(Box<Self>),
     Application(Box<Self>, Box<Self>),
     Constructor(String, Vec<Self>),
@@ -71,6 +73,11 @@ fn shape_with_datatypes(
                 Shape::Datatype(name.clone(), Vec::new(), Vec::new())
             }
             Term::Ref(name) => Shape::Reference(name.clone()),
+            Term::Qua(quant) => Shape::Multiplicity(match quant {
+                Quant::None => 0,
+                Quant::Lone => 1,
+                Quant::Many => 2,
+            }),
             Term::Lam { id, body, .. } => {
                 scope.push(*id);
                 let body = visit(body, scope, depth + 1, datatypes)?;

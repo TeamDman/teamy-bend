@@ -944,3 +944,59 @@ fn open_list_rendering_preserves_structure_and_operand_precedence() {
         );
     }
 }
+
+#[test]
+fn multi_scrutinee_originals_preserve_columns_fallbacks_and_reconstructed_values() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-multi-scrutinee");
+    for index in 0..17 {
+        let path = root.join(format!("multi_scrutinee_{index:03}.bend"));
+        let source = std::fs::read_to_string(&path).unwrap();
+        let expected = source
+            .lines()
+            .filter_map(|line| line.strip_prefix("#|"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let book = load(path).unwrap();
+        let value = check_book(&book)
+            .unwrap()
+            .normalize_definition("main")
+            .unwrap();
+        assert_eq!(value.to_string(), expected);
+        assert_eq!(
+            shape_in_book(&value, &book).unwrap(),
+            shape_in_book(&parse_term(&expected).unwrap(), &book).unwrap()
+        );
+    }
+}
+
+#[test]
+fn multi_scrutinee_applications_match_all_pinned_branch_observations() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-multi-scrutinee");
+    let mut observations = 0;
+    for index in 0..17 {
+        let fixture = format!("multi_scrutinee_{index:03}.bend");
+        let book = load(root.join(&fixture)).unwrap();
+        let checked = check_book(&book).unwrap();
+        for line in include_str!("fixtures/cpu-multi-scrutinee/applications.tsv").lines() {
+            let mut fields = line.splitn(3, '\t');
+            let source = fields.next().unwrap();
+            let arguments = fields.next().unwrap();
+            let expected = fields.next().unwrap();
+            if source != fixture {
+                continue;
+            }
+            let arguments = arguments
+                .split(';')
+                .map(|arg| parse_term(arg).unwrap())
+                .collect::<Vec<_>>();
+            let value = checked.evaluate("main", &arguments).unwrap();
+            assert_eq!(value.to_string(), expected, "{fixture}: {arguments:?}");
+            assert_eq!(
+                shape_in_book(&value, &book).unwrap(),
+                shape_in_book(&parse_term(expected).unwrap(), &book).unwrap()
+            );
+            observations += 1;
+        }
+    }
+    assert_eq!(observations, 100);
+}

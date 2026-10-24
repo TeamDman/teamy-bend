@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -147,6 +147,12 @@ if ($Suite -in @('layout', 'all')) {
     }
     foreach ($name in @('if_branch_newline', 'elif_alignment', 'do_line_depth')) {
         $cases += @{ name = "$($name)_pure"; fixture = "authored/$($name)_pure.bend"; original = Join-Path $port "tests/fixtures/cpu-layout/$($name)_pure.bend"; origin = 'authored'; function_printer = $false }
+    }
+}
+if ($Suite -in @('multi-scrutinee', 'all')) {
+    foreach ($index in 0..16) {
+        $name = 'multi_scrutinee_{0:D3}' -f $index
+        $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; no_base_printer = $true }
     }
 }
 foreach ($case in $cases) {

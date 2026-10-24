@@ -154,7 +154,7 @@ fn compiling_foreign_source_does_not_execute_it() {
 }
 
 #[test]
-fn generated_pure_and_missing_main_follow_executable_entry_rules() {
+fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
     let pure = Fixture::new("import Base\ndef main() -> U32: 42\n");
     pure.compile_ok();
     let output = pure.run();
@@ -162,8 +162,18 @@ fn generated_pure_and_missing_main_follow_executable_entry_rules() {
     assert_eq!(output.stdout, b"42\n");
 
     let empty = Fixture::new("type Marker is Data:\n  Mark{}\ndef value() -> Marker: Mark{}\n");
-    empty.compile_ok();
-    let output = empty.run();
-    assert_eq!(output.status.code(), Some(0));
-    assert_eq!(output.stdout, b"All terms check.\n");
+    for target in ["javascript", "c", "native"] {
+        let output = empty.compile(&["--executable", "--target", target]);
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+        assert!(String::from_utf8_lossy(&output.stderr).contains("no main to run"));
+        assert!(!empty.0.join("main.cjs").exists());
+    }
+    std::fs::write(empty.0.join("main.cjs"), "preserved output").unwrap();
+    let output = empty.compile(&["--executable", "--force"]);
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(
+        std::fs::read_to_string(empty.0.join("main.cjs")).unwrap(),
+        "preserved output"
+    );
 }
