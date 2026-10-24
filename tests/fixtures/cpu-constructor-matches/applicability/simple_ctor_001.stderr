@@ -1,0 +1,1 @@
+Error: main's type @x:../simple_ctor_001.MaybeNat -> ../simple_ctor_001.MaybeNat cannot be printed (a function, a Type, an erased or dependent field)

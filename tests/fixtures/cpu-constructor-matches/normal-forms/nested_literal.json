@@ -1,0 +1,1 @@
+{"Match":["Env",{"Match":["Num",{"Match":["Z",{"Lambda":{"Constructor":["K100",[]]}},{"Lambda":{"Lambda":{"Constructor":["KP",[{"Constructor":["S",[{"Bound":1}]]}]]}}}]},{"Match":["Stop",{"Match":["Num",{"Lambda":{"Constructor":["KK",[{"Bound":0}]]}},{"Match":["Stop",{"Constructor":["K0",[]]},"EmptyMatch"]}]},"EmptyMatch"]}]},"EmptyMatch"]}

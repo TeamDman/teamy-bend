@@ -1,0 +1,233 @@
+[
+  {
+    "name": "simple_ctor_000",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "A{}"
+  },
+  {
+    "name": "simple_ctor_000",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "B{Z{}}"
+  },
+  {
+    "name": "simple_ctor_000",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "B{S{Z{}}}"
+  },
+  {
+    "name": "simple_ctor_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "B{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "simple_ctor_001",
+    "arguments": [
+      "None{}"
+    ],
+    "value": "None{}"
+  },
+  {
+    "name": "simple_ctor_001",
+    "arguments": [
+      "Some{Z{}}"
+    ],
+    "value": "Some{Z{}}"
+  },
+  {
+    "name": "simple_ctor_001",
+    "arguments": [
+      "Some{S{Z{}}}"
+    ],
+    "value": "Some{S{Z{}}}"
+  },
+  {
+    "name": "simple_ctor_001",
+    "arguments": [
+      "Some{S{S{Z{}}}}"
+    ],
+    "value": "Some{S{S{Z{}}}}"
+  },
+  {
+    "name": "simple_ctor_001",
+    "arguments": [
+      "Some{S{S{S{S{Z{}}}}}}"
+    ],
+    "value": "Some{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "single_ctor_type_001",
+    "arguments": [
+      "Only{Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "single_ctor_type_001",
+    "arguments": [
+      "Only{S{Z{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "single_ctor_type_001",
+    "arguments": [
+      "Only{S{S{Z{}}}}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "single_ctor_type_001",
+    "arguments": [
+      "Only{S{S{S{S{Z{}}}}}}"
+    ],
+    "value": "S{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "single_ctor_type_001_mk",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "Only{Z{}}"
+  },
+  {
+    "name": "single_ctor_type_001_mk",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "Only{S{Z{}}}"
+  },
+  {
+    "name": "single_ctor_type_001_mk",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "Only{S{S{Z{}}}}"
+  },
+  {
+    "name": "single_ctor_type_001_mk",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "Only{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Stop{}, Stop{}}"
+    ],
+    "value": "K0{}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Stop{}, Num{Z{}}}"
+    ],
+    "value": "KK{Z{}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Stop{}, Num{S{Z{}}}}"
+    ],
+    "value": "KK{S{Z{}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Stop{}, Num{S{S{S{Z{}}}}}}"
+    ],
+    "value": "KK{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{Z{}}, Stop{}}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{Z{}}, Num{Z{}}}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{Z{}}, Num{S{Z{}}}}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{Z{}}, Num{S{S{S{Z{}}}}}}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{Z{}}}, Stop{}}"
+    ],
+    "value": "KP{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{Z{}}}, Num{Z{}}}"
+    ],
+    "value": "KP{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{Z{}}}, Num{S{Z{}}}}"
+    ],
+    "value": "KP{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{Z{}}}, Num{S{S{S{Z{}}}}}}"
+    ],
+    "value": "KP{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{S{S{Z{}}}}}, Stop{}}"
+    ],
+    "value": "KP{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{S{S{Z{}}}}}, Num{Z{}}}"
+    ],
+    "value": "KP{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{S{S{Z{}}}}}, Num{S{Z{}}}}"
+    ],
+    "value": "KP{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_literal",
+    "arguments": [
+      "Env{Num{S{S{S{Z{}}}}}, Num{S{S{S{Z{}}}}}}"
+    ],
+    "value": "KP{S{S{S{S{Z{}}}}}}"
+  }
+]

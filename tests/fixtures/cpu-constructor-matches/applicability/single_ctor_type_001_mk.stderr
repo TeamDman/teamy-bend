@@ -1,0 +1,1 @@
+Error: main's type @x:../single_ctor_type_001_mk.W -> ../single_ctor_type_001_mk.One cannot be printed (a function, a Type, an erased or dependent field)

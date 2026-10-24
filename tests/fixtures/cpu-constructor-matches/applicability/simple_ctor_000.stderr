@@ -1,0 +1,1 @@
+Error: main's type @x:../simple_ctor_000.Nat -> ../simple_ctor_000.R cannot be printed (a function, a Type, an erased or dependent field)
