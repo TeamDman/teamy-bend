@@ -4596,3 +4596,35 @@ first-match priority, overlapping defaults, reconstructed values and bounded rec
 Initial applicability probes remain unqualified; structural and concrete-application
 comparisons are required. Dependencies, references, toolchains, budgets and approved
 demand policy remain frozen. No installations, pushes, desktop or GPU work.
+
+### [x] 5.80 Qualify ragged-row applications and native IO
+
+Source `623c6bacfc82993e731c4c124306924c1d68d8eb` qualifies five unchanged `flatten/ragged_rows_000..004`
+originals through exact normal forms and an **81-vector** direct application grid.
+Separate pure observation wrappers and IO adapters compare every constructor ID
+and returned field depth across applicable runtimes. The IO adapters explicitly
+exercise the native executable driver; pure CLI results exercise normalization.
+Known printer refusals now use the structured language diagnostic boundary.
+[Report](cpu-ragged-rows.md).
+
+Full gate: **933 passed, zero failed, 49 ignored**. The repeated pure matrix has
+140 process observations; the IO matrix has 100, including ten unavailable direct
+Node IO-oracle calls and five deliberate strict-proof exclusions. The 14-case
+printer matrix has 112 exact comparisons plus 28 oracle captures, with 56 separate
+accepted-source phase probes. All 1,302 checking statuses remain unchanged.
+
+Detailed receipts cover **287 originals**, with **1,015** lacking detailed receipts:
+**360 checker negatives, one checking-only module, 101 interpreter cases and 553
+compiled candidates**. Five interpretation rows are renewed; the other 99 interpretation,
+93 runtime and 90 checking rows retain historical identities. Wrappers do not
+create executable qualification for the original function-valued mains.
+
+Imported-datatype printing is a newly minimized open discrepancy: the interpreter,
+upstream C and native normalizer print qualified names, port C/JS print local names,
+and pinned JS reaches an unmatched-tag printer loop. This is not an exception.
+Erased-hole/TODO, host/resource/foreign/F32.read/runtime-error-order/API requirements
+and the incomplete 688-vector exploration remain unwaived. Next independent batch:
+six `computed_ref_call_000/001` originals and their `_f`/`_step` companions, initially
+20 concrete vectors; selected from source and ledger, not executed or qualified.
+Frozen inputs, budgets, guards and demand policy; no installations, pushes, desktop
+or GPU work.
