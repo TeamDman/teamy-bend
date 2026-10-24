@@ -149,6 +149,32 @@ fn shared_heads_preserve_first_field_failure_and_unwind_depth() {
 }
 
 #[test]
+fn shared_observations_still_exhaust_an_insufficient_total_work_budget() {
+    let shared = boxed(term(Term::Rfl));
+    let pair = term(Term::Ctr {
+        name: "Pair".into(),
+        args: vec![Rc::clone(&shared), shared],
+    });
+    let mut measured = empty();
+    measured.fuel = 128;
+    let expected = measured.normalize(&pair).unwrap().to_string();
+    let required = 128 - measured.fuel;
+    assert!(required > 1 && required < 128);
+    for fuel in [required - 1, required] {
+        let mut engine = empty();
+        engine.fuel = fuel;
+        let result = engine.normalize(&pair);
+        if fuel == required {
+            assert_eq!(result.unwrap().to_string(), expected);
+        } else {
+            assert!(result.unwrap_err().to_string().contains("budget exhausted"));
+        }
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        assert!(engine.normalization_memo.is_none());
+    }
+}
+
+#[test]
 fn composition_individual_prefix_and_aggregate_fit_the_original_budget() {
     let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-open-closures/wrappers/open_closure_pipe.bend");

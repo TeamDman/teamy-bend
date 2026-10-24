@@ -253,16 +253,7 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
                 })
             }
         }
-        Term::App(f, x) => {
-            // An unrelated binder must not copy an already shared computation.
-            let next_f = sub(f);
-            let next_x = sub(x);
-            if Rc::ptr_eq(f, &next_f) && Rc::ptr_eq(x, &next_x) {
-                Rc::clone(value)
-            } else {
-                term(Term::App(next_f, next_x))
-            }
-        }
+        Term::App(f, x) => map_application(value, f, x, sub),
         Term::Adt {
             name,
             args,
@@ -313,6 +304,22 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
                 sub(body)
             },
         }),
+    }
+}
+
+fn map_application(
+    value: &TermRef,
+    f: &TermRef,
+    x: &TermRef,
+    mut transform: impl FnMut(&TermRef) -> TermRef,
+) -> TermRef {
+    // An unrelated binder must not copy an already shared computation.
+    let next_f = transform(f);
+    let next_x = transform(x);
+    if Rc::ptr_eq(f, &next_f) && Rc::ptr_eq(x, &next_x) {
+        Rc::clone(value)
+    } else {
+        term(Term::App(next_f, next_x))
     }
 }
 
