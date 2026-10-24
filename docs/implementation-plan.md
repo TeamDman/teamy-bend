@@ -3918,3 +3918,29 @@ positive originals and three diagnostic-mismatch rows. Runtime/interpretation
 union remains 103; no-main absence there is not missing runtime coverage.
 Next: parse/chain_default_nat_f and _g applicability/normalization. Full parity
 remains incomplete; frozen dependencies/toolchains/budgets and no push.
+
+
+### [x] 5.54 Qualify default-Nat functions and characterize proof diagnostics
+
+Source `0093d01` qualifies unchanged parse/chain_default_nat_f and _g. Strict
+normalized structure and raw text match twice; actual upstream C/JS generation
+refuses the function results without artifacts. No engine change was required.
+The original goldens, Apache attribution and strict regression coverage remain.
+
+The no-main list fixture is renewed. Both false-proof mutations parse/load then
+fail at rev/srt reflexivity checks. Structured upstream error inspection confirms
+phase, endpoint values and source spans. Upstream renders normalized endpoints;
+the port retains original expressions and host error context. Raw differences
+remain open in a separate authored-control ledger; no new exception. Regressions
+now require the specific offending proof name, without weakening rejection.
+
+Full gate **825 passed, zero failed, 49 ignored**; 58 focused tests and strict
+Clippy pass. Normalization: 34 fixtures, 266 successes, 76 printer refusals and
+six F32 exclusions. Disk preflight/monitoring prevented exhaustion and preserved
+source/evidence. Runtime/demand and broader audits retain historical receipts.
+Thirty interpretation originals plus 75 runtime originals link 105 inventory
+rows; remaining modes stay classified by applicability. Full parity is incomplete.
+
+The [checkpoint](cpu-default-nat-functions.md) records exact commands, hashes,
+phase/cause distinctions and headroom. Next: parse/chain_spacing_rules_f, _g and
+_h applicability and normalization. Frozen inputs/budgets/policies; no push.

@@ -12,20 +12,21 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `c900e3f` qualifies
-[checking-only list reverse and sort proofs](cpu-list-reverse-sort.md): exact
-original checking output and five named normal forms, with separate actual-core
-comparison. Two false-proof controls reject correctly; their diagnostic text
-still differs. Full gate: **825 passed, zero failed, 49 ignored**; 58 focused
-tests and strict Clippy pass. The full normalization suite is renewed, while
-runtime/demand/audit receipts keep their historical identities. No engine,
-demand-policy, dependency or safety-budget change; no new exception.
+neither is a completion percentage. Current checkpoint `0093d01` qualifies
+[two default-Nat functions](cpu-default-nat-functions.md), with exact normalized
+core/text and actual upstream function-printer refusals. Renewed list-proof
+controls confirm rejection during checking; normalized-endpoint/source-span
+versus symbolic-endpoint/host-context diagnostics remain different. Full gate:
+**825 passed, zero failed, 49 ignored**; 58 focused tests and strict Clippy pass.
+The 34-fixture normalization suite is renewed. No engine, dependency, demand or
+budget change; no new policy exception. Runtime/demand/audit receipts remain
+at their actual historical commits.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 103 originals; the 1,199 remaining
+Current runtime/interpretation ledgers link 105 originals; the 1,197 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 595 compiled candidates. These are distinct
+interpreter-only cases and 593 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -443,7 +444,17 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [checking-only list proofs](cpu-list-reverse-sort.md),
+Latest bounded checkpoint: [default-Nat functions and checker diagnostics](cpu-default-nat-functions.md),
+`0093d01`. Two unchanged function originals agree in strict normal form, actual
+core and raw text twice. Actual C/JS printers refuse their function results with
+no artifacts. Full gate **825 passed, zero failed, 49 ignored**; 58 focused tests
+and strict Clippy pass. Normalization: 34 fixtures, 266 successes, 76 printer
+refusals and six F32 exclusions. List checking and named definitions are renewed;
+two authored false equalities retain diagnostic differences, now characterized
+by phase and reporting cause. No engine or policy change. Minimum workspace
+headroom during the monitored gate: 4.82 GiB; no exhaustion.
+
+Previous bounded checkpoint: [checking-only list proofs](cpu-list-reverse-sort.md),
 `c900e3f`. The unchanged no-main original checks exactly in both CLI compatibility
 paths; strict port checking also passes. Five named definitions agree in text
 and actual core twice. False reverse and lost-duplicate controls reject at the
@@ -504,15 +515,15 @@ nonzero-expectation fixtures rejected, including all 439 checker negatives.
 No acceptance status changed, and no timeout or abnormal exit occurred. These
 are status-only results, not raw-diagnostic or executable parity.
 
-The current primary ledgers link 103 distinct originals; 1,199 lack
+The current primary ledgers link 105 distinct originals; 1,197 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 595 compiled candidates). The checking ledger now has
+153 interpreter-only, 593 compiled candidates). The checking ledger now has
 two exact positive acceptances and three earlier phase/construct agreements
 with differing diagnostics. Thus two of the twelve no-main entries have explicit
 checking qualification despite remaining absent from runtime/interpretation
-ledgers. Authored controls add no inventory rows. Next: parse/chain_default_nat_f
-and _g, requiring actual printer applicability and normalized-core comparison.
-Neither needs GPU hardware, a new dependency or a new F32.read policy.
+ledgers. Authored controls add no inventory rows. Next: parse/chain_spacing_rules_f,
+_g and _h, requiring actual printer applicability and normalized-core comparison.
+This family needs no GPU hardware, new dependency or new F32.read policy.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -520,6 +531,7 @@ CPU work.
 
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
+| Passed in strict function normalization; upstream printers inapplicable | Default Nat function companions | Both originals retain arithmetic precedence/comparison helper structure and exact text. Actual function-printer refusals verified; no concrete invocation claim. |
 | Passed checking-only; authored negative diagnostics remain different | Concrete list reverse/sort proofs | Exact original checking output and five named normal forms with independent core comparison. No main or runtime lanes; wrong reverse and dropped duplicate refuse at the expected proofs. |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
