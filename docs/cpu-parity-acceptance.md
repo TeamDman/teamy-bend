@@ -91,43 +91,43 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Tested source `cc3818eaa394ab3be74d9edd14b00e7763c11da1` adds three unchanged
-`flatten/nested_computed_match_001`, `_dec` and `_zro` originals and **12 bounded
-applications**. Original function graphs/text preserve `dec(zro(p))`; closed
-constructor results, scalar projections and execution are distinct comparisons.
-No production defect or code change was found. [Scope and receipts](cpu-nested-computed.md).
+Tested source `39634e208333393e6cf0b47502eb4669ba2fd590` adds seven unchanged
+`flatten/annotated_computed_scrutinee_000` originals/companions and **77 bounded
+applications** covering annotated list length/selection, all Boolean cases and
+all 49 ordered pairs of seven lists. Original graphs/text, complete constructors,
+scalar projections and executable output remain separate. No production change
+was needed. [Scope and receipts](cpu-annotated-scrutinee.md).
 
-Full gate: **1,024 passed, zero failures, 49 ignored**. Focused controls:
-**33 / 0 / 0**. All **36 complete graph** and **90 normalization/applicability**
-observations pass, including 60 exact standalone-build refusals without artifacts.
-Six authored executable mains produce **72 exact repeated executions and 36
-successful generation/build checks**, with zero matrix timeouts. Their result
-constructors are nullary; this success does not resolve the historical
-field-bearing imported-constructor upstream-JS printer failures.
+Full gate: **1,030 passed, zero failures, 49 ignored**. Focused controls:
+**35 / 0 / 0**. All **84 complete graph** and **210 normalization/applicability**
+observations complete, including 140 exact build refusals without artifacts.
+The runtime matrix records **162 exact executions, 84 successful generation/
+build checks and 6 unresolved upstream-JS printer timeouts**; runner exit
+**1**. All required port observations pass. Projection or nullary-result
+success does not qualify the field-bearing full-value upstream-JS printers.
 
-Aggregate sharing/work/native/C/JS/demand/cancellation regressions pass in the
-full gate; no mid-normalization cancellation is claimed. All 1,302 checking
-statuses and streams remain unchanged, including 439 rejecting negatives.
-Fourteen positive controls pass; 18 observations retain three hole/TODO
-disagreements. The IO emitter correction's API caveat remains: no-IO executable
-compilation may now return Err for external consumers, which have not been
-audited. Minimal-IO upstream C compiler failures and foreign checking diagnostic
-differences remain separately unqualified; prior receipts are not renewed by
-matching cases in this batch.
+Independent review found no blocking concerns or weakened comparisons. The source
+annotation is checked; its elimination from normal form agrees with upstream.
+Aggregate sharing/work/native/C/JS/demand/cancellation controls pass, with no
+mid-normalization cancellation claim. All 1,302 checking statuses/streams remain
+unchanged, including 439 rejecting negatives. Fourteen positive controls pass;
+18 observations preserve three hole/TODO disagreements. External consumers of
+the IO emitter correction remain unaudited: no-IO compilation may return Err
+where it previously produced source. Earlier minimal-IO upstream C failures,
+foreign diagnostics, resource/host gaps, F32.read, competing failure order and
+the incomplete 688-vector exploration remain unwaived.
 
-Detailed evidence links **361 originals**; **941 remain unlinked**: **357 checker
-negatives, one checking-only module, 46 interpreter cases and 537 compiled
-candidates**. Links include partial, blocked and historical evidence, not
-completed parity. F32.read, competing failure order, resource/host/foreign gaps,
-erased-hole/TODO, downstream API caveats and the incomplete 688-vector exploration
-remain unwaived. Missing API/integration requirements still require review.
-
-Next proposed coherent family: seven `flatten/annotated_computed_scrutinee_000`
-originals/companions, actual applicability first, then **77** bounded applications
-covering list equality/length, annotation, selection and Boolean helpers.
-This is source/ledger selection only; no next-batch execution credit.
-Dependencies, pins, toolchains, guards, budgets and cancellation stay frozen.
-Local checkpoints only; no installs, publication, merge, desktop or GPU work.
+Detailed receipts link **368 originals**; **934 remain unlinked**: **357 checker
+negatives, one checking-only module, 39 interpreter cases and 537 compiled
+candidates**. Links include historical, partial and blocked results; they do not
+establish complete CPU parity or close the separate API/integration inventory.
+Next proposed batch: four `flatten/statement_sequence` originals/companions,
+applicability first, then eight closed function inputs and two nullary proof
+observations. No execution credit is assigned to that proposal. Dependencies,
+toolchains, pins, budgets, guards and cancellation remain frozen. Reviewed
+feature-branch preservation is now authorized; no main merge or release. Private
+raw receipts, binaries and generated failures remain outside Git and must be
+retained separately. No installs, desktop or GPU work.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1542,3 +1542,43 @@ covering list equality/length, annotation, selection and Boolean helpers.
 This is source/ledger selection only; no next-batch execution credit.
 Dependencies, pins, toolchains, guards, budgets and cancellation stay frozen.
 Local checkpoints only; no installs, publication, merge, desktop or GPU work.
+
+## Annotated computed scrutinee checkpoint
+
+Tested source `39634e208333393e6cf0b47502eb4669ba2fd590` adds seven unchanged
+`flatten/annotated_computed_scrutinee_000` originals/companions and **77 bounded
+applications** covering annotated list length/selection, all Boolean cases and
+all 49 ordered pairs of seven lists. Original graphs/text, complete constructors,
+scalar projections and executable output remain separate. No production change
+was needed. [Scope and receipts](cpu-annotated-scrutinee.md).
+
+Full gate: **1,030 passed, zero failures, 49 ignored**. Focused controls:
+**35 / 0 / 0**. All **84 complete graph** and **210 normalization/applicability**
+observations complete, including 140 exact build refusals without artifacts.
+The runtime matrix records **162 exact executions, 84 successful generation/
+build checks and 6 unresolved upstream-JS printer timeouts**; runner exit
+**1**. All required port observations pass. Projection or nullary-result
+success does not qualify the field-bearing full-value upstream-JS printers.
+
+Independent review found no blocking concerns or weakened comparisons. The source
+annotation is checked; its elimination from normal form agrees with upstream.
+Aggregate sharing/work/native/C/JS/demand/cancellation controls pass, with no
+mid-normalization cancellation claim. All 1,302 checking statuses/streams remain
+unchanged, including 439 rejecting negatives. Fourteen positive controls pass;
+18 observations preserve three hole/TODO disagreements. External consumers of
+the IO emitter correction remain unaudited: no-IO compilation may return Err
+where it previously produced source. Earlier minimal-IO upstream C failures,
+foreign diagnostics, resource/host gaps, F32.read, competing failure order and
+the incomplete 688-vector exploration remain unwaived.
+
+Detailed receipts link **368 originals**; **934 remain unlinked**: **357 checker
+negatives, one checking-only module, 39 interpreter cases and 537 compiled
+candidates**. Links include historical, partial and blocked results; they do not
+establish complete CPU parity or close the separate API/integration inventory.
+Next proposed batch: four `flatten/statement_sequence` originals/companions,
+applicability first, then eight closed function inputs and two nullary proof
+observations. No execution credit is assigned to that proposal. Dependencies,
+toolchains, pins, budgets, guards and cancellation remain frozen. Reviewed
+feature-branch preservation is now authorized; no main merge or release. Private
+raw receipts, binaries and generated failures remain outside Git and must be
+retained separately. No installs, desktop or GPU work.
