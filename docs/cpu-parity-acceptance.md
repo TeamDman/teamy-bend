@@ -91,40 +91,46 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Tested source `eeb7b2814ae9fa21cf68b8c0c06cf236c419b75b` adds five unchanged `flatten/literal_default_000..004`
-originals and a bounded **45-input** grid. Original function graphs/text, direct
-applications, full imported constructor values and scalar projections remain
-separate. No production divergence was found. [Scope and receipts](cpu-literal-defaults.md).
+Tested source `dcf26ff64a9c093cd5a5b123b3b5c6df599e5bc5` adds four unchanged `flatten/dead_residue_elision`
+originals (`_000`, `_001`, `_002`, `_004`) and **29 bounded applications**.
+Applicability exposed nine incorrect standalone-build acceptances: the three
+concrete originals compiled in port C/JS/native despite lacking the exact
+top-level `IO` declaration required by pinned upstream. A shared, independently
+reviewed preflight now rejects them before lowering, with exact status/stderr
+and artifact preservation. Pure interpretation, strict emitters, evaluation,
+sharing and safety limits are unchanged. [Details and receipts](cpu-dead-residue.md).
 
-Full gate: **1,009 passed, zero failures, 49 ignored**. Clean focused controls:
-**24 / 0 / 0**. Sixty structural and 150 original/applicability observations
-complete. Runtime observations comprise **112 exact executions, 60 successful
-build/generation steps and eight unresolved upstream-JS printer timeouts**.
-The complete runtime runner exits 1; full values match native Rust, port C/JS,
-pinned interpretation and upstream C O3, without claiming upstream-JS parity.
+Full gate: **1,018 passed, zero failures, 49 ignored**. Focused controls:
+**83 / 0 / 0**. All **72 complete graph** and **132 normalization/applicability**
+observations complete. The runtime matrix records **120 exact executions,
+66 successful generation/build steps and 12 unresolved upstream-JS printer
+timeouts**. All port-required cases pass; the complete matrix exits 1. Full
+values agree in native Rust, port C/JS, pinned interpretation and upstream C O3;
+scalar projection success does not qualify the failed upstream-JS full printers.
 
-A new test initially overflowed during recursive graph JSON encoding, after
-Bend evaluation and Shape construction succeeded. A reviewed test-only explicit
-stack now preserves every constructor name/ordered child and rejects other
-nodes. Failed receipts remain tied to `cf2e86a`; no evaluator, stack-size,
-guard, budget or cancellation change occurred. Current aggregate controls pass;
+Aggregate sharing/work/demand/cancellation regressions pass in the full gate;
 no mid-normalization cancellation is claimed. All 1,302 checking statuses and
-streams remain unchanged, with 439 expected negatives rejecting. Fourteen
-positive controls pass; 18 observations retain three hole/TODO disagreements.
+streams remain unchanged, including 439 rejecting negatives. Fourteen positive
+controls pass; 18 observations retain three hole/TODO disagreements. Minimal
+ordinary-IO scaffold C compiler failures and a foreign-source checking diagnostic
+difference remain separately unqualified. External emitter consumers can now
+receive Err for no-IO builds; repository callers handle status 1, but external
+consumers have not been audited.
 
-Detailed receipts link **354 originals**, leaving **948 unlinked**: **357 checker
-negatives, one checking-only module, 53 interpreter cases and 537 compiled
-candidates**. Links include historical, partial and blocked observations, not
-completed parity. Imported-JS printing, erased-hole/TODO, resource/host/foreign
-gaps, F32.read, competing failure order, downstream API caveats and the unfinished
+Detailed receipts link **358 originals**, leaving **944 unlinked**: **357 checker
+negatives, one checking-only module, 49 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test
+counts. Links include historical, partial and blocked evidence, not completed
+parity. Imported-JS printing, erased-hole/TODO, resource/host/foreign gaps,
+F32.read, competing failure order, downstream API caveats and the unfinished
 688-vector exploration remain unwaived.
 
-Next proposed batch: `flatten/dead_residue_elision_000`, `_001`, `_002` and `_004`.
-Establish original function/concrete-value applicability first, then **29**
-applications of `main` or `f` as appropriate. No next-batch execution credit.
-Dependencies, toolchains, upstream references, budgets, guards and cancellation
-remain frozen; no installs, pushes, merges, desktop or GPU work. No new decision
-is required by this checkpoint.
+Next proposed independent batch: `flatten/nested_computed_match_001`, `_dec` and
+`_zro`; establish actual printability, then **12** bounded applications. This is
+source/ledger selection only, without execution credit. Dependencies, toolchains,
+references, budgets, guards and cancellation remain frozen. Local checkpoints
+only; no installs, pushes, merges, desktop or GPU work. No user decision is
+required by this correction.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1456,3 +1462,46 @@ applications of `main` or `f` as appropriate. No next-batch execution credit.
 Dependencies, toolchains, upstream references, budgets, guards and cancellation
 remain frozen; no installs, pushes, merges, desktop or GPU work. No new decision
 is required by this checkpoint.
+
+## Dead-residue and standalone-build checkpoint
+
+Tested source `dcf26ff64a9c093cd5a5b123b3b5c6df599e5bc5` adds four unchanged `flatten/dead_residue_elision`
+originals (`_000`, `_001`, `_002`, `_004`) and **29 bounded applications**.
+Applicability exposed nine incorrect standalone-build acceptances: the three
+concrete originals compiled in port C/JS/native despite lacking the exact
+top-level `IO` declaration required by pinned upstream. A shared, independently
+reviewed preflight now rejects them before lowering, with exact status/stderr
+and artifact preservation. Pure interpretation, strict emitters, evaluation,
+sharing and safety limits are unchanged. [Details and receipts](cpu-dead-residue.md).
+
+Full gate: **1,018 passed, zero failures, 49 ignored**. Focused controls:
+**83 / 0 / 0**. All **72 complete graph** and **132 normalization/applicability**
+observations complete. The runtime matrix records **120 exact executions,
+66 successful generation/build steps and 12 unresolved upstream-JS printer
+timeouts**. All port-required cases pass; the complete matrix exits 1. Full
+values agree in native Rust, port C/JS, pinned interpretation and upstream C O3;
+scalar projection success does not qualify the failed upstream-JS full printers.
+
+Aggregate sharing/work/demand/cancellation regressions pass in the full gate;
+no mid-normalization cancellation is claimed. All 1,302 checking statuses and
+streams remain unchanged, including 439 rejecting negatives. Fourteen positive
+controls pass; 18 observations retain three hole/TODO disagreements. Minimal
+ordinary-IO scaffold C compiler failures and a foreign-source checking diagnostic
+difference remain separately unqualified. External emitter consumers can now
+receive Err for no-IO builds; repository callers handle status 1, but external
+consumers have not been audited.
+
+Detailed receipts link **358 originals**, leaving **944 unlinked**: **357 checker
+negatives, one checking-only module, 49 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test
+counts. Links include historical, partial and blocked evidence, not completed
+parity. Imported-JS printing, erased-hole/TODO, resource/host/foreign gaps,
+F32.read, competing failure order, downstream API caveats and the unfinished
+688-vector exploration remain unwaived.
+
+Next proposed independent batch: `flatten/nested_computed_match_001`, `_dec` and
+`_zro`; establish actual printability, then **12** bounded applications. This is
+source/ledger selection only, without execution credit. Dependencies, toolchains,
+references, budgets, guards and cancellation remain frozen. Local checkpoints
+only; no installs, pushes, merges, desktop or GPU work. No user decision is
+required by this correction.
