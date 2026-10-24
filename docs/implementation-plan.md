@@ -4230,3 +4230,44 @@ are current; 80 runtime rows remain historical. Union: 123 originals; CPU parity
 remains incomplete. Next independent family: parse/match_indent_column and
 parse/ctor_row_layout. Dependencies/toolchains/reference/security/guards and
 cancellation stay frozen; no installs, desktop/GPU work or pushes.
+
+
+### [x] 5.65 Qualify the shared parser layout family and review coverage categories
+
+Source `f29284f` expands match_indent_column/ctor_row_layout to seven unchanged
+originals: case_body_newline, tab_character, if_branch_newline, elif_alignment
+and do_line_depth exercise the same shape-delimited machinery. Four no-Base
+originals normalize exactly and have verified build-applicability refusals.
+Three IO originals produce 7, 56 and 1n across generated/native lanes; direct
+upstream IO host blocks and strict-proof exclusions remain distinct. No
+production fix or new semantic exception was required.
+
+Full gate **861 passed, zero failed, 49 ignored**; 48 focused tests, five guards,
+strict Clippy and the 50-observation baseline pass. New family: 30 exact IO runs,
+six host blocks, 56 normalization/report/core observations, sixteen no-Base
+build refusals, eighteen named-definition matches and six strict IO exclusions.
+The full 49-case normalization suite passes exact structure and text. Broader
+audit, runtime-negative/demand and prior diagnostic receipts retain their
+actual source identities and gaps.
+
+The [layout and coverage report](cpu-layout-family.md) recomputes all 1,302
+inventory entries by applicability: 439 checker negatives, twelve checking-only,
+164 interpreter-only and 687 compiled candidates. Detailed original receipts
+cover 3/2/15/115 respectively, including unresolved and historical cells; 1,167
+have no detailed receipt. Runtime/interpretation union is 130, or 135 including
+five original-checking rows. Source host/offload hints are separate overlapping
+review dimensions, not exemptions. Full CPU parity remains incomplete.
+
+Next recommended bounded batch: five original constructor/import-negative
+fixtures sharing the known Nat/List diagnostic boundary, with actual phase,
+normalized offending terms and Bend source locations. This targets a demonstrated
+gap; no newer upstream or policy exception is proposed. A subsequent category
+closure can address nine remaining ordinary no-main modules and separately
+classify the foreign helper.
+
+Temporary host Rust debug=0 plus CARGO_INCREMENTAL=0 prevents recurring cache
+growth; it is separate from the C oracle O3 profile. Initial preflight refusal
+is preserved; only inactive rebuildable cache was reclaimed. The 10-GiB reserve,
+2/1-GiB stop floors and all Bend limits remain. Full-gate minimum workspace
+headroom: 10.15 GiB. Dependencies/toolchains/pins/security/cancellation are frozen;
+source and evidence survive; no installs, desktop/GPU work or pushes.

@@ -91,54 +91,50 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **85 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **88 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
-representation, nineteen parse and eight compile originals. Linked rows include
-unresolved negative and oracle-host cells. Seventeen positive authored/derived
-controls and a separate read probe supplement the suites without adding inventory
-rows. Only passed cells qualify their recorded runtime/profile; this is not
-category, checker-diagnostic, API or multiworker completion.
+representation, twenty-two parse and eight compile originals. Linked rows include
+required resource/foreign/oracle-host gaps and mixed historical commits. Only
+passed cells qualify their recorded runtime/profile. Authored/derived controls
+and separate probes add no upstream inventory rows.
 
-There are **1,217 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 602 compiled
-candidates. These are distinct required modes, not 1,217 missing CPU runtime
-tests. The historical [applicability classification](cpu-applicability.md) and
-its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
-source hints and related tests are not promoted to parity passes. Complete
-per-lane applicability/printability and API review remain required.
+There are **1,214 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 599 compiled
+candidates. These are distinct required modes, not 1,214 missing runtime tests.
+The historical [applicability classification](cpu-applicability.md) and its CSV
+retain their earlier snapshot. Source hints and status-only audits are not passes.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) links 38 originals
-at `8218011`: eleven interpreter-only cases and twenty-seven compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) links 42 originals
+at `f29284f`: fifteen interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
-Four authored controls add no inventory rows. Across runtime and interpretation,
-**123 originals** have receipts and **1,179** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 575 compiled
-candidates.
+Seven authored controls add no inventory rows. Across runtime and interpretation,
+**130 originals** have receipts and **1,172** lack those kinds: 439 checker
+negatives, twelve checking-only, 149 interpreter-only and 572 compiled candidates.
 
-The [typed/list checkpoint](cpu-typed-list.md), source `8218011`, adds execution
-qualification of two originals with exact outputs 6 and 3510. Actual C/JS
-generation succeeds; the original direct-IO host is blocked. Including two pure
-derivatives, 44 observations match with four host blocks, plus 18 exact core/
-report/normalization observations and four strict-proof exclusions. No production
-source change was needed. The full gate passes 858/0/49; the baseline and all
-42 normalization cases pass.
+Including the five separate original-checking rows gives **135 detailed originals**
+and **1,167 without detailed receipts**: 436 checker negatives, ten checking-only,
+149 interpreter-only and 572 compiled candidates. Three linked checking-negative
+rows still have raw diagnostic differences, so this is a coverage count rather
+than completed parity. The [category summary](cpu-coverage-summary.csv) and
+[coverage review](cpu-layout-family.md#remaining-coverage-by-category) distinguish
+these counts, historical status-only checks, known failed cells and overlapping
+host/API review flags. Complete per-lane applicability and API review remain required.
 
-Thirteen authored list-shadowing controls confirm fixed global literal/cons
-constructors and distinct explicit local constructor resolution. Nine cases
-reject at the appropriate parse/checking phase; raw constructor/parse diagnostics
-remain different and unqualified. Eleven authored Nat-resolution controls are
-renewed; their separate upstream phase probe remains historical. No authored
-control adds an inventory row or an exception.
+The [layout checkpoint](cpu-layout-family.md), source `f29284f`, qualifies seven
+unchanged originals across shape-delimited layout rules. The four no-Base pure
+programs have exact core/text and verified C/JS build refusals. Three IO originals
+generate and run with exact outputs 7, 56 and 1n; direct upstream IO is host-blocked.
+Their pure-entry derivatives qualify normalization separately. No production
+source change or new exception was needed. Full gate: 861/0/49, with 48 focused
+tests, five guards, 50 baseline observations and all 49 normalization cases passing.
 
-Five runtime rows, all interpretation rows and authored Nat-resolution rows are
-current. The other 80 runtime rows, checking, full-audit and demand receipts
-retain their actual earlier commits. The negative/demand matrices were not rerun
-for this test-only change and retain required resource/foreign/host/error-order
-cells. The [reflexivity diagnostics](cpu-reflexivity-diagnostics.md) keep their
-67cdcdf renewal; production invoke handling and external-caller caveats are
-unchanged. No blanket diagnostic, API or CPU parity claim follows.
-Next: parse/match_indent_column and parse/ctor_row_layout; their pure evaluation
-and actual emitter applicability are not yet qualified.
+Six runtime rows and all interpretation rows are current; 82 runtime rows and
+all checking/demand/Nat/List diagnostic receipts retain their actual earlier
+commits. The full audit and broad negative/demand matrices were not rerun for
+this test-only change. Existing resource/foreign/host, F32.read, error-order,
+constructor diagnostic, API/loader/platform gaps remain. No new runtime count
+qualifies them. Next recommended batch: five original constructor/import
+negatives, using actual phase/source diagnostics instead of stale source comments.
 
 Historical bitwise/brace evidence follows; its recorded diagnostic gap is closed
 by the separate reflexivity-diagnostic checkpoint and its 67cdcdf renewal.

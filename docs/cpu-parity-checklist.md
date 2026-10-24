@@ -10,38 +10,37 @@ their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) still requires complete
-mode/profile evidence. Current source `8218011` qualifies
-[typed definitions and list sugar](cpu-typed-list.md), preserving both original
-fixtures. Actual C/JS generation succeeds; outputs 6 and 3510 match in available
-generated/native lanes. Direct upstream IO remains host-blocked, separately from
-strict-proof exclusions. List literals and cons syntax already keep fixed global
-Nil/Con names under local shadowing; explicit local constructors work. No
-production correction or new semantic exception was needed.
+mode/profile evidence. Current source `f29284f` qualifies the seven-original
+[layout family](cpu-layout-family.md): four no-Base pure programs and three IO
+programs. Adjacent inline/newline/tab/branch/do forms agree. No production fix,
+semantic exception or changed safety policy was needed.
 
-Full gate **858 passed, zero failed, 49 ignored**; 55 focused tests and five guards
-pass. The typed/list suite has 44 exact observations and four direct-IO host
-blocks, plus 18 exact normalization/report/core observations and four strict
-exclusions. Thirteen list-resolution controls give 156 outcomes and 26 phase
-probes; the eleven Nat controls give 132 renewed outcomes. Constructor/pattern
-raw diagnostics remain unqualified. Baseline and 42-case normalization pass.
-The full 1,302 checking audit, negative/demand and detailed checking-control
-receipts remain historical; their open cells are unchanged, not rerun here.
+Full gate **861 passed, zero failed, 49 ignored**; 48 focused tests and five guards
+pass. The IO family has 30 exact executions and six direct-upstream host blocks.
+The seven new normalization cases have 56 exact observations and sixteen verified
+no-Base build refusals; three named definitions add eighteen exact observations,
+and six strict IO exclusions remain separate. All 49 normalization cases pass
+exact structure/text; the baseline gives 50 exact observations.
 
-Five runtime rows, all 38 interpretation rows and the authored Nat-resolution
-rows are current; the other 80 runtime rows retain historical receipts. Runtime/
-interpretation union is **123 originals**, with 1,179 unlinked: 439 checker
-negatives, twelve checking-only, 153 interpreter-only and 575 compiled candidates.
-These are distinct requirements, not runtime defect counts. Next independent
-family: parse/match_indent_column and parse/ctor_row_layout, beginning with mode
-applicability and normalization. Other diagnostics, host/resource/foreign,
+Six runtime rows and all 42 interpretation rows are current; 82 runtime rows and
+other checking/demand/diagnostic receipts remain historical. Runtime/interpretation
+union: **130 originals**. Adding five original-checking rows gives 135 with detailed
+evidence, including unresolved cells, and 1,167 without those receipts: 436
+checker negatives, ten checking-only, 149 interpreter-only and 572 compiled
+candidates. These are required modes, not one execution-test denominator.
+
+The [coverage review](cpu-layout-family.md#remaining-coverage-by-category) recommends
+a shared constructor/import-negative batch next, using five pinned originals
+alongside the existing Nat/List reproducers. This addresses a recorded diagnostic
+gap instead of accumulating unrelated parser passes. Known resource/foreign/host,
 F32.read, competing-error, loader/API/platform and wider-corpus gaps remain open.
 
-Dependencies, toolchains, lockfile, reference, Bend guards/budgets and approved
-demand policy remain frozen. Temporary Rust dev/test debug=0 is recorded
-separately from the upstream C oracle's O3 profile. The 10-GiB reserve and 2/1-GiB
-stop floors remain; preflight refused a build until inactive incremental cache
-was reclaimed. Full-gate minimum workspace headroom was 9.61 GiB. Source and
-historical evidence are preserved; no install, desktop/GPU work or push occurred.
+Dependencies, toolchains, references, lockfile, Bend budgets/guards, demand and
+cancellation remain frozen. Temporary Rust debug=0 and newly explicit
+CARGO_INCREMENTAL=0 control host build storage separately from upstream C's O3.
+The 10-GiB reserve and 2/1-GiB stop floors remain; full-gate minimum headroom was
+10.15 GiB workspace. Only inactive rebuildable cache was reclaimed. All source
+and historical evidence survive; no installs, desktop/GPU work or pushes.
 
 ## Passed in this review
 
