@@ -1,0 +1,86 @@
+[
+  {
+    "name": "nested_computed_match_001",
+    "arguments": [
+      "Zn{}"
+    ],
+    "value": "K5{}"
+  },
+  {
+    "name": "nested_computed_match_001",
+    "arguments": [
+      "Sn{Zn{}}"
+    ],
+    "value": "K6{}"
+  },
+  {
+    "name": "nested_computed_match_001",
+    "arguments": [
+      "Sn{Sn{Zn{}}}"
+    ],
+    "value": "K7{}"
+  },
+  {
+    "name": "nested_computed_match_001",
+    "arguments": [
+      "Sn{Sn{Sn{Zn{}}}}"
+    ],
+    "value": "K7{}"
+  },
+  {
+    "name": "nested_computed_match_001",
+    "arguments": [
+      "Sn{Sn{Sn{Sn{Sn{Zn{}}}}}}"
+    ],
+    "value": "K7{}"
+  },
+  {
+    "name": "nested_computed_match_001_dec",
+    "arguments": [
+      "T{}"
+    ],
+    "value": "K6{}"
+  },
+  {
+    "name": "nested_computed_match_001_dec",
+    "arguments": [
+      "F{}"
+    ],
+    "value": "K7{}"
+  },
+  {
+    "name": "nested_computed_match_001_zro",
+    "arguments": [
+      "Zn{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "nested_computed_match_001_zro",
+    "arguments": [
+      "Sn{Zn{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "nested_computed_match_001_zro",
+    "arguments": [
+      "Sn{Sn{Zn{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "nested_computed_match_001_zro",
+    "arguments": [
+      "Sn{Sn{Sn{Zn{}}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "nested_computed_match_001_zro",
+    "arguments": [
+      "Sn{Sn{Sn{Sn{Sn{Zn{}}}}}}"
+    ],
+    "value": "F{}"
+  }
+]
