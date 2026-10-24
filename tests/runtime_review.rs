@@ -33,7 +33,7 @@ def witnessed(-n: Nat, -proof: {n == 0n : Nat}) -> Nat: 0n
         book.evaluate_data("identity", &[Rc::clone(&nat), Rc::clone(&one)])
             .expect("dependent identity")
             .to_string(),
-        "Succ{Zero{}}"
+        "1n"
     );
     book.evaluate_data("identity", &[nat, truth])
         .expect_err("second argument must inhabit the supplied first argument");
@@ -43,7 +43,7 @@ def witnessed(-n: Nat, -proof: {n == 0n : Nat}) -> Nat: 0n
         book.evaluate_data("witnessed", &[zero, proof])
             .expect("valid proof after failed dependent calls")
             .to_string(),
-        "Zero{}"
+        "0n"
     );
 }
 
@@ -156,7 +156,7 @@ def work0(n: Nat) -> Nat: n
         book.evaluate_data("work1", &[parse_term("0n").expect("natural")])
             .expect("subsequent small call")
             .to_string(),
-        "Zero{}"
+        "0n"
     );
 }
 
@@ -178,12 +178,12 @@ fn long_checked_tail_chain_shares_updates_without_growing_continuations() {
         book.evaluate_data("step2200", &[parse_term("0n").expect("natural")])
             .expect("tail calls share their memoized result")
             .to_string(),
-        "Zero{}"
+        "0n"
     );
     assert_eq!(
         book.evaluate_data("step1", &[parse_term("0n").expect("natural")])
             .expect("subsequent small call")
             .to_string(),
-        "Zero{}"
+        "0n"
     );
 }

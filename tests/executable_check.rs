@@ -218,10 +218,7 @@ fn unsafe_function_normalization_keeps_limits_and_emits_no_partial_value() {
 fn missing_and_pure_entries_have_separate_output_without_effects() {
     for (body, expected) in [
         ("", "All terms check.\n"),
-        (
-            "import Base\ndef main() -> Nat: 2n\n",
-            "Succ{Succ{Zero{}}}\n",
-        ),
+        ("import Base\ndef main() -> Nat: 2n\n", "2n\n"),
     ] {
         let program = executable(body);
         let mut stdout = Vec::new();

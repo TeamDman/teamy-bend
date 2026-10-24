@@ -40,7 +40,7 @@ def add_zero(n): {==}
             ],
         )
         .expect("evaluate add");
-    assert_eq!(value.to_string(), "Succ{Succ{Succ{Succ{Succ{Zero{}}}}}}");
+    assert_eq!(value.to_string(), "5n");
 }
 
 #[test]
@@ -62,7 +62,7 @@ def small(n: Nat) -> Nat:
             .evaluate("small", &[parse_term("3n").expect("literal")])
             .expect("evaluate")
             .to_string(),
-        "Succ{Succ{Zero{}}}"
+        "2n"
     );
 }
 
@@ -164,7 +164,7 @@ def twice(n: Nat) -> Nat:
             .evaluate("twice", &[parse_term("2n").expect("Nat")])
             .expect("evaluate")
             .to_string(),
-        "Succ{Zero{}}"
+        "1n"
     );
     let source = format!(
         "{NAT}{}",
@@ -196,7 +196,7 @@ def result() -> Nat:
             .evaluate("result", &[])
             .expect("do result")
             .to_string(),
-        "Succ{Zero{}}"
+        "1n"
     );
     assert_eq!(
         parse_term("do M<>: return x")
@@ -212,11 +212,11 @@ fn array_sugar_and_nested_type_closers_parse() {
         parse_term("[0n: Nat * 4n]")
             .expect("power of two")
             .to_string(),
-        "Array.new(Nat, Succ{Succ{Zero{}}}, Zero{})"
+        "Array.new(Nat, 2n, 0n)"
     );
     assert_eq!(
         parse_term("[0n: Nat ^ 2n]").expect("depth").to_string(),
-        "Array.new(Nat, Succ{Succ{Zero{}}}, Zero{})"
+        "Array.new(Nat, 2n, 0n)"
     );
     parse_term("[0n: Nat * 3n]").expect_err("array count must be a power of two");
     assert_eq!(
@@ -244,7 +244,7 @@ def result() -> Nat:
     let checked = check_book(&parse(&source).expect("source parses")).expect("source checks");
     assert_eq!(
         checked.evaluate("result", &[]).expect("result").to_string(),
-        "Succ{Zero{}}"
+        "1n"
     );
 }
 
@@ -499,10 +499,7 @@ fn imported_base_literals_stay_global_and_distinct_local_nats_do_not_unify() {
         "import library.bend as L\ndef main() -> Nat: L.value\n",
     );
     let checked = check_book(&load(entry).unwrap()).expect("imported Base remains global");
-    assert_eq!(
-        checked.evaluate("main", &[]).unwrap().to_string(),
-        "Succ{Succ{Succ{Zero{}}}}"
-    );
+    assert_eq!(checked.evaluate("main", &[]).unwrap().to_string(), "3n");
     fixture.write("nat.bend", NAT);
     let wrong = fixture.write(
         "wrong.bend",
@@ -563,10 +560,7 @@ fn relative_module_function_references_do_not_acquire_a_nat_prefix() {
         "import ../shared/constant.bend as F\ndef main() -> Nat: F.value\n",
     );
     let checked = check_book(&load(path).unwrap()).expect("relative function reference checks");
-    assert_eq!(
-        checked.evaluate("main", &[]).unwrap().to_string(),
-        "Succ{Zero{}}"
-    );
+    assert_eq!(checked.evaluate("main", &[]).unwrap().to_string(), "1n");
 }
 
 #[test]

@@ -76,10 +76,7 @@ fn pure_shifts_comparison_and_small_conversion_agree() {
         1_073_741_824
     );
     assert_eq!(number(&evaluate(&book, "U32.from_nat", &["7n"])), 7);
-    assert_eq!(
-        evaluate(&book, "U32.to_nat", &["3"]).to_string(),
-        "Succ{Succ{Succ{Zero{}}}}"
-    );
+    assert_eq!(evaluate(&book, "U32.to_nat", &["3"]).to_string(), "3n");
     assert_eq!(
         evaluate(&book, "U32.is_gt", &["4294967295", "2147483648"]).to_string(),
         "True{}"

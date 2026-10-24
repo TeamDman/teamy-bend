@@ -55,10 +55,7 @@ fn macro_substitution_preserves_affine_and_reusable_resource_checks() {
 def app(~f: Nat -> Nat, +x: Nat) -> Nat: f(x)
 def main() -> Nat: app(~(y => add(y, y)), 3n)
 ";
-    assert_eq!(
-        evaluate(program),
-        "Succ{Succ{Succ{Succ{Succ{Succ{Zero{}}}}}}}"
-    );
+    assert_eq!(evaluate(program), "6n");
     let affine = parse(&source(&program.replace("+x: Nat", "x: Nat"))).expect("affine syntax");
     let error = check_book(&affine).expect_err("duplicating an affine argument must fail");
     assert!(error.to_string().contains("Many"), "{error}");
@@ -90,7 +87,7 @@ def main() -> Nats: map(~inc, Cons{4n, Nil{}})
             .evaluate_data("main", &[])
             .expect("run map")
             .to_string(),
-        "Cons{Succ{Succ{Succ{Succ{Succ{Zero{}}}}}}, Nil{}}"
+        "Cons{5n, Nil{}}"
     );
 }
 
@@ -106,7 +103,7 @@ def run(~f: Nat -> Nat -> Nat, a: Nat, b: Nat) -> Nat: f(a, b)
 def outer(~f: Nat -> Nat -> Nat) -> Nat: run(~(x => f(x)), 1n, 2n)
 def main() -> Pair: Pair{outer(~(y => x => y)), run(~(x => x => x), 1n, 2n)}
 ";
-    assert_eq!(evaluate(program), "Pair{Succ{Zero{}}, Succ{Succ{Zero{}}}}");
+    assert_eq!(evaluate(program), "Pair{1n, 2n}");
     assert_eq!(
         instances(&parse(&source(program)).expect("shadow fixture"), "run"),
         2
@@ -136,7 +133,7 @@ def run(~f: Nat -> Nat -> Nat) -> Nat: f({1n : Nat}, {2n : Nat})
 def main() -> Nat: run(~(x => y => x))
 "
         ),
-        "Succ{Zero{}}"
+        "1n"
     );
 }
 
@@ -165,7 +162,7 @@ def h(k: Nat) -> Nat: app(~(y => (k = {1n : Nat}; add(y, k))), k)
 def main() -> Nat: add(g(1n), h(1n))
 "
         ),
-        "Succ{Succ{Succ{Succ{Zero{}}}}}"
+        "4n"
     );
 }
 
@@ -200,7 +197,7 @@ def keep(x: Nat, ~ignored: Nat) -> Nat: x
 def main() -> Nat: keep(id(~Nat, 2n), 7n)
 "
         ),
-        "Succ{Succ{Zero{}}}"
+        "2n"
     );
     for arguments in ["~True{}, 0n", "~?unfinished, 0n"] {
         let program = source(&format!(

@@ -81,7 +81,7 @@ def find_two():
             .evaluate("find_two", &[])
             .expect("existential proof computes")
             .to_string(),
-        "Tuple{Succ{Succ{Zero{}}}, {==}}"
+        "Tuple{2n, {==}}"
     );
 }
 
@@ -110,7 +110,7 @@ def main() -> Nat:
             .evaluate("main", &[])
             .expect("list length computes")
             .to_string(),
-        "Succ{Succ{Succ{Zero{}}}}"
+        "3n"
     );
 }
 
@@ -122,7 +122,7 @@ fn structural_division_returns_quotient_and_remainder() {
             .evaluate("main", &[])
             .expect("division computes")
             .to_string(),
-        "Tuple{Succ{Succ{Zero{}}}, Succ{Zero{}}}"
+        "Tuple{2n, 1n}"
     );
 }
 

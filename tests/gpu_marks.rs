@@ -109,7 +109,7 @@ def main() -> Nat: walk!(3n)
     let checked = check_book(&parsed).unwrap();
     let normalized = checked.evaluate("main", &[]).unwrap().to_string();
     let executed = checked.evaluate_data("main", &[]).unwrap().to_string();
-    assert_eq!(normalized, "Succ{Succ{Succ{Zero{}}}}");
+    assert_eq!(normalized, "3n");
     assert_eq!(executed, normalized);
     assert!(matches!(head(body(&parsed, "main")), Term::GpuRef(name) if name == "walk"));
 }
@@ -189,7 +189,7 @@ fn substituting_a_marked_reference_preserves_its_name_and_annotation() {
     let replacement = term(Term::GpuRef("library.walk".into()));
     let result = substitute(&source, 7, &replacement);
     assert!(matches!(head(&result), Term::GpuRef(name) if name == "library.walk"));
-    assert_eq!(result.to_string(), "library.walk!(Zero{})");
+    assert_eq!(result.to_string(), "library.walk!(0n)");
 }
 
 #[test]

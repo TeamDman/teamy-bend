@@ -42,3 +42,9 @@ shift/bitwise let binding normalize in strict proof mode. The runner compares
 actual normalized core as well as raw text, after independently verifying both
 upstream function-printer refusals. The F32 executable-only mode is not used for
 these U32 fixtures.
+
+The unchanged `parse/chain_brace_suffix_f.bend`, `_g` and `_h` originals retain
+the same pinned attribution. They cover annotated U32 operators, a bare Nat
+chain inside braces and a Nat literal in an equality-type result. All three
+support strict checking and actual-core normalization. Both upstream compiled
+printers refuse their returned function types; the runner checks that boundary.

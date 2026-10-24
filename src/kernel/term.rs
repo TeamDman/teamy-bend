@@ -404,6 +404,9 @@ impl fmt::Display for Term {
                 Ok(())
             }
             Self::Ctr { name, args } => {
+                if let Some(value) = literal_nat(self) {
+                    return write!(f, "{value}n");
+                }
                 if name == "U32"
                     && let [word] = args.as_slice()
                     && let Some(value) = literal_word(word)
@@ -456,6 +459,28 @@ impl fmt::Display for Term {
                 }
                 write!(f, "{body}")
             }
+        }
+    }
+}
+
+// Pinned term_show spells a complete, unqualified Succ/Zero chain as NUMBER n.
+// Walk existing syntax only: annotations, open tails and malformed constructors
+// remain boundaries. In particular, displaying a term must never demand a field.
+fn literal_nat(mut value: &Term) -> Option<usize> {
+    let mut count = 0_usize;
+    loop {
+        match value {
+            Term::Ctr { name, args } if name == "Zero" && args.is_empty() => {
+                return Some(count);
+            }
+            Term::Ctr { name, args } if name == "Succ" => {
+                let [tail] = args.as_slice() else {
+                    return None;
+                };
+                count = count.checked_add(1)?;
+                value = tail;
+            }
+            _ => return None,
         }
     }
 }

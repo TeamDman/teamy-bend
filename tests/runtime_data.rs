@@ -54,16 +54,13 @@ fn lazy_unused_constructor_branch_does_not_materialize_oversized_data() {
             .to_string()
             .contains("output depth")
     );
-    assert_eq!(
-        book.evaluate_data("main", &[]).unwrap().to_string(),
-        "Zero{}"
-    );
+    assert_eq!(book.evaluate_data("main", &[]).unwrap().to_string(), "0n");
     // A failed call cannot poison another call's thunk memoization or budgets.
     assert_eq!(
         book.evaluate_data("discard", &[parse_term("1n").unwrap()])
             .unwrap()
             .to_string(),
-        "Zero{}"
+        "0n"
     );
 }
 

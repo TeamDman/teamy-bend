@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -115,6 +115,11 @@ if ($Suite -in @('float-suffix', 'all')) {
 }
 if ($Suite -in @('u32-suffix', 'all')) {
     foreach ($name in @('chain_suffix_u32_f', 'chain_suffix_u32_g', 'chain_suffix_u32_h')) {
+        $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
+}
+if ($Suite -in @('brace-suffix', 'all')) {
+    foreach ($name in @('chain_brace_suffix_f', 'chain_brace_suffix_g', 'chain_brace_suffix_h')) {
         $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
     }
 }

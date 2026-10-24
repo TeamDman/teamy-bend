@@ -261,7 +261,7 @@ fn unsafe_assumptions_execute_without_becoming_strict_proof_certificates() {
         assumed.checked().unsafe_names().collect::<Vec<_>>(),
         ["assumption"]
     );
-    assumed.expect_all("Zero{}\n", "0n\n");
+    assumed.expect_all("0n\n", "0n\n");
     for source in [UNUSED_UNSAFE, ASSUMED_EQUALITY] {
         let fixture = Fixture::new(source);
         let book = load(fixture.0.join("main.bend")).unwrap();

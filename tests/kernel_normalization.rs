@@ -115,6 +115,9 @@ fn base_function_companions_preserve_normalized_structure_and_exact_text() {
         "chain_suffix_u32_f",
         "chain_suffix_u32_g",
         "chain_suffix_u32_h",
+        "chain_brace_suffix_f",
+        "chain_brace_suffix_g",
+        "chain_brace_suffix_h",
     ] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-normalization")
@@ -238,6 +241,73 @@ fn nat_fuel_and_reusable_bindings_preserve_complete_application_results() {
             );
         }
     }
+}
+
+#[test]
+fn complete_nat_rendering_preserves_core_structure_and_open_boundaries() {
+    for (source, expected) in [
+        ("Zero{}", "0n"),
+        ("Succ{Zero{}}", "1n"),
+        ("Succ{Succ{Succ{Zero{}}}}", "3n"),
+        ("31n", "31n"),
+        (
+            "x => {Nat.add(x, Succ{Zero{}}) == Zero{} : Nat}",
+            "x => {Nat.add(x, 1n) == 0n : Nat}",
+        ),
+        ("Pair{Succ{Zero{}}, Zero{}}", "Pair{1n, 0n}"),
+        ("f(Succ{Zero{}})(Zero{})", "f(1n, 0n)"),
+        ("Zero{x}", "Zero{x}"),
+        ("Succ{}", "Succ{}"),
+        ("Succ{Zero{}, Zero{}}", "Succ{0n, 0n}"),
+        ("Local.Succ{Local.Zero{}}", "Local.Succ{Local.Zero{}}"),
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), expected, "{source}");
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(expected).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+    // Open or annotated tails are not complete literals. Keep their structure;
+    // this does not qualify upstream's separate NUMBER n+tail presentation.
+    for source in ["Succ{tail}", "Succ{f(Zero{})}"] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(&value.to_string()).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+    let hole = parse_term("Succ{?unknown}").unwrap();
+    let rendered = parse_term(&hole.to_string()).unwrap();
+    let Term::Ctr { name, args } = rendered.as_ref() else {
+        panic!("the open constructor must survive");
+    };
+    assert_eq!(name, "Succ");
+    assert!(
+        matches!(args.as_slice(), [tail] if matches!(tail.as_ref(), Term::Hole(name) if name == "unknown"))
+    );
+    let annotated = parse_term("Succ{{Zero{} : Nat}}").unwrap();
+    let rendered = parse_term(&annotated.to_string()).unwrap();
+    let Term::Ctr { name, args } = rendered.as_ref() else {
+        panic!("the annotated constructor must survive");
+    };
+    assert_eq!(name, "Succ");
+    let [tail] = args.as_slice() else {
+        panic!("the annotation must remain the only field");
+    };
+    let Term::Ann(value, ty) = tail.as_ref() else {
+        panic!("printing must not erase the annotation boundary");
+    };
+    assert_eq!(
+        shape(value).unwrap(),
+        shape(&parse_term("0n").unwrap()).unwrap()
+    );
+    assert_eq!(
+        shape(ty).unwrap(),
+        shape(&parse_term("Nat").unwrap()).unwrap()
+    );
 }
 
 #[test]
