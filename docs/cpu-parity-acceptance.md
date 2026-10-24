@@ -91,23 +91,24 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `abd6d22b1a0d53420a6f60423b381b37137cccc3` closes annotated non-equation, substituted proof-use and
-non-function application diagnostic gaps. Five unchanged originals and fifteen
-complete adjacent controls match the pinned checker; five prior controls also
-renew. The [report](cpu-rewrite-proof.md) preserves the separate hole-preflight
-ordering and computed-scrutinee load diagnostic mismatches as unresolved.
+Source `75085cb0a27dd8fb01f6bf50bb5e03198dddda80` fixes computed-scrutinee provenance for two unchanged
+originals and the three preceding hole-order defects. Structural limits remain
+upfront; checker rule order selects the error; saved source-hole refusals prevent
+erased/unreachable holes from escaping. [Report](cpu-computed-scrutinee.md).
 
-Full gate **905 passed, zero failed, 49 ignored**; 500 negative observations,
-four positive no-main checking observations and all 1,302 checking statuses pass
-with zero status transitions. Detailed coverage is 218 originals / 1,084 without
-receipts: 424 checker negatives, one checking-only module, 106 interpreter cases
-and 553 compiled candidates. Linked rows include historical and unresolved cells.
-Only nine checking originals are current; unrelated detailed lanes retain their
-actual source identities. The 688-vector exploration remains unqualified.
+Full gate **911 passed, zero failed, 49 ignored**; 560 negative observations
+(504 exact stream/status results plus 56 phase probes), 14 positive controls,
+and all 1,302 checking statuses pass. Five separately retained controls remain
+unresolved: constructor/global scrutinee diagnostics and erased-hole/TODO policy
+or diagnostic differences. No new exception or runtime demand change is adopted.
 
-The existing acceptance criterion and external invocation-status caveat remain.
-No semantic exception, dependency/toolchain/pin or budget change; no push.
-Next: computed-match scrutinee diagnostic provenance and adjacent negatives.
+Detailed coverage: 220 originals / 1,082 without receipts, split as 422 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Eight checking rows are renewed; other detailed lanes retain historical
+identities. The 688-vector exploration and existing host/resource/foreign/F32.read,
+runtime-error-order/API/lane requirements remain open. External invoke callers must
+inspect exit_code. Next: substituted/consumed/out-of-order scrutinee diagnostics.
+Frozen inputs and safety limits; historical evidence preserved; no installs/pushes.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -593,3 +594,24 @@ actual source identities. The 688-vector exploration remains unqualified.
 The existing acceptance criterion and external invocation-status caveat remain.
 No semantic exception, dependency/toolchain/pin or budget change; no push.
 Next: computed-match scrutinee diagnostic provenance and adjacent negatives.
+
+## Computed scrutinee checkpoint
+
+Source `75085cb0a27dd8fb01f6bf50bb5e03198dddda80` fixes computed-scrutinee provenance for two unchanged
+originals and the three preceding hole-order defects. Structural limits remain
+upfront; checker rule order selects the error; saved source-hole refusals prevent
+erased/unreachable holes from escaping. [Report](cpu-computed-scrutinee.md).
+
+Full gate **911 passed, zero failed, 49 ignored**; 560 negative observations
+(504 exact stream/status results plus 56 phase probes), 14 positive controls,
+and all 1,302 checking statuses pass. Five separately retained controls remain
+unresolved: constructor/global scrutinee diagnostics and erased-hole/TODO policy
+or diagnostic differences. No new exception or runtime demand change is adopted.
+
+Detailed coverage: 220 originals / 1,082 without receipts, split as 422 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Eight checking rows are renewed; other detailed lanes retain historical
+identities. The 688-vector exploration and existing host/resource/foreign/F32.read,
+runtime-error-order/API/lane requirements remain open. External invoke callers must
+inspect exit_code. Next: substituted/consumed/out-of-order scrutinee diagnostics.
+Frozen inputs and safety limits; historical evidence preserved; no installs/pushes.

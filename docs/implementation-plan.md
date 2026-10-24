@@ -4476,3 +4476,24 @@ actual source identities. The 688-vector exploration remains unqualified.
 The existing acceptance criterion and external invocation-status caveat remain.
 No semantic exception, dependency/toolchain/pin or budget change; no push.
 Next: computed-match scrutinee diagnostic provenance and adjacent negatives.
+
+### [x] 5.75 Preserve computed scrutinees and checker failure order
+
+Source `75085cb0a27dd8fb01f6bf50bb5e03198dddda80` fixes computed-scrutinee provenance for two unchanged
+originals and the three preceding hole-order defects. Structural limits remain
+upfront; checker rule order selects the error; saved source-hole refusals prevent
+erased/unreachable holes from escaping. [Report](cpu-computed-scrutinee.md).
+
+Full gate **911 passed, zero failed, 49 ignored**; 560 negative observations
+(504 exact stream/status results plus 56 phase probes), 14 positive controls,
+and all 1,302 checking statuses pass. Five separately retained controls remain
+unresolved: constructor/global scrutinee diagnostics and erased-hole/TODO policy
+or diagnostic differences. No new exception or runtime demand change is adopted.
+
+Detailed coverage: 220 originals / 1,082 without receipts, split as 422 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Eight checking rows are renewed; other detailed lanes retain historical
+identities. The 688-vector exploration and existing host/resource/foreign/F32.read,
+runtime-error-order/API/lane requirements remain open. External invoke callers must
+inspect exit_code. Next: substituted/consumed/out-of-order scrutinee diagnostics.
+Frozen inputs and safety limits; historical evidence preserved; no installs/pushes.
