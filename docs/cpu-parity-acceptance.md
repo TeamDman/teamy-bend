@@ -91,38 +91,44 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `0dec12b6b2261ea82a27da454dda3272b8128a12` corrects contextual diagnostic scope: expected/observed
-terms distinguish outer `x^0` from shadowing `x`, while each context-row type sees
-only its preceding binders. Two unchanged page originals and three authored
-shadowing/import controls are covered; four earlier diagnostic controls are
-renewed. No evaluator, sharing, term identity, acceptance, demand or budget change.
-[Report](cpu-context-scope.md).
+Source `c123b3eaafe12f9ef40880aaa9922c22ec5465bc` corrects named-call reconstruction when a constructor-field
+match blocks. The unchanged `eval/partial_app_snf` now agrees with pinned upstream
+in exact normalized text and structure: **27 graph nodes on both sides**, replacing
+the earlier port's 166-node residual match. Nine authored adjacent cases cover
+first/nested/second fields, fuel, fallback, computed constructors, callee handoff,
+partial applications and anonymous matches. No printer workaround, raised limit,
+new semantic exception or public API is introduced.
+[Report](cpu-blocked-named-calls.md).
 
-Gate: **959 passed, zero failed, 49 ignored**. Focused validation: 288 passed,
-zero failed, one ignored. The repeated diagnostic matrix has **180 observations**:
-162 exact failure contracts and 18 phase probes. All 1,302 checking statuses remain
-unchanged; exactly one stderr changes, the intended pinned `context_dedup_shadow`
-correction. Fourteen positive controls pass; three hole/TODO cases remain unwaived.
+Clean-source gate: **966 passed, zero failed, 49 ignored**. Forty repeated graph
+observations agree. The 270-observation open/applicability matrix separates exact
+normalization from type/phase probes and actual emitter refusals. Ninety closed
+observations agree; persistent tests separately cover native execution and both
+generated targets. The original's function-valued `Trm` still refuses executable
+printing, exactly as upstream; wrapper execution is not an original runtime pass.
 
-`eval/partial_app_snf` remains **unqualified**. Actual normalized graphs differ
-(27 versus 166 nodes in the bounded comparison representation); a constructor-field
-match minimizes the issue to `f(Box{x})` versus an unfolded stuck match. The
-pinned weak-head contract retains the named call. Twenty primary graph observations
-and 20 corroborating all-feature observations agree on that diagnosis. Ninety
-closed-value observations pass across direct interpretation, port pure CLI and
-generated C/JS, but do not close the open-normal-form mismatch. No evaluator fix
-was attempted in this checkpoint. Next: preserve named-call reconstruction when
-matching becomes blocked on a constructor field, with guard/accounting controls.
+The 180-observation diagnostic renewal passes. All 1,302 checking statuses remain
+unchanged, including rejection of all 439 expected negatives. Two shift proofs
+now get beyond former budget exhaustion to the existing strict-proof `IO`
+exclusion; 20 separate observations confirm pinned checking and upstream/port JS
+emission succeed. No shift program execution is claimed. Fourteen positive
+controls pass; three hole/TODO differences remain unwaived.
 
-Detailed receipts link **325 originals**; **977** lack detailed receipts:
-**358 checker negatives, one checking-only module, 68 interpreter cases and 550
-compiled candidates**. Only two checking rows are new; prior 140 interpretation,
-93 runtime and 90 checking rows retain historical identities. Linked rows include
-partial/blocked evidence and do not establish CPU parity. Imported-printer/JS-timeout,
-erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps and the unfinished
-688-vector exploration remain unwaived. Dependencies, references, toolchains,
-guards, budgets, cancellation and approved demand policy remain frozen. No installs,
-pushes, desktop or GPU work.
+Detailed receipts link **326 originals**; **976** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 549
+compiled candidates**. Only one interpretation row is added; prior 140 interpretation,
+93 runtime and 92 checking rows retain historical identities. Linked receipts
+include partial/blocked cells and do not establish CPU parity. Imported-printer/
+JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps
+and the unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
+
+Next independent source-reviewed batch: `eval/eta_expand_print`,
+`eval/toplevel_ref_print` and `eval/hoas_binder_refresh`, distinguishing a retained
+bare reference from eta-expanded and shadowed-binder values. Actual printer
+applicability and bounded applications still require qualification; no new
+execution credit is assigned to those three sources.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1048,3 +1054,44 @@ erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps and the un
 688-vector exploration remain unwaived. Dependencies, references, toolchains,
 guards, budgets, cancellation and approved demand policy remain frozen. No installs,
 pushes, desktop or GPU work.
+
+## Blocked named-call normalization checkpoint
+
+Source `c123b3eaafe12f9ef40880aaa9922c22ec5465bc` corrects named-call reconstruction when a constructor-field
+match blocks. The unchanged `eval/partial_app_snf` now agrees with pinned upstream
+in exact normalized text and structure: **27 graph nodes on both sides**, replacing
+the earlier port's 166-node residual match. Nine authored adjacent cases cover
+first/nested/second fields, fuel, fallback, computed constructors, callee handoff,
+partial applications and anonymous matches. No printer workaround, raised limit,
+new semantic exception or public API is introduced.
+[Report](cpu-blocked-named-calls.md).
+
+Clean-source gate: **966 passed, zero failed, 49 ignored**. Forty repeated graph
+observations agree. The 270-observation open/applicability matrix separates exact
+normalization from type/phase probes and actual emitter refusals. Ninety closed
+observations agree; persistent tests separately cover native execution and both
+generated targets. The original's function-valued `Trm` still refuses executable
+printing, exactly as upstream; wrapper execution is not an original runtime pass.
+
+The 180-observation diagnostic renewal passes. All 1,302 checking statuses remain
+unchanged, including rejection of all 439 expected negatives. Two shift proofs
+now get beyond former budget exhaustion to the existing strict-proof `IO`
+exclusion; 20 separate observations confirm pinned checking and upstream/port JS
+emission succeed. No shift program execution is claimed. Fourteen positive
+controls pass; three hole/TODO differences remain unwaived.
+
+Detailed receipts link **326 originals**; **976** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 549
+compiled candidates**. Only one interpretation row is added; prior 140 interpretation,
+93 runtime and 92 checking rows retain historical identities. Linked receipts
+include partial/blocked cells and do not establish CPU parity. Imported-printer/
+JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps
+and the unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
+
+Next independent source-reviewed batch: `eval/eta_expand_print`,
+`eval/toplevel_ref_print` and `eval/hoas_binder_refresh`, distinguishing a retained
+bare reference from eta-expanded and shadowed-binder values. Actual printer
+applicability and bounded applications still require qualification; no new
+execution credit is assigned to those three sources.
