@@ -53,16 +53,20 @@ struct Application {
 }
 
 #[test]
-fn closed_proofs_and_helpers_keep_their_complete_results() {
+fn closed_helpers_keep_their_complete_results() {
     let cases: Vec<Application> = facet_json::from_str(include_str!(
         "fixtures/cpu-proof-case-trees/closed-applications.json"
     ))
     .unwrap();
     assert_eq!(cases.len(), 52);
+    let mut count = 0;
     for name in NAMES {
         let book = load(root().join(format!("{name}.bend"))).unwrap();
         let checked = check_book(&book).unwrap();
-        for case in cases.iter().filter(|case| case.name == name) {
+        for case in cases
+            .iter()
+            .filter(|case| case.name == name && case.entry != "main")
+        {
             let arguments = case
                 .arguments
                 .iter()
@@ -75,8 +79,13 @@ fn closed_proofs_and_helpers_keep_their_complete_results() {
                 shape_in_book(&value, &book).unwrap(),
                 shape_in_book(&expected, &book).unwrap()
             );
+            count += 1;
         }
     }
+    // The zero-argument main definitions return proof functions. Their sixteen
+    // applications are checked through typed source callers below, rather than
+    // passing arguments to the named-definition API's zero-arity entry.
+    assert_eq!(count, 36);
 }
 
 #[test]
