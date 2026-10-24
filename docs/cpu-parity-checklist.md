@@ -12,14 +12,14 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `4083b32` qualifies
-[the Nat literal round-trip](cpu-nat-literal-roundtrip.md), fixing open Nat and
-compound tuple/list presentation while preserving actual core. Full gate:
-**823 passed, zero failed, 49 ignored**; 69 focused tests and strict Clippy pass.
-The full normalization matrix and baseline/negative/demand matrices are renewed.
-Existing resource/host/foreign/error-order gaps remain open; no demand extension,
-new exception or safety-budget change is introduced. Bounded cache management
-kept the final gate above 4.89 GiB workspace headroom without disk exhaustion.
+neither is a completion percentage. Current checkpoint `c900e3f` qualifies
+[checking-only list reverse and sort proofs](cpu-list-reverse-sort.md): exact
+original checking output and five named normal forms, with separate actual-core
+comparison. Two false-proof controls reject correctly; their diagnostic text
+still differs. Full gate: **825 passed, zero failed, 49 ignored**; 58 focused
+tests and strict Clippy pass. The full normalization suite is renewed, while
+runtime/demand/audit receipts keep their historical identities. No engine,
+demand-policy, dependency or safety-budget change; no new exception.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
@@ -443,7 +443,17 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [Nat literal round-trip](cpu-nat-literal-roundtrip.md),
+Latest bounded checkpoint: [checking-only list proofs](cpu-list-reverse-sort.md),
+`c900e3f`. The unchanged no-main original checks exactly in both CLI compatibility
+paths; strict port checking also passes. Five named definitions agree in text
+and actual core twice. False reverse and lost-duplicate controls reject at the
+intended proofs; raw diagnostic differences remain open. No program execution
+or generated lane is claimed. Full gate **825 passed, zero failed, 49 ignored**;
+58 focused tests and strict Clippy pass. The 32-fixture normalization matrix is
+renewed without changing its exclusions. All runtime/demand and other checking
+receipts remain historical. Minimum gate headroom: 4.83 GiB; no disk failure.
+
+Previous bounded checkpoint: [Nat literal round-trip](cpu-nat-literal-roundtrip.md),
 `4083b32`. One unchanged original now matches exact compound output and actual
 normalized core under strict checking. Upstream C/JS printers actually refuse
 the function-containing type. A standalone open Nat function also matches exactly;
@@ -496,16 +506,13 @@ are status-only results, not raw-diagnostic or executable parity.
 
 The current primary ledgers link 103 distinct originals; 1,199 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 595 compiled candidates). The renewed checking ledger
-retains one exact check-only acceptance and three phase/construct agreements
-with differing raw diagnostics. Linked does not mean every lane passed. The
-combined authored regression adds no upstream inventory row. The open-Nat
-presentation gap and eval/nat_literal_roundtrip are now qualified. The next
-ledger-selected original is eval/list_reverse_sort: checking-only List.reverse
-and insertion-sort equality proofs, with no main and no manufactured runtime
-lanes. It was inspected but not executed here. The independent
-parse/chain_default_nat_f / _g family is also unqualified. Neither requires GPU
-hardware, a dependency installation or a new F32.read contract decision.
+153 interpreter-only, 595 compiled candidates). The checking ledger now has
+two exact positive acceptances and three earlier phase/construct agreements
+with differing diagnostics. Thus two of the twelve no-main entries have explicit
+checking qualification despite remaining absent from runtime/interpretation
+ledgers. Authored controls add no inventory rows. Next: parse/chain_default_nat_f
+and _g, requiring actual printer applicability and normalized-core comparison.
+Neither needs GPU hardware, a new dependency or a new F32.read policy.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -513,6 +520,7 @@ CPU work.
 
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
+| Passed checking-only; authored negative diagnostics remain different | Concrete list reverse/sort proofs | Exact original checking output and five named normal forms with independent core comparison. No main or runtime lanes; wrong reverse and dropped duplicate refuse at the expected proofs. |
 | Passed, bounded | Linux build/provider/strict C portability | Standard gate plus original five-case and task/file comparisons. Keep these as regressions. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
 | Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |

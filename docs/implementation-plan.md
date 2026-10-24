@@ -3895,3 +3895,26 @@ cache controls and remaining gaps. Ledgers link 103 originals, with 1,199 unlink
 by runtime/interpretation modes, classified by applicability. Next: checking-only
 eval/list_reverse_sort (no main; no runtime lanes), then the independent
 parse/chain_default_nat_f / _g family. Full CPU parity remains incomplete.
+
+
+### [x] 5.53 Qualify checking-only reverse and insertion-sort proofs
+
+Source `c900e3f` qualifies unchanged eval/list_reverse_sort without inventing a
+main or runtime lane. Original compatibility checking output/status is exact;
+strict checking and five named-definition text/actual-core comparisons pass
+twice. Two authored wrong-equality controls reject at rev/srt, while raw diagnostic
+differences remain recorded and unqualified. No engine or contract change.
+
+The attributed fixture and two regressions are retained; the structural probe
+now accepts an explicit entry in strict mode. Full gate **825 passed, zero failed,
+49 ignored**; 58 focused tests and strict Clippy pass. The full 32-fixture
+normalization suite renews 28 interpretation rows. Other runtime/demand/audit and
+checking receipts keep their actual historical identities. Build-cache preflight
+and monitored headroom prevent another exhaustion without deleting evidence.
+
+The [checkpoint](cpu-list-reverse-sort.md) records exact commands, hashes,
+diagnostic distinctions and disk evidence. The checking ledger now has two exact
+positive originals and three diagnostic-mismatch rows. Runtime/interpretation
+union remains 103; no-main absence there is not missing runtime coverage.
+Next: parse/chain_default_nat_f and _g applicability/normalization. Full parity
+remains incomplete; frozen dependencies/toolchains/budgets and no push.

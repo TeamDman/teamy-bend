@@ -108,14 +108,23 @@ source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
 The [interpretation ledger](cpu-interpretation-evidence.csv) now links 28 originals
-at `4083b32`: eleven interpreter-only cases and seventeen compiled candidates
+at `c900e3f`: eleven interpreter-only cases and seventeen compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
 **103 originals** have receipts and **1,199** lack those kinds: 439 checker
 negatives, twelve check-only modules, 153 interpreter-only cases and 595 compiled
 candidates.
 
-The [Nat literal checkpoint](cpu-nat-literal-roundtrip.md) qualifies the unchanged
+The [checking-only list checkpoint](cpu-list-reverse-sort.md), `c900e3f`, adds
+exact acceptance/report agreement for the unchanged eval/list_reverse_sort.
+Strict checking and five named-definition actual-core/text comparisons pass twice.
+Two authored false equalities are rejected at the intended proofs, but raw
+diagnostics differ and remain unqualified. No main, runtime lane or new exception
+is invented. Full gate: **825 passed, zero failed, 49 ignored**; 58 focused tests
+and strict Clippy pass. The 32-fixture normalization suite is renewed; runtime,
+demand and broader audit receipts retain their actual older identities.
+
+The preceding [Nat literal checkpoint](cpu-nat-literal-roundtrip.md), `4083b32`, qualifies the unchanged
 eval/nat_literal_roundtrip original. The actual core already agreed; open Nat,
 right-nested tuple and complete-list spelling now also match exactly. Both upstream
 printers refuse its compound function-containing result without artifacts. Strict
@@ -140,12 +149,11 @@ changes to Bend's limits. Deep raw constructor input still reaches the existing
 64-level parser guard, independently of compact display of an internal spine.
 That refusal is not promoted to upstream acceptance parity.
 
-Next ledger-selected gap: checking-only qualification of eval/list_reverse_sort,
-which has no main. Its previous strict acceptance is not a current exact checker
-comparison and does not create runtime or compiled requirements. The independent
-parse/chain_default_nat_f and _g function family also remains unqualified. Full
-API, lane, resource, host, foreign, F32.read, error-order and platform closure is
-still required; no broader printer parity is claimed.
+Next ledger-selected gap: parse/chain_default_nat_f and _g. Their Nat
+arithmetic/comparison functions still need actual printer-applicability and
+strict normalized-core qualification. Full API, lane, resource, host, foreign,
+F32.read, error-order and platform closure remains required. No broader printer
+or list-algorithm parity is claimed.
 
 The earlier [checker-depth checkpoint](cpu-checker-depth.md),
 `2f349c8`, repairs redundant
@@ -185,13 +193,15 @@ including all 439 checker negatives. No acceptance status changed from bd6a228;
 no abnormal exit or timeout occurred. Historical applicability metadata stays
 unchanged; these statuses do not qualify unexecuted runtime or raw diagnostic cells.
 
-The separate [checking ledger](cpu-checking-evidence.csv), also renewed at
-`2f349c8`, records one check-only
-module with exact acceptance/report agreement and three negatives with matching
-phase/offending construct but differing raw diagnostics. The latter remain
-unqualified. No proof-only rejection is substituted for execution or diagnostic
-parity. Structural equality retains every supported rewrite field and binding;
-raw `pass_exact` is an independent requirement.
+The separate [checking ledger](cpu-checking-evidence.csv) records two check-only
+modules with exact acceptance/report agreement: rewrite_type_family at `2f349c8`
+and list_reverse_sort at `c900e3f`. Its three earlier negatives retain matching
+phase/offending construct but differing raw diagnostics at `2f349c8`. The new
+list checkpoint's two authored false-proof controls also retain diagnostic
+differences and add no inventory rows. None is promoted to exact negative parity.
+The twelve no-main entries absent from runtime/interpretation ledgers therefore
+include two explicitly qualified checking positives, not twelve missing runtime
+tests. Structural equality and raw exactness remain separate requirements.
 
 The historical [approved-demand checkpoint](cpu-approved-demand.md), `208b343`, renewed
 all 51 runtime rows and nine interpretation rows at their recorded serial/host
