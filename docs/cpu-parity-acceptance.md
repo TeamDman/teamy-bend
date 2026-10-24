@@ -91,40 +91,39 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `e46434c5417252287478158e45260b3cbe6603eb` qualifies three unchanged `flatten` originals:
-`shared_param_computed_000`, `cross_binder_promotion` and `var_row_column_rebind`.
-The **36 bounded applications** cover predecessor matching, cross-binder shadowing
-and catch-all priority with complete payload retention. Original normalization,
-checked applications, pure projections and native IO execution are separate.
-The first original's old sharing comment describes absent syntax; no sharing/Own
-coverage is claimed. No production defect or implementation change was needed.
-[Report](cpu-binder-priority.md).
+Source `93d10bf440096736fd60a977032c3869d8ebc9c6` qualifies five unchanged `flatten/wide_scrutinee_000..004`
+originals with **96 bounded applications** across four or five columns. The
+sample varies every argument independently over constructor depths 0 and 2,
+preserving nonadjacent discriminators, ignored columns, default reconstruction
+and complete ordered payloads. Function normalization, checked applications,
+pure projections and native IO evidence remain distinct. No production defect
+or implementation change was needed. [Report](cpu-wide-scrutinee.md).
 
-Clean-source gate: **948 passed, zero failed, 49 ignored**. The repeated matrix
-records **216 process observations**, including six direct Node IO host blocks
-and three strict-proof exclusions. Original missing-Base refusals and separate
-Base-enabled function-printer refusals match exactly, with no artifact. All 1,302
-checking statuses are unchanged; 14 positive controls pass and 18 observations
-preserve three unwaived hole/TODO differences.
+Clean-source gate: **951 passed, zero failed, 49 ignored**. The repeated matrix
+has **360 process observations**, including ten direct Node IO host blocks and
+five strict-proof exclusions. Original missing-Base refusals and Base-enabled
+function-printer refusals match exactly, without artifacts. All 1,302 checking
+statuses are unchanged; 14 positive controls pass and 18 observations retain
+three unwaived hole/TODO differences.
 
-Detailed receipts link **313 originals**; **989** lack detailed receipts:
-**360 checker negatives, one checking-only module, 78 interpreter cases and 550
-compiled candidates**. Three interpretation rows are new; the earlier 127
-interpretation, 93 runtime and 90 checking rows retain historical identities.
-Linked receipts include partial/blocked cells and do not establish CPU parity.
+Detailed receipts link **318 originals**; **984** lack detailed receipts:
+**360 checker negatives, one checking-only module, 73 interpreter cases and 550
+compiled candidates**. Five interpretation rows are new; prior 130 interpretation,
+93 runtime and 90 checking rows retain their historical identities. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
 Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
 host/resource/foreign/F32.read/runtime-error-order/API requirements and the
-unfinished 688-vector exploration remain unwaived. Frozen dependencies,
-references, toolchains, guards, budgets, cancellation and approved demand policy;
-no installations, pushes, desktop or GPU work.
+unfinished 688-vector exploration remain unwaived. Dependencies, references,
+toolchains, guards, budgets, cancellation and approved demand policy remain
+frozen. No installations, pushes, desktop or GPU work.
 
-Next independent batch: the five `wide_scrutinee_000..004` originals. Source
-review proposes 96 vectors using every combination of depths 0 and 2 across
-four or five columns. This would exercise nonadjacent discriminators, ignored columns,
-default reconstruction and complete payload forwarding. Actual printability
-must be probed first; only source/inventory review is complete, with no execution
-credit assigned. The grid is a bounded branch/payload sample, not arbitrary-depth
-or exhaustive semantic coverage.
+Next independent batch: five `list_ctor_000..004` originals, with a proposed
+78-vector sample. The first four use all lists of length 0..2 over Bit F/T or
+Nat depths 0/2; `_004` uses both Nat depths and five selected list shapes in each
+list argument (50 combinations). This would exercise parameterized constructors,
+nested head/tail defaults and complete ordered list payloads. Actual printability
+and type/kind applicability must be established first. Only source/inventory
+review is complete; no execution credit is assigned to this next batch.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -939,3 +938,39 @@ default reconstruction and complete payload forwarding. Actual printability
 must be probed first; only source/inventory review is complete, with no execution
 credit assigned. The grid is a bounded branch/payload sample, not arbitrary-depth
 or exhaustive semantic coverage.
+
+## Wide-scrutinee checkpoint
+
+Source `93d10bf440096736fd60a977032c3869d8ebc9c6` qualifies five unchanged `flatten/wide_scrutinee_000..004`
+originals with **96 bounded applications** across four or five columns. The
+sample varies every argument independently over constructor depths 0 and 2,
+preserving nonadjacent discriminators, ignored columns, default reconstruction
+and complete ordered payloads. Function normalization, checked applications,
+pure projections and native IO evidence remain distinct. No production defect
+or implementation change was needed. [Report](cpu-wide-scrutinee.md).
+
+Clean-source gate: **951 passed, zero failed, 49 ignored**. The repeated matrix
+has **360 process observations**, including ten direct Node IO host blocks and
+five strict-proof exclusions. Original missing-Base refusals and Base-enabled
+function-printer refusals match exactly, without artifacts. All 1,302 checking
+statuses are unchanged; 14 positive controls pass and 18 observations retain
+three unwaived hole/TODO differences.
+
+Detailed receipts link **318 originals**; **984** lack detailed receipts:
+**360 checker negatives, one checking-only module, 73 interpreter cases and 550
+compiled candidates**. Five interpretation rows are new; prior 130 interpretation,
+93 runtime and 90 checking rows retain their historical identities. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Dependencies, references,
+toolchains, guards, budgets, cancellation and approved demand policy remain
+frozen. No installations, pushes, desktop or GPU work.
+
+Next independent batch: five `list_ctor_000..004` originals, with a proposed
+78-vector sample. The first four use all lists of length 0..2 over Bit F/T or
+Nat depths 0/2; `_004` uses both Nat depths and five selected list shapes in each
+list argument (50 combinations). This would exercise parameterized constructors,
+nested head/tail defaults and complete ordered list payloads. Actual printability
+and type/kind applicability must be established first. Only source/inventory
+review is complete; no execution credit is assigned to this next batch.

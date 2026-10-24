@@ -4805,3 +4805,39 @@ default reconstruction and complete payload forwarding. Actual printability
 must be probed first; only source/inventory review is complete, with no execution
 credit assigned. The grid is a bounded branch/payload sample, not arbitrary-depth
 or exhaustive semantic coverage.
+
+### [x] 5.86 Qualify wide scrutinee columns and payloads
+
+Source `93d10bf440096736fd60a977032c3869d8ebc9c6` qualifies five unchanged `flatten/wide_scrutinee_000..004`
+originals with **96 bounded applications** across four or five columns. The
+sample varies every argument independently over constructor depths 0 and 2,
+preserving nonadjacent discriminators, ignored columns, default reconstruction
+and complete ordered payloads. Function normalization, checked applications,
+pure projections and native IO evidence remain distinct. No production defect
+or implementation change was needed. [Report](cpu-wide-scrutinee.md).
+
+Clean-source gate: **951 passed, zero failed, 49 ignored**. The repeated matrix
+has **360 process observations**, including ten direct Node IO host blocks and
+five strict-proof exclusions. Original missing-Base refusals and Base-enabled
+function-printer refusals match exactly, without artifacts. All 1,302 checking
+statuses are unchanged; 14 positive controls pass and 18 observations retain
+three unwaived hole/TODO differences.
+
+Detailed receipts link **318 originals**; **984** lack detailed receipts:
+**360 checker negatives, one checking-only module, 73 interpreter cases and 550
+compiled candidates**. Five interpretation rows are new; prior 130 interpretation,
+93 runtime and 90 checking rows retain their historical identities. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Dependencies, references,
+toolchains, guards, budgets, cancellation and approved demand policy remain
+frozen. No installations, pushes, desktop or GPU work.
+
+Next independent batch: five `list_ctor_000..004` originals, with a proposed
+78-vector sample. The first four use all lists of length 0..2 over Bit F/T or
+Nat depths 0/2; `_004` uses both Nat depths and five selected list shapes in each
+list argument (50 combinations). This would exercise parameterized constructors,
+nested head/tail defaults and complete ordered list payloads. Actual printability
+and type/kind applicability must be established first. Only source/inventory
+review is complete; no execution credit is assigned to this next batch.
