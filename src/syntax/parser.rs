@@ -1904,20 +1904,23 @@ impl Parser<'_> {
         self.depth -= 1;
         result
     }
+    fn match_scrutinees(&mut self, line: usize) -> Result<Vec<SurfaceTerm>, ParseError> {
+        let scrutinees = self.terms_before_colon()?;
+        if let Some(origins) = &mut self.templates.diagnostics {
+            for value in &scrutinees {
+                origins.match_location(value, &self.label, line);
+            }
+        }
+        Ok(self
+            .scrutinees(scrutinees)
+            .into_iter()
+            .map(SurfaceTerm::statement_scrutinee)
+            .collect())
+    }
     fn body_inner(&mut self, column: usize) -> Result<Body, ParseError> {
         let match_line = self.current().line;
         if self.take("match") {
-            let scrutinees = self.terms_before_colon()?;
-            if let Some(origins) = &mut self.templates.diagnostics {
-                for value in &scrutinees {
-                    origins.match_location(value, &self.label, match_line);
-                }
-            }
-            let scrutinees = self
-                .scrutinees(scrutinees)
-                .into_iter()
-                .map(SurfaceTerm::statement_scrutinee)
-                .collect::<Vec<_>>();
+            let scrutinees = self.match_scrutinees(match_line)?;
             let case_column = self.current().column;
             let mut rows = Vec::new();
             while case_column > column && self.is("case") && self.current().column >= case_column {

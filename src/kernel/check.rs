@@ -44,11 +44,11 @@ impl Context {
         }
         previous
     }
-    fn get(&self, id: &usize) -> Option<&Binder> {
-        self.bindings.get(id)
+    fn get(&self, id: usize) -> Option<&Binder> {
+        self.bindings.get(&id)
     }
-    fn contains_key(&self, id: &usize) -> bool {
-        self.bindings.contains_key(id)
+    fn contains_key(&self, id: usize) -> bool {
+        self.bindings.contains_key(&id)
     }
     fn values(&self) -> impl Iterator<Item = &Binder> {
         self.bindings.values()
@@ -979,7 +979,7 @@ impl Engine {
     ) -> Result<(TermRef, Uses), KernelError> {
         match value.as_ref() {
             Term::Var { id, name } => {
-                let Some(b) = context.get(id) else {
+                let Some(b) = context.get(*id) else {
                     let mut error = KernelError::new(format!("unbound variable {value}"));
                     if self
                         .origins
@@ -1329,7 +1329,7 @@ impl Engine {
                 let mut uses = Uses::new();
                 let mut binders = Vec::new();
                 for b in bindings {
-                    if next.contains_key(&b.id) {
+                    if next.contains_key(b.id) {
                         return Err(KernelError::new("duplicate let binder identifier"));
                     }
                     let (t, u) = self.infer(lhs, &b.value, b.quant.demand(demand), context, &[])?;
@@ -2017,7 +2017,7 @@ mod reflexivity_diagnostic_tests {
                 },
             );
         }
-        let mut replacement = context.get(&100).unwrap().clone();
+        let mut replacement = context.get(100).unwrap().clone();
         replacement.name = "renamed".into();
         context.insert(100, replacement);
         assert_eq!(context.values().map(|b| b.id).collect::<Vec<_>>(), [2, 100]);
@@ -2271,7 +2271,7 @@ mod reflexivity_diagnostic_tests {
         assert_eq!((engine.fuel, engine.depth), (0, 0));
         engine.reset();
         let mut bound = context;
-        let mut binding = bound.get(&1).unwrap().clone();
+        let mut binding = bound.get(1).unwrap().clone();
         binding.id = 2;
         bound.insert(2, binding);
         assert_eq!(
