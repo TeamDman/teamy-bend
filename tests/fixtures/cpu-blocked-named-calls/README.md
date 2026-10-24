@@ -13,3 +13,8 @@ notation or erase names to hide an unfolded match.
 
 Open normalization, closed applications and executable printer applicability are
 separate contracts. The original fixture is not modified to obtain an executable.
+
+The MPL-2.0 wrappers observe twelve concrete applications of the four minimized
+functions and one double application of the original's returned lambdas. They
+return complete List<U32> observations; their successful execution does not imply
+that a function-valued original is printable.

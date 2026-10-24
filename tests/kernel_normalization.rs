@@ -86,6 +86,31 @@ fn blocked_call_reconstruction_cannot_hide_source_holes_false_proofs_or_bad_recu
 }
 
 #[test]
+fn blocked_call_closed_applications_keep_complete_constructor_results() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-blocked-named-calls/wrappers");
+    for name in [
+        "stuck_first",
+        "stuck_field",
+        "fuel_stuck_field",
+        "under_applied_return",
+        "original_closed",
+    ] {
+        let book = load(root.join(format!("{name}.bend"))).unwrap();
+        let checked = check_book(&book).unwrap();
+        let actual = checked.evaluate("main", &[]).unwrap();
+        let expected = std::fs::read_to_string(root.join(format!("{name}.stdout"))).unwrap();
+        assert_eq!(format!("{actual}\n"), expected, "{name}");
+        let oracle = parse_term(expected.trim()).unwrap();
+        assert_eq!(
+            shape_in_book(&actual, &book).unwrap(),
+            shape_in_book(&oracle, &book).unwrap(),
+            "{name}"
+        );
+    }
+}
+
+#[test]
 fn checking_only_list_fixture_preserves_named_values_and_proofs() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-checking/list_reverse_sort.bend");
