@@ -451,8 +451,8 @@ fn long_nullary_pattern_rows_retain_a_bounded_compilation_limit() {
 }
 
 #[test]
-fn imported_nat_literals_resolve_like_explicit_local_constructors() {
-    for literal in ["Zero{}", "0n", "Succ{Zero{}}", "1n"] {
+fn imported_explicit_nat_constructors_resolve_locally() {
+    for literal in ["Zero{}", "0n+Zero{}", "Succ{Zero{}}"] {
         let fixture = Fixture::new();
         fixture.write("nat.bend", &format!("{NAT}def value() -> Nat: {literal}\n"));
         let entry = fixture.write(
@@ -461,7 +461,7 @@ fn imported_nat_literals_resolve_like_explicit_local_constructors() {
         );
         let book = load(entry).expect("local Nat literal loads");
         let checked = check_book(&book).expect("local literal uses its declared constructors");
-        let expected = if literal == "Zero{}" || literal == "0n" {
+        let expected = if literal == "Zero{}" || literal == "0n+Zero{}" {
             "nat.Zero{}"
         } else {
             "nat.Succ{nat.Zero{}}"
@@ -471,12 +471,12 @@ fn imported_nat_literals_resolve_like_explicit_local_constructors() {
 }
 
 #[test]
-fn imported_nat_patterns_and_default_operators_use_the_local_type() {
+fn imported_explicit_nat_patterns_and_default_operators_use_the_local_type() {
     let fixture = Fixture::new();
     fixture.write(
         "nat.bend",
         &format!(
-            "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case 0n: b\n    case 1n+p: 1n+Nat.add(p,b)\ndef value() -> Nat: 1n + 2n\n"
+            "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case Zero{{}}: b\n    case Succ{{p}}: Succ{{Nat.add(p,b)}}\ndef value() -> Nat: Succ{{Zero{{}}}} + Succ{{Succ{{Zero{{}}}}}}\n"
         ),
     );
     let entry = fixture.write(
@@ -567,7 +567,7 @@ fn relative_module_function_references_do_not_acquire_a_nat_prefix() {
 fn relative_module_operators_resolve_once_and_distinct_types_stay_distinct() {
     let fixture = Fixture::new();
     fixture.write("shared/nat.bend", &format!(
-        "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case Zero{{}}: b\n    case Succ{{p}}: Succ{{Nat.add(p, b)}}\ndef value() -> Nat: 1n + 2n\n"
+        "{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case Zero{{}}: b\n    case Succ{{p}}: Succ{{Nat.add(p, b)}}\ndef value() -> Nat: Succ{{Zero{{}}}} + Succ{{Succ{{Zero{{}}}}}}\n"
     ));
     let path = fixture.write(
         "nested/main.bend",
@@ -609,5 +609,95 @@ fn relative_foreign_signature_retains_its_own_datatype_and_source_identity() {
             .unwrap()
             .to_string()
             .contains("../io/far_types.Far")
+    );
+}
+
+#[test]
+fn imported_numeric_nat_sugar_does_not_capture_local_constructors() {
+    for literal in ["0n", "1n", "1n+Zero{}", "1n + 2n"] {
+        for base in ["", "import Base\n"] {
+            // Base already defines Nat.add; the operator control below owns a
+            // separate local method and therefore intentionally omits Base.
+            if !base.is_empty() && literal == "1n + 2n" {
+                continue;
+            }
+            let addition = if literal == "1n + 2n" {
+                "def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case Zero{}: b\n    case Succ{p}: Succ{Nat.add(p,b)}\n"
+            } else {
+                ""
+            };
+            let fixture = Fixture::new();
+            fixture.write(
+                "nat.bend",
+                &format!("{base}{NAT}{addition}def value() -> Nat: {literal}\n"),
+            );
+            let main = fixture.write(
+                "main.bend",
+                "import nat.bend as N\ndef main() -> N.Nat: N.value\n",
+            );
+            let book = load(&main).unwrap();
+            let source = load_executable(&main).unwrap();
+            for error in [
+                check_book(&book).unwrap_err(),
+                check_executable(&source).unwrap_err(),
+            ] {
+                assert!(
+                    error
+                        .message
+                        .contains("not a remaining constructor of nat.Nat"),
+                    "{literal}: {error}"
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn original_imported_false_and_trivial_proofs_reject_before_reflexivity() {
+    let fixture = Fixture::new();
+    let original = include_str!("fixtures/cpu-imported-nat/original/helper.bend");
+    for helper in [
+        original.to_owned(),
+        original.replace("0n == 1n", "0n == 0n"),
+    ] {
+        fixture.write("helper.bend", &helper);
+        let main = fixture.write(
+            "main.bend",
+            include_str!("fixtures/cpu-imported-nat/original/main.bend"),
+        );
+        for error in [
+            check_book(&load(&main).unwrap()).unwrap_err(),
+            check_executable(&load_executable(&main).unwrap()).unwrap_err(),
+        ] {
+            assert_eq!(
+                error.message,
+                "helper.bad: Zero is not a remaining constructor of helper.Nat"
+            );
+        }
+    }
+}
+
+#[test]
+fn imported_numeric_patterns_stay_fixed_and_literal_expansion_stays_bounded() {
+    let fixture = Fixture::new();
+    // Preserve the old positive control as a negative: upstream refuses its
+    // fixed Zero pattern because only nat.Zero is declared in this module.
+    fixture.write("nat.bend", &format!("{NAT}def Nat.add(a: Nat, b: Nat) -> Nat:\n  match a:\n    case 0n: b\n    case 1n+p: 1n+Nat.add(p,b)\ndef value() -> Nat: 1n + 2n\n"));
+    let main = fixture.write(
+        "main.bend",
+        "import nat.bend as N\ndef main() -> N.Nat: N.value\n",
+    );
+    assert!(
+        load(&main)
+            .unwrap_err()
+            .message
+            .contains("unknown constructor pattern: Zero")
+    );
+    fixture.write("nat.bend", &format!("{NAT}def value() -> Nat: 129n\n"));
+    assert!(
+        load(&main)
+            .unwrap_err()
+            .message
+            .contains("Nat literals above 128")
     );
 }

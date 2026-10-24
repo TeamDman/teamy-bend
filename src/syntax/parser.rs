@@ -1683,18 +1683,20 @@ impl Parser<'_> {
             if count > 128 {
                 return Err(self.error("Nat literals above 128 exceed the parser's resource limit"));
             }
+            // Literal sugar names the fixed constructors, like U32/F32 sugar.
+            // Explicit constructor names still resolve in the local module.
             let glued = self.at > 0 && self.tokens[self.at - 1].end == self.current().start;
             let mut value = if glued && self.take("+") {
                 self.expression(0)?
             } else {
                 term(Term::Ctr {
-                    name: self.resolve("Zero"),
+                    name: "Zero".into(),
                     args: Vec::new(),
                 })
             };
             for _ in 0..count {
                 value = term(Term::Ctr {
-                    name: self.resolve("Succ"),
+                    name: "Succ".into(),
                     args: vec![value],
                 });
             }
