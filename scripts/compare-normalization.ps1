@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -125,6 +125,11 @@ if ($Suite -in @('brace-suffix', 'all')) {
 }
 if ($Suite -in @('nat-literal', 'all')) {
     $cases += @{ name = 'nat_literal_roundtrip'; fixture = 'eval/nat_literal_roundtrip.bend'; original = Join-Path $Reference 'tests/eval/nat_literal_roundtrip.bend'; origin = 'upstream'; function_printer = $true }
+}
+if ($Suite -in @('default-nat', 'all')) {
+    foreach ($name in @('chain_default_nat_f', 'chain_default_nat_g')) {
+        $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
 }
 foreach ($case in $cases) {
     $name = $case.name

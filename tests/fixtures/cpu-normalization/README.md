@@ -53,3 +53,8 @@ The unchanged `eval/nat_literal_roundtrip.bend` comes from the same pin. It
 retains complete and open-tail Nat values inside tuple/list syntax. Actual
 upstream C and JS generation refuses the compound result containing a function;
 the source comment alone is not used to classify compiled applicability.
+
+The unchanged `parse/chain_default_nat_f.bend` and `_g` companions come from
+the same pinned source. They retain Nat arithmetic precedence and comparison
+functions. Strict normalization and actual-core comparison remain separate from
+the C/JS function-printer applicability checks; no function invocation is claimed.

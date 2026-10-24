@@ -55,14 +55,22 @@ fn checking_only_list_fixture_preserves_named_values_and_proofs() {
 #[test]
 fn checking_only_list_fixture_rejects_wrong_reverse_and_lost_duplicate() {
     let original = include_str!("fixtures/cpu-checking/list_reverse_sort.bend");
-    for (before, after) in [("[3, 2, 1]", "[3, 1, 2]"), ("[1, 2, 3, 3]", "[1, 2, 3]")] {
+    for (before, after, definition) in [
+        ("[3, 2, 1]", "[3, 1, 2]", "rev"),
+        ("[1, 2, 3, 3]", "[1, 2, 3]", "srt"),
+    ] {
         assert_eq!(original.matches(before).count(), 1);
         let source = original
             .replace(before, after)
             .replace("import Base\n", include_str!("../src/syntax/base.bend"));
         let book = parse(&source).expect("false proof still parses");
         let error = check_book(&book).expect_err("incorrect concrete equality must fail");
-        assert!(error.to_string().contains("reflexivity"), "{error}");
+        assert!(
+            error.to_string().starts_with(&format!(
+                "{definition}: reflexivity requires equal endpoints:"
+            )),
+            "{error}"
+        );
     }
 }
 
@@ -158,6 +166,8 @@ fn base_function_companions_preserve_normalized_structure_and_exact_text() {
         "chain_brace_suffix_f",
         "chain_brace_suffix_g",
         "chain_brace_suffix_h",
+        "chain_default_nat_f",
+        "chain_default_nat_g",
     ] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-normalization")
