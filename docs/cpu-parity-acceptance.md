@@ -91,27 +91,28 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `1175aa37f317db553a2e596d16d0089297f1fa40` closes substituted, consumed and out-of-order scrutinee diagnostics
-for eleven unchanged originals, plus constructor and bare-global matches. Per-use
-surface metadata preserves source locations without changing core terms, sharing,
-acceptance, evaluation, approved demand semantics or safety limits.
-[Report](cpu-scrutinee-origins.md).
+Source `77116c8ab4ab8eabbaea599679996941e41ed3b4` closes reconstructed matched-value and row-arity diagnostics for fourteen
+unchanged originals, with fifteen authored controls. Per-use return provenance is
+carried through generated match/lambda/let edges outside core terms. Constructor
+checking and row-arity rejection keep their original failure decisions and budgets.
+[Report](cpu-matched-values.md).
 
-Full gate **915 passed, zero failed, 49 ignored**. The 31-case repeated matrix
-contains 558 exact stream/status observations and 62 separate phase probes;
-14 positive controls pass. All 1,302 checking statuses remain unchanged.
-The three erased-hole/TODO controls remain unresolved and unwaived. Single probes
-also retain matched-value checking and row-arity diagnostic gaps, not qualifications.
+Full gate **920 passed, zero failed, 49 ignored**. The 37-case repeated matrix
+contains 666 exact stream/status observations and 74 separate phase probes;
+14 positive controls pass. All 1,302 checking statuses remain unchanged from
+1175aa3. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+Next bounded probes expose empty-match inference, missing-case and unsupported-pattern
+diagnostics; these probes are not counted as qualifications.
 
-Detailed coverage: **231 originals / 1,071 without detailed receipts**: 411 checker
+Detailed coverage: **245 originals / 1,057 without detailed receipts**: 397 checker
 negatives, one checking-only module, 106 interpreter cases and 553 compiled
-candidates. Eighteen checking rows are current; 21 other checking, 99 interpretation
+candidates. Twenty-two checking rows are current; 31 other checking, 99 interpretation
 and 93 runtime rows retain historical identities. Linked receipts include unresolved
 cells and do not establish universal parity. The incomplete 688-vector exploration,
 host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
 External invoke consumers must still inspect exit_code; no external audit is claimed.
-Next: reconstructed matched-value and row-arity diagnostics. Frozen inputs/policies;
-no installations, pushes, desktop or GPU work.
+Frozen dependencies, references, toolchains, guards and demand policy; no installations,
+pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -642,3 +643,28 @@ host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain
 External invoke consumers must still inspect exit_code; no external audit is claimed.
 Next: reconstructed matched-value and row-arity diagnostics. Frozen inputs/policies;
 no installations, pushes, desktop or GPU work.
+
+## Matched-value and row-arity checkpoint
+
+Source `77116c8ab4ab8eabbaea599679996941e41ed3b4` closes reconstructed matched-value and row-arity diagnostics for fourteen
+unchanged originals, with fifteen authored controls. Per-use return provenance is
+carried through generated match/lambda/let edges outside core terms. Constructor
+checking and row-arity rejection keep their original failure decisions and budgets.
+[Report](cpu-matched-values.md).
+
+Full gate **920 passed, zero failed, 49 ignored**. The 37-case repeated matrix
+contains 666 exact stream/status observations and 74 separate phase probes;
+14 positive controls pass. All 1,302 checking statuses remain unchanged from
+1175aa3. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+Next bounded probes expose empty-match inference, missing-case and unsupported-pattern
+diagnostics; these probes are not counted as qualifications.
+
+Detailed coverage: **245 originals / 1,057 without detailed receipts**: 397 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Twenty-two checking rows are current; 31 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts include unresolved
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
+External invoke consumers must still inspect exit_code; no external audit is claimed.
+Frozen dependencies, references, toolchains, guards and demand policy; no installations,
+pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
