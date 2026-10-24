@@ -4628,3 +4628,36 @@ six `computed_ref_call_000/001` originals and their `_f`/`_step` companions, ini
 20 concrete vectors; selected from source and ledger, not executed or qualified.
 Frozen inputs, budgets, guards and demand policy; no installations, pushes, desktop
 or GPU work.
+
+### [x] 5.81 Qualify computed reference calls and worker applications
+
+Source `8deca787667b9d01d40a865ca71fba6d527fdfdd` qualifies six unchanged `flatten/computed_ref_call_000/001`
+originals and their `_f`/`_step` companions through exact normal forms and **20
+bounded concrete applications**. Checked-core structure and text, pure CLI
+normalization, and native IO execution are separate observations. The original
+builds require Base; separate Base-enabled function adapters are unprintable.
+Concrete pure/IO observation wrappers pass the available generated C/JS lanes.
+No production behavior change was needed. [Report](cpu-computed-reference-calls.md).
+
+The clean-source full gate passed **936 tests, zero failed, 49 ignored**. The
+repeated matrix has **426 process observations**, including 12 direct upstream
+Node IO host blocks and six strict-proof exclusions. All 1,302 checking statuses
+are unchanged; 14 positive controls passed, and 18 observations preserve the
+three unwaived hole/TODO disagreements. The interrupted initial gate is not a
+candidate receipt. Historical source and receipt identities remain unchanged.
+
+Detailed receipts now link **293 originals**, with **1,009** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 95 interpreter cases
+and 553 compiled candidates**. Six interpretation rows are new; the 104 other
+interpretation, 93 runtime and 90 checking rows retain historical identities.
+These counts include partial/blocked cells and do not establish CPU parity.
+
+The imported-constructor spelling disagreement and pinned JS printer timeout
+remain separately open at their earlier tested source. Erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Next independent batch:
+six `stacked_computed_match_000/001` originals and `_nat`/`_not`/`_sel` companions,
+with a proposed 39-vector grid for two/three computed columns. Source and
+applicability were reviewed; none of that new grid was executed or qualified.
+Dependencies, references, toolchains, guards, budgets, cancellation and approved
+demand semantics remain frozen. No installations, pushes, desktop or GPU work.
