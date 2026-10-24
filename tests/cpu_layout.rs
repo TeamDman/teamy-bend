@@ -103,6 +103,9 @@ fn original_layout_io_books_remain_outside_strict_proof_mode() {
             .unwrap();
         assert_eq!(result.status.code(), Some(1));
         assert!(result.stdout.is_empty());
-        assert!(String::from_utf8_lossy(&result.stderr).contains("main: undefined name IO"));
+        assert!(
+            String::from_utf8_lossy(&result.stderr)
+                .contains("Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n")
+        );
     }
 }

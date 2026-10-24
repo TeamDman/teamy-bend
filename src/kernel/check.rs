@@ -1134,11 +1134,20 @@ impl Engine {
                     }
                     return Ok((Rc::clone(&adt.kind), Uses::new()));
                 }
-                let def = self
-                    .defs
-                    .get(name)
-                    .cloned()
-                    .ok_or_else(|| KernelError::new(format!("undefined name {name}")))?;
+                let Some(def) = self.defs.get(name).cloned() else {
+                    let mut error = KernelError::new(format!("undefined name {name}"));
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Text("a defined name".into()),
+                            DiagnosticExpression::Term(value),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
+                };
                 if demand != Quant::None {
                     if name == &lhs.name && !lhs.unsafe_ {
                         let (_, columns) = spine(&lhs.equation);
@@ -2302,6 +2311,39 @@ mod depth_tests {
 #[cfg(test)]
 mod reflexivity_diagnostic_tests {
     use super::*;
+
+    #[test]
+    fn undefined_name_diagnostics_preserve_first_error_sharing_and_remaining_budget() {
+        let book = crate::syntax::parse("type N is Data:\n  Z{}\n").unwrap();
+        let mut engine = empty_engine(&book).unwrap();
+        let missing = term(Term::Ref("missing".into()));
+        let unused = term(Term::Ref("later".into()));
+        let value = term(Term::App(Rc::clone(&missing), unused));
+        let before = format!("{value:?}");
+        let owners = Rc::strong_count(&missing);
+        let fresh = engine.fresh_id;
+        let initial = engine.fuel;
+        let error = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(error.message, "undefined name missing");
+        let report = error.checker_diagnostic().unwrap();
+        assert_eq!(report.expected, "a defined name");
+        assert_eq!(report.observed.as_deref(), Some("missing"));
+        assert_eq!(report.term_identity, Rc::as_ptr(&missing) as usize);
+        assert_eq!(format!("{value:?}"), before);
+        assert_eq!(Rc::strong_count(&missing), owners);
+        assert_eq!(engine.fresh_id, fresh);
+        let spent = initial - engine.fuel;
+        engine.fuel = spent;
+        let exhausted = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(error, exhausted);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert!(exhausted.language_failure().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+    }
 
     #[test]
     fn match_guard_diagnostics_preserve_first_errors_and_remaining_budget() {

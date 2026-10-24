@@ -123,7 +123,9 @@ fn io_array_reads_preserve_results_and_the_strict_eval_boundary() {
                 .unwrap();
             assert_eq!(output.status.code(), Some(1), "{name}: {entry}");
             assert!(output.stdout.is_empty());
-            assert!(String::from_utf8_lossy(&output.stderr).contains("main: undefined name IO"));
+            assert!(String::from_utf8_lossy(&output.stderr).contains(
+                "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n"
+            ));
         }
     }
 }

@@ -208,7 +208,7 @@ fn extracted_fields_execute_with_raw_output_and_keep_proof_mode_separate() {
     assert!(
         String::from_utf8(proof.stderr)
             .unwrap()
-            .contains("undefined name IO")
+            .contains("Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n")
     );
 }
 

@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : IO.print\nLocation: bad\n32 | law bad: Box\n33>| def bad(): IO.print(Full{})\n34 | \n"

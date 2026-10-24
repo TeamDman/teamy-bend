@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing\nLocation: bad\n7 | law bad: N\n8>| def bad(): ignore(Missing)\n9 | \n"

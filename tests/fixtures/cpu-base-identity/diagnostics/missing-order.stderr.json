@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : first\nLocation: bad\n3 | law bad: N\n4>| def bad(): first(second)\n5 | \n"

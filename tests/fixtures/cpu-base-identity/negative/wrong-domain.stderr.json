@@ -1,0 +1,1 @@
+"Error:\n- expected : Nx\n- observed : Other\nLocation: bad\n30 | law bad: Nx\n31>| def bad(): depth(Other{})\n32 | \n"

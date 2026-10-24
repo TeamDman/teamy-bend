@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing\nLocation: bad\n2 | type N is Data: Z{}\n3>| law bad: Missing\n4 | def bad(): Z{}\n"

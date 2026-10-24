@@ -1,0 +1,34 @@
+[
+  {
+    "key": "depth-0",
+    "entry": "depth",
+    "arguments": [
+      "Zx{}"
+    ],
+    "value": "Zx{}"
+  },
+  {
+    "key": "depth-1",
+    "entry": "depth",
+    "arguments": [
+      "Sx{Zx{}}"
+    ],
+    "value": "Sx{Zx{}}"
+  },
+  {
+    "key": "depth-3",
+    "entry": "depth",
+    "arguments": [
+      "Sx{Sx{Sx{Zx{}}}}"
+    ],
+    "value": "Sx{Sx{Sx{Zx{}}}}"
+  },
+  {
+    "key": "depth-8",
+    "entry": "depth",
+    "arguments": [
+      "Sx{Sx{Sx{Sx{Sx{Sx{Sx{Sx{Zx{}}}}}}}}}"
+    ],
+    "value": "Sx{Sx{Sx{Sx{Sx{Sx{Sx{Sx{Zx{}}}}}}}}}"
+  }
+]

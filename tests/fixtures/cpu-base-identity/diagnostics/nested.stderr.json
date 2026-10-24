@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : missing\nContext:\n- x : N\nLocation: bad\n3 | law bad: N -> N\n4>| def bad(x): missing(x)\n5 | \n"
