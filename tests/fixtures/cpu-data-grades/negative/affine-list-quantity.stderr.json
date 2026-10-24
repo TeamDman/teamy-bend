@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nLocation: observe\n92 | \n93>| def observe(+xs: List<&1, Nat -> Nat>) -> List<&1, Nat -> Nat>: xs\n94 | \n"

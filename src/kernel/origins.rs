@@ -24,6 +24,7 @@ struct Index {
     // The parser keeps unique semantic IDs for upstream's unbound + markers.
     // This display-only index records their spelling without changing terms.
     reusable_markers: BTreeSet<usize>,
+    binder_sources: BTreeMap<usize, usize>,
     sweep_at: usize,
 }
 
@@ -54,6 +55,22 @@ impl Origin {
 }
 
 impl TermOrigins {
+    pub(crate) fn binder_source(&self, id: usize, source: usize) {
+        self.0.borrow_mut().binder_sources.insert(id, source);
+    }
+
+    pub(crate) fn binder_node(&self, id: usize, value: &TermRef) {
+        self.track(value);
+        let mut index = self.0.borrow_mut();
+        if let Some(source) = index.binder_sources.get(&id).copied() {
+            index
+                .nodes
+                .get_mut(&(Rc::as_ptr(value) as usize))
+                .expect("tracked binder")
+                .source = source;
+        }
+    }
+
     pub(crate) fn reusable_marker(&self, id: usize) {
         self.0.borrow_mut().reusable_markers.insert(id);
     }

@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: observe\n95 | def observe(\n96>|   f\n97 | ): Tuple{f, f}\n"

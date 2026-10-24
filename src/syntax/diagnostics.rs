@@ -112,6 +112,25 @@ impl DiagnosticOrigins {
         }
     }
 
+    pub(super) fn grown(&mut self, value: &TermRef, head: &TermRef, label: &str, line: usize) {
+        let position = self
+            .nodes
+            .get(&self.tracker.source(head))
+            .map(|origin| (Rc::clone(&origin.source), origin.line));
+        if let Some((source, line)) = position {
+            self.tracker.track(value);
+            self.nodes
+                .entry(Rc::as_ptr(value) as usize)
+                .or_insert_with(|| TermOrigin {
+                    _node: Rc::downgrade(value),
+                    source,
+                    line,
+                });
+        } else {
+            self.node(value, label, line);
+        }
+    }
+
     pub(super) fn unknown_pattern(&mut self, name: &str, value: &TermRef) {
         // This parser rejection is not recovered: the private loader carries
         // the structured cause alongside its original public ParseError.
@@ -148,9 +167,22 @@ impl DiagnosticOrigins {
     }
 
     pub(super) fn local_binder(&mut self, id: usize, label: &str, line: usize) {
+        self.binder(id, label, line);
         if let Some(source) = self.sources.get(label) {
             self.local_binders.insert(id, (Rc::clone(source), line));
         }
+    }
+
+    pub(super) fn binder(&mut self, id: usize, label: &str, line: usize) {
+        // A weakly held source anchor reserves an identity without retaining a
+        // semantic term or adding a field to the AST. Generated lambda/let
+        // nodes inherit this binder occurrence's span during flattening.
+        let anchor = crate::kernel::term(Term::Var {
+            name: String::new(),
+            id,
+        });
+        self.node(&anchor, label, line);
+        self.tracker.binder_source(id, Rc::as_ptr(&anchor) as usize);
     }
 
     pub(super) fn rejected_local_binding(&mut self, id: usize) {

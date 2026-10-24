@@ -483,6 +483,47 @@ impl Engine {
         })
     }
 
+    fn check_usage(
+        &self,
+        lhs: &Lhs,
+        value: &TermRef,
+        binder: &Binder,
+        uses: &mut Uses,
+        context: &Context,
+    ) -> Result<(), KernelError> {
+        let observed = uses.remove(&binder.id).unwrap_or(Quant::None);
+        if observed <= binder.quant {
+            return Ok(());
+        }
+        let mut error = KernelError::new(format!(
+            "binder {} permits {:?} use, observed {:?}",
+            binder.name, binder.quant, observed
+        ));
+        // Upstream quant_used reports the closing binder in the outer context.
+        // Preserve the internal cause and resource measurement; only the
+        // source-facing diagnostic changes after rejection is established.
+        let prefix = |quant| match quant {
+            Quant::None => "-",
+            Quant::Lone => "",
+            Quant::Many => "+",
+        };
+        error.diagnostic = self
+            .term_diagnostic(
+                lhs,
+                value,
+                DiagnosticExpression::Text(format!("{}{}", prefix(binder.quant), binder.name)),
+                DiagnosticExpression::Text(if observed == Quant::Many {
+                    format!("{} (consumed more than once)", binder.name)
+                } else {
+                    format!("{}{}", prefix(observed), binder.name)
+                }),
+                context,
+            )
+            .ok()
+            .map(Box::new);
+        Err(error)
+    }
+
     fn child_diagnostic(
         &self,
         mut error: KernelError,
@@ -603,17 +644,6 @@ fn join(mut a: Uses, b: Uses) -> Uses {
         a.insert(id, old.max(q));
     }
     a
-}
-fn check_usage(binder: &Binder, uses: &mut Uses) -> Result<(), KernelError> {
-    let observed = uses.remove(&binder.id).unwrap_or(Quant::None);
-    if observed > binder.quant {
-        Err(KernelError::new(format!(
-            "binder {} permits {:?} use, observed {:?}",
-            binder.name, binder.quant, observed
-        )))
-    } else {
-        Ok(())
-    }
 }
 fn mismatch(expected: &TermRef, observed: &TermRef) -> KernelError {
     KernelError::new(format!(
@@ -1408,7 +1438,7 @@ impl Engine {
                         &next,
                     )
                     .map_err(|error| self.child_diagnostic(error, value, 0, &checked_body))?;
-                check_usage(&binder, &mut uses)?;
+                self.check_usage(&lhs, value, &binder, &mut uses, context)?;
                 return Ok(uses);
             }
             Term::Let { bindings, body } => {
@@ -1442,7 +1472,7 @@ impl Engine {
                 }
                 let mut body_uses = result?;
                 for b in &binders {
-                    check_usage(b, &mut body_uses)?;
+                    self.check_usage(lhs, value, b, &mut body_uses, context)?;
                 }
                 return Ok(add(uses, body_uses));
             }
@@ -2481,6 +2511,62 @@ mod reflexivity_diagnostic_tests {
             assert!(exhausted.language_failure().is_none());
             assert_eq!((engine.fuel, engine.depth), (0, 0));
         }
+    }
+
+    #[test]
+    fn quantity_diagnostic_origins_preserve_terms_work_and_rejection() {
+        let root =
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-data-grades");
+        let original = std::fs::read_to_string(root.join("accept_data.bend")).unwrap();
+        let temporary = std::env::temp_dir().join(format!(
+            "teamy-bend-quantity-origins-{}.bend",
+            std::process::id()
+        ));
+        let mut sources = vec![original.clone()];
+        for entry in std::fs::read_dir(root.join("negative")).unwrap() {
+            let path = entry.unwrap().path();
+            if path
+                .extension()
+                .is_some_and(|extension| extension == "bend")
+            {
+                let fragment = std::fs::read_to_string(path).unwrap();
+                sources.push(format!(
+                    "{original}\n{}",
+                    fragment.split_once('\n').unwrap().1
+                ));
+            }
+        }
+        assert_eq!(sources.len(), 12);
+        for (index, source) in sources.iter().enumerate() {
+            std::fs::write(&temporary, source).unwrap();
+            let (book, origins) = crate::syntax::load_with_diagnostics(&temporary).unwrap();
+            let plain = crate::syntax::load(&temporary).unwrap();
+            assert_eq!(format!("{book:?}"), format!("{plain:?}"));
+            let mut ordinary = empty_engine(&book).unwrap();
+            let mut tracked = ordinary.clone();
+            tracked.origins = Some(origins.tracker.clone());
+            let mut rejected = false;
+            for declaration in &book.declarations {
+                let results = [&mut ordinary, &mut tracked].map(|engine| {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                });
+                assert_eq!(results[0], results[1]);
+                assert_eq!(
+                    (ordinary.fuel, ordinary.depth, ordinary.fresh_id),
+                    (tracked.fuel, tracked.depth, tracked.fresh_id)
+                );
+                if results[0].is_err() {
+                    rejected = true;
+                    break;
+                }
+            }
+            assert_eq!(rejected, index != 0);
+        }
+        std::fs::remove_file(temporary).unwrap();
     }
 
     #[test]

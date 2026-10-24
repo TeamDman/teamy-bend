@@ -1,0 +1,1 @@
+{"Constructor":["Tuple",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Zero",[]]}]]}]]}]]}]]},{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Zero",[]]}]]}]]}]]}]]}]]}

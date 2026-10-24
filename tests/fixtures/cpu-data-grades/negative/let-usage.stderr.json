@@ -1,0 +1,1 @@
+"Error:\n- expected : g\n- observed : g (consumed more than once)\nContext:\n- f : @_:Nat -> Nat\nLocation: observe\n93 | def observe(f: Nat -> Nat) -> Sigma<&1, &1, (Nat -> Nat), _ => (Nat -> Nat)>:\n94>|   g = f\n95 |   Tuple{g, g}\n"

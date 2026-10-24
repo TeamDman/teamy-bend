@@ -1,0 +1,1 @@
+{"Constructor":["Con",[{"Lambda":{"Bound":0}},{"Constructor":["Con",[{"Lambda":{"Constructor":["Succ",[{"Bound":0}]]}},{"Constructor":["Nil",[]]}]]}]]}

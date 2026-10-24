@@ -1,0 +1,302 @@
+[
+  {
+    "key": "dup-0",
+    "entry": "dup",
+    "arguments": [
+      "Zero{}"
+    ],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "dup(Zero{})",
+    "value": "(0n, 0n)"
+  },
+  {
+    "key": "dup-1",
+    "entry": "dup",
+    "arguments": [
+      "Succ{Zero{}}"
+    ],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "dup(Succ{Zero{}})",
+    "value": "(1n, 1n)"
+  },
+  {
+    "key": "dup-2",
+    "entry": "dup",
+    "arguments": [
+      "Succ{Succ{Zero{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "dup(Succ{Succ{Zero{}}})",
+    "value": "(2n, 2n)"
+  },
+  {
+    "key": "dup-3",
+    "entry": "dup",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "dup(Succ{Succ{Succ{Succ{Zero{}}}}})",
+    "value": "(4n, 4n)"
+  },
+  {
+    "key": "dupl-0",
+    "entry": "dupl",
+    "arguments": [
+      "Nil{}"
+    ],
+    "result_type": "Sigma<&2, &2, List<&2, Nat>, _ => List<&2, Nat>>",
+    "runtime": true,
+    "body": "dupl(Nil{})",
+    "value": "([], [])"
+  },
+  {
+    "key": "dupl-1",
+    "entry": "dupl",
+    "arguments": [
+      "Con{Zero{}, Nil{}}"
+    ],
+    "result_type": "Sigma<&2, &2, List<&2, Nat>, _ => List<&2, Nat>>",
+    "runtime": true,
+    "body": "dupl(Con{Zero{}, Nil{}})",
+    "value": "([0n], [0n])"
+  },
+  {
+    "key": "dupl-2",
+    "entry": "dupl",
+    "arguments": [
+      "Con{Succ{Zero{}}, Con{Succ{Succ{Zero{}}}, Nil{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, List<&2, Nat>, _ => List<&2, Nat>>",
+    "runtime": true,
+    "body": "dupl(Con{Succ{Zero{}}, Con{Succ{Succ{Zero{}}}, Nil{}}})",
+    "value": "([1n, 2n], [1n, 2n])"
+  },
+  {
+    "key": "dupl-3",
+    "entry": "dupl",
+    "arguments": [
+      "Con{Succ{Succ{Succ{Succ{Zero{}}}}}, Con{Zero{}, Nil{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, List<&2, Nat>, _ => List<&2, Nat>>",
+    "runtime": true,
+    "body": "dupl(Con{Succ{Succ{Succ{Succ{Zero{}}}}}, Con{Zero{}, Nil{}}})",
+    "value": "([4n, 0n], [4n, 0n])"
+  },
+  {
+    "key": "dupe-0",
+    "entry": "dupe",
+    "arguments": [
+      "Zero{}",
+      "Zero{}",
+      "{==}"
+    ],
+    "result_type": "Sigma<&2, &2, {Zero{} == Zero{} : Nat}, _ => {Zero{} == Zero{} : Nat}>",
+    "runtime": false,
+    "body": "dupe(Zero{}, Zero{}, {==})",
+    "value": "({==}, {==})"
+  },
+  {
+    "key": "dupe-1",
+    "entry": "dupe",
+    "arguments": [
+      "Succ{Zero{}}",
+      "Succ{Zero{}}",
+      "{==}"
+    ],
+    "result_type": "Sigma<&2, &2, {Succ{Zero{}} == Succ{Zero{}} : Nat}, _ => {Succ{Zero{}} == Succ{Zero{}} : Nat}>",
+    "runtime": false,
+    "body": "dupe(Succ{Zero{}}, Succ{Zero{}}, {==})",
+    "value": "({==}, {==})"
+  },
+  {
+    "key": "dupe-2",
+    "entry": "dupe",
+    "arguments": [
+      "Succ{Succ{Zero{}}}",
+      "Succ{Succ{Zero{}}}",
+      "{==}"
+    ],
+    "result_type": "Sigma<&2, &2, {Succ{Succ{Zero{}}} == Succ{Succ{Zero{}}} : Nat}, _ => {Succ{Succ{Zero{}}} == Succ{Succ{Zero{}}} : Nat}>",
+    "runtime": false,
+    "body": "dupe(Succ{Succ{Zero{}}}, Succ{Succ{Zero{}}}, {==})",
+    "value": "({==}, {==})"
+  },
+  {
+    "key": "dupe-3",
+    "entry": "dupe",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "{==}"
+    ],
+    "result_type": "Sigma<&2, &2, {Succ{Succ{Succ{Succ{Zero{}}}}} == Succ{Succ{Succ{Succ{Zero{}}}}} : Nat}, _ => {Succ{Succ{Succ{Succ{Zero{}}}}} == Succ{Succ{Succ{Succ{Zero{}}}}} : Nat}>",
+    "runtime": false,
+    "body": "dupe(Succ{Succ{Succ{Succ{Zero{}}}}}, Succ{Succ{Succ{Succ{Zero{}}}}}, {==})",
+    "value": "({==}, {==})"
+  },
+  {
+    "key": "dupp-0",
+    "entry": "dupp",
+    "arguments": [
+      "Tuple{Zero{}, Zero{}}"
+    ],
+    "result_type": "Sigma<&2, &2, Sigma<&2, &2, Nat, _ => Nat>, _ => Sigma<&2, &2, Nat, _ => Nat>>",
+    "runtime": true,
+    "body": "dupp(Tuple{Zero{}, Zero{}})",
+    "value": "((0n, 0n), 0n, 0n)"
+  },
+  {
+    "key": "dupp-1",
+    "entry": "dupp",
+    "arguments": [
+      "Tuple{Zero{}, Succ{Zero{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Sigma<&2, &2, Nat, _ => Nat>, _ => Sigma<&2, &2, Nat, _ => Nat>>",
+    "runtime": true,
+    "body": "dupp(Tuple{Zero{}, Succ{Zero{}}})",
+    "value": "((0n, 1n), 0n, 1n)"
+  },
+  {
+    "key": "dupp-2",
+    "entry": "dupp",
+    "arguments": [
+      "Tuple{Succ{Succ{Zero{}}}, Succ{Zero{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Sigma<&2, &2, Nat, _ => Nat>, _ => Sigma<&2, &2, Nat, _ => Nat>>",
+    "runtime": true,
+    "body": "dupp(Tuple{Succ{Succ{Zero{}}}, Succ{Zero{}}})",
+    "value": "((2n, 1n), 2n, 1n)"
+  },
+  {
+    "key": "dupp-3",
+    "entry": "dupp",
+    "arguments": [
+      "Tuple{Succ{Succ{Succ{Succ{Zero{}}}}}, Succ{Succ{Zero{}}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Sigma<&2, &2, Nat, _ => Nat>, _ => Sigma<&2, &2, Nat, _ => Nat>>",
+    "runtime": true,
+    "body": "dupp(Tuple{Succ{Succ{Succ{Succ{Zero{}}}}}, Succ{Succ{Zero{}}}})",
+    "value": "((4n, 2n), 4n, 2n)"
+  },
+  {
+    "key": "dupt-0",
+    "entry": "dupt",
+    "arguments": [
+      "MkTag{Zero{}}"
+    ],
+    "result_type": "Sigma<&2, &2, Tag<(Nat -> Nat)>, _ => Tag<(Nat -> Nat)>>",
+    "runtime": true,
+    "body": "dupt(MkTag{Zero{}})",
+    "value": "(MkTag{0n}, MkTag{0n})"
+  },
+  {
+    "key": "dupt-1",
+    "entry": "dupt",
+    "arguments": [
+      "MkTag{Succ{Zero{}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Tag<(Nat -> Nat)>, _ => Tag<(Nat -> Nat)>>",
+    "runtime": true,
+    "body": "dupt(MkTag{Succ{Zero{}}})",
+    "value": "(MkTag{1n}, MkTag{1n})"
+  },
+  {
+    "key": "dupt-2",
+    "entry": "dupt",
+    "arguments": [
+      "MkTag{Succ{Succ{Zero{}}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Tag<(Nat -> Nat)>, _ => Tag<(Nat -> Nat)>>",
+    "runtime": true,
+    "body": "dupt(MkTag{Succ{Succ{Zero{}}}})",
+    "value": "(MkTag{2n}, MkTag{2n})"
+  },
+  {
+    "key": "dupt-3",
+    "entry": "dupt",
+    "arguments": [
+      "MkTag{Succ{Succ{Succ{Succ{Zero{}}}}}}"
+    ],
+    "result_type": "Sigma<&2, &2, Tag<(Nat -> Nat)>, _ => Tag<(Nat -> Nat)>>",
+    "runtime": true,
+    "body": "dupt(MkTag{Succ{Succ{Succ{Succ{Zero{}}}}}})",
+    "value": "(MkTag{4n}, MkTag{4n})"
+  },
+  {
+    "key": "weak-0",
+    "entry": "weak",
+    "arguments": [
+      "Nat",
+      "Zero{}"
+    ],
+    "result_type": "List<&1, Nat>",
+    "runtime": true,
+    "body": "weak(Nat, Zero{})",
+    "value": "[0n]"
+  },
+  {
+    "key": "weak-1",
+    "entry": "weak",
+    "arguments": [
+      "Nat",
+      "Succ{Zero{}}"
+    ],
+    "result_type": "List<&1, Nat>",
+    "runtime": true,
+    "body": "weak(Nat, Succ{Zero{}})",
+    "value": "[1n]"
+  },
+  {
+    "key": "weak-2",
+    "entry": "weak",
+    "arguments": [
+      "Nat",
+      "Succ{Succ{Zero{}}}"
+    ],
+    "result_type": "List<&1, Nat>",
+    "runtime": true,
+    "body": "weak(Nat, Succ{Succ{Zero{}}})",
+    "value": "[2n]"
+  },
+  {
+    "key": "weak-3",
+    "entry": "weak",
+    "arguments": [
+      "Nat",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "result_type": "List<&1, Nat>",
+    "runtime": true,
+    "body": "weak(Nat, Succ{Succ{Succ{Succ{Zero{}}}}})",
+    "value": "[4n]"
+  },
+  {
+    "key": "weak-4",
+    "entry": "weak",
+    "arguments": [
+      "Nat -> Nat",
+      "x => x"
+    ],
+    "result_type": "List<&1, Nat -> Nat>",
+    "runtime": false,
+    "body": "weak(Nat -> Nat, x => x)",
+    "value": "[x => x]"
+  },
+  {
+    "key": "weak-5",
+    "entry": "weak",
+    "arguments": [
+      "Nat -> Nat",
+      "x => Succ{x}"
+    ],
+    "result_type": "List<&1, Nat -> Nat>",
+    "runtime": false,
+    "body": "weak(Nat -> Nat, x => Succ{x})",
+    "value": "[x => 1n+x]"
+  }
+]

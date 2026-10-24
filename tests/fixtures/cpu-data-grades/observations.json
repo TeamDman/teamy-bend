@@ -1,0 +1,66 @@
+[
+  {
+    "key": "fns-0",
+    "entry": "fns",
+    "arguments": [],
+    "result_type": "List<&2, Nat>",
+    "runtime": true,
+    "body": "apply_fns(fns, Zero{})"
+  },
+  {
+    "key": "fns-1",
+    "entry": "fns",
+    "arguments": [],
+    "result_type": "List<&2, Nat>",
+    "runtime": true,
+    "body": "apply_fns(fns, Succ{Zero{}})"
+  },
+  {
+    "key": "fns-2",
+    "entry": "fns",
+    "arguments": [],
+    "result_type": "List<&2, Nat>",
+    "runtime": true,
+    "body": "apply_fns(fns, Succ{Succ{Zero{}}})"
+  },
+  {
+    "key": "fns-4",
+    "entry": "fns",
+    "arguments": [],
+    "result_type": "List<&2, Nat>",
+    "runtime": true,
+    "body": "apply_fns(fns, Succ{Succ{Succ{Succ{Zero{}}}}})"
+  },
+  {
+    "key": "mixed-0",
+    "entry": "mixed",
+    "arguments": [],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "apply_mixed(mixed, Zero{})"
+  },
+  {
+    "key": "mixed-1",
+    "entry": "mixed",
+    "arguments": [],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "apply_mixed(mixed, Succ{Zero{}})"
+  },
+  {
+    "key": "mixed-2",
+    "entry": "mixed",
+    "arguments": [],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "apply_mixed(mixed, Succ{Succ{Zero{}}})"
+  },
+  {
+    "key": "mixed-4",
+    "entry": "mixed",
+    "arguments": [],
+    "result_type": "Sigma<&2, &2, Nat, _ => Nat>",
+    "runtime": true,
+    "body": "apply_mixed(mixed, Succ{Succ{Succ{Succ{Zero{}}}}})"
+  }
+]

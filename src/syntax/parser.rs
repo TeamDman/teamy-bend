@@ -458,6 +458,7 @@ impl Parser<'_> {
             if binders.len() >= 128 {
                 return Err(self.error("binder telescope exceeds the parser resource limit of 128"));
             }
+            let line = self.current().line;
             let compile_time = close == ")" && self.take("~");
             let quant = if compile_time {
                 Quant::None
@@ -473,6 +474,9 @@ impl Parser<'_> {
                 return Err(self.error("expected a type after a quantified binder"));
             };
             let variable = self.open(name.clone());
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.binder(variable.id, &self.label, line);
+            }
             if compile_time && let Some(argument) = self.instance_arguments.pop_front() {
                 self.compile_bindings.insert(variable.id, argument);
             }
@@ -762,8 +766,13 @@ impl Parser<'_> {
             if vars.len() >= 128 {
                 return Err(self.error("proof telescope exceeds the parser resource limit of 128"));
             }
+            let line = self.current().line;
             let name = self.name()?;
-            vars.push(self.open(name));
+            let variable = self.open(name);
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.binder(variable.id, &self.label, line);
+            }
+            vars.push(variable);
             self.take(",");
         }
         Ok(vars)
@@ -1148,11 +1157,15 @@ impl Parser<'_> {
                             );
                         }
                     }
-                    out = term(Term::Adt {
+                    let grown = term(Term::Adt {
                         name,
                         args,
                         excluded: Vec::new(),
                     });
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.grown(&grown, &out, &self.label, line);
+                    }
+                    out = grown;
                 } else {
                     out = apply(term(Term::Ref(".is_lt".into())), [out, first]);
                 }
@@ -1182,13 +1195,17 @@ impl Parser<'_> {
             if min == 0 && self.take("->") {
                 let body = self.expression(0)?;
                 let v = self.fresh_variable("_".into());
-                out = term(Term::All {
+                let grown = term(Term::All {
                     quant: Quant::Lone,
                     name: v.name,
                     id: v.id,
-                    domain: out,
+                    domain: Rc::clone(&out),
                     body,
                 });
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.grown(&grown, &out, &self.label, line);
+                }
+                out = grown;
                 continue;
             }
             let Some((prec, right, method)) = operator(&self.current().text) else {

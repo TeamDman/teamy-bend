@@ -1,0 +1,1 @@
+"Error:\n- expected : a declared constructor (../accept_data.List declares ../accept_data.Nil, ../accept_data.Con)\n- observed : [x => x, x => ../accept_data.Succ{x}]\nLocation: ../accept_data.fns\n68 | def fns():\n69>|   [x => x, x => Succ{x}]\n70 | \n"

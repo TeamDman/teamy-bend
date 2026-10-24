@@ -1,0 +1,1 @@
+"Error:\n- expected : Empty\n- observed : Nat\nLocation: observe\n93 | law observe: Nat\n94>| def observe(): absurd(Nat, Zero{})\n95 | \n"

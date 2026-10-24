@@ -98,6 +98,9 @@ impl SurfaceTerm {
 
     fn lambda(self, binder: &Variable, origins: Option<&TermOrigins>) -> Self {
         let value = binder.lambda(self.value);
+        if let Some(origins) = origins {
+            origins.binder_node(binder.id, &value);
+        }
         Self::parent(value, [Some(self.origin), None, None], origins)
     }
 
@@ -349,6 +352,11 @@ fn flatten_at(
                     .collect(),
                 body: tail.value,
             });
+            if let Some(origins) = origins
+                && let Some(binder) = bindings.first()
+            {
+                origins.binder_node(binder.id, &value);
+            }
             let value = SurfaceTerm::parent(value, [Some(tail.origin), None, None], origins);
             Ok(vars.iter().rev().fold(value, |v, b| v.lambda(b, origins)))
         }

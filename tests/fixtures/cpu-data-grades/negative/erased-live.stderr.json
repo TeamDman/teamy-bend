@@ -1,0 +1,1 @@
+"Error:\n- expected : -n\n- observed : n\nLocation: observe\n92 | \n93>| def observe(-n: Nat) -> Nat: n\n94 | \n"

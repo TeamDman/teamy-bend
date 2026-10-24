@@ -1,0 +1,1 @@
+"Error:\n- expected : 0n\n- observed : 1n\nLocation: observe\n93 | law observe: Sigma<&2, &2, {Zero{} == Succ{Zero{}} : Nat}, _ => {Zero{} == Succ{Zero{}} : Nat}>\n94>| def observe(): dupe(Zero{}, Succ{Zero{}}, {==})\n95 | \n"

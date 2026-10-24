@@ -1,0 +1,1 @@
+"Error:\n- expected : ../accept_data.List<&1, @_:../accept_data.Nat -> ../accept_data.Nat>\n- observed : List\nLocation: ../accept_data.fns\n68 | def fns():\n69>|   [x => x, x => Succ{x}]\n70 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: helper.duplicate\n5 |   Pair{left: A, right: A}\n6>| def duplicate(f: N -> N) -> Pair<(N -> N)>:\n7 |   Pair{f, f}\n"
