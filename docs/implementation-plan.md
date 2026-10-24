@@ -4695,3 +4695,37 @@ threading and computed middle arguments. Only source/applicability review is
 complete; no execution credit. Dependencies, references, toolchains, guards,
 budgets, cancellation and approved demand semantics remain frozen. No installs,
 pushes, desktop or GPU work.
+
+### [x] 5.83 Qualify mixed computed columns and recursive values
+
+Source `b382a7683d2be3b06033cc4e6236595baed689f2` qualifies eight unchanged `flatten/mixed_computed_column_000..002`
+originals and companions with **63 bounded applications**. The grid covers parity
+recursion, value-column threading, full returned constructor depth, and all Bit
+combinations for computed middle arguments. Normalized text, actual checked core,
+concrete values, strict-proof applicability and native IO execution remain distinct.
+No production defect was demonstrated or implementation change needed.
+[Report](cpu-mixed-computed-columns.md).
+
+The clean-source gate passed **942 tests, zero failed, 49 ignored**. The repeated
+matrix records **568 process observations**, including 16 direct Node IO host
+blocks and eight strict-proof exclusions. All 1,302 checking statuses are unchanged;
+14 positive controls pass and 18 observations retain three unwaived hole/TODO
+cases. Original missing-Base and separate function-printer refusals match exactly,
+with no artifact; wrappers do not supply executable passes for original functions.
+
+Detailed receipts now link **307 originals**; **995** lack detailed receipts:
+**360 checker negatives, one checking-only module, 81 interpreter cases and 553
+compiled candidates**. Eight interpretation rows are new. The prior 116
+interpretation, 93 runtime and 90 checking rows keep their actual tested identities.
+Linked receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor spelling and upstream JS timeout evidence remain separately
+open at the earlier source. Erased-hole/TODO, host/resource/foreign/F32.read,
+runtime-error-order, external API and unfinished 688-vector requirements remain
+unwaived. No new semantic exception or resource policy was adopted.
+
+Next independent batch: `mixed_computed_column_003`, `_id` and `_sel`, proposed
+39 vectors. These import Base and are compiled candidates in the inventory;
+actual function quantity/printability must be established, preserving the `+b`
+reuse annotation. Only source/applicability review is complete, with no execution
+credit. Dependencies, references, toolchains, guards, budgets, cancellation and
+approved demand semantics remain frozen. No installs, pushes, desktop or GPU work.
