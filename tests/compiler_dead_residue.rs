@@ -114,7 +114,7 @@ fn original_base_requirement_and_adapted_printer_refusals_preserve_status_and_ar
 }
 
 #[test]
-fn standalone_io_declaration_gate_preserves_status_outputs_and_lowering_precedence() {
+fn standalone_io_declaration_gate_preserves_status_and_existing_outputs() {
     let fixture = Artifacts(std::env::temp_dir().join(format!(
         "teamy-bend-dead-residue-gate-{}",
         std::process::id()
@@ -123,8 +123,8 @@ fn standalone_io_declaration_gate_preserves_status_outputs_and_lowering_preceden
     std::fs::write(fixture.0.join("helper.bend"), "type IO is Data: Marker{}\n").unwrap();
     for source in [
         "type Tag is Data: OK{}\ndef main() -> Tag: OK{}\n",
+        "def main() -> Type: Type\n",
         "import helper.bend as H\ntype Tag is Data: OK{}\ndef main() -> Tag: OK{}\n",
-        "type Tag is Data: OK{}\ndef main() -> Tag: import \"missing.js\"\n",
     ] {
         let path = fixture.0.join("main.bend");
         std::fs::write(&path, source).unwrap();
@@ -217,4 +217,25 @@ fn ordinary_io_declarations_enable_builds_without_changing_pure_interpretation_o
             }
         }
     }
+}
+
+#[test]
+fn absent_io_does_not_bypass_existing_foreign_source_refusal() {
+    let fixture = Artifacts(std::env::temp_dir().join(format!(
+        "teamy-bend-dead-residue-foreign-refusal-{}",
+        std::process::id()
+    )));
+    std::fs::create_dir(&fixture.0).unwrap();
+    let path = fixture.0.join("main.bend");
+    std::fs::write(
+        &path,
+        "type Tag is Data: OK{}\ndef main() -> Tag: import \"missing.js\"\n",
+    )
+    .unwrap();
+    let error = check_executable(&load_executable(&path).unwrap()).unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("a foreign definition must return actual Base IO(...) directly")
+    );
 }

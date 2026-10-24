@@ -448,6 +448,8 @@ fn user_intrinsic_names_and_local_nat_types_keep_their_checked_meaning() {
     let fixture = Fixture::new();
     fixture.expect(
         r"
+# Ordinary IO supplies the standalone gate, not Base numeric provenance.
+def IO() -> Type: Type
 type Nat is Data:
   Zero{}
   Succ{pred: Nat}
