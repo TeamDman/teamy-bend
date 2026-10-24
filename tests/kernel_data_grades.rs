@@ -82,7 +82,7 @@ fn bounded_calls_preserve_reusable_data_evidence_phantom_types_and_weakening() {
             );
         } else {
             // Evidence/closures remain full graph observations, not DataValue.
-            teamy_bend::protocol::DataValue::from_term(&value).unwrap_err();
+            let _ = teamy_bend::protocol::DataValue::from_term(&value).unwrap_err();
         }
     }
 }
