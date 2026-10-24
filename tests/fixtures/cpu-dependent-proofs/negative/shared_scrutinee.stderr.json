@@ -1,0 +1,1 @@
+"Error:\n- expected : ../shared_scrutinee.S{../shared_scrutinee.Z{}}\n- observed : ../shared_scrutinee.Z{}\nLocation: main\n4 | law main: {H.add(H.S{H.Z{}}, H.Z{}) == H.Z{} : H.N}\n5>| def main(): {==}\n6 | \n"

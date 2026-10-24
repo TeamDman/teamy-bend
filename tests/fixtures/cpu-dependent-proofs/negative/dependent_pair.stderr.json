@@ -1,0 +1,1 @@
+"Error:\n- expected : ../dependent_pair.Emp\n- observed : ../dependent_pair.Uni\nLocation: main\n4 | law main: H.DPair<&2, &2, H.N, H.isZ>\n5>| def main(): H.MkP{H.S{H.Z{}}, H.U{}}\n6 | \n"

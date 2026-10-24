@@ -1,0 +1,1 @@
+"Error: main's type ../dependent_pair.DPair<&2, &2, ../dependent_pair.N, ../dependent_pair.isZ> cannot be printed (a function, a Type, an erased or dependent field)\n"

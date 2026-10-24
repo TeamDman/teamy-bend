@@ -1,0 +1,188 @@
+[
+  {
+    "name": "dependent_pair",
+    "entry": "packed",
+    "arguments": [],
+    "value": "MkP{Z{}, U{}}"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "fst",
+    "arguments": [
+      "MkP{Z{},U{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "isZ",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "Uni"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "isZ",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "Emp"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "isZ",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "Emp"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "isZ",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "Emp"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and2",
+    "arguments": [
+      "T{}",
+      "T{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and2",
+    "arguments": [
+      "T{}",
+      "F{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and2",
+    "arguments": [
+      "F{}",
+      "T{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and2",
+    "arguments": [
+      "F{}",
+      "F{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and_comm",
+    "arguments": [
+      "T{}",
+      "T{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and_comm",
+    "arguments": [
+      "T{}",
+      "F{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and_comm",
+    "arguments": [
+      "F{}",
+      "T{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and_comm",
+    "arguments": [
+      "F{}",
+      "F{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add",
+    "arguments": [
+      "S{S{Z{}}}",
+      "Z{}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "Z{}"
+    ],
+    "value": "S{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add0",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add0",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add0",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add0",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "{==}"
+  }
+]

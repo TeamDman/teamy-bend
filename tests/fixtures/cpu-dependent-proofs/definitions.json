@@ -1,0 +1,57 @@
+[
+  {
+    "name": "dependent_pair",
+    "entry": "main",
+    "key": "dependent_pair--main"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "isZ",
+    "key": "dependent_pair--isZ"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "packed",
+    "key": "dependent_pair--packed"
+  },
+  {
+    "name": "dependent_pair",
+    "entry": "fst",
+    "key": "dependent_pair--fst"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "main",
+    "key": "multi_column_match--main"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and2",
+    "key": "multi_column_match--and2"
+  },
+  {
+    "name": "multi_column_match",
+    "entry": "and_comm",
+    "key": "multi_column_match--and_comm"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "main",
+    "key": "shared_scrutinee--main"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add",
+    "key": "shared_scrutinee--add"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "add0",
+    "key": "shared_scrutinee--add0"
+  },
+  {
+    "name": "shared_scrutinee",
+    "entry": "q",
+    "key": "shared_scrutinee--q"
+  }
+]

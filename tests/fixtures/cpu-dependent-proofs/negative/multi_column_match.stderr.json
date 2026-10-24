@@ -1,0 +1,1 @@
+"Error:\n- expected : ../multi_column_match.F{}\n- observed : ../multi_column_match.T{}\nLocation: main\n4 | law main: {H.and2(H.T{}, H.F{}) == H.T{} : H.Bit}\n5>| def main(): {==}\n6 | \n"

@@ -1,0 +1,1 @@
+{"Match":["Z","Reflexivity",{"Match":["S",{"Lambda":{"Rewrite":[{"Application":[{"Reference":"add0"},{"Bound":0}]},{"Lambda":{"Lambda":{"Equation":[{"Constructor":["S",[{"Application":[{"Application":[{"Reference":"add"},{"Bound":2}]},{"Constructor":["Z",[]]}]}]]},{"Constructor":["S",[{"Bound":1}]]},{"Datatype":["N",[],[]]}]}}},"Reflexivity"]}},"EmptyMatch"]}]}
