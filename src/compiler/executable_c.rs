@@ -74,22 +74,21 @@ impl OwnedLocal {
 /// closures, with optional CUDA execution for marked calls.
 ///
 /// # Errors
+/// Requires the exact top-level `IO` declaration (normally from Base) before lowering.
 /// Rejects a missing main, unsupported reachable contracts, invalid layouts,
 /// unavailable C imports and exhausted compiler budgets before producing output.
 pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileError> {
+    CompileError::require_executable_io(book)?;
     let program = book
         .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
     if program.entry == ExecutableEntry::Missing {
-        return Err(CompileError::missing_main(
-            program.datatypes.contains_key("IO") || book.definition_type("IO").is_some(),
-        ));
+        return Err(CompileError::missing_main(book.has_io_declaration()));
     }
     let table = ConstructorTable::build(&program)?;
     let foreign = executable_c_foreign::assemble(&program, &table)?;
     let mut generator = Generator {
-        has_io_declaration: program.datatypes.contains_key("IO")
-            || book.definition_type("IO").is_some(),
+        has_io_declaration: book.has_io_declaration(),
         program: &program,
         table,
         layouts: Layouts::new(&program),

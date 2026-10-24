@@ -30,16 +30,16 @@ use std::rc::Rc;
 /// compilation requires main; the existing strict data compiler is unchanged.
 ///
 /// # Errors
+/// Requires the exact top-level `IO` declaration (normally from Base) before lowering.
 /// Rejects a missing main, unsupported pure result types, unavailable reachable
 /// foreign imports, unsupported code generation and exhausted lowering limits.
 pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, CompileError> {
+    CompileError::require_executable_io(book)?;
     let program = book
         .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
     if program.entry == ExecutableEntry::Missing {
-        return Err(CompileError::missing_main(
-            program.datatypes.contains_key("IO") || book.definition_type("IO").is_some(),
-        ));
+        return Err(CompileError::missing_main(book.has_io_declaration()));
     }
     let foreign = executable_foreign::assemble(&program)?;
     let indices = program
@@ -107,8 +107,7 @@ pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, Co
         ),
         ExecutableEntry::Pure => {
             let mut printer = Printer {
-                has_io_declaration: program.datatypes.contains_key("IO")
-                    || book.definition_type("IO").is_some(),
+                has_io_declaration: book.has_io_declaration(),
                 program: &program,
                 nodes: Vec::new(),
                 seen: BTreeMap::new(),

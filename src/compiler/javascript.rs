@@ -28,6 +28,20 @@ impl PartialEq for CompileError {
 }
 
 impl CompileError {
+    pub(super) fn require_executable_io(book: &crate::kernel::ExecutableBook) -> Result<(), Self> {
+        if book.has_io_declaration() {
+            return Ok(());
+        }
+        if book.definition_type("main").is_none() {
+            return Err(Self::missing_main(false));
+        }
+        let message = "a build needs import Base".to_owned();
+        Err(Self {
+            language_message: Some(message.clone()),
+            message,
+        })
+    }
+
     pub(super) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),

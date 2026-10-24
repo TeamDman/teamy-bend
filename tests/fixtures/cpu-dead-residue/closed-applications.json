@@ -1,0 +1,260 @@
+[
+  {
+    "name": "dead_residue_elision_000",
+    "entry": "main",
+    "arguments": [
+      "A{}"
+    ],
+    "value": "XA{}"
+  },
+  {
+    "name": "dead_residue_elision_000",
+    "entry": "main",
+    "arguments": [
+      "C{}"
+    ],
+    "value": "XC{}"
+  },
+  {
+    "name": "dead_residue_elision_000",
+    "entry": "main",
+    "arguments": [
+      "B{}"
+    ],
+    "value": "XB{}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "C{}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "B{Z{}, Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "B{Z{}, S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "D{Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "A{Z{}, Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{Z{}, S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "D{S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "A{S{S{Z{}}}, Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_001",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{S{S{Z{}}}, S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "C{Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "B{Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "B{S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "C{S{Z{}}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "A{Z{}, Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{Z{}, S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "C{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "A{S{S{Z{}}}, Z{}}"
+  },
+  {
+    "name": "dead_residue_elision_002",
+    "entry": "f",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "A{S{S{Z{}}}, S{S{Z{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Ax{}",
+      "Zx9{}"
+    ],
+    "value": "Zx9{}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Ax{}",
+      "Sx9{Zx9{}}"
+    ],
+    "value": "Sx9{Zx9{}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Ax{}",
+      "Sx9{Sx9{Zx9{}}}"
+    ],
+    "value": "Sx9{Sx9{Zx9{}}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Ax{}",
+      "Sx9{Sx9{Sx9{Sx9{Zx9{}}}}}"
+    ],
+    "value": "Sx9{Sx9{Sx9{Sx9{Zx9{}}}}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Bx{}",
+      "Zx9{}"
+    ],
+    "value": "Zx9{}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Bx{}",
+      "Sx9{Zx9{}}"
+    ],
+    "value": "Sx9{Sx9{Zx9{}}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Bx{}",
+      "Sx9{Sx9{Zx9{}}}"
+    ],
+    "value": "Sx9{Sx9{Sx9{Zx9{}}}}"
+  },
+  {
+    "name": "dead_residue_elision_004",
+    "entry": "f",
+    "arguments": [
+      "Bx{}",
+      "Sx9{Sx9{Sx9{Sx9{Zx9{}}}}}"
+    ],
+    "value": "Sx9{Sx9{Sx9{Sx9{Sx9{Zx9{}}}}}}"
+  }
+]

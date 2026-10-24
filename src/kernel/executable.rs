@@ -80,6 +80,12 @@ pub struct ExecutableBook {
 }
 
 impl ExecutableBook {
+    /// The pinned standalone printer requires the exact top-level declaration,
+    /// independently of its kind, import spelling or Base provenance.
+    pub(crate) fn has_io_declaration(&self) -> bool {
+        self.engine.defs.contains_key("IO") || self.engine.adts.contains_key("IO")
+    }
+
     pub(crate) fn lower_for_compilation(
         &self,
     ) -> Result<super::elaborate::ExecutableProgram, KernelError> {

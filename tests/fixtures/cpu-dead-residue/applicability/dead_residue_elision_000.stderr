@@ -1,0 +1,1 @@
+Error: main's type @x:../dead_residue_elision_000.T -> ../dead_residue_elision_000.R cannot be printed (a function, a Type, an erased or dependent field)

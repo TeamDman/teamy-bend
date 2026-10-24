@@ -190,16 +190,18 @@ fn function_main_remains_unprintable_by_the_generated_c_data_printer() {
 
 #[test]
 fn user_nat_and_u32_names_without_base_keep_their_checked_datatypes_and_functions() {
+    // Ordinary IO satisfies the standalone declaration gate without granting
+    // Base provenance to the user-defined numeric names below.
     success(
         &Fixture::new().run(
-            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef Nat.add(a: Nat, b: Nat) -> Nat: b\ndef main() -> Nat: Nat.add(Succ{Zero{}}, Succ{Succ{Zero{}}})\n",
+            "def IO() -> Type: Type\ntype Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef Nat.add(a: Nat, b: Nat) -> Nat: b\ndef main() -> Nat: Nat.add(Succ{Zero{}}, Succ{Succ{Zero{}}})\n",
             &[],
         ),
         "Succ{Succ{Zero{}}}\n",
     );
     success(
         &Fixture::new().run(
-            "type Tag is Data: Off{} On{}\ntype U32 is Data: U32{tag: Tag}\ndef U32.add(a: U32, b: U32) -> U32: b\ndef main() -> U32: U32.add(U32{Off{}}, U32{On{}})\n",
+            "def IO() -> Type: Type\ntype Tag is Data: Off{} On{}\ntype U32 is Data: U32{tag: Tag}\ndef U32.add(a: U32, b: U32) -> U32: b\ndef main() -> U32: U32.add(U32{Off{}}, U32{On{}})\n",
             &[],
         ),
         "U32{On{}}\n",
