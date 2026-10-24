@@ -91,28 +91,28 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `d82417425b9c46f6ac7a63a39858987ca965b5bf` closes empty-match inference, missing-case and unsupported-pattern
-diagnostics for **29 unchanged originals**, with fifteen authored controls. Private
-match provenance survives flattening and substitution; diagnostic contexts use
-binder admission order without changing semantic lookup or dead-context traversal.
-[Report](cpu-match-failures.md).
+Source `a241e18b5b262453397e6195733e790ed83ee244` closes match-domain, wrong/repeated-constructor and erased-scrutinee
+diagnostics for **eight unchanged originals**, with sixteen authored controls.
+Private constructor spans survive flattening/substitution; message-only checker
+reports use the existing status-bearing boundary. Rejection and evaluation remain
+unchanged. [Report](cpu-match-guards.md).
 
-Full gate **926 passed, zero failed, 49 ignored**. The repeated 52-case matrix
-contains 936 exact stream/status observations and 104 separate phase probes;
+Full gate **929 passed, zero failed, 49 ignored**. The repeated 33-case matrix
+contains 594 exact stream/status observations and 66 separate phase probes;
 32 positive controls pass. All 1,302 checking statuses remain unchanged from
-77116c8. Three erased-hole/TODO disagreements remain unresolved and unwaived.
-Bounded probes expose adjacent match-domain, mismatched/repeated-constructor and erased
-scrutinee diagnostics; those single probes are not qualifications.
+d824174. Three erased-hole/TODO disagreements remain unresolved and unwaived.
 
-Detailed coverage: **274 originals / 1,028 without detailed receipts**: 368 checker
+Detailed coverage: **282 originals / 1,020 without detailed receipts**: 360 checker
 negatives, one checking-only module, 106 interpreter cases and 553 compiled
-candidates. Thirty-seven checking rows are current; 45 other checking, 99 interpretation
-and 93 runtime rows retain historical identities. Linked receipts include unresolved
+candidates. Seventeen checking rows are current; 73 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts may include open
 cells and do not establish universal parity. The incomplete 688-vector exploration,
-host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
-External invoke consumers must still inspect exit_code; no external audit is claimed.
-Frozen dependencies, references, toolchains, guards and demand policy; no installations,
-pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
+host/resource/foreign/F32.read/runtime-error-order/API requirements remain open.
+Next substantive batch: five `flatten/ragged_rows_000..004` originals, covering
+first-match priority, overlapping defaults, reconstructed values and bounded recursion.
+Initial applicability probes remain unqualified; structural and concrete-application
+comparisons are required. Dependencies, references, toolchains, budgets and approved
+demand policy remain frozen. No installations, pushes, desktop or GPU work.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -693,3 +693,28 @@ host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain
 External invoke consumers must still inspect exit_code; no external audit is claimed.
 Frozen dependencies, references, toolchains, guards and demand policy; no installations,
 pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
+
+## Match guard diagnostic checkpoint
+
+Source `a241e18b5b262453397e6195733e790ed83ee244` closes match-domain, wrong/repeated-constructor and erased-scrutinee
+diagnostics for **eight unchanged originals**, with sixteen authored controls.
+Private constructor spans survive flattening/substitution; message-only checker
+reports use the existing status-bearing boundary. Rejection and evaluation remain
+unchanged. [Report](cpu-match-guards.md).
+
+Full gate **929 passed, zero failed, 49 ignored**. The repeated 33-case matrix
+contains 594 exact stream/status observations and 66 separate phase probes;
+32 positive controls pass. All 1,302 checking statuses remain unchanged from
+d824174. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+
+Detailed coverage: **282 originals / 1,020 without detailed receipts**: 360 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Seventeen checking rows are current; 73 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts may include open
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read/runtime-error-order/API requirements remain open.
+Next substantive batch: five `flatten/ragged_rows_000..004` originals, covering
+first-match priority, overlapping defaults, reconstructed values and bounded recursion.
+Initial applicability probes remain unqualified; structural and concrete-application
+comparisons are required. Dependencies, references, toolchains, budgets and approved
+demand policy remain frozen. No installations, pushes, desktop or GPU work.

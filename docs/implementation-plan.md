@@ -4571,3 +4571,28 @@ host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain
 External invoke consumers must still inspect exit_code; no external audit is claimed.
 Frozen dependencies, references, toolchains, guards and demand policy; no installations,
 pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
+
+### [x] 5.79 Preserve match-domain and constructor diagnostics
+
+Source `a241e18b5b262453397e6195733e790ed83ee244` closes match-domain, wrong/repeated-constructor and erased-scrutinee
+diagnostics for **eight unchanged originals**, with sixteen authored controls.
+Private constructor spans survive flattening/substitution; message-only checker
+reports use the existing status-bearing boundary. Rejection and evaluation remain
+unchanged. [Report](cpu-match-guards.md).
+
+Full gate **929 passed, zero failed, 49 ignored**. The repeated 33-case matrix
+contains 594 exact stream/status observations and 66 separate phase probes;
+32 positive controls pass. All 1,302 checking statuses remain unchanged from
+d824174. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+
+Detailed coverage: **282 originals / 1,020 without detailed receipts**: 360 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Seventeen checking rows are current; 73 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts may include open
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read/runtime-error-order/API requirements remain open.
+Next substantive batch: five `flatten/ragged_rows_000..004` originals, covering
+first-match priority, overlapping defaults, reconstructed values and bounded recursion.
+Initial applicability probes remain unqualified; structural and concrete-application
+comparisons are required. Dependencies, references, toolchains, budgets and approved
+demand policy remain frozen. No installations, pushes, desktop or GPU work.
