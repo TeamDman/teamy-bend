@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'nested-fields', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'nested-fields', 'nested-patterns', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -159,6 +159,14 @@ if ($Suite -in @('nested-fields', 'all')) {
     foreach ($suffix in @('000', '001', '002', '003', '004', '004_go', '005', '006', '007', '007_go')) {
         $name = "nested_field_match_$suffix"
         $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; no_base_printer = $true }
+    }
+}
+if ($Suite -in @('nested-patterns', 'all')) {
+    foreach ($family in @(@('nested_multi_scrutinee', 4), @('nested_ctor', 5), @('default_rebuild', 5))) {
+        for ($index = 0; $index -lt $family[1]; $index++) {
+            $name = '{0}_{1:D3}' -f $family[0], $index
+            $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; no_base_printer = $true }
+        }
     }
 }
 foreach ($case in $cases) {

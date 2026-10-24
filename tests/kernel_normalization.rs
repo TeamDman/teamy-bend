@@ -1047,3 +1047,54 @@ fn nested_field_originals_preserve_core_and_complete_branch_observations() {
     }
     assert_eq!(observations, 171);
 }
+
+#[test]
+fn nested_patterns_preserve_fallback_reconstruction_and_branch_values() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-nested-patterns");
+    let mut observations = 0;
+    for (family, count) in [
+        ("nested_multi_scrutinee", 4),
+        ("nested_ctor", 5),
+        ("default_rebuild", 5),
+    ] {
+        for index in 0..count {
+            let fixture = format!("{family}_{index:03}.bend");
+            let path = root.join(&fixture);
+            let source = std::fs::read_to_string(&path).unwrap();
+            let expected = source
+                .lines()
+                .filter_map(|line| line.strip_prefix("#|"))
+                .collect::<Vec<_>>()
+                .join("\n");
+            let book = load(path).unwrap();
+            let checked = check_book(&book).unwrap();
+            let value = checked.normalize_definition("main").unwrap();
+            assert_eq!(value.to_string(), expected);
+            assert_eq!(
+                shape_in_book(&value, &book).unwrap(),
+                shape_in_book(&parse_term(&expected).unwrap(), &book).unwrap()
+            );
+            for line in include_str!("fixtures/cpu-nested-patterns/applications.tsv").lines() {
+                let mut fields = line.splitn(3, '\t');
+                let source = fields.next().unwrap();
+                let arguments = fields.next().unwrap();
+                let expected = fields.next().unwrap();
+                if source != fixture {
+                    continue;
+                }
+                let arguments = arguments
+                    .split(';')
+                    .map(|arg| parse_term(arg).unwrap())
+                    .collect::<Vec<_>>();
+                let value = checked.evaluate("main", &arguments).unwrap();
+                assert_eq!(value.to_string(), expected, "{fixture}: {arguments:?}");
+                assert_eq!(
+                    shape_in_book(&value, &book).unwrap(),
+                    shape_in_book(&parse_term(expected).unwrap(), &book).unwrap()
+                );
+                observations += 1;
+            }
+        }
+    }
+    assert_eq!(observations, 476);
+}
