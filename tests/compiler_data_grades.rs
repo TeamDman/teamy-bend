@@ -132,6 +132,16 @@ fn executable_base_requirement_and_both_import_orders_remain_distinct_refusals()
             "Error: a build needs import Base\n".to_owned(),
         ),
         (
+            root().join("diagnostics/goal_ladder_state_027.bend"),
+            facet_json::from_str::<String>(
+                &std::fs::read_to_string(
+                    root().join("diagnostics/goal_ladder_state_027.stderr.json"),
+                )
+                .unwrap(),
+            )
+            .unwrap(),
+        ),
+        (
             root().join("imported/main.bend"),
             facet_json::from_str::<String>(
                 &std::fs::read_to_string(root().join("imported/main.stderr.json")).unwrap(),

@@ -21,6 +21,10 @@ pub(crate) struct TermOrigins(Rc<RefCell<Index>>);
 #[derive(Debug, Default)]
 struct Index {
     nodes: BTreeMap<usize, Origin>,
+    // Captured source identities can outlive their semantic allocations and
+    // transformed-node sweeps. Reserve only origin roots, never every result of
+    // substitution, so a stale address cannot become an unrelated source span.
+    source_roots: BTreeMap<usize, Weak<Term>>,
     // The parser keeps unique semantic IDs for upstream's unbound + markers.
     // This display-only index records their spelling without changing terms.
     reusable_markers: BTreeSet<usize>,
@@ -82,6 +86,12 @@ impl TermOrigins {
     pub(crate) fn track(&self, value: &TermRef) {
         let key = Rc::as_ptr(value) as usize;
         let mut index = self.0.borrow_mut();
+        if !index.nodes.contains_key(&key) {
+            index
+                .source_roots
+                .entry(key)
+                .or_insert_with(|| Rc::downgrade(value));
+        }
         let children = match value.as_ref() {
             Term::Eql { left, right, ty } => Some([Some(left), Some(right), Some(ty)]),
             Term::Rwt {
@@ -158,11 +168,15 @@ impl TermOrigins {
 
     pub(crate) fn source(&self, value: &TermRef) -> usize {
         let key = Rc::as_ptr(value) as usize;
-        self.0
-            .borrow()
-            .nodes
-            .get(&key)
-            .map_or(key, |origin| origin.source)
+        let mut index = self.0.borrow_mut();
+        if let Some(origin) = index.nodes.get(&key) {
+            return origin.source;
+        }
+        index
+            .source_roots
+            .entry(key)
+            .or_insert_with(|| Rc::downgrade(value));
+        key
     }
 
     pub(crate) fn child_source(
@@ -504,6 +518,45 @@ mod tests {
         drop(origins);
         assert_eq!(Rc::strong_count(&replacement), 1);
         assert_eq!(Rc::weak_count(&replacement), 0);
+    }
+
+    #[test]
+    fn captured_untracked_source_reserves_only_a_weak_identity() {
+        let origins = TermOrigins::default();
+        let child = term(Term::Qua(super::super::Quant::Lone));
+        let original = term(Term::Typ(Rc::clone(&child)));
+        let source = origins.source(&original);
+        assert_eq!(Rc::strong_count(&original), 1);
+        assert_eq!(origins.0.borrow().source_roots.len(), 1);
+        assert!(origins.0.borrow().nodes.is_empty());
+        drop(original);
+        assert_eq!(Rc::strong_count(&child), 1);
+        assert!(origins.0.borrow().source_roots[&source].upgrade().is_none());
+        for _ in 0..1024 {
+            let unrelated = variable(7);
+            assert_ne!(Rc::as_ptr(&unrelated) as usize, source);
+        }
+    }
+
+    #[test]
+    fn tracked_root_survives_transform_and_sweep_before_first_source_query() {
+        let origins = TermOrigins::default();
+        let mut value = term(Term::Ctr {
+            name: "Outer".into(),
+            args: vec![variable(0)],
+        });
+        let source = Rc::as_ptr(&value) as usize;
+        origins.track(&value);
+        for id in 0..1024 {
+            value = substitute_with_origins(&value, id, &variable(id + 1), Some(&origins));
+        }
+        assert_eq!(origins.source(&value), source);
+        assert!(origins.0.borrow().nodes.len() < 260);
+        assert_eq!(origins.0.borrow().source_roots.len(), 1);
+        assert!(origins.0.borrow().source_roots[&source].upgrade().is_none());
+        assert_eq!(Rc::strong_count(&value), 1);
+        drop(origins);
+        assert_eq!(Rc::weak_count(&value), 0);
     }
 
     #[test]

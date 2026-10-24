@@ -2572,6 +2572,10 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            (
+                "cpu-data-grades/diagnostics/goal_ladder_state_027.bend",
+                &[][..],
+            ),
             ("cpu-match-guards/match_not_datatype.bend", &[][..]),
             ("cpu-match-guards/empty_match_datatype.bend", &[][..]),
             ("cpu-match-guards/float_match_scrutinee.bend", &[][..]),

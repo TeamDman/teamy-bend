@@ -34,3 +34,9 @@ refusals, not executable successes. The port's strict pure native constructor
 API and standalone C/JS backends separately execute the original main and both
 aggregates, checking complete constructor values. That does not establish an
 upstream executable C/JS match for the original.
+
+`diagnostics/goal_ladder_state_027.bend` is also unchanged from the pinned
+`tests/proof` source, with the same HigherOrderCO/Apache-2.0 attribution. Its
+negative proof observes a Type at line 234, not the later definition. It guards
+source-address lifetime across substitution and weak-index sweeping; checking
+and runtime semantics remain unchanged.

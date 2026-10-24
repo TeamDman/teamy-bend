@@ -1,0 +1,1 @@
+"Error:\n- expected : Sigma<&1, &1, Nat, q => Sigma<&1, &1, Nat, r => Sigma<&1, &1, LE(r, d1), e2 => {1n+p == add(mul(q, 1n+d1), r) : Nat}>>>\n- observed : Type\nContext:\n- p   : Nat\n- d1  : Nat\n- q   : Nat\n- r   : Nat\n- ev  : LE(r, d1)\n- eq0 : {p == add(mul(q, 1n+d1), r) : Nat}\nLocation: div_spec.go\n233 |   (q, r, ev, eq0) = w\n234>|   Type\n235 | \n"

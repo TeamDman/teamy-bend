@@ -1275,7 +1275,8 @@ impl Parser<'_> {
         let value = self.atom_inner()?;
         if matches!(
             value.as_ref(),
-            Term::Ctr { .. }
+            Term::Typ(_)
+                | Term::Ctr { .. }
                 | Term::Rwt { .. }
                 | Term::Eql { .. }
                 | Term::Var { .. }
