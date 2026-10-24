@@ -233,6 +233,7 @@ struct Templates {
     declarations: BTreeMap<String, Template>,
     instances: usize,
     active: usize,
+    diagnostics: Option<super::diagnostics::DiagnosticOrigins>,
 }
 
 #[derive(Clone, Default)]
@@ -1270,8 +1271,13 @@ impl Parser<'_> {
         }
         if self.take("{") {
             if self.take("==") {
+                let line = self.tokens[self.at - 2].line;
                 self.expect("}")?;
-                return Ok(term(Term::Rfl));
+                let proof = term(Term::Rfl);
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.proof(&proof, &self.label, line);
+                }
+                return Ok(proof);
             }
             let left = self.expression(0)?;
             let equality = self.take("==");
@@ -2427,6 +2433,9 @@ fn parse_into(
     foreign: Option<&mut BTreeMap<String, ForeignDefinition>>,
     constructor_tags: Option<&mut BTreeMap<String, String>>,
 ) -> Result<(), ParseError> {
+    if let Some(origins) = &mut templates.diagnostics {
+        origins.source(input.label, input.source);
+    }
     Parser {
         tokens: lex(input.source, input.label)?,
         at: 0,
@@ -2571,6 +2580,11 @@ impl Loader {
                 cleaned.push('\n');
             }
         }
+        if let Some(origins) = &mut self.templates.diagnostics {
+            // Keep the exact original lines, including import headers and CRLF.
+            // Parsing below uses a cleaned copy with the same line numbers.
+            origins.source(&path.display().to_string(), &source);
+        }
         parse_into(
             ParseInput {
                 source: &cleaned,
@@ -2686,6 +2700,23 @@ pub fn load(path: impl AsRef<Path>) -> Result<Book, ParseError> {
     load_with_sources(path).map(|(book, _)| book)
 }
 
+pub(crate) fn load_with_diagnostics(
+    path: impl AsRef<Path>,
+) -> Result<(Book, super::diagnostics::DiagnosticOrigins), ParseError> {
+    let mut loader = Loader {
+        templates: Templates {
+            diagnostics: Some(super::diagnostics::DiagnosticOrigins::default()),
+            ..Templates::default()
+        },
+        ..Loader::default()
+    };
+    loader.file(path.as_ref(), "")?;
+    Ok((
+        loader.book,
+        loader.templates.diagnostics.expect("enabled origins"),
+    ))
+}
+
 /// Read a local module and return the canonical files consumed by its loader.
 ///
 /// The embedded Base library has no filesystem path in this list.
@@ -2707,6 +2738,32 @@ pub fn load_with_sources(path: impl AsRef<Path>) -> Result<(Book, Vec<PathBuf>),
 /// Returns a located error on Bend file access, import resolution or parsing failure.
 pub fn load_executable(path: impl AsRef<Path>) -> Result<ExecutableSource, ParseError> {
     load_executable_with_sources(path).map(|(source, _)| source)
+}
+
+pub(crate) fn load_executable_with_diagnostics(
+    path: impl AsRef<Path>,
+) -> Result<(ExecutableSource, super::diagnostics::DiagnosticOrigins), ParseError> {
+    let mut loader = Loader {
+        executable: true,
+        templates: Templates {
+            diagnostics: Some(super::diagnostics::DiagnosticOrigins::default()),
+            ..Templates::default()
+        },
+        ..Loader::default()
+    };
+    loader.file(path.as_ref(), "")?;
+    let source = ExecutableSource {
+        book: loader.book,
+        foreign: loader.foreign,
+        numeric: loader.numeric,
+        opaque: loader.opaque,
+        constructor_tags: loader.constructor_tags,
+        base_names: loader.base_names,
+    };
+    Ok((
+        source,
+        loader.templates.diagnostics.expect("enabled origins"),
+    ))
 }
 
 /// Read execution contracts and return their canonical Bend source paths.

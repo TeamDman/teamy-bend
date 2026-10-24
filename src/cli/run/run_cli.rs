@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 use crate::cli::output::CliOutput;
 use crate::kernel::check_executable;
-use crate::syntax::load_executable;
+use crate::syntax::load_executable_with_diagnostics;
 use arbitrary::Arbitrary;
 use eyre::Context;
 use eyre::eyre;
@@ -21,14 +21,23 @@ pub struct RunArgs {
 impl RunArgs {
     /// Execute main and preserve its raw output and process status.
     ///
+    /// Source reflexivity failures write a Bend diagnostic and return output with
+    /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
+    ///
     /// # Errors
     /// Rejects invalid programs, unsupported foreign implementations, runtime
     /// limits, output errors and cancellation.
     pub fn invoke(self, cancellation: &CancellationToken) -> eyre::Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let source =
-            load_executable(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
-        let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
+        let (source, origins) = load_executable_with_diagnostics(std::path::Path::new(&self.file))
+            .map_err(|error| eyre!("{error}"))?;
+        let checked = match check_executable(&source) {
+            Ok(checked) => checked,
+            Err(error) => {
+                return crate::cli::checker_diagnostic::reject(&error, &origins, cancellation);
+            }
+        };
+        drop(origins);
         let mut stdout = std::io::stdout().lock();
         let mut stderr = std::io::stderr().lock();
         let result = checked.run_main(&mut stdout, &mut stderr, &|| {

@@ -2,6 +2,7 @@ pub mod base;
 pub mod batch;
 pub mod cache;
 pub mod check;
+mod checker_diagnostic;
 pub mod compile;
 pub mod eval;
 pub mod facet_shape;

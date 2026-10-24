@@ -29,13 +29,18 @@ struct CheckReport {
 impl CheckArgs {
     /// Check a program and return counts only after complete validation.
     ///
+    /// Source reflexivity failures write a Bend diagnostic and return output with
+    /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
+    ///
     /// # Errors
     /// Returns parse, import, type, proof or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let book =
-            syntax::load(std::path::Path::new(&self.file)).map_err(|error| eyre!("{error}"))?;
-        check_book(&book).map_err(|error| eyre!("{error}"))?;
+        let (book, origins) = syntax::load_with_diagnostics(std::path::Path::new(&self.file))
+            .map_err(|error| eyre!("{error}"))?;
+        if let Err(error) = check_book(&book) {
+            return crate::cli::checker_diagnostic::reject(&error, &origins, cancellation);
+        }
         cancellation.bail_if_cancelled()?;
         let mut report = CheckReport {
             checked: true,

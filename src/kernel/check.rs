@@ -32,10 +32,28 @@ type Context = BTreeMap<usize, Binder>;
 /// Classification is private: callers can read the message or use Display,
 /// but cannot construct an error with a struct literal. In particular, diagnostic
 /// text alone never grants an internal error the language-exit contract.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq)]
 pub struct KernelError {
     pub message: String,
     kind: FailureKind,
+    reflexivity: Option<Box<ReflexivityDiagnostic>>,
+}
+
+// Optional presentation metadata does not change the existing error equality
+// contract or make errors depend on a thread-local, non-Send checker engine.
+impl PartialEq for KernelError {
+    fn eq(&self, other: &Self) -> bool {
+        self.message == other.message && self.kind == other.kind
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct ReflexivityDiagnostic {
+    pub(crate) proof_identity: usize,
+    pub(crate) definition: String,
+    pub(crate) expected: String,
+    pub(crate) observed: String,
+    pub(crate) context: Vec<(String, String)>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -56,6 +74,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::Internal,
+            reflexivity: None,
         }
     }
 
@@ -63,6 +82,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::RequestOutOfBand,
+            reflexivity: None,
         }
     }
 
@@ -70,6 +90,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::NatOverflow,
+            reflexivity: None,
         }
     }
 
@@ -77,7 +98,17 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::ArrayDepth,
+            reflexivity: None,
         }
+    }
+
+    pub(crate) fn in_definition(mut self, name: &str) -> Self {
+        self.message = format!("{name}: {}", self.message);
+        self
+    }
+
+    pub(crate) fn reflexivity_diagnostic(&self) -> Option<&ReflexivityDiagnostic> {
+        self.reflexivity.as_deref()
     }
 
     pub(crate) const fn language_failure(&self) -> Option<(&'static str, &'static [u8])> {
@@ -302,6 +333,40 @@ pub(crate) struct Engine {
 }
 
 impl Engine {
+    fn reflexivity_diagnostic(
+        &self,
+        lhs: &Lhs,
+        proof: &TermRef,
+        left: &TermRef,
+        right: &TermRef,
+        context: &Context,
+    ) -> Result<ReflexivityDiagnostic, KernelError> {
+        // The comparison has already rejected the proof. Presentation cannot
+        // change that result. Use only the remaining fuel/depth allowance, keep
+        // aliases for local endpoints, and leave the checking engine untouched.
+        let mut display = self.clone();
+        let expected = display.normalize(left)?.to_string();
+        let observed = display.normalize(right)?.to_string();
+        let context = context
+            .values()
+            .map(|binder| {
+                Ok((
+                    binder.name.clone(),
+                    display.normalize(&binder.ty)?.to_string(),
+                ))
+            })
+            .collect::<Result<Vec<_>, KernelError>>()?;
+        Ok(ReflexivityDiagnostic {
+            // Never dereferenced: the loader's map holds each source node alive
+            // until this immediate check result is handled by the CLI.
+            proof_identity: Rc::as_ptr(proof) as usize,
+            definition: lhs.name.clone(),
+            expected,
+            observed,
+            context,
+        })
+    }
+
     pub(super) fn normalize_definition(&mut self, name: &str) -> Result<TermRef, KernelError> {
         let definition = self
             .defs
@@ -437,7 +502,7 @@ pub fn check_book(book: &Book) -> Result<CheckedBook, KernelError> {
                 Declaration::Adt(d) => &d.name,
                 Declaration::Def(d) => &d.name,
             };
-            return Err(KernelError::new(format!("{name}: {error}")));
+            return Err(error.in_definition(name));
         }
     }
     let open: Vec<_> = engine
@@ -1060,9 +1125,14 @@ impl Engine {
                     return Err(mismatch(ty, value));
                 };
                 if !self.compare(Comparison::Equal, left, right)? {
-                    return Err(KernelError::new(format!(
+                    let mut error = KernelError::new(format!(
                         "reflexivity requires equal endpoints: {left} != {right}"
-                    )));
+                    ));
+                    error.reflexivity = self
+                        .reflexivity_diagnostic(lhs, value, left, right, context)
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 }
                 return Ok(Uses::new());
             }
@@ -1545,5 +1615,97 @@ mod depth_tests {
         let error = engine.normalize(&delayed).unwrap_err();
         assert!(error.to_string().contains("evaluation budget exhausted"));
         assert_eq!(engine.depth, 0);
+    }
+}
+
+#[cfg(test)]
+mod reflexivity_diagnostic_tests {
+    use super::*;
+
+    #[test]
+    fn presentation_keeps_aliases_and_uses_only_remaining_allowance() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let proof = term(Term::Rfl);
+        let left = term(Term::Var {
+            name: "x".into(),
+            id: 1,
+        });
+        let right = term(Term::Qua(Quant::Lone));
+        engine.aliases.insert(1, Rc::clone(&right));
+        let report = engine
+            .reflexivity_diagnostic(&Lhs::default(), &proof, &left, &right, &Context::new())
+            .unwrap();
+        assert_eq!(report.expected, report.observed);
+        assert_eq!(report.expected, right.to_string());
+        let fresh = engine.fresh_id;
+        for (fuel, depth, expected) in [
+            (0, 0, "evaluation budget exhausted"),
+            // One endpoint can normalize with two work units. The second must
+            // not get a fresh allowance of its own.
+            (2, 0, "evaluation budget exhausted"),
+            (100, 128, "kernel nesting limit exhausted"),
+        ] {
+            engine.fuel = fuel;
+            engine.depth = depth;
+            let error = engine
+                .reflexivity_diagnostic(&Lhs::default(), &proof, &right, &right, &Context::new())
+                .unwrap_err();
+            assert!(error.message.contains(expected), "{error}");
+            assert_eq!(
+                (engine.fuel, engine.depth, engine.fresh_id),
+                (fuel, depth, fresh)
+            );
+            assert!(Rc::ptr_eq(&engine.aliases[&1], &right));
+        }
+    }
+
+    #[test]
+    fn unavailable_presentation_retains_the_original_reflexivity_rejection() {
+        fn assert_send_sync<T: Send + Sync>() {}
+        assert_send_sync::<KernelError>();
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let deep = (0..128).fold(term(Term::Qua(Quant::Lone)), |value, _| {
+            term(Term::Ctr {
+                name: "A".into(),
+                args: vec![value],
+            })
+        });
+        let right = term(Term::Ctr {
+            name: "B".into(),
+            args: vec![],
+        });
+        let expected = format!("reflexivity requires equal endpoints: {deep} != {right}");
+        let ty = term(Term::Eql {
+            left: deep,
+            right,
+            ty: term(Term::Qnt),
+        });
+        let error = engine
+            .check(
+                &Lhs::default(),
+                &term(Term::Rfl),
+                Quant::None,
+                &ty,
+                &Context::new(),
+            )
+            .unwrap_err();
+        assert_eq!(error.message, expected);
+        assert!(error.reflexivity_diagnostic().is_none());
+        assert_eq!(engine.depth, 0);
+        assert_eq!(error, KernelError::new(expected));
+
+        let source =
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad() -> {0n == 1n : Nat}: {==}\n";
+        let error = check_book(&crate::syntax::parse(source).unwrap()).unwrap_err();
+        assert!(error.reflexivity_diagnostic().is_some());
+        assert_eq!(error, KernelError::new(error.message.clone()));
+        assert_eq!(error.to_string(), error.message);
+        assert!(error.language_failure().is_none());
     }
 }

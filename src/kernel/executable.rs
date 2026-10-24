@@ -473,7 +473,7 @@ pub fn check_executable(source: &ExecutableSource) -> Result<ExecutableBook, Ker
                 (&definition.name, result)
             }
         };
-        result.map_err(|error| KernelError::new(format!("{name}: {error}")))?;
+        result.map_err(|error| error.in_definition(name))?;
     }
     let open = engine
         .defs
