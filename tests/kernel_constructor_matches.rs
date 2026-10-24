@@ -93,13 +93,14 @@ fn complete_constructor_results_and_scalar_projections_keep_distinct_graphs() {
             let book = load(&path).unwrap();
             let checked = check_book(&book).unwrap();
             let expected = std::fs::read_to_string(path.with_extension("stdout")).unwrap();
-            let expected_graph: Shape = facet_json::from_str(
-                &std::fs::read_to_string(path.with_extension("json")).unwrap(),
-            )
-            .unwrap();
+            let expected_graph = std::fs::read_to_string(path.with_extension("json")).unwrap();
             let value = checked.evaluate("main", &[]).unwrap();
             assert_eq!(format!("{value}\n"), expected);
-            assert_eq!(shape_in_book(&value, &book).unwrap(), expected_graph);
+            // Compare the complete bounded graph, without recursively decoding the
+            // large Word/List oracle through the generic test JSON deserializer.
+            let actual_graph =
+                facet_json::to_string(&shape_in_book(&value, &book).unwrap()).unwrap();
+            assert_eq!(actual_graph, expected_graph.strip_suffix('\n').unwrap());
             if folder == "wrappers" {
                 let outputs: Vec<Vec<u32>> = facet_json::from_str(expected.trim()).unwrap();
                 assert_eq!(outputs.len(), cases[name].len());
