@@ -136,13 +136,41 @@ impl Body {
     }
 }
 
+pub(super) enum FlattenError {
+    Other(String),
+    LocalBinding { binder: usize },
+}
+
+impl FlattenError {
+    pub(super) fn message(&self) -> &str {
+        match self {
+            Self::Other(message) => message,
+            Self::LocalBinding { .. } => {
+                "a match cannot scrutinize a local binding; pass it to a definition"
+            }
+        }
+    }
+}
+
+impl From<String> for FlattenError {
+    fn from(message: String) -> Self {
+        Self::Other(message)
+    }
+}
+
+impl From<&str> for FlattenError {
+    fn from(message: &str) -> Self {
+        Self::Other(message.into())
+    }
+}
+
 pub(super) fn flatten(
     body: &Body,
     vars: &[Variable],
     fresh: &mut usize,
     display_fresh: &mut usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, String> {
+) -> Result<TermRef, FlattenError> {
     flatten_at(body, vars, fresh, display_fresh, 0, origins)
 }
 
@@ -153,7 +181,7 @@ fn flatten_at(
     display_fresh: &mut usize,
     depth: usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, String> {
+) -> Result<TermRef, FlattenError> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
@@ -198,14 +226,11 @@ fn flatten_at(
                 })
                 .collect::<Result<Vec<_>, _>>()?;
             let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1, origins)?;
-            for _ in &bindings {
+            for binder in &bindings {
                 match tail.as_ref() {
                     Term::Lam { body, .. } => tail = Rc::clone(body),
                     _ => {
-                        return Err(
-                            "a match cannot scrutinize a local binding; pass it to a definition"
-                                .to_owned(),
-                        );
+                        return Err(FlattenError::LocalBinding { binder: binder.id });
                     }
                 }
             }
@@ -250,7 +275,7 @@ fn flatten_match(
     display_fresh: &mut usize,
     depth: usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, String> {
+) -> Result<TermRef, FlattenError> {
     // A nullary constructor consumes a column without introducing field
     // binders. Continue that arm iteratively: a fixed-width word has one Bool
     // column per bit, which need not double its Rust recursion depth. Retain
@@ -313,13 +338,13 @@ fn flatten_match_step(
     display_fresh: &mut usize,
     depth: usize,
     origins: Option<&TermOrigins>,
-) -> Result<MatchStep, String> {
+) -> Result<MatchStep, FlattenError> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     if scrutinees.is_empty() {
         return rows.first().map_or_else(
-            || Err("a match needs a case to return".to_owned()),
+            || Err("a match needs a case to return".into()),
             |r| {
                 flatten_at(&r.body, vars, fresh, display_fresh, depth + 1, origins)
                     .map(MatchStep::Done)
@@ -327,7 +352,7 @@ fn flatten_match_step(
         );
     }
     let Some(first) = vars.first() else {
-        return Err("match scrutinees must be parameters or fields, in binder order".to_owned());
+        return Err("match scrutinees must be parameters or fields, in binder order".into());
     };
     let constructor = rows.iter().find_map(|row| match &row.patterns[0] {
         Pattern::Constructor(name, fields) => Some((name, fields)),
@@ -391,7 +416,9 @@ fn flatten_match_step(
             match &row.patterns[0] {
                 Pattern::Constructor(n, ps) if n == name => {
                     if ps.len() != fields.len() {
-                        return Err(format!("constructor {name} has the wrong number of fields"));
+                        return Err(
+                            format!("constructor {name} has the wrong number of fields").into()
+                        );
                     }
                     let mut patterns = ps.clone();
                     patterns.extend_from_slice(&row.patterns[1..]);

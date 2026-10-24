@@ -192,3 +192,22 @@ def main() -> IO(Unit): external()
         "{error}"
     );
 }
+
+#[test]
+fn extracted_fields_execute_with_raw_output_and_keep_proof_mode_separate() {
+    let fixture = Fixture::new(include_str!(
+        "fixtures/cpu-destructure/field_match_in_order.bend"
+    ));
+    let output = fixture.invoke("run");
+    assert_eq!(output.status.code(), Some(0));
+    assert_eq!(output.stdout, b"9\n");
+    assert!(output.stderr.is_empty());
+    let proof = fixture.invoke("check");
+    assert_eq!(proof.status.code(), Some(1));
+    assert!(proof.stdout.is_empty());
+    assert!(
+        String::from_utf8(proof.stderr)
+            .unwrap()
+            .contains("undefined name IO")
+    );
+}

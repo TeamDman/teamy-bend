@@ -1749,10 +1749,21 @@ mod reflexivity_diagnostic_tests {
 
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
-        for name in [
-            "cpu-constructors/context-open.bend",
-            "cpu-checking/false_fusion.bend",
-            "cpu-checking/list_reverse_sort.bend",
+        for (name, entries) in [
+            ("cpu-constructors/context-open.bend", &[][..]),
+            ("cpu-checking/false_fusion.bend", &[][..]),
+            (
+                "cpu-checking/list_reverse_sort.bend",
+                &["l123", "l321", "rev", "srt"][..],
+            ),
+            (
+                "cpu-destructure/destructure_let_000.bend",
+                &["main", "swap", "go"][..],
+            ),
+            (
+                "cpu-destructure/destructure_then_match_001.bend",
+                &["main"][..],
+            ),
         ] {
             let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
                 .join("tests/fixtures")
@@ -1786,7 +1797,7 @@ mod reflexivity_diagnostic_tests {
                 assert!(checked.engine.origins.is_none());
                 drop(origins);
                 let baseline = check_book(&plain).unwrap();
-                for entry in ["l123", "l321", "rev", "srt"] {
+                for entry in entries {
                     assert_eq!(
                         checked.normalize_definition(entry).unwrap().to_string(),
                         baseline.normalize_definition(entry).unwrap().to_string()

@@ -342,7 +342,14 @@ impl Parser<'_> {
             &mut self.display_fresh,
             self.templates.diagnostics.as_ref().map(|o| &o.tracker),
         )
-        .map_err(|error| self.error(error))
+        .map_err(|error| {
+            if let super::surface::FlattenError::LocalBinding { binder } = &error
+                && let Some(origins) = &mut self.templates.diagnostics
+            {
+                origins.rejected_local_binding(*binder);
+            }
+            self.error(error.message())
+        })
     }
     fn qualify_operators(&self, value: &TermRef, namespace: &str) -> TermRef {
         let result = qualify_operators(value, namespace);
@@ -1884,6 +1891,13 @@ impl Parser<'_> {
             .iter()
             .map(|p| self.pattern(p))
             .collect::<Result<Vec<_>, _>>()?;
+        if let Some(origins) = &mut self.templates.diagnostics {
+            for pattern in &patterns {
+                if let Pattern::Variable(variable) = pattern {
+                    origins.local_binder(variable.id, &self.label, self.tokens[start].line);
+                }
+            }
+        }
         let body = self.body(column)?;
         self.scope.truncate(old);
         Ok(Body::Local {

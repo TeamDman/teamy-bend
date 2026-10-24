@@ -517,3 +517,14 @@ fn reachable_foreign_definition_requires_a_c_companion() {
     ).unwrap_err();
     assert!(error.to_string().contains('C'));
 }
+
+#[test]
+fn extracted_fields_remain_matchable_in_executable_c() {
+    success(
+        &Fixture::new().run(
+            include_str!("fixtures/cpu-destructure/field_match_in_order.bend"),
+            &[],
+        ),
+        "9\n",
+    );
+}

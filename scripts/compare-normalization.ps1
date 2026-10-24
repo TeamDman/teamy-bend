@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
-    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'nested-fields', 'nested-patterns', 'all')][string]$Suite = 'all',
+    [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'nested-fields', 'nested-patterns', 'destructure', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
 )
 $ErrorActionPreference = 'Stop'
@@ -167,6 +167,14 @@ if ($Suite -in @('nested-patterns', 'all')) {
             $name = '{0}_{1:D3}' -f $family[0], $index
             $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; no_base_printer = $true }
         }
+    }
+}
+if ($Suite -in @('destructure', 'all')) {
+    foreach ($name in @('destructure_let_000', 'destructure_let_000_go', 'destructure_let_000_go_at', 'destructure_let_000_mk', 'destructure_let_000_swap', 'destructure_let_002', 'destructure_let_002_flip', 'destructure_let_003', 'destructure_let_004', 'destructure_let_005', 'destructure_let_005_go', 'field_match_in_order_f', 'field_match_in_order_g', 'nested_destructure_let')) {
+        $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; function_printer = $true }
+    }
+    foreach ($name in @('destructure_then_match_000', 'destructure_then_match_001')) {
+        $cases += @{ name = $name; fixture = "flatten/$name.bend"; original = Join-Path $Reference "tests/flatten/$name.bend"; origin = 'upstream'; no_base_printer = $true }
     }
 }
 foreach ($case in $cases) {

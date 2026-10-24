@@ -613,3 +613,11 @@ def main() -> List<String>:
         "[\"1.25\", \"-0\", \"0.5\", \"1\", \"12\", \"inf\", \"-inf\", \"nan\", \"nan\", \"inf\", \"-0\", \"0\", \"16777216\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\", \"invalid\"]\n",
     );
 }
+
+#[test]
+fn extracted_fields_remain_matchable_in_executable_javascript() {
+    Fixture::new().expect(
+        include_str!("fixtures/cpu-destructure/field_match_in_order.bend"),
+        "9\n",
+    );
+}

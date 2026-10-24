@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-layout', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-layout', 'destructure', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -243,6 +243,9 @@ $parseLayout = @(
     @{ name = 'elif_alignment'; source = "$Reference/tests/parse/elif_alignment.bend"; expected = "56`n"; direct_mode = 'io' },
     @{ name = 'do_line_depth'; source = "$Reference/tests/parse/do_line_depth.bend"; expected = "1n`n"; direct_mode = 'io' }
 )
+$destructure = @(
+    @{ name = 'field_match_in_order'; source = "$Reference/tests/flatten/field_match_in_order.bend"; expected = "9`n"; direct_mode = 'io' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -259,6 +262,7 @@ $fixtures = switch ($Suite) {
     'parse-cons' { $parseCons }
     'parse-typed-list' { $parseTypedList }
     'parse-layout' { $parseLayout }
+    'destructure' { $destructure }
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
@@ -266,7 +270,7 @@ $fixtures = switch ($Suite) {
     'float-arithmetic' { $floatArithmetic }
     'float-specials' { $floatSpecials }
     'float-specials-depth' { $floatSpecialsDepth }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseLayout + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseLayout + $destructure + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {

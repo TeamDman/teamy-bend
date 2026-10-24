@@ -1,0 +1,399 @@
+destructure_let_000.bend	P{0, 0};0	0
+destructure_let_000.bend	P{0, 4294967295};2	4294967294
+destructure_let_000.bend	P{2, 17};1	19
+destructure_let_000_go.bend	0;0;0	0
+destructure_let_000_go.bend	2;17;1	19
+destructure_let_000_go.bend	4294967295;0;2	4294967294
+destructure_let_000_go_at.bend	P{0, 0};0	0
+destructure_let_000_go_at.bend	P{2, 17};1	19
+destructure_let_000_go_at.bend	P{4294967295, 0};2	4294967294
+destructure_let_000_mk.bend	0;0	P{0, 0}
+destructure_let_000_mk.bend	0;1	P{0, 1}
+destructure_let_000_mk.bend	0;2	P{0, 2}
+destructure_let_000_mk.bend	0;17	P{0, 17}
+destructure_let_000_mk.bend	0;4294967295	P{0, 4294967295}
+destructure_let_000_mk.bend	1;0	P{1, 0}
+destructure_let_000_mk.bend	1;1	P{1, 1}
+destructure_let_000_mk.bend	1;2	P{1, 2}
+destructure_let_000_mk.bend	1;17	P{1, 17}
+destructure_let_000_mk.bend	1;4294967295	P{1, 4294967295}
+destructure_let_000_mk.bend	2;0	P{2, 0}
+destructure_let_000_mk.bend	2;1	P{2, 1}
+destructure_let_000_mk.bend	2;2	P{2, 2}
+destructure_let_000_mk.bend	2;17	P{2, 17}
+destructure_let_000_mk.bend	2;4294967295	P{2, 4294967295}
+destructure_let_000_mk.bend	17;0	P{17, 0}
+destructure_let_000_mk.bend	17;1	P{17, 1}
+destructure_let_000_mk.bend	17;2	P{17, 2}
+destructure_let_000_mk.bend	17;17	P{17, 17}
+destructure_let_000_mk.bend	17;4294967295	P{17, 4294967295}
+destructure_let_000_mk.bend	4294967295;0	P{4294967295, 0}
+destructure_let_000_mk.bend	4294967295;1	P{4294967295, 1}
+destructure_let_000_mk.bend	4294967295;2	P{4294967295, 2}
+destructure_let_000_mk.bend	4294967295;17	P{4294967295, 17}
+destructure_let_000_mk.bend	4294967295;4294967295	P{4294967295, 4294967295}
+destructure_let_000_swap.bend	P{0, 0}	P{0, 0}
+destructure_let_000_swap.bend	P{0, 1}	P{1, 0}
+destructure_let_000_swap.bend	P{0, 2}	P{2, 0}
+destructure_let_000_swap.bend	P{0, 17}	P{17, 0}
+destructure_let_000_swap.bend	P{0, 4294967295}	P{4294967295, 0}
+destructure_let_000_swap.bend	P{1, 0}	P{0, 1}
+destructure_let_000_swap.bend	P{1, 1}	P{1, 1}
+destructure_let_000_swap.bend	P{1, 2}	P{2, 1}
+destructure_let_000_swap.bend	P{1, 17}	P{17, 1}
+destructure_let_000_swap.bend	P{1, 4294967295}	P{4294967295, 1}
+destructure_let_000_swap.bend	P{2, 0}	P{0, 2}
+destructure_let_000_swap.bend	P{2, 1}	P{1, 2}
+destructure_let_000_swap.bend	P{2, 2}	P{2, 2}
+destructure_let_000_swap.bend	P{2, 17}	P{17, 2}
+destructure_let_000_swap.bend	P{2, 4294967295}	P{4294967295, 2}
+destructure_let_000_swap.bend	P{17, 0}	P{0, 17}
+destructure_let_000_swap.bend	P{17, 1}	P{1, 17}
+destructure_let_000_swap.bend	P{17, 2}	P{2, 17}
+destructure_let_000_swap.bend	P{17, 17}	P{17, 17}
+destructure_let_000_swap.bend	P{17, 4294967295}	P{4294967295, 17}
+destructure_let_000_swap.bend	P{4294967295, 0}	P{0, 4294967295}
+destructure_let_000_swap.bend	P{4294967295, 1}	P{1, 4294967295}
+destructure_let_000_swap.bend	P{4294967295, 2}	P{2, 4294967295}
+destructure_let_000_swap.bend	P{4294967295, 17}	P{17, 4294967295}
+destructure_let_000_swap.bend	P{4294967295, 4294967295}	P{4294967295, 4294967295}
+destructure_let_002.bend	Mk{0, 0}	Mk{0, 0}
+destructure_let_002.bend	Mk{0, 1}	Mk{1, 0}
+destructure_let_002.bend	Mk{0, 2}	Mk{2, 0}
+destructure_let_002.bend	Mk{0, 17}	Mk{17, 0}
+destructure_let_002.bend	Mk{0, 4294967295}	Mk{4294967295, 0}
+destructure_let_002.bend	Mk{1, 0}	Mk{0, 1}
+destructure_let_002.bend	Mk{1, 1}	Mk{1, 1}
+destructure_let_002.bend	Mk{1, 2}	Mk{2, 1}
+destructure_let_002.bend	Mk{1, 17}	Mk{17, 1}
+destructure_let_002.bend	Mk{1, 4294967295}	Mk{4294967295, 1}
+destructure_let_002.bend	Mk{2, 0}	Mk{0, 2}
+destructure_let_002.bend	Mk{2, 1}	Mk{1, 2}
+destructure_let_002.bend	Mk{2, 2}	Mk{2, 2}
+destructure_let_002.bend	Mk{2, 17}	Mk{17, 2}
+destructure_let_002.bend	Mk{2, 4294967295}	Mk{4294967295, 2}
+destructure_let_002.bend	Mk{17, 0}	Mk{0, 17}
+destructure_let_002.bend	Mk{17, 1}	Mk{1, 17}
+destructure_let_002.bend	Mk{17, 2}	Mk{2, 17}
+destructure_let_002.bend	Mk{17, 17}	Mk{17, 17}
+destructure_let_002.bend	Mk{17, 4294967295}	Mk{4294967295, 17}
+destructure_let_002.bend	Mk{4294967295, 0}	Mk{0, 4294967295}
+destructure_let_002.bend	Mk{4294967295, 1}	Mk{1, 4294967295}
+destructure_let_002.bend	Mk{4294967295, 2}	Mk{2, 4294967295}
+destructure_let_002.bend	Mk{4294967295, 17}	Mk{17, 4294967295}
+destructure_let_002.bend	Mk{4294967295, 4294967295}	Mk{4294967295, 4294967295}
+destructure_let_002_flip.bend	Mk{0, 0}	Mk{0, 0}
+destructure_let_002_flip.bend	Mk{0, 1}	Mk{1, 0}
+destructure_let_002_flip.bend	Mk{0, 2}	Mk{2, 0}
+destructure_let_002_flip.bend	Mk{0, 17}	Mk{17, 0}
+destructure_let_002_flip.bend	Mk{0, 4294967295}	Mk{4294967295, 0}
+destructure_let_002_flip.bend	Mk{1, 0}	Mk{0, 1}
+destructure_let_002_flip.bend	Mk{1, 1}	Mk{1, 1}
+destructure_let_002_flip.bend	Mk{1, 2}	Mk{2, 1}
+destructure_let_002_flip.bend	Mk{1, 17}	Mk{17, 1}
+destructure_let_002_flip.bend	Mk{1, 4294967295}	Mk{4294967295, 1}
+destructure_let_002_flip.bend	Mk{2, 0}	Mk{0, 2}
+destructure_let_002_flip.bend	Mk{2, 1}	Mk{1, 2}
+destructure_let_002_flip.bend	Mk{2, 2}	Mk{2, 2}
+destructure_let_002_flip.bend	Mk{2, 17}	Mk{17, 2}
+destructure_let_002_flip.bend	Mk{2, 4294967295}	Mk{4294967295, 2}
+destructure_let_002_flip.bend	Mk{17, 0}	Mk{0, 17}
+destructure_let_002_flip.bend	Mk{17, 1}	Mk{1, 17}
+destructure_let_002_flip.bend	Mk{17, 2}	Mk{2, 17}
+destructure_let_002_flip.bend	Mk{17, 17}	Mk{17, 17}
+destructure_let_002_flip.bend	Mk{17, 4294967295}	Mk{4294967295, 17}
+destructure_let_002_flip.bend	Mk{4294967295, 0}	Mk{0, 4294967295}
+destructure_let_002_flip.bend	Mk{4294967295, 1}	Mk{1, 4294967295}
+destructure_let_002_flip.bend	Mk{4294967295, 2}	Mk{2, 4294967295}
+destructure_let_002_flip.bend	Mk{4294967295, 17}	Mk{17, 4294967295}
+destructure_let_002_flip.bend	Mk{4294967295, 4294967295}	Mk{4294967295, 4294967295}
+destructure_let_003.bend	P{0, 0}	0
+destructure_let_003.bend	P{0, 1}	1
+destructure_let_003.bend	P{0, 2}	2
+destructure_let_003.bend	P{0, 17}	17
+destructure_let_003.bend	P{0, 4294967295}	4294967295
+destructure_let_003.bend	P{1, 0}	1
+destructure_let_003.bend	P{1, 1}	2
+destructure_let_003.bend	P{1, 2}	3
+destructure_let_003.bend	P{1, 17}	18
+destructure_let_003.bend	P{1, 4294967295}	0
+destructure_let_003.bend	P{2, 0}	2
+destructure_let_003.bend	P{2, 1}	3
+destructure_let_003.bend	P{2, 2}	4
+destructure_let_003.bend	P{2, 17}	19
+destructure_let_003.bend	P{2, 4294967295}	1
+destructure_let_003.bend	P{17, 0}	17
+destructure_let_003.bend	P{17, 1}	18
+destructure_let_003.bend	P{17, 2}	19
+destructure_let_003.bend	P{17, 17}	34
+destructure_let_003.bend	P{17, 4294967295}	16
+destructure_let_003.bend	P{4294967295, 0}	4294967295
+destructure_let_003.bend	P{4294967295, 1}	0
+destructure_let_003.bend	P{4294967295, 2}	1
+destructure_let_003.bend	P{4294967295, 17}	16
+destructure_let_003.bend	P{4294967295, 4294967295}	4294967294
+destructure_let_004.bend	P{0, 0};P{0, 0}	0
+destructure_let_004.bend	P{1, 0};P{1, 1}	1
+destructure_let_004.bend	P{4294967295, 0};P{1, 1}	4294967295
+destructure_let_005.bend	0;0;0	0
+destructure_let_005.bend	2;17;1	19
+destructure_let_005.bend	4294967295;0;2	4294967294
+destructure_let_005_go.bend	P{0, 0};0	0
+destructure_let_005_go.bend	P{2, 17};1	19
+destructure_let_005_go.bend	P{4294967295, 0};2	4294967294
+destructure_then_match_000.bend	P{Z{}, Z{}}	Z{}
+destructure_then_match_000.bend	P{Z{}, S{Z{}}}	Z{}
+destructure_then_match_000.bend	P{Z{}, S{S{Z{}}}}	S{Z{}}
+destructure_then_match_000.bend	P{Z{}, S{S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{Z{}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_000.bend	P{S{Z{}}, Z{}}	S{Z{}}
+destructure_then_match_000.bend	P{S{Z{}}, S{Z{}}}	Z{}
+destructure_then_match_000.bend	P{S{Z{}}, S{S{Z{}}}}	S{Z{}}
+destructure_then_match_000.bend	P{S{Z{}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{S{Z{}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_000.bend	P{S{S{Z{}}}, Z{}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{S{S{Z{}}}, S{Z{}}}	Z{}
+destructure_then_match_000.bend	P{S{S{Z{}}}, S{S{Z{}}}}	S{Z{}}
+destructure_then_match_000.bend	P{S{S{Z{}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{S{S{Z{}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_000.bend	P{S{S{S{Z{}}}}, Z{}}	S{S{S{Z{}}}}
+destructure_then_match_000.bend	P{S{S{S{Z{}}}}, S{Z{}}}	Z{}
+destructure_then_match_000.bend	P{S{S{S{Z{}}}}, S{S{Z{}}}}	S{Z{}}
+destructure_then_match_000.bend	P{S{S{S{Z{}}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{S{S{S{Z{}}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_000.bend	P{S{S{S{S{Z{}}}}}, Z{}}	S{S{S{S{Z{}}}}}
+destructure_then_match_000.bend	P{S{S{S{S{Z{}}}}}, S{Z{}}}	Z{}
+destructure_then_match_000.bend	P{S{S{S{S{Z{}}}}}, S{S{Z{}}}}	S{Z{}}
+destructure_then_match_000.bend	P{S{S{S{S{Z{}}}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_000.bend	P{S{S{S{S{Z{}}}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{Z{}, Z{}}}	Z{}
+destructure_then_match_001.bend	Box{P{Z{}, S{Z{}}}}	Z{}
+destructure_then_match_001.bend	Box{P{Z{}, S{S{Z{}}}}}	Z{}
+destructure_then_match_001.bend	Box{P{Z{}, S{S{S{Z{}}}}}}	Z{}
+destructure_then_match_001.bend	Box{P{Z{}, S{S{S{S{Z{}}}}}}}	Z{}
+destructure_then_match_001.bend	Box{P{S{Z{}}, Z{}}}	S{Z{}}
+destructure_then_match_001.bend	Box{P{S{Z{}}, S{Z{}}}}	S{Z{}}
+destructure_then_match_001.bend	Box{P{S{Z{}}, S{S{Z{}}}}}	S{Z{}}
+destructure_then_match_001.bend	Box{P{S{Z{}}, S{S{S{Z{}}}}}}	S{Z{}}
+destructure_then_match_001.bend	Box{P{S{Z{}}, S{S{S{S{Z{}}}}}}}	S{Z{}}
+destructure_then_match_001.bend	Box{P{S{S{Z{}}}, Z{}}}	S{S{Z{}}}
+destructure_then_match_001.bend	Box{P{S{S{Z{}}}, S{Z{}}}}	S{S{Z{}}}
+destructure_then_match_001.bend	Box{P{S{S{Z{}}}, S{S{Z{}}}}}	S{S{Z{}}}
+destructure_then_match_001.bend	Box{P{S{S{Z{}}}, S{S{S{Z{}}}}}}	S{S{Z{}}}
+destructure_then_match_001.bend	Box{P{S{S{Z{}}}, S{S{S{S{Z{}}}}}}}	S{S{Z{}}}
+destructure_then_match_001.bend	Box{P{S{S{S{Z{}}}}, Z{}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{Z{}}}}, S{Z{}}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{Z{}}}}, S{S{Z{}}}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{Z{}}}}, S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{Z{}}}}, S{S{S{S{Z{}}}}}}}	S{S{S{Z{}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{S{Z{}}}}}, Z{}}}	S{S{S{S{Z{}}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{S{Z{}}}}}, S{Z{}}}}	S{S{S{S{Z{}}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{S{Z{}}}}}, S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{S{Z{}}}}}, S{S{S{Z{}}}}}}	S{S{S{S{Z{}}}}}
+destructure_then_match_001.bend	Box{P{S{S{S{S{Z{}}}}}, S{S{S{S{Z{}}}}}}}	S{S{S{S{Z{}}}}}
+field_match_in_order_f.bend	Nil{}	0n
+field_match_in_order_f.bend	Con{0n, Nil{}}	0n
+field_match_in_order_f.bend	Con{1n, Nil{}}	0n
+field_match_in_order_f.bend	Con{2n, Nil{}}	1n
+field_match_in_order_f.bend	Con{3n, Nil{}}	2n
+field_match_in_order_f.bend	Con{4n, Nil{}}	3n
+field_match_in_order_f.bend	Con{0n, Con{0n, Nil{}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{1n, Nil{}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{2n, Nil{}}}	1n
+field_match_in_order_f.bend	Con{0n, Con{3n, Nil{}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{4n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{0n, Nil{}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{1n, Nil{}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{2n, Nil{}}}	1n
+field_match_in_order_f.bend	Con{1n, Con{3n, Nil{}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{4n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{0n, Nil{}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{1n, Nil{}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{2n, Nil{}}}	2n
+field_match_in_order_f.bend	Con{2n, Con{3n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{4n, Nil{}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{0n, Nil{}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{1n, Nil{}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{2n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{3n, Con{3n, Nil{}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{4n, Nil{}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{0n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{1n, Nil{}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{2n, Nil{}}}	4n
+field_match_in_order_f.bend	Con{4n, Con{3n, Nil{}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{4n, Nil{}}}	6n
+field_match_in_order_f.bend	Con{0n, Con{0n, Con{0n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{0n, Con{1n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{0n, Con{2n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{0n, Con{0n, Con{3n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{0n, Con{4n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{1n, Con{0n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{1n, Con{1n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{0n, Con{1n, Con{2n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{0n, Con{1n, Con{3n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{1n, Con{4n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{2n, Con{0n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{0n, Con{2n, Con{1n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{0n, Con{2n, Con{2n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{2n, Con{3n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{2n, Con{4n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{0n, Con{3n, Con{0n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{3n, Con{1n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{0n, Con{3n, Con{2n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{3n, Con{3n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{0n, Con{3n, Con{4n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{0n, Con{4n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{4n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{0n, Con{4n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{0n, Con{4n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{0n, Con{4n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{1n, Con{0n, Con{0n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{0n, Con{1n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{0n, Con{2n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{1n, Con{0n, Con{3n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{0n, Con{4n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{1n, Con{0n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{1n, Con{1n, Nil{}}}}	0n
+field_match_in_order_f.bend	Con{1n, Con{1n, Con{2n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{1n, Con{1n, Con{3n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{1n, Con{4n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{2n, Con{0n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{1n, Con{2n, Con{1n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{1n, Con{2n, Con{2n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{2n, Con{3n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{2n, Con{4n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{1n, Con{3n, Con{0n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{3n, Con{1n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{1n, Con{3n, Con{2n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{3n, Con{3n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{1n, Con{3n, Con{4n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{1n, Con{4n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{4n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{1n, Con{4n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{1n, Con{4n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{1n, Con{4n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{2n, Con{0n, Con{0n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{0n, Con{1n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{0n, Con{2n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{2n, Con{0n, Con{3n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{0n, Con{4n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{1n, Con{0n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{1n, Con{1n, Nil{}}}}	1n
+field_match_in_order_f.bend	Con{2n, Con{1n, Con{2n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{2n, Con{1n, Con{3n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{1n, Con{4n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{2n, Con{0n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{2n, Con{2n, Con{1n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{2n, Con{2n, Con{2n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{2n, Con{3n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{2n, Con{4n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{2n, Con{3n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{3n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{2n, Con{3n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{3n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{2n, Con{3n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{2n, Con{4n, Con{0n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{4n, Con{1n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{2n, Con{4n, Con{2n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{2n, Con{4n, Con{3n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{2n, Con{4n, Con{4n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{3n, Con{0n, Con{0n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{0n, Con{1n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{0n, Con{2n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{3n, Con{0n, Con{3n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{0n, Con{4n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{1n, Con{0n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{1n, Con{1n, Nil{}}}}	2n
+field_match_in_order_f.bend	Con{3n, Con{1n, Con{2n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{3n, Con{1n, Con{3n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{1n, Con{4n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{2n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{3n, Con{2n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{3n, Con{2n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{2n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{2n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{3n, Con{3n, Con{0n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{3n, Con{1n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{3n, Con{3n, Con{2n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{3n, Con{3n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{3n, Con{3n, Con{4n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{3n, Con{4n, Con{0n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{4n, Con{1n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{3n, Con{4n, Con{2n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{3n, Con{4n, Con{3n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{3n, Con{4n, Con{4n, Nil{}}}}	8n
+field_match_in_order_f.bend	Con{4n, Con{0n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{0n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{0n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{4n, Con{0n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{0n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{1n, Con{0n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{1n, Con{1n, Nil{}}}}	3n
+field_match_in_order_f.bend	Con{4n, Con{1n, Con{2n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{4n, Con{1n, Con{3n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{1n, Con{4n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{2n, Con{0n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{4n, Con{2n, Con{1n, Nil{}}}}	4n
+field_match_in_order_f.bend	Con{4n, Con{2n, Con{2n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{2n, Con{3n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{2n, Con{4n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{4n, Con{3n, Con{0n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{3n, Con{1n, Nil{}}}}	5n
+field_match_in_order_f.bend	Con{4n, Con{3n, Con{2n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{3n, Con{3n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{4n, Con{3n, Con{4n, Nil{}}}}	8n
+field_match_in_order_f.bend	Con{4n, Con{4n, Con{0n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{4n, Con{1n, Nil{}}}}	6n
+field_match_in_order_f.bend	Con{4n, Con{4n, Con{2n, Nil{}}}}	7n
+field_match_in_order_f.bend	Con{4n, Con{4n, Con{3n, Nil{}}}}	8n
+field_match_in_order_f.bend	Con{4n, Con{4n, Con{4n, Nil{}}}}	9n
+field_match_in_order_g.bend	Tuple{0n, 0n}	0n
+field_match_in_order_g.bend	Tuple{0n, 1n}	1n
+field_match_in_order_g.bend	Tuple{0n, 2n}	2n
+field_match_in_order_g.bend	Tuple{0n, 3n}	3n
+field_match_in_order_g.bend	Tuple{0n, 4n}	4n
+field_match_in_order_g.bend	Tuple{1n, 0n}	0n
+field_match_in_order_g.bend	Tuple{1n, 1n}	1n
+field_match_in_order_g.bend	Tuple{1n, 2n}	2n
+field_match_in_order_g.bend	Tuple{1n, 3n}	3n
+field_match_in_order_g.bend	Tuple{1n, 4n}	4n
+field_match_in_order_g.bend	Tuple{2n, 0n}	1n
+field_match_in_order_g.bend	Tuple{2n, 1n}	2n
+field_match_in_order_g.bend	Tuple{2n, 2n}	3n
+field_match_in_order_g.bend	Tuple{2n, 3n}	4n
+field_match_in_order_g.bend	Tuple{2n, 4n}	5n
+field_match_in_order_g.bend	Tuple{3n, 0n}	2n
+field_match_in_order_g.bend	Tuple{3n, 1n}	3n
+field_match_in_order_g.bend	Tuple{3n, 2n}	4n
+field_match_in_order_g.bend	Tuple{3n, 3n}	5n
+field_match_in_order_g.bend	Tuple{3n, 4n}	6n
+field_match_in_order_g.bend	Tuple{4n, 0n}	3n
+field_match_in_order_g.bend	Tuple{4n, 1n}	4n
+field_match_in_order_g.bend	Tuple{4n, 2n}	5n
+field_match_in_order_g.bend	Tuple{4n, 3n}	6n
+field_match_in_order_g.bend	Tuple{4n, 4n}	7n
+nested_destructure_let.bend	P{B{0}, 0}	0
+nested_destructure_let.bend	P{B{0}, 1}	1
+nested_destructure_let.bend	P{B{0}, 2}	2
+nested_destructure_let.bend	P{B{0}, 17}	17
+nested_destructure_let.bend	P{B{0}, 4294967295}	4294967295
+nested_destructure_let.bend	P{B{1}, 0}	1
+nested_destructure_let.bend	P{B{1}, 1}	2
+nested_destructure_let.bend	P{B{1}, 2}	3
+nested_destructure_let.bend	P{B{1}, 17}	18
+nested_destructure_let.bend	P{B{1}, 4294967295}	0
+nested_destructure_let.bend	P{B{2}, 0}	2
+nested_destructure_let.bend	P{B{2}, 1}	3
+nested_destructure_let.bend	P{B{2}, 2}	4
+nested_destructure_let.bend	P{B{2}, 17}	19
+nested_destructure_let.bend	P{B{2}, 4294967295}	1
+nested_destructure_let.bend	P{B{17}, 0}	17
+nested_destructure_let.bend	P{B{17}, 1}	18
+nested_destructure_let.bend	P{B{17}, 2}	19
+nested_destructure_let.bend	P{B{17}, 17}	34
+nested_destructure_let.bend	P{B{17}, 4294967295}	16
+nested_destructure_let.bend	P{B{4294967295}, 0}	4294967295
+nested_destructure_let.bend	P{B{4294967295}, 1}	0
+nested_destructure_let.bend	P{B{4294967295}, 2}	1
+nested_destructure_let.bend	P{B{4294967295}, 17}	16
+nested_destructure_let.bend	P{B{4294967295}, 4294967295}	4294967294

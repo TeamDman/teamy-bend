@@ -383,3 +383,48 @@ fn rewritten_imports_templates_and_nested_goals_keep_the_rejected_origin() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn local_binding_rejections_use_the_original_binder_source() {
+    let original = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-destructure/destructure_let_001.bend");
+    assert_diagnostic(
+        &original,
+        "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n13 | def main(p):\n14>|   q = p\n15 |   P{a, b} = q\n",
+    );
+    for (source, helper, expected) in [
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef main(n: N) -> N:\n  q = n\n  match q:\n    case Z{}: Z{}\n    case S{p}: p\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n4 | def main(n: N) -> N:\n5>|   q = n\n6 |   match q:\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.N: H.Z{}\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(n: N) -> N:\n  q = n\n  match q:\n    case Z{}: Z{}\n    case S{p}: p\n",
+            ),
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n4 | def bad(n: N) -> N:\n5>|   q = n\n6 |   match q:\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef main(n: N) -> N:\n  q =\n    S{n}\n  match q:\n    case Z{}: Z{}\n    case S{p}: p\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n4 | def main(n: N) -> N:\n5>|   q =\n6 |     S{n}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef main(n: N) -> N:\n  match n:\n    case Z{}: Z{}\n    case S{p}:\n      q = p\n      match q:\n        case Z{}: Z{}\n        case S{k}: k\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n7 |     case S{p}:\n8>|       q = p\n9 |       match q:\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(~k: N, n: N) -> N:\n  q = n\n  match q:\n    case Z{}: k\n    case S{p}: p\ndef main(n: N) -> N: bad(Z{}, n)\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n4 | def bad(~k: N, n: N) -> N:\n5>|   q = n\n6 |   match q:\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

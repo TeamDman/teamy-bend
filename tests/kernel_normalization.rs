@@ -1098,3 +1098,64 @@ fn nested_patterns_preserve_fallback_reconstruction_and_branch_values() {
     }
     assert_eq!(observations, 476);
 }
+
+#[test]
+fn destructuring_functions_preserve_fields_and_application_values() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-destructure");
+    let mut observations = 0;
+    for fixture in [
+        "destructure_let_000.bend",
+        "destructure_let_000_go.bend",
+        "destructure_let_000_go_at.bend",
+        "destructure_let_000_mk.bend",
+        "destructure_let_000_swap.bend",
+        "destructure_let_002.bend",
+        "destructure_let_002_flip.bend",
+        "destructure_let_003.bend",
+        "destructure_let_004.bend",
+        "destructure_let_005.bend",
+        "destructure_let_005_go.bend",
+        "destructure_then_match_000.bend",
+        "destructure_then_match_001.bend",
+        "field_match_in_order_f.bend",
+        "field_match_in_order_g.bend",
+        "nested_destructure_let.bend",
+    ] {
+        let path = root.join(fixture);
+        let source = std::fs::read_to_string(&path).unwrap();
+        let expected = source
+            .lines()
+            .filter_map(|line| line.strip_prefix("#|"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let book = load(path).unwrap();
+        let checked = check_book(&book).unwrap();
+        let value = checked.normalize_definition("main").unwrap();
+        assert_eq!(value.to_string(), expected);
+        assert_eq!(
+            shape_in_book(&value, &book).unwrap(),
+            shape_in_book(&parse_term(&expected).unwrap(), &book).unwrap()
+        );
+        for line in include_str!("fixtures/cpu-destructure/applications.tsv").lines() {
+            let mut fields = line.splitn(3, '\t');
+            let source = fields.next().unwrap();
+            let arguments = fields.next().unwrap();
+            let expected = fields.next().unwrap();
+            if source != fixture {
+                continue;
+            }
+            let arguments = arguments
+                .split(';')
+                .map(|arg| parse_term(arg).unwrap())
+                .collect::<Vec<_>>();
+            let value = checked.evaluate("main", &arguments).unwrap();
+            assert_eq!(value.to_string(), expected, "{fixture}: {arguments:?}");
+            assert_eq!(
+                shape_in_book(&value, &book).unwrap(),
+                shape_in_book(&parse_term(expected).unwrap(), &book).unwrap()
+            );
+            observations += 1;
+        }
+    }
+    assert_eq!(observations, 399);
+}

@@ -66,14 +66,14 @@ fn emit_load(
     stderr: &mut impl Write,
 ) -> eyre::Result<CliOutput> {
     cancellation.bail_if_cancelled()?;
-    let Some(report) = &failure.pattern else {
+    let Some(report) = &failure.diagnostic else {
         return Err(eyre!("{}", failure.error));
     };
-    tracing::debug!(internal_error = %failure.error, "Bend pattern load rejected");
+    tracing::debug!(internal_error = %failure.error, "Bend source load rejected");
     write_diagnostic(
         &format!(
-            "Error:\n- message  : a declared constructor (unknown: {})\nLocation:\n{}\n",
-            report.constructor, report.excerpt
+            "Error:\n- message  : {}\nLocation:\n{}\n",
+            report.message, report.excerpt
         ),
         stderr,
     )
@@ -185,7 +185,7 @@ mod tests {
                 .unwrap()
                 .contains("7>|       Missing{}")
         );
-        error.pattern = None;
+        error.diagnostic = None;
         let mut bytes = Vec::new();
         assert_eq!(
             emit_load(&error, &CancellationToken::new(), &mut bytes)
