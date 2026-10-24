@@ -5079,3 +5079,51 @@ Next source-reviewed batch: `eval/open_closure`, `eval/open_closure_pipe` and
 `eval/stuck_split_mint`. The first has an IO main; the others exercise open
 higher-order bindings and blocked computed calls. Only source/inventory review
 is complete; applicability and execution remain unqualified.
+
+### [x] 5.93 Record open-closure qualification and function-domain repair
+
+Source `cbfe84fb6f76c17fcb3022fc86d3e62f01a3cafa` qualifies the unchanged `eval/open_closure`,
+`eval/open_closure_pipe` and `eval/stuck_split_mint` originals under separate
+normalization, printer and IO contracts. Function-domain diagnostics now retain
+the pinned parentheses. Graphs/text and binder identities agree; 54 individual
+composition calls and five recursive Nat applications preserve complete results.
+The IO original prints `12` in native and upstream/port generated C and JS.
+Its direct upstream Node lane remains host-blocked and strict proof checking
+still excludes IO. [Report](cpu-open-closures.md).
+
+Full gate: **983 passed, zero failed, 49 ignored**; focused controls:
+**300 passed, zero failed, one ignored**. The 54-observation open matrix and
+12-observation graph matrix pass, including renewed `partial_app_snf`. The
+72-observation execution collection has **42 exact outputs, 24 generation/build
+successes, four aggregate work-budget failures and two direct-Node host blocks**.
+It exits 1; it is not a passing full runtime matrix. Both unchanged authored
+27-result composition wrappers exhaust the single pure-normalization budget,
+although individual calls and generated C/JS aggregates agree. This new required
+resource gap remains open; no evaluator switch, larger budget or policy exception
+is used to qualify it.
+
+All 1,302 checking statuses are unchanged; all 439 expected negatives reject.
+Only `check/capture_soundness.bend` changed its checking stream. It now matches
+exact repeated upstream status/streams and rejects during checking. Phase-only
+probes remain separate. Fourteen positive controls pass;
+18 observations retain three unwaived hole/TODO differences. Existing source-hole,
+sharing, named-call, demand, cancellation and work/depth/structural controls pass.
+The initial test-comparator expansion broke two refusal controls; it was reverted
+and a type-only comparison was kept local. The failed receipt remains historical.
+
+Detailed receipts link **339 originals**; **963** lack detailed receipts:
+**357 checker negatives, one checking-only module, 68 interpreter cases and 537
+compiled candidates**. Two interpretation rows, one original-IO runtime row and
+one exact checking row are added; earlier 149 interpretation, 94 runtime and
+92 checking rows retain source identities. Linked evidence includes partial/blocked cells, not universal
+CPU parity. Aggregate work, imported-printer/JS-timeout, erased-hole/TODO,
+host/resource/foreign/F32.read/error-order/API gaps and the incomplete 688-vector
+exploration remain unwaived.
+
+Next bounded work: account for the observed **23-result pass / 24-result budget
+failure** boundary, separating genuine accumulated work from avoidable repeated
+reduction. Preserve the exact 27-result reproducers, individual and generated
+results, fixed budgets and guards. The printer correction is independent of this
+resource investigation. Frozen dependencies, toolchains and reference pins;
+no installations, desktop, GPU work or new pushes. Previously published branch
+heads remain at the earlier approved checkpoints.

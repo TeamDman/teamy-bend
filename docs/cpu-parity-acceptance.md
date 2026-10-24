@@ -91,45 +91,51 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `49aeac60e8794b0f7f0644cbcc0450a5a355054a` qualifies the unchanged `eval/underscore_print`,
-`eval/wildcard_chain_print` and `eval/efq_arm_value` originals. Exact normalized
-graphs/text preserve distinct unused wildcard binders, a selected empty-match
-function and the separately blocked named call. Twelve complete wildcard
-applications, three partial applications and two Boolean-to-function selections
-have separate evidence. No inhabitant of `Empty` is fabricated; the empty-match
-function is never applied. No production or public API change was needed.
-[Report](cpu-wildcard-values.md).
+Source `cbfe84fb6f76c17fcb3022fc86d3e62f01a3cafa` qualifies the unchanged `eval/open_closure`,
+`eval/open_closure_pipe` and `eval/stuck_split_mint` originals under separate
+normalization, printer and IO contracts. Function-domain diagnostics now retain
+the pinned parentheses. Graphs/text and binder identities agree; 54 individual
+composition calls and five recursive Nat applications preserve complete results.
+The IO original prints `12` in native and upstream/port generated C and JS.
+Its direct upstream Node lane remains host-blocked and strict proof checking
+still excludes IO. [Report](cpu-open-closures.md).
 
-Clean-source gate: **977 passed, zero failed, 49 ignored**; focused controls:
-**289 passed, zero failed, one ignored**. The open/applicability matrix records
-62 observations; 16 paired graphs include renewed `partial_app_snf`; the closed
-matrix records 36 observations for the two wildcard wrappers only. All original
-executable printers refuse function-containing results exactly. Native executable
-wrapper observations are separately covered by the persistent test; pure CLI
-normalization is not relabeled as native executable evidence.
+Full gate: **983 passed, zero failed, 49 ignored**; focused controls:
+**300 passed, zero failed, one ignored**. The 54-observation open matrix and
+12-observation graph matrix pass, including renewed `partial_app_snf`. The
+72-observation execution collection has **42 exact outputs, 24 generation/build
+successes, four aggregate work-budget failures and two direct-Node host blocks**.
+It exits 1; it is not a passing full runtime matrix. Both unchanged authored
+27-result composition wrappers exhaust the single pure-normalization budget,
+although individual calls and generated C/JS aggregates agree. This new required
+resource gap remains open; no evaluator switch, larger budget or policy exception
+is used to qualify it.
 
-All 1,302 checking statuses and streams match the preceding port receipt; all
-439 expected negatives reject. Fourteen positive controls pass; 18 observations
-retain three unwaived hole/TODO cases. Private-effect wildcard refusal, source-hole
-refusal, sharing, demand order, cancellation and resource guards remain under
-regression. The new differential matrices contain no IO or shift programs;
-earlier oracle receipts retain their actual source and lane identities.
+All 1,302 checking statuses are unchanged; all 439 expected negatives reject.
+Only `check/capture_soundness.bend` changed its checking stream. It now matches
+exact repeated upstream status/streams and rejects during checking. Phase-only
+probes remain separate. Fourteen positive controls pass;
+18 observations retain three unwaived hole/TODO differences. Existing source-hole,
+sharing, named-call, demand, cancellation and work/depth/structural controls pass.
+The initial test-comparator expansion broke two refusal controls; it was reverted
+and a type-only comparison was kept local. The failed receipt remains historical.
 
-Detailed receipts link **335 originals**; **967** lack detailed receipts:
-**358 checker negatives, one checking-only module, 68 interpreter cases and 540
-compiled candidates**. Three interpretation rows are added; earlier 146
-interpretation, 94 runtime and 92 checking rows retain their identities. Linked
-rows include partial/blocked cells and do not establish full CPU parity.
-Imported-printer/JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/
-error-order/API gaps and the unfinished 688-vector exploration remain unwaived.
-Dependencies, references, toolchains, guards, budgets, cancellation and approved
-demand policy remain frozen; no installs, desktop or GPU work. Publication is
-recorded separately after explicit approval.
+Detailed receipts link **339 originals**; **963** lack detailed receipts:
+**357 checker negatives, one checking-only module, 68 interpreter cases and 537
+compiled candidates**. Two interpretation rows, one original-IO runtime row and
+one exact checking row are added; earlier 149 interpretation, 94 runtime and
+92 checking rows retain source identities. Linked evidence includes partial/blocked cells, not universal
+CPU parity. Aggregate work, imported-printer/JS-timeout, erased-hole/TODO,
+host/resource/foreign/F32.read/error-order/API gaps and the incomplete 688-vector
+exploration remain unwaived.
 
-Next source-reviewed batch: `eval/open_closure`, `eval/open_closure_pipe` and
-`eval/stuck_split_mint`. The first has an IO main; the others exercise open
-higher-order bindings and blocked computed calls. Only source/inventory review
-is complete; applicability and execution remain unqualified.
+Next bounded work: account for the observed **23-result pass / 24-result budget
+failure** boundary, separating genuine accumulated work from avoidable repeated
+reduction. Preserve the exact 27-result reproducers, individual and generated
+results, fixed budgets and guards. The printer correction is independent of this
+resource investigation. Frozen dependencies, toolchains and reference pins;
+no installations, desktop, GPU work or new pushes. Previously published branch
+heads remain at the earlier approved checkpoints.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1218,3 +1224,51 @@ Next source-reviewed batch: `eval/open_closure`, `eval/open_closure_pipe` and
 `eval/stuck_split_mint`. The first has an IO main; the others exercise open
 higher-order bindings and blocked computed calls. Only source/inventory review
 is complete; applicability and execution remain unqualified.
+
+## Open closure and function-domain checkpoint
+
+Source `cbfe84fb6f76c17fcb3022fc86d3e62f01a3cafa` qualifies the unchanged `eval/open_closure`,
+`eval/open_closure_pipe` and `eval/stuck_split_mint` originals under separate
+normalization, printer and IO contracts. Function-domain diagnostics now retain
+the pinned parentheses. Graphs/text and binder identities agree; 54 individual
+composition calls and five recursive Nat applications preserve complete results.
+The IO original prints `12` in native and upstream/port generated C and JS.
+Its direct upstream Node lane remains host-blocked and strict proof checking
+still excludes IO. [Report](cpu-open-closures.md).
+
+Full gate: **983 passed, zero failed, 49 ignored**; focused controls:
+**300 passed, zero failed, one ignored**. The 54-observation open matrix and
+12-observation graph matrix pass, including renewed `partial_app_snf`. The
+72-observation execution collection has **42 exact outputs, 24 generation/build
+successes, four aggregate work-budget failures and two direct-Node host blocks**.
+It exits 1; it is not a passing full runtime matrix. Both unchanged authored
+27-result composition wrappers exhaust the single pure-normalization budget,
+although individual calls and generated C/JS aggregates agree. This new required
+resource gap remains open; no evaluator switch, larger budget or policy exception
+is used to qualify it.
+
+All 1,302 checking statuses are unchanged; all 439 expected negatives reject.
+Only `check/capture_soundness.bend` changed its checking stream. It now matches
+exact repeated upstream status/streams and rejects during checking. Phase-only
+probes remain separate. Fourteen positive controls pass;
+18 observations retain three unwaived hole/TODO differences. Existing source-hole,
+sharing, named-call, demand, cancellation and work/depth/structural controls pass.
+The initial test-comparator expansion broke two refusal controls; it was reverted
+and a type-only comparison was kept local. The failed receipt remains historical.
+
+Detailed receipts link **339 originals**; **963** lack detailed receipts:
+**357 checker negatives, one checking-only module, 68 interpreter cases and 537
+compiled candidates**. Two interpretation rows, one original-IO runtime row and
+one exact checking row are added; earlier 149 interpretation, 94 runtime and
+92 checking rows retain source identities. Linked evidence includes partial/blocked cells, not universal
+CPU parity. Aggregate work, imported-printer/JS-timeout, erased-hole/TODO,
+host/resource/foreign/F32.read/error-order/API gaps and the incomplete 688-vector
+exploration remain unwaived.
+
+Next bounded work: account for the observed **23-result pass / 24-result budget
+failure** boundary, separating genuine accumulated work from avoidable repeated
+reduction. Preserve the exact 27-result reproducers, individual and generated
+results, fixed budgets and guards. The printer correction is independent of this
+resource investigation. Frozen dependencies, toolchains and reference pins;
+no installations, desktop, GPU work or new pushes. Previously published branch
+heads remain at the earlier approved checkpoints.
