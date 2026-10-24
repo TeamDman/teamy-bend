@@ -3862,3 +3862,36 @@ eval/nat_literal_roundtrip original and its compound printer applicability next;
 parse/chain_default_nat_f and _g remain an independent family. Existing F32.read,
 error-order, resource, host, foreign, API and platform gaps stay open. Frozen
 dependencies/toolchains/pin/budgets and unchanged demand policy; no push.
+
+
+### [x] 5.52 Qualify Nat literal round-trip and bound build-cache growth
+
+Final source `4083b32` qualifies the unchanged eval/nat_literal_roundtrip original.
+Its actual core already agreed; open Nat, right-nested tuple and complete-list
+presentation now match exact upstream output. Both actual upstream printers
+refuse the compound type containing a function, without artifacts. Strict eval,
+actual core and raw text remain separate; F32 proof exclusions are unchanged.
+A standalone open-Nat function matches twice, and 41 direct pinned printer
+controls separate spelling from computation. The original dbl checks still
+compute 0n, 2n and 6n; function-containing data output remains refused.
+
+No evaluator/checker/parser/demand/budget/dependency/toolchain changes. The raw
+64-level constructor input guard remains tested independently of printing a
+64-successor internal value. Full gate **823 passed, zero failed, 49 ignored**;
+69 focused tests and strict all-target Clippy pass. Normalization: 32 fixtures,
+250 successes, 68 printer refusals, six F32 proof exclusions. Baseline:50/50 exact,
+including 16/17 regressions. Negative/demand retain 44/56 and 92/100 exact results,
+classified gaps, approved narrow exceptions and required nonzero runner exits.
+
+Disk growth was traced to retained large test executables, duplicate dependency
+fingerprints and metadata-triggered relinking. Hash-manifest cleanup only removes
+inactive rebuildable tests; 12 GiB reserve is required before broad builds.
+The final gate kept 4.89 GiB minimum workspace headroom; no disk exhaustion.
+Immutable duplicate snapshots share bytes while retaining paths/hashes. All
+historical source, receipts and candidate failures are preserved; no push.
+
+The [checkpoint](cpu-nat-literal-roundtrip.md) records exact commands, provenance,
+cache controls and remaining gaps. Ledgers link 103 originals, with 1,199 unlinked
+by runtime/interpretation modes, classified by applicability. Next: checking-only
+eval/list_reverse_sort (no main; no runtime lanes), then the independent
+parse/chain_default_nat_f / _g family. Full CPU parity remains incomplete.

@@ -12,20 +12,20 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `f6c057c` qualifies
-[three brace-suffix function values](cpu-brace-suffix-functions.md), correcting
-complete Nat presentation while preserving actual core. Full gate: **820 passed,
-zero failed, 49 ignored**; 114 affected tests and strict Clippy pass. The complete
-normalization suite is renewed, along with three adjacent executable originals,
-six runtime negatives and ten demand controls. Their existing gaps remain open,
-as does adjacent open-Nat presentation. No demand extension or new exception is
-introduced; evaluation and safety budgets are unchanged.
+neither is a completion percentage. Current checkpoint `4083b32` qualifies
+[the Nat literal round-trip](cpu-nat-literal-roundtrip.md), fixing open Nat and
+compound tuple/list presentation while preserving actual core. Full gate:
+**823 passed, zero failed, 49 ignored**; 69 focused tests and strict Clippy pass.
+The full normalization matrix and baseline/negative/demand matrices are renewed.
+Existing resource/host/foreign/error-order gaps remain open; no demand extension,
+new exception or safety-budget change is introduced. Bounded cache management
+kept the final gate above 4.89 GiB workspace headroom without disk exhaustion.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 102 originals; the 1,200 remaining
+Current runtime/interpretation ledgers link 103 originals; the 1,199 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 596 compiled candidates. These are distinct
+interpreter-only cases and 595 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -443,24 +443,29 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [brace-suffix functions and complete Nat presentation](cpu-brace-suffix-functions.md),
-`f6c057c`. Three unchanged originals add twelve exact interpreter/native outputs,
-six strict JSON eval reports, six actual-core comparisons and twelve upstream
-printer refusals. The `_h` presentation mismatch is fixed by compact printing
-of complete Nat constructors; no evaluation or safety-policy changes occur.
-F32's executable-output/core-regression mode and proof exclusions remain distinct.
-Full gate: **820 passed, zero failed, 49 ignored**; 114 affected tests and strict
-Clippy pass. The normalization renewal covers 27 originals plus four controls:
-242 successful observations, 64 printer refusals and six retained F32 exclusions.
+Latest bounded checkpoint: [Nat literal round-trip](cpu-nat-literal-roundtrip.md),
+`4083b32`. One unchanged original now matches exact compound output and actual
+normalized core under strict checking. Upstream C/JS printers actually refuse
+the function-containing type. A standalone open Nat function also matches exactly;
+41 direct printer controls verify syntax independently of computation. No parser,
+evaluator, checker, demand-policy or safety-budget changes occur. F32 executable
+observation/core-regression and strict exclusions remain distinct.
 
-Three adjacent executable originals match in all five generated/native runtimes
-(30 exact observations); their six direct upstream IO entries remain host-blocked.
-Six runtime negatives retain 44/56 exact results; ten demand controls retain
-92/100 exact, six approved wildcard exceptions and two unwaived error-order
-observations. Both negative runners exit 1. Nine runtime rows and ten demand rows
-are renewed at `f6c057c`; the other 66 runtime rows stay at `2f349c8`.
+Full gate **823 passed, zero failed, 49 ignored**; 69 focused tests and strict
+Clippy pass. Normalization covers 28 originals plus four controls: 250 successful
+observations, 68 printer refusals and six F32 exclusions. Five-runtime baseline:
+50 exact executions, including the recovered 16/17 regressions. Negatives remain
+44/56 exact; demand remains 92/100 exact, six approved wildcard exceptions and
+two unwaived error-order observations. Both negative runners exit 1. Nine runtime
+rows and ten demand rows are renewed at `4083b32`; the other 66 runtime rows keep
+their earlier source identities. No unrelated receipt is relabelled.
 
-Previous production checkpoint: [checker-depth accounting](cpu-checker-depth.md),
+Repeated disk pressure was traced to retained large test binaries, multiple
+dependency fingerprints and Git-metadata-triggered relinking. A bounded cleanup
+manifest protects source/evidence and requires 12 GiB before broad builds. The
+monitored final gate stayed above 4.89 GiB; no disk failure or raised Bend limit.
+
+Earlier checkpoint: [checker-depth accounting](cpu-checker-depth.md),
 `2f349c8`. Checking no longer enters an extra depth frame merely to infer the
 same term; its work charge and recursive-child guards remain. The exact combined
 source is unchanged and now matches native, port C/JS and pinned C/JS twice:
@@ -489,18 +494,18 @@ nonzero-expectation fixtures rejected, including all 439 checker negatives.
 No acceptance status changed, and no timeout or abnormal exit occurred. These
 are status-only results, not raw-diagnostic or executable parity.
 
-The current primary ledgers link 102 distinct originals; 1,200 lack
+The current primary ledgers link 103 distinct originals; 1,199 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 596 compiled candidates). The renewed checking ledger
+153 interpreter-only, 595 compiled candidates). The renewed checking ledger
 retains one exact check-only acceptance and three phase/construct agreements
 with differing raw diagnostics. Linked does not mean every lane passed. The
-combined authored regression adds no upstream inventory row. A checked open-Nat
-control isolates the next presentation gap: upstream `n => 1n+n`, native
-`n => Succ{n}`, equal actual core but unequal text. Qualify the unlinked
-`eval/nat_literal_roundtrip` original and its compound output/printer applicability
-next; no lane is promoted from acceptance alone. The independent
-`parse/chain_default_nat_f` / `_g` family remains available as well. Neither needs
-GPU hardware or a new runtime F32.read decision.
+combined authored regression adds no upstream inventory row. The open-Nat
+presentation gap and eval/nat_literal_roundtrip are now qualified. The next
+ledger-selected original is eval/list_reverse_sort: checking-only List.reverse
+and insertion-sort equality proofs, with no main and no manufactured runtime
+lanes. It was inspected but not executed here. The independent
+parse/chain_default_nat_f / _g family is also unqualified. Neither requires GPU
+hardware, a dependency installation or a new F32.read contract decision.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
 identifies a specific unavailable host capability; it does not block unrelated
@@ -512,7 +517,7 @@ CPU work.
 | Passed in primary runtimes; direct IO oracle-host blocked | Application, grouping and operator chains | Six original parse fixtures match five runtimes twice, including brace annotations, Nat precedence and U32 suffix propagation. Pure direct CLI agrees; five IO entries need import.meta.require. Strict proof IO exclusions remain separate. |
 | Passed in primary runtimes; direct IO oracle-host blocked | F32 literals and patterns | Three original fixtures and an authored bit/pattern control match five runtimes twice. Corrected bounded Word-pattern compilation, exact U32 printing and pinned two-stage literal rounding. Finite rejection, malformed-word printing and deep-pattern guards remain covered. |
 | Passed in interpreter/native function mode; upstream printers inapplicable | F32 suffix function companions | Three unchanged originals preserve normalized structure and exact text. Core regression and parsed-output probe are distinguished; strict proof F32 exclusions stay recorded. No numeric execution or parsing-policy claim. |
-| Passed for the three originals; adjacent presentation still missing | Brace suffix functions and complete Nat spelling | Actual core and exact text now agree, including equality-type Nat literals. Both upstream printers refuse the function results. Open `n => Succ{n}` still differs from upstream `n => 1n+n`; this is not an accepted exception. |
+| Passed in strict interpretation; upstream printers inapplicable | Brace suffix functions and Nat literals | The three brace originals retain actual-core/exact-text agreement. The new Nat round-trip and standalone open Nat control now also match; compound function-containing printer refusal is verified. This does not establish every printer form. |
 | Passed in strict interpretation/native function mode; upstream printers inapplicable | U32 suffix function companions | Three originals preserve arithmetic/call nesting and reusable shift/bitwise let structure. Strict eval, actual core and raw text match; both upstream printers refuse the function results. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Float rounding, accumulation and storage | Three original runtime fixtures and a focused bit/text control match five runtimes twice, including signed-zero field/array storage and adjacent infinity/NaN classifications. No production fix or NaN payload-parity claim. |
 | Passed in primary runtimes; direct IO oracle-host blocked | Unary/trig/hyperbolic float math | Three originals and a bit/text control match five runtimes twice. All twelve original expressions agree in exact binary32 bits; no tolerance or math-library exception. Other host profiles and NaN payload observations remain unqualified. |
