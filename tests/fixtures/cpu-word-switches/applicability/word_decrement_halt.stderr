@@ -1,0 +1,1 @@
+Error: main's type @k:../word_decrement_halt.W -> ../word_decrement_halt.W cannot be printed (a function, a Type, an erased or dependent field)

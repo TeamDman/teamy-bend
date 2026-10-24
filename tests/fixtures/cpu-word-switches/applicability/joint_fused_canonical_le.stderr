@@ -1,0 +1,1 @@
+Error: main's type @a:../joint_fused_canonical_le.Nat -> @b:../joint_fused_canonical_le.Nat -> ../joint_fused_canonical_le.Bool cannot be printed (a function, a Type, an erased or dependent field)

@@ -1,0 +1,1 @@
+Error: main's type @a:../nested_word_switch_001.W -> @b:../nested_word_switch_001.W -> ../nested_word_switch_001.R cannot be printed (a function, a Type, an erased or dependent field)

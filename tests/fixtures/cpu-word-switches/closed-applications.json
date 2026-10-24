@@ -1,0 +1,421 @@
+[
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "KP{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "Z{}",
+      "S{S{Z{}}}"
+    ],
+    "value": "KP{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "Z{}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "KP{S{S{S{S{S{Z{}}}}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "KN{S{Z{}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "KM{S{Z{}}, S{Z{}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "KM{S{Z{}}, S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "KM{S{Z{}}, S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{Z{}}}",
+      "Z{}"
+    ],
+    "value": "KN{S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{Z{}}"
+    ],
+    "value": "KM{S{S{Z{}}}, S{Z{}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "KM{S{S{Z{}}}, S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "KM{S{S{Z{}}}, S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "Z{}"
+    ],
+    "value": "KN{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{Z{}}"
+    ],
+    "value": "KM{S{S{S{S{Z{}}}}}, S{Z{}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "KM{S{S{S{S{Z{}}}}}, S{S{Z{}}}}"
+  },
+  {
+    "name": "nested_word_switch_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "KM{S{S{S{S{Z{}}}}}, S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "K1{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "K2{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "Z{}",
+      "S{S{Z{}}}"
+    ],
+    "value": "K2{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "Z{}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "K2{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "K3{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{Z{}}}",
+      "Z{}"
+    ],
+    "value": "K3{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{Z{}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "Z{}"
+    ],
+    "value": "K3{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{Z{}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "nested_word_switch_001",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "K4{}"
+  },
+  {
+    "name": "word_decrement_halt",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "word_decrement_halt",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "word_decrement_halt",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "word_decrement_halt",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "word_decrement_halt",
+    "arguments": [
+      "S{S{S{S{S{S{S{S{Z{}}}}}}}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "Z{}",
+      "S{S{Z{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "Z{}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{Z{}}}",
+      "Z{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{Z{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{Z{}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "T{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "Z{}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{Z{}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{Z{}}}"
+    ],
+    "value": "F{}"
+  },
+  {
+    "name": "joint_fused_canonical_le",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}",
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "T{}"
+  }
+]
