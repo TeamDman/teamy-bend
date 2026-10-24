@@ -4101,3 +4101,29 @@ are current; 68 runtime rows remain historical. Union: 117 originals, full CPU
 parity incomplete. Next: actual printer/runtime qualification of
 parse/bitwise_dot_operators and parse/brace_term_forms. Frozen inputs and budgets;
 no dependency/toolchain/policy change, installation or push.
+
+
+### [x] 5.61 Qualify dotted bitwise operators and brace forms
+
+Source `d5d0585` qualifies unchanged bitwise_dot_operators and brace_term_forms.
+Actual upstream C/JS generation succeeds; corresponding runtime results are
+exactly 671 and 42. The bitwise direct-IO host remains blocked, and strict eval
+excludes the IO book. A separately attributed pure-entry derivative and five
+named definitions retain exact normal forms, strict reports and actual core.
+No production source or policy change was needed.
+
+Full gate **838 passed, zero failed, 49 ignored**; 29 focused tests, five guard
+tests, strict Clippy and 50 baseline observations pass. The complete capture has
+34 exact executions, two host blocks, four proof exclusions, 30 normalization/
+report/core matches, eight false-proof rejections and two structured phase probes.
+It returns 1: the false brace proof rejects at refl but retains the known raw
+checker diagnostic mismatch. No new exception or relaxed rejection was adopted.
+
+See [bitwise/brace evidence](cpu-bitwise-braces.md) for exact commands, source/
+receipt hashes and cache preflight. Only rebuildable target products were
+reclaimed; source and historical evidence remain intact. Five runtime rows and
+the new diagnostic control are current; broader matrices retain their original
+receipts. Union: 119 originals; full CPU parity remains incomplete. Next:
+parse/cons_operator and parse/cons_plus_pattern applicability and execution.
+Frozen dependencies/toolchains/budgets/guards; no installation, desktop/GPU work
+or push.

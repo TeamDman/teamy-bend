@@ -91,17 +91,17 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **79 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **81 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
-representation, thirteen parse and eight compile originals. Linked rows include
-unresolved negative and oracle-host cells. Thirteen positive authored/derived
+representation, fifteen parse and eight compile originals. Linked rows include
+unresolved negative and oracle-host cells. Fourteen positive authored/derived
 controls and a separate read probe supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
 
-There are **1,223 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 608 compiled
-candidates. These are distinct required modes, not 1,223 missing CPU runtime
+There are **1,221 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 606 compiled
+candidates. These are distinct required modes, not 1,221 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
@@ -111,33 +111,37 @@ The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 origin
 at `0f83aea`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
-**117 originals** have receipts and **1,185** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 581 compiled
+**119 originals** have receipts and **1,183** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 579 compiled
 candidates.
 
-The [array-read checkpoint](cpu-array-reads.md), source `0f83aea`, qualifies two
-unchanged IO originals with outputs 4 and 97. Their direct upstream IO host
-remains blocked, and strict eval deliberately excludes the IO books. Separate
-pure-entry derivatives now pass strict eval and six execution lanes after a
-checked Word.adc library correction. No reducer, guard, budget or demand-policy
-change was needed. The complete capture has 52 exact observations, four host
-blocks and eight proof exclusions; it returns 1 rather than waiving the host lane.
+The [bitwise/brace checkpoint](cpu-bitwise-braces.md), source `d5d0585`, qualifies
+two unchanged originals with exact outputs 671 and 42 across their available
+lanes. Actual C/JS generation succeeds. Bitwise direct upstream IO remains
+host-blocked and the IO book stays excluded from strict proof mode. A separately
+attributed pure-entry derivative and five named definitions have exact
+normal-form, strict-report and actual-core evidence. No production fix was needed.
 
-Full gate: **834 passed, zero failed, 49 ignored**; 31 focused integration tests,
-five guard tests, 52 bounded control observations, baseline and normalization
-renewals pass. The 1,302-case strict audit changes no acceptance status and still
-rejects all 439 checker negatives. Negative/demand matrices retain existing
-unresolved cells and the approved wildcard exception; both runners return 1.
-Eleven runtime rows, all interpretation and demand rows identify this source.
-The other 68 runtime rows retain historical receipts. Full runtime, read/comptime
-and raw diagnostic differential matrices are not renewed.
+Full gate: **838 passed, zero failed, 49 ignored**; 29 focused tests, five guards
+and the 50-observation baseline pass. Complete capture: 34 exact executions,
+two host blocks, four proof exclusions, 30 normalization/report/core matches,
+eight false-proof rejections and two phase probes. The unused false brace proof
+rejects at refl before execution, but normalized-endpoint/Bend-span versus
+symbolic-endpoint/host-context diagnostics remain different and unwaived.
+The supplemental runner therefore returns 1.
 
-The preceding [array-depth correction](cpu-array-depth.md), implementation
-e9410bf and test follow-up 6644368, retains its exact receipts. It repaired tail
-frame accumulation and qualified the original array_literal/array_write_stmt
-and four-slot read. Those results are distinct from this checked-library fix.
-Next: parse/bitwise_dot_operators and parse/brace_term_forms applicability and
-corresponding runtime/pure normalization. No current missing cell is passed.
+Five runtime rows identify this source; 76 retain historical identities. All 38
+interpretation and ten demand rows remain at their previous receipts. Broader
+normalization, checking audit, negative/demand, read/comptime and full runtime
+matrices are not renewed. The two older checking controls remain at 0093d01;
+the new brace control is separately recorded at d5d0585. Budgets, evaluators and
+demand policies are unchanged; no new exception was introduced. Next: parse/cons_operator and
+parse/cons_plus_pattern, with actual printer applicability first.
+
+The preceding [array-read checkpoint](cpu-array-reads.md), 0f83aea, retains its
+834-pass gate and exact historical evidence. It repaired composed Word.adc
+normalization, distinct from the earlier [array-depth correction](cpu-array-depth.md)
+at e9410bf/6644368. No prior receipt is relabelled as a fresh comparison here.
 
 The preceding [comparison/index checkpoint](cpu-paren-index.md), `694a210`, qualifies
 two unchanged function originals with strict actual-core/text agreement and eight

@@ -11,26 +11,27 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 79-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current source `0f83aea` qualifies the
-[array-read family](cpu-array-reads.md) and repairs composed word normalization
-by consuming the pinned full-adder pair. Original IO results are exactly 4 and
-97; separate pure-entry derivatives pass. Upstream direct-IO remains host-blocked
-and strict proof mode excludes the original IO books. Full gate **834 passed,
-zero failed, 49 ignored**; 31 focused tests, five guards, bounded controls,
-baseline and normalization pass. The audit changes no acceptance status.
-Negative/demand matrices retain their unresolved cells and return 1. No budget,
-evaluator or approved demand policy changed; no new exception was created.
-O0's oracle build failure remains distinct from pinned O3 evidence.
+1,302-fixture inventory and 81-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current source `d5d0585` qualifies the
+[bitwise/brace family](cpu-bitwise-braces.md): exact original results 671 and 42,
+actual C/JS printer acceptance and corresponding runtime comparisons. The IO
+original retains its direct-host block and strict-proof exclusion. Pure/main/
+helper normalization matches independently. No production fix was needed.
+
+Full gate **838 passed, zero failed, 49 ignored**; 29 focused tests, five guards
+and baseline pass. The false brace proof rejects at the same checking construct,
+but raw diagnostic differences remain unwaived. The complete capture returns 1
+for that mismatch and the unavailable direct-IO host. Broader differential/audit
+receipts remain historical; no safety or semantic policy changed.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Runtime/interpretation ledgers link 117 originals; 1,185 remain unlinked: 439
-checker negatives, twelve check-only modules, 153 interpreter cases and 581
+Runtime/interpretation ledgers link 119 originals; 1,183 remain unlinked: 439
+checker negatives, twelve check-only modules, 153 interpreter cases and 579
 compiled candidates. These are distinct requirements, not runtime defect counts.
-Next bounded family: parse/bitwise_dot_operators and parse/brace_term_forms,
-with actual printer applicability first. Complete lane/API review, host/resource
-and cross-oracle requirements remain open. Earlier milestones below keep their
-historical identities; no missing coverage is promoted to a pass.
+Next: parse/cons_operator and parse/cons_plus_pattern, beginning with actual
+printer applicability. Complete lane/API, resource/host, diagnostics and
+cross-oracle requirements remain open. Earlier milestones below retain their
+historical identities; missing coverage is not promoted to a pass.
 
 ## Passed in this review
 
