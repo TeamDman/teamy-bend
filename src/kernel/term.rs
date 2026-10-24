@@ -486,32 +486,7 @@ impl fmt::Display for ScopedTerm<'_> {
                 Ok(())
             }
             Term::Ctr { name, args } => constructor(f, self.value, name, args, scope),
-            Term::Mat { .. } => {
-                // Upstream term_show prints a consecutive fallback chain as
-                // ordered arms in one match. An empty final fallback is implicit.
-                f.write_str("\\{")?;
-                let mut current = self.value;
-                let mut first = true;
-                while let Term::Mat {
-                    constructor,
-                    arm,
-                    fallback,
-                } = current
-                {
-                    if !first {
-                        f.write_str("; ")?;
-                    }
-                    write!(f, "{constructor}: ")?;
-                    match_branch(f, arm, scope)?;
-                    current = fallback;
-                    first = false;
-                }
-                if !matches!(current, Term::Efq) {
-                    f.write_str("; ")?;
-                    match_branch(f, current, scope)?;
-                }
-                f.write_str("}")
-            }
+            Term::Mat { .. } => match_term(f, self.value, scope),
             Term::Efq => f.write_str("\\{}"),
             Term::Eql { left, right, ty } => equation(f, left, right, ty, scope),
             Term::Rfl => f.write_str("{==}"),
@@ -548,6 +523,33 @@ fn reference(
         f.write_str("!")?;
     }
     Ok(())
+}
+
+fn match_term(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+    // Upstream term_show prints a consecutive fallback chain as
+    // ordered arms in one match. An empty final fallback is implicit.
+    f.write_str("\\{")?;
+    let mut current = value;
+    let mut first = true;
+    while let Term::Mat {
+        constructor,
+        arm,
+        fallback,
+    } = current
+    {
+        if !first {
+            f.write_str("; ")?;
+        }
+        write!(f, "{constructor}: ")?;
+        match_branch(f, arm, scope)?;
+        current = fallback;
+        first = false;
+    }
+    if !matches!(current, Term::Efq) {
+        f.write_str("; ")?;
+        match_branch(f, current, scope)?;
+    }
+    f.write_str("}")
 }
 
 fn equation(
