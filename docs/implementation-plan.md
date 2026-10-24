@@ -5856,3 +5856,55 @@ dependencies, toolchains, limits and cancellation remain frozen. Inactive test
 caches alone are reclaimable; unique evidence is retained. Raw receipts and CLI
 snapshots remain outside Git preservation. Reviewed feature checkpoint publication
 is authorized, without a main merge or release.
+
+### [x] 5.111 Qualify Base identity and source undefined-reference diagnostics
+
+Tested source `81ec997d1e3c93c24a525548ff21396297390f27` qualifies unchanged
+`io/main_forged_io` and `import/base_prelude`, with four bounded depth inputs,
+full original graphs/text, strict-pure constructor results and actual executable
+applicability. A Base-import adapter confirms user `IO` identity stays pure.
+[Scope, commands, hashes and failures](cpu-base-identity.md).
+
+Undefined references now attach source diagnostics at the existing failed lookup:
+expected `a defined name`, observed reference/context/window. Exact negatives
+cover direct/imported/type/erased positions and missing-head priority. Internal
+error messages, acceptance, sharing, budgets and demand semantics remain intact;
+exhausted presentation preserves the original failure. Independent review found
+no blocker. The existing status-bearing `Ok(CliOutput)` path now handles more
+undefined-reference failures; repository entrypoints consume `exit_code`, but
+external callers remain unaudited. Previous emitter/DefDecl caveats remain.
+
+Full gate **1,118 / 0 / 49**, including aggregate sharing, demand, cancellation
+and guard controls; new integration-target strict Clippy passes. The matrix has
+246 observations with no timeout: exact available executions and negatives,
+separate graph/text/check evidence, four IO proof exclusions, two repeated
+upstream forged-IO C generation failures and two Node direct-IO host failures.
+Failed C generation has no build/execution credit. No new semantic exception.
+
+A fresh 1,302-status census preserves every prior outcome, including all 439
+negative rejections. The 489 changed stderr streams compare at checking phase:
+26 exact diagnostics, 385 strict IO exclusions, 78 unwaived differences (64
+upstream accepts/port rejects and 14 differing rejections). Six of the latter
+are generated-reference/source-label/substitution presentation gaps; eight are
+strict IO/foreign exclusions preempting upstream errors. These phase probes are
+not 489 newly qualified runtime fixtures. The ten older cells renew exactly in
+40 observations. Fourteen positive and eighteen unfinished-hole controls retain
+their previous outcomes. Historical supplementary all-target lint failures remain
+unwaived, not rerun and not implied closed by standard/focused lint success.
+
+Detailed links now cover **395 originals**, with **907 unlinked**: 356 checker
+negatives, one checking-only module, 13 interpreter-profile cases and 537 compiled
+candidates. Links include partial/blocked/historical receipts and do not establish
+CPU parity. Existing imported-JS timeouts, dependent-pair/minimal-IO C failures,
+F32.read, error order, host/foreign/resource/API gaps and the incomplete 688-vector
+exploration remain unwaived. Mid-normalization cancellation is not claimed.
+
+Next bounded independent correction: generated `Exists`, `Empty` and `Box.bind`
+source provenance across four original negatives. Next substantive candidate:
+`parse/datatype_declaration_form`, `empty_datatype`, `empty_param_group`, actual
+applicability first. Neither future batch has qualification credit. Dependencies,
+toolchains, pin, safety limits and security remain frozen. Disk preflight/floors
+are enforced; only completed inactive rebuildable caches are reclaimed. Unique
+raw receipts, binary snapshots and historical failures remain outside Git,
+explicitly separate from reviewed feature-branch preservation. No main merge
+or release.
