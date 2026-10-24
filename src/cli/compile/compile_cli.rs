@@ -8,7 +8,7 @@ use crate::compiler::compile_c;
 use crate::compiler::compile_executable_c;
 use crate::compiler::compile_executable_javascript;
 use crate::compiler::compile_javascript;
-use crate::kernel::check_executable;
+use crate::kernel::check_executable_with_origins;
 use crate::syntax;
 use arbitrary::Arbitrary;
 use eyre::Context;
@@ -64,18 +64,24 @@ struct CompileReport {
     gpu_artifact: Option<String>,
 }
 
+enum Generation {
+    Program(String, Vec<PathBuf>),
+    Rejected(CliOutput),
+}
+
 impl CompileArgs {
     /// Validate source and write the compiled program.
     ///
-    /// Classified missing-entry failures write a language diagnostic and return
+    /// Classified source/checking and missing-entry failures write a language diagnostic and return
     /// status-1 output. Callers must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
     /// Returns other source, proof, compilation, output or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let (program, inputs) = match self.generate() {
-            Ok(generated) => generated,
+        let (program, inputs) = match self.generate(cancellation) {
+            Ok(Generation::Program(program, inputs)) => (program, inputs),
+            Ok(Generation::Rejected(output)) => return Ok(output),
             Err(error) => {
                 if let Some(compile) = error.downcast_ref::<CompileError>() {
                     return super::compile_diagnostic_cli::reject(compile, cancellation);
@@ -121,15 +127,32 @@ impl CompileArgs {
         }))
     }
 
-    fn generate(&self) -> Result<(String, Vec<PathBuf>)> {
+    fn generate(&self, cancellation: &CancellationToken) -> Result<Generation> {
         let entry = self.entry.as_deref().unwrap_or("main");
         let (program, inputs) = if self.executable {
             if entry != "main" {
                 return Err(eyre!("executable compilation requires the main entry"));
             }
-            let (source, mut inputs) = syntax::load_executable_with_sources(Path::new(&self.file))
-                .map_err(|error| eyre!("{error}"))?;
-            let checked = check_executable(&source).map_err(|error| eyre!("{error}"))?;
+            let (source, origins, mut inputs) =
+                match syntax::load_executable_with_diagnostics_and_sources(Path::new(&self.file)) {
+                    Ok(loaded) => loaded,
+                    Err(error) => {
+                        return crate::cli::checker_diagnostic::reject_load(&error, cancellation)
+                            .map(Generation::Rejected);
+                    }
+                };
+            let checked =
+                match check_executable_with_origins(&source, Some(origins.tracker.clone())) {
+                    Ok(checked) => checked,
+                    Err(error) => {
+                        return crate::cli::checker_diagnostic::reject(
+                            &error,
+                            &origins,
+                            cancellation,
+                        )
+                        .map(Generation::Rejected);
+                    }
+                };
             for name in checked.foreign_names() {
                 if let Some(imports) = checked.foreign_imports(name) {
                     for (target, path) in imports {
@@ -159,7 +182,7 @@ impl CompileArgs {
             (program, inputs)
         };
         let program = program.map_err(eyre::Report::new)?;
-        Ok((program, inputs))
+        Ok(Generation::Program(program, inputs))
     }
 }
 

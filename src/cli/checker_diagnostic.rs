@@ -92,14 +92,17 @@ fn write_diagnostic(diagnostic: &str, stderr: &mut impl Write) -> eyre::Result<C
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::kernel::check_book;
+    use crate::kernel::check_book_with_origins;
     use crate::syntax::load_with_diagnostics;
     use std::io;
 
     fn rejected(name: &str) -> (KernelError, DiagnosticOrigins) {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(name);
         let (book, origins) = load_with_diagnostics(path).unwrap();
-        (check_book(&book).unwrap_err(), origins)
+        (
+            check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap_err(),
+            origins,
+        )
     }
 
     #[test]
@@ -107,6 +110,7 @@ mod tests {
         for name in [
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
+            "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
         ] {
             let (error, origins) = rejected(name);
             let cancellation = CancellationToken::new();
@@ -218,6 +222,7 @@ mod tests {
         for name in [
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
+            "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
         ] {
             let (error, origins) = rejected(name);
             for fail_write in [true, false] {

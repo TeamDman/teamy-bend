@@ -3,9 +3,10 @@
 param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
+    [string]$BinaryDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-layout', 'destructure', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-typed-list', 'parse-layout', 'destructure', 'plus-binders', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -28,10 +29,15 @@ if ($outputPath -eq $Reference -or $outputPath.StartsWith("$Reference/", [String
 }
 if (Test-Path $OutputDirectory) { throw 'Choose a new output directory to preserve prior evidence.' }
 $OutputDirectory = (New-Item -ItemType Directory -Path $OutputDirectory).FullName
-$builtBinary = Join-Path $port 'target/debug/teamy-bend'
-$binary = Join-Path $OutputDirectory 'teamy-bend'
-[IO.File]::Copy($builtBinary, $binary)
-[IO.File]::SetUnixFileMode($binary, [IO.File]::GetUnixFileMode($builtBinary))
+if ($BinaryDirectory) {
+    # Reuse an immutable, separately retained snapshot; receipts still hash it.
+    $binary = (Resolve-Path (Join-Path $BinaryDirectory 'teamy-bend')).Path
+} else {
+    $builtBinary = Join-Path $port 'target/debug/teamy-bend'
+    $binary = Join-Path $OutputDirectory 'teamy-bend'
+    [IO.File]::Copy($builtBinary, $binary)
+    [IO.File]::SetUnixFileMode($binary, [IO.File]::GetUnixFileMode($builtBinary))
+}
 $binaryHash = (Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash.ToLowerInvariant()
 $node = if ($env:TEAMY_BEND_NODE) { $env:TEAMY_BEND_NODE } else { 'node' }
 $rows = [System.Collections.Generic.List[object]]::new()
@@ -246,6 +252,12 @@ $parseLayout = @(
 $destructure = @(
     @{ name = 'field_match_in_order'; source = "$Reference/tests/flatten/field_match_in_order.bend"; expected = "9`n"; direct_mode = 'io' }
 )
+$plusBinders = @(
+    @{ name = 'plus_binder_case'; source = "$Reference/tests/parse/plus_binder_case.bend"; expected = "12`n25`n8`n"; direct_mode = 'io' },
+    @{ name = 'plus_binder_lambda_do'; source = "$Reference/tests/parse/plus_binder_lambda_do.bend"; expected = "58`n49`n"; direct_mode = 'io' },
+    @{ name = 'plus_binder_nested'; source = "$Reference/tests/parse/plus_binder_nested.bend"; expected = "91`n"; direct_mode = 'io' },
+    @{ name = 'plus_binder_row'; source = "$Reference/tests/parse/plus_binder_row.bend"; expected = "13`n11`n10`n"; direct_mode = 'io' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -263,6 +275,7 @@ $fixtures = switch ($Suite) {
     'parse-typed-list' { $parseTypedList }
     'parse-layout' { $parseLayout }
     'destructure' { $destructure }
+    'plus-binders' { $plusBinders }
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
@@ -270,7 +283,7 @@ $fixtures = switch ($Suite) {
     'float-arithmetic' { $floatArithmetic }
     'float-specials' { $floatSpecials }
     'float-specials-depth' { $floatSpecialsDepth }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseLayout + $destructure + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseTypedList + $parseLayout + $destructure + $plusBinders + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {

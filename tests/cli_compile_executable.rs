@@ -194,3 +194,37 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
         );
     }
 }
+
+#[test]
+fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
+    for (source, expected) in [
+        (
+            include_str!("fixtures/cpu-plus-binders/plus_binder_term.bend"),
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n6 |   x = U32.add(1, 1)\n7>|   U32.add(+x, 1)\n8 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-destructure/destructure_let_001.bend"),
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)\nLocation:\n13 | def main(p):\n14>|   q = p\n15 |   P{a, b} = q\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        for target in ["javascript", "c", "native"] {
+            for existing in [false, true] {
+                let destination = fixture.0.join("main.cjs");
+                if existing {
+                    std::fs::write(&destination, b"preserved output").unwrap();
+                }
+                let output = fixture.compile(&["--executable", "--target", target, "--force"]);
+                assert_eq!(output.status.code(), Some(1));
+                assert!(output.stdout.is_empty());
+                assert_eq!(output.stderr, expected.as_bytes());
+                if existing {
+                    assert_eq!(std::fs::read(&destination).unwrap(), b"preserved output");
+                    std::fs::remove_file(destination).unwrap();
+                } else {
+                    assert!(!destination.exists());
+                }
+            }
+        }
+    }
+}

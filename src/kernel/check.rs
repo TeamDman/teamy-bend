@@ -863,10 +863,34 @@ impl Engine {
         arguments: &[TermRef],
     ) -> Result<(TermRef, Uses), KernelError> {
         match value.as_ref() {
-            Term::Var { id, .. } => {
-                let b = context
-                    .get(id)
-                    .ok_or_else(|| KernelError::new(format!("unbound variable {value}")))?;
+            Term::Var { id, name } => {
+                let Some(b) = context.get(id) else {
+                    let mut error = KernelError::new(format!("unbound variable {value}"));
+                    if self
+                        .origins
+                        .as_ref()
+                        .is_some_and(|origins| origins.is_reusable_marker(*id))
+                    {
+                        // Upstream's sentinel is -1. Its printer shows the
+                        // suffix only when the name also occurs in scope.
+                        let observed = if context.values().any(|binder| binder.name == *name) {
+                            format!("{name}^-1")
+                        } else {
+                            name.clone()
+                        };
+                        error.diagnostic = self
+                            .term_diagnostic(
+                                lhs,
+                                value,
+                                DiagnosticExpression::Text("a bound variable".into()),
+                                DiagnosticExpression::Text(observed),
+                                context,
+                            )
+                            .ok()
+                            .map(Box::new);
+                    }
+                    return Err(error);
+                };
                 Ok((Rc::clone(&b.ty), usage(*id, demand)))
             }
             Term::Ref(name) | Term::GpuRef(name) => {
@@ -1752,6 +1776,11 @@ mod reflexivity_diagnostic_tests {
         for (name, entries) in [
             ("cpu-constructors/context-open.bend", &[][..]),
             ("cpu-checking/false_fusion.bend", &[][..]),
+            ("cpu-plus-binders/plus_binder_term.bend", &[][..]),
+            ("cpu-plus-binders/plus_binder_case.bend", &[][..]),
+            ("cpu-plus-binders/plus_binder_lambda_do.bend", &[][..]),
+            ("cpu-plus-binders/plus_binder_nested.bend", &[][..]),
+            ("cpu-plus-binders/plus_binder_row.bend", &[][..]),
             (
                 "cpu-checking/list_reverse_sort.bend",
                 &["l123", "l321", "rev", "srt"][..],
@@ -1869,6 +1898,64 @@ mod reflexivity_diagnostic_tests {
             KernelError::new("term needs an expected type or annotation: Missing{}")
         );
         assert!(error.language_failure().is_none());
+    }
+
+    #[test]
+    fn marker_diagnostic_requires_provenance_and_remaining_context_budget() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let marker = term(Term::Var {
+            name: "x".into(),
+            id: 2,
+        });
+        let context = Context::from([(
+            1,
+            Binder {
+                quant: Quant::Lone,
+                name: "x".into(),
+                id: 1,
+                ty: term(Term::Qnt),
+            },
+        )]);
+        let origins = super::super::origins::TermOrigins::default();
+        engine.origins = Some(origins.clone());
+        let untracked = engine
+            .infer(&Lhs::default(), &marker, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert!(untracked.checker_diagnostic().is_none());
+        origins.reusable_marker(2);
+        engine.reset();
+        let tracked = engine
+            .infer(&Lhs::default(), &marker, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert_eq!(tracked, untracked);
+        assert_eq!(tracked.to_string(), "unbound variable x");
+        assert_eq!(tracked.checker_diagnostic().unwrap().observed, "x^-1");
+        let unshadowed = engine
+            .infer(&Lhs::default(), &marker, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(unshadowed.checker_diagnostic().unwrap().observed, "x");
+        engine.fuel = 1;
+        let exhausted = engine
+            .infer(&Lhs::default(), &marker, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert_eq!(exhausted, untracked);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        engine.reset();
+        let mut bound = context;
+        let mut binding = bound[&1].clone();
+        binding.id = 2;
+        bound.insert(2, binding);
+        assert_eq!(
+            engine
+                .infer(&Lhs::default(), &marker, Quant::Lone, &bound, &[])
+                .unwrap()
+                .1,
+            usage(2, Quant::Lone)
+        );
     }
 
     #[test]

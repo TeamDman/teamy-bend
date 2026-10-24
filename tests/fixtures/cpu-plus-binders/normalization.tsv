@@ -1,0 +1,10 @@
+plus_binder_case.bend	area	\{Circle: (r => U32.mul(U32.mul(3, r), r)); Square: (s => U32.mul(s, s))}
+plus_binder_case.bend	twice	x => U32.add(x, x)
+plus_binder_lambda_do.bend	sq	f => x => f(x)
+plus_binder_nested.bend	sum2	\{Nil: 0; Con: \{Tuple: (a => b => t => U32.add(U32.add(U32.mul(a, a), b), sum2(t)))}}
+plus_binder_nested.bend	two	\{Con: (u => \{Con: (v => \{Nil: U32.add(U32.mul(u, u), v); (_13 => 0)}); (_12 => 0)}); (xs => 0)}
+plus_binder_nested.bend	pair	\{Tuple: (p => q => U32.add(U32.mul(p, p), q))}
+plus_binder_nested.bend	box	\{Box: (m => U32.mul(m, m))}
+plus_binder_row.bend	sq	x => U32.add(U32.mul(U32.inc(x), U32.inc(x)), U32.mul(U32.inc(U32.inc(x)), U32.inc(U32.inc(x))))
+plus_binder_row.bend	pair	\{Tuple: (h => v => \{Tuple: (g => z => U32.add(U32.add(v, v), U32.add(g, z)))})}
+plus_binder_row.bend	kon	\{Kon: (h => \{True: U32.add(h, h); False: h})}

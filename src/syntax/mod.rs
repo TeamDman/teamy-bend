@@ -15,6 +15,7 @@ pub use parser::ParseError;
 pub use parser::load;
 pub use parser::load_executable;
 pub(crate) use parser::load_executable_with_diagnostics;
+pub(crate) use parser::load_executable_with_diagnostics_and_sources;
 pub use parser::load_executable_with_sources;
 pub(crate) use parser::load_with_diagnostics;
 pub use parser::load_with_sources;

@@ -3,6 +3,7 @@
 param(
     [Parameter(Mandatory = $true)][string]$Reference,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
+    [string]$BinaryDirectory,
     [ValidateRange(1, 3)][int]$Repetitions = 2,
     [ValidateSet('operator', 'recursion', 'companions', 'base-functions', 'nat-fuel', 'rewrite', 'float-suffix', 'u32-suffix', 'brace-suffix', 'nat-literal', 'default-nat', 'spacing-functions', 'paren-functions', 'layout', 'multi-scrutinee', 'nested-fields', 'nested-patterns', 'destructure', 'all')][string]$Suite = 'all',
     [switch]$RequireExactText
@@ -26,12 +27,18 @@ if ($outputPath -eq $Reference -or $outputPath.StartsWith("$Reference$separator"
 if (Test-Path -LiteralPath $outputPath) { throw 'Choose a fresh evidence directory.' }
 $null = New-Item -ItemType Directory -Path $outputPath
 $extension = if ($IsWindows) { '.exe' } else { '' }
-$binary = Join-Path $outputPath "teamy-bend$extension"
-$probe = Join-Path $outputPath "compare_normalization$extension"
-foreach ($pair in @(@("target/debug/teamy-bend$extension", $binary), @("target/debug/examples/compare_normalization$extension", $probe))) {
-    $source = Join-Path $port $pair[0]
-    [IO.File]::Copy($source, $pair[1])
-    if (-not $IsWindows) { [IO.File]::SetUnixFileMode($pair[1], [IO.File]::GetUnixFileMode($source)) }
+if ($BinaryDirectory) {
+    # Caller retains this immutable snapshot once for all comparison suites.
+    $binary = (Resolve-Path (Join-Path $BinaryDirectory "teamy-bend$extension")).Path
+    $probe = (Resolve-Path (Join-Path $BinaryDirectory "compare_normalization$extension")).Path
+} else {
+    $binary = Join-Path $outputPath "teamy-bend$extension"
+    $probe = Join-Path $outputPath "compare_normalization$extension"
+    foreach ($pair in @(@("target/debug/teamy-bend$extension", $binary), @("target/debug/examples/compare_normalization$extension", $probe))) {
+        $source = Join-Path $port $pair[0]
+        [IO.File]::Copy($source, $pair[1])
+        if (-not $IsWindows) { [IO.File]::SetUnixFileMode($pair[1], [IO.File]::GetUnixFileMode($source)) }
+    }
 }
 $binaryHash = (Get-FileHash $binary -Algorithm SHA256).Hash.ToLowerInvariant()
 $probeHash = (Get-FileHash $probe -Algorithm SHA256).Hash.ToLowerInvariant()

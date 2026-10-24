@@ -621,3 +621,27 @@ fn extracted_fields_remain_matchable_in_executable_javascript() {
         "9\n",
     );
 }
+
+#[test]
+fn reusable_binders_preserve_original_execution_results() {
+    for (source, expected) in [
+        (
+            include_str!("fixtures/cpu-plus-binders/plus_binder_case.bend"),
+            "12\n25\n8\n",
+        ),
+        (
+            include_str!("fixtures/cpu-plus-binders/plus_binder_lambda_do.bend"),
+            "58\n49\n",
+        ),
+        (
+            include_str!("fixtures/cpu-plus-binders/plus_binder_nested.bend"),
+            "91\n",
+        ),
+        (
+            include_str!("fixtures/cpu-plus-binders/plus_binder_row.bend"),
+            "13\n11\n10\n",
+        ),
+    ] {
+        Fixture::new().expect(source, expected);
+    }
+}

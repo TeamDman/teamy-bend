@@ -55,3 +55,41 @@ fn float_suffix_functions_preserve_core_structure_without_granting_proof_contrac
         );
     }
 }
+
+#[test]
+fn reusable_binder_helpers_preserve_core_without_granting_io_proofs() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-plus-binders");
+    let mut count = 0;
+    for suffix in ["case", "lambda_do", "nested", "row"] {
+        let name = format!("plus_binder_{suffix}.bend");
+        let path = root.join(&name);
+        let source = load_executable(&path).unwrap();
+        let checked = check_executable(&source).unwrap();
+        assert_eq!(checked.entry_kind().unwrap(), ExecutableEntry::Io);
+        assert!(
+            check_book(&load(&path).unwrap())
+                .unwrap_err()
+                .to_string()
+                .contains("undefined name IO")
+        );
+        for row in include_str!("../../tests/fixtures/cpu-plus-binders/normalization.tsv").lines() {
+            let mut fields = row.splitn(3, '\t');
+            let file = fields.next().unwrap();
+            let entry = fields.next().unwrap();
+            let expected = fields.next().unwrap();
+            if file != name {
+                continue;
+            }
+            let mut engine = checked.engine.clone();
+            engine.reset();
+            let value = engine.normalize_definition(entry).unwrap();
+            assert_eq!(value.to_string(), expected, "{name}/{entry}");
+            assert_eq!(
+                shape_in_book(&value, &source.book).unwrap(),
+                shape_in_book(&parse_term(expected).unwrap(), &source.book).unwrap()
+            );
+            count += 1;
+        }
+    }
+    assert_eq!(count, 10);
+}

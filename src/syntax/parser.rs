@@ -1220,7 +1220,8 @@ impl Parser<'_> {
     fn atom(&mut self) -> Result<TermRef, ParseError> {
         let line = self.current().line;
         let value = self.atom_inner()?;
-        if matches!(value.as_ref(), Term::Ctr { .. } | Term::Rwt { .. })
+        if (matches!(value.as_ref(), Term::Ctr { .. } | Term::Rwt { .. })
+            || self.is_reusable(&value))
             && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);
@@ -1510,6 +1511,9 @@ impl Parser<'_> {
                     *self.fresh += 1;
                     let marker = Variable { name, id };
                     self.reusable_markers.insert(marker.id);
+                    if let Some(origins) = &self.templates.diagnostics {
+                        origins.tracker.reusable_marker(marker.id);
+                    }
                     return Ok(marker.term());
                 }
                 return Err(self.error("+ needs a quantified datatype or a binder"));
@@ -2559,6 +2563,11 @@ impl Loader {
         }
         self.active.insert(real.clone());
         let source = fs::read_to_string(&real).map_err(|e| error(e.to_string()))?;
+        let mut display_lines = self
+            .templates
+            .diagnostics
+            .as_ref()
+            .map(|_| source.split('\n').collect::<Vec<_>>());
         let mut aliases = BTreeMap::new();
         let mut cleaned = String::new();
         let mut header = true;
@@ -2624,6 +2633,9 @@ impl Loader {
                     ));
                 }
                 cleaned.push('\n');
+                if let Some(lines) = &mut display_lines {
+                    lines[line_number] = "";
+                }
             } else {
                 if !text.is_empty() {
                     header = false;
@@ -2633,9 +2645,13 @@ impl Loader {
             }
         }
         if let Some(origins) = &mut self.templates.diagnostics {
-            // Keep the exact original lines, including import headers and CRLF.
-            // Parsing below uses a cleaned copy with the same line numbers.
-            origins.source(&path.display().to_string(), &source);
+            // Upstream removes consumed import headers from diagnostic source.
+            // Preserve other original bytes, including CRLF and the final line;
+            // the parser's cleaned buffer has different newline normalization.
+            origins.source(
+                &path.display().to_string(),
+                &display_lines.expect("enabled origins").join("\n"),
+            );
         }
         parse_into(
             ParseInput {
@@ -2806,6 +2822,19 @@ pub(crate) fn load_executable_with_diagnostics(
     (ExecutableSource, super::diagnostics::DiagnosticOrigins),
     super::diagnostics::DiagnosticLoadError,
 > {
+    load_executable_with_diagnostics_and_sources(path).map(|(source, origins, _)| (source, origins))
+}
+
+pub(crate) fn load_executable_with_diagnostics_and_sources(
+    path: impl AsRef<Path>,
+) -> Result<
+    (
+        ExecutableSource,
+        super::diagnostics::DiagnosticOrigins,
+        Vec<PathBuf>,
+    ),
+    super::diagnostics::DiagnosticLoadError,
+> {
     let mut loader = Loader {
         executable: true,
         templates: Templates {
@@ -2833,6 +2862,7 @@ pub(crate) fn load_executable_with_diagnostics(
     Ok((
         source,
         loader.templates.diagnostics.expect("enabled origins"),
+        loader.seen.into_keys().collect(),
     ))
 }
 

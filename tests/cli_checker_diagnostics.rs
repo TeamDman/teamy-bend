@@ -428,3 +428,76 @@ fn local_binding_rejections_use_the_original_binder_source() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn unbound_reusable_markers_keep_context_source_and_first_error() {
+    let original = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-plus-binders/plus_binder_term.bend");
+    assert_diagnostic(
+        &original,
+        "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n6 |   x = U32.add(1, 1)\n7>|   U32.add(+x, 1)\n8 | \n",
+    );
+    for (source, helper, expected) in [
+        (
+            "import Base\ndef main() -> {0n == 1n : Nat}: {==}\n",
+            None,
+            "Error:\n- expected : 0n\n- observed : 1n\nLocation: main\n1 | \n2>| def main() -> {0n == 1n : Nat}: {==}\n3 | \n",
+        ),
+        (
+            "import Base\ndef main() -> Nat: Missing{}\n",
+            None,
+            "Error:\n- expected : a declared constructor (Nat declares Zero, Succ)\n- observed : Missing{}\nLocation: main\n1 | \n2>| def main() -> Nat: Missing{}\n3 | \n",
+        ),
+        (
+            "import Base\r\ndef main(x: U32) -> U32: +x\r\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n1 | \n2>| def main(x: U32) -> U32: +x\r\n3 | \n",
+        ),
+        (
+            "import Base\ndef main(x: U32) -> U32: +x",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n1 | \n2>| def main(x: U32) -> U32: +x\n",
+        ),
+        (
+            "import Base\ndef main(x: U32) -> U32: +x\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n1 | \n2>| def main(x: U32) -> U32: +x\n3 | \n",
+        ),
+        (
+            "import Base\ntype Box is Data:\n  Box{v: U32}\ndef main(b: Box) -> U32:\n  match b:\n    case Box{x}: +x\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n5 |   match b:\n6>|     case Box{x}: +x\n7 | \n",
+        ),
+        (
+            "import Base\nimport helper.bend as H\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad(x: U32) -> U32: +x\n"),
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: helper.bad\n1 | \n2>| def bad(x: U32) -> U32: +x\n3 | \n",
+        ),
+        (
+            "import Base\ndef main(x: U32, y: U32) -> U32: U32.add(+x, +y)\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\n- y : U32\nLocation: main\n1 | \n2>| def main(x: U32, y: U32) -> U32: U32.add(+x, +y)\n3 | \n",
+        ),
+        (
+            "import Base\ndef main(x: U32) -> U32:\n  x = U32.inc(x)\n  +x\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\n- x : U32\nLocation: main\n3 |   x = U32.inc(x)\n4>|   +x\n5 | \n",
+        ),
+        (
+            "import Base\ndef bad(~n: U32, x: U32) -> U32: U32.add(+x, n)\ndef main() -> U32: bad(0, 1)\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- n : U32\n- x : U32\nLocation: bad~0\n1 | \n2>| def bad(~n: U32, x: U32) -> U32: U32.add(+x, n)\n3 | def main() -> U32: bad(0, 1)\n",
+        ),
+        (
+            "import Base\ndef main() -> U32: +missing\n",
+            None,
+            "Error:\n- expected : a bound variable\n- observed : missing\nLocation: main\n1 | \n2>| def main() -> U32: +missing\n3 | \n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

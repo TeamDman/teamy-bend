@@ -4,6 +4,7 @@ use super::Term;
 use super::TermRef;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 use std::rc::Rc;
 use std::rc::Weak;
 
@@ -13,6 +14,9 @@ pub(crate) struct TermOrigins(Rc<RefCell<Index>>);
 #[derive(Debug, Default)]
 struct Index {
     nodes: BTreeMap<usize, Origin>,
+    // The parser keeps unique semantic IDs for upstream's unbound + markers.
+    // This display-only index records their spelling without changing terms.
+    reusable_markers: BTreeSet<usize>,
     sweep_at: usize,
 }
 
@@ -26,6 +30,14 @@ struct Origin {
 }
 
 impl TermOrigins {
+    pub(crate) fn reusable_marker(&self, id: usize) {
+        self.0.borrow_mut().reusable_markers.insert(id);
+    }
+
+    pub(crate) fn is_reusable_marker(&self, id: usize) -> bool {
+        self.0.borrow().reusable_markers.contains(&id)
+    }
+
     pub(crate) fn track(&self, value: &TermRef) {
         let key = Rc::as_ptr(value) as usize;
         self.0
