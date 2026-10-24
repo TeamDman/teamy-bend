@@ -5242,3 +5242,46 @@ application grid. These are ledger-selected interpreter cases; no new execution
 credit is claimed. Dependencies, pins, toolchains, guards, budgets and security
 policies remain frozen. Local checkpoints only; no publication, merge,
 installation, desktop or GPU work. No new user decision was needed for this fix.
+
+### [x] 5.97 Qualify simple single and nested constructor behavior
+
+Tested source `0b041df0fa8de2a50787026082ee59afa253070b` adds five unchanged simple,
+single-constructor and nested-constructor originals with a bounded **33-input**
+grid. Original graphs/text, complete application results, scalar projections
+and executable output are compared separately. No production change or new
+port semantic mismatch was found. [Scope and receipts](cpu-constructor-matches.md).
+
+The full gate passes **1,003 tests, zero failures, 49 ignored**; final focused
+controls pass **23 / 0 / 0**. The **60 graph observations** and **150 original/
+applicability observations** complete. Ten wrapper mains have **110 exact
+executions and 60 successful generation/build steps**. The **ten upstream-JS
+full-constructor printer timeouts remain unresolved**, so the complete runtime
+matrix exits 1. All projected-output lanes agree. Port native/C/JS full values
+match the pinned interpreter and C O3; this is not upstream-JS output parity.
+Original Base-required and adapted function-printer refusals are exact and do
+not become executable passes.
+
+The initial new test aborted while recursively decoding its large graph oracle,
+before Bend evaluation. The independently reviewed test-only repair compares
+the entire canonical serialized graph, with no dropped nodes or structural
+relaxation. Failed receipts remain tied to `5a210c3`; the clean final gate uses
+this tested source. No host stack, Bend work/depth guard, evaluator or policy
+change occurred. Aggregate sharing/work/demand/cancellation regressions pass in
+the full gate; no mid-normalization cancellation is claimed. All 1,302 checking
+statuses and streams remain unchanged; 439 expected negatives reject. Fourteen
+positive controls pass; 18 observations retain three hole/TODO disagreements.
+
+Detailed evidence now links **349 originals**, with **953** without detailed
+receipts: **357 checker negatives, one checking-only module, 58 interpreter
+cases and 537 compiled candidates**. Five interpretation rows are new; prior
+rows retain their historical identities. Links include partial/blocked evidence,
+not completed parity. Imported-JS printing, erased-hole/TODO, resource/host/
+foreign gaps, F32.read, competing failure order, downstream API caveats and the
+unfinished 688-vector exploration remain unwaived.
+
+Next independent family: `flatten/literal_default_000..004`, covering literal
+ladders, three-column defaults and reconstruction of the whole matched default
+value. Establish applicability before a bounded **45-input** grid. These remain
+unqualified. Frozen dependencies, toolchains, pins, budgets, guards and
+cancellation; local checkpoints only, no pushes/merges/installations/desktop/GPU.
+No new user decision was needed for this bounded qualification.
