@@ -606,7 +606,7 @@ fn constructor(
         && let [word] = args
         && let Some(value) = literal_word(word)
     {
-        return write!(f, "{}", scoped(value, scope));
+        return write!(f, "{value}");
     }
     write!(f, "{name}{{")?;
     list(f, args, scope)?;
