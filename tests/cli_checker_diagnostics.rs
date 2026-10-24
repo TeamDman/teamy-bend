@@ -1353,3 +1353,142 @@ fn match_failures_keep_nested_imported_template_and_layout_origins() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn match_guard_originals_keep_exact_rejections_and_locations() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-match-guards");
+    for (name, expected) in [
+        (
+            "match_not_datatype",
+            "Error:\n- expected : a datatype\n- observed : @_:U32 -> U32\nLocation: f\n11 | def f(h):\n12>|   match h:\n13 |     case Z{}:\n",
+        ),
+        (
+            "empty_match_datatype",
+            "Error:\n- expected : a datatype\n- observed : @_:U32 -> U32\nLocation: main\n7 | \n8>| def main(): \\{}\n9 | \n",
+        ),
+        (
+            "float_match_scrutinee",
+            "Error:\n- expected : a constructor of F32 (missing, or already matched)\n- observed : \\{Chr: (c => 0)}\nLocation: f\n12 |   match x:\n13>|     case Chr{c}:\n14 |       0\n",
+        ),
+        (
+            "error_window_match_repeated",
+            "Error:\n- expected : a constructor of One (missing, or already matched)\n- observed : \\{One: One{}}\nLocation: bad\n5 | def bad() -> One -> One:\n6>|   \\{One: One{}; One: One{}}\n7 | \n",
+        ),
+        (
+            "erased_match_empty",
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nLocation: bad\n10 | \n11>| def bad(): \\{}\n12 | \n",
+        ),
+        (
+            "erased_match_ctor",
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nLocation: hidden\n10 | \n11>| def hidden(): \\{F8: T8{}; \\{T8: F8{}; \\{}}}\n12 | \n",
+        ),
+        (
+            "unknown_constructor",
+            "Error:\n- expected : a constructor of U32 (missing, or already matched)\n- observed : \\{Qux: 3}\nLocation: main\n6 | \n7>| def main(): \\{Qux: 3}\n8 | \n",
+        ),
+        (
+            "bool_wrap_scope",
+            "Error:\n- expected : a constructor of Bool (missing, or already matched)\n- observed : \\{Con: (h => t => h); Nil: 0}\nLocation: main.go\n12 |   match z:\n13>|     case h <> t:\n14 |       h\n",
+        ),
+    ] {
+        assert_diagnostic(&root.join(format!("{name}.bend")), expected);
+    }
+}
+
+#[test]
+fn match_guard_reports_preserve_nested_imported_template_and_literal_locations() {
+    for (source, helper, expected) in [
+        (
+            "def bad(f: Type -> Type) -> Type:\n  match (\n    f\n  ):\n",
+            None,
+            "Error:\n- expected : a datatype\n- observed : @_:Type -> Type\nLocation: bad\n1 | def bad(f: Type -> Type) -> Type:\n2>|   match (\n3 |     f\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some("def bad(f: Type -> Type) -> Type:\n  match (\n    f\n  ):\n"),
+            "Error:\n- expected : a datatype\n- observed : @_:Type -> Type\nLocation: helper.bad\n1 | def bad(f: Type -> Type) -> Type:\n2>|   match (\n3 |     f\n",
+        ),
+        (
+            "def bad() -> Type:\n  \\{}\n",
+            None,
+            "Error:\n- expected : Type\n- observed : non-inferrable term '\\{}'\nLocation: bad\n1 | def bad() -> Type:\n2>|   \\{}\n3 | \n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad() -> Type:\n  \\{Z: Z{}}\n",
+            None,
+            "Error:\n- expected : Type\n- observed : non-inferrable term '\\{Z: Z{}}'\nLocation: bad\n4 | def bad() -> Type:\n5>|   \\{Z: Z{}}\n6 | \n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ntype Other is Data:\n  Other.new{}\ndef bad(n: N) -> N:\n  match n:\n    case Other.new{}:\n      Z{}\n",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Other.new: Z{}}\nLocation: bad\n7 |   match n:\n8>|     case Other.new{}:\n9 |       Z{}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ntype Other is Data:\n  Other.new{}\ndef bad(n: N) -> N:\n  match n:\n    case S{\n      Other.new{}\n    }:\n      Z{}\n",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Other.new: Z{}}\nLocation: bad\n 8 |     case S{\n 9>|       Other.new{}\n10 |     }:\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\ntype Other is Data:\n  Other.new{}\ndef bad(n: N) -> N:\n  match n:\n    case S{\n      Other.new{}\n    }:\n      Z{}\n",
+            ),
+            "Error:\n- expected : a constructor of helper.N (missing, or already matched)\n- observed : \\{helper.Other.new: helper.Z{}}\nLocation: helper.bad\n 8 |     case S{\n 9>|       Other.new{}\n10 |     }:\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ntype Other is Data:\n  Other.new{}\ndef bad(~f: Type -> Type, n: N) -> N:\n  match n:\n    case Other.new{}:\n      Z{}\ndef main() -> N: bad(~(x => x), Z{})\n",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Other.new: Z{}}\nContext:\n- f : @_:Type -> Type\nLocation: bad~0\n7 |   match n:\n8>|     case Other.new{}:\n9 |       Z{}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad() -> N -> N:\n  \\{Z: Z{};\n    Z: Z{};\n    S: p => p}\n",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Z: Z{}; S: (p => p)}\nLocation: bad\n5 |   \\{Z: Z{};\n6>|     Z: Z{};\n7 |     S: p => p}\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\ndef bad() -> N -> N:\n  \\{Z: Z{};\n    Z: Z{};\n    S: p => p}\n",
+            ),
+            "Error:\n- expected : a constructor of helper.N (missing, or already matched)\n- observed : \\{helper.Z: helper.Z{}; helper.S: (p => p)}\nLocation: helper.bad\n5 |   \\{Z: Z{};\n6>|     Z: Z{};\n7 |     S: p => p}\n",
+        ),
+        (
+            "type N is Data:\r\n  Z{}\r\n  S{p: N}\r\ntype Other is Data:\r\n  Other.new{}\r\ndef bad(n: N) -> N:\r\n  match n:\r\n    case S{\r\n      Other.new{}\r\n    }:\r\n      Z{}\r\n",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Other.new: Z{}}\nLocation: bad\n 8 |     case S{\r\n 9>|       Other.new{}\r\n10 |     }:\r\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ntype Other is Data:\n  Other.new{}\ndef bad(n: N) -> N:\n  match n:\n    case S{\n      Other.new{}\n    }:\n      Z{}",
+            None,
+            "Error:\n- expected : a constructor of N (missing, or already matched)\n- observed : \\{Other.new: Z{}}\nLocation: bad\n 8 |     case S{\n 9>|       Other.new{}\n10 |     }:\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(-n: N) -> N:\n  match n:\n    case Z{}: Z{}\n    case S{p}: p\n",
+            None,
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nLocation: bad\n4 | def bad(-n: N) -> N:\n5>|   match n:\n6 |     case Z{}: Z{}\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(-n: N) -> N:\n  match n:\n    case Z{}: Z{}\n    case S{p}: p\n",
+            ),
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nLocation: helper.bad\n4 | def bad(-n: N) -> N:\n5>|   match n:\n6 |     case Z{}: Z{}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(~f: Type -> Type, -n: N) -> N:\n  match n:\n    case Z{}: Z{}\n    case S{p}: p\ndef main() -> N: bad(~(x => x), Z{})\n",
+            None,
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nContext:\n- f : @_:Type -> Type\nLocation: bad~0\n4 | def bad(~f: Type -> Type, -n: N) -> N:\n5>|   match n:\n6 |     case Z{}: Z{}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(x: N) -> @-n:N -> N:\n  \\{Z: x; S: p => p}\n",
+            None,
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nContext:\n- x : N\nLocation: bad\n4 | def bad(x: N) -> @-n:N -> N:\n5>|   \\{Z: x; S: p => p}\n6 | \n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

@@ -93,7 +93,7 @@ pub(crate) struct CheckerDiagnostic {
     pub(crate) match_site: Option<super::origins::MatchSite>,
     pub(crate) definition: String,
     pub(crate) expected: String,
-    pub(crate) observed: String,
+    pub(crate) observed: Option<String>,
     pub(crate) context: Vec<(String, String)>,
 }
 
@@ -428,11 +428,24 @@ impl Engine {
         observed: DiagnosticExpression<'_>,
         context: &Context,
     ) -> Result<CheckerDiagnostic, KernelError> {
+        self.diagnostic(lhs, value, expected, Some(observed), context)
+    }
+
+    fn diagnostic(
+        &self,
+        lhs: &Lhs,
+        value: &TermRef,
+        expected: DiagnosticExpression<'_>,
+        observed: Option<DiagnosticExpression<'_>>,
+        context: &Context,
+    ) -> Result<CheckerDiagnostic, KernelError> {
         // The check has already rejected. Presentation shares only the remaining
         // fuel/depth allowance on a clone; it cannot alter acceptance or budgets.
         let mut display = self.clone();
         let expected = expected.render(&mut display)?;
-        let observed = observed.render(&mut display)?;
+        let observed = observed
+            .map(|value| value.render(&mut display))
+            .transpose()?;
         let context = context
             .diagnostic_values()
             .map(|binder| {
@@ -1589,15 +1602,51 @@ impl Engine {
             body,
         } = t.as_ref()
         else {
-            return Err(mismatch(ty, value));
+            let mut error = mismatch(ty, value);
+            error.diagnostic = self
+                .term_diagnostic(
+                    lhs,
+                    value,
+                    DiagnosticExpression::Term(ty),
+                    DiagnosticExpression::Typeless(value),
+                    context,
+                )
+                .ok()
+                .map(Box::new);
+            return Err(error);
         };
         if demand != Quant::None && *quant == Quant::None {
-            return Err(KernelError::new(
-                "an erased scrutinee cannot determine live evidence",
-            ));
+            let mut error = KernelError::new("an erased scrutinee cannot determine live evidence");
+            error.diagnostic = self
+                .diagnostic(
+                    lhs,
+                    value,
+                    DiagnosticExpression::Text(
+                        "a live scrutinee (a - scrutinee matches only in a dead region)".into(),
+                    ),
+                    None,
+                    context,
+                )
+                .ok()
+                .map(Box::new);
+            return Err(error);
         }
         let dt = self.whnf(domain)?;
-        let adt = self.adt(&dt)?;
+        let adt = self.adt(&dt).map_err(|mut error| {
+            if !matches!(dt.as_ref(), Term::Adt { .. }) {
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text("a datatype".into()),
+                        DiagnosticExpression::Term(domain),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+            }
+            error
+        })?;
         if matches!(value.as_ref(), Term::Efq) {
             if adt.constructors.is_empty() || self.context_dead(context)? {
                 return Ok(Uses::new());
@@ -1634,9 +1683,33 @@ impl Engine {
             .iter()
             .find(|c| &c.name == constructor)
             .ok_or_else(|| {
-                KernelError::new(format!(
+                let mut error = KernelError::new(format!(
                     "constructor {constructor} missing or already matched"
-                ))
+                ));
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text(format!(
+                            "a constructor of {} (missing, or already matched)",
+                            adt.name
+                        )),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(|mut report| {
+                        if let Some(source) = self
+                            .origins
+                            .as_ref()
+                            .and_then(|origins| origins.constructor_source(value))
+                        {
+                            report.term_identity = source;
+                            report.match_site = None;
+                        }
+                        Box::new(report)
+                    });
+                error
             })?;
         let Term::Adt { args, excluded, .. } = dt.as_ref() else {
             unreachable!()
@@ -2004,6 +2077,71 @@ mod reflexivity_diagnostic_tests {
     use super::*;
 
     #[test]
+    fn match_guard_diagnostics_preserve_first_errors_and_remaining_budget() {
+        let book = crate::syntax::parse("type N is Data:\n  Z{}\n").unwrap();
+        let mut engine = empty_engine(&book).unwrap();
+        let Declaration::Adt(adt) = &book.declarations[0] else {
+            panic!("datatype")
+        };
+        engine.validate_adt(adt).unwrap();
+        let context = Context::from([(
+            77,
+            Binder {
+                quant: Quant::None,
+                name: "q".into(),
+                id: 77,
+                ty: term(Term::Qnt),
+            },
+        )]);
+        for (goal, message) in [
+            ("Type", "expected Type"),
+            ("@-n:N -> N", "an erased scrutinee"),
+            ("(Type -> Type) -> N", "expected a datatype"),
+            ("N -> N", "constructor Wrong missing"),
+        ] {
+            let goal = crate::syntax::parse_term(goal).unwrap();
+            let value = term(Term::Mat {
+                constructor: "Wrong".into(),
+                arm: term(Term::Ctr {
+                    name: "Z".into(),
+                    args: vec![],
+                }),
+                fallback: term(Term::Efq),
+            });
+            engine.reset();
+            let before = engine.fuel;
+            let error = engine
+                .check(&Lhs::default(), &value, Quant::Lone, &goal, &context)
+                .unwrap_err();
+            assert!(error.message.contains(message), "{error}");
+            assert!(error.checker_diagnostic().is_some());
+            let spent = before - engine.fuel;
+            engine.fuel = spent;
+            let exhausted = engine
+                .check(&Lhs::default(), &value, Quant::Lone, &goal, &context)
+                .unwrap_err();
+            assert_eq!(error, exhausted);
+            assert!(exhausted.checker_diagnostic().is_none());
+            assert!(exhausted.language_failure().is_none());
+            assert_eq!((engine.fuel, engine.depth), (0, 0));
+            // Direct rule control only: whole-book source-hole refusal remains
+            // earlier. Neither child can preempt this match guard.
+            let unused = term(Term::Hole("unused".into()));
+            let value = term(Term::Mat {
+                constructor: "Wrong".into(),
+                arm: Rc::clone(&unused),
+                fallback: unused,
+            });
+            engine.reset();
+            let first = engine
+                .check(&Lhs::default(), &value, Quant::Lone, &goal, &context)
+                .unwrap_err();
+            assert!(first.message.contains(message));
+            assert!(!first.message.contains("unfinished proof hole"));
+        }
+    }
+
+    #[test]
     fn diagnostic_context_follows_admission_without_changing_semantic_iteration() {
         let mut context = Context::new();
         for (id, name) in [(100, "field"), (2, "local")] {
@@ -2080,6 +2218,14 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-match-guards/match_not_datatype.bend", &[][..]),
+            ("cpu-match-guards/empty_match_datatype.bend", &[][..]),
+            ("cpu-match-guards/float_match_scrutinee.bend", &[][..]),
+            ("cpu-match-guards/error_window_match_repeated.bend", &[][..]),
+            ("cpu-match-guards/erased_match_empty.bend", &[][..]),
+            ("cpu-match-guards/erased_match_ctor.bend", &[][..]),
+            ("cpu-match-guards/unknown_constructor.bend", &[][..]),
+            ("cpu-match-guards/bool_wrap_scope.bend", &[][..]),
             ("cpu-match-failures/empty_match.bend", &[][..]),
             (
                 "cpu-match-failures/error_window_match_missing.bend",
@@ -2177,7 +2323,7 @@ mod reflexivity_diagnostic_tests {
         let report = engine
             .reflexivity_diagnostic(&Lhs::default(), &proof, &left, &right, &Context::new())
             .unwrap();
-        assert_eq!(report.expected, report.observed);
+        assert_eq!(Some(report.expected.as_str()), report.observed.as_deref());
         assert_eq!(report.expected, right.to_string());
         let fresh = engine.fresh_id;
         for (fuel, depth, expected) in [
@@ -2257,11 +2403,17 @@ mod reflexivity_diagnostic_tests {
             .unwrap_err();
         assert_eq!(tracked, untracked);
         assert_eq!(tracked.to_string(), "unbound variable x");
-        assert_eq!(tracked.checker_diagnostic().unwrap().observed, "x^-1");
+        assert_eq!(
+            tracked.checker_diagnostic().unwrap().observed.as_deref(),
+            Some("x^-1")
+        );
         let unshadowed = engine
             .infer(&Lhs::default(), &marker, Quant::Lone, &Context::new(), &[])
             .unwrap_err();
-        assert_eq!(unshadowed.checker_diagnostic().unwrap().observed, "x");
+        assert_eq!(
+            unshadowed.checker_diagnostic().unwrap().observed.as_deref(),
+            Some("x")
+        );
         engine.fuel = 1;
         let exhausted = engine
             .infer(&Lhs::default(), &marker, Quant::Lone, &context, &[])
@@ -2367,7 +2519,10 @@ mod reflexivity_diagnostic_tests {
             )
             .unwrap_err();
         assert_eq!(error, KernelError::new("unfinished proof hole ?missing"));
-        assert_eq!(error.checker_diagnostic().unwrap().observed, "?missing");
+        assert_eq!(
+            error.checker_diagnostic().unwrap().observed.as_deref(),
+            Some("?missing")
+        );
         let spent = before - engine.fuel;
         engine.fuel = spent;
         let exhausted = engine
@@ -2405,8 +2560,8 @@ mod reflexivity_diagnostic_tests {
             KernelError::new("expected a datatype; observed Type")
         );
         assert_eq!(
-            error.checker_diagnostic().unwrap().observed,
-            "non-inferrable term 'Missing{}'"
+            error.checker_diagnostic().unwrap().observed.as_deref(),
+            Some("non-inferrable term 'Missing{}'")
         );
         let spent = before - engine.fuel;
         engine.fuel = spent;

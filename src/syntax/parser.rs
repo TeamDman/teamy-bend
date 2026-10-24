@@ -1427,7 +1427,11 @@ impl Parser<'_> {
                         _ => return Err(self.error("a lambda-match arm needs a constructor name")),
                     };
                     let arm = self.expression(0)?;
-                    arms.push((name, arm));
+                    let source = self.templates.diagnostics.as_ref().map_or_else(
+                        || Rc::as_ptr(&value) as usize,
+                        |origins| origins.tracker.source(&value),
+                    );
+                    arms.push((name, arm, source));
                     self.take(";");
                 } else {
                     tail = value;
@@ -1436,7 +1440,7 @@ impl Parser<'_> {
                     break;
                 }
             }
-            for (constructor, arm) in arms.into_iter().rev() {
+            for (constructor, arm, source) in arms.into_iter().rev() {
                 tail = term(Term::Mat {
                     constructor,
                     arm,
@@ -1444,6 +1448,7 @@ impl Parser<'_> {
                 });
                 if let Some(origins) = &mut self.templates.diagnostics {
                     origins.node(&tail, &self.label, match_line);
+                    origins.tracker.match_constructor(&tail, source);
                 }
             }
             return Ok(tail);
@@ -1854,7 +1859,14 @@ impl Parser<'_> {
                     .iter()
                     .map(|a| self.pattern(a))
                     .collect::<Result<Vec<_>, _>>()?;
-                Ok(Pattern::Constructor(name.clone(), fields))
+                Ok(Pattern::Constructor(
+                    name.clone(),
+                    fields,
+                    self.templates.diagnostics.as_ref().map_or_else(
+                        || Rc::as_ptr(value) as usize,
+                        |origins| origins.tracker.source(value),
+                    ),
+                ))
             }
             _ => {
                 if let Some(origins) = &mut self.templates.diagnostics {

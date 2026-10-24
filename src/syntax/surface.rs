@@ -36,14 +36,14 @@ impl Variable {
 #[derive(Clone, Debug)]
 pub(super) enum Pattern {
     Variable(Variable),
-    Constructor(String, Vec<Pattern>),
+    Constructor(String, Vec<Pattern>, usize),
 }
 
 impl Pattern {
     fn term(&self) -> TermRef {
         match self {
             Self::Variable(v) => v.term(),
-            Self::Constructor(name, fields) => term(Term::Ctr {
+            Self::Constructor(name, fields, _) => term(Term::Ctr {
                 name: name.clone(),
                 args: fields.iter().map(Self::term).collect(),
             }),
@@ -106,6 +106,7 @@ impl SurfaceTerm {
         arm: Self,
         fallback: Self,
         site: Option<MatchSite>,
+        constructor_origin: Option<usize>,
         origins: Option<&TermOrigins>,
     ) -> Self {
         let children = [Some(arm.origin), Some(fallback.origin), None];
@@ -114,6 +115,9 @@ impl SurfaceTerm {
             arm: arm.value,
             fallback: fallback.value,
         });
+        if let (Some(origins), Some(source)) = (origins, constructor_origin) {
+            origins.match_constructor(&value, source);
+        }
         let result = Self::parent(value, children, origins);
         if let Some(site) = site {
             result.at_match(site, origins)
@@ -154,7 +158,7 @@ impl Body {
                 quant,
                 values,
                 body,
-            } if matches!(patterns.first(), Some(Pattern::Constructor(_, _))) => Self::Local {
+            } if matches!(patterns.first(), Some(Pattern::Constructor(_, _, _))) => Self::Local {
                 patterns,
                 quant,
                 values,
@@ -293,7 +297,7 @@ fn flatten_at(
             values,
             body,
         } => {
-            if let [Pattern::Constructor(_, _)] = patterns.as_slice() {
+            if let [Pattern::Constructor(_, _, _)] = patterns.as_slice() {
                 return flatten_match(
                     values,
                     &[Row {
@@ -311,7 +315,7 @@ fn flatten_at(
                 .iter()
                 .map(|p| match p {
                     Pattern::Variable(v) => Ok(v.clone()),
-                    Pattern::Constructor(_, _) => {
+                    Pattern::Constructor(_, _, _) => {
                         Err("a parallel let can bind only names".to_owned())
                     }
                 })
@@ -361,6 +365,7 @@ enum MatchStep {
     Done(SurfaceTerm),
     Nullary {
         constructor: String,
+        constructor_origin: usize,
         next: MatchState,
         fallback: MatchState,
     },
@@ -381,7 +386,7 @@ fn flatten_match(
     // bounded pending work and compile fallbacks only after their arms, keeping
     // the original term, fresh-name sequence and first-error ordering.
     let mut state: Option<MatchState> = None;
-    let mut pending: Vec<(String, MatchState)> = Vec::new();
+    let mut pending: Vec<(String, usize, MatchState)> = Vec::new();
     loop {
         if depth + pending.len() >= 64 {
             return Err("pattern compilation exceeds the resource limit of 64 levels".into());
@@ -395,7 +400,7 @@ fn flatten_match(
         });
         match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins)? {
             MatchStep::Done(mut value) => {
-                for (constructor, fallback) in pending.into_iter().rev() {
+                for (constructor, constructor_origin, fallback) in pending.into_iter().rev() {
                     let site = fallback.scrutinees[0].match_site;
                     let fallback = flatten_match(
                         &fallback.scrutinees,
@@ -406,16 +411,24 @@ fn flatten_match(
                         depth + 1,
                         origins,
                     )?;
-                    value = SurfaceTerm::matched(constructor, value, fallback, Some(site), origins);
+                    value = SurfaceTerm::matched(
+                        constructor,
+                        value,
+                        fallback,
+                        Some(site),
+                        Some(constructor_origin),
+                        origins,
+                    );
                 }
                 return Ok(value);
             }
             MatchStep::Nullary {
                 constructor,
+                constructor_origin,
                 next,
                 fallback,
             } => {
-                pending.push((constructor, fallback));
+                pending.push((constructor, constructor_origin, fallback));
                 state = Some(next);
             }
         }
@@ -458,7 +471,7 @@ fn flatten_match_step(
         });
     };
     let constructor = rows.iter().find_map(|row| match &row.patterns[0] {
-        Pattern::Constructor(name, fields) => Some((name, fields)),
+        Pattern::Constructor(name, fields, origin) => Some((name, fields, *origin)),
         Pattern::Variable(_) => None,
     });
     let binder = vars
@@ -489,7 +502,7 @@ fn flatten_match_step(
         .map(MatchStep::Done);
     }
     if binder.is_some_and(|v| v.id == first.id) {
-        let Some((name, fields)) = constructor else {
+        let Some((name, fields, constructor_origin)) = constructor else {
             return Ok(MatchStep::Done(
                 SurfaceTerm::new(term(Term::Efq), origins)
                     .at_match(scrutinees[0].match_site, origins),
@@ -499,7 +512,7 @@ fn flatten_match_step(
             .iter()
             .map(|p| match p {
                 Pattern::Variable(v) => v.clone(),
-                Pattern::Constructor(_, _) => {
+                Pattern::Constructor(_, _, _) => {
                     let id = *fresh;
                     *fresh += 1;
                     let display = *display_fresh;
@@ -514,13 +527,14 @@ fn flatten_match_step(
         let value = Pattern::Constructor(
             name.clone(),
             field_vars.iter().cloned().map(Pattern::Variable).collect(),
+            constructor_origin,
         )
         .term();
         let mut positive = Vec::new();
         let mut negative = Vec::new();
         for row in rows {
             match &row.patterns[0] {
-                Pattern::Constructor(n, ps) if n == name => {
+                Pattern::Constructor(n, ps, _) if n == name => {
                     if ps.len() != fields.len() {
                         return Err(
                             format!("constructor {name} has the wrong number of fields").into()
@@ -533,7 +547,7 @@ fn flatten_match_step(
                         body: row.body.replace(first.id, &value, origins),
                     });
                 }
-                Pattern::Constructor(_, _) => negative.push(row.clone()),
+                Pattern::Constructor(_, _, _) => negative.push(row.clone()),
                 Pattern::Variable(v) => {
                     let mut patterns = field_vars
                         .iter()
@@ -566,6 +580,7 @@ fn flatten_match_step(
         if fields.is_empty() {
             return Ok(MatchStep::Nullary {
                 constructor: name.clone(),
+                constructor_origin,
                 next: MatchState {
                     scrutinees: next_scrutinees,
                     rows: positive,
@@ -601,6 +616,7 @@ fn flatten_match_step(
             arm,
             fallback,
             Some(scrutinees[0].match_site),
+            Some(constructor_origin),
             origins,
         )))
     } else {
@@ -642,7 +658,7 @@ mod tests {
         });
         let a = first.replace(0, &replacement, Some(&origins));
         let b = second.replace(0, &replacement, Some(&origins));
-        let parent = SurfaceTerm::matched("Zero".into(), a, b, None, Some(&origins));
+        let parent = SurfaceTerm::matched("Zero".into(), a, b, None, None, Some(&origins));
         let Term::Mat { arm, fallback, .. } = parent.value.as_ref() else {
             panic!("match")
         };

@@ -199,6 +199,18 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-match-guards/match_not_datatype.bend"),
+            "Error:\n- expected : a datatype\n- observed : @_:U32 -> U32\nLocation: f\n11 | def f(h):\n12>|   match h:\n13 |     case Z{}:\n",
+        ),
+        (
+            include_str!("fixtures/cpu-match-guards/error_window_match_repeated.bend"),
+            "Error:\n- expected : a constructor of One (missing, or already matched)\n- observed : \\{One: One{}}\nLocation: bad\n5 | def bad() -> One -> One:\n6>|   \\{One: One{}; One: One{}}\n7 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-match-guards/erased_match_ctor.bend"),
+            "Error:\n- message  : a live scrutinee (a - scrutinee matches only in a dead region)\nLocation: hidden\n10 | \n11>| def hidden(): \\{F8: T8{}; \\{T8: F8{}; \\{}}}\n12 | \n",
+        ),
+        (
             include_str!("fixtures/cpu-match-failures/error_window_match_missing.bend"),
             "Error:\n- expected : cases for False\n- observed : \\{}\nLocation: bad\n6 | def bad() -> Bool -> Bool:\n7>|   \\{True: True{}}\n8 | \n",
         ),

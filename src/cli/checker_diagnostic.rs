@@ -36,9 +36,14 @@ fn emit(
         // host diagnostic. Never guess a source line from an error string.
         return Err(eyre!("{error}"));
     };
-    let mut diagnostic = format!(
-        "Error:\n- expected : {}\n- observed : {}",
-        report.expected, report.observed
+    let mut diagnostic = report.observed.as_ref().map_or_else(
+        || format!("Error:\n- message  : {}", report.expected),
+        |observed| {
+            format!(
+                "Error:\n- expected : {}\n- observed : {observed}",
+                report.expected
+            )
+        },
     );
     if !report.context.is_empty() {
         diagnostic.push_str("\nContext:");
@@ -116,6 +121,9 @@ mod tests {
     #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
         for name in [
+            "tests/fixtures/cpu-match-guards/match_not_datatype.bend",
+            "tests/fixtures/cpu-match-guards/error_window_match_repeated.bend",
+            "tests/fixtures/cpu-match-guards/erased_match_ctor.bend",
             "tests/fixtures/cpu-match-failures/empty_match.bend",
             "tests/fixtures/cpu-match-failures/error_window_match_missing.bend",
             "tests/fixtures/cpu-matched-values/error_window_matched_scrutinee.bend",
@@ -259,6 +267,9 @@ mod tests {
             }
         }
         for name in [
+            "tests/fixtures/cpu-match-guards/match_not_datatype.bend",
+            "tests/fixtures/cpu-match-guards/error_window_match_repeated.bend",
+            "tests/fixtures/cpu-match-guards/erased_match_ctor.bend",
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",

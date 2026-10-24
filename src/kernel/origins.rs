@@ -38,6 +38,7 @@ struct Origin {
     // variable uses share one replacement allocation. No strong term edges.
     child_origins: Option<[Option<usize>; 3]>,
     match_site: Option<MatchSite>,
+    constructor_source: Option<usize>,
 }
 
 impl TermOrigins {
@@ -74,6 +75,7 @@ impl TermOrigins {
             source: key,
             child_origins,
             match_site: None,
+            constructor_source: None,
         });
     }
 
@@ -97,6 +99,24 @@ impl TermOrigins {
             .get_mut(&(Rc::as_ptr(value) as usize))
             .expect("tracked match")
             .match_site = Some(site);
+    }
+
+    pub(crate) fn match_constructor(&self, value: &TermRef, source: usize) {
+        self.track(value);
+        self.0
+            .borrow_mut()
+            .nodes
+            .get_mut(&(Rc::as_ptr(value) as usize))
+            .expect("tracked constructor match")
+            .constructor_source = Some(source);
+    }
+
+    pub(crate) fn constructor_source(&self, value: &TermRef) -> Option<usize> {
+        self.0
+            .borrow()
+            .nodes
+            .get(&(Rc::as_ptr(value) as usize))?
+            .constructor_source
     }
 
     pub(crate) fn match_site(&self, value: &TermRef) -> Option<MatchSite> {
@@ -160,6 +180,7 @@ impl TermOrigins {
                 let source = origin.source;
                 let child_origins = origin.child_origins;
                 let match_site = origin.match_site;
+                let constructor_source = origin.constructor_source;
                 origins.nodes.insert(
                     Rc::as_ptr(after) as usize,
                     Origin {
@@ -167,6 +188,7 @@ impl TermOrigins {
                         source,
                         child_origins,
                         match_site,
+                        constructor_source,
                     },
                 );
             }
@@ -279,12 +301,14 @@ mod tests {
                 fallback: Rc::clone(&fallback),
             });
             origins.surface_match(&original, site);
+            origins.match_constructor(&original, 29);
             origins.surface_match(&fallback, site);
             origins.surface_children(&original, [Some(23), None, None]);
             assert_eq!(Rc::strong_count(&original), 1);
             let replacement = variable(2);
             let result = substitute_with_origins(&original, 1, &replacement, Some(&origins));
             assert_eq!(origins.match_site(&result), Some(site));
+            assert_eq!(origins.constructor_source(&result), Some(29));
             assert_eq!(origins.child_source(&result, 0, &replacement), Some(23));
             let Term::Mat {
                 arm,
