@@ -1,0 +1,1 @@
+Error: main's type @x:../statement_sequence.W -> ../statement_sequence.W cannot be printed (a function, a Type, an erased or dependent field)

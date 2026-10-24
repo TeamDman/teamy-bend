@@ -1,0 +1,58 @@
+[
+  {
+    "name": "statement_sequence",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "S{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "statement_sequence",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "S{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "statement_sequence",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "S{S{S{S{S{S{Z{}}}}}}}"
+  },
+  {
+    "name": "statement_sequence",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "S{S{S{S{S{S{S{S{Z{}}}}}}}}}"
+  },
+  {
+    "name": "statement_sequence_inc",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "statement_sequence_inc",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "statement_sequence_inc",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "statement_sequence_inc",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "S{S{S{S{S{Z{}}}}}}"
+  }
+]
