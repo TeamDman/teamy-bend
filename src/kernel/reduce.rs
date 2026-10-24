@@ -17,6 +17,11 @@ pub(crate) enum Comparison {
     Fits,
 }
 
+enum PatternArgument {
+    Value(TermRef),
+    EndFields,
+}
+
 pub(crate) fn spine(value: &TermRef) -> (TermRef, Vec<TermRef>) {
     let mut head = Rc::clone(value);
     let mut args = Vec::new();
@@ -130,15 +135,8 @@ impl Engine {
                 && args.len() >= def.parameters.len()
                 && let Some(body) = def.body
             {
-                let mut body = self.freshen(&body)?;
-                for arg in args.iter().take(def.parameters.len()) {
-                    let Some(next) = self.consume(&body, arg)? else {
-                        return Ok(ControlFlow::Break(Rc::clone(value)));
-                    };
-                    body = next;
-                }
-                let result = apply(body, args.into_iter().skip(def.parameters.len()));
-                return Ok(ControlFlow::Continue(result));
+                let body = self.freshen(&body)?;
+                return self.named_patterns(value, body, args, def.parameters.len());
             }
             return Ok(ControlFlow::Break(Rc::clone(value)));
         }
@@ -161,6 +159,106 @@ impl Engine {
         } else {
             Ok(ControlFlow::Break(result))
         }
+    }
+
+    fn named_patterns(
+        &mut self,
+        original: &TermRef,
+        body: TermRef,
+        mut args: Vec<TermRef>,
+        arity: usize,
+    ) -> Result<ControlFlow<TermRef, TermRef>, KernelError> {
+        let extra = args.split_off(arity);
+        let pending = args.into_iter().rev().map(PatternArgument::Value).collect();
+        // Field applications have pending work just like the former recursive
+        // whnf(apply(arm, fields)). Restore only these owned depth frames on
+        // return/error; fuel, fresh identities and aliases are never reset.
+        let depth = self.depth;
+        let result = self.named_patterns_inner(original, body, pending, extra);
+        self.depth = depth;
+        result
+    }
+
+    fn named_patterns_inner(
+        &mut self,
+        original: &TermRef,
+        mut body: TermRef,
+        mut pending: Vec<PatternArgument>,
+        extra: Vec<TermRef>,
+    ) -> Result<ControlFlow<TermRef, TermRef>, KernelError> {
+        while let Some(argument) = pending.pop() {
+            let PatternArgument::Value(argument) = argument else {
+                self.depth -= 1;
+                continue;
+            };
+            self.step()?;
+            match body.as_ref() {
+                Term::Lam { id, body: next, .. } => {
+                    body = substitute(next, *id, &argument);
+                }
+                Term::Mat {
+                    constructor,
+                    arm,
+                    fallback,
+                } => {
+                    let evaluated = self.whnf(&argument)?;
+                    let Term::Ctr { name, args } = evaluated.as_ref() else {
+                        return Ok(ControlFlow::Break(Rc::clone(original)));
+                    };
+                    if name == constructor {
+                        self.step()?;
+                        self.enter()?;
+                        pending.push(PatternArgument::EndFields);
+                        pending.extend(
+                            args.iter()
+                                .rev()
+                                .map(|x| PatternArgument::Value(Rc::clone(x))),
+                        );
+                        body = Rc::clone(arm);
+                    } else {
+                        pending.push(PatternArgument::Value(evaluated));
+                        body = Rc::clone(fallback);
+                    }
+                }
+                Term::Efq => return Ok(ControlFlow::Break(Rc::clone(original))),
+                Term::Ann(value, _) => {
+                    pending.push(PatternArgument::Value(argument));
+                    body = Rc::clone(value);
+                }
+                Term::Let {
+                    bindings,
+                    body: next,
+                } => {
+                    let mut next = Rc::clone(next);
+                    for binding in bindings {
+                        next = substitute(&next, binding.id, &binding.value);
+                    }
+                    pending.push(PatternArgument::Value(argument));
+                    body = next;
+                }
+                Term::Rwt {
+                    evidence,
+                    body: next,
+                    ..
+                } if matches!(self.whnf(evidence)?.as_ref(), Term::Rfl) => {
+                    pending.push(PatternArgument::Value(argument));
+                    body = Rc::clone(next);
+                }
+                _ => {
+                    // A new call/computation ends this definition's pattern
+                    // prefix. Pass every remaining field/parameter together so
+                    // an underapplied callee can become saturated normally.
+                    let args = std::iter::once(argument)
+                        .chain(pending.into_iter().rev().filter_map(|arg| match arg {
+                            PatternArgument::Value(value) => Some(value),
+                            PatternArgument::EndFields => None,
+                        }))
+                        .chain(extra);
+                    return Ok(ControlFlow::Continue(apply(body, args)));
+                }
+            }
+        }
+        Ok(ControlFlow::Continue(apply(body, extra)))
     }
 
     fn consume(

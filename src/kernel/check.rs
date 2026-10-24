@@ -1886,6 +1886,129 @@ impl Engine {
 mod depth_tests {
     use super::*;
 
+    fn named_pattern_engine() -> Engine {
+        let book = crate::syntax::parse(include_str!(
+            "../../tests/fixtures/cpu-blocked-named-calls/second_field.bend"
+        ))
+        .unwrap();
+        empty_engine(&book).unwrap()
+    }
+
+    fn named_box_call(left: TermRef, right: TermRef) -> TermRef {
+        term(Term::App(
+            term(Term::Ref("f".into())),
+            term(Term::Ctr {
+                name: "Box".into(),
+                args: vec![left, right],
+            }),
+        ))
+    }
+
+    #[test]
+    fn named_patterns_keep_shared_stuck_calls_and_do_not_force_later_fields() {
+        let mut engine = named_pattern_engine();
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 10_000,
+        });
+        engine.aliases.insert(10_000, Rc::clone(&cycle));
+        let free = term(Term::Var {
+            name: "free".into(),
+            id: 10_001,
+        });
+        let call = named_box_call(Rc::clone(&free), Rc::clone(&cycle));
+        let before = format!("{call:?}");
+        let owners = Rc::strong_count(&cycle);
+        engine.fuel = 512;
+        for _ in 0..2 {
+            assert!(Rc::ptr_eq(&engine.whnf(&call).unwrap(), &call));
+            assert_eq!(engine.depth, 0);
+        }
+        assert!(engine.fuel < 512);
+        assert_eq!(format!("{call:?}"), before);
+        assert_eq!(Rc::strong_count(&cycle), owners);
+        assert!(Rc::ptr_eq(&engine.aliases[&10_000], &cycle));
+        let zero = term(Term::Ctr {
+            name: "Z".into(),
+            args: vec![],
+        });
+        let successor = term(Term::Ctr {
+            name: "S".into(),
+            args: vec![Rc::clone(&zero)],
+        });
+        let selected = engine.whnf(&named_box_call(successor, cycle)).unwrap();
+        assert!(Rc::ptr_eq(&selected, &zero));
+    }
+
+    #[test]
+    fn named_pattern_work_and_depth_limits_fail_closed_without_resetting_state() {
+        let engine = named_pattern_engine();
+        let zero = term(Term::Ctr {
+            name: "Z".into(),
+            args: vec![],
+        });
+        let call = named_box_call(Rc::clone(&zero), zero);
+        let mut measured = engine.clone();
+        measured.fuel = 512;
+        assert_eq!(measured.whnf(&call).unwrap().to_string(), "Z{}");
+        let required = 512 - measured.fuel;
+        assert!(required > 1 && required < 512);
+        for fuel in [0, required - 1, required] {
+            let mut bounded = engine.clone();
+            bounded.fuel = fuel;
+            let result = bounded.whnf(&call);
+            if fuel == required {
+                assert_eq!(result.unwrap().to_string(), "Z{}");
+            } else {
+                assert!(
+                    result
+                        .unwrap_err()
+                        .to_string()
+                        .contains("evaluation budget exhausted")
+                );
+            }
+            assert_eq!(bounded.fuel, 0);
+            assert_eq!(bounded.depth, 0);
+        }
+        let mut nested = engine;
+        nested.depth = 127;
+        assert!(
+            nested
+                .whnf(&call)
+                .unwrap_err()
+                .to_string()
+                .contains("kernel nesting limit exhausted")
+        );
+        assert_eq!(nested.depth, 127);
+    }
+
+    #[test]
+    fn named_pattern_fields_preserve_first_demanded_failure() {
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 10_000,
+        });
+        let leaf = term(Term::Qua(Quant::Lone));
+        let deep = (0..128).fold(Rc::clone(&leaf), |left, _| {
+            term(Term::Min(left, Rc::clone(&leaf)))
+        });
+        for (first, second, expected) in [
+            (
+                Rc::clone(&cycle),
+                Rc::clone(&deep),
+                "evaluation budget exhausted",
+            ),
+            (deep, Rc::clone(&cycle), "kernel nesting limit exhausted"),
+        ] {
+            let mut engine = named_pattern_engine();
+            engine.aliases.insert(10_000, Rc::clone(&cycle));
+            engine.fuel = 512;
+            let error = engine.whnf(&named_box_call(first, second)).unwrap_err();
+            assert!(error.to_string().contains(expected), "{error}");
+            assert_eq!(engine.depth, 0);
+        }
+    }
+
     #[test]
     fn check_to_infer_keeps_work_charge_and_unwinds_after_exhaustion() {
         let mut engine = empty_engine(&Book {

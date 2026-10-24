@@ -1,0 +1,1 @@
+{"Lambda":{"Application":[{"Reference":"f"},{"Constructor":["Box",[{"Constructor":["Z",[]]},{"Bound":0}]]}]}}

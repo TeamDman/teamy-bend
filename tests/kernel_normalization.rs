@@ -27,6 +27,62 @@ const CASES: [&str; 9] = [
 ];
 
 #[test]
+fn blocked_named_calls_preserve_pinned_open_graphs_and_exact_text() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-blocked-named-calls");
+    for name in [
+        "partial_app_snf",
+        "stuck_first",
+        "stuck_field",
+        "fuel_stuck_field",
+        "under_applied_return",
+        "callee_handoff",
+        "fallback",
+        "second_field",
+        "computed_constructor",
+        "anonymous_match",
+    ] {
+        let book = load(root.join(format!("{name}.bend"))).unwrap();
+        let checked = check_book(&book).unwrap();
+        let expected =
+            std::fs::read_to_string(root.join("normal-forms").join(format!("{name}.stdout")))
+                .unwrap();
+        let graph = std::fs::read_to_string(root.join("normal-forms").join(format!("{name}.json")))
+            .unwrap();
+        let oracle: normalization_shape::Shape = facet_json::from_str(&graph).unwrap();
+        for actual in [
+            checked.normalize_definition("main").unwrap(),
+            checked.evaluate("main", &[]).unwrap(),
+        ] {
+            assert_eq!(format!("{actual}\n"), expected, "{name}");
+            assert_eq!(shape_in_book(&actual, &book).unwrap(), oracle, "{name}");
+        }
+    }
+}
+
+#[test]
+fn blocked_call_reconstruction_cannot_hide_source_holes_false_proofs_or_bad_recursion() {
+    let source = include_str!("fixtures/cpu-blocked-named-calls/stuck_field.bend");
+    let hole = source.replace("case S{p}: p", "case S{p}: ?unfinished");
+    let error = check_book(&parse(&hole).unwrap()).unwrap_err();
+    assert!(
+        error.to_string().contains("unfinished proof hole"),
+        "{error}"
+    );
+    let bad_recursion = source.replace("case S{p}: p", "case S{p}: f(Box{S{p}})");
+    let error = check_book(&parse(&bad_recursion).unwrap()).unwrap_err();
+    assert!(error.to_string().contains("decreasing"), "{error}");
+    let false_proof =
+        format!("{source}\ndef false() -> {{f(Box{{S{{Z{{}}}}}}) == S{{Z{{}}}} : N}}: {{==}}\n");
+    let error = check_book(&parse(&false_proof).unwrap()).unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("reflexivity requires equal endpoints"),
+        "{error}"
+    );
+}
+
+#[test]
 fn checking_only_list_fixture_preserves_named_values_and_proofs() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-checking/list_reverse_sort.bend");

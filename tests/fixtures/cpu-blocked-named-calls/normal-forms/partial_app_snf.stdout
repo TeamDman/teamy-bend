@@ -1,0 +1,1 @@
+TLam{x => TLam{x => snf9(4n, Sp{wnf(1n, Ap{x, wnf(1n, Ev{x^0})})})}}
