@@ -190,7 +190,7 @@ impl Engine {
         let mut result = self.whnf(&head)?;
         let mut progressed = false;
         for arg in args {
-            match self.consume(&result, &arg)? {
+            match self.consume(&result, &arg, false)? {
                 Some(next) => {
                     result = next;
                     progressed = true;
@@ -309,6 +309,7 @@ impl Engine {
         &mut self,
         function: &TermRef,
         arg: &TermRef,
+        residual: bool,
     ) -> Result<Option<TermRef>, KernelError> {
         let function = self.whnf(function)?;
         match function.as_ref() {
@@ -324,12 +325,17 @@ impl Engine {
                         self.whnf(&apply(Rc::clone(arm), args.iter().map(Rc::clone)))
                             .map(Some)
                     } else {
-                        self.consume(fallback, &evaluated)
+                        self.consume(fallback, &evaluated, true)
                     }
                 } else {
                     Ok(None)
                 }
             }
+            // An impossible residual arm retains the original match graph.
+            Term::Efq => Ok(None),
+            // A residual value is an argument to a named or open fallback.
+            // Supply it before testing whether a named call is saturated.
+            _ if residual => Ok(Some(term(Term::App(function, Rc::clone(arg))))),
             _ => Ok(None),
         }
     }

@@ -129,10 +129,10 @@ pub fn compile_javascript(book: &Book, entry: &str) -> Result<String, CompileErr
     let selected = definitions
         .get(entry)
         .ok_or_else(|| CompileError::new(format!("undefined entry point {entry}")))?;
-    if !selected.parameters.is_empty() {
+    if selected.declared_arity() != 0 {
         return Err(CompileError::new(format!(
             "standalone entry {entry} requires {} arguments; define a closed entry instead",
-            selected.parameters.len()
+            selected.declared_arity()
         )));
     }
     let indices = definitions

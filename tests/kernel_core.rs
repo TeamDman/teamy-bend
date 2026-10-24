@@ -52,6 +52,7 @@ fn eq(left: TermRef, right: TermRef) -> TermRef {
 }
 fn def(name: &str, parameters: Vec<Binder>, result: TermRef, body: TermRef) -> Declaration {
     Declaration::Def(DefDecl {
+        completion_parameters: None,
         name: name.into(),
         ty: arrows(&parameters, result),
         parameters,
@@ -176,6 +177,7 @@ fn rejects_false_reflexivity() {
 #[test]
 fn rejects_unfinished_laws_and_todo() {
     let law = Declaration::Def(DefDecl {
+        completion_parameters: None,
         name: "open".into(),
         parameters: vec![],
         ty: eq(nat(0), nat(0)),
@@ -297,6 +299,7 @@ fn runtime_rejects_wrong_arity_and_ill_typed_arguments() {
 fn law_fill_cannot_change_the_claim() {
     let claim = eq(nat(0), nat(1));
     let law = Declaration::Def(DefDecl {
+        completion_parameters: None,
         name: "claim".into(),
         parameters: vec![],
         ty: claim,
@@ -319,6 +322,7 @@ fn law_fill_cannot_change_the_claim() {
 fn rejects_unsafe_and_foreign_assumptions() {
     for (unsafe_, foreign) in [(true, false), (false, true)] {
         let declaration = Declaration::Def(DefDecl {
+            completion_parameters: None,
             name: "escape".into(),
             parameters: vec![],
             ty: r("Nat"),
@@ -387,6 +391,7 @@ fn simultaneous_let_accounts_for_resources_once() {
 fn accepts_declared_law_followed_by_exact_proof() {
     let ty = eq(nat(0), nat(0));
     let law = DefDecl {
+        completion_parameters: None,
         name: "truth".into(),
         parameters: vec![],
         ty: Rc::clone(&ty),
@@ -395,6 +400,7 @@ fn accepts_declared_law_followed_by_exact_proof() {
         foreign: false,
     };
     let proof = DefDecl {
+        completion_parameters: None,
         body: Some(term(Term::Rfl)),
         ..law.clone()
     };

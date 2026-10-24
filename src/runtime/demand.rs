@@ -189,6 +189,7 @@ mod tests {
     fn strict_constructor_recursion_keeps_frame_work_and_cancellation_limits() {
         let body = parse_term("n => Box{repeat(n), n}").unwrap();
         let definition = DefDecl {
+            completion_parameters: None,
             name: "repeat".into(),
             parameters: vec![],
             ty: term(Term::Rfl),

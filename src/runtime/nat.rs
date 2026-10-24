@@ -148,6 +148,7 @@ impl Shape {
             || actual.foreign
             || actual.unsafe_
             || actual.parameters.len() != expected.parameters.len()
+            || actual.declared_arity() != expected.declared_arity()
         {
             return false;
         }

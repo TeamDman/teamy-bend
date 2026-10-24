@@ -136,11 +136,27 @@ pub struct ConstructorDecl {
 #[derive(Clone, Debug)]
 pub struct DefDecl {
     pub name: String,
+    /// Typed declaration telescope. For a parsed law completion, this retains
+    /// the law's provisional telescope until checking resolves the actual list.
     pub parameters: Vec<Binder>,
+    /// Actual names and IDs supplied by an ordinary `def` completing a law.
+    /// Types and quantities come exclusively from the checked function type;
+    /// aliases need not expose a syntactic telescope during parsing. Checked
+    /// definitions contain canonical `parameters` and clear this field.
+    pub completion_parameters: Option<Vec<(String, usize)>>,
     pub ty: TermRef,
     pub body: Option<TermRef>,
     pub unsafe_: bool,
     pub foreign: bool,
+}
+impl DefDecl {
+    /// Source arity, excluding binders of a returned function.
+    #[must_use]
+    pub fn declared_arity(&self) -> usize {
+        self.completion_parameters
+            .as_ref()
+            .map_or(self.parameters.len(), Vec::len)
+    }
 }
 /// Source-order declaration events, including a law and its later proof.
 #[derive(Clone, Debug)]

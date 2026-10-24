@@ -689,6 +689,14 @@ pub(super) fn prepare_book(book: &Book) -> Result<(Engine, Vec<Option<String>>),
                 if let Some(b) = &d.body {
                     inspect(b)?;
                 }
+                highest = highest.max(
+                    d.parameters
+                        .iter()
+                        .map(|p| p.id)
+                        .chain(d.completion_parameters.iter().flatten().map(|(_, id)| *id))
+                        .max()
+                        .unwrap_or(0),
+                );
             }
             Declaration::Adt(d) => {
                 inspect(&d.kind)?;
@@ -812,7 +820,13 @@ impl Engine {
         if self.adts.contains_key(&definition.name) {
             return Err(KernelError::new("definition collides with a datatype"));
         }
-        if let Some(previous) = self.defs.get(&definition.name).cloned() {
+        let previous = self.defs.get(&definition.name).cloned();
+        if definition.completion_parameters.is_some()
+            && (previous.is_none() || definition.body.is_none() || foreign_completion)
+        {
+            return Err(KernelError::new("invalid ordinary law completion metadata"));
+        }
+        if let Some(previous) = previous {
             if previous.body.is_some()
                 || self.foreign_contracts.contains(&definition.name)
                 || self.numeric_contracts.contains(&definition.name)
@@ -821,9 +835,7 @@ impl Engine {
             {
                 return Err(KernelError::new("duplicate declaration"));
             }
-            if !foreign_completion && previous.parameters.len() != definition.parameters.len()
-                || !self.compare(Comparison::Equal, &previous.ty, &definition.ty)?
-            {
+            if !self.compare(Comparison::Equal, &previous.ty, &definition.ty)? {
                 return Err(KernelError::new("proof does not preserve its law's type"));
             }
         }
@@ -844,28 +856,77 @@ impl Engine {
             &kind(Quant::Lone),
             &Context::new(),
         )?;
+        let (checked, quants) = self.complete_parameters(definition)?;
+        // Recursive checking sees the actual arity but never an unchecked body.
+        let mut pending = checked.clone();
+        pending.body = None;
+        Rc::make_mut(&mut self.defs).insert(checked.name.clone(), pending);
+        if let Some(body) = &checked.body {
+            let lhs = Lhs {
+                remaining: checked.parameters.len(),
+                quants,
+                ..lhs
+            };
+            self.check(&lhs, body, Quant::Lone, &checked.ty, &Context::new())?;
+        }
+        Rc::make_mut(&mut self.defs).insert(checked.name.clone(), checked);
+        Ok(())
+    }
+
+    fn complete_parameters(
+        &mut self,
+        definition: &DefDecl,
+    ) -> Result<(DefDecl, Vec<Quant>), KernelError> {
+        let mut checked = definition.clone();
         let mut telescope = Rc::clone(&definition.ty);
         let mut quants = Vec::new();
-        for _ in &definition.parameters {
+        let names = definition.completion_parameters.clone().unwrap_or_else(|| {
+            definition
+                .parameters
+                .iter()
+                .map(|p| (p.name.clone(), p.id))
+                .collect()
+        });
+        let mut parameters = Vec::with_capacity(names.len());
+        let mut ids = BTreeSet::new();
+        for (name, id) in names {
+            if !ids.insert(id) {
+                return Err(KernelError::new("duplicate declared parameter identifier"));
+            }
             let t = self.whnf(&telescope)?;
-            let Term::All { quant, body, .. } = t.as_ref() else {
+            let Term::All {
+                quant,
+                id: old_id,
+                domain,
+                body,
+                ..
+            } = t.as_ref()
+            else {
                 return Err(KernelError::new(
                     "parameter list exceeds the function telescope",
                 ));
             };
             quants.push(*quant);
-            telescope = Rc::clone(body);
+            if definition.completion_parameters.is_some() {
+                let variable = term(Term::Var {
+                    name: name.clone(),
+                    id,
+                });
+                parameters.push(Binder {
+                    quant: *quant,
+                    name,
+                    id,
+                    ty: Rc::clone(domain),
+                });
+                telescope = substitute(body, *old_id, &variable);
+            } else {
+                telescope = Rc::clone(body);
+            }
         }
-        if let Some(body) = &definition.body {
-            let lhs = Lhs {
-                remaining: definition.parameters.len(),
-                quants,
-                ..lhs
-            };
-            self.check(&lhs, body, Quant::Lone, &definition.ty, &Context::new())?;
+        if checked.completion_parameters.take().is_some() {
+            checked.parameters = parameters;
         }
-        Rc::make_mut(&mut self.defs).insert(definition.name.clone(), definition.clone());
-        Ok(())
+        Ok((checked, quants))
     }
 
     pub(super) fn validate_adt(&mut self, declaration: &AdtDecl) -> Result<(), KernelError> {
@@ -2832,3 +2893,7 @@ mod reflexivity_diagnostic_tests {
 #[cfg(test)]
 #[path = "composition_work_tests.rs"]
 mod composition_work_tests;
+
+#[cfg(test)]
+#[path = "law_completion_tests.rs"]
+mod law_completion_tests;

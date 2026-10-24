@@ -642,6 +642,7 @@ impl Parser<'_> {
             };
         }
         self.book.declarations.push(Declaration::Def(DefDecl {
+            completion_parameters: None,
             name,
             parameters,
             ty: self.qualify_operators(&ty, &self.resolve("Nat")),
@@ -670,21 +671,12 @@ impl Parser<'_> {
         };
         self.expect("(")?;
         let template = prior.is_none() && self.instance_name.is_none() && self.is("~");
+        let completing_law = prior.is_some();
         let (parameters, ty, vars) = if let Some(prior) = prior {
             if prior.body.is_some() || prior.foreign {
                 return Err(self.error(format!("duplicate definition: {name}")));
             }
-            let mut vars = Vec::new();
-            while !self.take(")") {
-                if vars.len() >= 128 {
-                    return Err(
-                        self.error("proof telescope exceeds the parser resource limit of 128")
-                    );
-                }
-                let name = self.name()?;
-                vars.push(self.open(name));
-                self.take(",");
-            }
+            let vars = self.completion_variables()?;
             (prior.parameters, prior.ty, vars)
         } else {
             self.require_fresh(&name)?;
@@ -727,9 +719,15 @@ impl Parser<'_> {
                 template.then_some(declaration_at),
             );
         }
+        let completion_parameters = completing_law.then(|| {
+            vars.iter()
+                .map(|v| (v.name.clone(), v.id))
+                .collect::<Vec<_>>()
+        });
         // Make recursive names visible while parsing the body, then retain one event.
         let temporary = self.book.declarations.len();
         self.book.declarations.push(Declaration::Def(DefDecl {
+            completion_parameters: completion_parameters.clone(),
             name: name.clone(),
             parameters: parameters.clone(),
             ty: Rc::clone(&ty),
@@ -746,6 +744,7 @@ impl Parser<'_> {
             self.retain_template_source(&name, declaration_at);
         } else {
             self.book.declarations.push(Declaration::Def(DefDecl {
+                completion_parameters,
                 name,
                 parameters,
                 ty: self.qualify_operators(&ty, &self.resolve("Nat")),
@@ -755,6 +754,19 @@ impl Parser<'_> {
             }));
         }
         Ok(())
+    }
+
+    fn completion_variables(&mut self) -> Result<Vec<Variable>, ParseError> {
+        let mut vars = Vec::new();
+        while !self.take(")") {
+            if vars.len() >= 128 {
+                return Err(self.error("proof telescope exceeds the parser resource limit of 128"));
+            }
+            let name = self.name()?;
+            vars.push(self.open(name));
+            self.take(",");
+        }
+        Ok(vars)
     }
 
     fn retain_template_source(&mut self, name: &str, declaration_at: usize) {
@@ -863,6 +875,7 @@ impl Parser<'_> {
             .expect("execution parser")
             .insert(name.clone(), descriptor);
         self.book.declarations.push(Declaration::Def(DefDecl {
+            completion_parameters: None,
             name,
             parameters,
             ty: self.qualify_operators(ty, &self.resolve("Nat")),
