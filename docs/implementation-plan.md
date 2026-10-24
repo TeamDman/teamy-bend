@@ -4456,3 +4456,23 @@ must inspect exit_code; they are not audited here.
 Next: annotated non-equation evidence, generated rewrite proof-binder provenance,
 and missing-IH diagnostics. Frozen inputs/policies; historical evidence preserved;
 no installs or pushes.
+
+### [x] 5.74 Preserve rewrite proof diagnostics and use-site provenance
+
+Source `abd6d22b1a0d53420a6f60423b381b37137cccc3` closes annotated non-equation, substituted proof-use and
+non-function application diagnostic gaps. Five unchanged originals and fifteen
+complete adjacent controls match the pinned checker; five prior controls also
+renew. The [report](cpu-rewrite-proof.md) preserves the separate hole-preflight
+ordering and computed-scrutinee load diagnostic mismatches as unresolved.
+
+Full gate **905 passed, zero failed, 49 ignored**; 500 negative observations,
+four positive no-main checking observations and all 1,302 checking statuses pass
+with zero status transitions. Detailed coverage is 218 originals / 1,084 without
+receipts: 424 checker negatives, one checking-only module, 106 interpreter cases
+and 553 compiled candidates. Linked rows include historical and unresolved cells.
+Only nine checking originals are current; unrelated detailed lanes retain their
+actual source identities. The 688-vector exploration remains unqualified.
+
+The existing acceptance criterion and external invocation-status caveat remain.
+No semantic exception, dependency/toolchain/pin or budget change; no push.
+Next: computed-match scrutinee diagnostic provenance and adjacent negatives.

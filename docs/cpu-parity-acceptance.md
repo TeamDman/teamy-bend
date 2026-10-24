@@ -91,17 +91,23 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The latest [rewrite checking checkpoint](cpu-rewrite-checking.md), source
-`4c90907a78db96cc9e46da6d25659f10b4d978cc`, closes the three recorded original rewrite diagnostic cells.
-The detailed union remains 213, including historical/unresolved cells, with
-1,089 without detailed receipts across distinct applicable categories.
-Twenty checking, all 99 interpretation and seven runtime originals are renewed;
-one checking and 86 runtime rows retain historical commits. All 1,302 checking
-statuses are unchanged. The prior 688-vector exploration stays unqualified.
+Source `abd6d22b1a0d53420a6f60423b381b37137cccc3` closes annotated non-equation, substituted proof-use and
+non-function application diagnostic gaps. Five unchanged originals and fifteen
+complete adjacent controls match the pinned checker; five prior controls also
+renew. The [report](cpu-rewrite-proof.md) preserves the separate hole-preflight
+ordering and computed-scrutinee load diagnostic mismatches as unresolved.
 
-Host/resource/foreign, F32.read, competing-error and complete API/lane requirements
-remain open. No semantic exception is added or GPU prerequisite inferred. Next:
-annotated non-equation evidence and generated proof-binder/missing-IH diagnostics.
+Full gate **905 passed, zero failed, 49 ignored**; 500 negative observations,
+four positive no-main checking observations and all 1,302 checking statuses pass
+with zero status transitions. Detailed coverage is 218 originals / 1,084 without
+receipts: 424 checker negatives, one checking-only module, 106 interpreter cases
+and 553 compiled candidates. Linked rows include historical and unresolved cells.
+Only nine checking originals are current; unrelated detailed lanes retain their
+actual source identities. The 688-vector exploration remains unqualified.
+
+The existing acceptance criterion and external invocation-status caveat remain.
+No semantic exception, dependency/toolchain/pin or budget change; no push.
+Next: computed-match scrutinee diagnostic provenance and adjacent negatives.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -567,3 +573,23 @@ must inspect exit_code; they are not audited here.
 Next: annotated non-equation evidence, generated rewrite proof-binder provenance,
 and missing-IH diagnostics. Frozen inputs/policies; historical evidence preserved;
 no installs or pushes.
+
+## Rewrite proof checkpoint
+
+Source `abd6d22b1a0d53420a6f60423b381b37137cccc3` closes annotated non-equation, substituted proof-use and
+non-function application diagnostic gaps. Five unchanged originals and fifteen
+complete adjacent controls match the pinned checker; five prior controls also
+renew. The [report](cpu-rewrite-proof.md) preserves the separate hole-preflight
+ordering and computed-scrutinee load diagnostic mismatches as unresolved.
+
+Full gate **905 passed, zero failed, 49 ignored**; 500 negative observations,
+four positive no-main checking observations and all 1,302 checking statuses pass
+with zero status transitions. Detailed coverage is 218 originals / 1,084 without
+receipts: 424 checker negatives, one checking-only module, 106 interpreter cases
+and 553 compiled candidates. Linked rows include historical and unresolved cells.
+Only nine checking originals are current; unrelated detailed lanes retain their
+actual source identities. The 688-vector exploration remains unqualified.
+
+The existing acceptance criterion and external invocation-status caveat remain.
+No semantic exception, dependency/toolchain/pin or budget change; no push.
+Next: computed-match scrutinee diagnostic provenance and adjacent negatives.
