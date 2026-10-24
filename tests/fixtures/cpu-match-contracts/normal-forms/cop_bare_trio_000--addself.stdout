@@ -1,0 +1,1 @@
+\{Zero: 0n; Succ: (p => 1n+Nat.add(p, p))}

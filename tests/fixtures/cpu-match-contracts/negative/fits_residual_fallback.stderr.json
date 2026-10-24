@@ -1,0 +1,1 @@
+"Error:\n- expected : cases for ../fits_residual_fallback.B\n- observed : \\{}\nLocation: main\n4 | law main: H.D -> H.Unit\n5>| def main(): \\{H.A: H.Unit{}; \\{}}\n6 | \n"

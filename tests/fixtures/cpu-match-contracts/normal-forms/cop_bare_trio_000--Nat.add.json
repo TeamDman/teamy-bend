@@ -1,0 +1,1 @@
+{"Match":["Zero",{"Lambda":{"Bound":0}},{"Match":["Succ",{"Lambda":{"Lambda":{"Constructor":["Succ",[{"Application":[{"Application":[{"Reference":"Nat.add"},{"Bound":1}]},{"Bound":0}]}]]}}},"EmptyMatch"]}]}

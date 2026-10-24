@@ -1,0 +1,1 @@
+"Error:\n- expected : ../cop_bare_trio_000.Succ{../cop_bare_trio_000.Succ{../cop_bare_trio_000.Succ{../cop_bare_trio_000.Zero{}}}}\n- observed : ../cop_bare_trio_000.Succ{../cop_bare_trio_000.Succ{../cop_bare_trio_000.Zero{}}}\nLocation: main\n4 | law main: {H.addself(H.Succ{H.Succ{H.Zero{}}}) == H.Succ{H.Succ{H.Zero{}}} : H.Nat}\n5>| def main(): {==}\n6 | \n"

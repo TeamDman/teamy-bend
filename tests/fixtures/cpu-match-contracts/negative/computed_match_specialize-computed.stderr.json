@@ -1,0 +1,1 @@
+"Error:\n- expected : ../computed_match_specialize.Sf{../computed_match_specialize.Sf{../computed_match_specialize.Zf{}}}\n- observed : ../computed_match_specialize.Zf{}\nLocation: main\n4 | law main: {H.Zf{} == H.Zf{} : H.Nf}\n5>| def main(): H.p_comp(H.Sf{H.Zf{}}, {==})\n6 | \n"

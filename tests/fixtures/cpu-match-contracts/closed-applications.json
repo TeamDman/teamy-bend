@@ -1,0 +1,368 @@
+[
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_var",
+    "arguments": [
+      "Zf{}",
+      "{==}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp",
+    "arguments": [
+      "Zf{}",
+      "{==}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp.go",
+    "arguments": [
+      "Zf{}",
+      "{==}",
+      "Zf{}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "dbl",
+    "arguments": [
+      "Zf{}"
+    ],
+    "value": "Zf{}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp.go",
+    "arguments": [
+      "Zf{}",
+      "{==}",
+      "Sf{Zf{}}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "dbl",
+    "arguments": [
+      "Sf{Zf{}}"
+    ],
+    "value": "Sf{Sf{Zf{}}}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp.go",
+    "arguments": [
+      "Zf{}",
+      "{==}",
+      "Sf{Sf{Zf{}}}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "dbl",
+    "arguments": [
+      "Sf{Sf{Zf{}}}"
+    ],
+    "value": "Sf{Sf{Sf{Sf{Zf{}}}}}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp.go",
+    "arguments": [
+      "Zf{}",
+      "{==}",
+      "Sf{Sf{Sf{Sf{Zf{}}}}}"
+    ],
+    "value": "{==}",
+    "kind": "proof",
+    "declared": true
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "dbl",
+    "arguments": [
+      "Sf{Sf{Sf{Sf{Zf{}}}}}"
+    ],
+    "value": "Sf{Sf{Sf{Sf{Sf{Sf{Sf{Sf{Zf{}}}}}}}}}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "addself",
+    "arguments": [
+      "Zero{}"
+    ],
+    "value": "0n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "addself",
+    "arguments": [
+      "Succ{Zero{}}"
+    ],
+    "value": "1n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "addself",
+    "arguments": [
+      "Succ{Succ{Zero{}}}"
+    ],
+    "value": "3n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "addself",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "value": "7n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Zero{}",
+      "Zero{}"
+    ],
+    "value": "0n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Zero{}",
+      "Succ{Zero{}}"
+    ],
+    "value": "1n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Zero{}",
+      "Succ{Succ{Zero{}}}"
+    ],
+    "value": "2n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Zero{}",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "value": "4n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Zero{}}",
+      "Zero{}"
+    ],
+    "value": "1n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Zero{}}",
+      "Succ{Zero{}}"
+    ],
+    "value": "2n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Zero{}}",
+      "Succ{Succ{Zero{}}}"
+    ],
+    "value": "3n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Zero{}}",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "value": "5n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Zero{}}}",
+      "Zero{}"
+    ],
+    "value": "2n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Zero{}}}",
+      "Succ{Zero{}}"
+    ],
+    "value": "3n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Zero{}}}",
+      "Succ{Succ{Zero{}}}"
+    ],
+    "value": "4n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Zero{}}}",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "value": "6n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "Zero{}"
+    ],
+    "value": "4n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "Succ{Zero{}}"
+    ],
+    "value": "5n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "Succ{Succ{Zero{}}}"
+    ],
+    "value": "6n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "arguments": [
+      "Succ{Succ{Succ{Succ{Zero{}}}}}",
+      "Succ{Succ{Succ{Succ{Zero{}}}}}"
+    ],
+    "value": "8n",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "fallback",
+    "arguments": [
+      "A{}"
+    ],
+    "value": "Unit{}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "fallback",
+    "arguments": [
+      "B{}"
+    ],
+    "value": "Unit{}",
+    "kind": "data",
+    "declared": true
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "matcher",
+    "arguments": [
+      "A{}"
+    ],
+    "value": "Unit{}",
+    "kind": "data",
+    "declared": false
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "matcher",
+    "arguments": [
+      "B{}"
+    ],
+    "value": "Unit{}",
+    "kind": "data",
+    "declared": false
+  }
+]

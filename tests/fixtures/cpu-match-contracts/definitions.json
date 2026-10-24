@@ -1,0 +1,57 @@
+[
+  {
+    "name": "computed_match_specialize",
+    "entry": "main",
+    "key": "computed_match_specialize--main"
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "dbl",
+    "key": "computed_match_specialize--dbl"
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_var",
+    "key": "computed_match_specialize--p_var"
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp",
+    "key": "computed_match_specialize--p_comp"
+  },
+  {
+    "name": "computed_match_specialize",
+    "entry": "p_comp.go",
+    "key": "computed_match_specialize--p_comp.go"
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "main",
+    "key": "cop_bare_trio_000--main"
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "Nat.add",
+    "key": "cop_bare_trio_000--Nat.add"
+  },
+  {
+    "name": "cop_bare_trio_000",
+    "entry": "addself",
+    "key": "cop_bare_trio_000--addself"
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "main",
+    "key": "fits_residual_fallback--main"
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "fallback",
+    "key": "fits_residual_fallback--fallback"
+  },
+  {
+    "name": "fits_residual_fallback",
+    "entry": "matcher",
+    "key": "fits_residual_fallback--matcher"
+  }
+]
