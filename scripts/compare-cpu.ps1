@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-array-reads', 'parse-bitwise-braces', 'parse-cons', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -227,6 +227,11 @@ $parseBitwiseBraces = @(
     @{ name = 'brace_term_forms'; source = "$Reference/tests/parse/brace_term_forms.bend"; expected = "42`n"; direct_mode = 'pure' },
     @{ name = 'bitwise_dot_operators_pure'; source = "$port/tests/fixtures/cpu-bitwise-braces/bitwise_dot_operators_pure.bend"; expected = "671`n"; direct_mode = 'pure' }
 )
+$parseCons = @(
+    @{ name = 'cons_operator'; source = "$Reference/tests/parse/cons_operator.bend"; expected = "391`n"; direct_mode = 'io' },
+    @{ name = 'cons_plus_pattern'; source = "$Reference/tests/parse/cons_plus_pattern.bend"; expected = "12`n"; direct_mode = 'pure' },
+    @{ name = 'cons_operator_pure'; source = "$port/tests/fixtures/cpu-cons/cons_operator_pure.bend"; expected = "391`n"; direct_mode = 'pure' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -240,6 +245,7 @@ $fixtures = switch ($Suite) {
     'parse-arrays' { $parseArrays }
     'parse-array-reads' { $parseArrayReads }
     'parse-bitwise-braces' { $parseBitwiseBraces }
+    'parse-cons' { $parseCons }
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
@@ -247,7 +253,7 @@ $fixtures = switch ($Suite) {
     'float-arithmetic' { $floatArithmetic }
     'float-specials' { $floatSpecials }
     'float-specials-depth' { $floatSpecialsDepth }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseArrayReads + $parseBitwiseBraces + $parseCons + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {
