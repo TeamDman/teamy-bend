@@ -23,32 +23,33 @@ fn emit(
     stderr: &mut impl Write,
 ) -> eyre::Result<CliOutput> {
     cancellation.bail_if_cancelled()?;
-    let Some(proof) = error.reflexivity_diagnostic() else {
+    let Some(report) = error.checker_diagnostic() else {
         return Err(eyre!("{error}"));
     };
-    let Some(excerpt) = origins.excerpt(proof.proof_identity) else {
+    let Some(excerpt) = origins.excerpt(report.term_identity) else {
         // Programmatically constructed or untracked terms keep the ordinary
         // host diagnostic. Never guess a source line from an error string.
         return Err(eyre!("{error}"));
     };
     let mut diagnostic = format!(
         "Error:\n- expected : {}\n- observed : {}",
-        proof.expected, proof.observed
+        report.expected, report.observed
     );
-    if !proof.context.is_empty() {
+    if !report.context.is_empty() {
         diagnostic.push_str("\nContext:");
-        let width = proof
+        let width = report
             .context
             .iter()
             .map(|(name, _)| name.len())
             .max()
             .unwrap_or(0);
-        for (name, ty) in &proof.context {
+        for (name, ty) in &report.context {
             write!(diagnostic, "\n- {name:width$} : {ty}").expect("String formatting");
         }
     }
-    write!(diagnostic, "\nLocation: {}\n{excerpt}\n", proof.definition).expect("String formatting");
-    tracing::debug!(internal_error = %error, "Bend reflexivity check rejected");
+    write!(diagnostic, "\nLocation: {}\n{excerpt}\n", report.definition)
+        .expect("String formatting");
+    tracing::debug!(internal_error = %error, "Bend check rejected");
     stderr
         .write_all(diagnostic.as_bytes())
         .wrap_err("cannot write Bend checker diagnostic")?;
@@ -65,43 +66,47 @@ mod tests {
     use crate::syntax::load_with_diagnostics;
     use std::io;
 
-    fn rejected() -> (KernelError, DiagnosticOrigins) {
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/cpu-checking/false_brace.bend");
+    fn rejected(name: &str) -> (KernelError, DiagnosticOrigins) {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(name);
         let (book, origins) = load_with_diagnostics(path).unwrap();
         (check_book(&book).unwrap_err(), origins)
     }
 
     #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
-        let (error, origins) = rejected();
-        let cancellation = CancellationToken::new();
-        cancellation.request_cancel("stop diagnostic");
-        let mut bytes = Vec::new();
-        assert!(
-            emit(&error, &origins, &cancellation, &mut bytes)
-                .unwrap_err()
-                .to_string()
-                .contains("stop diagnostic")
-        );
-        assert!(bytes.is_empty());
-        let fallback = emit(
-            &error,
-            &DiagnosticOrigins::default(),
-            &CancellationToken::new(),
-            &mut bytes,
-        )
-        .unwrap_err();
-        assert_eq!(fallback.to_string(), error.to_string());
-        assert!(bytes.is_empty());
-        let ordinary = KernelError::new("ordinary type error");
-        assert_eq!(
-            emit(&ordinary, &origins, &CancellationToken::new(), &mut bytes)
-                .unwrap_err()
-                .to_string(),
-            "ordinary type error"
-        );
-        assert!(bytes.is_empty());
+        for name in [
+            "tests/fixtures/cpu-checking/false_brace.bend",
+            "tests/fixtures/cpu-constructors/nat_literal_import.bend",
+        ] {
+            let (error, origins) = rejected(name);
+            let cancellation = CancellationToken::new();
+            cancellation.request_cancel("stop diagnostic");
+            let mut bytes = Vec::new();
+            assert!(
+                emit(&error, &origins, &cancellation, &mut bytes)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("stop diagnostic")
+            );
+            assert!(bytes.is_empty());
+            let fallback = emit(
+                &error,
+                &DiagnosticOrigins::default(),
+                &CancellationToken::new(),
+                &mut bytes,
+            )
+            .unwrap_err();
+            assert_eq!(fallback.to_string(), error.to_string());
+            assert!(bytes.is_empty());
+            let ordinary = KernelError::new("ordinary type error");
+            assert_eq!(
+                emit(&ordinary, &origins, &CancellationToken::new(), &mut bytes)
+                    .unwrap_err()
+                    .to_string(),
+                "ordinary type error"
+            );
+            assert!(bytes.is_empty());
+        }
     }
 
     #[test]
@@ -123,22 +128,28 @@ mod tests {
                 Err(io::Error::other("flush failed"))
             }
         }
-        let (error, origins) = rejected();
-        for fail_write in [true, false] {
-            let mut writer = Writer {
-                fail_write,
-                flushed: false,
-            };
-            let failure =
-                emit(&error, &origins, &CancellationToken::new(), &mut writer).unwrap_err();
-            assert!(failure.to_string().contains(if fail_write {
-                "cannot write"
-            } else {
-                "cannot flush"
-            }));
-            assert_eq!(writer.flushed, !fail_write);
+        for name in [
+            "tests/fixtures/cpu-checking/false_brace.bend",
+            "tests/fixtures/cpu-constructors/nat_literal_import.bend",
+        ] {
+            let (error, origins) = rejected(name);
+            for fail_write in [true, false] {
+                let mut writer = Writer {
+                    fail_write,
+                    flushed: false,
+                };
+                let failure =
+                    emit(&error, &origins, &CancellationToken::new(), &mut writer).unwrap_err();
+                assert!(failure.to_string().contains(if fail_write {
+                    "cannot write"
+                } else {
+                    "cannot flush"
+                }));
+                assert_eq!(writer.flushed, !fail_write);
+            }
+            let output =
+                emit(&error, &origins, &CancellationToken::new(), &mut Vec::new()).unwrap();
+            assert_eq!(output.exit_code(), 1);
         }
-        let output = emit(&error, &origins, &CancellationToken::new(), &mut Vec::new()).unwrap();
-        assert_eq!(output.exit_code(), 1);
     }
 }

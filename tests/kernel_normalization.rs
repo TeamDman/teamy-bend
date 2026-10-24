@@ -917,3 +917,30 @@ fn rewrite_comparison_rejects_changed_fields_types_and_binding_targets() {
     );
     shape(&parse_term("Type").unwrap()).expect_err("unsupported syntax must fail closed");
 }
+
+#[test]
+fn open_list_rendering_preserves_structure_and_operand_precedence() {
+    for (source, expected) in [
+        ("Con{x, tail}", "x <> tail"),
+        ("Con{x, Con{y, tail}}", "x <> y <> tail"),
+        ("Con{Con{x, tail}, rest}", "(x <> tail) <> rest"),
+        ("Con{x => x, tail}", "(x => x) <> tail"),
+        ("Con{x, y => y}", "x <> (y => y)"),
+        ("Con{Succ{n}, tail}", "(1n+n) <> tail"),
+        ("Succ{Con{x, tail}}", "1n+x <> tail"),
+        ("Con{x, tail}(y)", "(x <> tail)(y)"),
+        ("f(Con{x, tail})", "f(x <> tail)"),
+        ("Con{x, Nil{}}", "[x]"),
+        ("Con{x, Local.Nil{}}", "x <> Local.Nil{}"),
+        ("Con{x, Con{}}", "x <> Con{}"),
+        ("Local.Con{x, tail}", "Local.Con{x, tail}"),
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), expected, "{source}");
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(expected).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
+}

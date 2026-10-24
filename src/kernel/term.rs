@@ -186,6 +186,29 @@ pub fn lambdas(binders: &[Binder], mut body: TermRef) -> TermRef {
     body
 }
 
+// Keep loader provenance when a constructor is unchanged. Mapped fields that
+// actually change produce a new, untracked node instead of a guessed origin.
+pub(crate) fn map_constructor(
+    value: &TermRef,
+    name: &str,
+    args: &[TermRef],
+    transform: impl FnMut(&TermRef) -> TermRef,
+) -> TermRef {
+    let mapped: Vec<_> = args.iter().map(transform).collect();
+    if args
+        .iter()
+        .zip(&mapped)
+        .all(|(old, new)| Rc::ptr_eq(old, new))
+    {
+        Rc::clone(value)
+    } else {
+        term(Term::Ctr {
+            name: name.into(),
+            args: mapped,
+        })
+    }
+}
+
 /// Capture-free substitution for terms whose binder IDs are globally unique.
 #[must_use]
 pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> TermRef {
@@ -240,10 +263,7 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
             args: args.iter().map(sub).collect(),
             excluded: excluded.clone(),
         }),
-        Term::Ctr { name, args } => term(Term::Ctr {
-            name: name.clone(),
-            args: args.iter().map(sub).collect(),
-        }),
+        Term::Ctr { name, args } => map_constructor(value, name, args, sub),
         Term::Mat {
             constructor,
             arm,
@@ -379,9 +399,9 @@ impl fmt::Display for Term {
             ),
             Self::Min(a, b) => {
                 f.write_str("(")?;
-                nat_operand(f, a)?;
+                infix_operand(f, a)?;
                 f.write_str(" <&> ")?;
-                nat_operand(f, b)?;
+                infix_operand(f, b)?;
                 f.write_str(")")
             }
             Self::All {
@@ -392,7 +412,7 @@ impl fmt::Display for Term {
                 ..
             } => {
                 write!(f, "@{quant}{name}:")?;
-                nat_operand(f, domain)?;
+                infix_operand(f, domain)?;
                 write!(f, " -> {body}")
             }
             Self::Lam { name, body, .. } => write!(f, "{name} => {body}"),
@@ -477,6 +497,9 @@ fn constructor(
     if complete_list(value) {
         return list_literal(f, value);
     }
+    if open_list(value) {
+        return cons_chain(f, value);
+    }
     if name == "Tuple" && args.len() == 2 {
         return tuple_literal(f, value);
     }
@@ -550,9 +573,9 @@ fn open_nat(value: &Term) -> bool {
     nat_spine(value).is_some_and(|(_, tail)| !empty_constructor(tail, "Zero"))
 }
 
-fn nat_operand(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
     // Arrow domains and quantitative-meet operands use upstream precedence 2.
-    if open_nat(value) {
+    if open_nat(value) || open_list(value) {
         write!(f, "({value})")
     } else {
         write!(f, "{value}")
@@ -570,6 +593,39 @@ fn complete_list(mut value: &Term) -> bool {
         value = tail;
     }
     empty_constructor(value, "Nil")
+}
+
+// A non-Nil tail remains explicit. This inspects syntax only; constructor
+// fields are never evaluated to decide whether list sugar is applicable.
+fn open_list(value: &Term) -> bool {
+    matches!(value, Term::Ctr { name, args } if name == "Con" && args.len() == 2)
+        && !complete_list(value)
+}
+
+fn cons_chain(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+    while let Term::Ctr { name, args } = value {
+        if name != "Con" || args.len() != 2 {
+            break;
+        }
+        let head = args[0].as_ref();
+        if matches!(
+            head,
+            Term::Lam { .. }
+                | Term::Let { .. }
+                | Term::Rwt { .. }
+                | Term::All { .. }
+                | Term::Min(_, _)
+        ) || open_nat(head)
+            || open_list(head)
+        {
+            write!(f, "({head})")?;
+        } else {
+            write!(f, "{head}")?;
+        }
+        f.write_str(" <> ")?;
+        value = &args[1];
+    }
+    match_branch(f, value)
 }
 
 fn list_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
@@ -656,6 +712,7 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
         head,
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
     ) || open_nat(head)
+        || open_list(head)
     {
         write!(f, "({head})")?;
     } else {

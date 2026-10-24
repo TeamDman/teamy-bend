@@ -1011,6 +1011,7 @@ impl Parser<'_> {
         reason = "Pratt parser alternatives share precedence and source adjacency state"
     )]
     fn expression_inner(&mut self, min: u8) -> Result<TermRef, ParseError> {
+        let line = self.current().line;
         let mut out = self.atom()?;
         let mut operations = 0;
         loop {
@@ -1164,10 +1165,16 @@ impl Parser<'_> {
             let b = self.expression(if right { prec } else { prec + 1 })?;
             out = match op.as_str() {
                 "<&>" => term(Term::Min(out, b)),
-                "<>" => term(Term::Ctr {
-                    name: "Con".into(),
-                    args: vec![out, b],
-                }),
+                "<>" => {
+                    let value = term(Term::Ctr {
+                        name: "Con".into(),
+                        args: vec![out, b],
+                    });
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.node(&value, &self.label, line);
+                    }
+                    value
+                }
                 _ => apply(term(Term::Ref(method.into())), [out, b]),
             };
         }
@@ -1184,11 +1191,21 @@ impl Parser<'_> {
         }
         Ok(xs)
     }
+    fn atom(&mut self) -> Result<TermRef, ParseError> {
+        let line = self.current().line;
+        let value = self.atom_inner()?;
+        if matches!(value.as_ref(), Term::Ctr { .. })
+            && let Some(origins) = &mut self.templates.diagnostics
+        {
+            origins.node(&value, &self.label, line);
+        }
+        Ok(value)
+    }
     #[expect(
         clippy::too_many_lines,
         reason = "Surface forms are kept in upstream grammar order for auditability"
     )]
-    fn atom(&mut self) -> Result<TermRef, ParseError> {
+    fn atom_inner(&mut self) -> Result<TermRef, ParseError> {
         if self.is("~") {
             return Err(self.error(
                 "~ arguments require a previously declared template head and leading argument position",
@@ -1275,7 +1292,7 @@ impl Parser<'_> {
                 self.expect("}")?;
                 let proof = term(Term::Rfl);
                 if let Some(origins) = &mut self.templates.diagnostics {
-                    origins.proof(&proof, &self.label, line);
+                    origins.node(&proof, &self.label, line);
                 }
                 return Ok(proof);
             }
@@ -2134,10 +2151,7 @@ fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
             args: args.iter().map(go).collect(),
             excluded: excluded.clone(),
         }),
-        Term::Ctr { name, args } => term(Term::Ctr {
-            name: name.clone(),
-            args: args.iter().map(go).collect(),
-        }),
+        Term::Ctr { name, args } => crate::kernel::map_constructor(value, name, args, go),
         Term::Mat {
             constructor,
             arm,

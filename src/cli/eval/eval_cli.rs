@@ -29,7 +29,7 @@ struct EvalReport {
 impl EvalArgs {
     /// Check and evaluate the selected entry point.
     ///
-    /// Source reflexivity failures write a Bend diagnostic and return output with
+    /// Tracked reflexivity/constructor failures write a Bend diagnostic and return output with
     /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors

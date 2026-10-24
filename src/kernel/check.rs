@@ -36,7 +36,7 @@ type Context = BTreeMap<usize, Binder>;
 pub struct KernelError {
     pub message: String,
     kind: FailureKind,
-    reflexivity: Option<Box<ReflexivityDiagnostic>>,
+    diagnostic: Option<Box<CheckerDiagnostic>>,
 }
 
 // Optional presentation metadata does not change the existing error equality
@@ -48,12 +48,26 @@ impl PartialEq for KernelError {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) struct ReflexivityDiagnostic {
-    pub(crate) proof_identity: usize,
+pub(crate) struct CheckerDiagnostic {
+    pub(crate) term_identity: usize,
     pub(crate) definition: String,
     pub(crate) expected: String,
     pub(crate) observed: String,
     pub(crate) context: Vec<(String, String)>,
+}
+
+// Structured checker facts, not interpretation of a human-readable error string.
+enum DiagnosticExpression<'a> {
+    Text(String),
+    Term(&'a TermRef),
+}
+impl DiagnosticExpression<'_> {
+    fn render(self, engine: &mut Engine) -> Result<String, KernelError> {
+        match self {
+            Self::Text(text) => Ok(text),
+            Self::Term(value) => Ok(engine.normalize(value)?.to_string()),
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -74,7 +88,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::Internal,
-            reflexivity: None,
+            diagnostic: None,
         }
     }
 
@@ -82,7 +96,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::RequestOutOfBand,
-            reflexivity: None,
+            diagnostic: None,
         }
     }
 
@@ -90,7 +104,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::NatOverflow,
-            reflexivity: None,
+            diagnostic: None,
         }
     }
 
@@ -98,7 +112,7 @@ impl KernelError {
         Self {
             message: message.into(),
             kind: FailureKind::ArrayDepth,
-            reflexivity: None,
+            diagnostic: None,
         }
     }
 
@@ -107,8 +121,8 @@ impl KernelError {
         self
     }
 
-    pub(crate) fn reflexivity_diagnostic(&self) -> Option<&ReflexivityDiagnostic> {
-        self.reflexivity.as_deref()
+    pub(crate) fn checker_diagnostic(&self) -> Option<&CheckerDiagnostic> {
+        self.diagnostic.as_deref()
     }
 
     pub(crate) const fn language_failure(&self) -> Option<(&'static str, &'static [u8])> {
@@ -340,13 +354,29 @@ impl Engine {
         left: &TermRef,
         right: &TermRef,
         context: &Context,
-    ) -> Result<ReflexivityDiagnostic, KernelError> {
-        // The comparison has already rejected the proof. Presentation cannot
-        // change that result. Use only the remaining fuel/depth allowance, keep
-        // aliases for local endpoints, and leave the checking engine untouched.
+    ) -> Result<CheckerDiagnostic, KernelError> {
+        self.term_diagnostic(
+            lhs,
+            proof,
+            DiagnosticExpression::Term(left),
+            DiagnosticExpression::Term(right),
+            context,
+        )
+    }
+
+    fn term_diagnostic(
+        &self,
+        lhs: &Lhs,
+        value: &TermRef,
+        expected: DiagnosticExpression<'_>,
+        observed: DiagnosticExpression<'_>,
+        context: &Context,
+    ) -> Result<CheckerDiagnostic, KernelError> {
+        // The check has already rejected. Presentation shares only the remaining
+        // fuel/depth allowance on a clone; it cannot alter acceptance or budgets.
         let mut display = self.clone();
-        let expected = display.normalize(left)?.to_string();
-        let observed = display.normalize(right)?.to_string();
+        let expected = expected.render(&mut display)?;
+        let observed = observed.render(&mut display)?;
         let context = context
             .values()
             .map(|binder| {
@@ -356,10 +386,9 @@ impl Engine {
                 ))
             })
             .collect::<Result<Vec<_>, KernelError>>()?;
-        Ok(ReflexivityDiagnostic {
-            // Never dereferenced: the loader's map holds each source node alive
-            // until this immediate check result is handled by the CLI.
-            proof_identity: Rc::as_ptr(proof) as usize,
+        Ok(CheckerDiagnostic {
+            // Never dereferenced. The loader retains each tracked source node.
+            term_identity: Rc::as_ptr(value) as usize,
             definition: lhs.name.clone(),
             expected,
             observed,
@@ -945,6 +974,27 @@ impl Engine {
                 let uses = self.check(lhs, x, demand, ty, context)?;
                 Ok((Rc::clone(ty), uses))
             }
+            Term::Ctr { name, .. } => {
+                let mut error = KernelError::new(format!(
+                    "term needs an expected type or annotation: {value}"
+                ));
+                let expected = if self.constructor_family(name).is_none() {
+                    "a declared constructor"
+                } else {
+                    "an annotated term (cannot infer)"
+                };
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text(expected.into()),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+                Err(error)
+            }
             Term::Hole(name) => Err(KernelError::new(format!("unfinished proof hole ?{name}"))),
             _ => Err(KernelError::new(format!(
                 "term needs an expected type or annotation: {value}"
@@ -1088,22 +1138,59 @@ impl Engine {
             Term::Ctr { name, args } => {
                 let t = self.whnf(ty)?;
                 let adt = self.adt(&t)?;
-                let constructor = adt
-                    .constructors
-                    .iter()
-                    .find(|c| &c.name == name)
-                    .ok_or_else(|| {
-                        KernelError::new(format!(
-                            "{name} is not a remaining constructor of {}",
-                            adt.name
-                        ))
-                    })?;
+                let Some(constructor) = adt.constructors.iter().find(|c| &c.name == name) else {
+                    let mut error = KernelError::new(format!(
+                        "{name} is not a remaining constructor of {}",
+                        adt.name
+                    ));
+                    let family = self
+                        .constructor_family(name)
+                        .map(|name| term(Term::Ref(name)));
+                    let (expected, observed) = if let Some(family) = &family {
+                        (
+                            DiagnosticExpression::Term(ty),
+                            DiagnosticExpression::Term(family),
+                        )
+                    } else {
+                        let constructors = adt
+                            .constructors
+                            .iter()
+                            .map(|c| c.name.as_str())
+                            .collect::<Vec<_>>()
+                            .join(", ");
+                        (
+                            DiagnosticExpression::Text(format!(
+                                "a declared constructor ({} declares {constructors})",
+                                adt.name
+                            )),
+                            DiagnosticExpression::Term(value),
+                        )
+                    };
+                    error.diagnostic = self
+                        .term_diagnostic(lhs, value, expected, observed, context)
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
+                };
                 if constructor.fields.len() != args.len() {
-                    return Err(KernelError::new(format!(
+                    let mut error = KernelError::new(format!(
                         "{name} needs {} fields; got {}",
                         constructor.fields.len(),
                         args.len()
-                    )));
+                    ));
+                    let count = constructor.fields.len();
+                    let plural = if count == 1 { "field" } else { "fields" };
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Text(format!("{name} with {count} {plural}")),
+                            DiagnosticExpression::Term(value),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 }
                 let Term::Adt {
                     args: parameters, ..
@@ -1128,7 +1215,7 @@ impl Engine {
                     let mut error = KernelError::new(format!(
                         "reflexivity requires equal endpoints: {left} != {right}"
                     ));
-                    error.reflexivity = self
+                    error.diagnostic = self
                         .reflexivity_diagnostic(lhs, value, left, right, context)
                         .ok()
                         .map(Box::new);
@@ -1663,6 +1750,30 @@ mod reflexivity_diagnostic_tests {
     }
 
     #[test]
+    fn constructor_presentation_does_not_reset_exhausted_allowance() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let value = term(Term::Ctr {
+            name: "Missing".into(),
+            args: vec![],
+        });
+        engine.fuel = 1;
+        let error = engine
+            .infer(&Lhs::default(), &value, Quant::None, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(engine.fuel, 0);
+        assert_eq!(engine.depth, 0);
+        assert!(error.checker_diagnostic().is_none());
+        assert_eq!(
+            error,
+            KernelError::new("term needs an expected type or annotation: Missing{}")
+        );
+        assert!(error.language_failure().is_none());
+    }
+
+    #[test]
     fn unavailable_presentation_retains_the_original_reflexivity_rejection() {
         fn assert_send_sync<T: Send + Sync>() {}
         assert_send_sync::<KernelError>();
@@ -1696,14 +1807,14 @@ mod reflexivity_diagnostic_tests {
             )
             .unwrap_err();
         assert_eq!(error.message, expected);
-        assert!(error.reflexivity_diagnostic().is_none());
+        assert!(error.checker_diagnostic().is_none());
         assert_eq!(engine.depth, 0);
         assert_eq!(error, KernelError::new(expected));
 
         let source =
             "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad() -> {0n == 1n : Nat}: {==}\n";
         let error = check_book(&crate::syntax::parse(source).unwrap()).unwrap_err();
-        assert!(error.reflexivity_diagnostic().is_some());
+        assert!(error.checker_diagnostic().is_some());
         assert_eq!(error, KernelError::new(error.message.clone()));
         assert_eq!(error.to_string(), error.message);
         assert!(error.language_failure().is_none());

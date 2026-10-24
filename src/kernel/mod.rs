@@ -32,5 +32,6 @@ pub use term::Term;
 pub use term::TermRef;
 pub use term::arrows;
 pub use term::lambdas;
+pub(crate) use term::map_constructor;
 pub use term::substitute;
 pub use term::term;

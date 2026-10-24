@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Optional loader-owned origins for source reflexivity nodes. No AST or
+//! Optional loader-owned origins for source diagnostic nodes. No AST or
 //! acceptance metadata is changed, and no global pointer registry is used.
 use crate::kernel::TermRef;
 use std::collections::BTreeMap;
@@ -8,13 +8,13 @@ use std::rc::Rc;
 #[derive(Default)]
 pub(crate) struct DiagnosticOrigins {
     sources: BTreeMap<String, Rc<str>>,
-    proofs: BTreeMap<usize, ProofOrigin>,
+    nodes: BTreeMap<usize, TermOrigin>,
 }
 
-struct ProofOrigin {
+struct TermOrigin {
     // Retain the allocation: an identity cannot be recycled while this source
     // map is paired with the check result. Identity is never dereferenced.
-    _proof: TermRef,
+    _node: TermRef,
     source: Rc<str>,
     line: usize,
 }
@@ -26,21 +26,20 @@ impl DiagnosticOrigins {
             .or_insert_with(|| Rc::from(source));
     }
 
-    pub(super) fn proof(&mut self, proof: &TermRef, label: &str, line: usize) {
+    pub(super) fn node(&mut self, node: &TermRef, label: &str, line: usize) {
         if let Some(source) = self.sources.get(label) {
-            self.proofs.insert(
-                Rc::as_ptr(proof) as usize,
-                ProofOrigin {
-                    _proof: Rc::clone(proof),
+            self.nodes
+                .entry(Rc::as_ptr(node) as usize)
+                .or_insert_with(|| TermOrigin {
+                    _node: Rc::clone(node),
                     source: Rc::clone(source),
                     line,
-                },
-            );
+                });
         }
     }
 
     pub(crate) fn excerpt(&self, identity: usize) -> Option<String> {
-        let origin = self.proofs.get(&identity)?;
+        let origin = self.nodes.get(&identity)?;
         let lines = origin.source.split('\n').collect::<Vec<_>>();
         let at = origin.line;
         if at == 0 || at > lines.len() {
