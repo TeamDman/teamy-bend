@@ -5365,3 +5365,43 @@ source/ledger selection only, without execution credit. Dependencies, toolchains
 references, budgets, guards and cancellation remain frozen. Local checkpoints
 only; no installs, pushes, merges, desktop or GPU work. No user decision is
 required by this correction.
+
+### [x] 5.100 Qualify nested computed decisions and workers
+
+Tested source `cc3818eaa394ab3be74d9edd14b00e7763c11da1` adds three unchanged
+`flatten/nested_computed_match_001`, `_dec` and `_zro` originals and **12 bounded
+applications**. Original function graphs/text preserve `dec(zro(p))`; closed
+constructor results, scalar projections and execution are distinct comparisons.
+No production defect or code change was found. [Scope and receipts](cpu-nested-computed.md).
+
+Full gate: **1,024 passed, zero failures, 49 ignored**. Focused controls:
+**33 / 0 / 0**. All **36 complete graph** and **90 normalization/applicability**
+observations pass, including 60 exact standalone-build refusals without artifacts.
+Six authored executable mains produce **72 exact repeated executions and 36
+successful generation/build checks**, with zero matrix timeouts. Their result
+constructors are nullary; this success does not resolve the historical
+field-bearing imported-constructor upstream-JS printer failures.
+
+Aggregate sharing/work/native/C/JS/demand/cancellation regressions pass in the
+full gate; no mid-normalization cancellation is claimed. All 1,302 checking
+statuses and streams remain unchanged, including 439 rejecting negatives.
+Fourteen positive controls pass; 18 observations retain three hole/TODO
+disagreements. The IO emitter correction's API caveat remains: no-IO executable
+compilation may now return Err for external consumers, which have not been
+audited. Minimal-IO upstream C compiler failures and foreign checking diagnostic
+differences remain separately unqualified; prior receipts are not renewed by
+matching cases in this batch.
+
+Detailed evidence links **361 originals**; **941 remain unlinked**: **357 checker
+negatives, one checking-only module, 46 interpreter cases and 537 compiled
+candidates**. Links include partial, blocked and historical evidence, not
+completed parity. F32.read, competing failure order, resource/host/foreign gaps,
+erased-hole/TODO, downstream API caveats and the incomplete 688-vector exploration
+remain unwaived. Missing API/integration requirements still require review.
+
+Next proposed coherent family: seven `flatten/annotated_computed_scrutinee_000`
+originals/companions, actual applicability first, then **77** bounded applications
+covering list equality/length, annotation, selection and Boolean helpers.
+This is source/ledger selection only; no next-batch execution credit.
+Dependencies, pins, toolchains, guards, budgets and cancellation stay frozen.
+Local checkpoints only; no installs, publication, merge, desktop or GPU work.
