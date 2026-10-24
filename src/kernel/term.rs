@@ -664,7 +664,7 @@ fn open_nat(value: &Term) -> bool {
 
 fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Arrow domains and quantitative-meet operands use upstream precedence 2.
-    if open_nat(value) || open_list(value) {
+    if matches!(value, Term::All { .. }) || open_nat(value) || open_list(value) {
         write!(f, "({})", scoped(value, scope))
     } else {
         write!(f, "{}", scoped(value, scope))

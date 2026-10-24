@@ -15,7 +15,9 @@ pub enum Shape {
     Bound(usize),
     Reference(String),
     Multiplicity(u8),
+    Universe(Box<Self>),
     Lambda(Box<Self>),
+    Forall(u8, Box<Self>, Box<Self>),
     Application(Box<Self>, Box<Self>),
     Constructor(String, Vec<Self>),
     Match(String, Box<Self>, Box<Self>),
@@ -78,11 +80,35 @@ fn shape_with_datatypes(
                 Quant::Lone => 1,
                 Quant::Many => 2,
             }),
+            Term::Typ(quant) => {
+                Shape::Universe(Box::new(visit(quant, scope, depth + 1, datatypes)?))
+            }
             Term::Lam { id, body, .. } => {
                 scope.push(*id);
                 let body = visit(body, scope, depth + 1, datatypes)?;
                 scope.pop();
                 Shape::Lambda(Box::new(body))
+            }
+            Term::All {
+                quant,
+                id,
+                domain,
+                body,
+                ..
+            } => {
+                let domain = visit(domain, scope, depth + 1, datatypes)?;
+                scope.push(*id);
+                let body = visit(body, scope, depth + 1, datatypes)?;
+                scope.pop();
+                Shape::Forall(
+                    match quant {
+                        Quant::None => 0,
+                        Quant::Lone => 1,
+                        Quant::Many => 2,
+                    },
+                    Box::new(domain),
+                    Box::new(body),
+                )
             }
             Term::App(function, argument) => Shape::Application(
                 Box::new(visit(function, scope, depth + 1, datatypes)?),

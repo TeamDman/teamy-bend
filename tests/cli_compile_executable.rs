@@ -390,3 +390,18 @@ fn unprintable_results_preserve_language_diagnostics_and_existing_outputs() {
         }
     }
 }
+
+#[test]
+fn higher_order_printer_refusal_preserves_domain_parentheses_and_failure_status() {
+    let fixture = Fixture::new(include_str!(
+        "fixtures/cpu-open-closures/open_closure_pipe.bend"
+    ));
+    let expected = b"Error: main's type @f:(@_:U32 -> U32) -> @g:(@_:U32 -> U32) -> @_:U32 -> U32 cannot be printed (a function, a Type, an erased or dependent field)\n";
+    for target in ["c", "javascript", "native"] {
+        let output = fixture.compile(&["--executable", "--target", target]);
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+        assert_eq!(output.stderr, expected);
+        assert!(!fixture.0.join("main.cjs").exists());
+    }
+}
