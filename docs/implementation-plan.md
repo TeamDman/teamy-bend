@@ -5614,3 +5614,45 @@ strict proofs, recursive rewriting and executable proof output distinct. This is
 source/ledger selection only, with no execution credit. Frozen references,
 dependencies, toolchains, budgets, guards and cancellation remain unchanged.
 Reviewed isolated checkpoints may be pushed; no main merge or release.
+
+### [x] 5.106 Qualify dependent pair and recursive proof behavior
+
+Tested source `99ff1baa56ab31aa18fa71641255cfc769b275cf` adds unchanged `proof/dependent_pair`,
+`multi_column_match` and `shared_scrutinee`, with **11 complete definition graphs
+and 22 direct applications** (8 proofs and 14 helper/type-family observations).
+Eight typed equation callers validate proof inputs separately. The complete DPair
+normalizes with both fields; its dependent-field printer refuses exactly, while
+fst extraction is executable. Full recursive rewrite evidence, motive, body,
+endpoints, type and binders remain compared. No production fix was required.
+[Scope and receipts](cpu-dependent-proofs.md).
+
+Full gate **1,067 / 0 / 49**; focused checks **39 / 0 / 0**. All **112 complete
+graph** and **140 normalization/applicability** observations pass. Negative matrix:
+**48 exact rejections** and six separately labeled checking-phase probes.
+Runtime matrix: **188 exact executions, 95 generation/build successes, two
+upstream-C compilation failures and two unresolved upstream-JS printer timeouts**.
+Two upstream-C executions remain **unrun**; runner exit 1. The dependent-pair
+adapter emits an undefined constructor ID in upstream C. Complete dependent-pair
+printer refusal and successful projections do not become executable pair parity.
+
+Independent review found no issues. Aggregate sharing/work/native/C/JS, demand,
+guards and existing cancellation controls pass, without mid-normalization
+cancellation claims. All 1,302 checking statuses/streams are unchanged, including
+439 rejecting negatives. Fourteen positive controls pass; eighteen observations
+retain three hole/TODO differences. Known imported-printer, minimal-IO C, foreign,
+resource/host, F32.read, failure-order and unfinished-grid gaps remain unwaived;
+external executable-emitter consumers remain unaudited.
+
+Detailed receipts link **384 originals**, with **918 unlinked**: **357 checker
+negatives, one checking-only module, 23 interpreter cases and 537 compiled
+candidates**. These categories are not missing runtime-test counts. Links include
+historical, partial and blocked results; CPU parity and the API/integration
+inventory remain incomplete.
+
+Next proposed batch: `check/dependent_telescope`, `capture_price_twin_000` and
+`_001`. Establish wide dependent-field and branch-join applicability first, then
+bounded valid records/closure applications and invalid witnesses. An equality
+hypothesis forcing a zero scrutinee must not be faked to reach a positive arm;
+test the independently callable helper where appropriate. Source/ledger selection
+only, with no execution credit. Inputs, guards, budgets and cancellation remain
+frozen. Reviewed feature checkpoints may be pushed; no main merge or release.

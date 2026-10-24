@@ -91,50 +91,45 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Tested source `6523d4654f81a427dc1bf30354deb7e0dd67bb91` adds three unchanged
-`state/eval_case_tree_001`, `_002` and `eval_split_apply` originals, **16 typed
-proof applications and 36 helper computations**. Original proof-function graphs
-retain named calls. Base-importing function adapters refuse printing, whereas
-closed equation proofs are printable as `{==}`. Strict proof checking remains
-separate from runtime output. No production change was needed.
-[Scope and receipts](cpu-proof-case-trees.md).
+Tested source `99ff1baa56ab31aa18fa71641255cfc769b275cf` adds unchanged `proof/dependent_pair`,
+`multi_column_match` and `shared_scrutinee`, with **11 complete definition graphs
+and 22 direct applications** (8 proofs and 14 helper/type-family observations).
+Eight typed equation callers validate proof inputs separately. The complete DPair
+normalizes with both fields; its dependent-field printer refuses exactly, while
+fst extraction is executable. Full recursive rewrite evidence, motive, body,
+endpoints, type and binders remain compared. No production fix was required.
+[Scope and receipts](cpu-dependent-proofs.md).
 
-Full gate: **1,059 passed, zero failures, 49 ignored**; focused checks
-**39 / 0 / 0**. All **100 complete graph** and **102 original normalization/
-applicability** observations pass. Negative matrix: **48 exact rejections** and
-six separately labeled checking-phase probes. Runtime matrix: **260 exact
-executions, 132 generation/build successes and four unresolved upstream-JS
-printer timeouts**; runner exit 1. Passing projections and closed proofs do not
-qualify the full imported-constructor printers.
+Full gate **1,067 / 0 / 49**; focused checks **39 / 0 / 0**. All **112 complete
+graph** and **140 normalization/applicability** observations pass. Negative matrix:
+**48 exact rejections** and six separately labeled checking-phase probes.
+Runtime matrix: **188 exact executions, 95 generation/build successes, two
+upstream-C compilation failures and two unresolved upstream-JS printer timeouts**.
+Two upstream-C executions remain **unrun**; runner exit 1. The dependent-pair
+adapter emits an undefined constructor ID in upstream C. Complete dependent-pair
+printer refusal and successful projections do not become executable pair parity.
 
-The initial focused test failed because the named-definition API received an
-argument for zero-parameter main(), which returns a proof lambda. The test-only
-correction uses the already checked typed H.main(arg) callers for all sixteen
-proof inputs; helpers still use the declared-entry API. Independent review
-confirmed complete coverage and found no remaining concerns. Initial failed
-receipts and the review correction remain historical evidence.
+Independent review found no issues. Aggregate sharing/work/native/C/JS, demand,
+guards and existing cancellation controls pass, without mid-normalization
+cancellation claims. All 1,302 checking statuses/streams are unchanged, including
+439 rejecting negatives. Fourteen positive controls pass; eighteen observations
+retain three hole/TODO differences. Known imported-printer, minimal-IO C, foreign,
+resource/host, F32.read, failure-order and unfinished-grid gaps remain unwaived;
+external executable-emitter consumers remain unaudited.
 
-Aggregate sharing/work/native/C/JS, demand, guards and existing cancellation
-controls pass; mid-normalization cancellation is not claimed. All 1,302 checking
-statuses/streams remain unchanged, including 439 rejecting negatives. Fourteen
-positive controls pass; eighteen observations retain three hole/TODO differences.
-Minimal-IO upstream C failures, foreign diagnostics, resource/host gaps, F32.read,
-competing failure order, incomplete 688-vector exploration and external
-executable-emitter API caveats remain unwaived.
+Detailed receipts link **384 originals**, with **918 unlinked**: **357 checker
+negatives, one checking-only module, 23 interpreter cases and 537 compiled
+candidates**. These categories are not missing runtime-test counts. Links include
+historical, partial and blocked results; CPU parity and the API/integration
+inventory remain incomplete.
 
-Detailed receipts link **381 originals**, leaving **921 unlinked**: **357 checker
-negatives, one checking-only module, 26 interpreter cases and 537 compiled
-candidates**. These are applicability categories, not missing runtime-test
-counts. Historical, partial and blocked links do not establish full CPU parity
-or close the separate API/integration inventory.
-
-Next proposed batch: `proof/dependent_pair`, `multi_column_match` and
-`shared_scrutinee`. Establish kind/printer applicability before bounded dependent
-pair validity, all four Bit pairs and Nat depths 0/1/2/4. Keep field refinement,
-strict proofs, recursive rewriting and executable proof output distinct. This is
-source/ledger selection only, with no execution credit. Frozen references,
-dependencies, toolchains, budgets, guards and cancellation remain unchanged.
-Reviewed isolated checkpoints may be pushed; no main merge or release.
+Next proposed batch: `check/dependent_telescope`, `capture_price_twin_000` and
+`_001`. Establish wide dependent-field and branch-join applicability first, then
+bounded valid records/closure applications and invalid witnesses. An equality
+hypothesis forcing a zero scrutinee must not be faked to reach a positive arm;
+test the independently callable helper where appropriate. Source/ledger selection
+only, with no execution credit. Inputs, guards, budgets and cancellation remain
+frozen. Reviewed feature checkpoints may be pushed; no main merge or release.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
