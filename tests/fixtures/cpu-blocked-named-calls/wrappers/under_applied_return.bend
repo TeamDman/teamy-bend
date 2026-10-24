@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import Base
-import ../under_applied_return as H
+import ../under_applied_return.bend as H
 def depth(n: H.N) -> U32:
   match n:
     case H.Z{}: 0

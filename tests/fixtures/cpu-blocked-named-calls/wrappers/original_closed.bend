@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import Base
-import ../partial_app_snf as H
+import ../partial_app_snf.bend as H
 def apply(f: H.Trm, x: H.Trm) -> H.Trm:
   match f:
     case H.TLam{bod}: bod(x)

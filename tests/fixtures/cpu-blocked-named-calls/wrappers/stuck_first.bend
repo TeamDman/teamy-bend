@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import Base
-import ../stuck_first as H
+import ../stuck_first.bend as H
 def depth(n: H.N) -> U32:
   match n:
     case H.Z{}: 0

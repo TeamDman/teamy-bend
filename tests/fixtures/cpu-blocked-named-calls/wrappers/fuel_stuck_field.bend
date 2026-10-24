@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 import Base
-import ../fuel_stuck_field as H
+import ../fuel_stuck_field.bend as H
 def depth(n: H.N) -> U32:
   match n:
     case H.Z{}: 0
