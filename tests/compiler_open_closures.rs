@@ -25,6 +25,27 @@ fn composition_grids_compile_and_original_io_executes_with_exact_outputs() {
     qualify();
 }
 
+#[test]
+fn aggregate_cancellation_before_evaluation_and_before_output_keeps_writers_empty() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-open-closures/wrappers/open_closure_pipe.bend");
+    let checked = check_executable(&load_executable(path).unwrap()).unwrap();
+    for cancel_at in [1, 2] {
+        let observations = std::cell::Cell::new(0);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| {
+                observations.set(observations.get() + 1);
+                observations.get() == cancel_at
+            })
+            .unwrap_err();
+        assert!(error.to_string().contains("execution cancelled"));
+        assert_eq!(observations.get(), cancel_at);
+        assert!(stdout.is_empty() && stderr.is_empty());
+    }
+}
+
 fn qualify() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-open-closures");
     let artifacts = Artifacts(
@@ -56,10 +77,7 @@ fn qualify() {
             check_executable(&load_executable(root.join(format!("{relative}.bend"))).unwrap())
                 .unwrap();
         assert_eq!(checked.entry_kind().unwrap(), entry);
-        // The two aggregate composition mains have an open pure-normalization
-        // budget discrepancy, recorded by the external matrix. Do not turn
-        // generated execution into native qualification of those aggregates.
-        if relative == "open_closure" || relative == "wrappers/stuck_split_mint" {
+        {
             let mut stdout = Vec::new();
             let mut stderr = Vec::new();
             assert_eq!(

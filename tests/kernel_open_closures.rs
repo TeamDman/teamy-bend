@@ -65,8 +65,7 @@ fn individual_closed_compositions_and_recursive_applications_preserve_complete_r
             shape_in_book(&expected, &book).unwrap()
         );
     }
-    // Each call receives the existing fixed budget. This does not qualify the
-    // separate aggregate main, whose normalization exhausts its single budget.
+    // Individual calls and the aggregate main have separate budget regressions.
     let book = load(root.join("stuck_split_mint.bend")).unwrap();
     let checked = check_book(&book).unwrap();
     for input in [0, 1, 2, 7, 16] {

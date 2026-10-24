@@ -398,6 +398,7 @@ pub(crate) struct Engine {
     fresh_id: usize,
     fuel: usize,
     pub(crate) depth: usize,
+    pub(super) normalization_memo: Option<super::reduce::NormalizationMemo>,
 }
 
 impl Engine {
@@ -521,6 +522,7 @@ impl Engine {
         self.fuel = 2_000_000;
         self.depth = 0;
         self.aliases.clear();
+        self.normalization_memo = None;
     }
     pub(crate) fn step(&mut self) -> Result<(), KernelError> {
         self.fuel = self.fuel.checked_sub(1).ok_or_else(|| {
@@ -723,6 +725,7 @@ pub(super) fn prepare_book(book: &Book) -> Result<(Engine, Vec<Option<String>>),
                 .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
             fuel: 2_000_000,
             depth: 0,
+            normalization_memo: None,
         },
         source_holes,
     ))
@@ -2825,3 +2828,7 @@ mod reflexivity_diagnostic_tests {
         assert!(error.language_failure().is_none());
     }
 }
+
+#[cfg(test)]
+#[path = "composition_work_tests.rs"]
+mod composition_work_tests;

@@ -253,7 +253,16 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
                 })
             }
         }
-        Term::App(f, x) => term(Term::App(sub(f), sub(x))),
+        Term::App(f, x) => {
+            // An unrelated binder must not copy an already shared computation.
+            let next_f = sub(f);
+            let next_x = sub(x);
+            if Rc::ptr_eq(f, &next_f) && Rc::ptr_eq(x, &next_x) {
+                Rc::clone(value)
+            } else {
+                term(Term::App(next_f, next_x))
+            }
+        }
         Term::Adt {
             name,
             args,

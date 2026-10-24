@@ -10,6 +10,36 @@ use super::substitute;
 use super::term;
 use std::ops::ControlFlow;
 use std::rc::Rc;
+use std::rc::Weak;
+
+// Demand-local sharing, analogous to upstream term_cell/VAR fills. Immutable
+// input nodes never change. Weak keys prevent allocator-address reuse; cached
+// constructor heads retain raw fields, so observation cannot force those fields.
+// The table exists only during one normalize call, while aliases are stable.
+#[derive(Clone, Debug, Default)]
+pub(super) struct NormalizationMemo {
+    heads: std::collections::BTreeMap<usize, (Weak<Term>, TermRef)>,
+}
+
+impl NormalizationMemo {
+    fn get(&self, value: &TermRef) -> Option<TermRef> {
+        if !matches!(value.as_ref(), Term::App(..)) {
+            return None;
+        }
+        self.heads
+            .get(&(Rc::as_ptr(value) as usize))
+            .map(|(_, result)| Rc::clone(result))
+    }
+
+    fn insert(&mut self, value: &TermRef, result: &TermRef) {
+        if matches!(value.as_ref(), Term::App(..)) && matches!(result.as_ref(), Term::Ctr { .. }) {
+            self.heads.insert(
+                Rc::as_ptr(value) as usize,
+                (Rc::downgrade(value), Rc::clone(result)),
+            );
+        }
+    }
+}
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub(crate) enum Comparison {
@@ -47,7 +77,21 @@ impl Engine {
     pub(crate) fn whnf(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
         self.step()?;
         self.enter()?;
-        let result = self.whnf_inner(value);
+        // Even a shared demand must pay its step and pass the nesting guard.
+        let cached = self
+            .normalization_memo
+            .as_ref()
+            .and_then(|memo| memo.get(value));
+        let result = cached.map_or_else(
+            || {
+                let result = self.whnf_inner(value);
+                if let (Some(memo), Ok(result)) = (&mut self.normalization_memo, &result) {
+                    memo.insert(value, result);
+                }
+                result
+            },
+            Ok,
+        );
         self.depth -= 1;
         result
     }
@@ -293,7 +337,14 @@ impl Engine {
     pub(crate) fn normalize(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
         self.step()?;
         self.enter()?;
+        let owns_memo = self.normalization_memo.is_none();
+        if owns_memo {
+            self.normalization_memo = Some(NormalizationMemo::default());
+        }
         let result = self.normalize_inner(value);
+        if owns_memo {
+            self.normalization_memo = None;
+        }
         self.depth -= 1;
         result
     }
