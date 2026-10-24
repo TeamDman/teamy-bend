@@ -3944,3 +3944,26 @@ rows; remaining modes stay classified by applicability. Full parity is incomplet
 The [checkpoint](cpu-default-nat-functions.md) records exact commands, hashes,
 phase/cause distinctions and headroom. Next: parse/chain_spacing_rules_f, _g and
 _h applicability and normalization. Frozen inputs/budgets/policies; no push.
+
+
+### [x] 5.55 Qualify spacing-rule function normal forms
+
+Source `f485b65` qualifies unchanged parse/chain_spacing_rules_f, _g and _h.
+Strict actual-core and exact-text comparisons agree twice, retaining modulo,
+comparison, the unused binder and the whole open Nat tail. Actual upstream C/JS
+printers refuse each returned function without artifacts. No engine fix needed;
+the fixture loop/runner gain inputs while preserving original bytes/attribution.
+
+Full gate **825 passed, zero failed, 49 ignored**; 59 focused parser/normalization/
+CLI tests and strict Clippy pass. The 37-fixture matrix has 290 successes,
+88 verified printer refusals and six retained F32 proof exclusions. Thirty-three
+interpretation originals are renewed; other ledgers preserve actual historical
+receipts. Wrong-reverse/lost-duplicate diagnostic differences remain unwaived.
+Frozen dependencies, toolchains, policies and budgets; no push.
+
+The [checkpoint](cpu-spacing-functions.md) retains exact commands, hashes and
+headroom evidence. Bounded cache preflight and gate monitoring prevent another
+exhaustion without removing source/evidence. Runtime/interpretation union is
+108 originals; full parity remains incomplete. Next: parse/chain_paren_group_f,
+_g and _h applicability and normalized-core/text qualification; _k and _m also
+remain unqualified. Their sources were inspected, not executed here.

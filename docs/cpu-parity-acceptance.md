@@ -107,15 +107,25 @@ its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) now links 30 originals
-at `0093d01`: eleven interpreter-only cases and nineteen compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) now links 33 originals
+at `f485b65`: eleven interpreter-only cases and twenty-two compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
-**105 originals** have receipts and **1,197** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 593 compiled
+**108 originals** have receipts and **1,194** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 590 compiled
 candidates.
 
-The [default-Nat function checkpoint](cpu-default-nat-functions.md), `0093d01`,
+The [spacing-function checkpoint](cpu-spacing-functions.md), `f485b65`, qualifies
+three unchanged originals with strict actual-core/text agreement and twelve
+verified upstream C/JS function-printer refusals. No generated execution or
+concrete function invocation is claimed. The 37-fixture normalization suite
+passes: 290 successes, 88 printer refusals, six F32 proof exclusions. Full gate:
+**825 passed, zero failed, 49 ignored**; 59 focused tests, strict Clippy and the
+pinned formatter pass. No engine, demand, comparison-vocabulary or budget change.
+Checking/diagnostic-control/runtime/demand and broader receipts remain historical;
+the two false-list diagnostic mismatches stay open at `0093d01`.
+
+The preceding [default-Nat function checkpoint](cpu-default-nat-functions.md), `0093d01`,
 qualifies two unchanged returned functions with strict actual-core/text agreement
 and actual C/JS function-printer refusals. The full 34-fixture normalization suite
 passes: 266 successes, 76 printer refusals and six F32 proof exclusions. Full gate:
@@ -163,10 +173,11 @@ changes to Bend's limits. Deep raw constructor input still reaches the existing
 64-level parser guard, independently of compact display of an internal spine.
 That refusal is not promoted to upstream acceptance parity.
 
-Next ledger-selected gap: parse/chain_spacing_rules_f, _g and _h, requiring
-actual printer-applicability and normalized-core/text qualification. Full API,
-lane, resource, host, foreign, F32.read, error-order and platform closure remains
-required. No broader printer or list-algorithm parity is claimed.
+Next ledger-selected gap: parse/chain_paren_group_f, _g and _h, requiring actual
+printer-applicability and normalized-core/text qualification. Their _k and _m
+companions also remain unqualified. Full API, lane, resource, host, foreign,
+F32.read, error-order and platform closure remains required; no broader printer
+or arithmetic parity is claimed.
 
 The earlier [checker-depth checkpoint](cpu-checker-depth.md),
 `2f349c8`, repairs redundant
