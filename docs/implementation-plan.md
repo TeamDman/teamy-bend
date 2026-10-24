@@ -5200,3 +5200,45 @@ uses scalar projections and does not qualify that constructor spelling or
 waive its timeout. Preserve those controls before any targeted correction.
 Frozen dependencies, toolchains, pins, budgets, guards and cancellation remain;
 no installations, pushes, merges, desktop or GPU work.
+
+### [x] 5.96 Preserve canonical constructor display names in executable printers
+
+Tested source `936d299d3f6db320b7ae0fcc82c33bfa934bcbbf` corrects the demonstrated port
+imported-constructor display gap. C and JS pure output now use canonical
+qualified names while retaining local runtime/foreign tags and constructor IDs.
+The independent source review found no blocking defect. Imported `Con`, `Nil`
+and `Tuple` also retain their qualified spelling instead of receiving Base sugar.
+[Diagnosis, commands and receipts](cpu-imported-printer.md).
+
+The full gate passes **998 tests, zero failures, 49 ignored**; focused controls
+pass **268 / 0 / 1**. Eight authored printer cases produce **84 exact execution
+matches and 48 successful generation/build steps**. The **12 upstream-JS timeout
+observations remain unresolved**; the complete printer matrix exits 1. This is
+an upstream descriptor/tag search defect reproduced under Node, not a missing
+host dependency or an approved exception. The minimal historical source and
+old failed receipts are preserved. All port observations match pinned interpreter
+and C O3 output; generated-JS oracle agreement is not claimed for imported cases.
+
+The renewed aggregate matrix has **46 exact outputs, 24 successful builds/
+generation steps and two unchanged direct-upstream-Node IO host blocks**. The
+unchanged 27-result aggregate still costs 1,338,629 steps, below the same
+2,000,000-step/128-depth guards. All 1,302 checking statuses and streams remain
+unchanged; 439 expected negatives reject. Fourteen positive controls pass;
+18 observations preserve three unwaived hole/TODO disagreements. No
+mid-normalization cancellation or general resource-equivalence claim is added.
+
+Coverage remains **344 originals linked / 958 without detailed receipts**:
+**357 checker negatives, one checking-only module, 63 interpreter cases and 537
+compiled candidates**. Authored printer reproducers do not increase original
+inventory coverage. Links include historical, partial and blocked evidence.
+Upstream imported-JS printing, erased-hole/TODO, resource/host/foreign gaps,
+F32.read, competing failure order, downstream API caveats and the unfinished
+688-vector exploration remain unwaived. CPU parity is incomplete.
+
+Next independent batch: `flatten/simple_ctor_000`, `_001`,
+`single_ctor_type_001`, `_mk` and `nested_literal`, first establishing actual
+printer/type applicability, then normalized graphs/text and a bounded 33-value
+application grid. These are ledger-selected interpreter cases; no new execution
+credit is claimed. Dependencies, pins, toolchains, guards, budgets and security
+policies remain frozen. Local checkpoints only; no publication, merge,
+installation, desktop or GPU work. No new user decision was needed for this fix.
