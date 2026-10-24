@@ -4337,3 +4337,25 @@ Next independent batch: nine ordinary no-main checking modules, with io/far_type
 reviewed separately for foreign applicability. Cache controls restored 10.30 GiB;
 all source/evidence is preserved. Frozen inputs/budgets/policies, no installs,
 pushes, desktop or GPU work.
+
+### [x] 5.68 Qualify no-main modules and multi-scrutinee interpretation
+
+Tested source `2417a27107e4adb5d5546ace6cd4e854fc2a0a92` qualifies nine ordinary
+no-main modules (checking and thirty named normal forms) and seventeen original
+multi-scrutinee functions (exact core/text plus 100 concrete application vectors).
+The [report](cpu-no-main-interpreter.md) preserves exact applicability: default
+no-main invocation checks successfully; standalone executable emission now
+refuses the missing entry rather than generating a checking-only program.
+Both public executable emitters change that behavior without changing signatures.
+Compiler stderr differences and the false-fusion rewrite diagnostic remain open.
+
+Full gate: **876 passed, zero failed, 49 ignored**. The 66-case normalization
+suite, 50 C/JS/native baseline observations and all 1,302 checking-status controls
+pass; zero status transitions. Candidate 57 focused tests also pass. No matching
+rejection or prior historical receipt becomes full parity.
+
+Coverage: 166 detailed originals / 1,136 without detailed receipts; category
+counts 8/11/32/115 and remaining 431/1/132/572. Only io/far_types remains without
+a detailed checking-only receipt. Next: the preserved false-fusion type-mismatch
+diagnostic, or the ten nested-field-match interpreters independently. Inputs,
+budgets, guards and cancellation remain frozen; no install, push, desktop or GPU.

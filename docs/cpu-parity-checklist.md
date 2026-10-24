@@ -724,3 +724,18 @@ remains 140 detailed originals / 1,162 without detailed receipts. The next
 independent category is ordinary no-main checking; broader host/resource/API/
 semantic disagreements remain open. No source or evidence was discarded, and
 nothing was pushed.
+
+## No-main and multi-scrutinee checkpoint
+
+Source `2417a27107e4adb5d5546ace6cd4e854fc2a0a92`: nine no-main modules accept,
+thirty named definitions match exact core/text, seventeen multi-column function
+originals match, and 100 concrete argument vectors agree. Standalone compilation
+now refuses missing main while default checking stays successful. See the
+[report](cpu-no-main-interpreter.md) for artifact/diagnostic distinctions and
+public emitter behavior compatibility.
+
+Full gate 876/0/49; all 1,302 checking statuses unchanged. Coverage is 166 detailed
+originals / 1,136 without detailed receipts. Compilation diagnostic differences
+and false-fusion expected-type/source rendering remain open alongside previous
+unresolved contracts. Next: that diagnostic correction or ten nested-field-match
+originals. The foreign io/far_types checking row remains separate. No push.

@@ -485,3 +485,18 @@ The inventory has no new original rows: 140 detailed, including historical/
 unresolved cells, and 1,162 without detailed receipts. All broader lane/API,
 resource, host, foreign, F32.read and error-order requirements remain unmet where
 previously recorded. This diagnostic closure does not establish full CPU parity.
+
+## No-main and multi-scrutinee checkpoint
+
+Source `2417a27107e4adb5d5546ace6cd4e854fc2a0a92` adds nine checking-only and
+seventeen interpreter-only originals; [report](cpu-no-main-interpreter.md).
+No-main checking and thirty named normal forms match. Executable emitters now
+refuse absent main; their prior successful-stub API behavior is intentionally
+corrected, with external consumers unaudited. Compilation stderr differences
+and one false-fusion rewrite type-mismatch diagnostic remain unmet, not waived.
+
+Full gate: 876/0/49; 66 normalization cases and 50 baseline executions pass.
+All 1,302 checking statuses are unchanged. Detailed coverage is 166 originals,
+including historical/unresolved cells, versus 1,136 without detailed receipts.
+No prior resource, host, foreign, API, F32.read or error-order requirement is
+removed. These results do not establish full CPU parity.
