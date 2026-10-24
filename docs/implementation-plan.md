@@ -3990,3 +3990,26 @@ without deleting source/evidence. Runtime/interpretation union is 111 originals;
 CPU acceptance remains incomplete. Next: parse/chain_paren_group_k and _m,
 requiring actual printer applicability and selected-main normalized-core/text
 qualification. Their sources were inspected only during this checkpoint.
+
+
+### [x] 5.57 Qualify comparison and array-index function normal forms
+
+Source `694a210` qualifies unchanged parse/chain_paren_group_k and _m. Actual
+C/JS printer refusal was established first, then repeated in the full matrix.
+Both originals match strict actual-core and exact-text observations twice.
+Comparison classification and array index/size threading remain intact. No
+concrete invocation is claimed, and no engine fix was needed. Original bytes,
+attribution, frozen policies and all safety budgets are preserved; no push.
+
+Full gate **825 passed, zero failed, 49 ignored**; 59 focused parser/normalization/
+CLI tests and strict Clippy pass. Normalization: 42 fixtures, 330 successes,
+108 verified printer refusals and six retained F32 proof exclusions. Thirty-eight
+interpretation originals are renewed; other ledgers retain their actual earlier
+receipts. All unresolved diagnostic mismatches remain unwaived.
+
+The [checkpoint](cpu-paren-index.md) records exact commands, source/receipt hashes
+and monitored disk headroom. Bounded cache preflight preserved source/evidence
+and prevented exhaustion. Runtime/interpretation union is 113 originals; full
+CPU acceptance remains incomplete. Next: parse/array_literal and
+parse/array_write_stmt, requiring actual printer applicability and corresponding
+runtime observations. Their sources were inspected only during this checkpoint.

@@ -107,15 +107,24 @@ its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) now links 36 originals
-at `5037d9a`: eleven interpreter-only cases and twenty-five compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 originals
+at `694a210`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
-**111 originals** have receipts and **1,191** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 587 compiled
+**113 originals** have receipts and **1,189** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 585 compiled
 candidates.
 
-The [parenthesized-function checkpoint](cpu-paren-functions.md), `5037d9a`,
+The [comparison/index checkpoint](cpu-paren-index.md), `694a210`, qualifies
+two unchanged function originals with strict actual-core/text agreement and eight
+repeated C/JS printer refusals, after four initial applicability checks. Concrete
+comparison inputs and array reads are not claimed. The 42-fixture normalization
+matrix passes: 330 successes, 108 printer refusals, six F32 proof exclusions.
+Full gate: **825 passed, zero failed, 49 ignored**; 59 focused tests, strict Clippy
+and the pinned formatter pass. No engine, policy or budget change. Historical
+non-normalization receipts and all unresolved diagnostic cells remain intact.
+
+The preceding [parenthesized-function checkpoint](cpu-paren-functions.md), `5037d9a`,
 qualifies three unchanged originals with strict actual-core/text agreement and
 twelve verified upstream C/JS printer refusals. No concrete invocation or
 generated execution is claimed. The 40-fixture normalization suite passes:
@@ -183,9 +192,9 @@ changes to Bend's limits. Deep raw constructor input still reaches the existing
 64-level parser guard, independently of compact display of an internal spine.
 That refusal is not promoted to upstream acceptance parity.
 
-Next ledger-selected gap: parse/chain_paren_group_k and _m, requiring actual
-printer-applicability and selected-main normalized-core/text qualification.
-Typed comparison chains and array-index expressions remain unqualified here.
+Next ledger-selected gap: parse/array_literal and parse/array_write_stmt, for
+concrete array construction and statement/semicolon writes. Actual printer
+applicability and corresponding runtime results remain unqualified here.
 Full API, lane, resource, host, foreign, F32.read, error-order and platform
 closure remains required; no broader printer or arithmetic parity is claimed.
 
