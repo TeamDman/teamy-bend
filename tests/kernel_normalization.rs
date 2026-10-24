@@ -171,6 +171,9 @@ fn base_function_companions_preserve_normalized_structure_and_exact_text() {
         "chain_spacing_rules_f",
         "chain_spacing_rules_g",
         "chain_spacing_rules_h",
+        "chain_paren_group_f",
+        "chain_paren_group_g",
+        "chain_paren_group_h",
     ] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-normalization")

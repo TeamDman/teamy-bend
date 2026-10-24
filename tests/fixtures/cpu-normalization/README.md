@@ -64,3 +64,10 @@ retain the same pinned attribution. They exercise spaced modulo/greater-than,
 nested generic closers, a reusable binder and an open Nat literal tail. All
 definitions are strictly checked; returned function structure/text and actual
 upstream printer applicability are observed separately.
+
+The unchanged `parse/chain_paren_group_f.bend`, `_g` and `_h` companions
+retain the same pinned attribution. They cover tuple-component annotations,
+nested typed arithmetic and list-element/shift syntax. All definitions are
+strictly checked; actual normalized structure and exact text are compared for
+the selected function result. The runner verifies upstream C/JS printer
+applicability separately; no concrete function invocation is claimed.
