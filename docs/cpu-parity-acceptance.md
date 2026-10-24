@@ -500,3 +500,20 @@ All 1,302 checking statuses are unchanged. Detailed coverage is 166 originals,
 including historical/unresolved cells, versus 1,136 without detailed receipts.
 No prior resource, host, foreign, API, F32.read or error-order requirement is
 removed. These results do not establish full CPU parity.
+
+## Compilation/rewrite and nested-field checkpoint
+
+Source `02b244e529e978a683b7f77a79ae04089665748d` closes the preceding no-main
+compilation stderr and false-fusion type/source diagnostic gaps. The
+[report](cpu-compile-rewrite-diagnostics.md) records preserved rejection, the
+repository caller audit and explicit external API caveats. Ten unchanged
+nested-field originals match exact core/text; 171 concrete application vectors
+are verified against the pinned interpreter. Function printing remains inapplicable.
+
+Full gate **882 passed, zero failed, 49 ignored**; 76 normalization cases,
+306 no-main observations, 60 rewrite/phase observations, 144 prior proof controls
+and 50 baseline executions pass. All 1,302 checking statuses are unchanged.
+Coverage is 176 detailed originals / 1,126 without detailed receipts, including
+historical and unresolved cells. The existing resource, host, foreign, API,
+F32.read and error-order requirements are unchanged; full CPU parity is incomplete.
+Next independent family: four nested_multi_scrutinee originals. No push.
