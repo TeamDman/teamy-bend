@@ -144,14 +144,16 @@ fn shared_constructor_continuations_keep_captures_and_fresh_binders_without_owni
             unreachable!()
         };
         ids.push(*id);
-        let input = term(Term::Ctr {
-            name: "Input".into(),
-            args: vec![],
-        });
-        assert_eq!(
-            substitute(body, *id, &input).to_string(),
-            "Pair{Captured{}, Input{}}"
-        );
+        for name in ["Left", "Right"] {
+            let input = term(Term::Ctr {
+                name: name.into(),
+                args: vec![],
+            });
+            assert_eq!(
+                substitute(body, *id, &input).to_string(),
+                format!("Pair{{Captured{{}}, {name}{{}}}}")
+            );
+        }
     }
     assert_eq!(ids.len(), 2);
     assert_ne!(ids[0], ids[1]);
