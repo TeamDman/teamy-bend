@@ -877,8 +877,10 @@ impl Generator<'_> {
                         .iter()
                         .any(|field| field.quant == Quant::None)
                     {
-                        return Err(CompileError::new(
+                        return Err(CompileError::unprintable_main(
                             "C pure main with erased constructor fields cannot be printed",
+                            &self.program.definitions["main"].ty,
+                            self.has_io_declaration,
                         ));
                     }
                     for (field_index, (field, value)) in
@@ -922,9 +924,11 @@ impl Generator<'_> {
                 output.push_str("  default: err_fail(\"C pure output constructor differs from its type\");\n  }\n");
             }
             _ => {
-                return Err(CompileError::new(format!(
-                    "C pure main type {ty} cannot be printed"
-                )));
+                return Err(CompileError::unprintable_main(
+                    format!("C pure main type {ty} cannot be printed"),
+                    &self.program.definitions["main"].ty,
+                    self.has_io_declaration,
+                ));
             }
         }
         self.printers[index] = output.function(

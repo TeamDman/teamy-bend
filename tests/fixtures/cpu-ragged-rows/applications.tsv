@@ -1,0 +1,81 @@
+ragged_rows_000.bend	Z{};Z{}	F{Z{}}
+ragged_rows_000.bend	Z{};S{Z{}}	E{Z{}, Z{}}
+ragged_rows_000.bend	Z{};S{S{Z{}}}	E{Z{}, S{Z{}}}
+ragged_rows_000.bend	S{Z{}};Z{}	C{Z{}}
+ragged_rows_000.bend	S{Z{}};S{Z{}}	D{Z{}, S{Z{}}}
+ragged_rows_000.bend	S{Z{}};S{S{Z{}}}	D{Z{}, S{S{Z{}}}}
+ragged_rows_000.bend	S{S{Z{}}};Z{}	C{S{Z{}}}
+ragged_rows_000.bend	S{S{Z{}}};S{Z{}}	B{Z{}, Z{}}
+ragged_rows_000.bend	S{S{Z{}}};S{S{Z{}}}	A{Z{}, Z{}}
+ragged_rows_001.bend	Z{};Z{}	A{Z{}}
+ragged_rows_001.bend	Z{};S{Z{}}	A{S{Z{}}}
+ragged_rows_001.bend	Z{};S{S{Z{}}}	A{S{S{Z{}}}}
+ragged_rows_001.bend	S{Z{}};Z{}	C{S{Z{}}}
+ragged_rows_001.bend	S{Z{}};S{Z{}}	B{S{Z{}}, Z{}}
+ragged_rows_001.bend	S{Z{}};S{S{Z{}}}	B{S{Z{}}, S{Z{}}}
+ragged_rows_001.bend	S{S{Z{}}};Z{}	C{S{S{Z{}}}}
+ragged_rows_001.bend	S{S{Z{}}};S{Z{}}	B{S{S{Z{}}}, Z{}}
+ragged_rows_001.bend	S{S{Z{}}};S{S{Z{}}}	B{S{S{Z{}}}, S{Z{}}}
+ragged_rows_002.bend	Z{};Z{};Z{}	D{Z{}, Z{}, Z{}}
+ragged_rows_002.bend	Z{};Z{};S{Z{}}	D{Z{}, Z{}, S{Z{}}}
+ragged_rows_002.bend	Z{};Z{};S{S{Z{}}}	D{Z{}, Z{}, S{S{Z{}}}}
+ragged_rows_002.bend	Z{};S{Z{}};Z{}	D{Z{}, S{Z{}}, Z{}}
+ragged_rows_002.bend	Z{};S{Z{}};S{Z{}}	D{Z{}, S{Z{}}, S{Z{}}}
+ragged_rows_002.bend	Z{};S{Z{}};S{S{Z{}}}	D{Z{}, S{Z{}}, S{S{Z{}}}}
+ragged_rows_002.bend	Z{};S{S{Z{}}};Z{}	D{Z{}, S{S{Z{}}}, Z{}}
+ragged_rows_002.bend	Z{};S{S{Z{}}};S{Z{}}	D{Z{}, S{S{Z{}}}, S{Z{}}}
+ragged_rows_002.bend	Z{};S{S{Z{}}};S{S{Z{}}}	D{Z{}, S{S{Z{}}}, S{S{Z{}}}}
+ragged_rows_002.bend	S{Z{}};Z{};Z{}	C{Z{}, Z{}}
+ragged_rows_002.bend	S{Z{}};Z{};S{Z{}}	D{S{Z{}}, Z{}, S{Z{}}}
+ragged_rows_002.bend	S{Z{}};Z{};S{S{Z{}}}	D{S{Z{}}, Z{}, S{S{Z{}}}}
+ragged_rows_002.bend	S{Z{}};S{Z{}};Z{}	B{Z{}, Z{}, Z{}}
+ragged_rows_002.bend	S{Z{}};S{Z{}};S{Z{}}	A{Z{}, Z{}, Z{}}
+ragged_rows_002.bend	S{Z{}};S{Z{}};S{S{Z{}}}	A{Z{}, Z{}, S{Z{}}}
+ragged_rows_002.bend	S{Z{}};S{S{Z{}}};Z{}	B{Z{}, S{Z{}}, Z{}}
+ragged_rows_002.bend	S{Z{}};S{S{Z{}}};S{Z{}}	A{Z{}, S{Z{}}, Z{}}
+ragged_rows_002.bend	S{Z{}};S{S{Z{}}};S{S{Z{}}}	A{Z{}, S{Z{}}, S{Z{}}}
+ragged_rows_002.bend	S{S{Z{}}};Z{};Z{}	C{S{Z{}}, Z{}}
+ragged_rows_002.bend	S{S{Z{}}};Z{};S{Z{}}	D{S{S{Z{}}}, Z{}, S{Z{}}}
+ragged_rows_002.bend	S{S{Z{}}};Z{};S{S{Z{}}}	D{S{S{Z{}}}, Z{}, S{S{Z{}}}}
+ragged_rows_002.bend	S{S{Z{}}};S{Z{}};Z{}	B{S{Z{}}, Z{}, Z{}}
+ragged_rows_002.bend	S{S{Z{}}};S{Z{}};S{Z{}}	A{S{Z{}}, Z{}, Z{}}
+ragged_rows_002.bend	S{S{Z{}}};S{Z{}};S{S{Z{}}}	A{S{Z{}}, Z{}, S{Z{}}}
+ragged_rows_002.bend	S{S{Z{}}};S{S{Z{}}};Z{}	B{S{Z{}}, S{Z{}}, Z{}}
+ragged_rows_002.bend	S{S{Z{}}};S{S{Z{}}};S{Z{}}	A{S{Z{}}, S{Z{}}, Z{}}
+ragged_rows_002.bend	S{S{Z{}}};S{S{Z{}}};S{S{Z{}}}	A{S{Z{}}, S{Z{}}, S{Z{}}}
+ragged_rows_003.bend	WZ{};WZ{};Z{}	K100{}
+ragged_rows_003.bend	WZ{};WZ{};S{Z{}}	K100{}
+ragged_rows_003.bend	WZ{};WZ{};S{S{Z{}}}	K100{}
+ragged_rows_003.bend	WZ{};WS{WZ{}};Z{}	K100{}
+ragged_rows_003.bend	WZ{};WS{WZ{}};S{Z{}}	K100{}
+ragged_rows_003.bend	WZ{};WS{WZ{}};S{S{Z{}}}	K100{}
+ragged_rows_003.bend	WZ{};WS{WS{WZ{}}};Z{}	K100{}
+ragged_rows_003.bend	WZ{};WS{WS{WZ{}}};S{Z{}}	K100{}
+ragged_rows_003.bend	WZ{};WS{WS{WZ{}}};S{S{Z{}}}	K100{}
+ragged_rows_003.bend	WS{WZ{}};WZ{};Z{}	K200{}
+ragged_rows_003.bend	WS{WZ{}};WZ{};S{Z{}}	K100{}
+ragged_rows_003.bend	WS{WZ{}};WZ{};S{S{Z{}}}	K100{}
+ragged_rows_003.bend	WS{WZ{}};WS{WZ{}};Z{}	K300{}
+ragged_rows_003.bend	WS{WZ{}};WS{WZ{}};S{Z{}}	K300{}
+ragged_rows_003.bend	WS{WZ{}};WS{WZ{}};S{S{Z{}}}	K300{}
+ragged_rows_003.bend	WS{WZ{}};WS{WS{WZ{}}};Z{}	K300{}
+ragged_rows_003.bend	WS{WZ{}};WS{WS{WZ{}}};S{Z{}}	K300{}
+ragged_rows_003.bend	WS{WZ{}};WS{WS{WZ{}}};S{S{Z{}}}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WZ{};Z{}	K200{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WZ{};S{Z{}}	K200{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WZ{};S{S{Z{}}}	K100{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WZ{}};Z{}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WZ{}};S{Z{}}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WZ{}};S{S{Z{}}}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WS{WZ{}}};Z{}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WS{WZ{}}};S{Z{}}	K300{}
+ragged_rows_003.bend	WS{WS{WZ{}}};WS{WS{WZ{}}};S{S{Z{}}}	K300{}
+ragged_rows_004.bend	Z{};Z{}	R1{}
+ragged_rows_004.bend	Z{};S{Z{}}	R3{}
+ragged_rows_004.bend	Z{};S{S{Z{}}}	R3{}
+ragged_rows_004.bend	S{Z{}};Z{}	R1{}
+ragged_rows_004.bend	S{Z{}};S{Z{}}	R2{}
+ragged_rows_004.bend	S{Z{}};S{S{Z{}}}	R2{}
+ragged_rows_004.bend	S{S{Z{}}};Z{}	R1{}
+ragged_rows_004.bend	S{S{Z{}}};S{Z{}}	R3{}
+ragged_rows_004.bend	S{S{Z{}}};S{S{Z{}}}	R3{}

@@ -88,6 +88,8 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
     let table = ConstructorTable::build(&program)?;
     let foreign = executable_c_foreign::assemble(&program, &table)?;
     let mut generator = Generator {
+        has_io_declaration: program.datatypes.contains_key("IO")
+            || book.definition_type("IO").is_some(),
         program: &program,
         table,
         layouts: Layouts::new(&program),
@@ -364,6 +366,7 @@ impl Write for Body {
 }
 
 struct Generator<'a> {
+    has_io_declaration: bool,
     program: &'a ExecutableProgram,
     table: ConstructorTable,
     layouts: Layouts<'a>,

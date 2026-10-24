@@ -16,8 +16,8 @@ use std::fmt::{self};
 #[derive(Clone, Debug, Eq)]
 pub struct CompileError {
     message: String,
-    // Present only for a missing entry; records the pinned IO-name prerequisite.
-    missing_entry: Option<bool>,
+    // Structured presentation for known entry/printer refusals, never parsed from text.
+    language_message: Option<String>,
 }
 
 // Presentation metadata does not change the public message/equality contract.
@@ -31,23 +31,43 @@ impl CompileError {
     pub(super) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
-            missing_entry: None,
+            language_message: None,
         }
     }
 
     pub(super) fn missing_main(has_io_declaration: bool) -> Self {
         Self {
             message: "no main to run".into(),
-            missing_entry: Some(has_io_declaration),
+            language_message: Some(
+                if has_io_declaration {
+                    "no main to run"
+                } else {
+                    "a build needs import Base"
+                }
+                .into(),
+            ),
         }
     }
 
-    pub(crate) const fn language_diagnostic(&self) -> Option<&'static str> {
-        match self.missing_entry {
-            Some(true) => Some("no main to run"),
-            Some(false) => Some("a build needs import Base"),
-            None => None,
+    pub(super) fn unprintable_main(
+        message: impl Into<String>,
+        main_type: &TermRef,
+        has_io_declaration: bool,
+    ) -> Self {
+        Self {
+            message: message.into(),
+            language_message: Some(if has_io_declaration {
+                format!(
+                    "main's type {main_type} cannot be printed (a function, a Type, an erased or dependent field)"
+                )
+            } else {
+                "a build needs import Base".into()
+            }),
         }
+    }
+
+    pub(crate) fn language_diagnostic(&self) -> Option<&str> {
+        self.language_message.as_deref()
     }
 }
 
@@ -318,6 +338,23 @@ mod diagnostic_tests {
             assert_eq!(classified, plain);
             assert_eq!(classified.to_string(), plain.to_string());
             assert!(classified.language_diagnostic().is_some());
+        }
+        let ty = crate::syntax::parse_term("Type").unwrap();
+        for has_io in [false, true] {
+            let classified =
+                CompileError::unprintable_main("internal printer refusal", &ty, has_io);
+            let plain = CompileError::new("internal printer refusal");
+            assert_eq!(classified, plain);
+            assert_eq!(classified.to_string(), plain.to_string());
+            assert_eq!(
+                classified.language_diagnostic(),
+                Some(if has_io {
+                    "main's type Type cannot be printed (a function, a Type, an erased or dependent field)"
+                } else {
+                    "a build needs import Base"
+                })
+            );
+            assert!(plain.language_diagnostic().is_none());
         }
         assert!(plain.language_diagnostic().is_none());
         assert!(

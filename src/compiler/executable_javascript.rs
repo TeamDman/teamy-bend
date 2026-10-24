@@ -107,6 +107,8 @@ pub fn compile_executable_javascript(book: &ExecutableBook) -> Result<String, Co
         ),
         ExecutableEntry::Pure => {
             let mut printer = Printer {
+                has_io_declaration: program.datatypes.contains_key("IO")
+                    || book.definition_type("IO").is_some(),
                 program: &program,
                 nodes: Vec::new(),
                 seen: BTreeMap::new(),
@@ -528,6 +530,7 @@ impl Generator<'_> {
 }
 
 struct Printer<'a> {
+    has_io_declaration: bool,
     program: &'a ExecutableProgram,
     nodes: Vec<String>,
     seen: BTreeMap<String, usize>,
@@ -565,8 +568,10 @@ impl Printer<'_> {
                         let mut fields = Vec::new();
                         for field in &constructor.fields {
                             if field.quant == Quant::None {
-                                return Err(CompileError::new(
+                                return Err(CompileError::unprintable_main(
                                     "pure main with erased constructor fields cannot be printed",
+                                    &self.program.definitions["main"].ty,
+                                    self.has_io_declaration,
                                 ));
                             }
                             let mut ty = Rc::clone(&field.ty);
@@ -593,9 +598,13 @@ impl Printer<'_> {
                 }
             }
             _ => {
-                return Err(CompileError::new(format!(
-                    "pure main type {ty} cannot be printed (function, type or dependent field)"
-                )));
+                return Err(CompileError::unprintable_main(
+                    format!(
+                        "pure main type {ty} cannot be printed (function, type or dependent field)"
+                    ),
+                    &self.program.definitions["main"].ty,
+                    self.has_io_declaration,
+                ));
             }
         };
         self.nodes[index] = description;

@@ -328,3 +328,65 @@ fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
         }
     }
 }
+
+#[test]
+fn unprintable_results_preserve_language_diagnostics_and_existing_outputs() {
+    for (source, expected) in [
+        (
+            include_str!("fixtures/cpu-ragged-rows/ragged_rows_000.bend"),
+            "Error: a build needs import Base\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/ragged_rows_001.bend"),
+            "Error: a build needs import Base\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/ragged_rows_002.bend"),
+            "Error: a build needs import Base\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/ragged_rows_003.bend"),
+            "Error: a build needs import Base\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/ragged_rows_004.bend"),
+            "Error: a build needs import Base\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/refusals/function.bend"),
+            "Error: main's type @x:U32 -> U32 cannot be printed (a function, a Type, an erased or dependent field)\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/refusals/type-value.bend"),
+            "Error: main's type Type cannot be printed (a function, a Type, an erased or dependent field)\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/refusals/erased-field.bend"),
+            "Error: main's type Box cannot be printed (a function, a Type, an erased or dependent field)\n",
+        ),
+        (
+            include_str!("fixtures/cpu-ragged-rows/refusals/function-field.bend"),
+            "Error: main's type Box cannot be printed (a function, a Type, an erased or dependent field)\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        for target in ["javascript", "c", "native"] {
+            for existing in [false, true] {
+                let destination = fixture.0.join("main.cjs");
+                if existing {
+                    std::fs::write(&destination, b"preserved output").unwrap();
+                }
+                let output = fixture.compile(&["--executable", "--target", target, "--force"]);
+                assert_eq!(output.status.code(), Some(1));
+                assert!(output.stdout.is_empty());
+                assert_eq!(output.stderr, expected.as_bytes());
+                if existing {
+                    assert_eq!(std::fs::read(&destination).unwrap(), b"preserved output");
+                    std::fs::remove_file(destination).unwrap();
+                } else {
+                    assert!(!destination.exists());
+                }
+            }
+        }
+    }
+}

@@ -54,50 +54,56 @@ mod tests {
                 Err(io::Error::other("flush failed"))
             }
         }
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/cpu-no-main/proof/gadt_refutation.bend");
-        let checked = check_executable(&load_executable(path).unwrap()).unwrap();
-        for error in [
-            compile_executable_c(&checked).unwrap_err(),
-            compile_executable_javascript(&checked).unwrap_err(),
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        for (path, expected) in [
+            (
+                "tests/fixtures/cpu-no-main/proof/gadt_refutation.bend",
+                "Error: a build needs import Base\n",
+            ),
+            (
+                "tests/fixtures/cpu-ragged-rows/refusals/type-value.bend",
+                "Error: main's type Type cannot be printed (a function, a Type, an erased or dependent field)\n",
+            ),
         ] {
-            let mut bytes = Vec::new();
-            let token = CancellationToken::new();
-            token.request_cancel("stop compiler diagnostic");
-            assert!(
-                emit(&error, &token, &mut bytes)
-                    .unwrap_err()
-                    .to_string()
-                    .contains("stop compiler diagnostic")
-            );
-            assert!(bytes.is_empty());
-            for fail_write in [true, false] {
-                let error =
-                    emit(&error, &CancellationToken::new(), &mut Writer(fail_write)).unwrap_err();
-                assert!(error.to_string().contains(if fail_write {
-                    "cannot write"
-                } else {
-                    "cannot flush"
-                }));
+            let checked = check_executable(&load_executable(root.join(path)).unwrap()).unwrap();
+            for error in [
+                compile_executable_c(&checked).unwrap_err(),
+                compile_executable_javascript(&checked).unwrap_err(),
+            ] {
+                let mut bytes = Vec::new();
+                let token = CancellationToken::new();
+                token.request_cancel("stop compiler diagnostic");
+                assert!(
+                    emit(&error, &token, &mut bytes)
+                        .unwrap_err()
+                        .to_string()
+                        .contains("stop compiler diagnostic")
+                );
+                assert!(bytes.is_empty());
+                for fail_write in [true, false] {
+                    let error = emit(&error, &CancellationToken::new(), &mut Writer(fail_write))
+                        .unwrap_err();
+                    assert!(error.to_string().contains(if fail_write {
+                        "cannot write"
+                    } else {
+                        "cannot flush"
+                    }));
+                }
+                assert_eq!(
+                    emit(&error, &CancellationToken::new(), &mut bytes)
+                        .unwrap()
+                        .exit_code(),
+                    1
+                );
+                assert_eq!(bytes, expected.as_bytes());
             }
-            assert_eq!(
-                emit(&error, &CancellationToken::new(), &mut bytes)
-                    .unwrap()
-                    .exit_code(),
-                1
-            );
-            assert_eq!(bytes, b"Error: a build needs import Base\n");
         }
     }
     #[test]
     fn unrelated_compilation_errors_keep_the_host_failure_boundary() {
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/cpu-multi-scrutinee/multi_scrutinee_000.bend");
-        let checked = check_executable(&load_executable(path).unwrap()).unwrap();
-        for error in [
-            compile_executable_c(&checked).unwrap_err(),
-            compile_executable_javascript(&checked).unwrap_err(),
-        ] {
+        let book = crate::syntax::parse("def main(x: Type) -> Type: x\n").unwrap();
+        for entry in ["main", "absent"] {
+            let error = crate::compiler::compile_javascript(&book, entry).unwrap_err();
             let mut bytes = Vec::new();
             assert_eq!(
                 emit(&error, &CancellationToken::new(), &mut bytes)
