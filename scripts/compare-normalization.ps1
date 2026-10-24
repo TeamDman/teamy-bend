@@ -137,7 +137,7 @@ if ($Suite -in @('spacing-functions', 'all')) {
     }
 }
 if ($Suite -in @('paren-functions', 'all')) {
-    foreach ($name in @('chain_paren_group_f', 'chain_paren_group_g', 'chain_paren_group_h')) {
+    foreach ($name in @('chain_paren_group_f', 'chain_paren_group_g', 'chain_paren_group_h', 'chain_paren_group_k', 'chain_paren_group_m')) {
         $cases += @{ name = $name; fixture = "parse/$name.bend"; original = Join-Path $Reference "tests/parse/$name.bend"; origin = 'upstream'; function_printer = $true }
     }
 }

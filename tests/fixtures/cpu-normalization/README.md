@@ -71,3 +71,9 @@ nested typed arithmetic and list-element/shift syntax. All definitions are
 strictly checked; actual normalized structure and exact text are compared for
 the selected function result. The runner verifies upstream C/JS printer
 applicability separately; no concrete function invocation is claimed.
+
+The unchanged `parse/chain_paren_group_k.bend` and `_m` complete this companion
+family at the same pin. They retain the typed comparison and array-index
+selected-main normal forms. Strict actual-core and exact-text comparisons do
+not imply concrete array reads or comparison inputs; actual upstream C/JS
+printers refuse both returned function types before producing artifacts.
