@@ -58,3 +58,9 @@ The unchanged `parse/chain_default_nat_f.bend` and `_g` companions come from
 the same pinned source. They retain Nat arithmetic precedence and comparison
 functions. Strict normalization and actual-core comparison remain separate from
 the C/JS function-printer applicability checks; no function invocation is claimed.
+
+The unchanged `parse/chain_spacing_rules_f.bend`, `_g` and `_h` companions
+retain the same pinned attribution. They exercise spaced modulo/greater-than,
+nested generic closers, a reusable binder and an open Nat literal tail. All
+definitions are strictly checked; returned function structure/text and actual
+upstream printer applicability are observed separately.
