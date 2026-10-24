@@ -1,0 +1,1 @@
+"Error:\n- expected : ../capture_price_twin_001.Se{../capture_price_twin_001.Ze{}}\n- observed : ../capture_price_twin_001.Ze{}\nLocation: main\n4 | law main: H.Ne\n5>| def main(): H.use(H.Se{H.Ze{}}, {==}, x => x)\n6 | \n"

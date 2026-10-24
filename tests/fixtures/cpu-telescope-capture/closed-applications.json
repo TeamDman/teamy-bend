@@ -1,0 +1,178 @@
+[
+  {
+    "name": "dependent_telescope",
+    "entry": "total",
+    "arguments": [
+      "Mq{Sq{Zq{}},Zq{},Zq{},Zq{},Zq{},Zq{},Zq{},{==}}"
+    ],
+    "value": "Sq{Zq{}}"
+  },
+  {
+    "name": "dependent_telescope",
+    "entry": "total",
+    "arguments": [
+      "Mq{Sq{Zq{}},Sq{Zq{}},Sq{Zq{}},Sq{Zq{}},Sq{Zq{}},Sq{Zq{}},Sq{Zq{}},{==}}"
+    ],
+    "value": "Sq{Zq{}}"
+  },
+  {
+    "name": "dependent_telescope",
+    "entry": "total",
+    "arguments": [
+      "Mq{Sq{Zq{}},Zq{},Sq{Zq{}},Sq{Sq{Zq{}}},Sq{Sq{Sq{Zq{}}}},Sq{Sq{Sq{Sq{Zq{}}}}},Zq{},{==}}"
+    ],
+    "value": "Sq{Zq{}}"
+  },
+  {
+    "name": "dependent_telescope",
+    "entry": "total",
+    "arguments": [
+      "Mq{Sq{Zq{}},Sq{Sq{Sq{Sq{Zq{}}}}},Sq{Sq{Sq{Zq{}}}},Sq{Sq{Zq{}}},Sq{Zq{}},Zq{},Sq{Sq{Sq{Sq{Zq{}}}}},{==}}"
+    ],
+    "value": "Sq{Zq{}}"
+  },
+  {
+    "name": "capture_price_twin_000",
+    "entry": "use",
+    "arguments": [
+      "Zd{}",
+      "{==}",
+      "x => x"
+    ],
+    "value": "Zd{}"
+  },
+  {
+    "name": "capture_price_twin_000",
+    "entry": "use",
+    "arguments": [
+      "Zd{}",
+      "{==}",
+      "x => Sd{x}"
+    ],
+    "value": "Sd{Zd{}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use",
+    "arguments": [
+      "Ze{}",
+      "{==}",
+      "x => x"
+    ],
+    "value": "Ze{}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use",
+    "arguments": [
+      "Ze{}",
+      "{==}",
+      "x => Se{x}"
+    ],
+    "value": "Se{Ze{}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "fe",
+    "arguments": [
+      "Ze{}"
+    ],
+    "value": "Ze{}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => x",
+      "Ze{}"
+    ],
+    "value": "Ze{}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => Se{x}",
+      "Ze{}"
+    ],
+    "value": "Se{Ze{}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "fe",
+    "arguments": [
+      "Se{Ze{}}"
+    ],
+    "value": "Se{Ze{}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => x",
+      "Se{Ze{}}"
+    ],
+    "value": "Se{Ze{}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => Se{x}",
+      "Se{Ze{}}"
+    ],
+    "value": "Se{Se{Ze{}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "fe",
+    "arguments": [
+      "Se{Se{Ze{}}}"
+    ],
+    "value": "Se{Se{Ze{}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => x",
+      "Se{Se{Ze{}}}"
+    ],
+    "value": "Se{Se{Ze{}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => Se{x}",
+      "Se{Se{Ze{}}}"
+    ],
+    "value": "Se{Se{Se{Ze{}}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "fe",
+    "arguments": [
+      "Se{Se{Se{Se{Ze{}}}}}"
+    ],
+    "value": "Se{Se{Se{Se{Ze{}}}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => x",
+      "Se{Se{Se{Se{Ze{}}}}}"
+    ],
+    "value": "Se{Se{Se{Se{Ze{}}}}}"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "arguments": [
+      "x => Se{x}",
+      "Se{Se{Se{Se{Ze{}}}}}"
+    ],
+    "value": "Se{Se{Se{Se{Se{Ze{}}}}}}"
+  }
+]

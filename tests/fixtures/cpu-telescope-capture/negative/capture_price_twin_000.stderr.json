@@ -1,0 +1,1 @@
+"Error:\n- expected : ../capture_price_twin_000.Sd{../capture_price_twin_000.Zd{}}\n- observed : ../capture_price_twin_000.Zd{}\nLocation: main\n4 | law main: H.Nd\n5>| def main(): H.use(H.Sd{H.Zd{}}, {==}, x => x)\n6 | \n"

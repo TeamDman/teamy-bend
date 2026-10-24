@@ -1,0 +1,42 @@
+[
+  {
+    "name": "dependent_telescope",
+    "entry": "main",
+    "key": "dependent_telescope--main"
+  },
+  {
+    "name": "dependent_telescope",
+    "entry": "total",
+    "key": "dependent_telescope--total"
+  },
+  {
+    "name": "capture_price_twin_000",
+    "entry": "main",
+    "key": "capture_price_twin_000--main"
+  },
+  {
+    "name": "capture_price_twin_000",
+    "entry": "use",
+    "key": "capture_price_twin_000--use"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "main",
+    "key": "capture_price_twin_001--main"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use",
+    "key": "capture_price_twin_001--use"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "use.go",
+    "key": "capture_price_twin_001--use.go"
+  },
+  {
+    "name": "capture_price_twin_001",
+    "entry": "fe",
+    "key": "capture_price_twin_001--fe"
+  }
+]

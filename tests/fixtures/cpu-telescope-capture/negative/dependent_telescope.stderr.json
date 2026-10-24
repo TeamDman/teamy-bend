@@ -1,0 +1,1 @@
+"Error:\n- expected : ../dependent_telescope.Zq{}\n- observed : ../dependent_telescope.Sq{../dependent_telescope.Zq{}}\nLocation: main\n4 | law main: H.Nq\n5>| def main(): H.total(H.Mq{H.Zq{},H.Zq{},H.Zq{},H.Zq{},H.Zq{},H.Zq{},H.Zq{},{==}})\n6 | \n"
