@@ -977,3 +977,159 @@ fn scrutinee_occurrences_keep_match_or_use_locations_through_substitution() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn matched_value_and_row_arity_originals_keep_exact_failure_contracts() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-matched-values");
+    for (name, expected) in [
+        (
+            "error_window_matched_scrutinee",
+            "Error:\n- expected : Type\n- observed : One\nLocation: bad\n7 |     case One.new{}:\n8>|       x\n9 | \n",
+        ),
+        (
+            "chained_switch_conflation_000",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n16 |       20\n17>|     case 2+q:\n18 |       q\n",
+        ),
+        (
+            "chained_switch_conflation_001",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n16 |       1\n17>|     case 2+q:\n18 |       (2 + q : U32)\n",
+        ),
+        (
+            "dec_switch_respell_000",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n20 |           h\n21>|         case 1+p:\n22 |           nth(d, p, t)\n",
+        ),
+        (
+            "dec_switch_respell_001",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n25 |           0\n26>|     case 2+p:\n27 |       p\n",
+        ),
+        (
+            "dependent_switch_induction",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n15 |       0\n16>|     case 1+p:\n17 |       down(p)\n",
+        ),
+        (
+            "fuel_inline_dep_match",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n15 |       h\n16>|     case 1+d:\n17 |       stack(d, (h * 5 : U32))\n",
+        ),
+        (
+            "match_as_specialize",
+            "Error:\n- expected : 3 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n12 |   match x as e:\n13>|     case Zero{}:\n14 |       h\n",
+        ),
+        (
+            "arity_mismatch_000",
+            "Error:\n- expected : 2 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n18 |   match a, b:\n19>|     case Zw{}, x, Zw{}:\n20 |       Aw{x}\n",
+        ),
+        (
+            "arity_mismatch_001",
+            "Error:\n- expected : 2 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n16 |   match a, b:\n17>|     case Zw2{}:\n18 |       Aw2{}\n",
+        ),
+        (
+            "as_pattern_error",
+            "Error:\n- expected : 4 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n12 |   match Bool.not(a), b as e:\n13>|     case True{}, True{}:\n14 |       1\n",
+        ),
+        (
+            "kplus_missing_case",
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n14 |       0\n15>|     case 2+k:\n16 |       k\n",
+        ),
+        (
+            "match_as_binding",
+            "Error:\n- expected : 3 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n27 |   match nat_eq(h, i) as e:\n28>|     case True{}:\n29 |       h\n",
+        ),
+        (
+            "hypothesis_retype",
+            "Error:\n- expected : 3 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n32 |   match nat_eq(n, m) as e:\n33>|     case True{}:\n34 |       use(True{}, False{}, h)\n",
+        ),
+    ] {
+        assert_diagnostic(&root.join(format!("{name}.bend")), expected);
+    }
+}
+
+#[test]
+fn matched_value_use_sites_and_row_arity_characters_survive_layout_and_imports() {
+    for (source, helper, expected) in [
+        (
+            "type One is Data:\n  One.new{}\ndef bad(x: One) -> Type:\n  match x:\n    case One.new{}:\n      x\n",
+            None,
+            "Error:\n- expected : Type\n- observed : One\nLocation: bad\n5 |     case One.new{}:\n6>|       x\n7 | \n",
+        ),
+        (
+            "type One is Data:\n  One.new{}\ndef bad(x: One) -> Type:\n  match x:\n    case One.new{}:\n      -ok = {Type : Type}\n      x\n",
+            None,
+            "Error:\n- expected : Type\n- observed : One\nContext:\n- ok : Type\nLocation: bad\n6 |       -ok = {Type : Type}\n7>|       x\n8 | \n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Type:\n  match n:\n    case Zero{}: Type\n    case Succ{p}:\n      n\n",
+            None,
+            "Error:\n- expected : Type\n- observed : Nat\nContext:\n- p : Nat\nLocation: bad\n7 |     case Succ{p}:\n8>|       n\n9 | \n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Type:\n  match n:\n    case Zero{}: Type\n    case Succ{p}:\n      match p:\n        case Zero{}: Type\n        case Succ{q}:\n          n\n",
+            None,
+            "Error:\n- expected : Type\n- observed : Nat\nContext:\n- q : Nat\nLocation: bad\n10 |         case Succ{q}:\n11>|           n\n12 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type One is Data:\n  One.new{}\ndef bad(x: One) -> Type:\n  match x:\n    case One.new{}:\n      x\n",
+            ),
+            "Error:\n- expected : Type\n- observed : helper.One\nLocation: helper.bad\n5 |     case One.new{}:\n6>|       x\n7 | \n",
+        ),
+        (
+            "type One is Data:\n  One.new{}\ndef bad(~f: Type -> Type, x: One) -> Type:\n  match x:\n    case One.new{}:\n      x\ndef main() -> Type: bad(~(y => y), One.new{})\n",
+            None,
+            "Error:\n- expected : Type\n- observed : One\nContext:\n- f : @_:Type -> Type\nLocation: bad~0\n5 |     case One.new{}:\n6>|       x\n7 | def main() -> Type: bad(~(y => y), One.new{})\n",
+        ),
+        (
+            "type One is Data:\n  One.new{}\ndef bad() -> Type:\n  One.new{}\n",
+            None,
+            "Error:\n- expected : Type\n- observed : One\nLocation: bad\n3 | def bad() -> Type:\n4>|   One.new{}\n5 | \n",
+        ),
+        (
+            "def bad() -> Type:\n  Missing{}\n",
+            None,
+            "Error:\n- expected : Type\n- observed : non-inferrable term 'Missing{}'\nLocation: bad\n1 | def bad() -> Type:\n2>|   Missing{}\n3 | \n",
+        ),
+        (
+            "type One is Data:\n  One.new{}\ndef bad() -> (Type -> Type):\n  One.new{}\n",
+            None,
+            "Error:\n- expected : @_:Type -> Type\n- observed : One\nLocation: bad\n3 | def bad() -> (Type -> Type):\n4>|   One.new{}\n5 | \n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match b:\n    case True{}, False{}: 0\n",
+            None,
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : ' '\nLocation:\n3 |   match b:\n4>|     case True{}, False{}: 0\n5 | \n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match b:\n    case True{},\n         False{}:\n      0\n",
+            None,
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n4 |     case True{},\n5>|          False{}:\n6 |       0\n",
+        ),
+        (
+            "import Base\r\ndef bad(b: Bool) -> U32:\r\n  match b:\r\n    case True{}, False{}:\r\n      0\r\n",
+            None,
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\r'\nLocation:\n3 |   match b:\r\n4>|     case True{}, False{}:\r\n5 |       0\r\n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match b:\n    case True{}, False{}:",
+            None,
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : end of input\nLocation:\n3 |   match b:\n4>|     case True{}, False{}:\n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some(
+                "import Base\ndef bad(b: Bool) -> U32:\n  match b:\n    case True{}, False{}:\n      0\n",
+            ),
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n3 |   match b:\n4>|     case True{}, False{}:\n5 |       0\n",
+        ),
+        (
+            "import Base\ndef bad(~f: U32 -> U32, b: Bool) -> U32:\n  match b:\n    case True{}, False{}:\n      0\ndef main() -> U32: bad(~(x => x), True{})\n",
+            None,
+            "Error:\n- expected : 1 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n3 |   match b:\n4>|     case True{}, False{}:\n5 |       0\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

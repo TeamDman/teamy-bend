@@ -199,6 +199,14 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-matched-values/error_window_matched_scrutinee.bend"),
+            "Error:\n- expected : Type\n- observed : One\nLocation: bad\n7 |     case One.new{}:\n8>|       x\n9 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-matched-values/arity_mismatch_000.bend"),
+            "Error:\n- expected : 2 patterns (one per scrutinee)\n- observed : '\n'\nLocation:\n18 |   match a, b:\n19>|     case Zw{}, x, Zw{}:\n20 |       Aw{x}\n",
+        ),
+        (
             include_str!("fixtures/cpu-scrutinee-origins/error_window_substituted_scrutinee.bend"),
             "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n11 |     case y, 1n+q:\n12>|       match y:\n13 |         case 0n:\n",
         ),

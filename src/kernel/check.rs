@@ -60,12 +60,17 @@ pub(crate) struct CheckerDiagnostic {
 enum DiagnosticExpression<'a> {
     Text(String),
     Term(&'a TermRef),
+    Typeless(&'a TermRef),
 }
 impl DiagnosticExpression<'_> {
     fn render(self, engine: &mut Engine) -> Result<String, KernelError> {
         match self {
             Self::Text(text) => Ok(text),
             Self::Term(value) => Ok(engine.normalize(value)?.to_string()),
+            Self::Typeless(value) => Ok(format!(
+                "non-inferrable term '{}'",
+                engine.normalize(value)?
+            )),
         }
     }
 }
@@ -1283,7 +1288,9 @@ impl Engine {
                 for b in bindings {
                     self.aliases.insert(b.id, Rc::clone(&b.value));
                 }
-                let result = self.check(lhs, body, demand, ty, &next);
+                let result = self
+                    .check(lhs, body, demand, ty, &next)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, body));
                 for b in bindings {
                     self.aliases.remove(&b.id);
                 }
@@ -1295,7 +1302,27 @@ impl Engine {
             }
             Term::Ctr { name, args } => {
                 let t = self.whnf(ty)?;
-                let adt = self.adt(&t)?;
+                let adt = self.adt(&t).map_err(|mut error| {
+                    if !matches!(t.as_ref(), Term::Adt { .. }) {
+                        let family = self
+                            .constructor_family(name)
+                            .map(|name| term(Term::Ref(name)));
+                        error.diagnostic = self
+                            .term_diagnostic(
+                                lhs,
+                                value,
+                                DiagnosticExpression::Term(ty),
+                                family.as_ref().map_or(
+                                    DiagnosticExpression::Typeless(value),
+                                    DiagnosticExpression::Term,
+                                ),
+                                context,
+                            )
+                            .ok()
+                            .map(Box::new);
+                    }
+                    error
+                })?;
                 let Some(constructor) = adt.constructors.iter().find(|c| &c.name == name) else {
                     let mut error = KernelError::new(format!(
                         "{name} is not a remaining constructor of {}",
@@ -1583,7 +1610,9 @@ impl Engine {
             );
             arm_lhs.remaining = lhs.remaining - 1 + fresh_fields.len();
         }
-        let arm_uses = self.check(&arm_lhs, arm, demand, &arm_goal, context)?;
+        let arm_uses = self
+            .check(&arm_lhs, arm, demand, &arm_goal, context)
+            .map_err(|error| self.child_diagnostic(error, value, 0, arm))?;
         let mut excluded = excluded.clone();
         excluded.push(constructor.clone());
         let residual = term(Term::All {
@@ -1597,7 +1626,9 @@ impl Engine {
             }),
             body: Rc::clone(body),
         });
-        let fallback_uses = self.check(lhs, fallback, demand, &residual, context)?;
+        let fallback_uses = self
+            .check(lhs, fallback, demand, &residual, context)
+            .map_err(|error| self.child_diagnostic(error, value, 1, fallback))?;
         Ok(join(arm_uses, fallback_uses))
     }
 
@@ -1906,6 +1937,10 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            (
+                "cpu-matched-values/error_window_matched_scrutinee.bend",
+                &[][..],
+            ),
             ("cpu-constructors/context-open.bend", &[][..]),
             ("cpu-checking/false_fusion.bend", &[][..]),
             ("cpu-rewrite-checking/rewrite_non_equation.bend", &[][..]),
@@ -2193,6 +2228,40 @@ mod reflexivity_diagnostic_tests {
                 &expected,
                 &Context::new(),
             )
+            .unwrap_err();
+        assert_eq!(error, exhausted);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        assert!(exhausted.language_failure().is_none());
+    }
+
+    #[test]
+    fn constructor_non_datatype_diagnostics_keep_remaining_budget_and_original_error() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let value = term(Term::Ctr {
+            name: "Missing".into(),
+            args: vec![],
+        });
+        let ty = kind(Quant::Lone);
+        let before = engine.fuel;
+        let error = engine
+            .check(&Lhs::default(), &value, Quant::None, &ty, &Context::new())
+            .unwrap_err();
+        assert_eq!(
+            error,
+            KernelError::new("expected a datatype; observed Type")
+        );
+        assert_eq!(
+            error.checker_diagnostic().unwrap().observed,
+            "non-inferrable term 'Missing{}'"
+        );
+        let spent = before - engine.fuel;
+        engine.fuel = spent;
+        let exhausted = engine
+            .check(&Lhs::default(), &value, Quant::None, &ty, &Context::new())
             .unwrap_err();
         assert_eq!(error, exhausted);
         assert!(exhausted.checker_diagnostic().is_none());

@@ -167,6 +167,33 @@ impl DiagnosticOrigins {
         });
     }
 
+    pub(super) fn row_arity(
+        &mut self,
+        label: &str,
+        line: usize,
+        colon_column: usize,
+        count: usize,
+    ) {
+        self.load_failure = self.sources.get(label).and_then(|source| {
+            // parse_terms leaves the pinned parser immediately after ':'. Use
+            // the original source character, including whitespace, CRLF or EOF;
+            // tokenization has already skipped that character in the port.
+            let observed = source
+                .split_inclusive('\n')
+                .nth(line - 1)?
+                .chars()
+                .nth(colon_column)
+                .map_or_else(|| "end of input".into(), |c| format!("'{c}'"));
+            source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
+                content: LoadDiagnosticContent::ExpectedObserved {
+                    expected: format!("{count} patterns (one per scrutinee)"),
+                    observed,
+                },
+                excerpt,
+            })
+        });
+    }
+
     pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Loader parsing uses a newline-normalized buffer. The public
@@ -224,6 +251,26 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn row_arity_metadata_preserves_public_load_error_and_location() {
+        for name in [
+            "arity_mismatch_000",
+            "arity_mismatch_001",
+            "as_pattern_error",
+            "kplus_missing_case",
+        ] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join(format!("tests/fixtures/cpu-matched-values/{name}.bend"));
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert_eq!(plain.message, "a match needs one pattern per scrutinee");
+            assert!(
+                matches!(tracked.diagnostic.unwrap().content, super::LoadDiagnosticContent::ExpectedObserved { observed, .. } if observed == "'\n'")
+            );
+        }
+    }
+
     #[test]
     fn scrutinee_metadata_preserves_public_load_errors() {
         for name in [

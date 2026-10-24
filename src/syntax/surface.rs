@@ -56,19 +56,46 @@ pub(super) struct Row {
     pub body: Body,
 }
 
-// A match occurrence keeps its own source anchor when substitution shares a
+// A surface occurrence keeps its own source anchor when substitution shares a
 // replacement across several uses. This is discarded with the surface body;
 // it adds no core term edge, identity, evaluator work, or serialized field.
 #[derive(Clone, Debug)]
-pub(super) struct Scrutinee {
+pub(super) struct SurfaceTerm {
     value: TermRef,
     origin: usize,
 }
 
-impl Scrutinee {
+impl SurfaceTerm {
     pub(super) fn new(value: TermRef, origins: Option<&TermOrigins>) -> Self {
         let origin = origins.map_or_else(|| Rc::as_ptr(&value) as usize, |o| o.source(&value));
         Self { value, origin }
+    }
+
+    fn parent(value: TermRef, children: [Option<usize>; 3], origins: Option<&TermOrigins>) -> Self {
+        if let Some(origins) = origins {
+            origins.surface_children(&value, children);
+        }
+        Self::new(value, origins)
+    }
+
+    fn lambda(self, binder: &Variable, origins: Option<&TermOrigins>) -> Self {
+        let value = binder.lambda(self.value);
+        Self::parent(value, [Some(self.origin), None, None], origins)
+    }
+
+    fn matched(
+        constructor: String,
+        arm: Self,
+        fallback: Self,
+        origins: Option<&TermOrigins>,
+    ) -> Self {
+        let children = [Some(arm.origin), Some(fallback.origin), None];
+        let value = term(Term::Mat {
+            constructor,
+            arm: arm.value,
+            fallback: fallback.value,
+        });
+        Self::parent(value, children, origins)
     }
 
     fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
@@ -81,15 +108,15 @@ impl Scrutinee {
 
 #[derive(Clone, Debug)]
 pub(super) enum Body {
-    Reply(TermRef),
+    Reply(SurfaceTerm),
     Local {
         patterns: Vec<Pattern>,
         quant: Quant,
-        values: Vec<Scrutinee>,
+        values: Vec<SurfaceTerm>,
         body: Box<Self>,
     },
     Match {
-        scrutinees: Vec<Scrutinee>,
+        scrutinees: Vec<SurfaceTerm>,
         rows: Vec<Row>,
     },
 }
@@ -124,16 +151,15 @@ impl Body {
                 .fold(body, |body, (binder, value)| Self::Local {
                     patterns: vec![Pattern::Variable(binder.clone())],
                     quant: Quant::Many,
-                    values: vec![Scrutinee::new(Rc::clone(value), None)],
+                    values: vec![SurfaceTerm::new(Rc::clone(value), None)],
                     body: Box::new(body),
                 }),
         }
     }
 
     fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
-        let sub = |t: &TermRef| substitute_with_origins(t, id, replacement, origins);
         match self {
-            Self::Reply(value) => Self::Reply(sub(value)),
+            Self::Reply(value) => Self::Reply(value.replace(id, replacement, origins)),
             Self::Local {
                 patterns,
                 quant,
@@ -208,7 +234,7 @@ pub(super) fn flatten(
     display_fresh: &mut usize,
     origins: Option<&TermOrigins>,
 ) -> Result<TermRef, FlattenError> {
-    flatten_at(body, vars, fresh, display_fresh, 0, origins)
+    flatten_at(body, vars, fresh, display_fresh, 0, origins).map(|value| value.value)
 }
 
 fn flatten_at(
@@ -218,12 +244,15 @@ fn flatten_at(
     display_fresh: &mut usize,
     depth: usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, FlattenError> {
+) -> Result<SurfaceTerm, FlattenError> {
     if depth >= 64 {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     match body {
-        Body::Reply(value) => Ok(vars.iter().rev().fold(Rc::clone(value), |v, b| b.lambda(v))),
+        Body::Reply(value) => Ok(vars
+            .iter()
+            .rev()
+            .fold(value.clone(), |v, b| v.lambda(b, origins))),
         Body::Match { scrutinees, rows } => flatten_match(
             scrutinees,
             rows,
@@ -264,8 +293,15 @@ fn flatten_at(
                 .collect::<Result<Vec<_>, _>>()?;
             let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1, origins)?;
             for binder in &bindings {
-                match tail.as_ref() {
-                    Term::Lam { body, .. } => tail = Rc::clone(body),
+                match tail.value.as_ref() {
+                    Term::Lam { body, .. } => {
+                        let origin = origins.and_then(|o| o.child_source(&tail.value, 0, body));
+                        let mut next = SurfaceTerm::new(Rc::clone(body), origins);
+                        if let Some(origin) = origin {
+                            next.origin = origin;
+                        }
+                        tail = next;
+                    }
                     _ => {
                         return Err(FlattenError::LocalBinding { binder: binder.id });
                     }
@@ -282,21 +318,22 @@ fn flatten_at(
                         value: Rc::clone(&v.value),
                     })
                     .collect(),
-                body: tail,
+                body: tail.value,
             });
-            Ok(vars.iter().rev().fold(value, |v, b| b.lambda(v)))
+            let value = SurfaceTerm::parent(value, [Some(tail.origin), None, None], origins);
+            Ok(vars.iter().rev().fold(value, |v, b| v.lambda(b, origins)))
         }
     }
 }
 
 struct MatchState {
-    scrutinees: Vec<Scrutinee>,
+    scrutinees: Vec<SurfaceTerm>,
     rows: Vec<Row>,
     vars: Vec<Variable>,
 }
 
 enum MatchStep {
-    Done(TermRef),
+    Done(SurfaceTerm),
     Nullary {
         constructor: String,
         next: MatchState,
@@ -305,14 +342,14 @@ enum MatchStep {
 }
 
 fn flatten_match(
-    scrutinees: &[Scrutinee],
+    scrutinees: &[SurfaceTerm],
     rows: &[Row],
     vars: &[Variable],
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, FlattenError> {
+) -> Result<SurfaceTerm, FlattenError> {
     // A nullary constructor consumes a column without introducing field
     // binders. Continue that arm iteratively: a fixed-width word has one Bool
     // column per bit, which need not double its Rust recursion depth. Retain
@@ -343,11 +380,7 @@ fn flatten_match(
                         depth + 1,
                         origins,
                     )?;
-                    value = term(Term::Mat {
-                        constructor,
-                        arm: value,
-                        fallback,
-                    });
+                    value = SurfaceTerm::matched(constructor, value, fallback, origins);
                 }
                 return Ok(value);
             }
@@ -368,7 +401,7 @@ fn flatten_match(
     reason = "Direct translation of upstream's first-row pattern compilation algorithm"
 )]
 fn flatten_match_step(
-    scrutinees: &[Scrutinee],
+    scrutinees: &[SurfaceTerm],
     rows: &[Row],
     vars: &[Variable],
     fresh: &mut usize,
@@ -431,7 +464,7 @@ fn flatten_match_step(
     }
     if binder.is_some_and(|v| v.id == first.id) {
         let Some((name, fields)) = constructor else {
-            return Ok(MatchStep::Done(term(Term::Efq)));
+            return Ok(MatchStep::Done(SurfaceTerm::new(term(Term::Efq), origins)));
         };
         let field_vars = fields
             .iter()
@@ -492,7 +525,7 @@ fn flatten_match_step(
         }
         let mut next_scrutinees = field_vars
             .iter()
-            .map(|v| Scrutinee::new(v.term(), None))
+            .map(|v| SurfaceTerm::new(v.term(), None))
             .collect::<Vec<_>>();
         next_scrutinees.extend_from_slice(&scrutinees[1..]);
         let mut next_vars = field_vars;
@@ -530,27 +563,68 @@ fn flatten_match_step(
             depth + 1,
             origins,
         )?;
-        Ok(MatchStep::Done(term(Term::Mat {
-            constructor: name.clone(),
+        Ok(MatchStep::Done(SurfaceTerm::matched(
+            name.clone(),
             arm,
             fallback,
-        })))
-    } else {
-        Ok(MatchStep::Done(first.lambda(flatten_match(
-            scrutinees,
-            rows,
-            &vars[1..],
-            fresh,
-            display_fresh,
-            depth + 1,
             origins,
-        )?)))
+        )))
+    } else {
+        Ok(MatchStep::Done(
+            flatten_match(
+                scrutinees,
+                rows,
+                &vars[1..],
+                fresh,
+                display_fresh,
+                depth + 1,
+                origins,
+            )?
+            .lambda(first, origins),
+        ))
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn generated_match_edges_preserve_distinct_reply_origins_and_shared_values() {
+        let origins = TermOrigins::default();
+        let variable = Variable {
+            name: "x".into(),
+            id: 0,
+        };
+        let first = variable.term();
+        let second = variable.term();
+        origins.track(&first);
+        origins.track(&second);
+        let first = SurfaceTerm::new(first, Some(&origins));
+        let second = SurfaceTerm::new(second, Some(&origins));
+        let replacement = term(Term::Ctr {
+            name: "Zero".into(),
+            args: vec![],
+        });
+        let a = first.replace(0, &replacement, Some(&origins));
+        let b = second.replace(0, &replacement, Some(&origins));
+        let parent = SurfaceTerm::matched("Zero".into(), a, b, Some(&origins));
+        let Term::Mat { arm, fallback, .. } = parent.value.as_ref() else {
+            panic!("match")
+        };
+        assert!(Rc::ptr_eq(arm, &replacement));
+        assert!(Rc::ptr_eq(fallback, &replacement));
+        assert_eq!(Rc::strong_count(&replacement), 3);
+        assert_eq!(
+            origins.child_source(&parent.value, 0, arm),
+            Some(first.origin)
+        );
+        assert_eq!(
+            origins.child_source(&parent.value, 1, fallback),
+            Some(second.origin)
+        );
+        assert_ne!(first.origin, second.origin);
+    }
 
     #[test]
     fn scrutinee_substitution_retains_occurrences_without_copying_replacements() {
@@ -563,8 +637,8 @@ mod tests {
         let origins = TermOrigins::default();
         origins.track(&first);
         origins.track(&second);
-        let first = Scrutinee::new(first, Some(&origins));
-        let second = Scrutinee::new(second, Some(&origins));
+        let first = SurfaceTerm::new(first, Some(&origins));
+        let second = SurfaceTerm::new(second, Some(&origins));
         let replacement = term(Term::Ctr {
             name: "Zero".into(),
             args: vec![],

@@ -112,6 +112,7 @@ mod tests {
     #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
         for name in [
+            "tests/fixtures/cpu-matched-values/error_window_matched_scrutinee.bend",
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
@@ -167,6 +168,10 @@ mod tests {
             }
         }
         for (file, excerpt) in [
+            (
+                "cpu-matched-values/arity_mismatch_000.bend",
+                "19>|     case Zw{}, x, Zw{}:",
+            ),
             (
                 "cpu-scrutinee-origins/error_window_substituted_scrutinee.bend",
                 "12>|       match y:",

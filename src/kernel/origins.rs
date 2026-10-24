@@ -68,6 +68,18 @@ impl TermOrigins {
         });
     }
 
+    // Generated surface parents need per-edge anchors when a reply is replaced
+    // by a shared constructor. Only weak, external provenance is recorded.
+    pub(crate) fn surface_children(&self, value: &TermRef, children: [Option<usize>; 3]) {
+        self.track(value);
+        self.0
+            .borrow_mut()
+            .nodes
+            .get_mut(&(Rc::as_ptr(value) as usize))
+            .expect("tracked surface parent")
+            .child_origins = Some(children);
+    }
+
     pub(crate) fn source(&self, value: &TermRef) -> usize {
         let key = Rc::as_ptr(value) as usize;
         self.0

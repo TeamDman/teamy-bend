@@ -11,7 +11,7 @@ use super::executable::OpaqueType;
 use super::surface::Body;
 use super::surface::Pattern;
 use super::surface::Row;
-use super::surface::Scrutinee;
+use super::surface::SurfaceTerm;
 use super::surface::Variable;
 use super::surface::flatten;
 use crate::kernel::AdtDecl;
@@ -1708,7 +1708,10 @@ impl Parser<'_> {
         );
         let rebindings = std::mem::take(&mut self.reusable);
         let tail = self.do_statement(module, types, result, column)?;
-        let tail = self.flatten_body(&Body::Reply(tail).with_reusable(&rebindings), &[])?;
+        let tail = self.flatten_body(
+            &Body::Reply(self.surface_term(tail)).with_reusable(&rebindings),
+            &[],
+        )?;
         self.scope.truncate(old);
         if assignment {
             Ok(term(Term::Let {
@@ -1842,11 +1845,17 @@ impl Parser<'_> {
             _ => Err(self.error("a pattern must be a binder or constructor")),
         }
     }
-    fn scrutinees(&self, values: Vec<TermRef>) -> Vec<Scrutinee> {
+    fn surface_term(&self, value: TermRef) -> SurfaceTerm {
+        SurfaceTerm::new(
+            value,
+            self.templates.diagnostics.as_ref().map(|o| &o.tracker),
+        )
+    }
+    fn scrutinees(&self, values: Vec<TermRef>) -> Vec<SurfaceTerm> {
         let origins = self.templates.diagnostics.as_ref().map(|o| &o.tracker);
         values
             .into_iter()
-            .map(|value| Scrutinee::new(value, origins))
+            .map(|value| SurfaceTerm::new(value, origins))
             .collect()
     }
     fn terms_before_colon(&mut self) -> Result<Vec<TermRef>, ParseError> {
@@ -1893,6 +1902,10 @@ impl Parser<'_> {
                 self.bump();
                 let patterns = self.terms_before_colon()?;
                 if patterns.len() != scrutinees.len() {
+                    let colon = &self.tokens[self.at - 1];
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.row_arity(&self.label, colon.line, colon.column, scrutinees.len());
+                    }
                     return Err(self.error("a match needs one pattern per scrutinee"));
                 }
                 let old = self.scope.len();
@@ -1936,7 +1949,7 @@ impl Parser<'_> {
                     values.push(patterns.remove(0));
                     patterns.push(variable);
                 } else {
-                    return Ok(Body::Reply(patterns.remove(0)));
+                    return Ok(Body::Reply(self.surface_term(patterns.remove(0))));
                 }
             } else {
                 self.expect("=")?;
