@@ -121,7 +121,7 @@ impl KernelError {
         if let Some(report) = &mut self.diagnostic
             && report.definition.is_empty()
         {
-            report.definition = name.to_owned();
+            name.clone_into(&mut report.definition);
         }
         self
     }
