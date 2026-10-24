@@ -91,24 +91,27 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `75085cb0a27dd8fb01f6bf50bb5e03198dddda80` fixes computed-scrutinee provenance for two unchanged
-originals and the three preceding hole-order defects. Structural limits remain
-upfront; checker rule order selects the error; saved source-hole refusals prevent
-erased/unreachable holes from escaping. [Report](cpu-computed-scrutinee.md).
+Source `1175aa37f317db553a2e596d16d0089297f1fa40` closes substituted, consumed and out-of-order scrutinee diagnostics
+for eleven unchanged originals, plus constructor and bare-global matches. Per-use
+surface metadata preserves source locations without changing core terms, sharing,
+acceptance, evaluation, approved demand semantics or safety limits.
+[Report](cpu-scrutinee-origins.md).
 
-Full gate **911 passed, zero failed, 49 ignored**; 560 negative observations
-(504 exact stream/status results plus 56 phase probes), 14 positive controls,
-and all 1,302 checking statuses pass. Five separately retained controls remain
-unresolved: constructor/global scrutinee diagnostics and erased-hole/TODO policy
-or diagnostic differences. No new exception or runtime demand change is adopted.
+Full gate **915 passed, zero failed, 49 ignored**. The 31-case repeated matrix
+contains 558 exact stream/status observations and 62 separate phase probes;
+14 positive controls pass. All 1,302 checking statuses remain unchanged.
+The three erased-hole/TODO controls remain unresolved and unwaived. Single probes
+also retain matched-value checking and row-arity diagnostic gaps, not qualifications.
 
-Detailed coverage: 220 originals / 1,082 without receipts, split as 422 checker
+Detailed coverage: **231 originals / 1,071 without detailed receipts**: 411 checker
 negatives, one checking-only module, 106 interpreter cases and 553 compiled
-candidates. Eight checking rows are renewed; other detailed lanes retain historical
-identities. The 688-vector exploration and existing host/resource/foreign/F32.read,
-runtime-error-order/API/lane requirements remain open. External invoke callers must
-inspect exit_code. Next: substituted/consumed/out-of-order scrutinee diagnostics.
-Frozen inputs and safety limits; historical evidence preserved; no installs/pushes.
+candidates. Eighteen checking rows are current; 21 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts include unresolved
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
+External invoke consumers must still inspect exit_code; no external audit is claimed.
+Next: reconstructed matched-value and row-arity diagnostics. Frozen inputs/policies;
+no installations, pushes, desktop or GPU work.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -615,3 +618,27 @@ identities. The 688-vector exploration and existing host/resource/foreign/F32.re
 runtime-error-order/API/lane requirements remain open. External invoke callers must
 inspect exit_code. Next: substituted/consumed/out-of-order scrutinee diagnostics.
 Frozen inputs and safety limits; historical evidence preserved; no installs/pushes.
+
+## Scrutinee occurrence checkpoint
+
+Source `1175aa37f317db553a2e596d16d0089297f1fa40` closes substituted, consumed and out-of-order scrutinee diagnostics
+for eleven unchanged originals, plus constructor and bare-global matches. Per-use
+surface metadata preserves source locations without changing core terms, sharing,
+acceptance, evaluation, approved demand semantics or safety limits.
+[Report](cpu-scrutinee-origins.md).
+
+Full gate **915 passed, zero failed, 49 ignored**. The 31-case repeated matrix
+contains 558 exact stream/status observations and 62 separate phase probes;
+14 positive controls pass. All 1,302 checking statuses remain unchanged.
+The three erased-hole/TODO controls remain unresolved and unwaived. Single probes
+also retain matched-value checking and row-arity diagnostic gaps, not qualifications.
+
+Detailed coverage: **231 originals / 1,071 without detailed receipts**: 411 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Eighteen checking rows are current; 21 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts include unresolved
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
+External invoke consumers must still inspect exit_code; no external audit is claimed.
+Next: reconstructed matched-value and row-arity diagnostics. Frozen inputs/policies;
+no installations, pushes, desktop or GPU work.
