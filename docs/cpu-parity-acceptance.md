@@ -91,39 +91,43 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `93d10bf440096736fd60a977032c3869d8ebc9c6` qualifies five unchanged `flatten/wide_scrutinee_000..004`
-originals with **96 bounded applications** across four or five columns. The
-sample varies every argument independently over constructor depths 0 and 2,
-preserving nonadjacent discriminators, ignored columns, default reconstruction
-and complete ordered payloads. Function normalization, checked applications,
-pure projections and native IO evidence remain distinct. No production defect
-or implementation change was needed. [Report](cpu-wide-scrutinee.md).
+Source `a53eac657f82b3fa75efc3e46263f13a9be4274b` qualifies five unchanged `flatten/list_ctor_000..004`
+originals with **78 bounded applications**. Type/kind probes preserve the erased
+quantity and element parameters, dependent `Kind(a)` and `&2` instantiation.
+Complete constructor values, ordered list payloads, normalized text/graphs and
+native IO execution remain separate. A demonstrated printer defect is fixed:
+shadowed bound variables retain upstream's scope-level suffix, including `b^1`.
+No parser, evaluator, core identity or sharing behavior changed.
+[Report](cpu-list-constructors.md).
 
-Clean-source gate: **951 passed, zero failed, 49 ignored**. The repeated matrix
-has **360 process observations**, including ten direct Node IO host blocks and
-five strict-proof exclusions. Original missing-Base refusals and Base-enabled
-function-printer refusals match exactly, without artifacts. All 1,302 checking
-statuses are unchanged; 14 positive controls pass and 18 observations retain
-three unwaived hole/TODO differences.
+Clean-source gate: **957 passed, zero failed, 49 ignored**. The repeated matrix
+contains **370 process observations**, including ten direct Node IO host blocks
+and five strict-proof exclusions. Both original missing-Base and separate
+function-printer refusals match exactly, with no artifact. All 1,302 checking
+statuses are unchanged; 14 positive controls pass and 18 observations preserve
+three unwaived hole/TODO differences. All 34 focused normalization/scope/list
+tests pass at the tested source and run again in the final gate. Earlier compile,
+lint and stale-printer-expectation failures remain separate failed receipts.
 
-Detailed receipts link **318 originals**; **984** lack detailed receipts:
-**360 checker negatives, one checking-only module, 73 interpreter cases and 550
-compiled candidates**. Five interpretation rows are new; prior 130 interpretation,
-93 runtime and 90 checking rows retain their historical identities. Linked
-receipts include partial/blocked cells and do not establish CPU parity.
-Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
-host/resource/foreign/F32.read/runtime-error-order/API requirements and the
-unfinished 688-vector exploration remain unwaived. Dependencies, references,
-toolchains, guards, budgets, cancellation and approved demand policy remain
-frozen. No installations, pushes, desktop or GPU work.
+Detailed receipts link **323 originals**; **979** lack detailed receipts:
+**360 checker negatives, one checking-only module, 68 interpreter cases and 550
+compiled candidates**. Five interpretation rows are new; prior 135 interpretation,
+93 runtime and 90 checking rows retain historical identities. Linked receipts
+include partial/blocked cells and do not establish CPU parity. Imported-printer/
+JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps
+and the unfinished 688-vector exploration remain unwaived. Dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy
+remain frozen. No installations, pushes, desktop or GPU work.
 
-Next independent batch: five `list_ctor_000..004` originals, with a proposed
-78-vector sample. The first four use all lists of length 0..2 over Bit F/T or
-Nat depths 0/2; `_004` uses both Nat depths and five selected list shapes in each
-list argument (50 combinations). This would exercise parameterized constructors,
-nested head/tail defaults and complete ordered list payloads. Actual printability
-and type/kind applicability must be established first. Only source/inventory
-review is complete; no execution credit is assigned to this next batch.
+Next bounded gap: `page/context_dedup_shadow.bend` still prints a free
+contextual endpoint as `x` rather than pinned `x^0`. Both reject at status 1;
+source location and context rows agree. The 12 adjacent observations also retain
+an independent `eval/partial_app_snf.bend` difference: both succeed, but the
+pinned normal form retains `snf9`/`wnf` references while the port unfolds a larger
+match expression. Scope suffixes alone do not close that normalization question.
+Both adjacent cases repeat deterministically without timeout; they are probes,
+not newly qualified ledger rows. Investigate contextual formatter scope first,
+then classify the normal-form difference structurally before changing evaluation.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -974,3 +978,43 @@ list argument (50 combinations). This would exercise parameterized constructors,
 nested head/tail defaults and complete ordered list payloads. Actual printability
 and type/kind applicability must be established first. Only source/inventory
 review is complete; no execution credit is assigned to this next batch.
+
+## List-constructor and scope-printer checkpoint
+
+Source `a53eac657f82b3fa75efc3e46263f13a9be4274b` qualifies five unchanged `flatten/list_ctor_000..004`
+originals with **78 bounded applications**. Type/kind probes preserve the erased
+quantity and element parameters, dependent `Kind(a)` and `&2` instantiation.
+Complete constructor values, ordered list payloads, normalized text/graphs and
+native IO execution remain separate. A demonstrated printer defect is fixed:
+shadowed bound variables retain upstream's scope-level suffix, including `b^1`.
+No parser, evaluator, core identity or sharing behavior changed.
+[Report](cpu-list-constructors.md).
+
+Clean-source gate: **957 passed, zero failed, 49 ignored**. The repeated matrix
+contains **370 process observations**, including ten direct Node IO host blocks
+and five strict-proof exclusions. Both original missing-Base and separate
+function-printer refusals match exactly, with no artifact. All 1,302 checking
+statuses are unchanged; 14 positive controls pass and 18 observations preserve
+three unwaived hole/TODO differences. All 34 focused normalization/scope/list
+tests pass at the tested source and run again in the final gate. Earlier compile,
+lint and stale-printer-expectation failures remain separate failed receipts.
+
+Detailed receipts link **323 originals**; **979** lack detailed receipts:
+**360 checker negatives, one checking-only module, 68 interpreter cases and 550
+compiled candidates**. Five interpretation rows are new; prior 135 interpretation,
+93 runtime and 90 checking rows retain historical identities. Linked receipts
+include partial/blocked cells and do not establish CPU parity. Imported-printer/
+JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps
+and the unfinished 688-vector exploration remain unwaived. Dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy
+remain frozen. No installations, pushes, desktop or GPU work.
+
+Next bounded gap: `page/context_dedup_shadow.bend` still prints a free
+contextual endpoint as `x` rather than pinned `x^0`. Both reject at status 1;
+source location and context rows agree. The 12 adjacent observations also retain
+an independent `eval/partial_app_snf.bend` difference: both succeed, but the
+pinned normal form retains `snf9`/`wnf` references while the port unfolds a larger
+match expression. Scope suffixes alone do not close that normalization question.
+Both adjacent cases repeat deterministically without timeout; they are probes,
+not newly qualified ledger rows. Investigate contextual formatter scope first,
+then classify the normal-form difference structurally before changing evaluation.
