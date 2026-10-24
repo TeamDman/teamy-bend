@@ -449,6 +449,59 @@ fn open_nat_rendering_preserves_spines_precedence_and_binding() {
 }
 
 #[test]
+fn array_rendering_preserves_complete_trees_and_partial_boundaries() {
+    for (source, expected) in [
+        ("ALeaf{x}", "[x]"),
+        ("ANode{ALeaf{x}, ALeaf{y}}", "[x, y]"),
+        (
+            "ANode{ALeaf{1n}, ANode{ALeaf{2n}, ALeaf{3n}}}",
+            "[1n, 2n, 3n]",
+        ),
+        ("ALeaf{ANode{ALeaf{x}, ALeaf{y}}}", "[[x, y]]"),
+        ("ALeaf{x => x}", "[x => x]"),
+        ("ALeaf{unknown(x)}", "[unknown(x)]"),
+        ("ANode{ALeaf{x}, tail}", "ANode{[x], tail}"),
+        ("ANode{{ALeaf{x} : A}, ALeaf{y}}", "ANode{{[x] : A}, [y]}"),
+        ("ALeaf{}", "ALeaf{}"),
+        ("ALeaf{x, y}", "ALeaf{x, y}"),
+        ("ANode{ALeaf{x}}", "ANode{[x]}"),
+        (
+            "ANode{ALeaf{x}, ALeaf{y}, ALeaf{z}}",
+            "ANode{[x], [y], [z]}",
+        ),
+        ("Local.ALeaf{x}", "Local.ALeaf{x}"),
+        ("ALeaf{(x = 1n; x)}", "[(x = 1n; x)]"),
+    ] {
+        assert_eq!(
+            parse_term(source).unwrap().to_string(),
+            expected,
+            "{source}"
+        );
+    }
+    // Walk an existing core tree iteratively without changing the input guard.
+    let leaf = parse_term("ALeaf{x}").unwrap();
+    let mut value = Rc::clone(&leaf);
+    for _ in 0..64 {
+        value = term(Term::Ctr {
+            name: "ANode".into(),
+            args: vec![Rc::clone(&leaf), value],
+        });
+    }
+    assert_eq!(value.to_string(), format!("[{}]", ["x"; 65].join(", ")));
+    let deep = format!(
+        "{}ALeaf{{x}}{}",
+        "ANode{ALeaf{x}, ".repeat(64),
+        "}".repeat(64)
+    );
+    assert!(
+        parse_term(&deep)
+            .unwrap_err()
+            .to_string()
+            .contains("parser resource limit of 64")
+    );
+}
+
+#[test]
 fn sequence_literal_rendering_preserves_tuple_and_closed_list_structure() {
     for (source, expected) in [
         ("Nil{}", "[]"),

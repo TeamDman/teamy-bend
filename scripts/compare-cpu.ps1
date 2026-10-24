@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [string]$Compiler = $env:TEAMY_BEND_CC,
     [ValidateSet('O0', 'O1', 'O2', 'O3')][string]$OracleOptimization = 'O3',
-    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
+    [ValidateSet('baseline', 'effects', 'control', 'collections', 'scheduler', 'words', 'representation', 'parse-chains', 'parse-operators', 'parse-arrays', 'parse-floats', 'float-runtime', 'float-math', 'float-text', 'float-arithmetic', 'float-specials', 'float-specials-depth', 'all')][string]$Suite = 'baseline',
     [ValidateRange(1, 3)][int]$Repetitions = 1
 )
 $ErrorActionPreference = 'Stop'
@@ -211,6 +211,10 @@ $floatSpecials = @(
 $floatSpecialsDepth = @(
     @{ name = 'float-specials-combined-depth'; source = "$port/tests/fixtures/cpu-float-specials/float-specials-combined-depth.bend"; expected = $floatSpecialExpected }
 )
+$parseArrays = @(
+    @{ name = 'array_literal'; source = "$Reference/tests/parse/array_literal.bend"; expected = "([3, 3, 3, 3], [True{}, True{}])`n"; direct_mode = 'pure' },
+    @{ name = 'array_write_stmt'; source = "$Reference/tests/parse/array_write_stmt.bend"; expected = "([7, 1, 0, 0, 0, 42, 0, 0], 42)`n"; direct_mode = 'pure' }
+)
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }
     'effects' { $effects }
@@ -221,6 +225,7 @@ $fixtures = switch ($Suite) {
     'representation' { $representation }
     'parse-chains' { $parseChains }
     'parse-operators' { $parseOperators }
+    'parse-arrays' { $parseArrays }
     'parse-floats' { $parseFloats }
     'float-runtime' { $floatRuntime }
     'float-math' { $floatMath }
@@ -228,7 +233,7 @@ $fixtures = switch ($Suite) {
     'float-arithmetic' { $floatArithmetic }
     'float-specials' { $floatSpecials }
     'float-specials-depth' { $floatSpecialsDepth }
-    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
+    'all' { $baseline + $effects + $control + $collections + $scheduler + $words + $representation + $parseChains + $parseOperators + $parseArrays + $parseFloats + $floatRuntime + $floatMath + $floatText + $floatArithmetic + $floatSpecials + $floatSpecialsDepth }
 }
 foreach ($fixture in $fixtures) {
     if ($fixture.effect_file -and (Get-Item -LiteralPath $fixture.effect_file -Force -ErrorAction SilentlyContinue)) {

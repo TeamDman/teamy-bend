@@ -480,6 +480,18 @@ fn constructor(
     if name == "Tuple" && args.len() == 2 {
         return tuple_literal(f, value);
     }
+    if matches!(name, "ALeaf" | "ANode")
+        && let Some(elements) = array_elements(value)
+    {
+        f.write_str("[")?;
+        for (index, element) in elements.into_iter().enumerate() {
+            if index != 0 {
+                f.write_str(", ")?;
+            }
+            argument(f, element)?;
+        }
+        return f.write_str("]");
+    }
     if name == "U32"
         && let [word] = args
         && let Some(value) = literal_word(word)
@@ -489,6 +501,27 @@ fn constructor(
     write!(f, "{name}{{")?;
     list(f, args)?;
     f.write_str("}")
+}
+
+// Pinned term_show flattens only complete ALeaf/ANode trees. Inspect syntax
+// without evaluating leaves or crossing annotations, and validate the whole
+// tree before writing so a partial tree retains its constructor spelling.
+fn array_elements(value: &Term) -> Option<Vec<&Term>> {
+    let mut pending = vec![value];
+    let mut elements = Vec::new();
+    while let Some(value) = pending.pop() {
+        match value {
+            Term::Ctr { name, args } if name == "ALeaf" && args.len() == 1 => {
+                elements.push(args[0].as_ref());
+            }
+            Term::Ctr { name, args } if name == "ANode" && args.len() == 2 => {
+                pending.push(args[1].as_ref());
+                pending.push(args[0].as_ref());
+            }
+            _ => return None,
+        }
+    }
+    Some(elements)
 }
 
 // Walk existing syntax only. Pinned term_show retains an open tail as NUMBER n+T,
