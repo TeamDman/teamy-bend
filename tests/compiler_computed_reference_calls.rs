@@ -37,8 +37,14 @@ fn qualify(profile: &str, entry: ExecutableEntry) {
         std::process::id()
     )));
     std::fs::create_dir(&artifacts.0).unwrap();
-    for index in 0..5 {
-        let name = format!("computed_reference_calls_{index:03}");
+    for name in [
+        "computed_ref_call_000",
+        "computed_ref_call_000_f",
+        "computed_ref_call_000_step",
+        "computed_ref_call_001",
+        "computed_ref_call_001_f",
+        "computed_ref_call_001_step",
+    ] {
         let checked = check_executable(
             &load_executable(root.join(profile).join(format!("{name}.bend"))).unwrap(),
         )
