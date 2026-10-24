@@ -20,3 +20,6 @@ and c's predecessor otherwise. Projection tags F=0 and G=1 are distinct from the
 complete constructor results. Original graphs, closed results, projections,
 checking and actual runtime lanes remain separate evidence. Earlier upstream
 imported-constructor printer failures are not waived.
+
+Negative diagnostic strings are losslessly JSON-encoded to preserve blank-line
+trailing spaces without introducing source-whitespace violations.

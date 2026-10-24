@@ -110,7 +110,10 @@ fn invalid_type_arguments_reject_at_check_run_and_compile_boundaries() {
     ));
     for name in ["type_param_match_000", "type_param_match_001"] {
         let path = root.join(format!("{name}-invalid_value.bend"));
-        let expected = std::fs::read(path.with_extension("stderr")).unwrap();
+        let expected: String = facet_json::from_str(
+            &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+        )
+        .unwrap();
         for operation in ["check", "run", "c", "javascript", "native"] {
             let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
             if matches!(operation, "check" | "run") {
@@ -125,7 +128,7 @@ fn invalid_type_arguments_reject_at_check_run_and_compile_boundaries() {
             let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
             assert_eq!(output.status.code(), Some(1));
             assert!(output.stdout.is_empty());
-            assert_eq!(output.stderr, expected, "{name}: {operation}");
+            assert_eq!(output.stderr, expected.as_bytes(), "{name}: {operation}");
             assert!(!destination.exists());
         }
     }
