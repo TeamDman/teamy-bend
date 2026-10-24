@@ -104,13 +104,15 @@ enum DiagnosticExpression<'a> {
     Typeless(&'a TermRef),
 }
 impl DiagnosticExpression<'_> {
-    fn render(self, engine: &mut Engine) -> Result<String, KernelError> {
+    fn render(self, engine: &mut Engine, scope: &[(usize, &str)]) -> Result<String, KernelError> {
         match self {
             Self::Text(text) => Ok(text),
-            Self::Term(value) => Ok(engine.normalize(value)?.to_string()),
+            Self::Term(value) => {
+                Ok(super::term::scoped(&engine.normalize(value)?, scope).to_string())
+            }
             Self::Typeless(value) => Ok(format!(
                 "non-inferrable term '{}'",
-                engine.normalize(value)?
+                super::term::scoped(&engine.normalize(value)?, scope)
             )),
         }
     }
@@ -442,16 +444,24 @@ impl Engine {
         // The check has already rejected. Presentation shares only the remaining
         // fuel/depth allowance on a clone; it cannot alter acceptance or budgets.
         let mut display = self.clone();
-        let expected = expected.render(&mut display)?;
+        let scope = context
+            .diagnostic_values()
+            .map(|binder| (binder.id, binder.name.as_str()))
+            .collect::<Vec<_>>();
+        let expected = expected.render(&mut display, &scope)?;
         let observed = observed
-            .map(|value| value.render(&mut display))
+            .map(|value| value.render(&mut display, &scope))
             .transpose()?;
         let context = context
             .diagnostic_values()
-            .map(|binder| {
+            .enumerate()
+            .map(|(index, binder)| {
                 Ok((
                     binder.name.clone(),
-                    display.normalize(&binder.ty)?.to_string(),
+                    // A binder's type is outside its own scope. Later shadowing
+                    // must not change the spelling of earlier context rows.
+                    super::term::scoped(&display.normalize(&binder.ty)?, &scope[..index])
+                        .to_string(),
                 ))
             })
             .collect::<Result<Vec<_>, KernelError>>()?;
@@ -2179,6 +2189,77 @@ mod reflexivity_diagnostic_tests {
                 ("local".into(), "Quant".into())
             ]
         );
+    }
+
+    #[test]
+    fn diagnostic_scope_preserves_shadowed_ids_and_context_type_prefixes() {
+        let outer = term(Term::Var {
+            name: "x".into(),
+            id: 100,
+        });
+        let global = term(Term::Ref("x".into()));
+        let pair = term(Term::Ctr {
+            name: "Pair".into(),
+            args: vec![Rc::clone(&outer), Rc::clone(&global)],
+        });
+        let mut context = Context::new();
+        for (id, name, ty) in [
+            (100, "x", Rc::clone(&global)),
+            (2, "x", Rc::clone(&outer)),
+            (300, "p", pair),
+        ] {
+            context.insert(
+                id,
+                Binder {
+                    quant: Quant::Lone,
+                    name: name.into(),
+                    id,
+                    ty,
+                },
+            );
+        }
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let proof = term(Term::Rfl);
+        let observed = term(Term::App(global, Rc::clone(&outer)));
+        let before = format!("{context:?} {observed:?}");
+        let state = (engine.fuel, engine.depth, engine.fresh_id);
+        let owners = Rc::strong_count(&outer);
+        let report = engine
+            .term_diagnostic(
+                &Lhs::default(),
+                &proof,
+                DiagnosticExpression::Term(&outer),
+                DiagnosticExpression::Typeless(&observed),
+                &context,
+            )
+            .unwrap();
+        assert_eq!(report.expected, "x^0");
+        assert_eq!(
+            report.observed.as_deref(),
+            Some("non-inferrable term 'x^(x^0)'")
+        );
+        assert_eq!(
+            report.context,
+            [
+                ("x".into(), "x".into()),
+                ("x".into(), "x".into()),
+                ("p".into(), "Pair{x^0, x^}".into()),
+            ]
+        );
+        assert_eq!(report.term_identity, Rc::as_ptr(&proof) as usize);
+        assert_eq!(format!("{context:?} {observed:?}"), before);
+        assert_eq!((engine.fuel, engine.depth, engine.fresh_id), state);
+        assert_eq!(Rc::strong_count(&outer), owners);
+        engine.fuel = 0;
+        assert!(
+            engine
+                .reflexivity_diagnostic(&Lhs::default(), &proof, &outer, &outer, &context)
+                .is_err()
+        );
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
     }
 
     #[test]

@@ -403,7 +403,7 @@ struct ScopedTerm<'a> {
     scope: &'a [(usize, &'a str)],
 }
 
-fn scoped<'a>(value: &'a Term, scope: &'a [(usize, &'a str)]) -> ScopedTerm<'a> {
+pub(super) fn scoped<'a>(value: &'a Term, scope: &'a [(usize, &'a str)]) -> impl fmt::Display + 'a {
     ScopedTerm { value, scope }
 }
 

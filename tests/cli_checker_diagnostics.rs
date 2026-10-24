@@ -1492,3 +1492,51 @@ fn match_guard_reports_preserve_nested_imported_template_and_literal_locations()
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn contextual_shadowing_preserves_endpoint_identity_and_context_type_scopes() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-context-scope");
+    let artifacts = Fixture::new("def main() -> Type: Type\n");
+    for (name, expected) in [
+        (
+            "context_dedup_shadow.bend",
+            "Error:\n- expected : x^0\n- observed : NS{x^0}\nContext:\n- x : N\n- x : U32\nLocation: f\n14 | def f(x):\n15>|   x => {==}\n16 | \n",
+        ),
+        (
+            "arm_leaf_context.bend",
+            "Error:\n- expected : U32\n- observed : MNat\nContext:\n- n : MNat\n- h : {dbl(n) == MZ{} : MNat}\n- p : MNat\nLocation: use.at\n38 |     case MS{p}:\n39>|       p\n40 | \n",
+        ),
+        (
+            "single/main.bend",
+            "Error:\n- expected : x^0\n- observed : S{x^0}\nContext:\n- x : N\n- x : N\nLocation: bad\n 8 | def bad(x):\n 9>|   x => {==}\n10 | \n",
+        ),
+        (
+            "prefix/main.bend",
+            "Error:\n- expected : x^0\n- observed : S{x^0}\nContext:\n- x : N\n- h : {x == S{x} : N}\n- x : N\n- x : N\nLocation: bad\n 9 | def bad(x, h):\n10>|   x => x => {==}\n11 | \n",
+        ),
+        (
+            "imported/main.bend",
+            "Error:\n- expected : x^0\n- observed : helper.S{x^0}\nContext:\n- x : helper.N\n- h : {x == helper.S{x} : helper.N}\n- x : helper.N\n- x : helper.N\nLocation: helper.bad\n 9 | def bad(x, h):\n10>|   x => x => {==}\n11 | \n",
+        ),
+    ] {
+        let path = root.join(name);
+        let book = teamy_bend::syntax::load(&path).expect("source loads before checking rejects");
+        assert!(teamy_bend::kernel::check_book(&book).is_err());
+        assert_diagnostic(&path, expected);
+        for target in ["c", "javascript", "native"] {
+            let artifact = artifacts.0.join(target);
+            let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+                .arg("compile")
+                .arg(&path)
+                .args(["--executable", "--target", target, "--output"])
+                .arg(&artifact)
+                .env("BEND_GPU", "off")
+                .output()
+                .unwrap();
+            assert_eq!(output.status.code(), Some(1), "{name}/{target}");
+            assert!(output.stdout.is_empty());
+            assert_eq!(String::from_utf8(output.stderr).unwrap(), expected);
+            assert!(!artifact.exists());
+        }
+    }
+}
