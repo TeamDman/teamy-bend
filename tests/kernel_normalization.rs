@@ -809,14 +809,12 @@ fn rewrite_normal_forms_preserve_every_motive_and_evidence_binder() {
 }
 
 #[test]
-fn rewrite_roundtrips_keep_inner_lambdas_shadowing_and_match_grouping() {
+fn rewrite_printing_preserves_inner_binders_and_match_grouping() {
     for source in [
         "e => %e : N; Z{}",
         "e => %h@e : {h == h : {_ == _ : N}}; {==}",
         "e => %e@e : {e == e : {_ == _ : N}}; e",
-        "e => %h@e : {Box{x => x} == Box{_ => _} : B}; e",
         r"\{Z: (%{==} : N; Z{}); tail}",
-        "e => %h@e : (_ => _); e",
     ] {
         let value = parse_term(source).unwrap();
         let rendered = value.to_string();
@@ -824,6 +822,28 @@ fn rewrite_roundtrips_keep_inner_lambdas_shadowing_and_match_grouping() {
         assert_eq!(
             shape(&value).unwrap(),
             shape(&parse_term(&rendered).unwrap()).unwrap()
+        );
+    }
+    // Anonymous `_` does not bind: these occurrences still name the hidden
+    // rewrite endpoint. Pinned term_show exposes that with a display-only suffix.
+    // Compare with an unambiguous alpha-equivalent term instead of reparsing ^n.
+    for (source, expected, unambiguous) in [
+        (
+            "e => %h@e : {Box{x => x} == Box{_ => _} : B}; e",
+            "e => %h@e : {Box{x => x} == Box{_ => _^1} : B}; e",
+            "e => %h@e : {Box{x => x} == Box{unused => _} : B}; e",
+        ),
+        (
+            "e => %h@e : (_ => _); e",
+            "e => %h@e : (_ => _^1); e",
+            "e => %h@e : (unused => _); e",
+        ),
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), expected);
+        assert_eq!(
+            shape(&value).unwrap(),
+            shape(&parse_term(unambiguous).unwrap()).unwrap()
         );
     }
 }
