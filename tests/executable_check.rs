@@ -197,20 +197,23 @@ fn parameterized_mains_are_values_even_when_their_result_is_io() {
 
 #[test]
 fn unsafe_function_normalization_keeps_limits_and_emits_no_partial_value() {
-    let checked = executable("import Base\n@unsafe\ndef main(n: Nat) -> Nat: main(n)\n");
-    for cancelled in [false, true] {
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-        let error = checked
-            .run_main(&mut stdout, &mut stderr, &|| cancelled)
-            .unwrap_err();
-        let expected = if cancelled {
-            "cancelled"
-        } else {
-            "kernel nesting limit exhausted"
-        };
-        assert!(error.to_string().contains(expected), "{error}");
-        assert!(stdout.is_empty() && stderr.is_empty());
+    for (body, refusal) in [
+        ("main(n)", "kernel evaluation budget exhausted"),
+        ("1n + main(n)", "kernel nesting limit exhausted"),
+    ] {
+        let checked = executable(&format!(
+            "import Base\n@unsafe\ndef main(n: Nat) -> Nat: {body}\n"
+        ));
+        for cancelled in [false, true] {
+            let mut stdout = Vec::new();
+            let mut stderr = Vec::new();
+            let error = checked
+                .run_main(&mut stdout, &mut stderr, &|| cancelled)
+                .unwrap_err();
+            let expected = if cancelled { "cancelled" } else { refusal };
+            assert!(error.to_string().contains(expected), "{error}");
+            assert!(stdout.is_empty() && stderr.is_empty());
+        }
     }
 }
 
