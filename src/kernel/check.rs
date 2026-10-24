@@ -404,6 +404,25 @@ impl Engine {
         })
     }
 
+    fn child_diagnostic(
+        &self,
+        mut error: KernelError,
+        parent: &TermRef,
+        index: usize,
+        child: &TermRef,
+    ) -> KernelError {
+        if let Some(report) = &mut error.diagnostic
+            && report.term_identity == Rc::as_ptr(child) as usize
+            && let Some(source) = self
+                .origins
+                .as_ref()
+                .and_then(|origins| origins.child_source(parent, index, child))
+        {
+            report.term_identity = source;
+        }
+        error
+    }
+
     pub(super) fn normalize_definition(&mut self, name: &str) -> Result<TermRef, KernelError> {
         let definition = self
             .defs
@@ -985,8 +1004,8 @@ impl Engine {
                 }
                 let mut args = vec![Rc::clone(x)];
                 args.extend(arguments.iter().map(Rc::clone));
-                let (ft, fu) = self.infer(lhs, f, demand, context, &args)?;
-                let ft = self.whnf(&ft)?;
+                let (function_type, fu) = self.infer(lhs, f, demand, context, &args)?;
+                let ft = self.whnf(&function_type)?;
                 let Term::All {
                     quant,
                     id,
@@ -995,9 +1014,19 @@ impl Engine {
                     ..
                 } = ft.as_ref()
                 else {
-                    return Err(KernelError::new(format!(
-                        "expected a function type; observed {ft}"
-                    )));
+                    let mut error =
+                        KernelError::new(format!("expected a function type; observed {ft}"));
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Text("a function type".into()),
+                            DiagnosticExpression::Term(&function_type),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 };
                 let xu = self.check(lhs, x, quant.demand(demand), domain, context)?;
                 Ok((self.substitute(body, *id, x), add(fu, xu)))
@@ -1018,17 +1047,7 @@ impl Engine {
                     (1, right, Rc::clone(ty)),
                 ] {
                     self.check(lhs, child, Quant::None, &expected, context)
-                        .map_err(|mut error| {
-                            if let Some(report) = &mut error.diagnostic
-                                && report.term_identity == Rc::as_ptr(child) as usize
-                                && let Some(source) = self.origins.as_ref().and_then(|origins| {
-                                    origins.equality_operand_source(value, index, child)
-                                })
-                            {
-                                report.term_identity = source;
-                            }
-                            error
-                        })?;
+                        .map_err(|error| self.child_diagnostic(error, value, index, child))?;
                 }
                 Ok((kind(Quant::Many), Uses::new()))
             }
@@ -1155,13 +1174,16 @@ impl Engine {
                     lhs.equation = apply(lhs.equation, [Rc::clone(&x)]);
                     lhs.remaining -= 1;
                 }
-                let mut uses = self.check(
-                    &lhs,
-                    &self.substitute(body, *id, &x),
-                    demand,
-                    &self.substitute(codomain, *tid, &x),
-                    &next,
-                )?;
+                let checked_body = self.substitute(body, *id, &x);
+                let mut uses = self
+                    .check(
+                        &lhs,
+                        &checked_body,
+                        demand,
+                        &self.substitute(codomain, *tid, &x),
+                        &next,
+                    )
+                    .map_err(|error| self.child_diagnostic(error, value, 0, &checked_body))?;
                 check_usage(&binder, &mut uses)?;
                 return Ok(uses);
             }
@@ -1291,15 +1313,26 @@ impl Engine {
                 motive,
                 body,
             } => {
-                let (et, eu) = self.infer(lhs, evidence, demand, context, &[])?;
-                let et = self.whnf(&et)?;
+                let (evidence_type, eu) = self.infer(lhs, evidence, demand, context, &[])?;
+                let et = self.whnf(&evidence_type)?;
                 let Term::Eql {
                     left,
                     right,
                     ty: domain,
                 } = et.as_ref()
                 else {
-                    return Err(KernelError::new("rewrite evidence must have equality type"));
+                    let mut error = KernelError::new("rewrite evidence must have equality type");
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            evidence,
+                            DiagnosticExpression::Text("an equation {a == b : T}".into()),
+                            DiagnosticExpression::Term(&evidence_type),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(self.child_diagnostic(error, value, 0, evidence));
                 };
                 let x = self.fresh("_")?;
                 let e = self.fresh("equation")?;
@@ -1803,6 +1836,12 @@ mod reflexivity_diagnostic_tests {
             ("cpu-constructors/context-open.bend", &[][..]),
             ("cpu-checking/false_fusion.bend", &[][..]),
             ("cpu-rewrite-checking/rewrite_non_equation.bend", &[][..]),
+            ("cpu-rewrite-proof/rewrite_non_equation.bend", &[][..]),
+            ("cpu-rewrite-proof/error_window_rewrite_proof.bend", &[][..]),
+            ("cpu-rewrite-proof/missing_ih_rewrite.bend", &[][..]),
+            ("cpu-rewrite-proof/reject_rewrite.bend", &[][..]),
+            ("cpu-rewrite-proof/rewrite_goal.bend", &[][..]),
+            ("cpu-rewrite-proof/rewrite_type_family.bend", &[][..]),
             ("cpu-rewrite-checking/rewrite_ctor_brace.bend", &[][..]),
             ("cpu-plus-binders/plus_binder_term.bend", &[][..]),
             ("cpu-plus-binders/plus_binder_case.bend", &[][..]),
@@ -1984,6 +2023,71 @@ mod reflexivity_diagnostic_tests {
                 .1,
             usage(2, Quant::Lone)
         );
+    }
+
+    #[test]
+    fn rewrite_and_application_diagnostics_preserve_first_error_and_remaining_budget() {
+        let variable = term(Term::Var {
+            name: "n".into(),
+            id: 1,
+        });
+        let context = Context::from([(
+            1,
+            Binder {
+                quant: Quant::Lone,
+                name: "n".into(),
+                id: 1,
+                ty: term(Term::Qnt),
+            },
+        )]);
+        // The unused child deliberately fails if visited. This tests the rule
+        // boundary directly; whole-book validation still rejects every hole.
+        let unused = term(Term::Hole("unused".into()));
+        for (value, expected) in [
+            (
+                term(Term::App(Rc::clone(&variable), Rc::clone(&unused))),
+                "expected a function type; observed Quant",
+            ),
+            (
+                term(Term::Rwt {
+                    evidence: Rc::clone(&variable),
+                    motive: Rc::clone(&unused),
+                    body: Rc::clone(&unused),
+                }),
+                "rewrite evidence must have equality type",
+            ),
+        ] {
+            let evaluate = |engine: &mut Engine| {
+                if matches!(value.as_ref(), Term::App(..)) {
+                    engine
+                        .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+                        .map(|(_, uses)| uses)
+                } else {
+                    engine.check(
+                        &Lhs::default(),
+                        &value,
+                        Quant::Lone,
+                        &term(Term::Qnt),
+                        &context,
+                    )
+                }
+            };
+            let mut engine = empty_engine(&Book {
+                declarations: vec![],
+            })
+            .unwrap();
+            let initial = engine.fuel;
+            let error = evaluate(&mut engine).unwrap_err();
+            assert_eq!(error, KernelError::new(expected));
+            assert!(error.checker_diagnostic().is_some());
+            let spent = initial - engine.fuel;
+            engine.fuel = spent;
+            let exhausted = evaluate(&mut engine).unwrap_err();
+            assert_eq!(exhausted, error);
+            assert!(exhausted.checker_diagnostic().is_none());
+            assert!(exhausted.language_failure().is_none());
+            assert_eq!((engine.fuel, engine.depth), (0, 0));
+        }
     }
 
     #[test]

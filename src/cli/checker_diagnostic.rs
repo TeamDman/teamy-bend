@@ -116,6 +116,9 @@ mod tests {
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
             "tests/fixtures/cpu-rewrite-checking/rewrite_ctor_brace.bend",
+            "tests/fixtures/cpu-rewrite-proof/rewrite_non_equation.bend",
+            "tests/fixtures/cpu-rewrite-proof/error_window_rewrite_proof.bend",
+            "tests/fixtures/cpu-rewrite-proof/reject_rewrite.bend",
         ] {
             let (error, origins) = rejected(name);
             let cancellation = CancellationToken::new();
@@ -237,6 +240,9 @@ mod tests {
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
             "tests/fixtures/cpu-rewrite-checking/rewrite_ctor_brace.bend",
+            "tests/fixtures/cpu-rewrite-proof/rewrite_non_equation.bend",
+            "tests/fixtures/cpu-rewrite-proof/error_window_rewrite_proof.bend",
+            "tests/fixtures/cpu-rewrite-proof/reject_rewrite.bend",
         ] {
             let (error, origins) = rejected(name);
             for fail_write in [true, false] {

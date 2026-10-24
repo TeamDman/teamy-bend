@@ -1208,6 +1208,9 @@ impl Parser<'_> {
                 _ => apply(term(Term::Ref(method.into())), [out, b]),
             };
         }
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.application(&out, &self.label, line);
+        }
         Ok(out)
     }
     fn arguments(&mut self, close: &str) -> Result<Vec<TermRef>, ParseError> {
@@ -1226,7 +1229,12 @@ impl Parser<'_> {
         let value = self.atom_inner()?;
         if matches!(
             value.as_ref(),
-            Term::Ctr { .. } | Term::Rwt { .. } | Term::Eql { .. } | Term::Var { .. }
+            Term::Ctr { .. }
+                | Term::Rwt { .. }
+                | Term::Eql { .. }
+                | Term::Var { .. }
+                | Term::Ref(_)
+                | Term::Ann(..)
         ) && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);
@@ -1413,6 +1421,8 @@ impl Parser<'_> {
             return Ok(tail);
         }
         if self.take("%") {
+            let rewrite_line = self.tokens[self.at - 1].line;
+            let binder_line = self.current().line;
             let first = self.expression(0)?;
             let (name, evidence) = if self.take("@") {
                 let name = match first.as_ref() {
@@ -1433,17 +1443,25 @@ impl Parser<'_> {
             self.take(";");
             let body = self.body(self.current().column.saturating_sub(1))?;
             let body = self.flatten_body(&body, &[])?;
+            let proof_motive = term(Term::Lam {
+                name,
+                id: e.id,
+                body: motive,
+            });
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.node(&proof_motive, &self.label, binder_line);
+            }
+            let motive = term(Term::Lam {
+                name: x.name,
+                id: x.id,
+                body: proof_motive,
+            });
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.node(&motive, &self.label, rewrite_line);
+            }
             return Ok(term(Term::Rwt {
                 evidence,
-                motive: term(Term::Lam {
-                    name: x.name,
-                    id: x.id,
-                    body: term(Term::Lam {
-                        name,
-                        id: e.id,
-                        body: motive,
-                    }),
-                }),
+                motive,
                 body,
             }));
         }

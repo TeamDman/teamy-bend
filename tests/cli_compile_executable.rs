@@ -199,6 +199,26 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-rewrite-proof/rewrite_non_equation.bend"),
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: f\n 8 | def f(e):\n 9>|   %e : U32\n10 |   3\n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-proof/error_window_rewrite_proof.bend"),
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n3 | def bad(e: {Type == Type : Type}) -> Type:\n4>|   %h@e : h\n5 |   Type\n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-proof/missing_ih_rewrite.bend"),
+            "Error:\n- expected : Sh{add(p, Zh{})}\n- observed : Sh{p}\nContext:\n- p : Nh\nLocation: add_zero\n28 |     case Sh{p}:\n29>|       {==}\n30 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-proof/reject_rewrite.bend"),
+            "Error:\n- expected : a function type\n- observed : %e : Kind(_); @_:Nat -> Nat\nContext:\n- e : {&1 == &2 : Quant}\n- f : %e : Kind(_); @_:Nat -> Nat\nLocation: cheat\n22 | def cheat(e, f):\n23>|   f(f(Zero{}))\n24 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-proof/rewrite_goal.bend"),
+            "Error:\n- expected : S{plus1(p, x)}\n- observed : plus1(p, S{x})\nContext:\n- p : MN\n- x : MN\nLocation: spec_thm\n46 |       %spec_thm(p, S{x}) : {S{plus1(p, x)} == _ : MN}\n47>|       {==}\n48 | \n",
+        ),
+        (
             include_str!("fixtures/cpu-rewrite-checking/rewrite_non_equation.bend"),
             "Error:\n- expected : an annotated term (cannot infer)\n- observed : 5\nLocation: main\n 9 | \n10>| def main(): %5 : U32; 1\n11 | \n",
         ),

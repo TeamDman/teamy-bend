@@ -29,7 +29,7 @@ struct Origin {
     source: usize,
     // Per-occurrence anchors survive binder substitution even when several
     // variable uses share one replacement allocation. No strong term edges.
-    equality_operands: Option<[Option<usize>; 3]>,
+    child_origins: Option<[Option<usize>; 3]>,
 }
 
 impl TermOrigins {
@@ -44,19 +44,27 @@ impl TermOrigins {
     pub(crate) fn track(&self, value: &TermRef) {
         let key = Rc::as_ptr(value) as usize;
         let mut index = self.0.borrow_mut();
-        let equality_operands = match value.as_ref() {
-            Term::Eql { left, right, ty } => Some([left, right, ty].map(|child| {
-                index
-                    .nodes
-                    .get(&(Rc::as_ptr(child) as usize))
-                    .map(|origin| origin.source)
-            })),
+        let children = match value.as_ref() {
+            Term::Eql { left, right, ty } => Some([Some(left), Some(right), Some(ty)]),
+            Term::Rwt {
+                evidence,
+                motive,
+                body,
+            } => Some([Some(evidence), Some(motive), Some(body)]),
+            Term::Lam { body, .. } => Some([Some(body), None, None]),
             _ => None,
         };
+        let child_origins = children.map(|children| {
+            children.map(|child| {
+                child
+                    .and_then(|child| index.nodes.get(&(Rc::as_ptr(child) as usize)))
+                    .map(|origin| origin.source)
+            })
+        });
         index.nodes.entry(key).or_insert_with(|| Origin {
             node: Rc::downgrade(value),
             source: key,
-            equality_operands,
+            child_origins,
         });
     }
 
@@ -69,7 +77,7 @@ impl TermOrigins {
             .map_or(key, |origin| origin.source)
     }
 
-    pub(crate) fn equality_operand_source(
+    pub(crate) fn child_source(
         &self,
         parent: &TermRef,
         operand: usize,
@@ -83,7 +91,7 @@ impl TermOrigins {
         origins
             .nodes
             .get(&(Rc::as_ptr(parent) as usize))?
-            .equality_operands
+            .child_origins
             .and_then(|children| children[operand])
     }
 
@@ -111,13 +119,13 @@ impl TermOrigins {
             }
             if let Some(origin) = origins.nodes.get(&(Rc::as_ptr(before) as usize)) {
                 let source = origin.source;
-                let equality_operands = origin.equality_operands;
+                let child_origins = origin.child_origins;
                 origins.nodes.insert(
                     Rc::as_ptr(after) as usize,
                     Origin {
                         node: Rc::downgrade(after),
                         source,
-                        equality_operands,
+                        child_origins,
                     },
                 );
             }
@@ -298,30 +306,78 @@ mod tests {
         };
         assert!(Rc::ptr_eq(a, &replacement) && Rc::ptr_eq(a, b));
         assert_eq!(
-            origins.equality_operand_source(&result, 0, a),
+            origins.child_source(&result, 0, a),
             Some(Rc::as_ptr(&left) as usize)
         );
         assert_eq!(
-            origins.equality_operand_source(&result, 1, b),
+            origins.child_source(&result, 1, b),
             Some(Rc::as_ptr(&right) as usize)
         );
         let next = substitute_with_origins(&result, 2, &variable(4), Some(&origins));
         assert_eq!(
-            origins.equality_operand_source(&next, 1, &replacement),
+            origins.child_source(&next, 1, &replacement),
             Some(Rc::as_ptr(&right) as usize)
         );
         assert_eq!(
-            origins.equality_operand_source(&next, 2, &variable(4)),
+            origins.child_source(&next, 2, &variable(4)),
             None,
             "an untracked operand never invents a source anchor"
         );
         origins.track(&replacement);
-        assert_eq!(
-            origins.equality_operand_source(&next, 1, &replacement),
-            None
-        );
+        assert_eq!(origins.child_source(&next, 1, &replacement), None);
         drop(result);
         drop(next);
+        drop(origins);
+        assert_eq!(Rc::strong_count(&replacement), 1);
+        assert_eq!(Rc::weak_count(&replacement), 0);
+    }
+
+    #[test]
+    fn rewrite_and_motive_occurrences_keep_use_sites_without_copying_values() {
+        let origins = TermOrigins::default();
+        let evidence = variable(1);
+        let body = variable(1);
+        let motive = term(Term::Lam {
+            name: "proof".into(),
+            id: 2,
+            body: Rc::clone(&body),
+        });
+        let original = term(Term::Rwt {
+            evidence: Rc::clone(&evidence),
+            motive: Rc::clone(&motive),
+            body: term(Term::Rfl),
+        });
+        for value in [&evidence, &body, &motive, &original] {
+            let count = Rc::strong_count(value);
+            origins.track(value);
+            assert_eq!(Rc::strong_count(value), count);
+        }
+        let replacement = variable(3);
+        let result = substitute_with_origins(&original, 1, &replacement, Some(&origins));
+        let Term::Rwt {
+            evidence: e,
+            motive: m,
+            ..
+        } = result.as_ref()
+        else {
+            panic!("rewrite");
+        };
+        let Term::Lam { body: b, .. } = m.as_ref() else {
+            panic!("motive");
+        };
+        assert!(Rc::ptr_eq(e, &replacement) && Rc::ptr_eq(e, b));
+        assert_eq!(
+            origins.child_source(&result, 0, e),
+            Some(Rc::as_ptr(&evidence) as usize)
+        );
+        assert_eq!(
+            origins.child_source(m, 0, b),
+            Some(Rc::as_ptr(&body) as usize)
+        );
+        origins.track(&replacement);
+        assert_eq!(origins.child_source(&result, 0, e), None);
+        assert_eq!(origins.child_source(m, 0, b), None);
+        drop(result);
         drop(origins);
         assert_eq!(Rc::strong_count(&replacement), 1);
         assert_eq!(Rc::weak_count(&replacement), 0);

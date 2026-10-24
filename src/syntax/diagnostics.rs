@@ -65,6 +65,38 @@ impl DiagnosticOrigins {
         }
     }
 
+    pub(super) fn application(&mut self, value: &TermRef, label: &str, line: usize) {
+        let mut spine = Vec::new();
+        let mut head = value;
+        while let Term::App(function, _) = head.as_ref() {
+            spine.push(head);
+            head = function;
+        }
+        // Like upstream parse_grow, keep the function's starting position,
+        // including a parenthesized function whose text starts on another line.
+        let position = self
+            .nodes
+            .get(&self.tracker.source(head))
+            .map(|origin| (Rc::clone(&origin.source), origin.line))
+            .or_else(|| {
+                self.sources
+                    .get(label)
+                    .map(|source| (Rc::clone(source), line))
+            });
+        if let Some((source, line)) = position {
+            for node in spine {
+                self.tracker.track(node);
+                self.nodes
+                    .entry(Rc::as_ptr(node) as usize)
+                    .or_insert_with(|| TermOrigin {
+                        _node: Rc::downgrade(node),
+                        source: Rc::clone(&source),
+                        line,
+                    });
+            }
+        }
+    }
+
     pub(super) fn unknown_pattern(&mut self, name: &str, value: &TermRef) {
         // This parser rejection is not recovered: the private loader carries
         // the structured cause alongside its original public ParseError.

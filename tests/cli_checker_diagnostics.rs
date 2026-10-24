@@ -593,3 +593,122 @@ fn rewritten_operand_locations_and_token_errors_survive_imports_and_layout() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn rewrite_proof_originals_reject_during_checking_with_exact_diagnostics() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-rewrite-proof");
+    for (name, expected) in [
+        (
+            "rewrite_non_equation",
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: f\n 8 | def f(e):\n 9>|   %e : U32\n10 |   3\n",
+        ),
+        (
+            "error_window_rewrite_proof",
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n3 | def bad(e: {Type == Type : Type}) -> Type:\n4>|   %h@e : h\n5 |   Type\n",
+        ),
+        (
+            "missing_ih_rewrite",
+            "Error:\n- expected : Sh{add(p, Zh{})}\n- observed : Sh{p}\nContext:\n- p : Nh\nLocation: add_zero\n28 |     case Sh{p}:\n29>|       {==}\n30 | \n",
+        ),
+        (
+            "reject_rewrite",
+            "Error:\n- expected : a function type\n- observed : %e : Kind(_); @_:Nat -> Nat\nContext:\n- e : {&1 == &2 : Quant}\n- f : %e : Kind(_); @_:Nat -> Nat\nLocation: cheat\n22 | def cheat(e, f):\n23>|   f(f(Zero{}))\n24 | \n",
+        ),
+        (
+            "rewrite_goal",
+            "Error:\n- expected : S{plus1(p, x)}\n- observed : plus1(p, S{x})\nContext:\n- p : MN\n- x : MN\nLocation: spec_thm\n46 |       %spec_thm(p, S{x}) : {S{plus1(p, x)} == _ : MN}\n47>|       {==}\n48 | \n",
+        ),
+    ] {
+        let path = root.join(format!("{name}.bend"));
+        let book = teamy_bend::syntax::load(&path).unwrap();
+        teamy_bend::kernel::check_book(&book).unwrap_err();
+        assert_diagnostic(&path, expected);
+    }
+}
+
+#[test]
+fn rewrite_proof_and_application_origins_preserve_use_sites_and_first_errors() {
+    for (source, helper, expected) in [
+        (
+            "import Base\ndef f(e: U32) -> U32:\n  %{e : U32} : U32; 3\n",
+            None,
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: f\n2 | def f(e: U32) -> U32:\n3>|   %{e : U32} : U32; 3\n4 | \n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad(e: U32) -> U32:\n  %e : U32; 3\n"),
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: helper.bad\n2 | def bad(e: U32) -> U32:\n3>|   %e : U32; 3\n4 | \n",
+        ),
+        (
+            "import Base\ndef f(e: U32) -> U32:\n  %(\n    e\n  ) : U32; 3\n",
+            None,
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: f\n3 |   %(\n4>|     e\n5 |   ) : U32; 3\n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad(n: U32) -> U32: n({Type : U32})\n"),
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: helper.bad\n1 | \n2>| def bad(n: U32) -> U32: n({Type : U32})\n3 | \n",
+        ),
+        (
+            "import Base\ndef f(n: U32) -> U32:\n  n(\n    0\n  )\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: f\n2 | def f(n: U32) -> U32:\n3>|   n(\n4 |     0\n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32: n(0, {Type : U32})\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n1 | \n2>| def bad(n: U32) -> U32: n(0, {Type : U32})\n3 | \n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32:\n  (\n    n\n  )(0)\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n3 |   (\n4>|     n\n5 |   )(0)\n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32: n({Type : U32})\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n1 | \n2>| def bad(n: U32) -> U32: n({Type : U32})\n3 | \n",
+        ),
+        (
+            "def bad(e: {Type == Type : Type}) -> Type:\r\n  %h@e : h\r\n  Type\r\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n1 | def bad(e: {Type == Type : Type}) -> Type:\r\n2>|   %h@e : h\r\n3 |   Type\r\n",
+        ),
+        (
+            "def bad(e: {Type == Type : Type}) -> Type:\n  %h@e : {\n    h == h : Type\n  }\n  Type\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n2 |   %h@e : {\n3>|     h == h : Type\n4 |   }\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some("def bad(e: {Type == Type : Type}) -> Type:\n  %h@e :\n    h\n  Type\n"),
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: helper.bad\n2 |   %h@e :\n3>|     h\n4 |   Type\n",
+        ),
+        (
+            "def bad(e: {Type == Type : Type}) -> Type:\n  %h@e :\n    h\n  Type\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n2 |   %h@e :\n3>|     h\n4 |   Type\n",
+        ),
+        (
+            "def bad(e: {Type == Type : Type}) -> Type:\n  %h@e : Type\n  %q@e :\n    q\n  Type\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- q : {Type == _ : Type}\nLocation: bad\n3 |   %q@e :\n4>|     q\n5 |   Type\n",
+        ),
+        (
+            "def bad(e: {Type == Type : Type}) -> Type:\n  %h@e : (\n    h\n  )\n  Type\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {Type == _ : Type}\nContext:\n- e : {Type == Type : Type}\n- _ : Type\n- h : {Type == _ : Type}\nLocation: bad\n2 |   %h@e : (\n3>|     h\n4 |   )\n",
+        ),
+        (
+            "def bad(~A: Type, e: {A == A : Type}) -> Type:\n  %h@e :\n    h\n  Type\ndef main() -> Type: bad(Type, {==})\n",
+            None,
+            "Error:\n- expected : Type\n- observed : {A == _ : Type}\nContext:\n- A : Type\n- e : {A == A : Type}\n- _ : Type\n- h : {A == _ : Type}\nLocation: bad~0\n2 |   %h@e :\n3>|     h\n4 |   Type\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}
