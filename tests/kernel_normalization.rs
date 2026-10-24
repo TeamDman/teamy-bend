@@ -32,7 +32,9 @@ fn checking_only_list_fixture_preserves_named_values_and_proofs() {
         .join("tests/fixtures/cpu-checking/list_reverse_sort.bend");
     let book = load(path).unwrap();
     let checked = check_book(&book).expect("all concrete list equalities check");
-    assert!(checked.normalize_definition("main").is_err());
+    checked
+        .normalize_definition("main")
+        .expect_err("checking-only source has no main");
     for (entry, expected) in [
         ("l123", "[1, 2, 3]"),
         ("l321", "[3, 2, 1]"),
