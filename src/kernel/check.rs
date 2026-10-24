@@ -1891,7 +1891,7 @@ mod depth_tests {
             "../../tests/fixtures/cpu-blocked-named-calls/second_field.bend"
         ))
         .unwrap();
-        empty_engine(&book).unwrap()
+        check_book(&book).unwrap().engine
     }
 
     fn named_box_call(left: TermRef, right: TermRef) -> TermRef {
