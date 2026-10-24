@@ -91,22 +91,22 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `77116c8ab4ab8eabbaea599679996941e41ed3b4` closes reconstructed matched-value and row-arity diagnostics for fourteen
-unchanged originals, with fifteen authored controls. Per-use return provenance is
-carried through generated match/lambda/let edges outside core terms. Constructor
-checking and row-arity rejection keep their original failure decisions and budgets.
-[Report](cpu-matched-values.md).
+Source `d82417425b9c46f6ac7a63a39858987ca965b5bf` closes empty-match inference, missing-case and unsupported-pattern
+diagnostics for **29 unchanged originals**, with fifteen authored controls. Private
+match provenance survives flattening and substitution; diagnostic contexts use
+binder admission order without changing semantic lookup or dead-context traversal.
+[Report](cpu-match-failures.md).
 
-Full gate **920 passed, zero failed, 49 ignored**. The 37-case repeated matrix
-contains 666 exact stream/status observations and 74 separate phase probes;
-14 positive controls pass. All 1,302 checking statuses remain unchanged from
-1175aa3. Three erased-hole/TODO disagreements remain unresolved and unwaived.
-Next bounded probes expose empty-match inference, missing-case and unsupported-pattern
-diagnostics; these probes are not counted as qualifications.
+Full gate **926 passed, zero failed, 49 ignored**. The repeated 52-case matrix
+contains 936 exact stream/status observations and 104 separate phase probes;
+32 positive controls pass. All 1,302 checking statuses remain unchanged from
+77116c8. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+Bounded probes expose adjacent match-domain, mismatched/repeated-constructor and erased
+scrutinee diagnostics; those single probes are not qualifications.
 
-Detailed coverage: **245 originals / 1,057 without detailed receipts**: 397 checker
+Detailed coverage: **274 originals / 1,028 without detailed receipts**: 368 checker
 negatives, one checking-only module, 106 interpreter cases and 553 compiled
-candidates. Twenty-two checking rows are current; 31 other checking, 99 interpretation
+candidates. Thirty-seven checking rows are current; 45 other checking, 99 interpretation
 and 93 runtime rows retain historical identities. Linked receipts include unresolved
 cells and do not establish universal parity. The incomplete 688-vector exploration,
 host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
@@ -662,6 +662,31 @@ diagnostics; these probes are not counted as qualifications.
 Detailed coverage: **245 originals / 1,057 without detailed receipts**: 397 checker
 negatives, one checking-only module, 106 interpreter cases and 553 compiled
 candidates. Twenty-two checking rows are current; 31 other checking, 99 interpretation
+and 93 runtime rows retain historical identities. Linked receipts include unresolved
+cells and do not establish universal parity. The incomplete 688-vector exploration,
+host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
+External invoke consumers must still inspect exit_code; no external audit is claimed.
+Frozen dependencies, references, toolchains, guards and demand policy; no installations,
+pushes, desktop or GPU work. Independent CPU progress is not blocked on a decision.
+
+## Empty-match and pattern diagnostic checkpoint
+
+Source `d82417425b9c46f6ac7a63a39858987ca965b5bf` closes empty-match inference, missing-case and unsupported-pattern
+diagnostics for **29 unchanged originals**, with fifteen authored controls. Private
+match provenance survives flattening and substitution; diagnostic contexts use
+binder admission order without changing semantic lookup or dead-context traversal.
+[Report](cpu-match-failures.md).
+
+Full gate **926 passed, zero failed, 49 ignored**. The repeated 52-case matrix
+contains 936 exact stream/status observations and 104 separate phase probes;
+32 positive controls pass. All 1,302 checking statuses remain unchanged from
+77116c8. Three erased-hole/TODO disagreements remain unresolved and unwaived.
+Bounded probes expose adjacent match-domain, mismatched/repeated-constructor and erased
+scrutinee diagnostics; those single probes are not qualifications.
+
+Detailed coverage: **274 originals / 1,028 without detailed receipts**: 368 checker
+negatives, one checking-only module, 106 interpreter cases and 553 compiled
+candidates. Thirty-seven checking rows are current; 45 other checking, 99 interpretation
 and 93 runtime rows retain historical identities. Linked receipts include unresolved
 cells and do not establish universal parity. The incomplete 688-vector exploration,
 host/resource/foreign/F32.read, runtime-error-order/API/lane requirements remain open.
