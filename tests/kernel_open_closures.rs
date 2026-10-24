@@ -6,10 +6,12 @@ mod normalization_shape;
 
 use facet::Facet;
 use normalization_shape::Shape;
-use normalization_shape::shape;
 use normalization_shape::shape_in_book;
 use std::path::Path;
 use teamy_bend::kernel as normalization_kernel;
+use teamy_bend::kernel::Quant;
+use teamy_bend::kernel::Term;
+use teamy_bend::kernel::TermRef;
 use teamy_bend::kernel::check_book;
 use teamy_bend::syntax::load;
 use teamy_bend::syntax::parse_term;
@@ -86,6 +88,42 @@ struct TypePrintCase {
     printed: String,
 }
 
+// Keep this type-only vocabulary local. The shared normal-form comparator
+// deliberately refuses universes and forall terms in its existing controls.
+#[derive(Debug, Eq, PartialEq)]
+enum TypeShape {
+    Bound(usize),
+    Universe(Quant),
+    Forall(Quant, Box<Self>, Box<Self>),
+}
+
+fn type_shape(value: &TermRef, scope: &mut Vec<usize>, depth: usize) -> TypeShape {
+    assert!(depth <= 128, "type comparison depth exhausted");
+    match value.as_ref() {
+        Term::Var { id, .. } => TypeShape::Bound(scope.iter().rev().position(|x| x == id).unwrap()),
+        Term::Typ(quant) => {
+            let Term::Qua(quant) = quant.as_ref() else {
+                panic!("expected explicit universe quantity");
+            };
+            TypeShape::Universe(*quant)
+        }
+        Term::All {
+            quant,
+            id,
+            domain,
+            body,
+            ..
+        } => {
+            let domain = type_shape(domain, scope, depth + 1);
+            scope.push(*id);
+            let body = type_shape(body, scope, depth + 1);
+            scope.pop();
+            TypeShape::Forall(*quant, Box::new(domain), Box::new(body))
+        }
+        _ => panic!("term outside the type-printer comparison vocabulary"),
+    }
+}
+
 #[test]
 fn higher_order_domains_keep_parentheses_and_dependent_binding_structure() {
     let cases: Vec<TypePrintCase> =
@@ -95,8 +133,8 @@ fn higher_order_domains_keep_parentheses_and_dependent_binding_structure() {
         let value = parse_term(&case.source).unwrap();
         assert_eq!(value.to_string(), case.printed);
         assert_eq!(
-            shape(&value).unwrap(),
-            shape(&parse_term(&value.to_string()).unwrap()).unwrap()
+            type_shape(&value, &mut Vec::new(), 0),
+            type_shape(&parse_term(&value.to_string()).unwrap(), &mut Vec::new(), 0)
         );
     }
 }
