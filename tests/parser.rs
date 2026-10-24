@@ -701,3 +701,90 @@ fn imported_numeric_patterns_stay_fixed_and_literal_expansion_stays_bounded() {
             .contains("Nat literals above 128")
     );
 }
+
+const LOCAL_LIST: &str =
+    "type Item is Data:\n  Val{}\ntype List is Data:\n  Nil{}\n  Con{head: Item, tail: List}\n";
+
+#[test]
+fn imported_list_literal_and_cons_sugar_keep_fixed_constructors() {
+    for expression in ["[]", "[Val{}]", "[Val{}, Val{}]", "Val{} <> Nil{}"] {
+        for base in ["", "import Base\n"] {
+            let fixture = Fixture::new();
+            fixture.write(
+                "helper.bend",
+                &format!("{base}{LOCAL_LIST}def value() -> List: {expression}\n"),
+            );
+            let main = fixture.write(
+                "main.bend",
+                "import helper.bend as H\ndef main() -> H.List: H.value\n",
+            );
+            for error in [
+                check_book(&load(&main).unwrap()).unwrap_err(),
+                check_executable(&load_executable(&main).unwrap()).unwrap_err(),
+            ] {
+                let constructor = if expression == "[]" { "Nil" } else { "Con" };
+                assert_eq!(
+                    error.message,
+                    format!(
+                        "helper.value: {constructor} is not a remaining constructor of helper.List"
+                    )
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn imported_list_patterns_do_not_capture_local_constructors() {
+    let fixture = Fixture::new();
+    fixture.write("helper.bend", &format!("{LOCAL_LIST}def tail(xs: List) -> List:\n  match xs:\n    case []: Nil{{}}\n    case h <> t: t\ndef value() -> List: tail(Con{{Val{{}}, Nil{{}}}})\n"));
+    let main = fixture.write(
+        "main.bend",
+        "import helper.bend as H\ndef main() -> H.List: H.value\n",
+    );
+    for error in [
+        load(&main).unwrap_err(),
+        load_executable(&main).unwrap_err(),
+    ] {
+        assert!(error.message.contains("unknown constructor pattern: Nil"));
+    }
+}
+
+#[test]
+fn explicit_local_lists_and_global_literal_lists_keep_their_identity() {
+    let fixture = Fixture::new();
+    for (helper, main, expected) in [
+        (
+            format!("{LOCAL_LIST}def value() -> List: Con{{Val{{}}, Nil{{}}}}\n"),
+            "import helper.bend as H\ndef main() -> H.List: H.value\n".to_owned(),
+            "helper.Con{helper.Val{}, helper.Nil{}}",
+        ),
+        (
+            format!(
+                "{LOCAL_LIST}def tail(xs: List) -> List:\n  match xs:\n    case Nil{{}}: Nil{{}}\n    case Con{{h,t}}: t\ndef value() -> List: tail(Con{{Val{{}}, Nil{{}}}})\n"
+            ),
+            "import helper.bend as H\ndef main() -> H.List: H.value\n".to_owned(),
+            "helper.Nil{}",
+        ),
+        (
+            "import Base\ndef value() -> List<&2, U32>: [1, 2]\n".to_owned(),
+            "import helper.bend as H\ndef main() -> List<&2, U32>: H.value\n".to_owned(),
+            "[1, 2]",
+        ),
+        (
+            String::new(),
+            format!("{LOCAL_LIST}def main() -> List: [Val{{}}]\n"),
+            "[Val{}]",
+        ),
+    ] {
+        fixture.write("helper.bend", &helper);
+        let main = fixture.write("main.bend", &main);
+        let book = load(&main).unwrap();
+        let checked = check_book(&book).unwrap();
+        assert_eq!(
+            checked.normalize_definition("main").unwrap().to_string(),
+            expected
+        );
+        check_executable(&load_executable(main).unwrap()).unwrap();
+    }
+}
