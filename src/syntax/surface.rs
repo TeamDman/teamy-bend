@@ -56,17 +56,40 @@ pub(super) struct Row {
     pub body: Body,
 }
 
+// A match occurrence keeps its own source anchor when substitution shares a
+// replacement across several uses. This is discarded with the surface body;
+// it adds no core term edge, identity, evaluator work, or serialized field.
+#[derive(Clone, Debug)]
+pub(super) struct Scrutinee {
+    value: TermRef,
+    origin: usize,
+}
+
+impl Scrutinee {
+    pub(super) fn new(value: TermRef, origins: Option<&TermOrigins>) -> Self {
+        let origin = origins.map_or_else(|| Rc::as_ptr(&value) as usize, |o| o.source(&value));
+        Self { value, origin }
+    }
+
+    fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
+        Self {
+            value: substitute_with_origins(&self.value, id, replacement, origins),
+            origin: self.origin,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub(super) enum Body {
     Reply(TermRef),
     Local {
         patterns: Vec<Pattern>,
         quant: Quant,
-        values: Vec<TermRef>,
+        values: Vec<Scrutinee>,
         body: Box<Self>,
     },
     Match {
-        scrutinees: Vec<TermRef>,
+        scrutinees: Vec<Scrutinee>,
         rows: Vec<Row>,
     },
 }
@@ -101,7 +124,7 @@ impl Body {
                 .fold(body, |body, (binder, value)| Self::Local {
                     patterns: vec![Pattern::Variable(binder.clone())],
                     quant: Quant::Many,
-                    values: vec![Rc::clone(value)],
+                    values: vec![Scrutinee::new(Rc::clone(value), None)],
                     body: Box::new(body),
                 }),
         }
@@ -119,11 +142,17 @@ impl Body {
             } => Self::Local {
                 patterns: patterns.clone(),
                 quant: *quant,
-                values: values.iter().map(sub).collect(),
+                values: values
+                    .iter()
+                    .map(|v| v.replace(id, replacement, origins))
+                    .collect(),
                 body: Box::new(body.replace(id, replacement, origins)),
             },
             Self::Match { scrutinees, rows } => Self::Match {
-                scrutinees: scrutinees.iter().map(sub).collect(),
+                scrutinees: scrutinees
+                    .iter()
+                    .map(|v| v.replace(id, replacement, origins))
+                    .collect(),
                 rows: rows
                     .iter()
                     .map(|r| Row {
@@ -140,6 +169,8 @@ pub(super) enum FlattenError {
     Other(String),
     LocalBinding { binder: usize },
     ComputedScrutinee { origin: usize },
+    VariableScrutinee { origin: usize },
+    ConstructorScrutinee { origin: usize },
 }
 
 impl FlattenError {
@@ -149,7 +180,9 @@ impl FlattenError {
             Self::LocalBinding { .. } => {
                 "a match cannot scrutinize a local binding; pass it to a definition"
             }
-            Self::ComputedScrutinee { .. } => {
+            Self::ComputedScrutinee { .. }
+            | Self::VariableScrutinee { .. }
+            | Self::ConstructorScrutinee { .. } => {
                 "match scrutinees must be parameters or fields, in binder order"
             }
         }
@@ -246,7 +279,7 @@ fn flatten_at(
                         quant: *quant,
                         name: b.name.clone(),
                         id: b.id,
-                        value: Rc::clone(v),
+                        value: Rc::clone(&v.value),
                     })
                     .collect(),
                 body: tail,
@@ -257,7 +290,7 @@ fn flatten_at(
 }
 
 struct MatchState {
-    scrutinees: Vec<TermRef>,
+    scrutinees: Vec<Scrutinee>,
     rows: Vec<Row>,
     vars: Vec<Variable>,
 }
@@ -272,7 +305,7 @@ enum MatchStep {
 }
 
 fn flatten_match(
-    scrutinees: &[TermRef],
+    scrutinees: &[Scrutinee],
     rows: &[Row],
     vars: &[Variable],
     fresh: &mut usize,
@@ -335,7 +368,7 @@ fn flatten_match(
     reason = "Direct translation of upstream's first-row pattern compilation algorithm"
 )]
 fn flatten_match_step(
-    scrutinees: &[TermRef],
+    scrutinees: &[Scrutinee],
     rows: &[Row],
     vars: &[Variable],
     fresh: &mut usize,
@@ -356,18 +389,14 @@ fn flatten_match_step(
         );
     }
     let Some(first) = vars.first() else {
-        if !matches!(
-            scrutinees[0].as_ref(),
-            Term::Var { .. } | Term::Ref(_) | Term::GpuRef(_) | Term::Ctr { .. }
-        ) {
-            return Err(FlattenError::ComputedScrutinee {
-                origin: origins.map_or_else(
-                    || Rc::as_ptr(&scrutinees[0]) as usize,
-                    |origins| origins.source(&scrutinees[0]),
-                ),
-            });
-        }
-        return Err("match scrutinees must be parameters or fields, in binder order".into());
+        let origin = scrutinees[0].origin;
+        return Err(match scrutinees[0].value.as_ref() {
+            Term::Var { .. } | Term::Ref(_) | Term::GpuRef(_) => {
+                FlattenError::VariableScrutinee { origin }
+            }
+            Term::Ctr { .. } => FlattenError::ConstructorScrutinee { origin },
+            _ => FlattenError::ComputedScrutinee { origin },
+        });
     };
     let constructor = rows.iter().find_map(|row| match &row.patterns[0] {
         Pattern::Constructor(name, fields) => Some((name, fields)),
@@ -375,7 +404,7 @@ fn flatten_match_step(
     });
     let binder = vars
         .iter()
-        .find(|v| matches!(scrutinees[0].as_ref(),Term::Var {id,..} if *id == v.id));
+        .find(|v| matches!(scrutinees[0].value.as_ref(),Term::Var {id,..} if *id == v.id));
     if let Some(v) = binder.filter(|_| constructor.is_none() && !rows.is_empty()) {
         let rows = rows
             .iter()
@@ -461,7 +490,10 @@ fn flatten_match_step(
                 }
             }
         }
-        let mut next_scrutinees = field_vars.iter().map(Variable::term).collect::<Vec<_>>();
+        let mut next_scrutinees = field_vars
+            .iter()
+            .map(|v| Scrutinee::new(v.term(), None))
+            .collect::<Vec<_>>();
         next_scrutinees.extend_from_slice(&scrutinees[1..]);
         let mut next_vars = field_vars;
         next_vars.extend_from_slice(&vars[1..]);
@@ -513,5 +545,40 @@ fn flatten_match_step(
             depth + 1,
             origins,
         )?)))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scrutinee_substitution_retains_occurrences_without_copying_replacements() {
+        let variable = Variable {
+            name: "x".into(),
+            id: 0,
+        };
+        let first = variable.term();
+        let second = variable.term();
+        let origins = TermOrigins::default();
+        origins.track(&first);
+        origins.track(&second);
+        let first = Scrutinee::new(first, Some(&origins));
+        let second = Scrutinee::new(second, Some(&origins));
+        let replacement = term(Term::Ctr {
+            name: "Zero".into(),
+            args: vec![],
+        });
+        let a = first.replace(0, &replacement, Some(&origins));
+        let b = second.replace(0, &replacement, Some(&origins));
+        assert!(Rc::ptr_eq(&a.value, &replacement));
+        assert!(Rc::ptr_eq(&b.value, &replacement));
+        assert_eq!(Rc::strong_count(&replacement), 3);
+        assert_eq!(a.origin, first.origin);
+        assert_eq!(b.origin, second.origin);
+        assert_ne!(a.origin, b.origin);
+        let plain = first.replace(0, &replacement, None);
+        assert!(Rc::ptr_eq(&plain.value, &replacement));
+        assert_eq!(plain.origin, first.origin);
     }
 }

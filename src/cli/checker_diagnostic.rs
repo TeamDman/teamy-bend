@@ -168,6 +168,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-scrutinee-origins/error_window_substituted_scrutinee.bend",
+                "12>|       match y:",
+            ),
+            (
+                "cpu-scrutinee-origins/consumed_column_error_001.bend",
+                "19>|       match a:",
+            ),
+            (
                 "cpu-computed-scrutinee/motive_suffix_join.bend",
                 "14>|   match Bool.not(n):",
             ),

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-//! Optional loader-owned origins for source diagnostic nodes. No AST or
+//! Optional loader-owned origins for source diagnostic nodes. No core AST or
 //! acceptance metadata is changed, and no global pointer registry is used.
 use crate::kernel::Term;
 use crate::kernel::TermRef;
@@ -17,6 +17,7 @@ pub(crate) struct DiagnosticOrigins {
     local_binders: BTreeMap<usize, (Rc<str>, usize)>,
     sources: BTreeMap<String, Rc<str>>,
     nodes: BTreeMap<usize, TermOrigin>,
+    match_locations: BTreeMap<usize, TermOrigin>,
 }
 
 #[derive(Debug)]
@@ -62,6 +63,19 @@ impl DiagnosticOrigins {
                     source: Rc::clone(source),
                     line,
                 });
+        }
+    }
+
+    pub(super) fn match_location(&mut self, value: &TermRef, label: &str, line: usize) {
+        if let Some(source) = self.sources.get(label) {
+            self.match_locations.insert(
+                self.tracker.source(value),
+                TermOrigin {
+                    _node: Rc::downgrade(value),
+                    source: Rc::clone(source),
+                    line,
+                },
+            );
         }
     }
 
@@ -132,6 +146,27 @@ impl DiagnosticOrigins {
         });
     }
 
+    pub(super) fn rejected_variable_scrutinee(&mut self, identity: usize) {
+        self.load_failure = self.excerpt(identity).map(|excerpt| LoadDiagnostic {
+            content: LoadDiagnosticContent::Message("match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)".into()),
+            excerpt,
+        });
+    }
+
+    pub(super) fn rejected_constructor_scrutinee(&mut self, identity: usize) {
+        // Upstream reports a constructor at its enclosing match; a virtual
+        // destructuring-let match instead inherits its value's source span.
+        let excerpt = self
+            .match_locations
+            .get(&identity)
+            .and_then(|origin| source_excerpt(&origin.source, origin.line))
+            .or_else(|| self.excerpt(identity));
+        self.load_failure = excerpt.map(|excerpt| LoadDiagnostic {
+            content: LoadDiagnosticContent::Message("an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)".into()),
+            excerpt,
+        });
+    }
+
     pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Loader parsing uses a newline-normalized buffer. The public
@@ -189,6 +224,27 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn scrutinee_metadata_preserves_public_load_errors() {
+        for name in [
+            "error_window_substituted_scrutinee",
+            "consumed_column_error_001",
+            "order_ban_002",
+            "framed_cell_capture",
+        ] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join(format!("tests/fixtures/cpu-scrutinee-origins/{name}.bend"));
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert_eq!(
+                plain.message,
+                "match scrutinees must be parameters or fields, in binder order"
+            );
+            assert!(tracked.diagnostic.is_some());
+        }
+    }
+
     #[test]
     fn computed_scrutinee_metadata_preserves_public_load_errors() {
         for name in ["motive_suffix_join", "computed_match_split"] {

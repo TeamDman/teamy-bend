@@ -199,6 +199,14 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-scrutinee-origins/error_window_substituted_scrutinee.bend"),
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n11 |     case y, 1n+q:\n12>|       match y:\n13 |         case 0n:\n",
+        ),
+        (
+            include_str!("fixtures/cpu-scrutinee-origins/consumed_column_error_001.bend"),
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n18 |     case Sw3{p}:\n19>|       match a:\n20 |         case Zw3{}:\n",
+        ),
+        (
             include_str!("fixtures/cpu-computed-scrutinee/motive_suffix_join.bend"),
             "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n13 | def j9(n, e):\n14>|   match Bool.not(n):\n15 |     case False{}:\n",
         ),

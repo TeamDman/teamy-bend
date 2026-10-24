@@ -11,6 +11,7 @@ use super::executable::OpaqueType;
 use super::surface::Body;
 use super::surface::Pattern;
 use super::surface::Row;
+use super::surface::Scrutinee;
 use super::surface::Variable;
 use super::surface::flatten;
 use crate::kernel::AdtDecl;
@@ -354,6 +355,12 @@ impl Parser<'_> {
                     }
                     super::surface::FlattenError::ComputedScrutinee { origin } => {
                         origins.rejected_computed_scrutinee(*origin);
+                    }
+                    super::surface::FlattenError::VariableScrutinee { origin } => {
+                        origins.rejected_variable_scrutinee(*origin);
+                    }
+                    super::surface::FlattenError::ConstructorScrutinee { origin } => {
+                        origins.rejected_constructor_scrutinee(*origin);
                     }
                     super::surface::FlattenError::Other(_) => {}
                 }
@@ -1835,6 +1842,13 @@ impl Parser<'_> {
             _ => Err(self.error("a pattern must be a binder or constructor")),
         }
     }
+    fn scrutinees(&self, values: Vec<TermRef>) -> Vec<Scrutinee> {
+        let origins = self.templates.diagnostics.as_ref().map(|o| &o.tracker);
+        values
+            .into_iter()
+            .map(|value| Scrutinee::new(value, origins))
+            .collect()
+    }
     fn terms_before_colon(&mut self) -> Result<Vec<TermRef>, ParseError> {
         let mut terms = Vec::new();
         loop {
@@ -1863,8 +1877,15 @@ impl Parser<'_> {
         result
     }
     fn body_inner(&mut self, column: usize) -> Result<Body, ParseError> {
+        let match_line = self.current().line;
         if self.take("match") {
             let scrutinees = self.terms_before_colon()?;
+            if let Some(origins) = &mut self.templates.diagnostics {
+                for value in &scrutinees {
+                    origins.match_location(value, &self.label, match_line);
+                }
+            }
+            let scrutinees = self.scrutinees(scrutinees);
             let case_column = self.current().column;
             let mut rows = Vec::new();
             while case_column > column && self.is("case") && self.current().column >= case_column {
@@ -1922,7 +1943,12 @@ impl Parser<'_> {
             }
         }
         while values.len() < patterns.len() {
-            values.push(self.expression(0)?);
+            let line = self.current().line;
+            let value = self.expression(0)?;
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.node(&value, &self.label, line);
+            }
+            values.push(value);
         }
         self.take(";");
         let old = self.scope.len();
@@ -1942,7 +1968,7 @@ impl Parser<'_> {
         Ok(Body::Local {
             patterns,
             quant,
-            values,
+            values: self.scrutinees(values),
             body: Box::new(body),
         })
     }

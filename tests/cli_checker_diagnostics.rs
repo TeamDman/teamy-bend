@@ -850,3 +850,130 @@ fn computed_scrutinees_and_holes_keep_source_and_first_error_contracts() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn substituted_consumed_and_out_of_order_originals_keep_exact_load_diagnostics() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-scrutinee-origins");
+    for (name, expected) in [
+        (
+            "error_window_substituted_scrutinee",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n11 |     case y, 1n+q:\n12>|       match y:\n13 |         case 0n:\n",
+        ),
+        (
+            "consumed_column_error_001",
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n18 |     case Sw3{p}:\n19>|       match a:\n20 |         case Zw3{}:\n",
+        ),
+        (
+            "order_ban_000",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n14 | def f(a, b):\n15>|   match b, a:\n16 |     case Zy{}, y:\n",
+        ),
+        (
+            "order_ban_001",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n18 |     case Pp2{a, b}:\n19>|       match b, a:\n20 |         case Zy2{}, y:\n",
+        ),
+        (
+            "order_ban_002",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n15 |   z = Zw{}\n16>|   Sw{p} = y\n17 |   p\n",
+        ),
+        (
+            "order_ban_003",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n18 |       t = Zb{}\n19>|       match p:\n20 |         case Zb{}:\n",
+        ),
+        (
+            "dup_guard_000",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n13 | def main(a):\n14>|   match a, a:\n15 |     case Z{}, x:\n",
+        ),
+        (
+            "dup_guard_001",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n15 | def main(a):\n16>|   match a, a:\n17 |     case Z{}, x:\n",
+        ),
+        (
+            "dead_residue_elision_003",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n24 |     case T{}:\n25>|       match x:\n26 |         case Z{}:\n",
+        ),
+        (
+            "framed_cell_capture",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n17 | def frame(b):\n18>|   match a : Bool = b, c : Bool = a:\n19 |     case x, y:\n",
+        ),
+        (
+            "column_order_search",
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n16 |     case Succ{p}:\n17>|       match n:\n18 |         case Zero{}:\n",
+        ),
+    ] {
+        assert_diagnostic(&root.join(format!("{name}.bend")), expected);
+    }
+}
+
+#[test]
+fn scrutinee_occurrences_keep_match_or_use_locations_through_substitution() {
+    for (source, helper, expected) in [
+        (
+            "import Base\ndef bad() -> U32:\n  match 0:\n    case Zero{}: 0\n",
+            None,
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n2 | def bad() -> U32:\n3>|   match 0:\n4 |     case Zero{}: 0\n",
+        ),
+        (
+            "import Base\ndef value() -> Bool: True{}\ndef bad() -> U32:\n  match value:\n    case True{}: 0\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n3 | def bad() -> U32:\n4>|   match value:\n5 |     case True{}: 0\n",
+        ),
+        (
+            "import Base\ndef bad() -> Nat:\n  match (\n    Zero{}\n  ):\n    case Zero{}: 0n\n",
+            None,
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n2 | def bad() -> Nat:\n3>|   match (\n4 |     Zero{}\n",
+        ),
+        (
+            "import Base\ndef value() -> Nat: 0n\ndef bad() -> Nat:\n  match (\n    value\n  ):\n    case Zero{}: 0n\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n4 |   match (\n5>|     value\n6 |   ):\n",
+        ),
+        (
+            "import Base\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      match (\n        n\n      ):\n        case Zero{}: 0n\n",
+            None,
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n4 |     case Succ{p}:\n5>|       match (\n6 |         n\n",
+        ),
+        (
+            "import Base\ndef bad(a: Nat, b: Nat) -> Nat:\n  match a, b:\n    case y, Succ{q}:\n      match (\n        y\n      ):\n        case Zero{}: 0n\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n5 |       match (\n6>|         y\n7 |       ):\n",
+        ),
+        (
+            "import Base\ndef bad(a: Nat, b: Nat) -> Nat:\n  match b, (\n    a\n  ):\n    case Zero{}, y: 0n\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n3 |   match b, (\n4>|     a\n5 |   ):\n",
+        ),
+        (
+            "import Base\ndef bad(a: Nat, b: Nat) -> Nat:\n  match a, b:\n    case y, Succ{q}:\n      Succ{p} = (\n        y\n      )\n      p\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n5 |       Succ{p} = (\n6>|         y\n7 |       )\n",
+        ),
+        (
+            "import Base\ndef bad() -> Nat:\n  Succ{p} = (\n    Succ{Zero{}}\n  )\n  p\n",
+            None,
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n3 |   Succ{p} = (\n4>|     Succ{Zero{}}\n5 |   )\n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> Nat: 0n\n",
+            Some(
+                "import Base\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      match n:\n        case Zero{}: 0n\n",
+            ),
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n4 |     case Succ{p}:\n5>|       match n:\n6 |         case Zero{}: 0n\n",
+        ),
+        (
+            "import Base\ndef bad(~f: Nat -> Nat, a: Nat, b: Nat) -> Nat:\n  match b, a:\n    case Zero{}, y:\n      match y:\n        case Zero{}: 0n\ndef main() -> Nat: bad(~(x => x), 0n, 0n)\n",
+            None,
+            "Error:\n- message  : match scrutinees in binder order (this variable is unbound, consumed, or out of order: reorder the match)\nLocation:\n2 | def bad(~f: Nat -> Nat, a: Nat, b: Nat) -> Nat:\n3>|   match b, a:\n4 |     case Zero{}, y:\n",
+        ),
+        (
+            "import Base\r\ndef bad() -> Nat:\r\n  match Zero{}:\r\n    case Zero{}: 0n",
+            None,
+            "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n2 | def bad() -> Nat:\r\n3>|   match Zero{}:\r\n4 |     case Zero{}: 0n\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}
