@@ -91,31 +91,46 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **75 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **77 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
-representation, nine parse and eight compile originals. Linked rows include
+representation, eleven parse and eight compile originals. Linked rows include
 unresolved negative and oracle-host cells. Ten positive authored controls and
 a separate read probe supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
 
-There are **1,227 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 612 compiled
-candidates. These are distinct required modes, not 1,227 missing CPU runtime
+There are **1,225 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 610 compiled
+candidates. These are distinct required modes, not 1,225 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
 The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 originals
-at `694a210`: eleven interpreter-only cases and twenty-seven compiled candidates
+at `9310cf2`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
-**113 originals** have receipts and **1,189** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 585 compiled
+**115 originals** have receipts and **1,187** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 583 compiled
 candidates.
 
-The [comparison/index checkpoint](cpu-paren-index.md), `694a210`, qualifies
+The [concrete-array checkpoint](cpu-array-syntax.md), `9310cf2`, fixes array
+term printing and partially qualifies two originals. Both compiled C/JS pairs
+and direct interpretation match; native pure normalization and strict eval of
+array_write_stmt still exceed the unchanged 128-level guard. The complete
+capture records 22/24 exact executions and 2/4 strict eval reports, and exits 1.
+The distinct evaluate_data API passes both originals but does not waive those
+failed cells. A four-slot read is a smaller reproducer; isolated word operations
+agree. No evaluator or resource policy changed.
+
+Full gate: **828 passed, zero failed, 49 ignored**; 67 focused tests, 15 printer
+controls, the 50-execution baseline and 42-fixture normalization suite pass.
+The 38 interpretation rows, three baseline originals and two new array rows
+identify this source. The other 72 runtime rows and negative/demand/checking/read/
+comptime audits retain their earlier receipts. Existing discrepancies stay open.
+
+The preceding [comparison/index checkpoint](cpu-paren-index.md), `694a210`, qualifies
 two unchanged function originals with strict actual-core/text agreement and eight
 repeated C/JS printer refusals, after four initial applicability checks. Concrete
 comparison inputs and array reads are not claimed. The 42-fixture normalization
@@ -192,9 +207,10 @@ changes to Bend's limits. Deep raw constructor input still reaches the existing
 64-level parser guard, independently of compact display of an internal spine.
 That refusal is not promoted to upstream acceptance parity.
 
-Next ledger-selected gap: parse/array_literal and parse/array_write_stmt, for
-concrete array construction and statement/semicolon writes. Actual printer
-applicability and corresponding runtime results remain unqualified here.
+Next priority: the reproduced array_write_stmt pure-normalization depth failure,
+minimized to a four-slot array read. Preserve the guard, work accounting and
+demand contract while investigating avoidable reduction work. The independent
+array read-annotation/read-write originals also remain unqualified.
 Full API, lane, resource, host, foreign, F32.read, error-order and platform
 closure remains required; no broader printer or arithmetic parity is claimed.
 

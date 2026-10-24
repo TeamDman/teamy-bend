@@ -2,7 +2,7 @@
 
 **Plan status:** Active
 **Primary implementation root:** `teamy-bend` repository
-**Last updated:** 2026-10-23
+**Last updated:** 2026-10-24
 **Intent audit:** Updated 2026-09-22 against the original request and available scope/GPU/firewall follow-ups
 
 **Resumption:** The user confirmed the pause was due to other priorities and
@@ -4013,3 +4013,31 @@ and prevented exhaustion. Runtime/interpretation union is 113 originals; full
 CPU acceptance remains incomplete. Next: parse/array_literal and
 parse/array_write_stmt, requiring actual printer applicability and corresponding
 runtime observations. Their sources were inspected only during this checkpoint.
+
+
+### [~] 5.58 Qualify concrete array syntax and resolve normalization depth
+
+Source `9310cf2` corrects array term display using complete existing ALeaf/ANode
+trees. Fifteen pinned printer controls cover complete, partial, malformed,
+annotated and deep forms; no evaluation or structural comparison is changed.
+Two unchanged originals are retained with attribution and exact CPU comparisons.
+
+array_literal matches all lanes. array_write_stmt matches upstream C/JS, port
+C/JS and direct interpretation, but pure native normalization and strict eval
+still exhaust the unchanged 128-level guard. The completed capture has 22/24
+exact executions and 2/4 strict reports and correctly exits 1. evaluate_data
+computes both expected values, but is a distinct API and does not close the gap.
+A four-slot read reproduces it; isolated word operations agree. An unsuccessful
+reduction candidate was reverted; no evaluator, demand or budget change remains.
+
+Full gate **828 passed, zero failed, 49 ignored**; 67 focused tests, strict Clippy,
+the 50-execution baseline and 42-fixture normalization suite pass. Cache preflight
+and monitoring preserve source/evidence and prevent exhaustion. The runtime
+ledger has 77 originals, including the explicit native failure. Thirty-eight
+interpretation rows and three baseline originals are renewed; other receipts
+retain historical source identities. All earlier discrepancies remain unwaived.
+
+The [checkpoint](cpu-array-syntax.md) records exact commands, outputs, hashes and
+resource diagnosis. Next: resolve the original normalization gap with a bounded
+implementation correction, retaining guards and demand behavior. Full CPU parity
+is incomplete; frozen dependencies/toolchains/policies and no push.

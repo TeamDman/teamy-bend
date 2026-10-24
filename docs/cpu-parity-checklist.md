@@ -11,21 +11,22 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `694a210` qualifies
-[typed comparison and array-index functions](cpu-paren-index.md), with exact
-strict core/text and actual upstream printer refusals. Full gate **825 passed,
-zero failed, 49 ignored**; 59 focused tests and strict Clippy pass. The full
-42-fixture normalization suite is renewed. Checker diagnostic mismatches remain
-unwaived at their previous receipts; checking/runtime/demand/audit ledgers keep
-their historical source identities. No engine, dependency, demand-policy or
-safety-budget change; no new exception.
+1,302-fixture inventory and 77-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current checkpoint `9310cf2` fixes
+[array term printing](cpu-array-syntax.md) and partially qualifies two concrete
+array originals. Generated C/JS and direct upstream interpretation match; the
+native pure normalizer still refuses the write original at its unchanged guard.
+Full gate **828 passed, zero failed, 49 ignored**; 67 focused tests, strict Clippy,
+15 printer controls, the 50-execution baseline and 42-fixture normalization pass.
+The array differential capture remains exit 1. Existing diagnostic mismatches
+are unwaived; historical receipts keep their actual source identities. No
+evaluator, dependency, demand-policy or safety-budget change; no new exception.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 113 originals; the 1,189 remaining
+Current runtime/interpretation ledgers link 115 originals; the 1,187 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 585 compiled candidates. These are distinct
+interpreter-only cases and 583 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -443,7 +444,17 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [typed comparison and array-index functions](cpu-paren-index.md),
+Latest bounded checkpoint: [concrete arrays and open normalization gap](cpu-array-syntax.md),
+`9310cf2`. Array display now matches upstream without altering core trees or
+evaluating leaves. The literal matches all runtimes. The write original matches
+generated C/JS and upstream interpretation but remains a native pure-normalizer
+failure. Full capture: 22/24 exact executions and 2/4 strict eval reports, exit 1.
+Separate evaluate_data success does not qualify the CLI. Four-slot read also
+fails; isolated word controls agree. Full gate **828 passed, zero failed,
+49 ignored**; 67 focused tests, 15 printer controls, baseline and normalization
+renewals pass. Minimum workspace headroom: 3.48 GiB. No resource-policy change.
+
+Previous bounded checkpoint: [typed comparison and array-index functions](cpu-paren-index.md),
 `694a210`. Both unchanged selected-main functions match strict actual core and
 exact text twice. Actual C/JS generators refuse their function types, with no
 artifacts; no concrete numeric inputs or array reads are claimed. Full gate:
@@ -542,15 +553,15 @@ nonzero-expectation fixtures rejected, including all 439 checker negatives.
 No acceptance status changed, and no timeout or abnormal exit occurred. These
 are status-only results, not raw-diagnostic or executable parity.
 
-The current primary ledgers link 113 distinct originals; 1,189 lack
+The current primary ledgers link 115 distinct originals; 1,187 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 585 compiled candidates). The checking ledger now has
+153 interpreter-only, 583 compiled candidates). The checking ledger now has
 two exact positive acceptances and three earlier phase/construct agreements
 with differing diagnostics. Thus two of the twelve no-main entries have explicit
 checking qualification despite remaining absent from runtime/interpretation
-ledgers. Authored controls add no inventory rows. Next: parse/array_literal and
-parse/array_write_stmt, requiring actual printer applicability and corresponding
-runtime qualification for concrete array construction and statement writes.
+ledgers. Authored controls add no inventory rows. Next: repair the pure-normalization
+depth gap in parse/array_write_stmt, starting from the four-slot read reproducer.
+Do not replace the original with a smaller case or switch its evaluation mode.
 This family needs no GPU hardware, new dependency or new F32.read policy.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -559,6 +570,7 @@ CPU work.
 
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
+| Partial; native pure normalization remains failed | Concrete array syntax | Array printer corrected. Literal matches all lanes; write result matches generated C/JS and upstream interpretation, but native CLI/strict eval exhaust the existing guard. Constructor-runtime API success is separate. |
 | Passed in strict function normalization; upstream printers inapplicable | Typed comparison and array-index companions | Both original selected-main functions match core/text twice; eight repeated actual printer refusals follow four initial checks. No concrete comparison inputs or array reads claimed. |
 | Passed in strict function normalization; upstream printers inapplicable | Parenthesized function companions | Three originals retain exact typed tuple/nested arithmetic/list-shift structure and text. Twelve actual printer refusals verified; no concrete invocation. |
 | Passed in strict function normalization; upstream printers inapplicable | Spacing-rule function companions | Three originals retain exact modulo/comparison/open-Nat function structure and text, including the unused binder. Twelve actual printer refusals verified; no invocation or new rewrite coverage. |
