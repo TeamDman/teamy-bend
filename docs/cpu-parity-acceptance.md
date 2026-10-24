@@ -91,50 +91,27 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **88 distinct
-upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
-representation, twenty-two parse and eight compile originals. Linked rows include
-required resource/foreign/oracle-host gaps and mixed historical commits. Only
-passed cells qualify their recorded runtime/profile. Authored/derived controls
-and separate probes add no upstream inventory rows.
+The latest [field-order/destructuring checkpoint](cpu-destructure.md), source
+`de31e54e8e35f35b1c0fa4c05415d8dd91ca9b10`, records 89 runtime, 99 interpretation
+and twenty checking originals. Their union is 208; linked rows include
+historical and unresolved cells. There are 1,094 originals without detailed
+receipts: 430 checker negatives, one checking-only module, 106 interpreter
+cases and 557 compiled candidates. These are applicability categories, not
+1,094 missing CPU runtime tests. The [category summary](cpu-coverage-summary.csv)
+is current; the static applicability inventory retains its original evidence.
 
-There are **1,214 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 599 compiled
-candidates. These are distinct required modes, not 1,214 missing runtime tests.
-The historical [applicability classification](cpu-applicability.md) and its CSV
-retain their earlier snapshot. Source hints and status-only audits are not passes.
+All 99 interpretation rows, eleven checking rows and four runtime originals
+are renewed at this source. Nine checking and 85 runtime rows retain their
+historical commits. All 1,302 checking statuses are unchanged; status agreement
+alone does not meet the acceptance criterion. Direct upstream IO/Bun lanes,
+resource-limit failures, native foreign support, F32.read, competing-error
+order and complete API/lane review remain open. No new semantic exception was
+introduced. The 399-vector application regression passes; 688 other exploratory
+oracle vectors are not fully port-grid-qualified. GPU is not required to
+continue independent CPU work.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) links 42 originals
-at `f29284f`: fifteen interpreter-only cases and twenty-seven compiled candidates
-whose function-containing results are actually refused by upstream C/JS generation.
-Seven authored controls add no inventory rows. Across runtime and interpretation,
-**130 originals** have receipts and **1,172** lack those kinds: 439 checker
-negatives, twelve checking-only, 149 interpreter-only and 572 compiled candidates.
-
-Including the five separate original-checking rows gives **135 detailed originals**
-and **1,167 without detailed receipts**: 436 checker negatives, ten checking-only,
-149 interpreter-only and 572 compiled candidates. Three linked checking-negative
-rows still have raw diagnostic differences, so this is a coverage count rather
-than completed parity. The [category summary](cpu-coverage-summary.csv) and
-[coverage review](cpu-layout-family.md#remaining-coverage-by-category) distinguish
-these counts, historical status-only checks, known failed cells and overlapping
-host/API review flags. Complete per-lane applicability and API review remain required.
-
-The [layout checkpoint](cpu-layout-family.md), source `f29284f`, qualifies seven
-unchanged originals across shape-delimited layout rules. The four no-Base pure
-programs have exact core/text and verified C/JS build refusals. Three IO originals
-generate and run with exact outputs 7, 56 and 1n; direct upstream IO is host-blocked.
-Their pure-entry derivatives qualify normalization separately. No production
-source change or new exception was needed. Full gate: 861/0/49, with 48 focused
-tests, five guards, 50 baseline observations and all 49 normalization cases passing.
-
-Six runtime rows and all interpretation rows are current; 82 runtime rows and
-all checking/demand/Nat/List diagnostic receipts retain their actual earlier
-commits. The full audit and broad negative/demand matrices were not rerun for
-this test-only change. Existing resource/foreign/host, F32.read, error-order,
-constructor diagnostic, API/loader/platform gaps remain. No new runtime count
-qualifies them. Next recommended batch: five original constructor/import
-negatives, using actual phase/source diagnostics instead of stale source comments.
+Earlier checkpoint evidence follows and is historical unless explicitly
+renewed by a later receipt.
 
 Historical bitwise/brace evidence follows; its recorded diagnostic gap is closed
 by the separate reflexivity-diagnostic checkpoint and its 67cdcdf renewal.
@@ -534,3 +511,24 @@ Coverage is 190 detailed originals / 1,112 without detailed receipts, including
 historical and unresolved cells. Full CPU parity remains incomplete; no prior
 host/resource/foreign/API/F32.read/error-order requirement is waived. Next:
 field-match-order and destructuring-let applicability/qualification. No push.
+
+## Field-order/destructuring checkpoint
+
+Source `de31e54e8e35f35b1c0fa4c05415d8dd91ca9b10` qualifies eighteen unchanged field-order/destructuring
+originals: sixteen function mains with exact core/text and 399 concrete applications,
+one IO main with ten exact generated/native executions, and one exact parse/load
+negative. The private binder-origin diagnostic fix preserves public ParseError,
+terms, evaluation, budgets and rejection. [Report](cpu-destructure.md).
+
+Full gate **889 passed, zero failed, 49 ignored**; 106 normalization cases,
+306 no-main observations, 60 local-binder and 60 rewrite observations,
+144 prior proof controls and 50 baseline executions pass. All 1,302 checking
+statuses are unchanged. Direct upstream IO remains host-blocked; the 688-vector
+exploratory remainder and historical unmet cells remain unqualified.
+
+Coverage is 208 detailed originals / 1,094 without detailed receipts, including
+historical/unresolved cells. Category counts are 9/11/58/130 and remaining
+430/1/106/557. Full CPU parity remains incomplete; host/resource/foreign/API,
+F32.read and competing-error requirements are unwaived. Next: the reusable
+plus-binder family with its negative companion. Final headroom 10.04 GiB;
+all evidence retained, frozen inputs/policies, no push.

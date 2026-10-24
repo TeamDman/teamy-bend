@@ -9,38 +9,19 @@ were unchanged. The earlier Linux portability and task/file milestones retain
 their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
-The [CPU acceptance criterion](cpu-parity-acceptance.md) still requires complete
-mode/profile evidence. Current source `f29284f` qualifies the seven-original
-[layout family](cpu-layout-family.md): four no-Base pure programs and three IO
-programs. Adjacent inline/newline/tab/branch/do forms agree. No production fix,
-semantic exception or changed safety policy was needed.
+The latest tested source and category counts are in the
+[field-order/destructuring report](cpu-destructure.md) and the final checkpoint
+below. The [CPU acceptance criterion](cpu-parity-acceptance.md) remains unmet.
+Current detailed coverage is 208 originals, including historical/unresolved
+cells, with 1,094 lacking detailed receipts: 430 checker negatives, one
+checking-only module, 106 interpreter cases and 557 compiled candidates.
+These are different applicable contracts, not one missing-runtime-test count.
 
-Full gate **861 passed, zero failed, 49 ignored**; 48 focused tests and five guards
-pass. The IO family has 30 exact executions and six direct-upstream host blocks.
-The seven new normalization cases have 56 exact observations and sixteen verified
-no-Base build refusals; three named definitions add eighteen exact observations,
-and six strict IO exclusions remain separate. All 49 normalization cases pass
-exact structure/text; the baseline gives 50 exact observations.
-
-Six runtime rows and all 42 interpretation rows are current; 82 runtime rows and
-other checking/demand/diagnostic receipts remain historical. Runtime/interpretation
-union: **130 originals**. Adding five original-checking rows gives 135 with detailed
-evidence, including unresolved cells, and 1,167 without those receipts: 436
-checker negatives, ten checking-only, 149 interpreter-only and 572 compiled
-candidates. These are required modes, not one execution-test denominator.
-
-The [coverage review](cpu-layout-family.md#remaining-coverage-by-category) recommends
-a shared constructor/import-negative batch next, using five pinned originals
-alongside the existing Nat/List reproducers. This addresses a recorded diagnostic
-gap instead of accumulating unrelated parser passes. Known resource/foreign/host,
-F32.read, competing-error, loader/API/platform and wider-corpus gaps remain open.
-
-Dependencies, toolchains, references, lockfile, Bend budgets/guards, demand and
-cancellation remain frozen. Temporary Rust debug=0 and newly explicit
-CARGO_INCREMENTAL=0 control host build storage separately from upstream C's O3.
-The 10-GiB reserve and 2/1-GiB stop floors remain; full-gate minimum headroom was
-10.15 GiB workspace. Only inactive rebuildable cache was reclaimed. All source
-and historical evidence survive; no installs, desktop/GPU work or pushes.
+The latest full gate is 889/0/49. Source/evidence receipts below remain attached
+to their actual commits; passing a later gate does not renew all earlier
+matrices. The following initial review and chronological checkpoints are
+historical, with the latest checkpoint at the end. No frozen input, budget,
+guard, cancellation or demand policy changed in the latest batch.
 
 ## Passed in this review
 
@@ -773,3 +754,24 @@ Coverage is 190 detailed originals / 1,112 without detailed receipts, including
 historical and unresolved cells. Full CPU parity remains incomplete; no prior
 host/resource/foreign/API/F32.read/error-order requirement is waived. Next:
 field-match-order and destructuring-let applicability/qualification. No push.
+
+## Field-order/destructuring checkpoint
+
+Source `de31e54e8e35f35b1c0fa4c05415d8dd91ca9b10` qualifies eighteen unchanged field-order/destructuring
+originals: sixteen function mains with exact core/text and 399 concrete applications,
+one IO main with ten exact generated/native executions, and one exact parse/load
+negative. The private binder-origin diagnostic fix preserves public ParseError,
+terms, evaluation, budgets and rejection. [Report](cpu-destructure.md).
+
+Full gate **889 passed, zero failed, 49 ignored**; 106 normalization cases,
+306 no-main observations, 60 local-binder and 60 rewrite observations,
+144 prior proof controls and 50 baseline executions pass. All 1,302 checking
+statuses are unchanged. Direct upstream IO remains host-blocked; the 688-vector
+exploratory remainder and historical unmet cells remain unqualified.
+
+Coverage is 208 detailed originals / 1,094 without detailed receipts, including
+historical/unresolved cells. Category counts are 9/11/58/130 and remaining
+430/1/106/557. Full CPU parity remains incomplete; host/resource/foreign/API,
+F32.read and competing-error requirements are unwaived. Next: the reusable
+plus-binder family with its negative companion. Final headroom 10.04 GiB;
+all evidence retained, frozen inputs/policies, no push.

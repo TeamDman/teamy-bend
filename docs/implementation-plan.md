@@ -4393,3 +4393,24 @@ Coverage is 190 detailed originals / 1,112 without detailed receipts, including
 historical and unresolved cells. Full CPU parity remains incomplete; no prior
 host/resource/foreign/API/F32.read/error-order requirement is waived. Next:
 field-match-order and destructuring-let applicability/qualification. No push.
+
+### [x] 5.71 Qualify destructuring and preserve local-binder origins
+
+Source `de31e54e8e35f35b1c0fa4c05415d8dd91ca9b10` qualifies eighteen unchanged field-order/destructuring
+originals: sixteen function mains with exact core/text and 399 concrete applications,
+one IO main with ten exact generated/native executions, and one exact parse/load
+negative. The private binder-origin diagnostic fix preserves public ParseError,
+terms, evaluation, budgets and rejection. [Report](cpu-destructure.md).
+
+Full gate **889 passed, zero failed, 49 ignored**; 106 normalization cases,
+306 no-main observations, 60 local-binder and 60 rewrite observations,
+144 prior proof controls and 50 baseline executions pass. All 1,302 checking
+statuses are unchanged. Direct upstream IO remains host-blocked; the 688-vector
+exploratory remainder and historical unmet cells remain unqualified.
+
+Coverage is 208 detailed originals / 1,094 without detailed receipts, including
+historical/unresolved cells. Category counts are 9/11/58/130 and remaining
+430/1/106/557. Full CPU parity remains incomplete; host/resource/foreign/API,
+F32.read and competing-error requirements are unwaived. Next: the reusable
+plus-binder family with its negative companion. Final headroom 10.04 GiB;
+all evidence retained, frozen inputs/policies, no push.
