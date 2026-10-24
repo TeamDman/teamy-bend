@@ -4127,3 +4127,32 @@ receipts. Union: 119 originals; full CPU parity remains incomplete. Next:
 parse/cons_operator and parse/cons_plus_pattern applicability and execution.
 Frozen dependencies/toolchains/budgets/guards; no installation, desktop/GPU work
 or push.
+
+
+### [x] 5.62 Normalize reflexivity diagnostics and retain Bend source origins
+
+Source `f317911` corrects the shared false-list/false-brace checker diagnostic
+gap without changing acceptance or evaluation. Optional presentation retains
+normalized endpoints/context with the original proof node's source snapshot;
+remaining fuel/depth bounds apply, and unavailable presentation preserves the
+original rejection. Public checker errors/messages/equality and AST shapes stay
+compatible. CLI invoke callers must inspect the returned exit status for these
+formatted source failures. Cancellation and output failures remain errors.
+
+Full gate **846 passed, zero failed, 49 ignored**; 44 focused tests, seven internal
+diagnostic tests, five guards and strict all-target/all-feature Clippy pass.
+Original/adjacent negative qualification, phase probes and positive checking/
+normalization give 144 observations. All 1,302 audit statuses are unchanged;
+439 checker negatives still reject. The 42-case normalization matrix and
+baseline pass; negative/demand matrices keep their prior open cells and exit 1.
+
+See [source-origin diagnostic evidence](cpu-reflexivity-diagnostics.md) for exact
+commands, source/receipt hashes, API caveat, bounded fallback regressions and
+honest preflight/runner history. Only rebuildable caches were reclaimed. The
+imported Nat-literal exploratory diagnostic difference remains unresolved.
+Eleven runtime rows and all interpretation/demand rows are current; 70 runtime
+rows remain historical. Union: 119 originals, full CPU parity incomplete. Next:
+cons_operator/cons_plus_pattern applicability and execution; other checker,
+resource/host/foreign/F32.read/error-order/API/platform requirements stay open.
+Frozen dependencies/toolchains/budgets/contracts; no install, desktop/GPU work
+or push.

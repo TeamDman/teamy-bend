@@ -9,29 +9,29 @@ were unchanged. The earlier Linux portability and task/file milestones retain
 their own [portability](linux-cpu-validation.md) and
 [effects](cpu-effects-validation.md) receipts.
 
-The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
-mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 81-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current source `d5d0585` qualifies the
-[bitwise/brace family](cpu-bitwise-braces.md): exact original results 671 and 42,
-actual C/JS printer acceptance and corresponding runtime comparisons. The IO
-original retains its direct-host block and strict-proof exclusion. Pure/main/
-helper normalization matches independently. No production fix was needed.
+The [CPU acceptance criterion](cpu-parity-acceptance.md) still requires complete
+mode/profile evidence. Current source `f317911` closes the three recorded
+[reflexivity diagnostic gaps](cpu-reflexivity-diagnostics.md): normalized values
+and original Bend source excerpts now match byte for byte, while false proofs
+remain rejected. A loader-owned origin map and optional bounded presentation
+metadata preserve public ASTs, checking results and safety budgets.
 
-Full gate **838 passed, zero failed, 49 ignored**; 29 focused tests, five guards
-and baseline pass. The false brace proof rejects at the same checking construct,
-but raw diagnostic differences remain unwaived. The complete capture returns 1
-for that mismatch and the unavailable direct-IO host. Broader differential/audit
-receipts remain historical; no safety or semantic policy changed.
+Full gate **846 passed, zero failed, 49 ignored**; 44 focused tests, seven internal
+diagnostic tests and five guards pass. The 1,302-case audit changes no acceptance
+status and rejects all 439 checker negatives. Repeated targeted qualification
+has 144 observations; the 42-case normalization matrix and baseline pass. Negative
+and demand matrices retain their existing gaps and both return 1. The imported
+Nat-literal exploratory diagnostic difference remains separately unresolved.
 
-The historical [applicability report](cpu-applicability.md) retains its inputs.
-Runtime/interpretation ledgers link 119 originals; 1,183 remain unlinked: 439
-checker negatives, twelve check-only modules, 153 interpreter cases and 579
+Eleven runtime rows, all 38 interpretation rows, ten demand controls and three
+checking controls are renewed; the other 70 runtime rows retain historical
+receipts. Runtime/interpretation union stays **119 originals**, with 1,183
+unlinked: 439 checker negatives, twelve checking-only, 153 interpreter and 579
 compiled candidates. These are distinct requirements, not runtime defect counts.
-Next: parse/cons_operator and parse/cons_plus_pattern, beginning with actual
-printer applicability. Complete lane/API, resource/host, diagnostics and
-cross-oracle requirements remain open. Earlier milestones below retain their
-historical identities; missing coverage is not promoted to a pass.
+Next independent family: parse/cons_operator and parse/cons_plus_pattern, with
+actual printer applicability first. Other diagnostics, host/resource/foreign,
+F32.read, competing-error, loader/API/platform and wider-corpus requirements
+remain open. No new exception, dependency, toolchain, budget change or push.
 
 ## Passed in this review
 
@@ -604,7 +604,7 @@ CPU work.
 | Implemented; narrow accepted exception | Approved arithmetic demand and wildcard refusal | Three Nat cases now agree across all five runtimes twice. Three private-wildcard controls preserve refusal and explicitly label the accepted upstream C exception. This is not byte parity with that C behavior. |
 | Missing | Competing failure diagnostics | `nat_first` chooses a different first error in upstream C at O0/O1/O2/O3. Source and closure/bound controls identify a C lowering difference. The core left-to-right model excludes runtime numeric/foreign errors; no new order or exception is imposed. |
 | Passed in CLI profile; oracle build limitation in O0 | Upstream Word compilation | `word_live_tail` matches at O1/O2/O3, including pinned cli_build's O3 flags. O0 fails Clang register allocation before execution; its failure stays recorded separately. |
-| Missing | Parser/checker/base breadth | Latest strict audit at e9410bf has 366 accepted positives, 487 refused and all 439 checker negatives refused. Status-only agreement does not qualify diagnostics or runtime behavior. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
+| Missing | Parser/checker/base breadth | Latest strict audit at f317911 has 366 accepted positives, 487 refused and all 439 checker negatives refused. Status-only agreement does not qualify diagnostics or runtime behavior. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |

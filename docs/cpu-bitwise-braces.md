@@ -1,5 +1,9 @@
 # Dotted bitwise operators and brace terms
 
+Later checkpoint: [reflexivity diagnostics](cpu-reflexivity-diagnostics.md) at
+`f317911` renews and closes the specific false-proof diagnostic gaps described
+below. This document retains its original tested source and historical receipts.
+
 Source `d5d0585bbed2fcd99babb9ce175a1c3796d66b27` qualifies the unchanged pinned
 parse/bitwise_dot_operators and parse/brace_term_forms originals across available
 CPU lanes. No production correction was needed. The original bitwise IO direct

@@ -1,5 +1,9 @@
 # Default Nat function qualification and false-proof diagnostics
 
+Later checkpoint: [reflexivity diagnostics](cpu-reflexivity-diagnostics.md) at
+`f317911` renews and closes the specific false-proof diagnostic gaps described
+below. This document retains its original tested source and historical receipts.
+
 Source `0093d01bf3e1f18337cf94f2ba7ee2882828b0bf` adds the unchanged pinned
 [`parse/chain_default_nat_f`](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/parse/chain_default_nat_f.bend)
 and [`_g`](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/parse/chain_default_nat_g.bend)

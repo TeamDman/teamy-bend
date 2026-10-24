@@ -108,12 +108,30 @@ source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
 The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 originals
-at `0f83aea`: eleven interpreter-only cases and twenty-seven compiled candidates
+at `f317911`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
 **119 originals** have receipts and **1,183** lack those kinds: 439 checker
 negatives, twelve check-only modules, 153 interpreter-only cases and 579 compiled
 candidates.
+
+The [reflexivity diagnostic checkpoint](cpu-reflexivity-diagnostics.md), source
+`f317911`, closes three authored false-proof diagnostic rows with exact normalized
+endpoints, stderr/status and Bend source locations. It adds no inventory rows or
+semantic exceptions. The full gate passes 846/0/49; a renewed 1,302-case audit
+changes no acceptance status. All 42 normalization cases pass exact structure/text.
+The negative matrix still returns 1 for twelve required resource/foreign/host
+observations, and demand returns 1 for two competing-error observations. The
+imported Nat-literal diagnostic probe remains unqualified. CLI invoke callers
+must inspect exit_code for a formatted source failure; library checks still Err.
+
+Eleven runtime rows, all interpretation/demand rows, three checking controls and
+the positive list checking row are current; other receipts retain their actual
+commits. The three original negative fixtures remain unchanged. No blanket
+checker-diagnostic, API or CPU parity claim follows from this correction.
+
+Historical bitwise/brace evidence follows; its recorded diagnostic gap is closed
+only by the specific renewed observations above.
 
 The [bitwise/brace checkpoint](cpu-bitwise-braces.md), source `d5d0585`, qualifies
 two unchanged originals with exact outputs 671 and 42 across their available
