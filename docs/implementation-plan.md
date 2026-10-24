@@ -3967,3 +3967,26 @@ exhaustion without removing source/evidence. Runtime/interpretation union is
 108 originals; full parity remains incomplete. Next: parse/chain_paren_group_f,
 _g and _h applicability and normalized-core/text qualification; _k and _m also
 remain unqualified. Their sources were inspected, not executed here.
+
+
+### [x] 5.56 Qualify parenthesized function normal forms
+
+Source `5037d9a` qualifies unchanged parse/chain_paren_group_f, _g and _h.
+Strict actual-core and exact-text comparisons agree twice, retaining typed tuple
+components, nested arithmetic and list-element/shift structure. Actual upstream
+C/JS printers refuse each returned function without artifacts. No engine fix
+was needed; original bytes, attribution and comparison assertions are preserved.
+
+Full gate **825 passed, zero failed, 49 ignored**; 59 focused parser/normalization/
+CLI tests and strict Clippy pass. The 40-fixture matrix has 314 successes,
+100 verified printer refusals and six retained F32 proof exclusions. Thirty-six
+interpretation originals are renewed; other ledgers retain actual historical
+receipts. Existing diagnostic mismatches remain unwaived. Frozen dependencies,
+toolchains, policies and budgets; no push.
+
+The [checkpoint](cpu-paren-functions.md) retains exact commands, hashes and disk
+headroom evidence. Cache preflight and gate monitoring prevented exhaustion
+without deleting source/evidence. Runtime/interpretation union is 111 originals;
+CPU acceptance remains incomplete. Next: parse/chain_paren_group_k and _m,
+requiring actual printer applicability and selected-main normalized-core/text
+qualification. Their sources were inspected only during this checkpoint.

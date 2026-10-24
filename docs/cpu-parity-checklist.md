@@ -12,20 +12,20 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 75-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `f485b65` qualifies
-[three spacing-rule functions](cpu-spacing-functions.md), with exact normalized
+neither is a completion percentage. Current checkpoint `5037d9a` qualifies
+[three parenthesized functions](cpu-paren-functions.md), with exact normalized
 core/text and actual upstream function-printer refusals. Full gate **825 passed,
 zero failed, 49 ignored**; 59 focused tests and strict Clippy pass. The full
-37-fixture normalization suite is renewed. Checker diagnostic mismatches remain
+40-fixture normalization suite is renewed. Checker diagnostic mismatches remain
 unwaived at their previous receipts; checking/runtime/demand/audit ledgers keep
 their historical source identities. No engine, dependency, demand-policy or
 safety-budget change; no new exception.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 108 originals; the 1,194 remaining
+Current runtime/interpretation ledgers link 111 originals; the 1,191 remaining
 entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 590 compiled candidates. These are distinct
+interpreter-only cases and 587 compiled candidates. These are distinct
 requirements, not a count of CPU runtime defects. Complete lane/API review,
 resource/host gaps and cross-oracle requirements remain open. Intervening
 milestones below are historical; the final checklist describes the current state.
@@ -443,7 +443,16 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [spacing-rule functions](cpu-spacing-functions.md),
+Latest bounded checkpoint: [parenthesized functions](cpu-paren-functions.md),
+`5037d9a`. Three unchanged function results preserve tuple-component annotations,
+nested typed arithmetic and list-element/shift structure and exact text twice.
+Actual C/JS generators refuse the function results without artifacts. Full gate:
+**825 passed, zero failed, 49 ignored**; 59 focused tests and strict Clippy pass.
+Normalization: 40 fixtures, 314 successes, 100 printer refusals and six F32
+exclusions. Minimum workspace headroom: 4.57 GiB, no exhaustion. No engine/policy
+change; all non-normalization receipts remain historical and mismatches stay open.
+
+Previous bounded checkpoint: [spacing-rule functions](cpu-spacing-functions.md),
 `f485b65`. Three unchanged returned functions preserve spaced modulo/greater-than,
 nested generic closers, an unused binder and an open Nat literal tail. Strict
 actual-core and raw-text comparisons agree twice; actual C/JS printers refuse
@@ -524,15 +533,15 @@ nonzero-expectation fixtures rejected, including all 439 checker negatives.
 No acceptance status changed, and no timeout or abnormal exit occurred. These
 are status-only results, not raw-diagnostic or executable parity.
 
-The current primary ledgers link 108 distinct originals; 1,194 lack
+The current primary ledgers link 111 distinct originals; 1,191 lack
 runtime/interpretation receipts (439 checker negatives, twelve check-only,
-153 interpreter-only, 590 compiled candidates). The checking ledger now has
+153 interpreter-only, 587 compiled candidates). The checking ledger now has
 two exact positive acceptances and three earlier phase/construct agreements
 with differing diagnostics. Thus two of the twelve no-main entries have explicit
 checking qualification despite remaining absent from runtime/interpretation
-ledgers. Authored controls add no inventory rows. Next: parse/chain_paren_group_f,
-_g and _h, requiring actual printer applicability and normalized-core comparison.
-The _k and _m originals remain unqualified too.
+ledgers. Authored controls add no inventory rows. Next: parse/chain_paren_group_k
+and _m, requiring actual printer applicability and selected-main normalized-core
+comparison. Checking their helper bodies elsewhere does not qualify those results.
 This family needs no GPU hardware, new dependency or new F32.read policy.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -541,6 +550,7 @@ CPU work.
 
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
+| Passed in strict function normalization; upstream printers inapplicable | Parenthesized function companions | Three originals retain exact typed tuple/nested arithmetic/list-shift structure and text. Twelve actual printer refusals verified; no concrete invocation. |
 | Passed in strict function normalization; upstream printers inapplicable | Spacing-rule function companions | Three originals retain exact modulo/comparison/open-Nat function structure and text, including the unused binder. Twelve actual printer refusals verified; no invocation or new rewrite coverage. |
 | Passed in strict function normalization; upstream printers inapplicable | Default Nat function companions | Both originals retain arithmetic precedence/comparison helper structure and exact text. Actual function-printer refusals verified; no concrete invocation claim. |
 | Passed checking-only; authored negative diagnostics remain different | Concrete list reverse/sort proofs | Exact original checking output and five named normal forms with independent core comparison. No main or runtime lanes; wrong reverse and dropped duplicate refuse at the expected proofs. |
