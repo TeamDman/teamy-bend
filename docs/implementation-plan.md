@@ -5127,3 +5127,37 @@ results, fixed budgets and guards. The printer correction is independent of this
 resource investigation. Frozen dependencies, toolchains and reference pins;
 no installations, desktop, GPU work or new pushes. Previously published branch
 heads remain at the earlier approved checkpoints.
+
+### [x] 5.94 Preserve demanded sharing across composition normalization
+
+Source `20fec64bebb656c3fea84896e177f6cda8a9e75d` closes the demonstrated 23-pass/24-fail composition
+work gap. Both unchanged authored 27-result wrappers now match pinned upstream
+in the pure CLI and generated C/JS lanes. Substitution preserves unaffected
+application sharing; one normalization call memoizes only demanded constructor
+heads, retaining raw fields and the existing guards and work charges.
+[Diagnosis, commands and receipts](cpu-composition-work.md).
+
+The final full gate passes **990 tests, zero failures, 49 ignored**. The renewed
+72-observation runtime matrix contains **46 exact output matches, 24 successful
+generation/build steps and two unchanged upstream direct-Node IO host blocks**.
+The 12 prefix and 12 graph observations pass. All 1,302 checking statuses and
+streams are unchanged from the preceding checkpoint; all 439 expected negatives
+reject. Fourteen positive controls pass and 18 observations preserve the three
+unwaived hole/TODO disagreements. Original failures and earlier receipts retain
+their original source identities.
+
+Coverage remains **339 linked originals and 963 without detailed receipts**:
+**357 checker negatives, one checking-only module, 68 interpreter cases and 537
+compiled candidates**. This repairs an existing required cell rather than adding
+new inventory coverage. Links include partial, blocked and historical evidence;
+full CPU parity remains incomplete. Imported-constructor printing/JS timeout,
+erased-hole/TODO, other resource/host/foreign gaps, F32.read, competing failure
+order, downstream API caveats and the incomplete 688-vector exploration remain
+unwaived. No new semantic exception is introduced.
+
+Next independent batch: `flatten/ctor_construct_000`, `_001`, `ctor_continuation`,
+`ctor_continuation_go` and `ctor_default`. Establish actual printer/type
+applicability, then compare graphs and bounded constructor applications. The
+local `Io` datatype in the continuation fixtures is not evidence of executing
+Base IO. These cases remain unqualified. Frozen inputs and local-only commits;
+no installations, new pushes, desktop or GPU work.
