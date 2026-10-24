@@ -5742,3 +5742,67 @@ checks of reusable Nat/list/pair/equality values, phantom tags, affine function
 lists and weakening. Empty-type elimination must remain a normalization/checking
 observation without fabricating an inhabitant. This is a proposal, not executed
 coverage. `reg/framed_cell_dep` is a later dependent-worker/IO control.
+
+### [x] 5.109 Qualify Data grades and preserve diagnostic origins
+
+Final gate/test source `a73825e91bdc8b5184b7bcc04597773c2757c503`; matrix engine
+`96f4d4759a91c8ba81c04550a238aa476269fcd4`. Their only difference is an equivalent test assertion.
+This batch qualifies the unchanged
+`grade/accept_data` through ten original definition graphs, 26 direct applications,
+eight consuming observations and two full aggregates. Proof/function graphs retain
+all children. Empty elimination has no fabricated runtime inhabitant.
+[Scope, commands, compatibility and receipts](cpu-data-grades.md).
+
+Quantity failures now report the pinned outer-context binder and measured use,
+with source spans for generated lambdas/lets and multiline datatype/arrow heads.
+The audit also exposed an older stale source-address defect: weak origin roots
+now reserve diagnostic identity across transformation/sweeping without retaining
+terms or children. The unchanged `proof/goal_ladder_state_027` now reports the
+actual Type at line 234. Plain/tracked checker decisions and work/depth/fresh-ID
+accounting agree; no evaluation, demand, sharing, budget or cancellation change.
+Independent review found no blocking issue. There is no mid-normalization
+cancellation claim.
+
+Full gate **1,104 / 0 / 49**; focused **46 / 0 / 0**. The **728-observation**
+matrix completes with no timeout: 184 full-graph observations, 184 exact text
+observations, 52 original calls, 280 exact rejection observations, 18 strict-pure
+native/C/JS executions and ten build/generation controls. All 359 repeated groups
+are deterministic. Upstream executable generation requires Base; both Base import
+orders reject in both implementations. Upstream executable runs therefore remain
+unrun. Port strict-pure successes are compared to the pinned interpreter, not
+claimed as upstream executable C/JS parity.
+
+All 1,302 checking statuses remain unchanged. Of 58 changed diagnostic streams,
+48 match upstream exactly. Ten cells remain unresolved: six constructor-label
+differences, three pattern-field source anchors, and the existing `unsafe_many`
+acceptance disagreement. Fourteen positive controls pass; eighteen observations
+retain three erased-hole/TODO differences. The supplementary all-target Clippy run at the matrix engine source failed
+on seven observed pre-existing test-only lints outside the standard gate; it
+is fail-fast, not an exhaustive lint inventory. The two new test targets pass
+focused strict Clippy. Historical gates
+at `47deb3b` are retained separately, not relabeled as current validation.
+
+The prior public `DefDecl::completion_parameters` field still requires external
+Rust struct-literal updates. Repository callers were inspected; none needs an
+additional update here. External consumers remain unaudited. Existing CLI exit
+status and executable-emitter Err compatibility caveats remain explicit. Prior
+imported-JS printer timeouts, dependent-pair undefined-CID C failure/two unrun
+executions, minimal-IO C, F32.read, failure-order, host/foreign/resource/API gaps
+and the incomplete 688-vector exploration remain unwaived.
+
+Detailed links cover **392 originals**, with **910 unlinked**: **356 checker
+negatives, one checking-only module, 16 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test counts.
+Historical/partial/blocked receipts do not establish CPU parity. Acceptance still
+requires closing or explicitly reviewing applicable unresolved contracts; no new
+exception is introduced.
+
+Next independent substantive candidate is `reg/framed_cell_dep`: actual
+proof-function/IO applicability, four bounded worker inputs (0, 1, 3, 8), unchanged
+IO output and false-evidence rejection. No next-batch execution credit is assigned.
+The nine remaining source/label diagnostic cells are also concrete bounded repair
+candidates. Dependencies, toolchains, pin, safety limits and cancellation remain
+frozen. Disk preflight requires 11 GiB; only completed inactive rebuildable test
+caches are reclaimed. Source, raw receipts, historical failures and CLI snapshots
+remain intact; ignored raw evidence is outside Git preservation. Reviewed feature
+checkpoint publication is authorized, with no main merge or release.
