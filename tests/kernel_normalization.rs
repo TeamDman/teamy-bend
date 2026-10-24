@@ -70,7 +70,10 @@ fn blocked_call_reconstruction_cannot_hide_source_holes_false_proofs_or_bad_recu
     );
     let bad_recursion = source.replace("case S{p}: p", "case S{p}: f(Box{S{p}})");
     let error = check_book(&parse(&bad_recursion).unwrap()).unwrap_err();
-    assert!(error.to_string().contains("decreasing"), "{error}");
+    assert!(
+        error.to_string().contains("must decrease structurally"),
+        "{error}"
+    );
     let false_proof =
         format!("{source}\ndef false() -> {{f(Box{{S{{Z{{}}}}}}) == S{{Z{{}}}} : N}}: {{==}}\n");
     let error = check_book(&parse(&false_proof).unwrap()).unwrap_err();
