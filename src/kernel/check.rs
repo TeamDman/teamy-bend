@@ -1012,9 +1012,24 @@ impl Engine {
                 Ok((ty, uses))
             }
             Term::Eql { left, right, ty } => {
-                self.check(lhs, ty, Quant::None, &kind(Quant::Lone), context)?;
-                self.check(lhs, left, Quant::None, ty, context)?;
-                self.check(lhs, right, Quant::None, ty, context)?;
+                for (index, child, expected) in [
+                    (2, ty, kind(Quant::Lone)),
+                    (0, left, Rc::clone(ty)),
+                    (1, right, Rc::clone(ty)),
+                ] {
+                    self.check(lhs, child, Quant::None, &expected, context)
+                        .map_err(|mut error| {
+                            if let Some(report) = &mut error.diagnostic
+                                && report.term_identity == Rc::as_ptr(child) as usize
+                                && let Some(source) = self.origins.as_ref().and_then(|origins| {
+                                    origins.equality_operand_source(value, index, child)
+                                })
+                            {
+                                report.term_identity = source;
+                            }
+                            error
+                        })?;
+                }
                 Ok((kind(Quant::Many), Uses::new()))
             }
             Term::Ann(x, ty) => {
@@ -1346,7 +1361,18 @@ impl Engine {
         if self.compare(Comparison::Fits, &observed, ty)? {
             Ok(uses)
         } else {
-            Err(mismatch(ty, &observed))
+            let mut error = mismatch(ty, &observed);
+            error.diagnostic = self
+                .term_diagnostic(
+                    lhs,
+                    value,
+                    DiagnosticExpression::Term(ty),
+                    DiagnosticExpression::Term(&observed),
+                    context,
+                )
+                .ok()
+                .map(Box::new);
+            Err(error)
         }
     }
 
@@ -1776,6 +1802,8 @@ mod reflexivity_diagnostic_tests {
         for (name, entries) in [
             ("cpu-constructors/context-open.bend", &[][..]),
             ("cpu-checking/false_fusion.bend", &[][..]),
+            ("cpu-rewrite-checking/rewrite_non_equation.bend", &[][..]),
+            ("cpu-rewrite-checking/rewrite_ctor_brace.bend", &[][..]),
             ("cpu-plus-binders/plus_binder_term.bend", &[][..]),
             ("cpu-plus-binders/plus_binder_case.bend", &[][..]),
             ("cpu-plus-binders/plus_binder_lambda_do.bend", &[][..]),

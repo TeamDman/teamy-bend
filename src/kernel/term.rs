@@ -461,7 +461,15 @@ impl fmt::Display for Term {
                 f.write_str("}")
             }
             Self::Efq => f.write_str("\\{}"),
-            Self::Eql { left, right, ty } => write!(f, "{{{left} == {right} : {ty}}}"),
+            Self::Eql { left, right, ty } => {
+                f.write_str("{")?;
+                match_branch(f, left)?;
+                f.write_str(" == ")?;
+                match_branch(f, right)?;
+                f.write_str(" : ")?;
+                match_branch(f, ty)?;
+                f.write_str("}")
+            }
             Self::Rfl => f.write_str("{==}"),
             Self::Rwt {
                 evidence,

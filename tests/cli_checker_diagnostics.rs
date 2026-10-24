@@ -501,3 +501,95 @@ fn unbound_reusable_markers_keep_context_source_and_first_error() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn original_rewrite_failures_preserve_phase_and_exact_diagnostics() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-rewrite-checking");
+    for (name, expected) in [
+        (
+            "rewrite_non_equation",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : 5\nLocation: main\n 9 | \n10>| def main(): %5 : U32; 1\n11 | \n",
+        ),
+        (
+            "rewrite_ctor_brace",
+            "Error:\n- expected : @_:Opt8<Un8> -> Opt8<Un8>\n- observed : @_:Opt8<Emp8> -> Opt8<Emp8>\nContext:\n- e : {(x => x) == (x => Zer8{}) : @_:Opt8<Emp8> -> Opt8<Emp8>}\n- _ : @_:Opt8<Emp8> -> Opt8<Emp8>\n- q : {(x => x) == _ : @_:Opt8<Emp8> -> Opt8<Emp8>}\nLocation: bad_fun\n21 | def bad_fun(e):\n22>|   %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n23 | \n",
+        ),
+        (
+            "dead_motive_syntax",
+            "Error:\n- expected : ':'\n- observed : 'e'\nLocation:\n12 | def sym3(x, y, e):\n13>|   %[h => {y == h : U32}] e {=}\n14 | \n",
+        ),
+    ] {
+        let path = root.join(format!("{name}.bend"));
+        if name == "dead_motive_syntax" {
+            teamy_bend::syntax::load(&path).unwrap_err();
+        } else {
+            let book = teamy_bend::syntax::load(&path).unwrap();
+            teamy_bend::kernel::check_book(&book).unwrap_err();
+        }
+        assert_diagnostic(&path, expected);
+    }
+}
+
+#[test]
+fn rewritten_operand_locations_and_token_errors_survive_imports_and_layout() {
+    for (source, helper, expected) in [
+        (
+            "import Base\ndef main() -> U32:\n  %5 : U32; 1\n",
+            None,
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : 5\nLocation: main\n2 | def main() -> U32:\n3>|   %5 : U32; 1\n4 | \n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad() -> U32:\n  %5 : U32; 1\n"),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : 5\nLocation: helper.bad\n2 | def bad() -> U32:\n3>|   %5 : U32; 1\n4 | \n",
+        ),
+        (
+            "# Cross-type (\"untyped global\") rewrite -- the faithful attack. Given e\n# at carrier Opt(Empty)->Opt(Empty), an untyped substitution would\n# coerce it into an Opt(Unit)->Opt(Unit) goal. The type-checked motive\n# REJECTS this: the abstracted motive variable cannot have both carrier\n# types.\n# ported from bend3: bend's rewrite spells the motive explicitly, and\n# the guard fires as the carrier mismatch\ntype Emp8 is Data:\n\ntype Un8 is Data:\n  Uu8{}\n\ntype Opt8<-A: Data> is Data:\n  Zer8{}\n  One8{x: A}\n\nlaw bad_fun:\n  for e: {(x => x) == (x => Zer8{}) : Opt8<Emp8> -> Opt8<Emp8>}\n  {(x => x) == (x => Zer8{}) : Opt8<Un8> -> Opt8<Un8>}\n\ndef bad_fun(e):\n  %q@e : {\n    (x => x) ==\n    _\n    : Opt8<Un8> -> Opt8<Un8>\n  }; {==}\n\nlaw main:\n  Un8\n\ndef main(): Uu8{}\n\n#|Error:\n#|- expected : @_:Opt8<Un8> -> Opt8<Un8>\n#|- observed : @_:Opt8<Emp8> -> Opt8<Emp8>\n#|Context:\n#|- e : {(x => x) == (x => Zer8{}) : @_:Opt8<Emp8> -> Opt8<Emp8>}\n#|- _ : @_:Opt8<Emp8> -> Opt8<Emp8>\n#|- q : {(x => x) == _ : @_:Opt8<Emp8> -> Opt8<Emp8>}\n#|Location: bad_fun\n#|21 | def bad_fun(e):\n#|22>|   %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n#|23 |\n#|exit 1\n",
+            None,
+            "Error:\n- expected : @_:Opt8<Un8> -> Opt8<Un8>\n- observed : @_:Opt8<Emp8> -> Opt8<Emp8>\nContext:\n- e : {(x => x) == (x => Zer8{}) : @_:Opt8<Emp8> -> Opt8<Emp8>}\n- _ : @_:Opt8<Emp8> -> Opt8<Emp8>\n- q : {(x => x) == _ : @_:Opt8<Emp8> -> Opt8<Emp8>}\nLocation: bad_fun\n23 |     (x => x) ==\n24>|     _\n25 |     : Opt8<Un8> -> Opt8<Un8>\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.Un8: H.Uu8{}\n",
+            Some(
+                "# Cross-type (\"untyped global\") rewrite -- the faithful attack. Given e\n# at carrier Opt(Empty)->Opt(Empty), an untyped substitution would\n# coerce it into an Opt(Unit)->Opt(Unit) goal. The type-checked motive\n# REJECTS this: the abstracted motive variable cannot have both carrier\n# types.\n# ported from bend3: bend's rewrite spells the motive explicitly, and\n# the guard fires as the carrier mismatch\ntype Emp8 is Data:\n\ntype Un8 is Data:\n  Uu8{}\n\ntype Opt8<-A: Data> is Data:\n  Zer8{}\n  One8{x: A}\n\nlaw bad_fun:\n  for e: {(x => x) == (x => Zer8{}) : Opt8<Emp8> -> Opt8<Emp8>}\n  {(x => x) == (x => Zer8{}) : Opt8<Un8> -> Opt8<Un8>}\n\ndef bad_fun(e):\n  %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n\n\n\n#|Error:\n#|- expected : @_:Opt8<Un8> -> Opt8<Un8>\n#|- observed : @_:Opt8<Emp8> -> Opt8<Emp8>\n#|Context:\n#|- e : {(x => x) == (x => Zer8{}) : @_:Opt8<Emp8> -> Opt8<Emp8>}\n#|- _ : @_:Opt8<Emp8> -> Opt8<Emp8>\n#|- q : {(x => x) == _ : @_:Opt8<Emp8> -> Opt8<Emp8>}\n#|Location: bad_fun\n#|21 | def bad_fun(e):\n#|22>|   %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n#|23 |\n#|exit 1\n",
+            ),
+            "Error:\n- expected : @_:helper.Opt8<helper.Un8> -> helper.Opt8<helper.Un8>\n- observed : @_:helper.Opt8<helper.Emp8> -> helper.Opt8<helper.Emp8>\nContext:\n- e : {(x => x) == (x => helper.Zer8{}) : @_:helper.Opt8<helper.Emp8> -> helper.Opt8<helper.Emp8>}\n- _ : @_:helper.Opt8<helper.Emp8> -> helper.Opt8<helper.Emp8>\n- q : {(x => x) == _ : @_:helper.Opt8<helper.Emp8> -> helper.Opt8<helper.Emp8>}\nLocation: helper.bad_fun\n21 | def bad_fun(e):\n22>|   %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n23 | \n",
+        ),
+        (
+            "type A is Data:\n  A0{}\ntype B is Data:\n  B0{}\ndef bad(x: A, e: {x == x : A}) -> Type:\n  %e : {\n    {_ == _ : A} ==\n    {_ == _ : B} : Type\n  }; {==}\n",
+            None,
+            "Error:\n- expected : B\n- observed : A\nContext:\n- x : A\n- e : {x == x : A}\n- _ : A\n-   : {x == _ : A}\nLocation: bad\n7 |     {_ == _ : A} ==\n8>|     {_ == _ : B} : Type\n9 |   }; {==}\n",
+        ),
+        (
+            "import Base\ndef main() -> U32:\n  %5 elephant\n",
+            None,
+            "Error:\n- expected : ':'\n- observed : 'e'\nLocation:\n2 | def main() -> U32:\n3>|   %5 elephant\n4 | \n",
+        ),
+        (
+            "import Base\ndef main() -> U32: %5",
+            None,
+            "Error:\n- expected : ':'\n- observed : end of input\nLocation:\n1 | \n2>| def main() -> U32: %5\n",
+        ),
+        (
+            "import Base\r\ndef main() -> U32:\r\n  %5 elephant\r\n",
+            None,
+            "Error:\n- expected : ':'\n- observed : 'e'\nLocation:\n2 | def main() -> U32:\r\n3>|   %5 elephant\r\n4 | \n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad() -> U32:\n  %5 elephant\n"),
+            "Error:\n- expected : ':'\n- observed : 'e'\nLocation:\n2 | def bad() -> U32:\n3>|   %5 elephant\n4 | \n",
+        ),
+        (
+            "import Base\ndef main() -> U32: {0 : U32]\n",
+            None,
+            "Error:\n- expected : '}'\n- observed : ']'\nLocation:\n1 | \n2>| def main() -> U32: {0 : U32]\n3 | \n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

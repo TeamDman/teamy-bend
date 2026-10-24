@@ -1159,3 +1159,21 @@ fn destructuring_functions_preserve_fields_and_application_values() {
     }
     assert_eq!(observations, 399);
 }
+
+#[test]
+fn equality_printer_preserves_low_precedence_operands_and_core_shape() {
+    for source in [
+        "{(x => x) == (y => y) : @_:A -> A}",
+        "{(x => x) == _ : @_:A -> A}",
+        "{a == b : (x => x)}",
+        "{(%e : A; x) == (x => x) : A}",
+    ] {
+        let value = parse_term(source).unwrap();
+        assert_eq!(value.to_string(), source);
+        let printed = parse_term(&value.to_string()).unwrap();
+        // The existing bounded Shape vocabulary deliberately excludes All.
+        // These standalone parses allocate IDs deterministically, so compare
+        // every AST field directly rather than expanding/weakening that oracle.
+        assert_eq!(format!("{value:?}"), format!("{printed:?}"));
+    }
+}

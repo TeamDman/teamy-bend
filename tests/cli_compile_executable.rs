@@ -199,6 +199,18 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-rewrite-checking/rewrite_non_equation.bend"),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : 5\nLocation: main\n 9 | \n10>| def main(): %5 : U32; 1\n11 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-checking/rewrite_ctor_brace.bend"),
+            "Error:\n- expected : @_:Opt8<Un8> -> Opt8<Un8>\n- observed : @_:Opt8<Emp8> -> Opt8<Emp8>\nContext:\n- e : {(x => x) == (x => Zer8{}) : @_:Opt8<Emp8> -> Opt8<Emp8>}\n- _ : @_:Opt8<Emp8> -> Opt8<Emp8>\n- q : {(x => x) == _ : @_:Opt8<Emp8> -> Opt8<Emp8>}\nLocation: bad_fun\n21 | def bad_fun(e):\n22>|   %q@e : {(x => x) == _ : Opt8<Un8> -> Opt8<Un8>}; {==}\n23 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-rewrite-checking/dead_motive_syntax.bend"),
+            "Error:\n- expected : ':'\n- observed : 'e'\nLocation:\n12 | def sym3(x, y, e):\n13>|   %[h => {y == h : U32}] e {=}\n14 | \n",
+        ),
+        (
             include_str!("fixtures/cpu-plus-binders/plus_binder_term.bend"),
             "Error:\n- expected : a bound variable\n- observed : x^-1\nContext:\n- x : U32\nLocation: main\n6 |   x = U32.add(1, 1)\n7>|   U32.add(+x, 1)\n8 | \n",
         ),

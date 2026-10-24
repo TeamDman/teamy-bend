@@ -27,8 +27,14 @@ pub(crate) struct DiagnosticLoadError {
 
 #[derive(Debug)]
 pub(crate) struct LoadDiagnostic {
-    pub(crate) message: String,
+    pub(crate) content: LoadDiagnosticContent,
     pub(crate) excerpt: String,
+}
+
+#[derive(Debug)]
+pub(crate) enum LoadDiagnosticContent {
+    Message(String),
+    ExpectedObserved { expected: String, observed: String },
 }
 
 struct TermOrigin {
@@ -65,7 +71,9 @@ impl DiagnosticOrigins {
         self.load_failure =
             self.excerpt(self.tracker.source(value))
                 .map(|excerpt| LoadDiagnostic {
-                    message: format!("a declared constructor (unknown: {name})"),
+                    content: LoadDiagnosticContent::Message(format!(
+                        "a declared constructor (unknown: {name})"
+                    )),
                     excerpt,
                 });
     }
@@ -79,7 +87,30 @@ impl DiagnosticOrigins {
     pub(super) fn rejected_local_binding(&mut self, id: usize) {
         self.load_failure = self.local_binders.get(&id).and_then(|(source, line)| {
             source_excerpt(source, *line).map(|excerpt| LoadDiagnostic {
-                message: "a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)".into(),
+                content: LoadDiagnosticContent::Message("a parameter or field scrutinee (a match cannot scrutinize a local binder: give it its own def)".into()),
+                excerpt,
+            })
+        });
+    }
+
+    pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
+        self.load_failure = self.sources.get(label).and_then(|source| {
+            // Loader parsing uses a newline-normalized buffer. The public
+            // ParseError retains that position; the source display uses the
+            // actual EOF, including an original missing final newline.
+            let line = if found.is_empty() {
+                source.split('\n').count()
+            } else {
+                line
+            };
+            source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
+                content: LoadDiagnosticContent::ExpectedObserved {
+                    expected: format!("'{expected}'"),
+                    observed: found
+                        .chars()
+                        .next()
+                        .map_or_else(|| "end of input".into(), |first| format!("'{first}'")),
+                },
                 excerpt,
             })
         });
@@ -119,6 +150,19 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn token_metadata_preserves_public_parse_error() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-rewrite-checking/dead_motive_syntax.bend");
+        let plain = crate::syntax::load(&path).unwrap_err();
+        let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+        assert_eq!(plain.to_string(), tracked.error.to_string());
+        assert_eq!((plain.line, plain.column), (13, 26));
+        assert!(matches!(tracked.diagnostic.unwrap().content,
+            super::LoadDiagnosticContent::ExpectedObserved { expected, observed }
+            if expected == "':'" && observed == "'e'"));
+    }
+
     #[test]
     fn local_binding_metadata_preserves_the_public_parse_error() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

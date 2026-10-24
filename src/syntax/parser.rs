@@ -322,7 +322,11 @@ impl Parser<'_> {
         if self.take(s) {
             Ok(())
         } else {
-            Err(self.error(format!("expected {s:?}, found {:?}", self.current().text)))
+            let token = self.current().clone();
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.expected_token(&self.label, token.line, s, &token.text);
+            }
+            Err(self.error(format!("expected {s:?}, found {:?}", token.text)))
         }
     }
     fn name(&mut self) -> Result<String, ParseError> {
@@ -1220,9 +1224,10 @@ impl Parser<'_> {
     fn atom(&mut self) -> Result<TermRef, ParseError> {
         let line = self.current().line;
         let value = self.atom_inner()?;
-        if (matches!(value.as_ref(), Term::Ctr { .. } | Term::Rwt { .. })
-            || self.is_reusable(&value))
-            && let Some(origins) = &mut self.templates.diagnostics
+        if matches!(
+            value.as_ref(),
+            Term::Ctr { .. } | Term::Rwt { .. } | Term::Eql { .. } | Term::Var { .. }
+        ) && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);
         }

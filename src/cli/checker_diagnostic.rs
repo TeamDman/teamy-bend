@@ -2,6 +2,7 @@
 use super::output::CliOutput;
 use crate::kernel::KernelError;
 use crate::syntax::diagnostics::DiagnosticOrigins;
+use crate::syntax::diagnostics::LoadDiagnosticContent;
 use eyre::Context;
 use eyre::eyre;
 use std::fmt::Write as _;
@@ -70,11 +71,14 @@ fn emit_load(
         return Err(eyre!("{}", failure.error));
     };
     tracing::debug!(internal_error = %failure.error, "Bend source load rejected");
+    let content = match &report.content {
+        LoadDiagnosticContent::Message(message) => format!("- message  : {message}"),
+        LoadDiagnosticContent::ExpectedObserved { expected, observed } => {
+            format!("- expected : {expected}\n- observed : {observed}")
+        }
+    };
     write_diagnostic(
-        &format!(
-            "Error:\n- message  : {}\nLocation:\n{}\n",
-            report.message, report.excerpt
-        ),
+        &format!("Error:\n{content}\nLocation:\n{}\n", report.excerpt),
         stderr,
     )
 }
@@ -111,6 +115,7 @@ mod tests {
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
+            "tests/fixtures/cpu-rewrite-checking/rewrite_ctor_brace.bend",
         ] {
             let (error, origins) = rejected(name);
             let cancellation = CancellationToken::new();
@@ -158,46 +163,54 @@ mod tests {
                 Err(io::Error::other("flush failed"))
             }
         }
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/cpu-constructors/nested-pattern.bend");
-        let mut error = load_with_diagnostics(path)
-            .err()
-            .expect("pattern load rejects");
-        let mut output = Vec::new();
-        let token = CancellationToken::new();
-        token.request_cancel("stop load diagnostic");
-        assert!(
-            emit_load(&error, &token, &mut output)
-                .unwrap_err()
-                .to_string()
-                .contains("stop load diagnostic")
-        );
-        assert!(output.is_empty());
-        for fail_write in [true, false] {
-            let failure =
-                emit_load(&error, &CancellationToken::new(), &mut Writer(fail_write)).unwrap_err();
-            assert!(failure.to_string().contains(if fail_write {
-                "cannot write"
-            } else {
-                "cannot flush"
-            }));
+        for (file, excerpt) in [
+            (
+                "cpu-constructors/nested-pattern.bend",
+                "7>|       Missing{}",
+            ),
+            (
+                "cpu-rewrite-checking/dead_motive_syntax.bend",
+                "13>|   %[h => {y == h : U32}] e {=}",
+            ),
+        ] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures")
+                .join(file);
+            let mut error = load_with_diagnostics(path)
+                .err()
+                .expect("pattern load rejects");
+            let mut output = Vec::new();
+            let token = CancellationToken::new();
+            token.request_cancel("stop load diagnostic");
+            assert!(
+                emit_load(&error, &token, &mut output)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("stop load diagnostic")
+            );
+            assert!(output.is_empty());
+            for fail_write in [true, false] {
+                let failure = emit_load(&error, &CancellationToken::new(), &mut Writer(fail_write))
+                    .unwrap_err();
+                assert!(failure.to_string().contains(if fail_write {
+                    "cannot write"
+                } else {
+                    "cannot flush"
+                }));
+            }
+            let result = emit_load(&error, &CancellationToken::new(), &mut output).unwrap();
+            assert_eq!(result.exit_code(), 1);
+            assert!(String::from_utf8(output).unwrap().contains(excerpt));
+            error.diagnostic = None;
+            let mut bytes = Vec::new();
+            assert_eq!(
+                emit_load(&error, &CancellationToken::new(), &mut bytes)
+                    .unwrap_err()
+                    .to_string(),
+                error.error.to_string()
+            );
+            assert!(bytes.is_empty());
         }
-        let result = emit_load(&error, &CancellationToken::new(), &mut output).unwrap();
-        assert_eq!(result.exit_code(), 1);
-        assert!(
-            String::from_utf8(output)
-                .unwrap()
-                .contains("7>|       Missing{}")
-        );
-        error.diagnostic = None;
-        let mut bytes = Vec::new();
-        assert_eq!(
-            emit_load(&error, &CancellationToken::new(), &mut bytes)
-                .unwrap_err()
-                .to_string(),
-            error.error.to_string()
-        );
-        assert!(bytes.is_empty());
     }
 
     #[test]
@@ -223,6 +236,7 @@ mod tests {
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",
             "tests/fixtures/cpu-plus-binders/plus_binder_term.bend",
+            "tests/fixtures/cpu-rewrite-checking/rewrite_ctor_brace.bend",
         ] {
             let (error, origins) = rejected(name);
             for fail_write in [true, false] {
