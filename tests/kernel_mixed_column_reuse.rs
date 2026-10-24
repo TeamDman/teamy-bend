@@ -5,6 +5,7 @@ mod normalization_shape;
 use normalization_shape::shape_in_book;
 use std::path::Path;
 use teamy_bend::kernel as normalization_kernel;
+use teamy_bend::kernel::Term;
 use teamy_bend::kernel::check_book;
 use teamy_bend::syntax::load;
 use teamy_bend::syntax::parse_term;
@@ -33,9 +34,35 @@ fn mixed_column_reuse_preserve_normal_forms_and_all_39_pinned_applications() {
         let checked = check_book(&book).unwrap();
         let definition_type = checked.definition_type("main").unwrap();
         assert_eq!(definition_type.to_string(), expected_type, "{fixture}");
+        let oracle_type = parse_term(expected_type).unwrap();
+        let mut actual = definition_type;
+        let mut oracle = &oracle_type;
+        while let (
+            Term::All {
+                quant,
+                domain,
+                body,
+                ..
+            },
+            Term::All {
+                quant: expected_quant,
+                domain: expected_domain,
+                body: expected_body,
+                ..
+            },
+        ) = (actual.as_ref(), oracle.as_ref())
+        {
+            assert_eq!(quant, expected_quant, "{fixture}");
+            assert_eq!(
+                shape_in_book(domain, &book).unwrap(),
+                shape_in_book(expected_domain, &book).unwrap()
+            );
+            actual = body;
+            oracle = expected_body;
+        }
         assert_eq!(
-            shape_in_book(definition_type, &book).unwrap(),
-            shape_in_book(&parse_term(expected_type).unwrap(), &book).unwrap()
+            shape_in_book(actual, &book).unwrap(),
+            shape_in_book(oracle, &book).unwrap()
         );
         let value = checked.normalize_definition("main").unwrap();
         assert_eq!(value.to_string(), expected, "{fixture}");
