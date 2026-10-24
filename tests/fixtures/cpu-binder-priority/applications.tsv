@@ -1,0 +1,36 @@
+shared_param_computed_000.bend	Z{}	Z{}
+shared_param_computed_000.bend	S{Z{}}	Z{}
+shared_param_computed_000.bend	S{S{Z{}}}	S{Z{}}
+shared_param_computed_000.bend	S{S{S{Z{}}}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{Z{}, Z{}};Z{}	Z{}
+cross_binder_promotion.bend	P{Z{}, Z{}};S{Z{}}	Z{}
+cross_binder_promotion.bend	P{Z{}, Z{}};S{S{Z{}}}	Z{}
+cross_binder_promotion.bend	P{Z{}, S{Z{}}};Z{}	S{Z{}}
+cross_binder_promotion.bend	P{Z{}, S{Z{}}};S{Z{}}	Z{}
+cross_binder_promotion.bend	P{Z{}, S{Z{}}};S{S{Z{}}}	Z{}
+cross_binder_promotion.bend	P{Z{}, S{S{Z{}}}};Z{}	S{S{Z{}}}
+cross_binder_promotion.bend	P{Z{}, S{S{Z{}}}};S{Z{}}	Z{}
+cross_binder_promotion.bend	P{Z{}, S{S{Z{}}}};S{S{Z{}}}	Z{}
+cross_binder_promotion.bend	P{S{Z{}}, Z{}};Z{}	Z{}
+cross_binder_promotion.bend	P{S{Z{}}, Z{}};S{Z{}}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, Z{}};S{S{Z{}}}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, S{Z{}}};Z{}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, S{Z{}}};S{Z{}}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, S{Z{}}};S{S{Z{}}}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, S{S{Z{}}}};Z{}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{Z{}}, S{S{Z{}}}};S{Z{}}	S{Z{}}
+cross_binder_promotion.bend	P{S{Z{}}, S{S{Z{}}}};S{S{Z{}}}	S{Z{}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, Z{}};Z{}	Z{}
+cross_binder_promotion.bend	P{S{S{Z{}}}, Z{}};S{Z{}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, Z{}};S{S{Z{}}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{Z{}}};Z{}	S{Z{}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{Z{}}};S{Z{}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{Z{}}};S{S{Z{}}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{S{Z{}}}};Z{}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{S{Z{}}}};S{Z{}}	S{S{Z{}}}
+cross_binder_promotion.bend	P{S{S{Z{}}}, S{S{Z{}}}};S{S{Z{}}}	S{S{Z{}}}
+var_row_column_rebind.bend	Z{}	KN{Z{}}
+var_row_column_rebind.bend	S{Z{}}	K10{}
+var_row_column_rebind.bend	S{S{Z{}}}	KN{S{S{Z{}}}}
+var_row_column_rebind.bend	S{S{S{Z{}}}}	KN{S{S{S{Z{}}}}}
+var_row_column_rebind.bend	S{S{S{S{Z{}}}}}	KN{S{S{S{S{Z{}}}}}}
