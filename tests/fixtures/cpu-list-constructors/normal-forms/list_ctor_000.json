@@ -1,0 +1,1 @@
+{"Match":["Cons",{"Match":["F",{"Lambda":{"Constructor":["A",[{"Bound":0}]]}},{"Match":["T",{"Lambda":{"Constructor":["B",[{"Bound":0}]]}},"EmptyMatch"]}]},{"Match":["Nil",{"Constructor":["C",[]]},"EmptyMatch"]}]}

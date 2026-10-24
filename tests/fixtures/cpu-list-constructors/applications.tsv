@@ -1,0 +1,78 @@
+list_ctor_000.bend	[]	C{}
+list_ctor_000.bend	Cons{F{}, []}	A{[]}
+list_ctor_000.bend	Cons{T{}, []}	B{[]}
+list_ctor_000.bend	Cons{F{}, Cons{F{}, []}}	A{Cons{F{}, []}}
+list_ctor_000.bend	Cons{F{}, Cons{T{}, []}}	A{Cons{T{}, []}}
+list_ctor_000.bend	Cons{T{}, Cons{F{}, []}}	B{Cons{F{}, []}}
+list_ctor_000.bend	Cons{T{}, Cons{T{}, []}}	B{Cons{T{}, []}}
+list_ctor_001.bend	[]	C{}
+list_ctor_001.bend	Cons{Z{}, []}	B{[]}
+list_ctor_001.bend	Cons{S{S{Z{}}}, []}	A{S{Z{}}, []}
+list_ctor_001.bend	Cons{Z{}, Cons{Z{}, []}}	B{Cons{Z{}, []}}
+list_ctor_001.bend	Cons{Z{}, Cons{S{S{Z{}}}, []}}	B{Cons{S{S{Z{}}}, []}}
+list_ctor_001.bend	Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{S{Z{}}, Cons{Z{}, []}}
+list_ctor_001.bend	Cons{S{S{Z{}}}, Cons{S{S{Z{}}}, []}}	A{S{Z{}}, Cons{S{S{Z{}}}, []}}
+list_ctor_002.bend	[]	C{}
+list_ctor_002.bend	Cons{Z{}, []}	B{Z{}, []}
+list_ctor_002.bend	Cons{S{S{Z{}}}, []}	B{S{S{Z{}}}, []}
+list_ctor_002.bend	Cons{Z{}, Cons{Z{}, []}}	B{Z{}, Cons{Z{}, []}}
+list_ctor_002.bend	Cons{Z{}, Cons{S{S{Z{}}}, []}}	B{Z{}, Cons{S{S{Z{}}}, []}}
+list_ctor_002.bend	Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{S{Z{}}, Z{}, []}
+list_ctor_002.bend	Cons{S{S{Z{}}}, Cons{S{S{Z{}}}, []}}	A{S{Z{}}, S{S{Z{}}}, []}
+list_ctor_003.bend	[]	D{}
+list_ctor_003.bend	Cons{Z{}, []}	B{}
+list_ctor_003.bend	Cons{S{S{Z{}}}, []}	A{S{Z{}}, []}
+list_ctor_003.bend	Cons{Z{}, Cons{Z{}, []}}	C{Z{}, []}
+list_ctor_003.bend	Cons{Z{}, Cons{S{S{Z{}}}, []}}	C{S{S{Z{}}}, []}
+list_ctor_003.bend	Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{S{Z{}}, Cons{Z{}, []}}
+list_ctor_003.bend	Cons{S{S{Z{}}}, Cons{S{S{Z{}}}, []}}	A{S{Z{}}, Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	Z{};[];[]	A{}
+list_ctor_004.bend	Z{};[];Cons{Z{}, []}	A{}
+list_ctor_004.bend	Z{};[];Cons{S{S{Z{}}}, []}	A{}
+list_ctor_004.bend	Z{};[];Cons{Z{}, Cons{S{S{Z{}}}, []}}	A{}
+list_ctor_004.bend	Z{};[];Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, []};[]	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, []};Cons{Z{}, []}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, []};Cons{S{S{Z{}}}, []}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, []};Cons{Z{}, Cons{S{S{Z{}}}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, []};Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, []};[]	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, []};Cons{Z{}, []}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, []};Cons{S{S{Z{}}}, []}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, []};Cons{Z{}, Cons{S{S{Z{}}}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, []};Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, Cons{S{S{Z{}}}, []}};[]	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{Z{}, []}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{S{S{Z{}}}, []}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{Z{}, Cons{S{S{Z{}}}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, Cons{Z{}, []}};[]	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{Z{}, []}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{S{S{Z{}}}, []}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{Z{}, Cons{S{S{Z{}}}, []}}	A{}
+list_ctor_004.bend	Z{};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{S{S{Z{}}}, Cons{Z{}, []}}	A{}
+list_ctor_004.bend	S{S{Z{}}};[];[]	B{S{Z{}}, []}
+list_ctor_004.bend	S{S{Z{}}};[];Cons{Z{}, []}	B{S{Z{}}, Cons{Z{}, []}}
+list_ctor_004.bend	S{S{Z{}}};[];Cons{S{S{Z{}}}, []}	B{S{Z{}}, Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	S{S{Z{}}};[];Cons{Z{}, Cons{S{S{Z{}}}, []}}	B{S{Z{}}, Cons{Z{}, Cons{S{S{Z{}}}, []}}}
+list_ctor_004.bend	S{S{Z{}}};[];Cons{S{S{Z{}}}, Cons{Z{}, []}}	B{S{Z{}}, Cons{S{S{Z{}}}, Cons{Z{}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, []};[]	C{S{Z{}}, [], []}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, []};Cons{Z{}, []}	C{S{Z{}}, [], Cons{Z{}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, []};Cons{S{S{Z{}}}, []}	C{S{Z{}}, [], Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, []};Cons{Z{}, Cons{S{S{Z{}}}, []}}	C{S{Z{}}, [], Cons{Z{}, Cons{S{S{Z{}}}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, []};Cons{S{S{Z{}}}, Cons{Z{}, []}}	C{S{Z{}}, [], Cons{S{S{Z{}}}, Cons{Z{}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, []};[]	D{S{Z{}}, S{Z{}}, [], []}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, []};Cons{Z{}, []}	D{S{Z{}}, S{Z{}}, [], Cons{Z{}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, []};Cons{S{S{Z{}}}, []}	D{S{Z{}}, S{Z{}}, [], Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, []};Cons{Z{}, Cons{S{S{Z{}}}, []}}	D{S{Z{}}, S{Z{}}, [], Cons{Z{}, Cons{S{S{Z{}}}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, []};Cons{S{S{Z{}}}, Cons{Z{}, []}}	D{S{Z{}}, S{Z{}}, [], Cons{S{S{Z{}}}, Cons{Z{}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, Cons{S{S{Z{}}}, []}};[]	C{S{Z{}}, Cons{S{S{Z{}}}, []}, []}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{Z{}, []}	C{S{Z{}}, Cons{S{S{Z{}}}, []}, Cons{Z{}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{S{S{Z{}}}, []}	C{S{Z{}}, Cons{S{S{Z{}}}, []}, Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{Z{}, Cons{S{S{Z{}}}, []}}	C{S{Z{}}, Cons{S{S{Z{}}}, []}, Cons{Z{}, Cons{S{S{Z{}}}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{Z{}, Cons{S{S{Z{}}}, []}};Cons{S{S{Z{}}}, Cons{Z{}, []}}	C{S{Z{}}, Cons{S{S{Z{}}}, []}, Cons{S{S{Z{}}}, Cons{Z{}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, Cons{Z{}, []}};[]	D{S{Z{}}, S{Z{}}, Cons{Z{}, []}, []}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{Z{}, []}	D{S{Z{}}, S{Z{}}, Cons{Z{}, []}, Cons{Z{}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{S{S{Z{}}}, []}	D{S{Z{}}, S{Z{}}, Cons{Z{}, []}, Cons{S{S{Z{}}}, []}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{Z{}, Cons{S{S{Z{}}}, []}}	D{S{Z{}}, S{Z{}}, Cons{Z{}, []}, Cons{Z{}, Cons{S{S{Z{}}}, []}}}
+list_ctor_004.bend	S{S{Z{}}};Cons{S{S{Z{}}}, Cons{Z{}, []}};Cons{S{S{Z{}}}, Cons{Z{}, []}}	D{S{Z{}}, S{Z{}}, Cons{Z{}, []}, Cons{S{S{Z{}}}, Cons{Z{}, []}}}

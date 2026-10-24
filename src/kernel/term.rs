@@ -396,18 +396,45 @@ impl fmt::Display for Quant {
     }
 }
 
+// Display-only lexical context. Semantic IDs remain unchanged; the suffix is
+// the binder's level in this printed term, matching pinned term_show.
+struct ScopedTerm<'a> {
+    value: &'a Term,
+    scope: &'a [(usize, &'a str)],
+}
+
+fn scoped<'a>(value: &'a Term, scope: &'a [(usize, &'a str)]) -> ScopedTerm<'a> {
+    ScopedTerm { value, scope }
+}
+
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Var { name, .. } | Self::Ref(name) => f.write_str(name),
-            Self::GpuRef(name) => write!(f, "{name}!"),
-            Self::Typ(g) => match g.as_ref() {
-                Self::Qua(Quant::Lone) => f.write_str("Type"),
-                Self::Qua(Quant::Many) => f.write_str("Data"),
-                _ => write!(f, "Kind({g})"),
+        scoped(self, &[]).fmt(f)
+    }
+}
+
+impl fmt::Display for ScopedTerm<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let scope = self.scope;
+        match self.value {
+            Term::Var { name, id } => {
+                f.write_str(name)?;
+                if let Some(level) = scope.iter().position(|(bound, _)| bound == id)
+                    && scope.iter().rposition(|(_, bound)| *bound == name) != Some(level)
+                {
+                    write!(f, "^{level}")?;
+                }
+                Ok(())
+            }
+            Term::Ref(name) => reference(f, name, false, scope),
+            Term::GpuRef(name) => reference(f, name, true, scope),
+            Term::Typ(g) => match g.as_ref() {
+                Term::Qua(Quant::Lone) => f.write_str("Type"),
+                Term::Qua(Quant::Many) => f.write_str("Data"),
+                _ => write!(f, "Kind({})", scoped(g, scope)),
             },
-            Self::Qnt => f.write_str("Quant"),
-            Self::Qua(q) => write!(
+            Term::Qnt => f.write_str("Quant"),
+            Term::Qua(q) => write!(
                 f,
                 "&{}",
                 match q {
@@ -416,27 +443,33 @@ impl fmt::Display for Term {
                     Quant::Many => 2,
                 }
             ),
-            Self::Min(a, b) => {
+            Term::Min(a, b) => {
                 f.write_str("(")?;
-                infix_operand(f, a)?;
+                infix_operand(f, a, scope)?;
                 f.write_str(" <&> ")?;
-                infix_operand(f, b)?;
+                infix_operand(f, b, scope)?;
                 f.write_str(")")
             }
-            Self::All {
+            Term::All {
                 quant,
                 name,
                 domain,
                 body,
-                ..
+                id,
             } => {
                 write!(f, "@{quant}{name}:")?;
-                infix_operand(f, domain)?;
-                write!(f, " -> {body}")
+                infix_operand(f, domain, scope)?;
+                let mut body_scope = scope.to_vec();
+                body_scope.push((*id, name));
+                write!(f, " -> {}", scoped(body, &body_scope))
             }
-            Self::Lam { name, body, .. } => write!(f, "{name} => {body}"),
-            Self::App(..) => application(f, self),
-            Self::Adt {
+            Term::Lam { name, id, body } => {
+                let mut body_scope = scope.to_vec();
+                body_scope.push((*id, name));
+                write!(f, "{name} => {}", scoped(body, &body_scope))
+            }
+            Term::App(..) => application(f, self.value, scope),
+            Term::Adt {
                 name,
                 args,
                 excluded,
@@ -444,7 +477,7 @@ impl fmt::Display for Term {
                 f.write_str(name)?;
                 if !args.is_empty() {
                     f.write_str("<")?;
-                    list(f, args)?;
+                    list(f, args, scope)?;
                     f.write_str(">")?;
                 }
                 if !excluded.is_empty() {
@@ -452,14 +485,14 @@ impl fmt::Display for Term {
                 }
                 Ok(())
             }
-            Self::Ctr { name, args } => constructor(f, self, name, args),
-            Self::Mat { .. } => {
+            Term::Ctr { name, args } => constructor(f, self.value, name, args, scope),
+            Term::Mat { .. } => {
                 // Upstream term_show prints a consecutive fallback chain as
                 // ordered arms in one match. An empty final fallback is implicit.
                 f.write_str("\\{")?;
-                let mut current = self;
+                let mut current = self.value;
                 let mut first = true;
-                while let Self::Mat {
+                while let Term::Mat {
                     constructor,
                     arm,
                     fallback,
@@ -469,43 +502,67 @@ impl fmt::Display for Term {
                         f.write_str("; ")?;
                     }
                     write!(f, "{constructor}: ")?;
-                    match_branch(f, arm)?;
+                    match_branch(f, arm, scope)?;
                     current = fallback;
                     first = false;
                 }
-                if !matches!(current, Self::Efq) {
+                if !matches!(current, Term::Efq) {
                     f.write_str("; ")?;
-                    match_branch(f, current)?;
+                    match_branch(f, current, scope)?;
                 }
                 f.write_str("}")
             }
-            Self::Efq => f.write_str("\\{}"),
-            Self::Eql { left, right, ty } => equation(f, left, right, ty),
-            Self::Rfl => f.write_str("{==}"),
-            Self::Rwt {
+            Term::Efq => f.write_str("\\{}"),
+            Term::Eql { left, right, ty } => equation(f, left, right, ty, scope),
+            Term::Rfl => f.write_str("{==}"),
+            Term::Rwt {
                 evidence,
                 motive,
                 body,
-            } => rewrite(f, evidence, motive, body),
-            Self::Hole(name) => write!(f, "?{name}"),
-            Self::Ann(x, t) => write!(f, "{{{x} : {t}}}"),
-            Self::Let { bindings, body } => {
+            } => rewrite(f, evidence, motive, body, scope),
+            Term::Hole(name) => write!(f, "?{name}"),
+            Term::Ann(x, t) => write!(f, "{{{} : {}}}", scoped(x, scope), scoped(t, scope)),
+            Term::Let { bindings, body } => {
+                let mut body_scope = scope.to_vec();
                 for b in bindings {
-                    write!(f, "{}{} = {}; ", b.quant, b.name, b.value)?;
+                    write!(f, "{}{} = {}; ", b.quant, b.name, scoped(&b.value, scope))?;
+                    body_scope.push((b.id, &b.name));
                 }
-                write!(f, "{body}")
+                write!(f, "{}", scoped(body, &body_scope))
             }
         }
     }
 }
 
-fn equation(f: &mut fmt::Formatter<'_>, left: &Term, right: &Term, ty: &Term) -> fmt::Result {
+fn reference(
+    f: &mut fmt::Formatter<'_>,
+    name: &str,
+    gpu: bool,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
+    f.write_str(name)?;
+    if scope.iter().any(|(_, bound)| *bound == name) {
+        f.write_str("^")?;
+    }
+    if gpu {
+        f.write_str("!")?;
+    }
+    Ok(())
+}
+
+fn equation(
+    f: &mut fmt::Formatter<'_>,
+    left: &Term,
+    right: &Term,
+    ty: &Term,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
     f.write_str("{")?;
-    match_branch(f, left)?;
+    match_branch(f, left, scope)?;
     f.write_str(" == ")?;
-    match_branch(f, right)?;
+    match_branch(f, right, scope)?;
     f.write_str(" : ")?;
-    match_branch(f, ty)?;
+    match_branch(f, ty, scope)?;
     f.write_str("}")
 }
 
@@ -514,23 +571,24 @@ fn constructor(
     value: &Term,
     name: &str,
     args: &[TermRef],
+    scope: &[(usize, &str)],
 ) -> fmt::Result {
     if let Some((count, tail)) = nat_spine(value) {
         write!(f, "{count}n")?;
         if !empty_constructor(tail, "Zero") {
             f.write_str("+")?;
-            match_branch(f, tail)?;
+            match_branch(f, tail, scope)?;
         }
         return Ok(());
     }
     if complete_list(value) {
-        return list_literal(f, value);
+        return list_literal(f, value, scope);
     }
     if open_list(value) {
-        return cons_chain(f, value);
+        return cons_chain(f, value, scope);
     }
     if name == "Tuple" && args.len() == 2 {
-        return tuple_literal(f, value);
+        return tuple_literal(f, value, scope);
     }
     if matches!(name, "ALeaf" | "ANode")
         && let Some(elements) = array_elements(value)
@@ -540,7 +598,7 @@ fn constructor(
             if index != 0 {
                 f.write_str(", ")?;
             }
-            argument(f, element)?;
+            argument(f, element, scope)?;
         }
         return f.write_str("]");
     }
@@ -548,10 +606,10 @@ fn constructor(
         && let [word] = args
         && let Some(value) = literal_word(word)
     {
-        return write!(f, "{value}");
+        return write!(f, "{}", scoped(value, scope));
     }
     write!(f, "{name}{{")?;
-    list(f, args)?;
+    list(f, args, scope)?;
     f.write_str("}")
 }
 
@@ -602,12 +660,12 @@ fn open_nat(value: &Term) -> bool {
     nat_spine(value).is_some_and(|(_, tail)| !empty_constructor(tail, "Zero"))
 }
 
-fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Arrow domains and quantitative-meet operands use upstream precedence 2.
     if open_nat(value) || open_list(value) {
-        write!(f, "({value})")
+        write!(f, "({})", scoped(value, scope))
     } else {
-        write!(f, "{value}")
+        write!(f, "{}", scoped(value, scope))
     }
 }
 
@@ -631,7 +689,11 @@ fn open_list(value: &Term) -> bool {
         && !complete_list(value)
 }
 
-fn cons_chain(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+fn cons_chain(
+    f: &mut fmt::Formatter<'_>,
+    mut value: &Term,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
     while let Term::Ctr { name, args } = value {
         if name != "Con" || args.len() != 2 {
             break;
@@ -647,17 +709,21 @@ fn cons_chain(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
         ) || open_nat(head)
             || open_list(head)
         {
-            write!(f, "({head})")?;
+            write!(f, "({})", scoped(head, scope))?;
         } else {
-            write!(f, "{head}")?;
+            write!(f, "{}", scoped(head, scope))?;
         }
         f.write_str(" <> ")?;
         value = &args[1];
     }
-    match_branch(f, value)
+    match_branch(f, value, scope)
 }
 
-fn list_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+fn list_literal(
+    f: &mut fmt::Formatter<'_>,
+    mut value: &Term,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
     f.write_str("[")?;
     let mut first = true;
     while let Term::Ctr { args, .. } = value {
@@ -667,14 +733,18 @@ fn list_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
         if !first {
             f.write_str(", ")?;
         }
-        argument(f, head)?;
+        argument(f, head, scope)?;
         value = tail;
         first = false;
     }
     f.write_str("]")
 }
 
-fn tuple_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
+fn tuple_literal(
+    f: &mut fmt::Formatter<'_>,
+    mut value: &Term,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
     f.write_str("(")?;
     while let Term::Ctr { name, args } = value {
         if name != "Tuple" {
@@ -683,11 +753,11 @@ fn tuple_literal(f: &mut fmt::Formatter<'_>, mut value: &Term) -> fmt::Result {
         let [head, tail] = args.as_slice() else {
             break;
         };
-        argument(f, head)?;
+        argument(f, head, scope)?;
         f.write_str(", ")?;
         value = tail;
     }
-    argument(f, value)?;
+    argument(f, value, scope)?;
     f.write_str(")")
 }
 
@@ -727,7 +797,7 @@ fn literal_word(mut word: &TermRef) -> Option<u32> {
         .then_some(value)
 }
 
-fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Pinned term_show un-applies only the function spine, then prints its
     // arguments in source order. An annotation is a boundary, not another App.
     let mut head = value;
@@ -743,30 +813,36 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
     ) || open_nat(head)
         || open_list(head)
     {
-        write!(f, "({head})")?;
+        write!(f, "({})", scoped(head, scope))?;
     } else {
-        write!(f, "{head}")?;
+        write!(f, "{}", scoped(head, scope))?;
     }
     f.write_str("(")?;
     for (index, value) in arguments.into_iter().rev().enumerate() {
         if index != 0 {
             f.write_str(", ")?;
         }
-        argument(f, value)?;
+        argument(f, value, scope)?;
     }
     f.write_str(")")
 }
 
-fn argument(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+fn argument(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Arguments and literal sequence elements use upstream precedence 0.
     if matches!(value, Term::Let { .. }) {
-        write!(f, "({value})")
+        write!(f, "({})", scoped(value, scope))
     } else {
-        write!(f, "{value}")
+        write!(f, "{}", scoped(value, scope))
     }
 }
 
-fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Term) -> fmt::Result {
+fn rewrite(
+    f: &mut fmt::Formatter<'_>,
+    evidence: &Term,
+    motive: &Term,
+    body: &Term,
+    scope: &[(usize, &str)],
+) -> fmt::Result {
     // A surface rewrite stores two motive binders: the endpoint `_`, then the
     // optional equation name. Print under them without evaluating the motive.
     f.write_str("%")?;
@@ -776,7 +852,18 @@ fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Te
     } else {
         outer
     };
-    let printed_motive = if let (Term::Lam { .. }, Term::Lam { name, body, .. }) = (outer, inner) {
+    let mut motive_scope = scope.to_vec();
+    let printed_motive = if let (
+        Term::Lam {
+            name: endpoint,
+            id: endpoint_id,
+            ..
+        },
+        Term::Lam { name, id, body },
+    ) = (outer, inner)
+    {
+        motive_scope.push((*endpoint_id, endpoint));
+        motive_scope.push((*id, name));
         if !name.is_empty() {
             write!(f, "{name}@")?;
         }
@@ -784,10 +871,10 @@ fn rewrite(f: &mut fmt::Formatter<'_>, evidence: &Term, motive: &Term, body: &Te
     } else {
         motive
     };
-    match_branch(f, evidence)?;
+    match_branch(f, evidence, scope)?;
     f.write_str(" : ")?;
-    match_branch(f, printed_motive)?;
-    write!(f, "; {body}")
+    match_branch(f, printed_motive, &motive_scope)?;
+    write!(f, "; {}", scoped(body, scope))
 }
 
 fn without_annotations(mut value: &Term) -> &Term {
@@ -797,25 +884,25 @@ fn without_annotations(mut value: &Term) -> &Term {
     value
 }
 
-fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term) -> fmt::Result {
+fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Match branches use upstream precedence 1. These low-precedence forms
     // need parentheses; nested matches retain their own explicit delimiters.
     if matches!(
         value,
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. }
     ) {
-        write!(f, "({value})")
+        write!(f, "({})", scoped(value, scope))
     } else {
-        write!(f, "{value}")
+        write!(f, "{}", scoped(value, scope))
     }
 }
 
-fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef]) -> fmt::Result {
+fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef], scope: &[(usize, &str)]) -> fmt::Result {
     for (i, x) in values.iter().enumerate() {
         if i > 0 {
             f.write_str(", ")?;
         }
-        write!(f, "{x}")?;
+        write!(f, "{}", scoped(x, scope))?;
     }
     Ok(())
 }
