@@ -91,43 +91,45 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `0cabee21d28aa6e8fb96164b860249db29510210` qualifies the unchanged `eval/printer_fixpoint`,
-`eval/printer_fresh_binder` and `eval/printer_fresh_binder_pick` originals under
-separate applicable contracts. Exact graphs/text preserve the constructor's
-continuation, generated `_4` binder and three distinct match-arm identities.
-Fourteen bounded applications retain complete values. No production defect or
-implementation change was needed. [Report](cpu-constructor-binders.md).
+Source `49aeac60e8794b0f7f0644cbcc0450a5a355054a` qualifies the unchanged `eval/underscore_print`,
+`eval/wildcard_chain_print` and `eval/efq_arm_value` originals. Exact normalized
+graphs/text preserve distinct unused wildcard binders, a selected empty-match
+function and the separately blocked named call. Twelve complete wildcard
+applications, three partial applications and two Boolean-to-function selections
+have separate evidence. No inhabitant of `Empty` is fabricated; the empty-match
+function is never applied. No production or public API change was needed.
+[Report](cpu-wildcard-values.md).
 
-Clean-source gate: **973 passed, zero failed, 49 ignored**; focused controls:
-**286 passed, zero failed, one ignored**. The open/applicability matrix has 52
-observations. Twelve paired graph observations include renewed `partial_app_snf`;
-the IO helper's execution-context graph comparison is separately covered by the
-private unit test, without exposing a proof API. The 72-observation runtime matrix
-contains 46 successful exact outputs, 24 generation/build successes and two known
-direct-Node IO host blocks. The unchanged IO original prints `2` in native and
-upstream/port generated C and JS. The two function-containing originals refuse
-executable printing exactly; their wrappers do not fabricate original runtime passes.
+Clean-source gate: **977 passed, zero failed, 49 ignored**; focused controls:
+**289 passed, zero failed, one ignored**. The open/applicability matrix records
+62 observations; 16 paired graphs include renewed `partial_app_snf`; the closed
+matrix records 36 observations for the two wildcard wrappers only. All original
+executable printers refuse function-containing results exactly. Native executable
+wrapper observations are separately covered by the persistent test; pure CLI
+normalization is not relabeled as native executable evidence.
 
 All 1,302 checking statuses and streams match the preceding port receipt; all
 439 expected negatives reject. Fourteen positive controls pass; 18 observations
-retain three unwaived hole/TODO cases. Strict IO checking remains excluded,
-separate from successful executable checking. No shift programs are executed.
+retain three unwaived hole/TODO cases. Private-effect wildcard refusal, source-hole
+refusal, sharing, demand order, cancellation and resource guards remain under
+regression. The new differential matrices contain no IO or shift programs;
+earlier oracle receipts retain their actual source and lane identities.
 
-Detailed receipts link **332 originals**; **970** lack detailed receipts:
-**358 checker negatives, one checking-only module, 68 interpreter cases and 543
-compiled candidates**. Two interpretation rows and one runtime row are new;
-earlier 144 interpretation, 93 runtime and 92 checking rows keep their historical
-identities. Linked receipts include partial/blocked cells and do not establish
-CPU parity. Imported-printer/JS-timeout, erased-hole/TODO, host/resource/foreign/
-F32.read/error-order/API gaps and the unfinished 688-vector exploration remain
-unwaived. Frozen dependencies, references, toolchains, guards, budgets,
-cancellation and approved demand policy; no installs, pushes, desktop or GPU work.
+Detailed receipts link **335 originals**; **967** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 540
+compiled candidates**. Three interpretation rows are added; earlier 146
+interpretation, 94 runtime and 92 checking rows retain their identities. Linked
+rows include partial/blocked cells and do not establish full CPU parity.
+Imported-printer/JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/
+error-order/API gaps and the unfinished 688-vector exploration remain unwaived.
+Dependencies, references, toolchains, guards, budgets, cancellation and approved
+demand policy remain frozen; no installs, desktop or GPU work. Publication is
+recorded separately after explicit approval.
 
-Next source-reviewed batch: `eval/underscore_print`, `eval/wildcard_chain_print`
-and `eval/efq_arm_value`. These distinguish fresh wildcard binders and a selected
-empty-match value from a genuinely blocked named call. No inhabitant of `Empty`
-may be fabricated to claim a closed runtime test. Only source/inventory review
-is complete; actual applicability and results remain unqualified.
+Next source-reviewed batch: `eval/open_closure`, `eval/open_closure_pipe` and
+`eval/stuck_split_mint`. The first has an IO main; the others exercise open
+higher-order bindings and blocked computed calls. Only source/inventory review
+is complete; applicability and execution remain unqualified.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1174,3 +1176,45 @@ and `eval/efq_arm_value`. These distinguish fresh wildcard binders and a selecte
 empty-match value from a genuinely blocked named call. No inhabitant of `Empty`
 may be fabricated to claim a closed runtime test. Only source/inventory review
 is complete; actual applicability and results remain unqualified.
+
+## Wildcard and empty-match value checkpoint
+
+Source `49aeac60e8794b0f7f0644cbcc0450a5a355054a` qualifies the unchanged `eval/underscore_print`,
+`eval/wildcard_chain_print` and `eval/efq_arm_value` originals. Exact normalized
+graphs/text preserve distinct unused wildcard binders, a selected empty-match
+function and the separately blocked named call. Twelve complete wildcard
+applications, three partial applications and two Boolean-to-function selections
+have separate evidence. No inhabitant of `Empty` is fabricated; the empty-match
+function is never applied. No production or public API change was needed.
+[Report](cpu-wildcard-values.md).
+
+Clean-source gate: **977 passed, zero failed, 49 ignored**; focused controls:
+**289 passed, zero failed, one ignored**. The open/applicability matrix records
+62 observations; 16 paired graphs include renewed `partial_app_snf`; the closed
+matrix records 36 observations for the two wildcard wrappers only. All original
+executable printers refuse function-containing results exactly. Native executable
+wrapper observations are separately covered by the persistent test; pure CLI
+normalization is not relabeled as native executable evidence.
+
+All 1,302 checking statuses and streams match the preceding port receipt; all
+439 expected negatives reject. Fourteen positive controls pass; 18 observations
+retain three unwaived hole/TODO cases. Private-effect wildcard refusal, source-hole
+refusal, sharing, demand order, cancellation and resource guards remain under
+regression. The new differential matrices contain no IO or shift programs;
+earlier oracle receipts retain their actual source and lane identities.
+
+Detailed receipts link **335 originals**; **967** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 540
+compiled candidates**. Three interpretation rows are added; earlier 146
+interpretation, 94 runtime and 92 checking rows retain their identities. Linked
+rows include partial/blocked cells and do not establish full CPU parity.
+Imported-printer/JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/
+error-order/API gaps and the unfinished 688-vector exploration remain unwaived.
+Dependencies, references, toolchains, guards, budgets, cancellation and approved
+demand policy remain frozen; no installs, desktop or GPU work. Publication is
+recorded separately after explicit approval.
+
+Next source-reviewed batch: `eval/open_closure`, `eval/open_closure_pipe` and
+`eval/stuck_split_mint`. The first has an IO main; the others exercise open
+higher-order bindings and blocked computed calls. Only source/inventory review
+is complete; applicability and execution remain unqualified.
