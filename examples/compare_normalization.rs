@@ -31,11 +31,19 @@ struct Report {
 fn main() -> eyre::Result<()> {
     let args = std::env::args_os().skip(1).collect::<Vec<_>>();
     let executable_function = args.len() == 3 && args[2] == "--executable-function";
-    if args.len() != 2 && !executable_function {
+    let named_definition = args.len() == 4 && args[2] == "--entry";
+    if args.len() != 2 && !executable_function && !named_definition {
         eyre::bail!(
-            "usage: compare_normalization <source.bend> <oracle-stdout> [--executable-function]"
+            "usage: compare_normalization <source.bend> <oracle-stdout> [--entry NAME | --executable-function]"
         );
     }
+    let entry = if named_definition {
+        args[3]
+            .to_str()
+            .ok_or_else(|| eyre::eyre!("definition name must be UTF-8"))?
+    } else {
+        "main"
+    };
     let path = Path::new(&args[0]);
     let (value, book, port_value) = if executable_function {
         // Executable contracts cannot become proof certificates. Observe the
@@ -62,7 +70,7 @@ fn main() -> eyre::Result<()> {
         (value, None, text.to_owned())
     } else {
         let book = load(path)?;
-        let value = check_book(&book)?.normalize_definition("main")?;
+        let value = check_book(&book)?.normalize_definition(entry)?;
         let port_value = value.to_string();
         (value, Some(book), port_value)
     };

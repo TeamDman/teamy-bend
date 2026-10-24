@@ -27,6 +27,44 @@ const CASES: [&str; 9] = [
 ];
 
 #[test]
+fn checking_only_list_fixture_preserves_named_values_and_proofs() {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-checking/list_reverse_sort.bend");
+    let book = load(path).unwrap();
+    let checked = check_book(&book).expect("all concrete list equalities check");
+    assert!(checked.normalize_definition("main").is_err());
+    for (entry, expected) in [
+        ("l123", "[1, 2, 3]"),
+        ("l321", "[3, 2, 1]"),
+        ("rev", "{==}"),
+        ("rev2", "{==}"),
+        ("srt", "{==}"),
+    ] {
+        let actual = checked.normalize_definition(entry).unwrap();
+        assert_eq!(actual.to_string(), expected, "{entry}");
+        assert_eq!(
+            shape_in_book(&actual, &book).unwrap(),
+            shape_in_book(&parse_term(expected).unwrap(), &book).unwrap(),
+            "{entry}"
+        );
+    }
+}
+
+#[test]
+fn checking_only_list_fixture_rejects_wrong_reverse_and_lost_duplicate() {
+    let original = include_str!("fixtures/cpu-checking/list_reverse_sort.bend");
+    for (before, after) in [("[3, 2, 1]", "[3, 1, 2]"), ("[1, 2, 3, 3]", "[1, 2, 3]")] {
+        assert_eq!(original.matches(before).count(), 1);
+        let source = original
+            .replace(before, after)
+            .replace("import Base\n", include_str!("../src/syntax/base.bend"));
+        let book = parse(&source).expect("false proof still parses");
+        let error = check_book(&book).expect_err("incorrect concrete equality must fail");
+        assert!(error.to_string().contains("reflexivity"), "{error}");
+    }
+}
+
+#[test]
 fn original_function_mains_match_pinned_normal_forms_without_calling_them() {
     for source in CASES {
         let checked = check_book(&parse(source).unwrap()).unwrap();
