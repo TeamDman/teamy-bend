@@ -5697,3 +5697,48 @@ then bound valid hypothesis specialization, Data-kind binder reuse and residual
 fallback behavior. The first fixture has limited checking/main-output controls,
 not complete definition/application qualification. This proposal adds no execution
 credit beyond those separately recorded controls. No fabricated witnesses, budget increases or new exceptions.
+
+### [x] 5.108 Correct completed-law arity and residual fallback application
+
+Tested source `1fce12435a4b714f5be4ca8efcf0825fae7fc8b3` qualifies `check/computed_match_specialize`,
+`cop_bare_trio_000` and `fits_residual_fallback`: **11 original definition graphs,
+34 bounded applications and 15 separate executable aggregate/proof/adapter mains**.
+[Report and exact receipts](cpu-match-contracts.md).
+
+Two port defects were corrected: ordinary law completion kept the law's
+provisional arity instead of the actual `def` parameters; anonymous residual
+matching then failed to apply a named fallback to its residual constructor.
+Checked telescope metadata now comes from bounded type exposure. Named fallback
+saturation is corrected while chained empty-match reconstruction remains intact.
+Independent review found no remaining blocker. Eleven new unit regressions
+cover aliases, dependencies, erasure/reuse, returned closures, forged metadata,
+exact work/depth boundaries and unselected fallback demand. No safety limits,
+input pins, dependency or cancellation policy changed.
+
+Full gate **1094 / 0 / 49**; focused **43 / 0 / 0**.
+**216 structural**, **132 applicability/text**, **64 exact negative** and **eight
+phase-only negative** observations pass. Runtime matrix has **174 exact executions,
+90 successful generation/builds, 6 unresolved upstream-JS timeouts,
+0 C build failures and 0 unrun C cells**. Matrix exit is
+`1`; full parity is not claimed.
+All 1,302 audit statuses/streams remain unchanged; 439 negatives reject. Fourteen
+positive controls pass; eighteen observations preserve three hole/TODO differences.
+
+Public Rust `DefDecl` adds `completion_parameters`: external struct literals need
+updating, and unchecked source consumers must use `declared_arity()` for actual
+arity. Repository callers are updated; external consumers are unaudited. Previous
+external-emitter, foreign/host/resource, F32.read, failure-order, minimal-IO C,
+dependent-pair C and imported-JS failures remain unwaived. No mid-normalization
+cancellation is claimed. The interrupted 688-vector exploration remains unqualified.
+
+Detailed receipts link **390 originals**; **912 remain unlinked**: **357 checker
+negatives, one checking-only module, 17 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test counts.
+Links include historical, partial and blocked evidence and do not establish full
+CPU parity or close the API/integration inventory.
+
+Next proposed substantive batch: `grade/accept_data`, with applicability-led
+checks of reusable Nat/list/pair/equality values, phantom tags, affine function
+lists and weakening. Empty-type elimination must remain a normalization/checking
+observation without fabricating an inhabitant. This is a proposal, not executed
+coverage. `reg/framed_cell_dep` is a later dependent-worker/IO control.

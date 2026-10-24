@@ -91,44 +91,48 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Tested source `5f83d2f27bbc026541f885126b112650090250fa` adds unchanged `check/dependent_telescope`,
-`capture_price_twin_000` and `_001`: **eight complete definition graphs and
-20 bounded applications**, each with a separately checked typed caller. Four
-records vary six unused fields while preserving the dependent first-field proof;
-identity/successor closures exercise both twins at zero. Positive inputs exercise
-only the independent `fe`/`use.go` helpers, without invented equality witnesses.
-Nine aggregate/adapter mains have separate runtime evidence. No production fix.
-[Scope, commands and receipts](cpu-telescope-capture.md).
+Tested source `1fce12435a4b714f5be4ca8efcf0825fae7fc8b3` qualifies `check/computed_match_specialize`,
+`cop_bare_trio_000` and `fits_residual_fallback`: **11 original definition graphs,
+34 bounded applications and 15 separate executable aggregate/proof/adapter mains**.
+[Report and exact receipts](cpu-match-contracts.md).
 
-Full gate **1,075 / 0 / 49**; focused **39 / 0 / 0**. All **148 graph** and
-**114 normalization/applicability** observations pass. Negative family: **48
-exact rejections**, plus six separately labeled phase probes. Runtime matrix:
-**100 exact executions, 54 successful generation/build checks and eight unresolved
-upstream-JS printer timeouts**; runner exit 1. This batch has no failed C builds
-or unrun execution cells. Earlier dependent-pair upstream C failures and two unrun
-executions remain historical and unresolved, not renewed or waived here.
+Two port defects were corrected: ordinary law completion kept the law's
+provisional arity instead of the actual `def` parameters; anonymous residual
+matching then failed to apply a named fallback to its residual constructor.
+Checked telescope metadata now comes from bounded type exposure. Named fallback
+saturation is corrected while chained empty-match reconstruction remains intact.
+Independent review found no remaining blocker. Eleven new unit regressions
+cover aliases, dependencies, erasure/reuse, returned closures, forged metadata,
+exact work/depth boundaries and unselected fallback demand. No safety limits,
+input pins, dependency or cancellation policy changed.
 
-Independent review approved the test-only corrections: dotted entry filenames
-and iterative complete graph comparison after expected-JSON decoding overflowed.
-Initial failures are preserved. Aggregate sharing/work, native/C/JS, demand,
-guards and existing cancellation controls pass; no mid-normalization cancellation
-is claimed. All 1,302 checking statuses/streams are unchanged; 439 negatives
-reject. Fourteen positive controls pass; eighteen observations preserve three
-hole/TODO differences. Prior foreign/host/resource, F32.read, failure-order,
-minimal-IO C, unfinished-grid and external-emitter caveats remain unwaived.
+Full gate **1094 / 0 / 49**; focused **43 / 0 / 0**.
+**216 structural**, **132 applicability/text**, **64 exact negative** and **eight
+phase-only negative** observations pass. Runtime matrix has **174 exact executions,
+90 successful generation/builds, 6 unresolved upstream-JS timeouts,
+0 C build failures and 0 unrun C cells**. Matrix exit is
+`1`; full parity is not claimed.
+All 1,302 audit statuses/streams remain unchanged; 439 negatives reject. Fourteen
+positive controls pass; eighteen observations preserve three hole/TODO differences.
 
-Detailed receipts link **387 originals**, with **915 unlinked**: **357 checker
-negatives, one checking-only module, 20 interpreter cases and 537 compiled
+Public Rust `DefDecl` adds `completion_parameters`: external struct literals need
+updating, and unchecked source consumers must use `declared_arity()` for actual
+arity. Repository callers are updated; external consumers are unaudited. Previous
+external-emitter, foreign/host/resource, F32.read, failure-order, minimal-IO C,
+dependent-pair C and imported-JS failures remain unwaived. No mid-normalization
+cancellation is claimed. The interrupted 688-vector exploration remains unqualified.
+
+Detailed receipts link **390 originals**; **912 remain unlinked**: **357 checker
+negatives, one checking-only module, 17 interpreter cases and 537 compiled
 candidates**. These are applicability categories, not missing runtime-test counts.
-Historical, partial and blocked links do not establish full CPU parity or close
-the API/integration inventory.
+Links include historical, partial and blocked evidence and do not establish full
+CPU parity or close the API/integration inventory.
 
-Next proposed batch: `check/computed_match_specialize`, `cop_bare_trio_000` and
-`fits_residual_fallback`. Establish proof-function and printer applicability;
-then bound valid hypothesis specialization, Data-kind binder reuse and residual
-fallback behavior. The first fixture has limited checking/main-output controls,
-not complete definition/application qualification. This proposal adds no execution
-credit beyond those separately recorded controls. No fabricated witnesses, budget increases or new exceptions.
+Next proposed substantive batch: `grade/accept_data`, with applicability-led
+checks of reusable Nat/list/pair/equality values, phantom tags, affine function
+lists and weakening. Empty-type elimination must remain a normalization/checking
+observation without fabricating an inhabitant. This is a proposal, not executed
+coverage. `reg/framed_cell_dep` is a later dependent-worker/IO control.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
