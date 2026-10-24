@@ -161,19 +161,36 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
     assert_eq!(output.status.code(), Some(0));
     assert_eq!(output.stdout, b"42\n");
 
-    let empty = Fixture::new("type Marker is Data:\n  Mark{}\ndef value() -> Marker: Mark{}\n");
-    for target in ["javascript", "c", "native"] {
-        let output = empty.compile(&["--executable", "--target", target]);
+    for (source, expected) in [
+        (
+            "type Marker is Data:\n  Mark{}\ndef value() -> Marker: Mark{}\n",
+            "Error: a build needs import Base\n",
+        ),
+        (
+            "import Base\ndef value() -> U32: 1\n",
+            "Error: no main to run\n",
+        ),
+        ("type IO is Data:\n  Marker{}\n", "Error: no main to run\n"),
+        (
+            "type Marker is Data:\n  Mark{}\ndef IO() -> Type: Marker\n",
+            "Error: no main to run\n",
+        ),
+    ] {
+        let empty = Fixture::new(source);
+        for target in ["javascript", "c", "native"] {
+            let output = empty.compile(&["--executable", "--target", target]);
+            assert_eq!(output.status.code(), Some(1));
+            assert!(output.stdout.is_empty());
+            assert_eq!(output.stderr, expected.as_bytes());
+            assert!(!empty.0.join("main.cjs").exists());
+        }
+        std::fs::write(empty.0.join("main.cjs"), "preserved output").unwrap();
+        let output = empty.compile(&["--executable", "--force"]);
         assert_eq!(output.status.code(), Some(1));
-        assert!(output.stdout.is_empty());
-        assert!(String::from_utf8_lossy(&output.stderr).contains("no main to run"));
-        assert!(!empty.0.join("main.cjs").exists());
+        assert_eq!(output.stderr, expected.as_bytes());
+        assert_eq!(
+            std::fs::read_to_string(empty.0.join("main.cjs")).unwrap(),
+            "preserved output"
+        );
     }
-    std::fs::write(empty.0.join("main.cjs"), "preserved output").unwrap();
-    let output = empty.compile(&["--executable", "--force"]);
-    assert_eq!(output.status.code(), Some(1));
-    assert_eq!(
-        std::fs::read_to_string(empty.0.join("main.cjs")).unwrap(),
-        "preserved output"
-    );
 }

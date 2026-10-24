@@ -1294,7 +1294,18 @@ impl Engine {
                 self.check(lhs, motive, Quant::None, &mt, context)?;
                 let goal = apply(Rc::clone(motive), [Rc::clone(right), Rc::clone(evidence)]);
                 if !self.compare(Comparison::Fits, &goal, ty)? {
-                    return Err(mismatch(ty, &goal));
+                    let mut error = mismatch(ty, &goal);
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Term(ty),
+                            DiagnosticExpression::Term(&goal),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 }
                 let premise = apply(Rc::clone(motive), [Rc::clone(left), term(Term::Rfl)]);
                 let bu = self.check(lhs, body, demand, &premise, context)?;
@@ -1740,6 +1751,7 @@ mod reflexivity_diagnostic_tests {
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for name in [
             "cpu-constructors/context-open.bend",
+            "cpu-checking/false_fusion.bend",
             "cpu-checking/list_reverse_sort.bend",
         ] {
             let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

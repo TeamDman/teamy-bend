@@ -1213,7 +1213,7 @@ impl Parser<'_> {
     fn atom(&mut self) -> Result<TermRef, ParseError> {
         let line = self.current().line;
         let value = self.atom_inner()?;
-        if matches!(value.as_ref(), Term::Ctr { .. })
+        if matches!(value.as_ref(), Term::Ctr { .. } | Term::Rwt { .. })
             && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);

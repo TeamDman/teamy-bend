@@ -16,3 +16,8 @@ negative controls of that pinned list fixture. Only their expected lists differ.
 changing the expected sum from 3 to 4. All three retain the upstream Apache-2.0
 attribution above. Exact diagnostics are asserted in Rust tests; raw local
 captures are not repository artifacts.
+
+`false_fusion.bend` preserves the authored negative from the no-main checkpoint:
+[proof/map_fusion.bend](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/proof/map_fusion.bend)
+with only the composed increment changed from 1 to 2. Apache-2.0 attribution
+above applies. It rejects at rewrite-goal comparison before checking the body.

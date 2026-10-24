@@ -1000,3 +1000,50 @@ fn multi_scrutinee_applications_match_all_pinned_branch_observations() {
     }
     assert_eq!(observations, 100);
 }
+
+#[test]
+fn nested_field_originals_preserve_core_and_complete_branch_observations() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-nested-fields");
+    let mut observations = 0;
+    for suffix in [
+        "000", "001", "002", "003", "004", "004_go", "005", "006", "007", "007_go",
+    ] {
+        let fixture = format!("nested_field_match_{suffix}.bend");
+        let path = root.join(&fixture);
+        let source = std::fs::read_to_string(&path).unwrap();
+        let expected = source
+            .lines()
+            .filter_map(|line| line.strip_prefix("#|"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let book = load(path).unwrap();
+        let checked = check_book(&book).unwrap();
+        let value = checked.normalize_definition("main").unwrap();
+        assert_eq!(value.to_string(), expected);
+        assert_eq!(
+            shape_in_book(&value, &book).unwrap(),
+            shape_in_book(&parse_term(&expected).unwrap(), &book).unwrap()
+        );
+        for line in include_str!("fixtures/cpu-nested-fields/applications.tsv").lines() {
+            let mut fields = line.splitn(3, '\t');
+            let source = fields.next().unwrap();
+            let arguments = fields.next().unwrap();
+            let expected = fields.next().unwrap();
+            if source != fixture {
+                continue;
+            }
+            let arguments = arguments
+                .split(';')
+                .map(|arg| parse_term(arg).unwrap())
+                .collect::<Vec<_>>();
+            let value = checked.evaluate("main", &arguments).unwrap();
+            assert_eq!(value.to_string(), expected, "{fixture}: {arguments:?}");
+            assert_eq!(
+                shape_in_book(&value, &book).unwrap(),
+                shape_in_book(&parse_term(expected).unwrap(), &book).unwrap()
+            );
+            observations += 1;
+        }
+    }
+    assert_eq!(observations, 171);
+}

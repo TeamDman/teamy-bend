@@ -334,3 +334,52 @@ fn transformed_and_pattern_origins_keep_nested_imported_and_template_locations()
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn false_fusion_rewrite_reports_normalized_types_and_original_source() {
+    let path =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-checking/false_fusion.bend");
+    assert_diagnostic(
+        &path,
+        "Error:\n- expected : {U32.add(U32.mul(h, 2), 1) <> map(AddOne{}, map(MulTwo{}, t)) == U32.add(U32.mul(h, 2), 2) <> map(MulTwoAddOne{}, t) : List<&2, U32>}\n- observed : {U32.add(U32.mul(h, 2), 1) <> map(AddOne{}, map(MulTwo{}, t)) == U32.add(U32.mul(h, 2), 1) <> map(MulTwoAddOne{}, t) : List<&2, U32>}\nContext:\n- h : U32\n- t : List<&2, U32>\nLocation: fuse\n51 |     case h <> t:\n52>|       %fuse(t) : {U32.add(U32.mul(h, 2), 1) <> map(AddOne{}, map(MulTwo{}, t)) == U32.add(U32.mul(h, 2), 1) <> _ : List<&2, U32>}\n53 |       {==}\n",
+    );
+}
+
+#[test]
+fn rewritten_imports_templates_and_nested_goals_keep_the_rejected_origin() {
+    for (main, helper, expected) in [
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(n: N, e: {n == n : N}) -> N:\n  %e : {_ == _ : N}\n  {==}\n",
+            None,
+            "Error:\n- expected : N\n- observed : {n == n : N}\nContext:\n- n : N\n- e : {n == n : N}\nLocation: bad\n4 | def bad(n: N, e: {n == n : N}) -> N:\n5>|   %e : {_ == _ : N}\n6 |   {==}\n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> H.N: H.Z{}\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(n: N, e: {n == n : N}) -> N:\n  %e : {_ == _ : N}\n  {==}\n",
+            ),
+            "Error:\n- expected : helper.N\n- observed : {n == n : helper.N}\nContext:\n- n : helper.N\n- e : {n == n : helper.N}\nLocation: helper.bad\n4 | def bad(n: N, e: {n == n : N}) -> N:\n5>|   %e : {_ == _ : N}\n6 |   {==}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(~n: N, e: {n == n : N}) -> N:\n  %e : {_ == _ : N}\n  {==}\ndef main() -> N: bad(Z{}, {==})\n",
+            None,
+            "Error:\n- expected : N\n- observed : {n == n : N}\nContext:\n- n : N\n- e : {n == n : N}\nLocation: bad~0\n4 | def bad(~n: N, e: {n == n : N}) -> N:\n5>|   %e : {_ == _ : N}\n6 |   {==}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(n: N, e: {n == n : N}) -> N:\n  %e : N\n  %e : {_ == _ : N}\n  {==}\n",
+            None,
+            "Error:\n- expected : N\n- observed : {n == n : N}\nContext:\n- n : N\n- e : {n == n : N}\nLocation: bad\n5 |   %e : N\n6>|   %e : {_ == _ : N}\n7 |   {==}\n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\ndef bad(n: N, e: {n == n : N}) -> N:\n  %e : N\n  Wrong{}\n",
+            None,
+            "Error:\n- expected : a declared constructor (N declares Z, S)\n- observed : Wrong{}\nContext:\n- n : N\n- e : {n == n : N}\nLocation: bad\n5 |   %e : N\n6>|   Wrong{}\n7 | \n",
+        ),
+    ] {
+        let fixture = Fixture::new(main);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

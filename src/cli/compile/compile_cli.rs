@@ -3,6 +3,7 @@ use super::compile_native_cli::compile_native;
 use super::compile_output_cli::OutputPlan;
 use super::compile_output_cli::Stage;
 use crate::cli::output::CliOutput;
+use crate::compiler::CompileError;
 use crate::compiler::compile_c;
 use crate::compiler::compile_executable_c;
 use crate::compiler::compile_executable_javascript;
@@ -66,11 +67,22 @@ struct CompileReport {
 impl CompileArgs {
     /// Validate source and write the compiled program.
     ///
+    /// Classified missing-entry failures write a language diagnostic and return
+    /// status-1 output. Callers must inspect `CliOutput::exit_code()`.
+    ///
     /// # Errors
-    /// Returns source, proof, compilation, output or cancellation errors.
+    /// Returns other source, proof, compilation, output or cancellation errors.
     pub fn invoke(self, cancellation: &CancellationToken) -> Result<CliOutput> {
         cancellation.bail_if_cancelled()?;
-        let (program, inputs) = self.generate()?;
+        let (program, inputs) = match self.generate() {
+            Ok(generated) => generated,
+            Err(error) => {
+                if let Some(compile) = error.downcast_ref::<CompileError>() {
+                    return super::compile_diagnostic_cli::reject(compile, cancellation);
+                }
+                return Err(error);
+            }
+        };
         cancellation.bail_if_cancelled()?;
         // Reserved emitter preamble contract: inert marks without an emitted
         // device program do not trigger a prebuild, nor does strict pure C.
@@ -146,7 +158,7 @@ impl CompileArgs {
             };
             (program, inputs)
         };
-        let program = program.map_err(|error| eyre!("{error}"))?;
+        let program = program.map_err(eyre::Report::new)?;
         Ok((program, inputs))
     }
 }

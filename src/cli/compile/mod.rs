@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 mod compile_cli;
+mod compile_diagnostic_cli;
 mod compile_native_cli;
 mod compile_output_cli;
 mod compile_process_cli;

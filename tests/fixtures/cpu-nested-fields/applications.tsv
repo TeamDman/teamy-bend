@@ -1,0 +1,171 @@
+nested_field_match_000.bend	Z{}	A{}
+nested_field_match_000.bend	S{Z{}}	A{}
+nested_field_match_000.bend	S{S{Z{}}}	B{Z{}}
+nested_field_match_000.bend	S{S{S{Z{}}}}	B{S{Z{}}}
+nested_field_match_000.bend	S{S{S{S{Z{}}}}}	B{S{S{Z{}}}}
+nested_field_match_001.bend	Z{}	Z{}
+nested_field_match_001.bend	S{Z{}}	Z{}
+nested_field_match_001.bend	S{S{Z{}}}	Z{}
+nested_field_match_001.bend	S{S{S{Z{}}}}	Z{}
+nested_field_match_001.bend	S{S{S{S{Z{}}}}}	S{Z{}}
+nested_field_match_002.bend	Z{}	Z{}
+nested_field_match_002.bend	S{Z{}}	S{Z{}}
+nested_field_match_002.bend	S{S{Z{}}}	Z{}
+nested_field_match_002.bend	S{S{S{Z{}}}}	S{Z{}}
+nested_field_match_002.bend	S{S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_003.bend	Z{};Z{}	Z{}
+nested_field_match_003.bend	Z{};S{Z{}}	S{Z{}}
+nested_field_match_003.bend	Z{};S{S{Z{}}}	S{S{Z{}}}
+nested_field_match_003.bend	Z{};S{S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_003.bend	Z{};S{S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_003.bend	S{Z{}};Z{}	Z{}
+nested_field_match_003.bend	S{Z{}};S{Z{}}	S{Z{}}
+nested_field_match_003.bend	S{Z{}};S{S{Z{}}}	S{S{Z{}}}
+nested_field_match_003.bend	S{Z{}};S{S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_003.bend	S{Z{}};S{S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_003.bend	S{S{Z{}}};Z{}	Z{}
+nested_field_match_003.bend	S{S{Z{}}};S{Z{}}	Z{}
+nested_field_match_003.bend	S{S{Z{}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_003.bend	S{S{Z{}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_003.bend	S{S{Z{}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_003.bend	S{S{S{Z{}}}};Z{}	S{Z{}}
+nested_field_match_003.bend	S{S{S{Z{}}}};S{Z{}}	Z{}
+nested_field_match_003.bend	S{S{S{Z{}}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_003.bend	S{S{S{Z{}}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_003.bend	S{S{S{Z{}}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_003.bend	S{S{S{S{Z{}}}}};Z{}	S{S{Z{}}}
+nested_field_match_003.bend	S{S{S{S{Z{}}}}};S{Z{}}	Z{}
+nested_field_match_003.bend	S{S{S{S{Z{}}}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_003.bend	S{S{S{S{Z{}}}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_003.bend	S{S{S{S{Z{}}}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{Z{}, Z{}}	Z{}
+nested_field_match_004.bend	P{Z{}, S{Z{}}}	S{Z{}}
+nested_field_match_004.bend	P{Z{}, S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_004.bend	P{Z{}, S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{Z{}, S{S{S{S{Z{}}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_004.bend	P{S{Z{}}, Z{}}	Z{}
+nested_field_match_004.bend	P{S{Z{}}, S{Z{}}}	Z{}
+nested_field_match_004.bend	P{S{Z{}}, S{S{Z{}}}}	S{Z{}}
+nested_field_match_004.bend	P{S{Z{}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_004.bend	P{S{Z{}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{S{S{Z{}}}, Z{}}	S{Z{}}
+nested_field_match_004.bend	P{S{S{Z{}}}, S{Z{}}}	Z{}
+nested_field_match_004.bend	P{S{S{Z{}}}, S{S{Z{}}}}	S{Z{}}
+nested_field_match_004.bend	P{S{S{Z{}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_004.bend	P{S{S{Z{}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{S{S{S{Z{}}}}, Z{}}	S{S{Z{}}}
+nested_field_match_004.bend	P{S{S{S{Z{}}}}, S{Z{}}}	Z{}
+nested_field_match_004.bend	P{S{S{S{Z{}}}}, S{S{Z{}}}}	S{Z{}}
+nested_field_match_004.bend	P{S{S{S{Z{}}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_004.bend	P{S{S{S{Z{}}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{S{S{S{S{Z{}}}}}, Z{}}	S{S{S{Z{}}}}
+nested_field_match_004.bend	P{S{S{S{S{Z{}}}}}, S{Z{}}}	Z{}
+nested_field_match_004.bend	P{S{S{S{S{Z{}}}}}, S{S{Z{}}}}	S{Z{}}
+nested_field_match_004.bend	P{S{S{S{S{Z{}}}}}, S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_004.bend	P{S{S{S{S{Z{}}}}}, S{S{S{S{Z{}}}}}}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	Z{};Z{}	Z{}
+nested_field_match_004_go.bend	Z{};S{Z{}}	S{Z{}}
+nested_field_match_004_go.bend	Z{};S{S{Z{}}}	S{S{Z{}}}
+nested_field_match_004_go.bend	Z{};S{S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	Z{};S{S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_004_go.bend	S{Z{}};Z{}	Z{}
+nested_field_match_004_go.bend	S{Z{}};S{Z{}}	Z{}
+nested_field_match_004_go.bend	S{Z{}};S{S{Z{}}}	S{Z{}}
+nested_field_match_004_go.bend	S{Z{}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_004_go.bend	S{Z{}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	S{S{Z{}}};Z{}	S{Z{}}
+nested_field_match_004_go.bend	S{S{Z{}}};S{Z{}}	Z{}
+nested_field_match_004_go.bend	S{S{Z{}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_004_go.bend	S{S{Z{}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_004_go.bend	S{S{Z{}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	S{S{S{Z{}}}};Z{}	S{S{Z{}}}
+nested_field_match_004_go.bend	S{S{S{Z{}}}};S{Z{}}	Z{}
+nested_field_match_004_go.bend	S{S{S{Z{}}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_004_go.bend	S{S{S{Z{}}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_004_go.bend	S{S{S{Z{}}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	S{S{S{S{Z{}}}}};Z{}	S{S{S{Z{}}}}
+nested_field_match_004_go.bend	S{S{S{S{Z{}}}}};S{Z{}}	Z{}
+nested_field_match_004_go.bend	S{S{S{S{Z{}}}}};S{S{Z{}}}	S{Z{}}
+nested_field_match_004_go.bend	S{S{S{S{Z{}}}}};S{S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_004_go.bend	S{S{S{S{Z{}}}}};S{S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_005.bend	Z{}	Z{}
+nested_field_match_005.bend	S{Z{}}	Z{}
+nested_field_match_005.bend	S{S{Z{}}}	Z{}
+nested_field_match_005.bend	S{S{S{Z{}}}}	Z{}
+nested_field_match_005.bend	S{S{S{S{Z{}}}}}	S{Z{}}
+nested_field_match_006.bend	Z{};Z{}	Z{}
+nested_field_match_006.bend	Z{};S{Z{}}	S{Z{}}
+nested_field_match_006.bend	Z{};S{S{Z{}}}	S{S{Z{}}}
+nested_field_match_006.bend	Z{};S{S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_006.bend	Z{};S{S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_006.bend	S{Z{}};Z{}	Z{}
+nested_field_match_006.bend	S{Z{}};S{Z{}}	Z{}
+nested_field_match_006.bend	S{Z{}};S{S{Z{}}}	Z{}
+nested_field_match_006.bend	S{Z{}};S{S{S{Z{}}}}	S{Z{}}
+nested_field_match_006.bend	S{Z{}};S{S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_006.bend	S{S{Z{}}};Z{}	S{Z{}}
+nested_field_match_006.bend	S{S{Z{}}};S{Z{}}	S{Z{}}
+nested_field_match_006.bend	S{S{Z{}}};S{S{Z{}}}	Z{}
+nested_field_match_006.bend	S{S{Z{}}};S{S{S{Z{}}}}	S{Z{}}
+nested_field_match_006.bend	S{S{Z{}}};S{S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_006.bend	S{S{S{Z{}}}};Z{}	S{S{Z{}}}
+nested_field_match_006.bend	S{S{S{Z{}}}};S{Z{}}	S{S{Z{}}}
+nested_field_match_006.bend	S{S{S{Z{}}}};S{S{Z{}}}	Z{}
+nested_field_match_006.bend	S{S{S{Z{}}}};S{S{S{Z{}}}}	S{Z{}}
+nested_field_match_006.bend	S{S{S{Z{}}}};S{S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_006.bend	S{S{S{S{Z{}}}}};Z{}	S{S{S{Z{}}}}
+nested_field_match_006.bend	S{S{S{S{Z{}}}}};S{Z{}}	S{S{S{Z{}}}}
+nested_field_match_006.bend	S{S{S{S{Z{}}}}};S{S{Z{}}}	Z{}
+nested_field_match_006.bend	S{S{S{S{Z{}}}}};S{S{S{Z{}}}}	S{Z{}}
+nested_field_match_006.bend	S{S{S{S{Z{}}}}};S{S{S{S{Z{}}}}}	S{S{Z{}}}
+nested_field_match_007.bend	Leaf{}	Z{}
+nested_field_match_007.bend	Node{Z{}, Z{}}	Z{}
+nested_field_match_007.bend	Node{Z{}, S{Z{}}}	S{Z{}}
+nested_field_match_007.bend	Node{Z{}, S{S{Z{}}}}	S{S{Z{}}}
+nested_field_match_007.bend	Node{Z{}, S{S{S{Z{}}}}}	S{S{S{Z{}}}}
+nested_field_match_007.bend	Node{Z{}, S{S{S{S{Z{}}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007.bend	Node{S{Z{}}, Z{}}	S{Z{}}
+nested_field_match_007.bend	Node{S{Z{}}, S{Z{}}}	S{S{Z{}}}
+nested_field_match_007.bend	Node{S{Z{}}, S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_007.bend	Node{S{Z{}}, S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007.bend	Node{S{Z{}}, S{S{S{S{Z{}}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007.bend	Node{S{S{Z{}}}, Z{}}	S{Z{}}
+nested_field_match_007.bend	Node{S{S{Z{}}}, S{Z{}}}	S{S{Z{}}}
+nested_field_match_007.bend	Node{S{S{Z{}}}, S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_007.bend	Node{S{S{Z{}}}, S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007.bend	Node{S{S{Z{}}}, S{S{S{S{Z{}}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007.bend	Node{S{S{S{Z{}}}}, Z{}}	S{Z{}}
+nested_field_match_007.bend	Node{S{S{S{Z{}}}}, S{Z{}}}	S{S{Z{}}}
+nested_field_match_007.bend	Node{S{S{S{Z{}}}}, S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_007.bend	Node{S{S{S{Z{}}}}, S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007.bend	Node{S{S{S{Z{}}}}, S{S{S{S{Z{}}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007.bend	Node{S{S{S{S{Z{}}}}}, Z{}}	S{Z{}}
+nested_field_match_007.bend	Node{S{S{S{S{Z{}}}}}, S{Z{}}}	S{S{Z{}}}
+nested_field_match_007.bend	Node{S{S{S{S{Z{}}}}}, S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_007.bend	Node{S{S{S{S{Z{}}}}}, S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007.bend	Node{S{S{S{S{Z{}}}}}, S{S{S{S{Z{}}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007_go.bend	Z{};Z{}	Z{}
+nested_field_match_007_go.bend	Z{};S{Z{}}	S{Z{}}
+nested_field_match_007_go.bend	Z{};S{S{Z{}}}	S{S{Z{}}}
+nested_field_match_007_go.bend	Z{};S{S{S{Z{}}}}	S{S{S{Z{}}}}
+nested_field_match_007_go.bend	Z{};S{S{S{S{Z{}}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007_go.bend	S{Z{}};Z{}	S{Z{}}
+nested_field_match_007_go.bend	S{Z{}};S{Z{}}	S{S{Z{}}}
+nested_field_match_007_go.bend	S{Z{}};S{S{Z{}}}	S{S{S{Z{}}}}
+nested_field_match_007_go.bend	S{Z{}};S{S{S{Z{}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007_go.bend	S{Z{}};S{S{S{S{Z{}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007_go.bend	S{S{Z{}}};Z{}	S{Z{}}
+nested_field_match_007_go.bend	S{S{Z{}}};S{Z{}}	S{S{Z{}}}
+nested_field_match_007_go.bend	S{S{Z{}}};S{S{Z{}}}	S{S{S{Z{}}}}
+nested_field_match_007_go.bend	S{S{Z{}}};S{S{S{Z{}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007_go.bend	S{S{Z{}}};S{S{S{S{Z{}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007_go.bend	S{S{S{Z{}}}};Z{}	S{Z{}}
+nested_field_match_007_go.bend	S{S{S{Z{}}}};S{Z{}}	S{S{Z{}}}
+nested_field_match_007_go.bend	S{S{S{Z{}}}};S{S{Z{}}}	S{S{S{Z{}}}}
+nested_field_match_007_go.bend	S{S{S{Z{}}}};S{S{S{Z{}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007_go.bend	S{S{S{Z{}}}};S{S{S{S{Z{}}}}}	S{S{S{S{S{Z{}}}}}}
+nested_field_match_007_go.bend	S{S{S{S{Z{}}}}};Z{}	S{Z{}}
+nested_field_match_007_go.bend	S{S{S{S{Z{}}}}};S{Z{}}	S{S{Z{}}}
+nested_field_match_007_go.bend	S{S{S{S{Z{}}}}};S{S{Z{}}}	S{S{S{Z{}}}}
+nested_field_match_007_go.bend	S{S{S{S{Z{}}}}};S{S{S{Z{}}}}	S{S{S{S{Z{}}}}}
+nested_field_match_007_go.bend	S{S{S{S{Z{}}}}};S{S{S{S{Z{}}}}}	S{S{S{S{S{Z{}}}}}}

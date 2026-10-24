@@ -13,15 +13,40 @@ use std::fmt::Write;
 use std::fmt::{self};
 
 /// A failed proof check or an unsupported standalone entry point.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq)]
 pub struct CompileError {
     message: String,
+    // Present only for a missing entry; records the pinned IO-name prerequisite.
+    missing_entry: Option<bool>,
+}
+
+// Presentation metadata does not change the public message/equality contract.
+impl PartialEq for CompileError {
+    fn eq(&self, other: &Self) -> bool {
+        self.message == other.message
+    }
 }
 
 impl CompileError {
     pub(super) fn new(message: impl Into<String>) -> Self {
         Self {
             message: message.into(),
+            missing_entry: None,
+        }
+    }
+
+    pub(super) fn missing_main(has_io_declaration: bool) -> Self {
+        Self {
+            message: "no main to run".into(),
+            missing_entry: Some(has_io_declaration),
+        }
+    }
+
+    pub(crate) const fn language_diagnostic(&self) -> Option<&'static str> {
+        match self.missing_entry {
+            Some(true) => Some("no main to run"),
+            Some(false) => Some("a build needs import Base"),
+            None => None,
         }
     }
 }
@@ -277,6 +302,28 @@ mod tests {
         assert_eq!(
             javascript_string("\"; throw Error('injected'); //\\\n\u{2028}\u{0000}"),
             "\"\\\"; throw Error('injected'); //\\\\\\n\\u2028\\u0000\""
+        );
+    }
+}
+
+#[cfg(test)]
+mod diagnostic_tests {
+    use super::*;
+
+    #[test]
+    fn compiler_diagnostic_classification_is_not_inferred_from_text() {
+        let plain = CompileError::new("no main to run");
+        for has_io in [false, true] {
+            let classified = CompileError::missing_main(has_io);
+            assert_eq!(classified, plain);
+            assert_eq!(classified.to_string(), plain.to_string());
+            assert!(classified.language_diagnostic().is_some());
+        }
+        assert!(plain.language_diagnostic().is_none());
+        assert!(
+            CompileError::new("a build needs import Base")
+                .language_diagnostic()
+                .is_none()
         );
     }
 }

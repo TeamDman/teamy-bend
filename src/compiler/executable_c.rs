@@ -81,7 +81,9 @@ pub fn compile_executable_c(book: &ExecutableBook) -> Result<String, CompileErro
         .lower_for_compilation()
         .map_err(|error| CompileError::new(error.to_string()))?;
     if program.entry == ExecutableEntry::Missing {
-        return Err(CompileError::new("no main to run"));
+        return Err(CompileError::missing_main(
+            program.datatypes.contains_key("IO") || book.definition_type("IO").is_some(),
+        ));
     }
     let table = ConstructorTable::build(&program)?;
     let foreign = executable_c_foreign::assemble(&program, &table)?;
