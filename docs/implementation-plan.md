@@ -3829,3 +3829,36 @@ by applicability. Next independent family: parse/chain_brace_suffix_f, _g and _h
 normalization and actual printer applicability. Full CPU parity and existing
 contract/resource/host/foreign/API gaps remain open. Frozen inputs, toolchains,
 budgets and demand policy; no installations or pushes.
+
+
+### [x] 5.51 Qualify brace suffix functions and complete Nat presentation
+
+Source `f6c057c` qualifies unchanged parse/chain_brace_suffix_f, _g and _h.
+The equality-type `_h` already had equal actual core, but printed Succ{Zero{}}
+instead of upstream 1n. Complete unqualified Nat constructor chains now print
+compactly without evaluating fields or changing checker/runtime/resource policy.
+Malformed, namespaced, open and annotated boundaries remain covered. Existing
+exact expectations change spelling only; strict F32 exclusions are preserved.
+
+All three originals pass strict eval, actual-core comparison and exact text twice.
+Both upstream printers actually refuse the function types, with no artifacts.
+The renewed normalization matrix covers 31 fixtures: 242 successful observations,
+64 printer refusals and six strict F32 exclusions. Full gate **820 passed, zero
+failed, 49 ignored**; 114 affected tests and strict all-target Clippy pass.
+Adjacent executable originals give 30 exact generated/native observations and
+six retained direct IO host failures. Negative/demand matrices keep their prior
+44/56 and 92/100 exact results, classified gaps and nonzero runner exits.
+
+The [checkpoint](cpu-brace-suffix-functions.md) records exact commands, hashes,
+candidate failures, recovered disk exhaustion and mode boundaries. Current
+receipts renew 27 interpretation originals, nine runtime rows and ten authored
+demand controls; all other receipts retain their actual historical identities.
+The ledgers link 102 originals; 1,200 remain unlinked by runtime/interpretation
+mode, classified by applicability rather than treated as runtime defects.
+
+Full parity remains incomplete. A checked open-Nat control still prints
+n => Succ{n} versus upstream n => 1n+n with equal core. Qualify the unlinked
+eval/nat_literal_roundtrip original and its compound printer applicability next;
+parse/chain_default_nat_f and _g remain an independent family. Existing F32.read,
+error-order, resource, host, foreign, API and platform gaps stay open. Frozen
+dependencies/toolchains/pin/budgets and unchanged demand policy; no push.

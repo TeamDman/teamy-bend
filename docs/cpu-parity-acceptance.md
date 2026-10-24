@@ -107,30 +107,41 @@ its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) now links 24 originals
-at `105484a`: eleven interpreter-only cases and thirteen compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) now links 27 originals
+at `f6c057c`: eleven interpreter-only cases and sixteen compiled candidates
 whose function results are actually refused by upstream C/JS generation. Four
 authored controls add no inventory rows. Across runtime and interpretation,
-**99 originals** have receipts and **1,203** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 599 compiled
+**102 originals** have receipts and **1,200** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 596 compiled
 candidates.
 
-The [U32-suffix checkpoint](cpu-u32-suffix-functions.md), `105484a`, adds three
-unchanged returned functions. Pinned interpretation, native run and strict eval
-preserve the normalized values; direct actual-core comparison and exact text
-both pass twice. Both upstream data printers refuse their function types without
-artifacts. These U32 cases need no proof exclusion or executable-only mode.
-The distinct [F32 observation mode](cpu-float-suffix-functions.md) remains explicit:
-parsed executable output plus an in-crate actual-core regression, retaining the
-six strict-proof refusals. No executable contract becomes proof evidence.
+The [brace-suffix checkpoint](cpu-brace-suffix-functions.md), `f6c057c`, adds three
+unchanged returned functions and repairs complete Nat literal presentation.
+Pinned interpretation, native run and strict eval now preserve all three exact
+values. Direct actual-core comparison passes independently; both upstream data
+printers refuse their function types without artifacts. These cases need no
+proof exclusion or executable-only observation. The distinct
+[F32 mode](cpu-float-suffix-functions.md) remains parsed executable output plus
+an in-crate actual-core regression, with six strict-proof refusals retained.
 
-The renewed normalization suite covers 28 fixtures: 218 successful observations,
-52 actual printer refusals and six F32 proof exclusions. All repeats are stable;
-no timeout occurs. Full gate: **819 passed, zero failed, 49 ignored**; 30 focused
-tests and strict all-target Clippy pass. Three inputs extend an existing test,
-so the test count is unchanged. Production source and the comparison mechanism
-are unchanged. Runtime/negative/demand/read/audit/comptime receipts retain
-`2f349c8` with all existing gaps, without rerunning or relabelling them.
+The renewed normalization suite covers 31 fixtures: 242 successful observations,
+64 actual printer refusals and six F32 exclusions. All repeats are stable with
+zero timeouts. Full gate: **820 passed, zero failed, 49 ignored**; 114 affected
+tests and strict all-target Clippy pass. Only term presentation changes, with
+no evaluator, checker, demand or resource-policy change. Adjacent executable
+brace/default-Nat/U32 originals give 30 exact generated/native executions and
+six direct upstream IO host failures. Six runtime negatives remain 44/56 exact;
+ten demand controls remain 92/100 exact, six approved C-wildcard exceptions and
+two unwaived diagnostic-order observations. Their runners correctly exit 1.
+Nine runtime rows and ten demand rows identify `f6c057c`; the other 66 runtime
+rows and comptime/read/checking/audit receipts keep their historical commits.
+
+An authored checked open-Nat function still prints `n => Succ{n}` versus
+upstream `n => 1n+n`, despite equal actual core and stable successful exits.
+That presentation gap is recorded, not waived or counted as exact parity.
+`eval/nat_literal_roundtrip` is a concrete next original for qualification;
+compound output and actual printer applicability need verification. The
+independent `parse/chain_default_nat_f` / `_g` family also remains unqualified.
 
 The preceding production [checker-depth checkpoint](cpu-checker-depth.md),
 `2f349c8`, repairs redundant
