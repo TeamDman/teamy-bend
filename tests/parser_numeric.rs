@@ -84,16 +84,12 @@ fn pure_shifts_comparison_and_small_conversion_agree() {
 }
 
 #[test]
-fn deep_pure_word_division_reports_resource_exhaustion() {
+fn pure_word_division_reduces_without_accumulating_tail_frames() {
     let book = library();
-    let args = [
-        parse_term("17").expect("literal"),
-        parse_term("5").expect("literal"),
-    ];
-    let error = book
-        .evaluate("U32.div", &args)
-        .expect_err("recursive divider exceeds current kernel limit");
-    assert!(error.to_string().contains("nesting limit"));
+    // This previously hit depth 128 through redundant tail-reduction frames.
+    // Pending-depth and work exhaustion remain covered by kernel guard tests.
+    assert_eq!(number(&evaluate(&book, "U32.div", &["17", "5"])), 3);
+    assert_eq!(number(&evaluate(&book, "U32.mod", &["17", "5"])), 2);
 }
 
 #[test]

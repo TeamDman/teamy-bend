@@ -213,7 +213,8 @@ $floatSpecialsDepth = @(
 )
 $parseArrays = @(
     @{ name = 'array_literal'; source = "$Reference/tests/parse/array_literal.bend"; expected = "([3, 3, 3, 3], [True{}, True{}])`n"; direct_mode = 'pure' },
-    @{ name = 'array_write_stmt'; source = "$Reference/tests/parse/array_write_stmt.bend"; expected = "([7, 1, 0, 0, 0, 42, 0, 0], 42)`n"; direct_mode = 'pure' }
+    @{ name = 'array_write_stmt'; source = "$Reference/tests/parse/array_write_stmt.bend"; expected = "([7, 1, 0, 0, 0, 42, 0, 0], 42)`n"; direct_mode = 'pure' },
+    @{ name = 'array_read_four'; source = "$port/tests/fixtures/cpu-array-syntax/array_read_four.bend"; expected = "([0, 0, 0, 0], 0)`n"; direct_mode = 'pure' }
 )
 $fixtures = switch ($Suite) {
     'baseline' { $baseline }

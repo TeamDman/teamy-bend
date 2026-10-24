@@ -8,6 +8,7 @@ use super::check::Engine;
 use super::check::KernelError;
 use super::substitute;
 use super::term;
+use std::ops::ControlFlow;
 use std::rc::Rc;
 
 #[derive(Clone, Copy, Eq, PartialEq)]
@@ -47,62 +48,81 @@ impl Engine {
     }
 
     fn whnf_inner(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
-        match value.as_ref() {
-            Term::Var { id, .. } => {
-                if let Some(replacement) = self.aliases.get(id).cloned() {
-                    self.whnf(&replacement)
-                } else {
-                    Ok(Rc::clone(value))
+        let mut value = Rc::clone(value);
+        loop {
+            match value.as_ref() {
+                Term::Var { id, .. } => {
+                    if let Some(replacement) = self.aliases.get(id).cloned() {
+                        value = replacement;
+                    } else {
+                        return Ok(value);
+                    }
                 }
+                Term::Ann(x, _) => value = Rc::clone(x),
+                Term::Let { bindings, body } => {
+                    // Bindings are simultaneous: values use only the outer scope.
+                    let mut result = Rc::clone(body);
+                    for b in bindings {
+                        result = substitute(&result, b.id, &b.value);
+                    }
+                    value = result;
+                }
+                Term::Min(a, b) => {
+                    let a = self.whnf(a)?;
+                    match a.as_ref() {
+                        Term::Qua(Quant::None) => return Ok(a),
+                        Term::Qua(Quant::Many) => {
+                            value = Rc::clone(b);
+                            self.step()?;
+                            continue;
+                        }
+                        _ => (),
+                    }
+                    let b = self.whnf(b)?;
+                    return match (a.as_ref(), b.as_ref()) {
+                        (_, Term::Qua(Quant::None)) | (Term::Qua(_), Term::Qua(Quant::Lone)) => {
+                            Ok(b)
+                        }
+                        (_, Term::Qua(Quant::Many)) => Ok(a),
+                        _ => Ok(term(Term::Min(a, b))),
+                    };
+                }
+                Term::Rwt { evidence, body, .. } => {
+                    if matches!(self.whnf(evidence)?.as_ref(), Term::Rfl) {
+                        value = Rc::clone(body);
+                    } else {
+                        return Ok(value);
+                    }
+                }
+                Term::Ref(name) | Term::GpuRef(name) if self.adts.contains_key(name) => {
+                    let declaration = &self.adts[name];
+                    if declaration.parameters.is_empty() {
+                        return Ok(term(Term::Adt {
+                            name: name.clone(),
+                            args: vec![],
+                            excluded: vec![],
+                        }));
+                    }
+                    return Ok(value);
+                }
+                Term::Ref(_) | Term::GpuRef(_) | Term::App(_, _) => {
+                    match self.whnf_spine(&value)? {
+                        ControlFlow::Break(result) => return Ok(result),
+                        ControlFlow::Continue(next) => value = next,
+                    }
+                }
+                _ => return Ok(value),
             }
-            Term::Ann(x, _) => self.whnf(x),
-            Term::Let { bindings, body } => {
-                // Bindings are simultaneous: values use only the outer scope.
-                let mut result = Rc::clone(body);
-                for b in bindings {
-                    result = substitute(&result, b.id, &b.value);
-                }
-                self.whnf(&result)
-            }
-            Term::Min(a, b) => {
-                let a = self.whnf(a)?;
-                match a.as_ref() {
-                    Term::Qua(Quant::None) => return Ok(a),
-                    Term::Qua(Quant::Many) => return self.whnf(b),
-                    _ => (),
-                }
-                let b = self.whnf(b)?;
-                match (a.as_ref(), b.as_ref()) {
-                    (_, Term::Qua(Quant::None)) | (Term::Qua(_), Term::Qua(Quant::Lone)) => Ok(b),
-                    (_, Term::Qua(Quant::Many)) => Ok(a),
-                    _ => Ok(term(Term::Min(a, b))),
-                }
-            }
-            Term::Rwt { evidence, body, .. } => {
-                if matches!(self.whnf(evidence)?.as_ref(), Term::Rfl) {
-                    self.whnf(body)
-                } else {
-                    Ok(Rc::clone(value))
-                }
-            }
-            Term::Ref(name) | Term::GpuRef(name) if self.adts.contains_key(name) => {
-                let declaration = &self.adts[name];
-                if declaration.parameters.is_empty() {
-                    Ok(term(Term::Adt {
-                        name: name.clone(),
-                        args: vec![],
-                        excluded: vec![],
-                    }))
-                } else {
-                    Ok(Rc::clone(value))
-                }
-            }
-            Term::Ref(_) | Term::GpuRef(_) | Term::App(_, _) => self.whnf_spine(value),
-            _ => Ok(Rc::clone(value)),
+            // A tail reduction has no pending work requiring a depth frame.
+            // Charge exactly the step that its former recursive whnf call used.
+            self.step()?;
         }
     }
 
-    fn whnf_spine(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
+    fn whnf_spine(
+        &mut self,
+        value: &TermRef,
+    ) -> Result<ControlFlow<TermRef, TermRef>, KernelError> {
         let (head, args) = spine(value);
         if let Term::Ref(name) | Term::GpuRef(name) = head.as_ref() {
             let definition = self.defs.get(name).cloned();
@@ -113,17 +133,17 @@ impl Engine {
                 let mut body = self.freshen(&body)?;
                 for arg in args.iter().take(def.parameters.len()) {
                     let Some(next) = self.consume(&body, arg)? else {
-                        return Ok(Rc::clone(value));
+                        return Ok(ControlFlow::Break(Rc::clone(value)));
                     };
                     body = next;
                 }
                 let result = apply(body, args.into_iter().skip(def.parameters.len()));
-                return self.whnf(&result);
+                return Ok(ControlFlow::Continue(result));
             }
-            return Ok(Rc::clone(value));
+            return Ok(ControlFlow::Break(Rc::clone(value)));
         }
         if args.is_empty() {
-            return Ok(Rc::clone(value));
+            return Ok(ControlFlow::Break(Rc::clone(value)));
         }
         let mut result = self.whnf(&head)?;
         let mut progressed = false;
@@ -137,9 +157,9 @@ impl Engine {
             }
         }
         if progressed {
-            self.whnf(&result)
+            Ok(ControlFlow::Continue(result))
         } else {
-            Ok(result)
+            Ok(ControlFlow::Break(result))
         }
     }
 

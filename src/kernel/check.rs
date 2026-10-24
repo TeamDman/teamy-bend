@@ -1421,4 +1421,129 @@ mod depth_tests {
         );
         assert_eq!(engine.depth, 0);
     }
+
+    #[test]
+    fn tail_reduction_charges_each_step_and_unwinds_after_budget_exhaustion() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let leaf = term(Term::Qnt);
+        let chain = (0..200).fold(Rc::clone(&leaf), |body, _| {
+            term(Term::Ann(body, Rc::clone(&leaf)))
+        });
+        engine.fuel = 201;
+        assert!(Rc::ptr_eq(&engine.whnf(&chain).unwrap(), &leaf));
+        assert_eq!(engine.fuel, 0);
+        assert_eq!(engine.depth, 0);
+
+        engine.fuel = 200;
+        let error = engine.whnf(&chain).unwrap_err();
+        assert!(error.to_string().contains("evaluation budget exhausted"));
+        assert_eq!(engine.depth, 0);
+
+        // A cyclic alias needs no pending stack, but cannot evade the work bound.
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 1,
+        });
+        engine.aliases.insert(1, Rc::clone(&cycle));
+        engine.fuel = 512;
+        let error = engine.whnf(&cycle).unwrap_err();
+        assert!(error.to_string().contains("evaluation budget exhausted"));
+        assert_eq!(engine.depth, 0);
+        engine.reset();
+        assert!(Rc::ptr_eq(&engine.whnf(&leaf).unwrap(), &leaf));
+    }
+
+    #[test]
+    fn pending_reductions_keep_the_depth_guard_and_first_error_order() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let leaf = term(Term::Qua(Quant::Lone));
+        let deep = (0..128).fold(Rc::clone(&leaf), |left, _| {
+            term(Term::Min(left, Rc::clone(&leaf)))
+        });
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 1,
+        });
+        for (left, right, diagnostic) in [
+            (
+                Rc::clone(&cycle),
+                Rc::clone(&deep),
+                "evaluation budget exhausted",
+            ),
+            (
+                Rc::clone(&deep),
+                Rc::clone(&cycle),
+                "kernel nesting limit exhausted",
+            ),
+        ] {
+            engine.reset();
+            engine.aliases.insert(1, Rc::clone(&cycle));
+            engine.fuel = 512;
+            let error = engine.whnf(&term(Term::Min(left, right))).unwrap_err();
+            assert!(error.to_string().contains(diagnostic), "{error}");
+            assert_eq!(engine.depth, 0);
+        }
+        engine.reset();
+        assert!(Rc::ptr_eq(&engine.whnf(&leaf).unwrap(), &leaf));
+    }
+
+    #[test]
+    fn tail_reduction_preserves_kernel_demand_boundaries() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 1,
+        });
+        engine.aliases.insert(1, Rc::clone(&cycle));
+        let leaf = term(Term::Qua(Quant::Lone));
+        let ignored = term(Term::Lam {
+            name: "ignored".into(),
+            id: 2,
+            body: Rc::clone(&leaf),
+        });
+        let selected = term(Term::Mat {
+            constructor: "Chosen".into(),
+            arm: Rc::clone(&leaf),
+            fallback: Rc::clone(&cycle),
+        });
+        let constructor = term(Term::Ctr {
+            name: "Chosen".into(),
+            args: vec![],
+        });
+        for value in [
+            term(Term::App(ignored, Rc::clone(&cycle))),
+            term(Term::App(selected, constructor)),
+            term(Term::Ann(Rc::clone(&leaf), Rc::clone(&cycle))),
+        ] {
+            assert!(Rc::ptr_eq(&engine.whnf(&value).unwrap(), &leaf));
+            assert_eq!(engine.depth, 0);
+        }
+        let delayed = term(Term::Ctr {
+            name: "Field".into(),
+            args: vec![Rc::clone(&cycle)],
+        });
+        assert!(Rc::ptr_eq(&engine.whnf(&delayed).unwrap(), &delayed));
+        let stuck = term(Term::Rwt {
+            evidence: term(Term::Var {
+                name: "evidence".into(),
+                id: 3,
+            }),
+            motive: Rc::clone(&cycle),
+            body: Rc::clone(&cycle),
+        });
+        assert!(Rc::ptr_eq(&engine.whnf(&stuck).unwrap(), &stuck));
+        engine.fuel = 512;
+        let error = engine.normalize(&delayed).unwrap_err();
+        assert!(error.to_string().contains("evaluation budget exhausted"));
+        assert_eq!(engine.depth, 0);
+    }
 }
