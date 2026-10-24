@@ -4768,3 +4768,40 @@ for a proposed 36-vector batch: ordinary parameter matching, cross-binder shadow
 and catch-all priority. No execution credit is assigned. The first fixture's old
 comment mentions sharing syntax absent from its actual source; no sharing/Own
 coverage is inferred from its name or comment.
+
+### [x] 5.85 Qualify binder shadowing and catch-all priority
+
+Source `e46434c5417252287478158e45260b3cbe6603eb` qualifies three unchanged `flatten` originals:
+`shared_param_computed_000`, `cross_binder_promotion` and `var_row_column_rebind`.
+The **36 bounded applications** cover predecessor matching, cross-binder shadowing
+and catch-all priority with complete payload retention. Original normalization,
+checked applications, pure projections and native IO execution are separate.
+The first original's old sharing comment describes absent syntax; no sharing/Own
+coverage is claimed. No production defect or implementation change was needed.
+[Report](cpu-binder-priority.md).
+
+Clean-source gate: **948 passed, zero failed, 49 ignored**. The repeated matrix
+records **216 process observations**, including six direct Node IO host blocks
+and three strict-proof exclusions. Original missing-Base refusals and separate
+Base-enabled function-printer refusals match exactly, with no artifact. All 1,302
+checking statuses are unchanged; 14 positive controls pass and 18 observations
+preserve three unwaived hole/TODO differences.
+
+Detailed receipts link **313 originals**; **989** lack detailed receipts:
+**360 checker negatives, one checking-only module, 78 interpreter cases and 550
+compiled candidates**. Three interpretation rows are new; the earlier 127
+interpretation, 93 runtime and 90 checking rows retain historical identities.
+Linked receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
+
+Next independent batch: the five `wide_scrutinee_000..004` originals. Source
+review proposes 96 vectors using every combination of depths 0 and 2 across
+four or five columns. This would exercise nonadjacent discriminators, ignored columns,
+default reconstruction and complete payload forwarding. Actual printability
+must be probed first; only source/inventory review is complete, with no execution
+credit assigned. The grid is a bounded branch/payload sample, not arbitrary-depth
+or exhaustive semantic coverage.
