@@ -3,6 +3,7 @@
 //! acceptance metadata is changed, and no global pointer registry is used.
 use crate::kernel::Term;
 use crate::kernel::TermRef;
+use crate::kernel::origins::MatchSite;
 use crate::kernel::origins::TermOrigins;
 use std::collections::BTreeMap;
 use std::rc::Rc;
@@ -122,6 +123,28 @@ impl DiagnosticOrigins {
                     )),
                     excerpt,
                 });
+    }
+
+    pub(super) fn unsupported_pattern(&mut self, value: &TermRef) {
+        self.load_failure =
+            self.excerpt(self.tracker.source(value))
+                .map(|excerpt| LoadDiagnostic {
+                    content: LoadDiagnosticContent::ExpectedObserved {
+                        expected: "a pattern (a binder or a constructor)".into(),
+                        observed: value.to_string(),
+                    },
+                    excerpt,
+                });
+    }
+
+    pub(crate) fn match_excerpt(&self, site: MatchSite) -> Option<String> {
+        match site {
+            MatchSite::Expression(identity) => self.excerpt(identity),
+            MatchSite::Statement(identity) => {
+                let origin = self.match_locations.get(&identity)?;
+                source_excerpt(&origin.source, origin.line)
+            }
+        }
     }
 
     pub(super) fn local_binder(&mut self, id: usize, label: &str, line: usize) {
@@ -251,6 +274,21 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn unsupported_pattern_metadata_preserves_public_load_error() {
+        for name in ["unsupported_pattern", "invalid_assign_target"] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join(format!("tests/fixtures/cpu-match-failures/{name}.bend"));
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert_eq!(plain.message, "a pattern must be a binder or constructor");
+            assert!(matches!(tracked.diagnostic.unwrap().content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                if expected == "a pattern (a binder or a constructor)"));
+        }
+    }
+
     #[test]
     fn row_arity_metadata_preserves_public_load_error_and_location() {
         for name in [

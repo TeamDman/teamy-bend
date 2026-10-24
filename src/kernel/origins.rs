@@ -8,6 +8,13 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 use std::rc::Weak;
 
+// Diagnostic-only source of a generated match, never part of a core term.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum MatchSite {
+    Expression(usize),
+    Statement(usize),
+}
+
 #[derive(Clone, Debug, Default)]
 pub(crate) struct TermOrigins(Rc<RefCell<Index>>);
 
@@ -30,6 +37,7 @@ struct Origin {
     // Per-occurrence anchors survive binder substitution even when several
     // variable uses share one replacement allocation. No strong term edges.
     child_origins: Option<[Option<usize>; 3]>,
+    match_site: Option<MatchSite>,
 }
 
 impl TermOrigins {
@@ -65,6 +73,7 @@ impl TermOrigins {
             node: Rc::downgrade(value),
             source: key,
             child_origins,
+            match_site: None,
         });
     }
 
@@ -78,6 +87,24 @@ impl TermOrigins {
             .get_mut(&(Rc::as_ptr(value) as usize))
             .expect("tracked surface parent")
             .child_origins = Some(children);
+    }
+
+    pub(crate) fn surface_match(&self, value: &TermRef, site: MatchSite) {
+        self.track(value);
+        self.0
+            .borrow_mut()
+            .nodes
+            .get_mut(&(Rc::as_ptr(value) as usize))
+            .expect("tracked match")
+            .match_site = Some(site);
+    }
+
+    pub(crate) fn match_site(&self, value: &TermRef) -> Option<MatchSite> {
+        self.0
+            .borrow()
+            .nodes
+            .get(&(Rc::as_ptr(value) as usize))?
+            .match_site
     }
 
     pub(crate) fn source(&self, value: &TermRef) -> usize {
@@ -132,12 +159,14 @@ impl TermOrigins {
             if let Some(origin) = origins.nodes.get(&(Rc::as_ptr(before) as usize)) {
                 let source = origin.source;
                 let child_origins = origin.child_origins;
+                let match_site = origin.match_site;
                 origins.nodes.insert(
                     Rc::as_ptr(after) as usize,
                     Origin {
                         node: Rc::downgrade(after),
                         source,
                         child_origins,
+                        match_site,
                     },
                 );
             }
@@ -237,6 +266,47 @@ mod tests {
             name: "x".into(),
             id,
         })
+    }
+
+    #[test]
+    fn match_sites_survive_substitution_without_retaining_terms() {
+        for site in [MatchSite::Expression(17), MatchSite::Statement(19)] {
+            let origins = TermOrigins::default();
+            let fallback = term(Term::Efq);
+            let original = term(Term::Mat {
+                constructor: "Z".into(),
+                arm: variable(1),
+                fallback: Rc::clone(&fallback),
+            });
+            origins.surface_match(&original, site);
+            origins.surface_match(&fallback, site);
+            origins.surface_children(&original, [Some(23), None, None]);
+            assert_eq!(Rc::strong_count(&original), 1);
+            let replacement = variable(2);
+            let result = substitute_with_origins(&original, 1, &replacement, Some(&origins));
+            assert_eq!(origins.match_site(&result), Some(site));
+            assert_eq!(origins.child_source(&result, 0, &replacement), Some(23));
+            let Term::Mat {
+                arm,
+                fallback: after,
+                ..
+            } = result.as_ref()
+            else {
+                panic!("match")
+            };
+            assert!(Rc::ptr_eq(arm, &replacement));
+            assert!(Rc::ptr_eq(after, &fallback));
+            assert_eq!(origins.match_site(after), Some(site));
+            assert_eq!(
+                format!("{result:?}"),
+                format!("{:?}", super::super::substitute(&original, 1, &replacement))
+            );
+            let weak = Rc::downgrade(&result);
+            drop(result);
+            assert!(weak.upgrade().is_none());
+            drop(origins);
+            assert_eq!(Rc::weak_count(&original), 0);
+        }
     }
 
     #[test]

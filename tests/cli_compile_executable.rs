@@ -199,6 +199,22 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-match-failures/error_window_match_missing.bend"),
+            "Error:\n- expected : cases for False\n- observed : \\{}\nLocation: bad\n6 | def bad() -> Bool -> Bool:\n7>|   \\{True: True{}}\n8 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-match-failures/empty_match.bend"),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{}\nContext:\n- e : Emp\nLocation: main\n 9 | def main(e):\n10>|   (\\{})(e)\n11 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-match-failures/match_app_scrutinee_001.bend"),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Z: b; S: (d => d)}\nContext:\n- a : N\n- b : N\n- c : N\nLocation: main\n17 |       c = a\n18>|       (\\{Z:b;S: d =>d})(c)\n19 | \n",
+        ),
+        (
+            include_str!("fixtures/cpu-match-failures/unsupported_pattern.bend"),
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n16 |   match a:\n17>|     case x => x:\n18 |       Au{}\n",
+        ),
+        (
             include_str!("fixtures/cpu-matched-values/error_window_matched_scrutinee.bend"),
             "Error:\n- expected : Type\n- observed : One\nLocation: bad\n7 |     case One.new{}:\n8>|       x\n9 | \n",
         ),

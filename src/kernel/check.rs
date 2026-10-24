@@ -25,7 +25,47 @@ use std::fmt;
 use std::rc::Rc;
 
 type Uses = BTreeMap<usize, Quant>;
-type Context = BTreeMap<usize, Binder>;
+// Semantic lookup and dead-context traversal retain their original ID order.
+// Diagnostic contexts follow binder admission, like upstream de Bruijn indices;
+// parser IDs can precede fresh field IDs even when admitted after those fields.
+#[derive(Clone, Debug, Default)]
+struct Context {
+    bindings: BTreeMap<usize, Binder>,
+    diagnostic_order: Vec<usize>,
+}
+impl Context {
+    fn new() -> Self {
+        Self::default()
+    }
+    fn insert(&mut self, id: usize, binder: Binder) -> Option<Binder> {
+        let previous = self.bindings.insert(id, binder);
+        if previous.is_none() {
+            self.diagnostic_order.push(id);
+        }
+        previous
+    }
+    fn get(&self, id: &usize) -> Option<&Binder> {
+        self.bindings.get(id)
+    }
+    fn contains_key(&self, id: &usize) -> bool {
+        self.bindings.contains_key(id)
+    }
+    fn values(&self) -> impl Iterator<Item = &Binder> {
+        self.bindings.values()
+    }
+    fn diagnostic_values(&self) -> impl Iterator<Item = &Binder> {
+        self.diagnostic_order.iter().map(|id| &self.bindings[id])
+    }
+}
+impl<const N: usize> From<[(usize, Binder); N]> for Context {
+    fn from(bindings: [(usize, Binder); N]) -> Self {
+        let mut context = Self::new();
+        for (id, binder) in bindings {
+            context.insert(id, binder);
+        }
+        context
+    }
+}
 
 /// A rejected check or execution, retaining internal diagnostic context.
 ///
@@ -50,6 +90,7 @@ impl PartialEq for KernelError {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct CheckerDiagnostic {
     pub(crate) term_identity: usize,
+    pub(crate) match_site: Option<super::origins::MatchSite>,
     pub(crate) definition: String,
     pub(crate) expected: String,
     pub(crate) observed: String,
@@ -393,7 +434,7 @@ impl Engine {
         let expected = expected.render(&mut display)?;
         let observed = observed.render(&mut display)?;
         let context = context
-            .values()
+            .diagnostic_values()
             .map(|binder| {
                 Ok((
                     binder.name.clone(),
@@ -407,6 +448,10 @@ impl Engine {
                 || Rc::as_ptr(value) as usize,
                 |origins| origins.source(value),
             ),
+            match_site: self
+                .origins
+                .as_ref()
+                .and_then(|origins| origins.match_site(value)),
             definition: lhs.name.clone(),
             expected,
             observed,
@@ -422,6 +467,7 @@ impl Engine {
         child: &TermRef,
     ) -> KernelError {
         if let Some(report) = &mut error.diagnostic
+            && report.match_site.is_none()
             && report.term_identity == Rc::as_ptr(child) as usize
             && let Some(source) = self
                 .origins
@@ -1141,9 +1187,22 @@ impl Engine {
                     .map(Box::new);
                 Err(error)
             }
-            _ => Err(KernelError::new(format!(
-                "term needs an expected type or annotation: {value}"
-            ))),
+            _ => {
+                let mut error = KernelError::new(format!(
+                    "term needs an expected type or annotation: {value}"
+                ));
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text("an annotated term (cannot infer)".into()),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+                Err(error)
+            }
         }
     }
 
@@ -1543,14 +1602,24 @@ impl Engine {
             if adt.constructors.is_empty() || self.context_dead(context)? {
                 return Ok(Uses::new());
             }
-            return Err(KernelError::new(format!(
-                "missing cases for {}",
-                adt.constructors
-                    .iter()
-                    .map(|c| c.name.as_str())
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            )));
+            let names = adt
+                .constructors
+                .iter()
+                .map(|c| c.name.as_str())
+                .collect::<Vec<_>>()
+                .join(", ");
+            let mut error = KernelError::new(format!("missing cases for {names}"));
+            error.diagnostic = self
+                .term_diagnostic(
+                    lhs,
+                    value,
+                    DiagnosticExpression::Text(format!("cases for {names}")),
+                    DiagnosticExpression::Term(value),
+                    context,
+                )
+                .ok()
+                .map(Box::new);
+            return Err(error);
         }
         let Term::Mat {
             constructor,
@@ -1935,8 +2004,89 @@ mod reflexivity_diagnostic_tests {
     use super::*;
 
     #[test]
+    fn diagnostic_context_follows_admission_without_changing_semantic_iteration() {
+        let mut context = Context::new();
+        for (id, name) in [(100, "field"), (2, "local")] {
+            context.insert(
+                id,
+                Binder {
+                    quant: Quant::Lone,
+                    name: name.into(),
+                    id,
+                    ty: term(Term::Qnt),
+                },
+            );
+        }
+        let mut replacement = context.get(&100).unwrap().clone();
+        replacement.name = "renamed".into();
+        context.insert(100, replacement);
+        assert_eq!(context.values().map(|b| b.id).collect::<Vec<_>>(), [2, 100]);
+        let engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let report = engine
+            .term_diagnostic(
+                &Lhs::default(),
+                &term(Term::Efq),
+                DiagnosticExpression::Text("test".into()),
+                DiagnosticExpression::Term(&term(Term::Efq)),
+                &context,
+            )
+            .unwrap();
+        assert_eq!(
+            report.context,
+            [
+                ("renamed".into(), "Quant".into()),
+                ("local".into(), "Quant".into())
+            ]
+        );
+    }
+
+    #[test]
+    fn inference_and_missing_cases_keep_original_errors_when_presentation_exhausts() {
+        let book = crate::syntax::parse("type N is Data:\n  Z{}\n").unwrap();
+        let mut engine = empty_engine(&book).unwrap();
+        let Declaration::Adt(adt) = &book.declarations[0] else {
+            panic!("datatype")
+        };
+        engine.validate_adt(adt).unwrap();
+        let value = term(Term::Efq);
+        let goal = crate::syntax::parse_term("N -> N").unwrap();
+        for missing_case in [false, true] {
+            let evaluate = |engine: &mut Engine| {
+                if missing_case {
+                    engine.check(&Lhs::default(), &value, Quant::Lone, &goal, &Context::new())
+                } else {
+                    engine
+                        .infer(&Lhs::default(), &value, Quant::Lone, &Context::new(), &[])
+                        .map(|(_, uses)| uses)
+                }
+            };
+            engine.reset();
+            let initial = engine.fuel;
+            let error = evaluate(&mut engine).unwrap_err();
+            assert!(error.checker_diagnostic().is_some());
+            let spent = initial - engine.fuel;
+            engine.fuel = spent;
+            let exhausted = evaluate(&mut engine).unwrap_err();
+            assert_eq!(error, exhausted);
+            assert!(exhausted.checker_diagnostic().is_none());
+            assert!(exhausted.language_failure().is_none());
+            assert_eq!((engine.fuel, engine.depth), (0, 0));
+        }
+    }
+
+    #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-match-failures/empty_match.bend", &[][..]),
+            (
+                "cpu-match-failures/error_window_match_missing.bend",
+                &[][..],
+            ),
+            ("cpu-match-failures/nontotal_multi_missing.bend", &[][..]),
+            ("cpu-match-failures/match_app_scrutinee_001.bend", &[][..]),
             (
                 "cpu-matched-values/error_window_matched_scrutinee.bend",
                 &[][..],
@@ -2121,7 +2271,7 @@ mod reflexivity_diagnostic_tests {
         assert_eq!((engine.fuel, engine.depth), (0, 0));
         engine.reset();
         let mut bound = context;
-        let mut binding = bound[&1].clone();
+        let mut binding = bound.get(&1).unwrap().clone();
         binding.id = 2;
         bound.insert(2, binding);
         assert_eq!(

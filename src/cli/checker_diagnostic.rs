@@ -27,7 +27,11 @@ fn emit(
     let Some(report) = error.checker_diagnostic() else {
         return Err(eyre!("{error}"));
     };
-    let Some(excerpt) = origins.excerpt(report.term_identity) else {
+    let excerpt = report.match_site.map_or_else(
+        || origins.excerpt(report.term_identity),
+        |site| origins.match_excerpt(site),
+    );
+    let Some(excerpt) = excerpt else {
         // Programmatically constructed or untracked terms keep the ordinary
         // host diagnostic. Never guess a source line from an error string.
         return Err(eyre!("{error}"));
@@ -112,6 +116,8 @@ mod tests {
     #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
         for name in [
+            "tests/fixtures/cpu-match-failures/empty_match.bend",
+            "tests/fixtures/cpu-match-failures/error_window_match_missing.bend",
             "tests/fixtures/cpu-matched-values/error_window_matched_scrutinee.bend",
             "tests/fixtures/cpu-checking/false_brace.bend",
             "tests/fixtures/cpu-constructors/nat_literal_import.bend",

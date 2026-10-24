@@ -1133,3 +1133,223 @@ fn matched_value_use_sites_and_row_arity_characters_survive_layout_and_imports()
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn match_failure_originals_preserve_phase_source_and_exact_diagnostics() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-match-failures");
+    for (name, expected) in [
+        (
+            "efq_erased_binder_000",
+            "Error:\n- expected : cases for B1\n- observed : \\{}\nContext:\n- v : Void\nLocation: bad\n20 |     case Pack{v, b}:\n21>|       match b:\n22 |         case B0{}: B0{}\n",
+        ),
+        (
+            "error_window_match_missing",
+            "Error:\n- expected : cases for False\n- observed : \\{}\nLocation: bad\n6 | def bad() -> Bool -> Bool:\n7>|   \\{True: True{}}\n8 | \n",
+        ),
+        (
+            "annotated_computed_scrutinee_001",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Sn: (k => T{}); Zn: F{}}\nContext:\n- n : Nt\nLocation: main\n15 | def main(n):\n16>|   \\{Sn: (k => T{}); Zn: F{}}({Sn{n} : Nt})\n17 | \n",
+        ),
+        (
+            "dependent_goal_000",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{T: {==}; F: {==}}\nContext:\n- n : W\nLocation: main\n39 | def main(n):\n40>|   \\{T: {==}; F: {==}}(even(n))\n41 | \n",
+        ),
+        (
+            "dependent_goal_001",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{T: \\{T: {==}; F: {==}}(odd(n)); F: \\{T: {==}; F: {==}}(odd(n))}\nContext:\n- n : W\nLocation: main\n62 | def main(n):\n63>|   \\{T: \\{T: {==}; F: {==}}(odd(n)); F: \\{T: {==}; F: {==}}(odd(n))}(pos(n))\n64 | \n",
+        ),
+        (
+            "empty_match",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{}\nContext:\n- e : Emp\nLocation: main\n 9 | def main(e):\n10>|   (\\{})(e)\n11 | \n",
+        ),
+        (
+            "lambda_match_literal_000",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{T: W; F: W}\nContext:\n- b : Bl\nLocation: main\n11 | law main:\n12>|   @b: Bl -> \\{T: W; F: W}(b)\n13 | \n",
+        ),
+        (
+            "lambda_match_literal_001",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{T: {n == n : Nt}; F: Nt}\nContext:\n- n : Nt\n- b : Bl\nLocation: main\n11 | law main:\n12>|   @n: Nt -> @b: Bl -> \\{T: {n == n : Nt}; F: Nt}(b)\n13 | \n",
+        ),
+        (
+            "lambda_match_literal_002",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{T: @x:W -> W; F: W}\nContext:\n- b : Bl\nLocation: main\n11 | law main:\n12>|   @b: Bl -> \\{T: @x: W -> W; F: W}(b)\n13 | \n",
+        ),
+        (
+            "match_app_scrutinee_000",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Zn: A{}; Sn: (x => B{x})}\nContext:\n- n : Nt\nLocation: main\n15 | def main(n):\n16>|   (\\{Zn: A{}; Sn: (x => B{x})})({n : Nt})\n17 | \n",
+        ),
+        (
+            "match_app_scrutinee_001",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Z: b; S: (d => d)}\nContext:\n- a : N\n- b : N\n- c : N\nLocation: main\n17 |       c = a\n18>|       (\\{Z:b;S: d =>d})(c)\n19 | \n",
+        ),
+        (
+            "match_as_term",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : S{x}\nContext:\n- x : Nt\nLocation: main\n19 |     case T{}:\n20>|       y = S{x}\n21 |       y\n",
+        ),
+        (
+            "noninfer_error_000",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Zx5: Bx5{Zx5{}}; Sx5: (x => Ax5{x})}\nLocation: main\n14 | \n15>| def main(): (\\{Zx5: Bx5{Zx5{}}; Sx5: x => Ax5{x}})(Zx5{})\n16 | \n",
+        ),
+        (
+            "noninfer_error_002",
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Sn: (k => Z{})}\nContext:\n- n : Nt\nLocation: f\n15 | def f(n):\n16>|   \\{Sn: (k => Z{})}(Sn{n})\n17 | \n",
+        ),
+        (
+            "nontotal_error_000",
+            "Error:\n- expected : cases for Zx6\n- observed : \\{}\nLocation: f\n14 | def f(a):\n15>|   match a:\n16 |     case Sx6{a}:\n",
+        ),
+        (
+            "nontotal_error_001",
+            "Error:\n- expected : cases for Zx7\n- observed : \\{}\nLocation: f\n16 | def f(a):\n17>|   match a:\n18 |     case Sx7{Sx7{a}}:\n",
+        ),
+        (
+            "nontotal_error_002",
+            "Error:\n- expected : cases for Ze2\n- observed : \\{}\nLocation: f\n15 | def f(a):\n16>|   match a:\n17 |     case Se2{a}:\n",
+        ),
+        (
+            "nontotal_error_003",
+            "Error:\n- expected : cases for Ze3\n- observed : \\{}\nLocation: pred\n11 | def pred(n):\n12>|   match n:\n13 |     case Se3{p}:\n",
+        ),
+        (
+            "nontotal_multi_missing",
+            "Error:\n- expected : cases for Bb1, Cc1\n- observed : \\{}\nLocation: f\n12 | def f(x):\n13>|   match x:\n14 |     case Aa1{}:\n",
+        ),
+        (
+            "nontotal_multi_scrutinee_000",
+            "Error:\n- expected : cases for Zz0\n- observed : \\{}\nContext:\n- b : Lz0<Nz0>\nLocation: f\n25 | def f(a, b):\n26>|   match a, b:\n27 |     case Cl0{Sz0{a}, b}, Cl0{Sz0{c}, d}:\n",
+        ),
+        (
+            "nontotal_multi_scrutinee_001",
+            "Error:\n- expected : cases for Cl1\n- observed : \\{}\nContext:\n- b : Lz1<Nz1>\nLocation: f\n23 | def f(a, b, c):\n24>|   match a, b, c:\n25 |     case Nl1{}, a, Nl1{}:\n",
+        ),
+        (
+            "nontotal_multi_scrutinee_002",
+            "Error:\n- expected : cases for Cl2\n- observed : \\{}\nContext:\n- b : Lz2<Nz2>\n- c : Nz2\nLocation: f\n24 | def f(a, b, c, d):\n25>|   match a, b, c, d:\n26 |     case Zz2b{}, xs, b, Nl2{}:\n",
+        ),
+        (
+            "nontotal_multi_scrutinee_003",
+            "Error:\n- expected : cases for Ib\n- observed : \\{}\nLocation: mix\n13 | def mix(a, b):\n14>|   match a, b:\n15 |     case Ob{}, Ob{}:\n",
+        ),
+        (
+            "nontotal_multi_scrutinee_004",
+            "Error:\n- expected : cases for By, Cy\n- observed : \\{}\nLocation: f\n19 | def f(x, y):\n20>|   match x, y:\n21 |     case Oy{}, Ay{}:\n",
+        ),
+        (
+            "pattern_shape_mismatch",
+            "Error:\n- expected : cases for True\n- observed : \\{}\nLocation: main\n19 | def main(a):\n20>|   match a:\n21 |     case 0:\n",
+        ),
+        (
+            "unsupported_pattern",
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n16 |   match a:\n17>|     case x => x:\n18 |       Au{}\n",
+        ),
+        (
+            "match_missing_ctors",
+            "Error:\n- expected : cases for Tt, Ff\n- observed : \\{}\nLocation: f\n12 | def f(b):\n13>|   match b:\n14 | \n",
+        ),
+        (
+            "match_missing_default",
+            "Error:\n- expected : cases for U32\n- observed : \\{}\nLocation: main\n 9 | def main():\n10>|   \\{}\n11 | \n",
+        ),
+        (
+            "invalid_assign_target",
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : f(1)\nLocation:\n16 | def main():\n17>|   f(1) = 3\n18 |   0\n",
+        ),
+    ] {
+        assert_diagnostic(&root.join(format!("{name}.bend")), expected);
+    }
+}
+
+#[test]
+fn match_failures_keep_nested_imported_template_and_layout_origins() {
+    for (source, helper, expected) in [
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      match p:\n        case Zero{}: Zero{}\n",
+            None,
+            "Error:\n- expected : cases for Succ\n- observed : \\{}\nLocation: bad\n6 |     case Succ{p}:\n7>|       match p:\n8 |         case Zero{}: Zero{}\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match (\n    n\n  ):\n    case Zero{}: Zero{}\n",
+            None,
+            "Error:\n- expected : cases for Succ\n- observed : \\{}\nLocation: bad\n4 | def bad(n: Nat) -> Nat:\n5>|   match (\n6 |     n\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  Succ{p} = n\n  p\n",
+            None,
+            "Error:\n- expected : cases for Zero\n- observed : \\{}\nLocation: bad\n4 | def bad(n: Nat) -> Nat:\n5>|   Succ{p} = n\n6 |   p\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad() -> Nat -> Nat:\n  \\{Zero: Zero{}}\n",
+            None,
+            "Error:\n- expected : cases for Succ\n- observed : \\{}\nLocation: bad\n4 | def bad() -> Nat -> Nat:\n5>|   \\{Zero: Zero{}}\n6 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      match p:\n        case Zero{}: Zero{}\n",
+            ),
+            "Error:\n- expected : cases for helper.Succ\n- observed : \\{}\nLocation: helper.bad\n6 |     case Succ{p}:\n7>|       match p:\n8 |         case Zero{}: Zero{}\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(~f: Type -> Type, n: Nat) -> Nat:\n  match n:\n    case Succ{p}:\n      match p:\n        case Zero{}: Zero{}\ndef main() -> Nat: bad(~(x => x), Zero{})\n",
+            None,
+            "Error:\n- expected : cases for Succ\n- observed : \\{}\nContext:\n- f : @_:Type -> Type\nLocation: bad~0\n6 |     case Succ{p}:\n7>|       match p:\n8 |         case Zero{}: Zero{}\n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  (\\{})(n)\n",
+            None,
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{}\nContext:\n- n : Nat\nLocation: bad\n4 | def bad(n: Nat) -> Nat:\n5>|   (\\{})(n)\n6 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  (\\{})(n)\n",
+            ),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{}\nContext:\n- n : helper.Nat\nLocation: helper.bad\n4 | def bad(n: Nat) -> Nat:\n5>|   (\\{})(n)\n6 | \n",
+        ),
+        (
+            "type N is Data:\n  Z{}\n  S{p: N}\n\ntype P is Data:\n  P{a: N, b: N}\n\n# a match application on a let-bound variable is the banned form too:\n# the checker rejects the application itself\nlaw main:\n  for p: P\n  N\n\ndef main(p):\n  match p:\n    case P{a, b}:\n      c = a\n      z = b\n      (\\{Z:b;S: d =>d})(c)\n\n",
+            None,
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{Z: b; S: (d => d)}\nContext:\n- a : N\n- b : N\n- c : N\n- z : N\nLocation: main\n18 |       z = b\n19>|       (\\{Z:b;S: d =>d})(c)\n20 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type N is Data:\n  Z{}\n  S{p: N}\n\ntype P is Data:\n  P{a: N, b: N}\n\n# a match application on a let-bound variable is the banned form too:\n# the checker rejects the application itself\nlaw main:\n  for p: P\n  N\n\ndef main(p):\n  match p:\n    case P{a, b}:\n      c = a\n      (\\{Z:b;S: d =>d})(c)\n\n",
+            ),
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : \\{helper.Z: b; helper.S: (d => d)}\nContext:\n- a : helper.N\n- b : helper.N\n- c : helper.N\nLocation: helper.main\n17 |       c = a\n18>|       (\\{Z:b;S: d =>d})(c)\n19 | \n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{x => x}: Zero{}\n",
+            None,
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n5 |   match n:\n6>|     case Succ{x => x}: Zero{}\n7 | \n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case {x : Nat}: Zero{}\n",
+            None,
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : {x : Nat}\nLocation:\n5 |   match n:\n6>|     case {x : Nat}: Zero{}\n7 | \n",
+        ),
+        (
+            "import helper.bend as H\ndef main() -> Type: Type\n",
+            Some(
+                "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{x => x}: Zero{}\n",
+            ),
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n5 |   match n:\n6>|     case Succ{x => x}: Zero{}\n7 | \n",
+        ),
+        (
+            "type Nat is Data:\r\n  Zero{}\r\n  Succ{pred: Nat}\r\ndef bad(n: Nat) -> Nat:\r\n  match n:\r\n    case Succ{x => x}: Zero{}\r\n",
+            None,
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n5 |   match n:\r\n6>|     case Succ{x => x}: Zero{}\r\n7 | \n",
+        ),
+        (
+            "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef bad(n: Nat) -> Nat:\n  match n:\n    case Succ{x => x}: Zero{}",
+            None,
+            "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : x => x\nLocation:\n5 |   match n:\n6>|     case Succ{x => x}: Zero{}\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}

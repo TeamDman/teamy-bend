@@ -5,6 +5,7 @@ use crate::kernel::LetBinding;
 use crate::kernel::Quant;
 use crate::kernel::Term;
 use crate::kernel::TermRef;
+use crate::kernel::origins::MatchSite;
 use crate::kernel::origins::TermOrigins;
 use crate::kernel::origins::substitute_with_origins;
 use crate::kernel::term;
@@ -63,12 +64,29 @@ pub(super) struct Row {
 pub(super) struct SurfaceTerm {
     value: TermRef,
     origin: usize,
+    match_site: MatchSite,
 }
 
 impl SurfaceTerm {
     pub(super) fn new(value: TermRef, origins: Option<&TermOrigins>) -> Self {
         let origin = origins.map_or_else(|| Rc::as_ptr(&value) as usize, |o| o.source(&value));
-        Self { value, origin }
+        Self {
+            value,
+            origin,
+            match_site: MatchSite::Expression(origin),
+        }
+    }
+
+    pub(super) fn statement_scrutinee(mut self) -> Self {
+        self.match_site = MatchSite::Statement(self.origin);
+        self
+    }
+
+    fn at_match(self, site: MatchSite, origins: Option<&TermOrigins>) -> Self {
+        if let Some(origins) = origins {
+            origins.surface_match(&self.value, site);
+        }
+        self
     }
 
     fn parent(value: TermRef, children: [Option<usize>; 3], origins: Option<&TermOrigins>) -> Self {
@@ -87,6 +105,7 @@ impl SurfaceTerm {
         constructor: String,
         arm: Self,
         fallback: Self,
+        site: Option<MatchSite>,
         origins: Option<&TermOrigins>,
     ) -> Self {
         let children = [Some(arm.origin), Some(fallback.origin), None];
@@ -95,13 +114,19 @@ impl SurfaceTerm {
             arm: arm.value,
             fallback: fallback.value,
         });
-        Self::parent(value, children, origins)
+        let result = Self::parent(value, children, origins);
+        if let Some(site) = site {
+            result.at_match(site, origins)
+        } else {
+            result
+        }
     }
 
     fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
         Self {
             value: substitute_with_origins(&self.value, id, replacement, origins),
             origin: self.origin,
+            match_site: self.match_site,
         }
     }
 }
@@ -371,6 +396,7 @@ fn flatten_match(
         match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins)? {
             MatchStep::Done(mut value) => {
                 for (constructor, fallback) in pending.into_iter().rev() {
+                    let site = fallback.scrutinees[0].match_site;
                     let fallback = flatten_match(
                         &fallback.scrutinees,
                         &fallback.rows,
@@ -380,7 +406,7 @@ fn flatten_match(
                         depth + 1,
                         origins,
                     )?;
-                    value = SurfaceTerm::matched(constructor, value, fallback, origins);
+                    value = SurfaceTerm::matched(constructor, value, fallback, Some(site), origins);
                 }
                 return Ok(value);
             }
@@ -464,7 +490,10 @@ fn flatten_match_step(
     }
     if binder.is_some_and(|v| v.id == first.id) {
         let Some((name, fields)) = constructor else {
-            return Ok(MatchStep::Done(SurfaceTerm::new(term(Term::Efq), origins)));
+            return Ok(MatchStep::Done(
+                SurfaceTerm::new(term(Term::Efq), origins)
+                    .at_match(scrutinees[0].match_site, origins),
+            ));
         };
         let field_vars = fields
             .iter()
@@ -525,7 +554,11 @@ fn flatten_match_step(
         }
         let mut next_scrutinees = field_vars
             .iter()
-            .map(|v| SurfaceTerm::new(v.term(), None))
+            .map(|v| {
+                let mut field = SurfaceTerm::new(v.term(), None);
+                field.match_site = scrutinees[0].match_site;
+                field
+            })
             .collect::<Vec<_>>();
         next_scrutinees.extend_from_slice(&scrutinees[1..]);
         let mut next_vars = field_vars;
@@ -567,6 +600,7 @@ fn flatten_match_step(
             name.clone(),
             arm,
             fallback,
+            Some(scrutinees[0].match_site),
             origins,
         )))
     } else {
@@ -608,7 +642,7 @@ mod tests {
         });
         let a = first.replace(0, &replacement, Some(&origins));
         let b = second.replace(0, &replacement, Some(&origins));
-        let parent = SurfaceTerm::matched("Zero".into(), a, b, Some(&origins));
+        let parent = SurfaceTerm::matched("Zero".into(), a, b, None, Some(&origins));
         let Term::Mat { arm, fallback, .. } = parent.value.as_ref() else {
             panic!("match")
         };

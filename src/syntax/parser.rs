@@ -1160,6 +1160,9 @@ impl Parser<'_> {
                 let v = self.bind_variable(name.clone(), reusable);
                 let body = self.body(self.current().column.saturating_sub(1))?;
                 out = self.flatten_body(&body, &[v])?;
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.node(&out, &self.label, line);
+                }
                 self.scope.truncate(old);
                 continue;
             }
@@ -1249,6 +1252,10 @@ impl Parser<'_> {
                 | Term::Ref(_)
                 | Term::Ann(..)
                 | Term::Hole(_)
+                | Term::Lam { .. }
+                | Term::Mat { .. }
+                | Term::Efq
+                | Term::Rfl
         ) && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);
@@ -1405,9 +1412,13 @@ impl Parser<'_> {
             return Ok(out);
         }
         if self.take("\\") {
+            let match_line = self.tokens[self.at - 1].line;
             self.expect("{")?;
             let mut arms = Vec::new();
             let mut tail = term(Term::Efq);
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.node(&tail, &self.label, match_line);
+            }
             while !self.take("}") {
                 let value = self.expression(0)?;
                 if self.take(":") {
@@ -1431,6 +1442,9 @@ impl Parser<'_> {
                     arm,
                     fallback: tail,
                 });
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.node(&tail, &self.label, match_line);
+                }
             }
             return Ok(tail);
         }
@@ -1842,7 +1856,12 @@ impl Parser<'_> {
                     .collect::<Result<Vec<_>, _>>()?;
                 Ok(Pattern::Constructor(name.clone(), fields))
             }
-            _ => Err(self.error("a pattern must be a binder or constructor")),
+            _ => {
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.unsupported_pattern(value);
+                }
+                Err(self.error("a pattern must be a binder or constructor"))
+            }
         }
     }
     fn surface_term(&self, value: TermRef) -> SurfaceTerm {
@@ -1894,7 +1913,11 @@ impl Parser<'_> {
                     origins.match_location(value, &self.label, match_line);
                 }
             }
-            let scrutinees = self.scrutinees(scrutinees);
+            let scrutinees = self
+                .scrutinees(scrutinees)
+                .into_iter()
+                .map(SurfaceTerm::statement_scrutinee)
+                .collect::<Vec<_>>();
             let case_column = self.current().column;
             let mut rows = Vec::new();
             while case_column > column && self.is("case") && self.current().column >= case_column {
