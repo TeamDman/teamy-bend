@@ -91,44 +91,51 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-The [runtime evidence ledger](cpu-runtime-evidence.csv) links **81 distinct
+The [runtime evidence ledger](cpu-runtime-evidence.csv) links **83 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
-representation, fifteen parse and eight compile originals. Linked rows include
-unresolved negative and oracle-host cells. Fourteen positive authored/derived
+representation, seventeen parse and eight compile originals. Linked rows include
+unresolved negative and oracle-host cells. Fifteen positive authored/derived
 controls and a separate read probe supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
 
-There are **1,221 inventory rows without a linked runtime receipt**: 439 checker
-negatives, twelve check-only modules, 164 interpreter-only cases and 606 compiled
-candidates. These are distinct required modes, not 1,221 missing CPU runtime
+There are **1,219 inventory rows without a linked runtime receipt**: 439 checker
+negatives, twelve check-only modules, 164 interpreter-only cases and 604 compiled
+candidates. These are distinct required modes, not 1,219 missing CPU runtime
 tests. The historical [applicability classification](cpu-applicability.md) and
 its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 originals
-at `f317911`: eleven interpreter-only cases and twenty-seven compiled candidates
+The [interpretation ledger](cpu-interpretation-evidence.csv) links 38 originals
+at `67cdcdf`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
-**119 originals** have receipts and **1,183** lack those kinds: 439 checker
-negatives, twelve check-only modules, 153 interpreter-only cases and 579 compiled
+**121 originals** have receipts and **1,181** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 577 compiled
 candidates.
 
-The [reflexivity diagnostic checkpoint](cpu-reflexivity-diagnostics.md), source
-`f317911`, closes three authored false-proof diagnostic rows with exact normalized
-endpoints, stderr/status and Bend source locations. It adds no inventory rows or
-semantic exceptions. The full gate passes 846/0/49; a renewed 1,302-case audit
-changes no acceptance status. All 42 normalization cases pass exact structure/text.
-The negative matrix still returns 1 for twelve required resource/foreign/host
-observations, and demand returns 1 for two competing-error observations. The
-imported Nat-literal diagnostic probe remains unqualified. CLI invoke callers
-must inspect exit_code for a formatted source failure; library checks still Err.
+The [imported-Nat/cons checkpoint](cpu-imported-nat-cons.md), source `67cdcdf`,
+corrects six wrongly accepted local-Nat variants by preserving literal sugar's
+fixed constructors. Upstream C/JS share the same rejection. Raw constructor/parse
+diagnostics remain different and unqualified; no new policy exception is adopted.
+The 11 authored cases add no inventory rows. Production invoke callers preserve
+exit_code; external callers remain an API caveat. The full gate passes 852/0/49,
+and the 1,302-case status audit has no transitions from f317911.
+
+The two new cons originals have actual C/JS printer and available execution
+evidence. Including the pure derivative, there are 34 exact observations and two
+direct-IO host blocks, plus 18 exact normalization/report/core observations and
+four strict-proof exclusions. All 42 broader normalization cases pass exact
+structure/text. The negative matrix still returns 1 for twelve required resource/
+foreign/host observations, and demand returns 1 for two competing-error observations.
 
 Eleven runtime rows, all interpretation/demand rows, three checking controls and
-the positive list checking row are current; other receipts retain their actual
-commits. The three original negative fixtures remain unchanged. No blanket
-checker-diagnostic, API or CPU parity claim follows from this correction.
+the positive list checking row are current; 72 runtime rows and other receipts
+retain their actual commits. The [reflexivity diagnostic checkpoint](cpu-reflexivity-diagnostics.md)
+remains qualified by 144 renewed observations on unchanged controls. No blanket
+checker-diagnostic, API or CPU parity claim follows. Next independent family:
+parse/def_typed and parse/list_literal_sugar; printer applicability is not yet tested.
 
 Historical bitwise/brace evidence follows; its recorded diagnostic gap is closed
 only by the specific renewed observations above.

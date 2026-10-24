@@ -4156,3 +4156,42 @@ cons_operator/cons_plus_pattern applicability and execution; other checker,
 resource/host/foreign/F32.read/error-order/API/platform requirements stay open.
 Frozen dependencies/toolchains/budgets/contracts; no install, desktop/GPU work
 or push.
+
+
+### [x] 5.63 Correct imported Nat literal resolution and qualify cons programs
+
+Source `67cdcdf` includes parser fix `6d12e3d`: Nat literal sugar keeps fixed
+global Zero/Succ names, as pinned upstream does. Six invalid local-Nat variants
+previously accepted by the port now reject. The exact original exploratory
+false proof is retained, with separate trivial-proof, numeric-pattern, explicit
+constructor, Base/root-literal and 128-cap controls. Upstream direct/C/JS share
+one front-end outcome; no new semantic policy or exception is needed. Raw
+constructor/parse diagnostic differences remain unqualified.
+
+Production invoke callers preserve nonzero exit_code through the dispatcher,
+worker and binary; no caller fix was needed. Existing text/JSON/CSV actual-binary
+regressions pass. External downstream callers remain an explicit API caveat.
+The unchanged cons_operator and cons_plus_pattern originals generate C/JS and
+match available runtime outputs 391 and 12. The separately attributed pure-entry
+derivative adds no inventory row. Direct upstream IO remains Node-host-blocked;
+strict proof exclusion is recorded separately.
+
+Full gate **852 passed, zero failed, 49 ignored**; 49 focused tests, five guards,
+strict Clippy, 50 baseline executions, 42 normalization cases and 144 previous
+diagnostic observations pass. The imported-Nat matrix has 132 observations plus
+22 structured phase probes. Cons has 34 exact executions/normalizations, two host
+blocks, 18 exact core/report/normalization observations and four proof exclusions.
+All 1,302 strict audit statuses remain unchanged; 439 checker negatives reject.
+Negative/demand matrices retain required gaps and both exit 1.
+
+See [imported-Nat/cons evidence](cpu-imported-nat-cons.md) for commands, hashes,
+failed candidate evidence and cache-profile changes. Temporary dev/test debug=0
+and a 10-GiB reserve prevent repeated build growth; 2/1-GiB stop floors remain.
+The full gate kept 9.63 GiB workspace headroom. Only rebuildable caches were
+reclaimed; all source and historical evidence survive. Eleven runtime rows and
+all interpretation/demand rows are current; 72 runtime rows remain historical.
+Union: 121 originals. Next independent family: parse/def_typed and
+parse/list_literal_sugar, beginning with actual printer applicability.
+Full CPU parity remains incomplete. Dependencies/toolchains/reference/Bend
+budgets/guards/cancellation and approved contracts are frozen; no installation,
+desktop/GPU work or push occurred.

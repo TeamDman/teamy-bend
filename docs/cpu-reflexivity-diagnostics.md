@@ -105,6 +105,17 @@ split: 439 checker negatives, twelve checking-only, 153 interpreter and 579
 compiled candidates. The [acceptance criterion](cpu-parity-acceptance.md) remains
 unchanged; full CPU parity is incomplete.
 
+## Later imported-literal follow-up
+
+Source `67cdcdf` [fixes the imported Nat literal acceptance defect](cpu-imported-nat-cons.md)
+and renews the 144 diagnostic observations without changing the original controls.
+Pinned literal sugar uses fixed global Zero/Succ names; the old port incorrectly
+resolved them as local constructors. The original exploratory program is now
+rejected before reflexivity for the same invalid literal. Constructor/parse
+stderr remains unqualified, not silently waived. Production invoke caller audit
+finds no dropped exit code; external downstream callers remain unverified. The
+historical receipts and observations below retain their original source identity.
+
 ## Retained non-passing exploratory evidence
 
 A malformed template control using angle brackets fails parsing in both
