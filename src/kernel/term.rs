@@ -308,8 +308,22 @@ pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> Term
 }
 
 pub(crate) fn inspect(value: &TermRef) -> Result<usize, super::KernelError> {
+    inspect_input(value, false).map(|input| input.highest)
+}
+
+pub(super) struct InspectedInput {
+    pub highest: usize,
+    pub hole: Option<String>,
+}
+
+pub(super) fn inspect_for_check(value: &TermRef) -> Result<InspectedInput, super::KernelError> {
+    inspect_input(value, true)
+}
+
+fn inspect_input(value: &TermRef, defer_holes: bool) -> Result<InspectedInput, super::KernelError> {
     let mut stack = vec![(value, 0_usize)];
     let mut highest = 0;
+    let mut hole = None;
     let mut remaining = 2_000_000_usize;
     while let Some((value, depth)) = stack.pop() {
         if depth > 128 {
@@ -323,9 +337,14 @@ pub(crate) fn inspect(value: &TermRef) -> Result<usize, super::KernelError> {
         let next = depth + 1;
         match value.as_ref() {
             Term::Hole(name) => {
-                return Err(super::KernelError::new(format!(
-                    "unfinished proof hole ?{name}"
-                )));
+                if !defer_holes {
+                    return Err(super::KernelError::new(format!(
+                        "unfinished proof hole ?{name}"
+                    )));
+                }
+                if hole.is_none() {
+                    hole = Some(name.clone());
+                }
             }
             Term::Var { id, .. } => highest = highest.max(*id),
             Term::All {
@@ -364,7 +383,7 @@ pub(crate) fn inspect(value: &TermRef) -> Result<usize, super::KernelError> {
             _ => (),
         }
     }
-    Ok(highest)
+    Ok(InspectedInput { highest, hole })
 }
 
 impl fmt::Display for Quant {
@@ -799,4 +818,56 @@ fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef]) -> fmt::Result {
         write!(f, "{x}")?;
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod inspection_tests {
+    use super::*;
+
+    #[test]
+    fn deferred_holes_keep_input_limits_and_identifier_discovery() {
+        let hole = term(Term::Hole("pending".into()));
+        let value = term(Term::App(
+            term(Term::Var {
+                name: "later".into(),
+                id: 987,
+            }),
+            Rc::clone(&hole),
+        ));
+        let checked = inspect_for_check(&value).unwrap();
+        assert_eq!(checked.highest, 987);
+        assert_eq!(checked.hole.as_deref(), Some("pending"));
+        assert!(
+            inspect(&value)
+                .unwrap_err()
+                .to_string()
+                .contains("unfinished proof hole")
+        );
+
+        let boundary = (0..128).fold(Rc::clone(&hole), |body, _| term(Term::Typ(body)));
+        assert_eq!(
+            inspect_for_check(&boundary).unwrap().hole.as_deref(),
+            Some("pending")
+        );
+        let deep = term(Term::Typ(boundary));
+        assert!(
+            inspect_for_check(&deep)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("input nesting limit")
+        );
+
+        let wide = term(Term::Ctr {
+            name: "Wide".into(),
+            args: vec![hole; 2_000_000],
+        });
+        assert!(
+            inspect_for_check(&wide)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("input size limit")
+        );
+    }
 }

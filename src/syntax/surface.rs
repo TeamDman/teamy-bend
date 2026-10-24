@@ -139,6 +139,7 @@ impl Body {
 pub(super) enum FlattenError {
     Other(String),
     LocalBinding { binder: usize },
+    ComputedScrutinee { origin: usize },
 }
 
 impl FlattenError {
@@ -147,6 +148,9 @@ impl FlattenError {
             Self::Other(message) => message,
             Self::LocalBinding { .. } => {
                 "a match cannot scrutinize a local binding; pass it to a definition"
+            }
+            Self::ComputedScrutinee { .. } => {
+                "match scrutinees must be parameters or fields, in binder order"
             }
         }
     }
@@ -352,6 +356,17 @@ fn flatten_match_step(
         );
     }
     let Some(first) = vars.first() else {
+        if !matches!(
+            scrutinees[0].as_ref(),
+            Term::Var { .. } | Term::Ref(_) | Term::GpuRef(_) | Term::Ctr { .. }
+        ) {
+            return Err(FlattenError::ComputedScrutinee {
+                origin: origins.map_or_else(
+                    || Rc::as_ptr(&scrutinees[0]) as usize,
+                    |origins| origins.source(&scrutinees[0]),
+                ),
+            });
+        }
         return Err("match scrutinees must be parameters or fields, in binder order".into());
     };
     let constructor = rows.iter().find_map(|row| match &row.patterns[0] {

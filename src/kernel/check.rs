@@ -118,6 +118,11 @@ impl KernelError {
 
     pub(crate) fn in_definition(mut self, name: &str) -> Self {
         self.message = format!("{name}: {}", self.message);
+        if let Some(report) = &mut self.diagnostic
+            && report.definition.is_empty()
+        {
+            report.definition = name.to_owned();
+        }
         self
     }
 
@@ -553,15 +558,15 @@ pub(crate) fn check_book_with_origins(
     book: &Book,
     origins: Option<super::origins::TermOrigins>,
 ) -> Result<CheckedBook, KernelError> {
-    let mut engine = empty_engine(book)?;
+    let (mut engine, source_holes) = prepare_book(book)?;
     engine.origins = origins;
-    for declaration in &book.declarations {
+    for (declaration, hole) in book.declarations.iter().zip(source_holes) {
         engine.fuel = 2_000_000;
         let result = match declaration {
             Declaration::Adt(d) => engine.validate_adt(d),
             Declaration::Def(d) => engine.validate_def(d),
         };
-        if let Err(error) = result {
+        if let Err(error) = result.and_then(|()| reject_source_hole(hole)) {
             let name = match declaration {
                 Declaration::Adt(d) => &d.name,
                 Declaration::Def(d) => &d.name,
@@ -586,42 +591,82 @@ pub(crate) fn check_book_with_origins(
     Ok(CheckedBook { engine, runtime })
 }
 
-pub(super) fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
+// Structural safety and fresh-ID discovery must precede recursive checking.
+// Holes instead follow the checker's first-error order. A declaration cannot
+// escape validation even if beta reduction would erase its original hole.
+pub(super) fn prepare_book(book: &Book) -> Result<(Engine, Vec<Option<String>>), KernelError> {
     let mut highest = 0;
+    let mut source_holes = Vec::with_capacity(book.declarations.len());
     for declaration in &book.declarations {
+        let mut hole = None;
+        let mut inspect = |value: &TermRef| -> Result<(), KernelError> {
+            let input = super::term::inspect_for_check(value)?;
+            highest = highest.max(input.highest);
+            if hole.is_none() {
+                hole = input.hole;
+            }
+            Ok(())
+        };
         match declaration {
             Declaration::Def(d) => {
-                highest = highest.max(inspect(&d.ty)?);
+                inspect(&d.ty)?;
                 if let Some(b) = &d.body {
-                    highest = highest.max(inspect(b)?);
+                    inspect(b)?;
                 }
             }
             Declaration::Adt(d) => {
-                highest = highest.max(inspect(&d.kind)?);
+                inspect(&d.kind)?;
                 for b in d
                     .parameters
                     .iter()
                     .chain(d.constructors.iter().flat_map(|c| &c.fields))
                 {
-                    highest = highest.max(b.id).max(inspect(&b.ty)?);
+                    inspect(&b.ty)?;
                 }
+                highest = highest.max(
+                    d.parameters
+                        .iter()
+                        .chain(d.constructors.iter().flat_map(|c| &c.fields))
+                        .map(|b| b.id)
+                        .max()
+                        .unwrap_or(0),
+                );
             }
         }
+        source_holes.push(hole);
     }
-    Ok(Engine {
-        origins: None,
-        defs: Rc::new(BTreeMap::new()),
-        adts: Rc::new(BTreeMap::new()),
-        aliases: BTreeMap::new(),
-        foreign_contracts: BTreeSet::new(),
-        numeric_contracts: BTreeSet::new(),
-        opaque_contracts: BTreeSet::new(),
-        fresh_id: highest
-            .checked_add(1)
-            .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
-        fuel: 2_000_000,
-        depth: 0,
+    Ok((
+        Engine {
+            origins: None,
+            defs: Rc::new(BTreeMap::new()),
+            adts: Rc::new(BTreeMap::new()),
+            aliases: BTreeMap::new(),
+            foreign_contracts: BTreeSet::new(),
+            numeric_contracts: BTreeSet::new(),
+            opaque_contracts: BTreeSet::new(),
+            fresh_id: highest
+                .checked_add(1)
+                .ok_or_else(|| KernelError::new("binder identifier space exhausted"))?,
+            fuel: 2_000_000,
+            depth: 0,
+        },
+        source_holes,
+    ))
+}
+
+pub(super) fn reject_source_hole(hole: Option<String>) -> Result<(), KernelError> {
+    hole.map_or(Ok(()), |name| {
+        Err(KernelError::new(format!("unfinished proof hole ?{name}")))
     })
+}
+
+#[cfg(test)]
+fn empty_engine(book: &Book) -> Result<Engine, KernelError> {
+    let (engine, holes) = prepare_book(book)?;
+    for hole in holes {
+        reject_source_hole(hole)?;
+    }
+    Ok(engine)
 }
 
 impl Engine {
@@ -1077,7 +1122,20 @@ impl Engine {
                     .map(Box::new);
                 Err(error)
             }
-            Term::Hole(name) => Err(KernelError::new(format!("unfinished proof hole ?{name}"))),
+            Term::Hole(name) => {
+                let mut error = KernelError::new(format!("unfinished proof hole ?{name}"));
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text("an annotated term (cannot infer)".into()),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+                Err(error)
+            }
             _ => Err(KernelError::new(format!(
                 "term needs an expected type or annotation: {value}"
             ))),
@@ -1143,7 +1201,22 @@ impl Engine {
     ) -> Result<Uses, KernelError> {
         match value.as_ref() {
             Term::Hole(name) => {
-                return Err(KernelError::new(format!("unfinished proof hole ?{name}")));
+                let mut error = KernelError::new(format!("unfinished proof hole ?{name}"));
+                // TODO remains an incomplete-source refusal. Upstream admits
+                // it provisionally; this checker never issues that certificate.
+                if name != "TODO" {
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Term(ty),
+                            DiagnosticExpression::Term(value),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                }
+                return Err(error);
             }
             Term::Lam { name, id, body } => {
                 let t = self.whnf(ty)?;
@@ -2088,6 +2161,43 @@ mod reflexivity_diagnostic_tests {
             assert!(exhausted.language_failure().is_none());
             assert_eq!((engine.fuel, engine.depth), (0, 0));
         }
+    }
+
+    #[test]
+    fn hole_diagnostics_keep_exhausted_budget_and_underlying_errors() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let hole = term(Term::Hole("missing".into()));
+        let expected = term(Term::Qnt);
+        let before = engine.fuel;
+        let error = engine
+            .check(
+                &Lhs::default(),
+                &hole,
+                Quant::None,
+                &expected,
+                &Context::new(),
+            )
+            .unwrap_err();
+        assert_eq!(error, KernelError::new("unfinished proof hole ?missing"));
+        assert_eq!(error.checker_diagnostic().unwrap().observed, "?missing");
+        let spent = before - engine.fuel;
+        engine.fuel = spent;
+        let exhausted = engine
+            .check(
+                &Lhs::default(),
+                &hole,
+                Quant::None,
+                &expected,
+                &Context::new(),
+            )
+            .unwrap_err();
+        assert_eq!(error, exhausted);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        assert!(exhausted.language_failure().is_none());
     }
 
     #[test]

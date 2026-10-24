@@ -125,6 +125,13 @@ impl DiagnosticOrigins {
         });
     }
 
+    pub(super) fn rejected_computed_scrutinee(&mut self, identity: usize) {
+        self.load_failure = self.excerpt(identity).map(|excerpt| LoadDiagnostic {
+            content: LoadDiagnosticContent::Message("a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)".into()),
+            excerpt,
+        });
+    }
+
     pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Loader parsing uses a newline-normalized buffer. The public
@@ -182,6 +189,24 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn computed_scrutinee_metadata_preserves_public_load_errors() {
+        for name in ["motive_suffix_join", "computed_match_split"] {
+            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join(format!("tests/fixtures/cpu-computed-scrutinee/{name}.bend"));
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert_eq!(
+                plain.message,
+                "match scrutinees must be parameters or fields, in binder order"
+            );
+            assert!(matches!(tracked.diagnostic.unwrap().content,
+                super::LoadDiagnosticContent::Message(message)
+                if message.contains("a match cannot scrutinize a computed value")));
+        }
+    }
+
     #[test]
     fn token_metadata_preserves_public_parse_error() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

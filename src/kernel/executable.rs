@@ -10,7 +10,8 @@ use super::Quant;
 use super::Term;
 use super::TermRef;
 use super::check::Engine;
-use super::check::empty_engine;
+use super::check::prepare_book;
+use super::check::reject_source_hole;
 use super::reduce::spine;
 use crate::syntax::ExecutableSource;
 use crate::syntax::executable::ForeignDefinition;
@@ -443,7 +444,7 @@ pub(crate) fn check_executable_with_origins(
     source: &ExecutableSource,
     origins: Option<super::origins::TermOrigins>,
 ) -> Result<ExecutableBook, KernelError> {
-    let mut engine = empty_engine(&source.book)?;
+    let (mut engine, source_holes) = prepare_book(&source.book)?;
     engine.origins = origins;
     // Upstream stores a law and its later body in one definition object. Its
     // eventual annotation also governs signature formation at the earlier law
@@ -458,7 +459,7 @@ pub(crate) fn check_executable_with_origins(
             _ => None,
         })
         .collect::<BTreeSet<_>>();
-    for declaration in &source.book.declarations {
+    for (declaration, hole) in source.book.declarations.iter().zip(source_holes) {
         engine.reset();
         let (name, result) = match declaration {
             Declaration::Adt(adt) => (&adt.name, engine.validate_adt(adt)),
@@ -481,7 +482,9 @@ pub(crate) fn check_executable_with_origins(
                 (&definition.name, result)
             }
         };
-        result.map_err(|error| error.in_definition(name))?;
+        result
+            .and_then(|()| reject_source_hole(hole))
+            .map_err(|error| error.in_definition(name))?;
     }
     let open = engine
         .defs

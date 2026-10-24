@@ -49,6 +49,30 @@ fn executable(body: &str) -> ExecutableBook {
 }
 
 #[test]
+fn source_holes_cannot_escape_through_erasure_or_unreachable_code() {
+    for source_text in [
+        "import Base\ndef main() -> U32: (x => {0 : U32})(?unused)\n",
+        "import Base\ndef main() -> U32: (x => {0 : U32})(?TODO)\n",
+        "import Base\ndef bad() -> U32: ?unreferenced\ndef main() -> U32: 0\n",
+        "import Base\ndef bad(b: Bool) -> U32:\n  match b:\n    case True{}: 0\n    case False{}: ?branch\ndef main() -> U32: bad(True{})\n",
+    ] {
+        let fixture = Fixture::new();
+        let path = fixture.write("main.bend", source_text);
+        let strict = load(&path).unwrap();
+        let input = load_executable(&path).unwrap();
+        for error in [
+            check_book(&strict).unwrap_err(),
+            check_executable(&input).unwrap_err(),
+        ] {
+            assert!(
+                error.to_string().contains("unfinished proof hole"),
+                "{error}"
+            );
+        }
+    }
+}
+
+#[test]
 fn foreign_results_are_runtime_assumptions_including_proof_and_type_values() {
     let program = executable(
         r#"

@@ -406,16 +406,18 @@ fn accepts_declared_law_followed_by_exact_proof() {
 
 #[test]
 fn rejects_holes_even_in_beta_erased_arguments() {
-    let ignored = b("ignored", 20, Quant::Lone, r("Nat"));
-    let body = app(
-        lambdas(&[ignored], term(Term::Ann(nat(0), r("Nat")))),
-        vec![term(Term::Hole("TODO".into()))],
-    );
-    let error = check_book(&Book {
-        declarations: vec![natural(), def("hidden", vec![], r("Nat"), body)],
-    })
-    .expect_err("source holes cannot disappear through beta reduction");
-    assert!(error.to_string().contains("unfinished proof hole"));
+    for name in ["TODO", "unfinished"] {
+        let ignored = b("ignored", 20, Quant::Lone, r("Nat"));
+        let body = app(
+            lambdas(&[ignored], term(Term::Ann(nat(0), r("Nat")))),
+            vec![term(Term::Hole(name.into()))],
+        );
+        let error = check_book(&Book {
+            declarations: vec![natural(), def("hidden", vec![], r("Nat"), body)],
+        })
+        .expect_err("source holes cannot disappear through beta reduction");
+        assert!(error.to_string().contains("unfinished proof hole"));
+    }
 }
 
 #[test]

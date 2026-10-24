@@ -199,6 +199,30 @@ fn generated_pure_main_and_missing_entry_follow_distinct_contracts() {
 fn executable_checker_rejections_preserve_diagnostics_and_existing_outputs() {
     for (source, expected) in [
         (
+            include_str!("fixtures/cpu-computed-scrutinee/motive_suffix_join.bend"),
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n13 | def j9(n, e):\n14>|   match Bool.not(n):\n15 |     case False{}:\n",
+        ),
+        (
+            include_str!("fixtures/cpu-computed-scrutinee/computed_match_split.bend"),
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n36 | def or_true(n):\n37>|   match isz(n):\n38 |     case True{}:\n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32: n(?unused)\n",
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n1 | \n2>| def bad(n: U32) -> U32: n(?unused)\n3 | \n",
+        ),
+        (
+            "import Base\ndef bad() -> U32: ?missing\n",
+            "Error:\n- expected : U32\n- observed : ?missing\nLocation: bad\n1 | \n2>| def bad() -> U32: ?missing\n3 | \n",
+        ),
+        (
+            "import Base\ntype Box is Data:\n  Box{x: ?field}\ndef main() -> U32: 0\n",
+            "Error:\n- expected : Data\n- observed : ?field\nLocation: Box\n2 | type Box is Data:\n3>|   Box{x: ?field}\n4 | def main() -> U32: 0\n",
+        ),
+        (
+            "import Base\ndef first(n: U32) -> U32: n(0)\ndef second() -> U32: ?later\n",
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: first\n1 | \n2>| def first(n: U32) -> U32: n(0)\n3 | def second() -> U32: ?later\n",
+        ),
+        (
             include_str!("fixtures/cpu-rewrite-proof/rewrite_non_equation.bend"),
             "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: f\n 8 | def f(e):\n 9>|   %e : U32\n10 |   3\n",
         ),

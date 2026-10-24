@@ -347,10 +347,16 @@ impl Parser<'_> {
             self.templates.diagnostics.as_ref().map(|o| &o.tracker),
         )
         .map_err(|error| {
-            if let super::surface::FlattenError::LocalBinding { binder } = &error
-                && let Some(origins) = &mut self.templates.diagnostics
-            {
-                origins.rejected_local_binding(*binder);
+            if let Some(origins) = &mut self.templates.diagnostics {
+                match &error {
+                    super::surface::FlattenError::LocalBinding { binder } => {
+                        origins.rejected_local_binding(*binder);
+                    }
+                    super::surface::FlattenError::ComputedScrutinee { origin } => {
+                        origins.rejected_computed_scrutinee(*origin);
+                    }
+                    super::surface::FlattenError::Other(_) => {}
+                }
             }
             self.error(error.message())
         })
@@ -1235,6 +1241,7 @@ impl Parser<'_> {
                 | Term::Var { .. }
                 | Term::Ref(_)
                 | Term::Ann(..)
+                | Term::Hole(_)
         ) && let Some(origins) = &mut self.templates.diagnostics
         {
             origins.node(&value, &self.label, line);
@@ -1831,7 +1838,12 @@ impl Parser<'_> {
     fn terms_before_colon(&mut self) -> Result<Vec<TermRef>, ParseError> {
         let mut terms = Vec::new();
         loop {
-            terms.push(self.expression(0)?);
+            let line = self.current().line;
+            let value = self.expression(0)?;
+            if let Some(origins) = &mut self.templates.diagnostics {
+                origins.node(&value, &self.label, line);
+            }
+            terms.push(value);
             if self.take(":") {
                 return Ok(terms);
             }

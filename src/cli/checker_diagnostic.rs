@@ -168,6 +168,10 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-computed-scrutinee/motive_suffix_join.bend",
+                "14>|   match Bool.not(n):",
+            ),
+            (
                 "cpu-constructors/nested-pattern.bend",
                 "7>|       Missing{}",
             ),

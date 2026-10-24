@@ -712,3 +712,141 @@ fn rewrite_proof_and_application_origins_preserve_use_sites_and_first_errors() {
         assert_diagnostic(&fixture.source(), expected);
     }
 }
+
+#[test]
+fn computed_match_originals_keep_exact_load_failures() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-computed-scrutinee");
+    for (name, expected) in [
+        (
+            "motive_suffix_join",
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n13 | def j9(n, e):\n14>|   match Bool.not(n):\n15 |     case False{}:\n",
+        ),
+        (
+            "computed_match_split",
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n36 | def or_true(n):\n37>|   match isz(n):\n38 |     case True{}:\n",
+        ),
+    ] {
+        let path = root.join(format!("{name}.bend"));
+        teamy_bend::syntax::load(&path).unwrap_err();
+        assert_diagnostic(&path, expected);
+    }
+}
+
+#[test]
+fn computed_scrutinees_and_holes_keep_source_and_first_error_contracts() {
+    for (source, helper, expected) in [
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match {b : Bool}:\n    case True{}: 1\n    case False{}: 0\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(b: Bool) -> U32:\n3>|   match {b : Bool}:\n4 |     case True{}: 1\n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match Bool.not(b):\n    case True{}: 1\n    case False{}: 0\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(b: Bool) -> U32:\n3>|   match Bool.not(b):\n4 |     case True{}: 1\n",
+        ),
+        (
+            "import Base\r\ndef bad(b: Bool) -> U32:\r\n  match Bool.not(b):\r\n    case True{}: 0\r\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(b: Bool) -> U32:\r\n3>|   match Bool.not(b):\r\n4 |     case True{}: 0\r\n",
+        ),
+        (
+            "import Base\ndef bad(n: Nat) -> Nat:\n  Succ{p} = Nat.add(n, 1n)\n  p\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(n: Nat) -> Nat:\n3>|   Succ{p} = Nat.add(n, 1n)\n4 |   p\n",
+        ),
+        (
+            "import Base\ndef bad() -> U32: ?missing\n",
+            None,
+            "Error:\n- expected : U32\n- observed : ?missing\nLocation: bad\n1 | \n2>| def bad() -> U32: ?missing\n3 | \n",
+        ),
+        (
+            "import Base\ndef first(n: U32) -> U32: n(0)\ndef second() -> U32: ?later\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: first\n1 | \n2>| def first(n: U32) -> U32: n(0)\n3 | def second() -> U32: ?later\n",
+        ),
+        (
+            "import Base\ntype Box is Data:\n  Box{x: ?field}\ndef main() -> U32: 0\n",
+            None,
+            "Error:\n- expected : Data\n- observed : ?field\nLocation: Box\n2 | type Box is Data:\n3>|   Box{x: ?field}\n4 | def main() -> U32: 0\n",
+        ),
+        (
+            "import Base\ndef bad() -> U32: U32.add(?first, ?second)\n",
+            None,
+            "Error:\n- expected : U32\n- observed : ?first\nLocation: bad\n1 | \n2>| def bad() -> U32: U32.add(?first, ?second)\n3 | \n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some("import Base\ndef bad(n: U32) -> U32: n(?unused)\n"),
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: helper.bad\n1 | \n2>| def bad(n: U32) -> U32: n(?unused)\n3 | \n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32: n(0, ?unused)\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n1 | \n2>| def bad(n: U32) -> U32: n(0, ?unused)\n3 | \n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32: n(?unused)\n",
+            None,
+            "Error:\n- expected : a function type\n- observed : U32\nContext:\n- n : U32\nLocation: bad\n1 | \n2>| def bad(n: U32) -> U32: n(?unused)\n3 | \n",
+        ),
+        (
+            "import Base\ndef bad() -> U32: ?missing(0)\n",
+            None,
+            "Error:\n- expected : an annotated term (cannot infer)\n- observed : ?missing\nLocation: bad\n1 | \n2>| def bad() -> U32: ?missing(0)\n3 | \n",
+        ),
+        (
+            "import Base\ndef first() -> U32: ?earlier\ndef second(n: U32) -> U32: n(0)\n",
+            None,
+            "Error:\n- expected : U32\n- observed : ?earlier\nLocation: first\n1 | \n2>| def first() -> U32: ?earlier\n3 | def second(n: U32) -> U32: n(0)\n",
+        ),
+        (
+            "import Base\ndef bad(n: U32) -> U32:\n  U32.add(0,\n    ?later\n  )\n",
+            None,
+            "Error:\n- expected : U32\n- observed : ?later\nContext:\n- n : U32\nLocation: bad\n3 |   U32.add(0,\n4>|     ?later\n5 |   )\n",
+        ),
+        (
+            "import Base\ndef bad(e: U32) -> U32:\n  %e : ?motive; ?body\n",
+            None,
+            "Error:\n- expected : an equation {a == b : T}\n- observed : U32\nContext:\n- e : U32\nLocation: bad\n2 | def bad(e: U32) -> U32:\n3>|   %e : ?motive; ?body\n4 | \n",
+        ),
+        (
+            "def bad(x: ?signature) -> Type: Type\n",
+            None,
+            "Error:\n- expected : Type\n- observed : ?signature\nLocation: bad\n1>| def bad(x: ?signature) -> Type: Type\n2 | \n",
+        ),
+        (
+            "import helper.bend as H\nimport Base\ndef main() -> U32: 0\n",
+            Some(
+                "import Base\ndef bad(b: Bool) -> U32:\n  match Bool.not(b):\n    case True{}: 0\n",
+            ),
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(b: Bool) -> U32:\n3>|   match Bool.not(b):\n4 |     case True{}: 0\n",
+        ),
+        (
+            "import Base\ndef bad(a: Bool, b: Bool) -> U32:\n  match a, Bool.not(b):\n    case True{}, True{}: 1\n    case False{}, False{}: 0\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(a: Bool, b: Bool) -> U32:\n3>|   match a, Bool.not(b):\n4 |     case True{}, True{}: 1\n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match (\n    Bool.not(b)\n  ):\n    case True{}: 1\n    case False{}: 0\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n3 |   match (\n4>|     Bool.not(b)\n5 |   ):\n",
+        ),
+        (
+            "import Base\ndef bad(n: Nat) -> U32:\n  match n:\n    case Zero{}: 0\n    case Succ{p}:\n      match Nat.is_zero(p):\n        case True{}: 1\n",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n5 |     case Succ{p}:\n6>|       match Nat.is_zero(p):\n7 |         case True{}: 1\n",
+        ),
+        (
+            "import Base\ndef bad(b: Bool) -> U32:\n  match Bool.not(b):\n    case True{}: 0",
+            None,
+            "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n2 | def bad(b: Bool) -> U32:\n3>|   match Bool.not(b):\n4 |     case True{}: 0\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        if let Some(helper) = helper {
+            std::fs::write(fixture.0.join("helper.bend"), helper).unwrap();
+        }
+        assert_diagnostic(&fixture.source(), expected);
+    }
+}
