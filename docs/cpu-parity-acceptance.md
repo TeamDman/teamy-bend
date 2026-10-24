@@ -107,28 +107,30 @@ its CSV retain their earlier 1,251-row unlinked snapshot. Status-only audits,
 source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
-The [interpretation ledger](cpu-interpretation-evidence.csv) now links 21 originals
-at `09df250`: eleven interpreter-only cases and ten compiled candidates whose
-function results are actually refused by upstream C/JS generation. Four authored
-controls add no inventory rows. Across runtime and interpretation, **96 originals**
-have receipts and **1,206** lack those kinds: 439 checker negatives, twelve
-check-only modules, 153 interpreter-only cases and 602 compiled candidates.
+The [interpretation ledger](cpu-interpretation-evidence.csv) now links 24 originals
+at `105484a`: eleven interpreter-only cases and thirteen compiled candidates
+whose function results are actually refused by upstream C/JS generation. Four
+authored controls add no inventory rows. Across runtime and interpretation,
+**99 originals** have receipts and **1,203** lack those kinds: 439 checker
+negatives, twelve check-only modules, 153 interpreter-only cases and 599 compiled
+candidates.
 
-The [float-suffix function checkpoint](cpu-float-suffix-functions.md), `09df250`,
-qualifies three unchanged returned functions. Native `run` and the pinned
-interpreter match exact output twice. Both upstream data printers actually
-refuse each function type, without an artifact. The strict proof `eval` refusals
-remain explicit exclusions; executable numeric contracts are not proof evidence.
-Actual normalized core is checked in an in-crate regression, while the differential
-probe explicitly records parsed executable output. Existing strict cases retain
-direct core comparisons. Structural agreement and raw text are separate checks.
+The [U32-suffix checkpoint](cpu-u32-suffix-functions.md), `105484a`, adds three
+unchanged returned functions. Pinned interpretation, native run and strict eval
+preserve the normalized values; direct actual-core comparison and exact text
+both pass twice. Both upstream data printers refuse their function types without
+artifacts. These U32 cases need no proof exclusion or executable-only mode.
+The distinct [F32 observation mode](cpu-float-suffix-functions.md) remains explicit:
+parsed executable output plus an in-crate actual-core regression, retaining the
+six strict-proof refusals. No executable contract becomes proof evidence.
 
-The expanded normalization suite has 194 successful observations, 40 expected
-printer refusals and six strict-proof exclusions across 25 fixtures; repeats are
-stable and no timeout occurred. Full gate: **819 passed, zero failed, 49 ignored**;
-33 focused tests and strict all-target Clippy pass. No production normalization,
-parser, demand, numeric or printer defect was demonstrated. Remaining runtime,
-negative/demand/read/audit/comptime receipts retain `2f349c8`, without relabelling.
+The renewed normalization suite covers 28 fixtures: 218 successful observations,
+52 actual printer refusals and six F32 proof exclusions. All repeats are stable;
+no timeout occurs. Full gate: **819 passed, zero failed, 49 ignored**; 30 focused
+tests and strict all-target Clippy pass. Three inputs extend an existing test,
+so the test count is unchanged. Production source and the comparison mechanism
+are unchanged. Runtime/negative/demand/read/audit/comptime receipts retain
+`2f349c8` with all existing gaps, without rerunning or relabelling them.
 
 The preceding production [checker-depth checkpoint](cpu-checker-depth.md),
 `2f349c8`, repairs redundant

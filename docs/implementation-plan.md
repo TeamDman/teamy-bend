@@ -3801,3 +3801,31 @@ Next independent family: parse/chain_suffix_u32_f, _g and _h normalization and
 actual printer applicability. Full parity, API/lane review, F32.read contracts,
 error ordering and resource/foreign/host gaps remain open. Frozen dependencies,
 toolchains, pin and budgets; no demand-policy extension, install or push.
+
+
+### [x] 5.50 Qualify U32 suffix function normalization
+
+Coverage source `105484a` adds unchanged parse/chain_suffix_u32_f, _g and _h.
+Pinned interpretation/native run preserve twelve exact raw outputs; strict JSON
+eval and actual-core comparison add six matching reports each. Arithmetic/call
+nesting and the reusable shift/bitwise let normalize exactly, including two
+nested U32.shl calls. Both upstream C/JS printers refuse the function types,
+twelve observations with no artifact. No executable-only mode or proof exclusion
+is used for U32; F32's separate observation boundaries remain intact.
+
+No production defect was demonstrated. Only suite selection, three unchanged
+fixture copies, attribution and an existing regression's inputs changed. Full
+gate **819 passed, zero failed, 49 ignored**; 30 focused checks and strict
+all-target Clippy pass. The full normalization renewal covers 28 fixtures:
+218 successful observations, 52 printer refusals and six retained F32 proof
+exclusions; stable repeats, zero timeouts. The test count is unchanged because
+three inputs extend an existing test. Historical runtime/negative/demand/read/
+audit/comptime receipts retain 2f349c8 and all existing gaps.
+
+The [checkpoint](cpu-u32-suffix-functions.md) records exact output, modes,
+commands and hashes. Interpretation now links 24 originals; with 75 runtime
+originals, 99 have receipts and 1,203 remain unlinked by these modes, classified
+by applicability. Next independent family: parse/chain_brace_suffix_f, _g and _h
+normalization and actual printer applicability. Full CPU parity and existing
+contract/resource/host/foreign/API gaps remain open. Frozen inputs, toolchains,
+budgets and demand policy; no installations or pushes.
