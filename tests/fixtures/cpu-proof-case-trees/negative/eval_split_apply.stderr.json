@@ -1,0 +1,1 @@
+"Error:\n- expected : ../eval_split_apply.S{../eval_split_apply.Z{}}\n- observed : ../eval_split_apply.Z{}\nLocation: main\n4 | law main: {H.wob(H.S{H.Z{}}) == H.Z{} : H.MN}\n5>| def main(): {==}\n6 | \n"

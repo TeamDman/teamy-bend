@@ -1,0 +1,1 @@
+"Error:\n- expected : ../eval_case_tree_002.S{../eval_case_tree_002.Z{}}\n- observed : ../eval_case_tree_002.Z{}\nLocation: main\n4 | law main: {H.getx(H.rot(H.Mk{H.Z{}, H.S{H.Z{}}, H.Z{}})) == H.Z{} : H.MN}\n5>| def main(): {==}\n6 | \n"

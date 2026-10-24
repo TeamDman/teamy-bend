@@ -1,0 +1,1 @@
+Error: main's type @n:../eval_split_apply.MN -> {../eval_split_apply.wob(n) == ../eval_split_apply.add(n, ../eval_split_apply.Z{}) : ../eval_split_apply.MN} cannot be printed (a function, a Type, an erased or dependent field)

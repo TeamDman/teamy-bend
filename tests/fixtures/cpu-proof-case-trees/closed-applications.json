@@ -1,0 +1,418 @@
+[
+  {
+    "name": "eval_case_tree_001",
+    "entry": "main",
+    "arguments": [
+      "Up{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "main",
+    "arguments": [
+      "Rt{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "main",
+    "arguments": [
+      "Dn{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "main",
+    "arguments": [
+      "Lf{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "turn",
+    "arguments": [
+      "Up{}"
+    ],
+    "value": "Rt{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "turn",
+    "arguments": [
+      "Rt{}"
+    ],
+    "value": "Dn{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "turn",
+    "arguments": [
+      "Dn{}"
+    ],
+    "value": "Lf{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "turn",
+    "arguments": [
+      "Lf{}"
+    ],
+    "value": "Up{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "back",
+    "arguments": [
+      "Up{}"
+    ],
+    "value": "Dn{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "back",
+    "arguments": [
+      "Rt{}"
+    ],
+    "value": "Lf{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "back",
+    "arguments": [
+      "Dn{}"
+    ],
+    "value": "Up{}"
+  },
+  {
+    "name": "eval_case_tree_001",
+    "entry": "back",
+    "arguments": [
+      "Lf{}"
+    ],
+    "value": "Rt{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{Z{},Z{},Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{Z{},Z{},S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{Z{},S{Z{}},Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{Z{},S{Z{}},S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{S{Z{}},Z{},Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{S{Z{}},Z{},S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "main",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{Z{},Z{},Z{}}"
+    ],
+    "value": "Mk{Z{}, Z{}, Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{Z{},Z{},S{Z{}}}"
+    ],
+    "value": "Mk{Z{}, S{Z{}}, Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{Z{},S{Z{}},Z{}}"
+    ],
+    "value": "Mk{S{Z{}}, Z{}, Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{Z{},S{Z{}},S{Z{}}}"
+    ],
+    "value": "Mk{S{Z{}}, S{Z{}}, Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{S{Z{}},Z{},Z{}}"
+    ],
+    "value": "Mk{Z{}, Z{}, S{Z{}}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{S{Z{}},Z{},S{Z{}}}"
+    ],
+    "value": "Mk{Z{}, S{Z{}}, S{Z{}}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},Z{}}"
+    ],
+    "value": "Mk{S{Z{}}, Z{}, S{Z{}}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "rot",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},S{Z{}}}"
+    ],
+    "value": "Mk{S{Z{}}, S{Z{}}, S{Z{}}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{Z{},Z{},Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{Z{},Z{},S{Z{}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{Z{},S{Z{}},Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{Z{},S{Z{}},S{Z{}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{S{Z{}},Z{},Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{S{Z{}},Z{},S{Z{}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "getx",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},S{Z{}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{Z{},Z{},Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{Z{},Z{},S{Z{}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{Z{},S{Z{}},Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{Z{},S{Z{}},S{Z{}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{S{Z{}},Z{},Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{S{Z{}},Z{},S{Z{}}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_case_tree_002",
+    "entry": "gety",
+    "arguments": [
+      "Mk{S{Z{}},S{Z{}},S{Z{}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "main",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "main",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "main",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "main",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "{==}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "wob",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "wob",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "wob",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "S{S{Z{}}}"
+  },
+  {
+    "name": "eval_split_apply",
+    "entry": "wob",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "S{S{S{S{Z{}}}}}"
+  }
+]

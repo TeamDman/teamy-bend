@@ -1,0 +1,1 @@
+"Error:\n- expected : ../eval_case_tree_001.Dn{}\n- observed : ../eval_case_tree_001.Up{}\nLocation: main\n4 | law main: {H.turn(H.turn(H.Up{})) == H.Up{} : H.Dir}\n5>| def main(): {==}\n6 | \n"

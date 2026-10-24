@@ -1,0 +1,1 @@
+Error: main's type @p:../eval_case_tree_002.P3 -> {../eval_case_tree_002.getx(../eval_case_tree_002.rot(p)) == ../eval_case_tree_002.gety(p) : ../eval_case_tree_002.MN} cannot be printed (a function, a Type, an erased or dependent field)
