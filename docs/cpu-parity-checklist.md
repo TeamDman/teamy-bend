@@ -11,25 +11,26 @@ their own [portability](linux-cpu-validation.md) and
 
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
-1,302-fixture inventory and 77-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `6644368`, with unchanged
-production implementation `e9410bf`, closes the
-[array pure-normalization depth gap](cpu-array-depth.md). Both unchanged originals
-and the four-slot regression match all six execution lanes and strict eval, twice.
-Full gate **831 passed, zero failed, 49 ignored**; 89 focused integration tests,
-five guard tests, strict Clippy, baseline and normalization pass. The full checking
-audit still rejects all 439 checker negatives, with no acceptance-status changes.
-Negative/demand matrices retain their existing open cells and return 1. Guards,
-work accounting and demand contracts are unchanged; no new exception.
-O0's oracle build failure remains distinct from matching Word results at pinned O3.
+1,302-fixture inventory and 79-row runtime ledger expose missing evidence;
+neither is a completion percentage. Current source `0f83aea` qualifies the
+[array-read family](cpu-array-reads.md) and repairs composed word normalization
+by consuming the pinned full-adder pair. Original IO results are exactly 4 and
+97; separate pure-entry derivatives pass. Upstream direct-IO remains host-blocked
+and strict proof mode excludes the original IO books. Full gate **834 passed,
+zero failed, 49 ignored**; 31 focused tests, five guards, bounded controls,
+baseline and normalization pass. The audit changes no acceptance status.
+Negative/demand matrices retain their unresolved cells and return 1. No budget,
+evaluator or approved demand policy changed; no new exception was created.
+O0's oracle build failure remains distinct from pinned O3 evidence.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
-Current runtime/interpretation ledgers link 115 originals; the 1,187 remaining
-entries comprise 439 checker negatives, twelve check-only modules, 153
-interpreter-only cases and 583 compiled candidates. These are distinct
-requirements, not a count of CPU runtime defects. Complete lane/API review,
-resource/host gaps and cross-oracle requirements remain open. Intervening
-milestones below are historical; the final checklist describes the current state.
+Runtime/interpretation ledgers link 117 originals; 1,185 remain unlinked: 439
+checker negatives, twelve check-only modules, 153 interpreter cases and 581
+compiled candidates. These are distinct requirements, not runtime defect counts.
+Next bounded family: parse/bitwise_dot_operators and parse/brace_term_forms,
+with actual printer applicability first. Complete lane/API review, host/resource
+and cross-oracle requirements remain open. Earlier milestones below keep their
+historical identities; no missing coverage is promoted to a pass.
 
 ## Passed in this review
 

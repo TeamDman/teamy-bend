@@ -4072,3 +4072,32 @@ and demand rows are renewed; other receipts retain their actual source identity.
 Next: actual printer/runtime qualification of parse/array_read_annotation and
 parse/array_read_write. Full CPU parity remains incomplete. No dependencies,
 toolchains, guards, policy, evaluator selection, installation or push changed.
+
+
+### [x] 5.60 Qualify annotated and chained array reads
+
+Source `0f83aea` qualifies unchanged array_read_annotation and array_read_write
+in five available execution lanes, twice, with exact outputs 4 and 97. Original
+direct upstream IO remains host-blocked; whole-book strict eval excludes IO.
+Separate pure-entry derivatives preserve all helpers and now pass six execution
+lanes and strict main/main.out observations. No original fixture was replaced.
+
+The read/write derivative exposed avoidable work in the port's expanded Word.adc
+Boolean formulas. Inlining the pinned pair-consuming helper with a typed core
+match preserves its a/b/f order and checked structural recursion. No evaluator,
+new cache, budget or demand-policy change. The exact failed original derivative,
+carry/wrapping/subtraction and partial-demand controls are retained.
+
+Full gate **834 passed, zero failed, 49 ignored**; 31 focused tests, five guards,
+52 bounded control observations, strict Clippy, baseline and normalization pass.
+The 1,302-case audit retains every acceptance status and all checker-negative
+refusals. Negative/demand matrices retain existing gaps. Complete array capture:
+52 exact, four host-blocked, eight strict exclusions; truthful aggregate exit 1.
+
+See [array-read evidence](cpu-array-reads.md) for source/receipt hashes, exact
+commands, historical failures, disk reserve refusal and content-preserving
+snapshot deduplication. Eleven runtime rows and all interpretation/demand rows
+are current; 68 runtime rows remain historical. Union: 117 originals, full CPU
+parity incomplete. Next: actual printer/runtime qualification of
+parse/bitwise_dot_operators and parse/brace_term_forms. Frozen inputs and budgets;
+no dependency/toolchain/policy change, installation or push.
