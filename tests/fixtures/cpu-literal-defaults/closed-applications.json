@@ -1,0 +1,371 @@
+[
+  {
+    "name": "literal_default_000",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "R1{}"
+  },
+  {
+    "name": "literal_default_000",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "R2{}"
+  },
+  {
+    "name": "literal_default_000",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "R2{}"
+  },
+  {
+    "name": "literal_default_000",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "R2{}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "RA{Z{}, Z{}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "RA{Z{}, S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RA{Z{}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "RA{S{Z{}}, Z{}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "RA{S{Z{}}, S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RA{S{Z{}}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "RA{S{S{S{Z{}}}}, Z{}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "RA{S{S{S{Z{}}}}, S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "Z{}",
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RA{S{S{S{Z{}}}}, S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{Z{}}",
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}",
+      "Z{}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "Z{}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}",
+      "Z{}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{Z{}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}",
+      "Z{}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}",
+      "S{Z{}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_001",
+    "arguments": [
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}",
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "RN{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_002",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "literal_default_002",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "Z{}"
+  },
+  {
+    "name": "literal_default_002",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "S{Z{}}"
+  },
+  {
+    "name": "literal_default_002",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "S{S{S{Z{}}}}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "K100{}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "K101{}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "K102{}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "S{S{S{Z{}}}}"
+    ],
+    "value": "KD{S{S{S{Z{}}}}}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "KD{S{S{S{S{Z{}}}}}}"
+  },
+  {
+    "name": "literal_default_003",
+    "arguments": [
+      "S{S{S{S{S{Z{}}}}}}"
+    ],
+    "value": "KD{S{S{S{S{S{Z{}}}}}}}"
+  },
+  {
+    "name": "literal_default_004",
+    "arguments": [
+      "Z{}"
+    ],
+    "value": "RZ{}"
+  },
+  {
+    "name": "literal_default_004",
+    "arguments": [
+      "S{Z{}}"
+    ],
+    "value": "RD{S{Z{}}}"
+  },
+  {
+    "name": "literal_default_004",
+    "arguments": [
+      "S{S{Z{}}}"
+    ],
+    "value": "RD{S{S{Z{}}}}"
+  },
+  {
+    "name": "literal_default_004",
+    "arguments": [
+      "S{S{S{S{Z{}}}}}"
+    ],
+    "value": "RD{S{S{S{S{Z{}}}}}}"
+  }
+]

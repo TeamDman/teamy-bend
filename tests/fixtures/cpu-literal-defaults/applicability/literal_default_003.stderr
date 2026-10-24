@@ -1,0 +1,1 @@
+Error: main's type @x:../literal_default_003.W -> ../literal_default_003.R cannot be printed (a function, a Type, an erased or dependent field)
