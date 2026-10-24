@@ -12,6 +12,56 @@ use crate::syntax::parse_term;
 use normalization_shape::shape_in_book;
 use std::path::Path;
 
+#[path = "../../tests/support/constructor_binder_assertions.rs"]
+mod constructor_binder_assertions;
+
+#[test]
+fn minted_binder_execution_core_and_applications_do_not_grant_io_proofs() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-constructor-binders");
+    let path = root.join("printer_fresh_binder.bend");
+    let source = load_executable(&path).unwrap();
+    let checked = check_executable(&source).unwrap();
+    assert_eq!(checked.entry_kind().unwrap(), ExecutableEntry::Io);
+    assert!(
+        check_book(&load(&path).unwrap())
+            .unwrap_err()
+            .to_string()
+            .contains("undefined name IO")
+    );
+    let graph =
+        std::fs::read_to_string(root.join("normal-forms/printer_fresh_binder.json")).unwrap();
+    let oracle: normalization_shape::Shape = facet_json::from_str(&graph).unwrap();
+    let expected =
+        std::fs::read_to_string(root.join("normal-forms/printer_fresh_binder.stdout")).unwrap();
+    for _ in 0..2 {
+        let mut engine = checked.engine.clone();
+        engine.reset();
+        let value = engine.normalize_definition("pick").unwrap();
+        assert_eq!(format!("{value}\n"), expected);
+        assert_eq!(shape_in_book(&value, &source.book).unwrap(), oracle);
+        constructor_binder_assertions::assert_fresh_match_binders(&value);
+        assert_eq!(
+            shape_in_book(&parse_term(expected.trim()).unwrap(), &source.book).unwrap(),
+            oracle
+        );
+    }
+    for n in [0, 1, 2, 3, 7] {
+        let mut engine = checked.engine.clone();
+        engine.reset();
+        let call = crate::kernel::reduce::apply(
+            crate::kernel::term(crate::kernel::Term::Ref("pick".into())),
+            [parse_term(&format!("{n}n")).unwrap()],
+        );
+        let value = engine.normalize(&call).unwrap();
+        let expected = parse_term(if n < 2 { "0n" } else { "2n" }).unwrap();
+        assert_eq!(value.to_string(), expected.to_string());
+        assert_eq!(
+            shape_in_book(&value, &source.book).unwrap(),
+            shape_in_book(&expected, &source.book).unwrap()
+        );
+    }
+}
+
 #[test]
 fn float_suffix_functions_preserve_core_structure_without_granting_proof_contracts() {
     for suffix in ["f", "g", "h"] {

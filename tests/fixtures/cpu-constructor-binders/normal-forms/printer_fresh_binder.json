@@ -1,0 +1,1 @@
+{"Match":["Succ",{"Match":["Succ",{"Lambda":{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Zero",[]]}]]}]]}},{"Lambda":{"Constructor":["Zero",[]]}}]},{"Lambda":{"Constructor":["Zero",[]]}}]}
