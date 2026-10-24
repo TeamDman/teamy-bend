@@ -4729,3 +4729,42 @@ actual function quantity/printability must be established, preserving the `+b`
 reuse annotation. Only source/applicability review is complete, with no execution
 credit. Dependencies, references, toolchains, guards, budgets, cancellation and
 approved demand semantics remain frozen. No installs, pushes, desktop or GPU work.
+
+### [x] 5.84 Qualify reusable mixed-column arguments
+
+Source `d48db566d46d0408bd2f172aca69ddf3c3d3cc23` qualifies `flatten/mixed_computed_column_003`, `_id` and
+`_sel` with **39 bounded applications**. Actual printer applicability was probed
+before the grid: these Base-importing inventory candidates return functions,
+which all compared emitters refuse with exact diagnostics and no artifact.
+The original `@a:Nt -> @+b:Nt -> W` type retains reusable `b`; direct structured
+binder/domain/result assertions and normalized `sel(a,b,b)` preserve that contract.
+Normalization, checked applications, strict-proof scope and native IO evidence
+remain distinct. No production implementation change was needed.
+[Report](cpu-mixed-column-reuse.md).
+
+Clean-source full gate: **945 passed, zero failed, 49 ignored**. The focused type/
+application regression also passed. The final repeated matrix has **183 process
+observations**, including six direct Node IO host blocks and three strict-proof
+exclusions. All 1,302 checking statuses are unchanged; 14 positive controls pass,
+and 18 observations retain three unwaived hole/TODO cases. Initial applicability
+probes retain the prior binary identity; the interrupted first gate and refused
+preflight are not successful validation receipts.
+
+Detailed receipts now link **310 originals**, with **992** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 81 interpreter cases
+and 550 compiled candidates**. Three interpretation rows are new; prior 124
+interpretation, 93 runtime and 90 checking rows retain historical identities.
+Function-emitter refusal does not give these originals a runtime pass. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
+
+After this batch passed, source/applicability review selected
+`shared_param_computed_000`, `cross_binder_promotion` and `var_row_column_rebind`
+for a proposed 36-vector batch: ordinary parameter matching, cross-binder shadowing
+and catch-all priority. No execution credit is assigned. The first fixture's old
+comment mentions sharing syntax absent from its actual source; no sharing/Own
+coverage is inferred from its name or comment.

@@ -91,37 +91,42 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `b382a7683d2be3b06033cc4e6236595baed689f2` qualifies eight unchanged `flatten/mixed_computed_column_000..002`
-originals and companions with **63 bounded applications**. The grid covers parity
-recursion, value-column threading, full returned constructor depth, and all Bit
-combinations for computed middle arguments. Normalized text, actual checked core,
-concrete values, strict-proof applicability and native IO execution remain distinct.
-No production defect was demonstrated or implementation change needed.
-[Report](cpu-mixed-computed-columns.md).
+Source `d48db566d46d0408bd2f172aca69ddf3c3d3cc23` qualifies `flatten/mixed_computed_column_003`, `_id` and
+`_sel` with **39 bounded applications**. Actual printer applicability was probed
+before the grid: these Base-importing inventory candidates return functions,
+which all compared emitters refuse with exact diagnostics and no artifact.
+The original `@a:Nt -> @+b:Nt -> W` type retains reusable `b`; direct structured
+binder/domain/result assertions and normalized `sel(a,b,b)` preserve that contract.
+Normalization, checked applications, strict-proof scope and native IO evidence
+remain distinct. No production implementation change was needed.
+[Report](cpu-mixed-column-reuse.md).
 
-The clean-source gate passed **942 tests, zero failed, 49 ignored**. The repeated
-matrix records **568 process observations**, including 16 direct Node IO host
-blocks and eight strict-proof exclusions. All 1,302 checking statuses are unchanged;
-14 positive controls pass and 18 observations retain three unwaived hole/TODO
-cases. Original missing-Base and separate function-printer refusals match exactly,
-with no artifact; wrappers do not supply executable passes for original functions.
+Clean-source full gate: **945 passed, zero failed, 49 ignored**. The focused type/
+application regression also passed. The final repeated matrix has **183 process
+observations**, including six direct Node IO host blocks and three strict-proof
+exclusions. All 1,302 checking statuses are unchanged; 14 positive controls pass,
+and 18 observations retain three unwaived hole/TODO cases. Initial applicability
+probes retain the prior binary identity; the interrupted first gate and refused
+preflight are not successful validation receipts.
 
-Detailed receipts now link **307 originals**; **995** lack detailed receipts:
-**360 checker negatives, one checking-only module, 81 interpreter cases and 553
-compiled candidates**. Eight interpretation rows are new. The prior 116
-interpretation, 93 runtime and 90 checking rows keep their actual tested identities.
-Linked receipts include partial/blocked cells and do not establish CPU parity.
-Imported-constructor spelling and upstream JS timeout evidence remain separately
-open at the earlier source. Erased-hole/TODO, host/resource/foreign/F32.read,
-runtime-error-order, external API and unfinished 688-vector requirements remain
-unwaived. No new semantic exception or resource policy was adopted.
+Detailed receipts now link **310 originals**, with **992** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 81 interpreter cases
+and 550 compiled candidates**. Three interpretation rows are new; prior 124
+interpretation, 93 runtime and 90 checking rows retain historical identities.
+Function-emitter refusal does not give these originals a runtime pass. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
 
-Next independent batch: `mixed_computed_column_003`, `_id` and `_sel`, proposed
-39 vectors. These import Base and are compiled candidates in the inventory;
-actual function quantity/printability must be established, preserving the `+b`
-reuse annotation. Only source/applicability review is complete, with no execution
-credit. Dependencies, references, toolchains, guards, budgets, cancellation and
-approved demand semantics remain frozen. No installs, pushes, desktop or GPU work.
+After this batch passed, source/applicability review selected
+`shared_param_computed_000`, `cross_binder_promotion` and `var_row_column_rebind`
+for a proposed 36-vector batch: ordinary parameter matching, cross-binder shadowing
+and catch-all priority. No execution credit is assigned. The first fixture's old
+comment mentions sharing syntax absent from its actual source; no sharing/Own
+coverage is inferred from its name or comment.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -860,3 +865,42 @@ actual function quantity/printability must be established, preserving the `+b`
 reuse annotation. Only source/applicability review is complete, with no execution
 credit. Dependencies, references, toolchains, guards, budgets, cancellation and
 approved demand semantics remain frozen. No installs, pushes, desktop or GPU work.
+
+## Mixed-column reuse checkpoint
+
+Source `d48db566d46d0408bd2f172aca69ddf3c3d3cc23` qualifies `flatten/mixed_computed_column_003`, `_id` and
+`_sel` with **39 bounded applications**. Actual printer applicability was probed
+before the grid: these Base-importing inventory candidates return functions,
+which all compared emitters refuse with exact diagnostics and no artifact.
+The original `@a:Nt -> @+b:Nt -> W` type retains reusable `b`; direct structured
+binder/domain/result assertions and normalized `sel(a,b,b)` preserve that contract.
+Normalization, checked applications, strict-proof scope and native IO evidence
+remain distinct. No production implementation change was needed.
+[Report](cpu-mixed-column-reuse.md).
+
+Clean-source full gate: **945 passed, zero failed, 49 ignored**. The focused type/
+application regression also passed. The final repeated matrix has **183 process
+observations**, including six direct Node IO host blocks and three strict-proof
+exclusions. All 1,302 checking statuses are unchanged; 14 positive controls pass,
+and 18 observations retain three unwaived hole/TODO cases. Initial applicability
+probes retain the prior binary identity; the interrupted first gate and refused
+preflight are not successful validation receipts.
+
+Detailed receipts now link **310 originals**, with **992** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 81 interpreter cases
+and 550 compiled candidates**. Three interpretation rows are new; prior 124
+interpretation, 93 runtime and 90 checking rows retain historical identities.
+Function-emitter refusal does not give these originals a runtime pass. Linked
+receipts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing/upstream JS timeouts, erased-hole/TODO,
+host/resource/foreign/F32.read/runtime-error-order/API requirements and the
+unfinished 688-vector exploration remain unwaived. Frozen dependencies,
+references, toolchains, guards, budgets, cancellation and approved demand policy;
+no installations, pushes, desktop or GPU work.
+
+After this batch passed, source/applicability review selected
+`shared_param_computed_000`, `cross_binder_promotion` and `var_row_column_rebind`
+for a proposed 36-vector batch: ordinary parameter matching, cross-binder shadowing
+and catch-all priority. No execution credit is assigned. The first fixture's old
+comment mentions sharing syntax absent from its actual source; no sharing/Own
+coverage is inferred from its name or comment.
