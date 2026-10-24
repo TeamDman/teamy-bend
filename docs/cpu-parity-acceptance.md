@@ -91,36 +91,37 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `8deca787667b9d01d40a865ca71fba6d527fdfdd` qualifies six unchanged `flatten/computed_ref_call_000/001`
-originals and their `_f`/`_step` companions through exact normal forms and **20
-bounded concrete applications**. Checked-core structure and text, pure CLI
-normalization, and native IO execution are separate observations. The original
-builds require Base; separate Base-enabled function adapters are unprintable.
-Concrete pure/IO observation wrappers pass the available generated C/JS lanes.
-No production behavior change was needed. [Report](cpu-computed-reference-calls.md).
+Source `63f4e30c7764a2cb72a78323e8aecc545dad4aa4` qualifies six unchanged `flatten/stacked_computed_match_000/001`
+originals and `_nat`/`_not`/`_sel` companions through exact normal forms and **39
+bounded applications**. The grid covers constructor depths 0..2 and every Boolean
+combination for the three-column functions. Actual checked-core structure, CLI
+text, concrete values, pure observation and native IO evidence remain separate.
+No production behavior change was needed. [Report](cpu-stacked-computed-matches.md).
 
-The clean-source full gate passed **936 tests, zero failed, 49 ignored**. The
-repeated matrix has **426 process observations**, including 12 direct upstream
-Node IO host blocks and six strict-proof exclusions. All 1,302 checking statuses
-are unchanged; 14 positive controls passed, and 18 observations preserve the
-three unwaived hole/TODO disagreements. The interrupted initial gate is not a
-candidate receipt. Historical source and receipt identities remain unchanged.
+The clean-source full gate passed **939 tests, zero failed, 49 ignored**. The
+repeated matrix contains **426 process observations**, including 12 direct Node
+IO-oracle host blocks and six strict-proof exclusions. All 1,302 checking statuses
+are unchanged. Fourteen positive controls passed; 18 observations preserve three
+unwaived hole/TODO disagreements. Original missing-Base refusals and Base-enabled
+function-printer refusals are exact, with no emitted artifact; neither supplies
+an executable pass for the original function-valued main.
 
-Detailed receipts now link **293 originals**, with **1,009** lacking detailed
-receipts: **360 checker negatives, one checking-only module, 95 interpreter cases
-and 553 compiled candidates**. Six interpretation rows are new; the 104 other
-interpretation, 93 runtime and 90 checking rows retain historical identities.
+Detailed receipts now link **299 originals**, with **1,003** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 89 interpreter cases
+and 553 compiled candidates**. Six interpretation rows are new; the previous
+110 interpretation, 93 runtime and 90 checking rows retain their tested identities.
 These counts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing and upstream JS timeouts remain separately open at
+their earlier source. Erased-hole/TODO, host/resource/foreign/F32.read,
+runtime-error-order, external API and unfinished 688-vector requirements remain
+unwaived. No new exception or resource policy was adopted.
 
-The imported-constructor spelling disagreement and pinned JS printer timeout
-remain separately open at their earlier tested source. Erased-hole/TODO,
-host/resource/foreign/F32.read/runtime-error-order/API requirements and the
-unfinished 688-vector exploration remain unwaived. Next independent batch:
-six `stacked_computed_match_000/001` originals and `_nat`/`_not`/`_sel` companions,
-with a proposed 39-vector grid for two/three computed columns. Source and
-applicability were reviewed; none of that new grid was executed or qualified.
-Dependencies, references, toolchains, guards, budgets, cancellation and approved
-demand semantics remain frozen. No installations, pushes, desktop or GPU work.
+Next independent batch: eight `mixed_computed_column_000..002` originals and
+companions, with a proposed 63-vector grid for parity recursion, value-column
+threading and computed middle arguments. Only source/applicability review is
+complete; no execution credit. Dependencies, references, toolchains, guards,
+budgets, cancellation and approved demand semantics remain frozen. No installs,
+pushes, desktop or GPU work.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -791,3 +792,37 @@ with a proposed 39-vector grid for two/three computed columns. Source and
 applicability were reviewed; none of that new grid was executed or qualified.
 Dependencies, references, toolchains, guards, budgets, cancellation and approved
 demand semantics remain frozen. No installations, pushes, desktop or GPU work.
+
+## Stacked computed-match checkpoint
+
+Source `63f4e30c7764a2cb72a78323e8aecc545dad4aa4` qualifies six unchanged `flatten/stacked_computed_match_000/001`
+originals and `_nat`/`_not`/`_sel` companions through exact normal forms and **39
+bounded applications**. The grid covers constructor depths 0..2 and every Boolean
+combination for the three-column functions. Actual checked-core structure, CLI
+text, concrete values, pure observation and native IO evidence remain separate.
+No production behavior change was needed. [Report](cpu-stacked-computed-matches.md).
+
+The clean-source full gate passed **939 tests, zero failed, 49 ignored**. The
+repeated matrix contains **426 process observations**, including 12 direct Node
+IO-oracle host blocks and six strict-proof exclusions. All 1,302 checking statuses
+are unchanged. Fourteen positive controls passed; 18 observations preserve three
+unwaived hole/TODO disagreements. Original missing-Base refusals and Base-enabled
+function-printer refusals are exact, with no emitted artifact; neither supplies
+an executable pass for the original function-valued main.
+
+Detailed receipts now link **299 originals**, with **1,003** lacking detailed
+receipts: **360 checker negatives, one checking-only module, 89 interpreter cases
+and 553 compiled candidates**. Six interpretation rows are new; the previous
+110 interpretation, 93 runtime and 90 checking rows retain their tested identities.
+These counts include partial/blocked cells and do not establish CPU parity.
+Imported-constructor printing and upstream JS timeouts remain separately open at
+their earlier source. Erased-hole/TODO, host/resource/foreign/F32.read,
+runtime-error-order, external API and unfinished 688-vector requirements remain
+unwaived. No new exception or resource policy was adopted.
+
+Next independent batch: eight `mixed_computed_column_000..002` originals and
+companions, with a proposed 63-vector grid for parity recursion, value-column
+threading and computed middle arguments. Only source/applicability review is
+complete; no execution credit. Dependencies, references, toolchains, guards,
+budgets, cancellation and approved demand semantics remain frozen. No installs,
+pushes, desktop or GPU work.
