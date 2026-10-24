@@ -4015,7 +4015,10 @@ parse/array_write_stmt, requiring actual printer applicability and corresponding
 runtime observations. Their sources were inspected only during this checkpoint.
 
 
-### [~] 5.58 Qualify concrete array syntax and resolve normalization depth
+### [x] 5.58 Qualify concrete array syntax and resolve normalization depth
+
+Closed by the correction in 5.59 at `e9410bf`; the partial checkpoint below
+retains its original tested-source identity.
 
 Source `9310cf2` corrects array term display using complete existing ALeaf/ANode
 trees. Fifteen pinned printer controls cover complete, partial, malformed,
@@ -4041,3 +4044,31 @@ The [checkpoint](cpu-array-syntax.md) records exact commands, outputs, hashes an
 resource diagnosis. Next: resolve the original normalization gap with a bounded
 implementation correction, retaining guards and demand behavior. Full CPU parity
 is incomplete; frozen dependencies/toolchains/policies and no push.
+
+
+### [x] 5.59 Reuse tail-reduction frames without weakening kernel guards
+
+Source `e9410bf` loops over tail reductions while preserving each work charge.
+Pending computation still consumes the unchanged nesting allowance; checker,
+normalization, input and executable demand contracts are unchanged. The prior
+failed selected-arm experiment remains preserved separately.
+
+The unchanged array_write_stmt original and four-slot read now pass pure native
+CLI and strict eval. Three array cases match 36/36 repeated executions and 6/6
+strict reports. Explicit core comparisons and separate constructor-API tests pass.
+U32 division 17/5 now computes 3 with remainder 2 instead of accidental depth
+exhaustion. Adversarial tests retain fuel, depth, demand and first-error checks.
+
+Final gate at test follow-up `6644368`: **831 passed, zero failed, 49 ignored**;
+89 focused tests, ten executable contract tests, five internal
+guard tests, strict Clippy, baseline and normalization renewals pass. The full
+1,302-case status audit still rejects all 439 checker negatives and changes no
+acceptance status. Negative/demand matrices retain prior classifications and
+exit 1 for remaining gaps. No diagnostic or resource disagreement is waived.
+
+See [array-depth evidence](cpu-array-depth.md) for commands, exact outputs,
+receipts and cache preflight/monitoring. Eleven runtime rows, all interpretation
+and demand rows are renewed; other receipts retain their actual source identity.
+Next: actual printer/runtime qualification of parse/array_read_annotation and
+parse/array_read_write. Full CPU parity remains incomplete. No dependencies,
+toolchains, guards, policy, evaluator selection, installation or push changed.

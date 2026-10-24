@@ -94,7 +94,7 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 The [runtime evidence ledger](cpu-runtime-evidence.csv) links **77 distinct
 upstream fixtures**: sixteen comptime, sixteen run, eighteen IO, six Base, two
 representation, eleven parse and eight compile originals. Linked rows include
-unresolved negative and oracle-host cells. Ten positive authored controls and
+unresolved negative and oracle-host cells. Eleven positive authored controls and
 a separate read probe supplement the suites without adding inventory
 rows. Only passed cells qualify their recorded runtime/profile; this is not
 category, checker-diagnostic, API or multiworker completion.
@@ -108,27 +108,29 @@ source hints and related tests are not promoted to parity passes. Complete
 per-lane applicability/printability and API review remain required.
 
 The [interpretation ledger](cpu-interpretation-evidence.csv) now links 38 originals
-at `9310cf2`: eleven interpreter-only cases and twenty-seven compiled candidates
+at `e9410bf`: eleven interpreter-only cases and twenty-seven compiled candidates
 whose function-containing results are actually refused by upstream C/JS generation.
 Four authored controls add no inventory rows. Across runtime and interpretation,
 **115 originals** have receipts and **1,187** lack those kinds: 439 checker
 negatives, twelve check-only modules, 153 interpreter-only cases and 583 compiled
 candidates.
 
-The [concrete-array checkpoint](cpu-array-syntax.md), `9310cf2`, fixes array
-term printing and partially qualifies two originals. Both compiled C/JS pairs
-and direct interpretation match; native pure normalization and strict eval of
-array_write_stmt still exceed the unchanged 128-level guard. The complete
-capture records 22/24 exact executions and 2/4 strict eval reports, and exits 1.
-The distinct evaluate_data API passes both originals but does not waive those
-failed cells. A four-slot read is a smaller reproducer; isolated word operations
-agree. No evaluator or resource policy changed.
+The [array-depth correction](cpu-array-depth.md), implementation `e9410bf` and
+test follow-up `6644368`, closes both original array cases in native pure
+normalization and strict eval without changing guards,
+work charges or demand. Two originals and the authored four-slot read produce
+36/36 exact repeated execution observations and 6/6 strict eval reports. The
+previous partial [printer checkpoint](cpu-array-syntax.md) remains historical.
 
-Full gate: **828 passed, zero failed, 49 ignored**; 67 focused tests, 15 printer
-controls, the 50-execution baseline and 42-fixture normalization suite pass.
-The 38 interpretation rows, three baseline originals and two new array rows
-identify this source. The other 72 runtime rows and negative/demand/checking/read/
-comptime audits retain their earlier receipts. Existing discrepancies stay open.
+Full gate: **831 passed, zero failed, 49 ignored**; 89 focused integration tests,
+five internal guard tests, baseline and normalization renewals pass. The 1,302-case
+strict audit changes no acceptance status and still rejects all 439 checker
+negatives. Negative/demand matrices are renewed with their existing unresolved
+cells and approved wildcard exception intact; both runners still exit 1.
+Eleven runtime rows, all 38 interpretation rows and ten demand rows identify this
+implementation; array rows identify the test follow-up `6644368`. The remaining
+66 runtime rows retain historical receipts. Checking raw diagnostics,
+read/comptime differential and other unrun matrices are not renewed.
 
 The preceding [comparison/index checkpoint](cpu-paren-index.md), `694a210`, qualifies
 two unchanged function originals with strict actual-core/text agreement and eight
@@ -207,10 +209,10 @@ changes to Bend's limits. Deep raw constructor input still reaches the existing
 64-level parser guard, independently of compact display of an internal spine.
 That refusal is not promoted to upstream acceptance parity.
 
-Next priority: the reproduced array_write_stmt pure-normalization depth failure,
-minimized to a four-slot array read. Preserve the guard, work accounting and
-demand contract while investigating avoidable reduction work. The independent
-array read-annotation/read-write originals also remain unqualified.
+Next independent family: parse/array_read_annotation and parse/array_read_write,
+requiring actual printer applicability and runtime qualification of annotated
+reads and chained read/write extraction. Their checking audit status alone does
+not qualify executable behavior.
 Full API, lane, resource, host, foreign, F32.read, error-order and platform
 closure remains required; no broader printer or arithmetic parity is claimed.
 

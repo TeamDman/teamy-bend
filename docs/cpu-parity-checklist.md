@@ -12,15 +12,15 @@ their own [portability](linux-cpu-validation.md) and
 The [CPU acceptance criterion](cpu-parity-acceptance.md) now defines the required
 mode/profile evidence before the pin can be called matched. Its reproducible
 1,302-fixture inventory and 77-row runtime ledger expose missing evidence;
-neither is a completion percentage. Current checkpoint `9310cf2` fixes
-[array term printing](cpu-array-syntax.md) and partially qualifies two concrete
-array originals. Generated C/JS and direct upstream interpretation match; the
-native pure normalizer still refuses the write original at its unchanged guard.
-Full gate **828 passed, zero failed, 49 ignored**; 67 focused tests, strict Clippy,
-15 printer controls, the 50-execution baseline and 42-fixture normalization pass.
-The array differential capture remains exit 1. Existing diagnostic mismatches
-are unwaived; historical receipts keep their actual source identities. No
-evaluator, dependency, demand-policy or safety-budget change; no new exception.
+neither is a completion percentage. Current checkpoint `6644368`, with unchanged
+production implementation `e9410bf`, closes the
+[array pure-normalization depth gap](cpu-array-depth.md). Both unchanged originals
+and the four-slot regression match all six execution lanes and strict eval, twice.
+Full gate **831 passed, zero failed, 49 ignored**; 89 focused integration tests,
+five guard tests, strict Clippy, baseline and normalization pass. The full checking
+audit still rejects all 439 checker negatives, with no acceptance-status changes.
+Negative/demand matrices retain their existing open cells and return 1. Guards,
+work accounting and demand contracts are unchanged; no new exception.
 O0's oracle build failure remains distinct from matching Word results at pinned O3.
 
 The historical [applicability report](cpu-applicability.md) retains its inputs.
@@ -444,15 +444,15 @@ policy or conflicting-oracle exception was implemented; API caveats remain.
 
 ## Remaining coverage checklist
 
-Latest bounded checkpoint: [concrete arrays and open normalization gap](cpu-array-syntax.md),
-`9310cf2`. Array display now matches upstream without altering core trees or
-evaluating leaves. The literal matches all runtimes. The write original matches
-generated C/JS and upstream interpretation but remains a native pure-normalizer
-failure. Full capture: 22/24 exact executions and 2/4 strict eval reports, exit 1.
-Separate evaluate_data success does not qualify the CLI. Four-slot read also
-fails; isolated word controls agree. Full gate **828 passed, zero failed,
-49 ignored**; 67 focused tests, 15 printer controls, baseline and normalization
-renewals pass. Minimum workspace headroom: 3.48 GiB. No resource-policy change.
+Latest bounded checkpoint: [array normalization depth correction](cpu-array-depth.md),
+`6644368` (implementation `e9410bf`). Tail reduction reuses its depth frame
+while retaining every work charge.
+Both originals and the four-slot regression match 36/36 repeated executions and
+6/6 strict eval reports. The original write failure is closed in its actual CLI
+mode. Full gate **831 passed, zero failed, 49 ignored**; focused, guard, baseline,
+normalization and strict-audit checks pass. Negative/demand classifications remain
+unchanged and their runners still return 1. The [partial printer checkpoint](cpu-array-syntax.md)
+and failed candidate remain historical evidence.
 
 Previous bounded checkpoint: [typed comparison and array-index functions](cpu-paren-index.md),
 `694a210`. Both unchanged selected-main functions match strict actual core and
@@ -559,9 +559,9 @@ runtime/interpretation receipts (439 checker negatives, twelve check-only,
 two exact positive acceptances and three earlier phase/construct agreements
 with differing diagnostics. Thus two of the twelve no-main entries have explicit
 checking qualification despite remaining absent from runtime/interpretation
-ledgers. Authored controls add no inventory rows. Next: repair the pure-normalization
-depth gap in parse/array_write_stmt, starting from the four-slot read reproducer.
-Do not replace the original with a smaller case or switch its evaluation mode.
+ledgers. Authored controls add no inventory rows. Next: qualify
+parse/array_read_annotation and parse/array_read_write in their actual executable
+modes, beginning with printer applicability. Their audit status is not runtime parity.
 This family needs no GPU hardware, new dependency or new F32.read policy.
 
 `Missing` below means incomplete implementation or qualification. `Blocked`
@@ -570,7 +570,7 @@ CPU work.
 
 | Status | Area | Evidence and next action |
 | --- | --- | --- |
-| Partial; native pure normalization remains failed | Concrete array syntax | Array printer corrected. Literal matches all lanes; write result matches generated C/JS and upstream interpretation, but native CLI/strict eval exhaust the existing guard. Constructor-runtime API success is separate. |
+| Passed for two originals and one authored minimizer | Concrete array syntax | Exact pure-native, generated C/JS and direct-interpreter results plus strict eval; actual core checks pass. Tail recursion no longer inflates depth; pending-depth and work guards remain enforced. |
 | Passed in strict function normalization; upstream printers inapplicable | Typed comparison and array-index companions | Both original selected-main functions match core/text twice; eight repeated actual printer refusals follow four initial checks. No concrete comparison inputs or array reads claimed. |
 | Passed in strict function normalization; upstream printers inapplicable | Parenthesized function companions | Three originals retain exact typed tuple/nested arithmetic/list-shift structure and text. Twelve actual printer refusals verified; no concrete invocation. |
 | Passed in strict function normalization; upstream printers inapplicable | Spacing-rule function companions | Three originals retain exact modulo/comparison/open-Nat function structure and text, including the unused binder. Twelve actual printer refusals verified; no invocation or new rewrite coverage. |
@@ -602,7 +602,7 @@ CPU work.
 | Implemented; narrow accepted exception | Approved arithmetic demand and wildcard refusal | Three Nat cases now agree across all five runtimes twice. Three private-wildcard controls preserve refusal and explicitly label the accepted upstream C exception. This is not byte parity with that C behavior. |
 | Missing | Competing failure diagnostics | `nat_first` chooses a different first error in upstream C at O0/O1/O2/O3. Source and closure/bound controls identify a C lowering difference. The core left-to-right model excludes runtime numeric/foreign errors; no new order or exception is imposed. |
 | Passed in CLI profile; oracle build limitation in O0 | Upstream Word compilation | `word_live_tail` matches at O1/O2/O3, including pinned cli_build's O3 flags. O0 fails Clang register allocation before execution; its failure stays recorded separately. |
-| Missing | Parser/checker/base breadth | Latest strict audit at 2f349c8 has 366 accepted positives, 487 refused and all 439 checker negatives refused. Status-only agreement does not qualify diagnostics or runtime behavior. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
+| Missing | Parser/checker/base breadth | Latest strict audit at e9410bf has 366 accepted positives, 487 refused and all 439 checker negatives refused. Status-only agreement does not qualify diagnostics or runtime behavior. Separate strict exclusions from real parser/template/descent gaps. `base/list_fold.bend` now has five-runtime executable evidence despite its strict refusal; validate other candidates in their intended mode. |
 | Missing | Remaining negative contracts and execution of accepted proofs/data | All ten runtime-negative fixtures now have observations; the six-family diagnostic-only gaps are closed, but resource/foreign/oracle-host gaps remain. Acceptance audit alone covers neither. Audit refusals can happen for the wrong reason; runtime-error fixtures may legitimately type-check. |
 | Missing | Wider executable corpus coverage | Only selected families have actual five-runtime output comparisons. The pinned corpus contains 1,302 fixtures, including 100 IO, 101 compile and 240 flatten fixtures; these are source counts, not a common runnable denominator. |
 | Missing | Arbitrary foreign effects in native Rust | Generated C/JS support companion imports; the native interpreter explicitly refuses arbitrary foreign implementations. This is an implementation gap, not a GPU requirement. |
