@@ -87,7 +87,7 @@ The [execution ledger](cpu-composition-work-evidence.csv) records:
 - **12 prefix observations:** counts 23, 24 and the byte-identical 27-result
   wrapper, two repetitions each in upstream interpretation and the port pure CLI.
 - **12 graph observations:** two pure originals plus `partial_app_snf`, both
-  implementations, twice. Graph identity/shape is separate from closed output.
+  implementations, twice. Binding structure and normalized graph shape are separate from closed output.
 - **1,302 checking controls:** unchanged statuses and streams; 439 expected
   negatives reject, and the other rows split 366 accepted / 497 rejected. These
   are checking controls, not universal exact upstream diagnostic qualification.
@@ -137,7 +137,8 @@ Binary SHA-256: `899618fdd20d3e49980cd6e43bcb5f7ec3ef75c2557a59b7a0d6ad34865b256
 
 ## Storage and remaining scope
 
-Preflight requires 11 GiB free above the 10 GiB reserve. The full gate's minimum
+Build preflight requires 11 GiB total free, providing 1 GiB of headroom above
+the 10 GiB reserve. The full gate's minimum
 was 10.146 GiB. Completed integration/unit executables
 and verified inactive alternate-feature first-party library caches were reclaimed;
 all hard links were inventoried before the library removal. Two old zombie rustc
