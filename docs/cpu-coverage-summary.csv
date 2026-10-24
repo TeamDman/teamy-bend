@@ -1,5 +1,5 @@
 category,inventory,runtime_links,interpretation_links,checking_links,detailed_originals,without_detailed_receipt
 checker_negative,439,0,0,8,8,431
 checking_only,12,0,0,11,11,1
-interpreter_only,164,0,42,0,42,122
+interpreter_only,164,0,56,0,56,108
 compiled_candidate,687,88,27,0,115,572

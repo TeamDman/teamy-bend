@@ -4376,3 +4376,20 @@ Coverage is 176 detailed originals / 1,126 without detailed receipts, including
 historical and unresolved cells. The existing resource, host, foreign, API,
 F32.read and error-order requirements are unchanged; full CPU parity is incomplete.
 Next independent family: four nested_multi_scrutinee originals. No push.
+
+### [x] 5.70 Qualify nested patterns and fallback reconstruction
+
+Source `062c7ec150168922ff642d07b1fc72ce5c14144c` qualifies four nested multi-scrutinee,
+five nested-constructor and five fallback-reconstruction originals. All fourteen
+match exact interpreted core/text and 476 concrete application vectors agree
+with the pinned interpreter. The [report](cpu-nested-patterns.md) distinguishes
+unprintable function results from generated execution. No production source or
+language contract changed.
+
+Full gate **883 passed, zero failed, 49 ignored**; 90 normalization cases,
+306 no-main observations, 60 rewrite/phase controls, 144 prior proof controls
+and 50 baseline executions pass. All 1,302 checking statuses remain unchanged.
+Coverage is 190 detailed originals / 1,112 without detailed receipts, including
+historical and unresolved cells. Full CPU parity remains incomplete; no prior
+host/resource/foreign/API/F32.read/error-order requirement is waived. Next:
+field-match-order and destructuring-let applicability/qualification. No push.
