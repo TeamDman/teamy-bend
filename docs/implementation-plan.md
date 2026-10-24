@@ -5656,3 +5656,44 @@ hypothesis forcing a zero scrutinee must not be faked to reach a positive arm;
 test the independently callable helper where appropriate. Source/ledger selection
 only, with no execution credit. Inputs, guards, budgets and cancellation remain
 frozen. Reviewed feature checkpoints may be pushed; no main merge or release.
+
+### [x] 5.107 Qualify dependent telescopes and affine capture twins
+
+Tested source `5f83d2f27bbc026541f885126b112650090250fa` adds unchanged `check/dependent_telescope`,
+`capture_price_twin_000` and `_001`: **eight complete definition graphs and
+20 bounded applications**, each with a separately checked typed caller. Four
+records vary six unused fields while preserving the dependent first-field proof;
+identity/successor closures exercise both twins at zero. Positive inputs exercise
+only the independent `fe`/`use.go` helpers, without invented equality witnesses.
+Nine aggregate/adapter mains have separate runtime evidence. No production fix.
+[Scope, commands and receipts](cpu-telescope-capture.md).
+
+Full gate **1,075 / 0 / 49**; focused **39 / 0 / 0**. All **148 graph** and
+**114 normalization/applicability** observations pass. Negative family: **48
+exact rejections**, plus six separately labeled phase probes. Runtime matrix:
+**100 exact executions, 54 successful generation/build checks and eight unresolved
+upstream-JS printer timeouts**; runner exit 1. This batch has no failed C builds
+or unrun execution cells. Earlier dependent-pair upstream C failures and two unrun
+executions remain historical and unresolved, not renewed or waived here.
+
+Independent review approved the test-only corrections: dotted entry filenames
+and iterative complete graph comparison after expected-JSON decoding overflowed.
+Initial failures are preserved. Aggregate sharing/work, native/C/JS, demand,
+guards and existing cancellation controls pass; no mid-normalization cancellation
+is claimed. All 1,302 checking statuses/streams are unchanged; 439 negatives
+reject. Fourteen positive controls pass; eighteen observations preserve three
+hole/TODO differences. Prior foreign/host/resource, F32.read, failure-order,
+minimal-IO C, unfinished-grid and external-emitter caveats remain unwaived.
+
+Detailed receipts link **387 originals**, with **915 unlinked**: **357 checker
+negatives, one checking-only module, 20 interpreter cases and 537 compiled
+candidates**. These are applicability categories, not missing runtime-test counts.
+Historical, partial and blocked links do not establish full CPU parity or close
+the API/integration inventory.
+
+Next proposed batch: `check/computed_match_specialize`, `cop_bare_trio_000` and
+`fits_residual_fallback`. Establish proof-function and printer applicability;
+then bound valid hypothesis specialization, Data-kind binder reuse and residual
+fallback behavior. The first fixture has limited checking/main-output controls,
+not complete definition/application qualification. This proposal adds no execution
+credit beyond those separately recorded controls. No fabricated witnesses, budget increases or new exceptions.
