@@ -4881,3 +4881,38 @@ match expression. Scope suffixes alone do not close that normalization question.
 Both adjacent cases repeat deterministically without timeout; they are probes,
 not newly qualified ledger rows. Investigate contextual formatter scope first,
 then classify the normal-form difference structurally before changing evaluation.
+
+### [x] 5.88 Preserve contextual names and characterize blocked normalization
+
+Source `0dec12b6b2261ea82a27da454dda3272b8128a12` corrects contextual diagnostic scope: expected/observed
+terms distinguish outer `x^0` from shadowing `x`, while each context-row type sees
+only its preceding binders. Two unchanged page originals and three authored
+shadowing/import controls are covered; four earlier diagnostic controls are
+renewed. No evaluator, sharing, term identity, acceptance, demand or budget change.
+[Report](cpu-context-scope.md).
+
+Gate: **959 passed, zero failed, 49 ignored**. Focused validation: 288 passed,
+zero failed, one ignored. The repeated diagnostic matrix has **180 observations**:
+162 exact failure contracts and 18 phase probes. All 1,302 checking statuses remain
+unchanged; exactly one stderr changes, the intended pinned `context_dedup_shadow`
+correction. Fourteen positive controls pass; three hole/TODO cases remain unwaived.
+
+`eval/partial_app_snf` remains **unqualified**. Actual normalized graphs differ
+(27 versus 166 nodes in the bounded comparison representation); a constructor-field
+match minimizes the issue to `f(Box{x})` versus an unfolded stuck match. The
+pinned weak-head contract retains the named call. Twenty primary graph observations
+and 20 corroborating all-feature observations agree on that diagnosis. Ninety
+closed-value observations pass across direct interpretation, port pure CLI and
+generated C/JS, but do not close the open-normal-form mismatch. No evaluator fix
+was attempted in this checkpoint. Next: preserve named-call reconstruction when
+matching becomes blocked on a constructor field, with guard/accounting controls.
+
+Detailed receipts link **325 originals**; **977** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 550
+compiled candidates**. Only two checking rows are new; prior 140 interpretation,
+93 runtime and 90 checking rows retain historical identities. Linked rows include
+partial/blocked evidence and do not establish CPU parity. Imported-printer/JS-timeout,
+erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps and the unfinished
+688-vector exploration remain unwaived. Dependencies, references, toolchains,
+guards, budgets, cancellation and approved demand policy remain frozen. No installs,
+pushes, desktop or GPU work.

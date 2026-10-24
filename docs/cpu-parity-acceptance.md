@@ -91,43 +91,38 @@ must remain separate. No missing CPU behavior becomes a GPU requirement.
 
 ## Evidence ledger and current open cells
 
-Source `a53eac657f82b3fa75efc3e46263f13a9be4274b` qualifies five unchanged `flatten/list_ctor_000..004`
-originals with **78 bounded applications**. Type/kind probes preserve the erased
-quantity and element parameters, dependent `Kind(a)` and `&2` instantiation.
-Complete constructor values, ordered list payloads, normalized text/graphs and
-native IO execution remain separate. A demonstrated printer defect is fixed:
-shadowed bound variables retain upstream's scope-level suffix, including `b^1`.
-No parser, evaluator, core identity or sharing behavior changed.
-[Report](cpu-list-constructors.md).
+Source `0dec12b6b2261ea82a27da454dda3272b8128a12` corrects contextual diagnostic scope: expected/observed
+terms distinguish outer `x^0` from shadowing `x`, while each context-row type sees
+only its preceding binders. Two unchanged page originals and three authored
+shadowing/import controls are covered; four earlier diagnostic controls are
+renewed. No evaluator, sharing, term identity, acceptance, demand or budget change.
+[Report](cpu-context-scope.md).
 
-Clean-source gate: **957 passed, zero failed, 49 ignored**. The repeated matrix
-contains **370 process observations**, including ten direct Node IO host blocks
-and five strict-proof exclusions. Both original missing-Base and separate
-function-printer refusals match exactly, with no artifact. All 1,302 checking
-statuses are unchanged; 14 positive controls pass and 18 observations preserve
-three unwaived hole/TODO differences. All 34 focused normalization/scope/list
-tests pass at the tested source and run again in the final gate. Earlier compile,
-lint and stale-printer-expectation failures remain separate failed receipts.
+Gate: **959 passed, zero failed, 49 ignored**. Focused validation: 288 passed,
+zero failed, one ignored. The repeated diagnostic matrix has **180 observations**:
+162 exact failure contracts and 18 phase probes. All 1,302 checking statuses remain
+unchanged; exactly one stderr changes, the intended pinned `context_dedup_shadow`
+correction. Fourteen positive controls pass; three hole/TODO cases remain unwaived.
 
-Detailed receipts link **323 originals**; **979** lack detailed receipts:
-**360 checker negatives, one checking-only module, 68 interpreter cases and 550
-compiled candidates**. Five interpretation rows are new; prior 135 interpretation,
-93 runtime and 90 checking rows retain historical identities. Linked receipts
-include partial/blocked cells and do not establish CPU parity. Imported-printer/
-JS-timeout, erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps
-and the unfinished 688-vector exploration remain unwaived. Dependencies,
-references, toolchains, guards, budgets, cancellation and approved demand policy
-remain frozen. No installations, pushes, desktop or GPU work.
+`eval/partial_app_snf` remains **unqualified**. Actual normalized graphs differ
+(27 versus 166 nodes in the bounded comparison representation); a constructor-field
+match minimizes the issue to `f(Box{x})` versus an unfolded stuck match. The
+pinned weak-head contract retains the named call. Twenty primary graph observations
+and 20 corroborating all-feature observations agree on that diagnosis. Ninety
+closed-value observations pass across direct interpretation, port pure CLI and
+generated C/JS, but do not close the open-normal-form mismatch. No evaluator fix
+was attempted in this checkpoint. Next: preserve named-call reconstruction when
+matching becomes blocked on a constructor field, with guard/accounting controls.
 
-Next bounded gap: `page/context_dedup_shadow.bend` still prints a free
-contextual endpoint as `x` rather than pinned `x^0`. Both reject at status 1;
-source location and context rows agree. The 12 adjacent observations also retain
-an independent `eval/partial_app_snf.bend` difference: both succeed, but the
-pinned normal form retains `snf9`/`wnf` references while the port unfolds a larger
-match expression. Scope suffixes alone do not close that normalization question.
-Both adjacent cases repeat deterministically without timeout; they are probes,
-not newly qualified ledger rows. Investigate contextual formatter scope first,
-then classify the normal-form difference structurally before changing evaluation.
+Detailed receipts link **325 originals**; **977** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 550
+compiled candidates**. Only two checking rows are new; prior 140 interpretation,
+93 runtime and 90 checking rows retain historical identities. Linked rows include
+partial/blocked evidence and do not establish CPU parity. Imported-printer/JS-timeout,
+erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps and the unfinished
+688-vector exploration remain unwaived. Dependencies, references, toolchains,
+guards, budgets, cancellation and approved demand policy remain frozen. No installs,
+pushes, desktop or GPU work.
 
 Earlier checkpoint evidence follows and is historical unless explicitly
 renewed by a later receipt.
@@ -1018,3 +1013,38 @@ match expression. Scope suffixes alone do not close that normalization question.
 Both adjacent cases repeat deterministically without timeout; they are probes,
 not newly qualified ledger rows. Investigate contextual formatter scope first,
 then classify the normal-form difference structurally before changing evaluation.
+
+## Contextual scope and partial-normalization checkpoint
+
+Source `0dec12b6b2261ea82a27da454dda3272b8128a12` corrects contextual diagnostic scope: expected/observed
+terms distinguish outer `x^0` from shadowing `x`, while each context-row type sees
+only its preceding binders. Two unchanged page originals and three authored
+shadowing/import controls are covered; four earlier diagnostic controls are
+renewed. No evaluator, sharing, term identity, acceptance, demand or budget change.
+[Report](cpu-context-scope.md).
+
+Gate: **959 passed, zero failed, 49 ignored**. Focused validation: 288 passed,
+zero failed, one ignored. The repeated diagnostic matrix has **180 observations**:
+162 exact failure contracts and 18 phase probes. All 1,302 checking statuses remain
+unchanged; exactly one stderr changes, the intended pinned `context_dedup_shadow`
+correction. Fourteen positive controls pass; three hole/TODO cases remain unwaived.
+
+`eval/partial_app_snf` remains **unqualified**. Actual normalized graphs differ
+(27 versus 166 nodes in the bounded comparison representation); a constructor-field
+match minimizes the issue to `f(Box{x})` versus an unfolded stuck match. The
+pinned weak-head contract retains the named call. Twenty primary graph observations
+and 20 corroborating all-feature observations agree on that diagnosis. Ninety
+closed-value observations pass across direct interpretation, port pure CLI and
+generated C/JS, but do not close the open-normal-form mismatch. No evaluator fix
+was attempted in this checkpoint. Next: preserve named-call reconstruction when
+matching becomes blocked on a constructor field, with guard/accounting controls.
+
+Detailed receipts link **325 originals**; **977** lack detailed receipts:
+**358 checker negatives, one checking-only module, 68 interpreter cases and 550
+compiled candidates**. Only two checking rows are new; prior 140 interpretation,
+93 runtime and 90 checking rows retain historical identities. Linked rows include
+partial/blocked evidence and do not establish CPU parity. Imported-printer/JS-timeout,
+erased-hole/TODO, host/resource/foreign/F32.read/error-order/API gaps and the unfinished
+688-vector exploration remain unwaived. Dependencies, references, toolchains,
+guards, budgets, cancellation and approved demand policy remain frozen. No installs,
+pushes, desktop or GPU work.
