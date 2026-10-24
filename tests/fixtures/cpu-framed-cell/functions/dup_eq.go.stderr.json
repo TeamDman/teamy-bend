@@ -1,0 +1,1 @@
+"Error: main's type @n:Nat -> @-e:{n == n : Nat} -> Nat cannot be printed (a function, a Type, an erased or dependent field)\n"

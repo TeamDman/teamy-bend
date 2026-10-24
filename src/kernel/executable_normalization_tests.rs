@@ -193,3 +193,69 @@ fn reusable_binder_helpers_preserve_core_without_granting_io_proofs() {
     }
     assert_eq!(count, 10);
 }
+
+#[test]
+fn framed_dependent_worker_retains_erased_telescope_and_all_closed_graph_children() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-framed-cell");
+    let source = load_executable(root.join("framed_cell_dep.bend")).unwrap();
+    let checked = check_executable(&source).unwrap();
+    assert_eq!(checked.entry_kind().unwrap(), ExecutableEntry::Io);
+    for entry in ["dup_eq.go", "dup_eq"] {
+        let expected_text =
+            std::fs::read_to_string(root.join("normal-forms").join(format!("{entry}.stdout")))
+                .unwrap();
+        let expected: normalization_shape::Shape = facet_json::from_str(
+            &std::fs::read_to_string(root.join("normal-forms").join(format!("{entry}.json")))
+                .unwrap(),
+        )
+        .unwrap();
+        for _ in 0..2 {
+            let mut engine = checked.engine.clone();
+            engine.reset();
+            let actual = engine.normalize_definition(entry).unwrap();
+            assert_eq!(format!("{actual}\n"), expected_text);
+            assert_eq!(shape_in_book(&actual, &source.book).unwrap(), expected);
+        }
+        for n in [0, 1, 3, 8] {
+            let mut args = vec![parse_term(&format!("{n}n")).unwrap()];
+            if entry == "dup_eq.go" {
+                args.push(parse_term("{==}").unwrap());
+            }
+            let mut engine = checked.engine.clone();
+            engine.reset();
+            let call = crate::kernel::reduce::apply(
+                crate::kernel::term(crate::kernel::Term::Ref(entry.into())),
+                args,
+            );
+            let actual = engine.normalize(&call).unwrap();
+            let kind = if entry == "dup_eq.go" {
+                "worker"
+            } else {
+                "caller"
+            };
+            let expected: normalization_shape::Shape = facet_json::from_str(
+                &std::fs::read_to_string(
+                    root.join("applications").join(format!("{kind}-{n}.json")),
+                )
+                .unwrap(),
+            )
+            .unwrap();
+            assert_eq!(actual.to_string(), format!("{n}n"));
+            assert_eq!(shape_in_book(&actual, &source.book).unwrap(), expected);
+        }
+    }
+}
+
+#[test]
+fn framed_worker_executable_observations_do_not_grant_io_proof_certificates() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-framed-cell");
+    for path in [
+        root.join("framed_cell_dep.bend"),
+        root.join("applications/worker-8.bend"),
+        root.join("functions/dup_eq.go.bend"),
+        root.join("negative/false-reflexivity.bend"),
+    ] {
+        let error = check_book(&load(&path).unwrap()).unwrap_err();
+        assert!(error.to_string().contains("undefined name IO"), "{error}");
+    }
+}

@@ -1,0 +1,1 @@
+"Error:\n- expected : {1n == 1n : Nat}\n- observed : {0n == 0n : Nat}\nLocation: main\n6 | law main: Nat\n7>| def main(): H.dup_eq.go(1n, witness)\n8 | \n"

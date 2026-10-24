@@ -1,0 +1,1 @@
+"Error:\n- expected : 0n\n- observed : 1n\nLocation: witness\n4 | law witness: {0n == 1n : Nat}\n5>| def witness(): {==}\n6 | law main: Nat\n"
