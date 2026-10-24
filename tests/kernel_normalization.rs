@@ -112,6 +112,9 @@ fn base_function_companions_preserve_normalized_structure_and_exact_text() {
         "computed_recursion_000",
         "computed_recursion_000_big",
         "computed_recursion_001",
+        "chain_suffix_u32_f",
+        "chain_suffix_u32_g",
+        "chain_suffix_u32_h",
     ] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-normalization")

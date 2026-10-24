@@ -35,3 +35,10 @@ their runtime primitives. Both upstream data printers reject the function
 results. The executable comparison observes parsed output, while the in-crate
 regression separately compares the actual normalized core against the pinned
 expectation. No executable contract becomes a strict proof certificate.
+
+The unchanged `parse/chain_suffix_u32_f.bend`, `_g` and `_h` companions also
+come from this pin. Their U32 arithmetic, nested call suffixes and reusable
+shift/bitwise let binding normalize in strict proof mode. The runner compares
+actual normalized core as well as raw text, after independently verifying both
+upstream function-printer refusals. The F32 executable-only mode is not used for
+these U32 fixtures.
