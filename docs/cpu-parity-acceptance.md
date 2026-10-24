@@ -453,3 +453,19 @@ Frozen toolchains, lockfile, pin and all previous evidence remain unchanged.
 The `-Suite float-specials-depth` probe retains a failure for the combined
 authored checker-depth reproducer. Its exclusion from the positive suite is not
 a waiver; the separate depth ledger remains a required open resource cell.
+
+## Constructor/import diagnostic checkpoint
+
+Source `6442b2ca1362e36f84b74044091a0151fb17726d` qualifies five additional
+original checker negatives and repairs the shared tracked-constructor
+presentation boundary. The [report](cpu-constructor-diagnostics.md) retains
+four unresolved diagnostic controls; phase/status agreement does not waive
+them. Full gate: 866 passed, zero failed, 49 ignored. The renewed 1,302-fixture
+status audit has zero transitions, including rejection of all 439 expected
+negatives. It remains status-only evidence.
+
+The category ledger now links 140 originals, including historical/unresolved
+cells; 1,162 lack detailed receipts. This does not meet complete lane/API review
+or establish full CPU parity. Existing resource, host, foreign, F32.read and
+first-error-order requirements remain open. The next bounded diagnostic step
+is explicit provenance for rebuilt constructors, not changed language policy.

@@ -4271,3 +4271,37 @@ is preserved; only inactive rebuildable cache was reclaimed. The 10-GiB reserve,
 2/1-GiB stop floors and all Bend limits remain. Full-gate minimum workspace
 headroom: 10.15 GiB. Dependencies/toolchains/pins/security/cancellation are frozen;
 source and evidence survive; no installs, desktop/GPU work or pushes.
+
+### [x] 5.66 Qualify five constructor/import negatives and repair tracked diagnostics
+
+Tested source `6442b2c` establishes checking failures for all five unchanged
+originals, correcting the misleading parse-failure comment only in the report.
+The structured failure boundary now renders undeclared/wrong-family/arity and
+known non-inferrable constructor errors with exact Bend terms, context and
+tracked source excerpts. Untouched constructor allocations retain provenance;
+rebuilt nodes keep the safe host fallback. Open canonical List presentation now
+matches pinned cons syntax with structural round-trip controls. No acceptance,
+evaluation, demand, cancellation or budget change was introduced.
+
+The [constructor diagnostic report](cpu-constructor-diagnostics.md) records
+504 observations: 24 exact negative cases, four unresolved diagnostic cases,
+eight positive controls and direct phase probes. The open Nat-tail and Wrong{n}
+cases still need origin propagation through substitution; Nat/List pattern-load
+diagnostics remain different. The qualification summary retains exit 1 for
+these unmet cells. No new exception is declared.
+
+Full gate: **866 passed, zero failed, 49 ignored**. Renewed: 76 focused tests,
+five guards, eight diagnostic controls, 144 proof/normalization controls,
+49-case exact normalization and 50 baseline C/JS/native observations. All
+1,302 status checks have zero transitions from the prior audit; all 439 expected
+checker negatives still reject. Other 366 acceptances and 497 rejections are
+status evidence, not full parity. Historical runtime-negative/demand receipts
+and broader host/resource/foreign/error-order/F32.read gaps remain unchanged.
+
+Detailed original coverage is now 8/2/15/115 across checker-negative,
+checking-only, interpreter-only and compiled-candidate categories: 140 linked,
+1,162 without detailed receipts. Authored controls do not inflate the inventory.
+Next: explicit provenance for transformed constructors, with the nine ordinary
+no-main modules as the independent checking batch. The existing acceptance
+criterion stays unmet. Cache controls restored 10.45 GiB after all work; source
+and evidence are preserved. Inputs remain frozen; no installation or push.

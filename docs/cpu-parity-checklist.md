@@ -700,3 +700,15 @@ difference. No dependency, toolchain, pin or safety limit changed, and no push
 occurred. The next independent small CPU family is the three recursive-normalization
 companions identified in the checkpoint; a separate review is needed before
 changing first-error order or waiving that difference.
+
+## Constructor diagnostics checkpoint
+
+Source `6442b2ca1362e36f84b74044091a0151fb17726d` adds five exact original
+checking-negative qualifications and renews the existing false-proof controls.
+See [the report](cpu-constructor-diagnostics.md) and
+[category counts](cpu-coverage-summary.csv). Full gate: 866/0/49; full checking
+audit: 1,302 observations, zero status changes, all 439 expected negatives
+rejected. Detailed original receipts: 140; without detailed receipts: 1,162.
+Four constructor/pattern diagnostic controls remain unmet, along with the
+previous host/resource/API/semantic disagreements. No missing cell is a pass.
+The scoped source and later documentation checkpoints are local only.
