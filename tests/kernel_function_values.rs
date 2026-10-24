@@ -74,7 +74,10 @@ fn function_value_applications_keep_complete_closed_results() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-function-values");
     let mut applications = 0;
     for name in CASES {
-        let book = load(root.join(format!("{name}.bend"))).unwrap();
+        // CheckedBook::evaluate takes declared parameters, not arguments to a
+        // function returned by a zero-parameter definition. The separate Bend
+        // adapter applies that value without changing the original fixture.
+        let book = load(root.join("wrappers").join(format!("{name}.bend"))).unwrap();
         let checked = check_book(&book).unwrap();
         let vectors: Vec<Vec<String>> = if name == "hoas_binder_refresh" {
             [0_u32, 7, u32::MAX]
@@ -89,7 +92,7 @@ fn function_value_applications_keep_complete_closed_results() {
                 .iter()
                 .map(|x| parse_term(x).unwrap())
                 .collect::<Vec<_>>();
-            let actual = checked.evaluate("main", &args).unwrap();
+            let actual = checked.evaluate("apply", &args).unwrap();
             let expected = parse_term(vector.last().unwrap()).unwrap();
             assert_eq!(
                 actual.to_string(),
@@ -103,8 +106,7 @@ fn function_value_applications_keep_complete_closed_results() {
             );
             applications += 1;
         }
-        let book = load(root.join("wrappers").join(format!("{name}.bend"))).unwrap();
-        let actual = check_book(&book).unwrap().evaluate("main", &[]).unwrap();
+        let actual = checked.evaluate("main", &[]).unwrap();
         let expected =
             std::fs::read_to_string(root.join("wrappers").join(format!("{name}.stdout"))).unwrap();
         assert_eq!(format!("{actual}\n"), expected, "{name}");
