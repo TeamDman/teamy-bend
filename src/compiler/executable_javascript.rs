@@ -589,8 +589,9 @@ impl Printer<'_> {
                                 CompileError::new("pure printer constructor has no local tag")
                             })?;
                         variants.push(format!(
-                            "{{tag:{},fields:[{}]}}",
+                            "{{tag:{},name:{},fields:[{}]}}",
                             quote(tag),
+                            quote(&constructor.name),
                             fields.join(",")
                         ));
                     }

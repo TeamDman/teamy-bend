@@ -343,9 +343,11 @@ const $tb = (() => {
           const tag = typeof value === 'boolean' ? value ? 'True' : 'False' : value?.$;
           const variant = type.variants.find(variant => variant.tag === tag);
           if (!variant) throw new Error('pure output constructor does not match its type');
-          const open = tag === 'Con' || tag === 'Nil' ? '[' : tag === 'Tuple' ? '(' : '{';
+          // Runtime/foreign tags stay local; pure output uses the canonical name.
+          const name = variant.name;
+          const open = name === 'Con' || name === 'Nil' ? '[' : name === 'Tuple' ? '(' : '{';
           const close = open === '[' ? ']' : open === '(' ? ')' : '}';
-          write(open === '{' ? tag + open : chain === open ? '' : open);
+          write(open === '{' ? name + open : chain === open ? '' : open);
           for (let i = 0; i < variant.fields.length; i++) {
             const [name, field] = variant.fields[i];
             if (open === '[' ? i === 0 && chain === open : i > 0) write(', ');

@@ -851,20 +851,21 @@ impl Generator<'_> {
                 output.push_str("  tb_reject_request(value);\n  switch (term_aux(value)) {\n");
                 for constructor in datatype.constructors {
                     let cid = self.table.get(&constructor.name)?.cid;
-                    let tag = self
-                        .program
-                        .constructor_tags
-                        .get(&constructor.name)
-                        .ok_or_else(|| CompileError::new("C printer missing constructor tag"))?
-                        .clone();
-                    let (open, close) = match tag.as_str() {
+                    // Runtime/foreign tags stay local; pure output uses the canonical name.
+                    let name = &constructor.name;
+                    let (open, close) = match name.as_str() {
                         "Con" | "Nil" => ('[', ']'),
                         "Tuple" => ('(', ')'),
                         _ => ('{', '}'),
                     };
                     writeln!(output, "  case {cid}: {{").unwrap();
                     if open == '{' {
-                        writeln!(output, "  tb_show_text({});", c_string(&(tag + "{"))).unwrap();
+                        writeln!(
+                            output,
+                            "  tb_show_text({});",
+                            c_string(&format!("{name}{{"))
+                        )
+                        .unwrap();
                     } else {
                         writeln!(output, "  if (chain != '{open}') tb_show_text(\"{open}\");")
                             .unwrap();
