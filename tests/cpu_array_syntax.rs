@@ -10,7 +10,7 @@ use teamy_bend::kernel::check_book;
 use teamy_bend::syntax::load;
 use teamy_bend::syntax::parse_term;
 
-const CASES: [(&str, &str, &str); 3] = [
+const CASES: [(&str, &str, &str); 4] = [
     (
         "array_literal",
         "([3, 3, 3, 3], [True{}, True{}])",
@@ -26,6 +26,7 @@ const CASES: [(&str, &str, &str); 3] = [
         "([0, 0, 0, 0], 0)",
         "Tuple{ANode{ANode{ALeaf{0}, ALeaf{0}}, ANode{ALeaf{0}, ALeaf{0}}}, 0}",
     ),
+    ("array_read_annotation_pure", "4", "4"),
 ];
 
 #[test]
@@ -88,5 +89,40 @@ fn checked_data_runtime_preserves_array_construction_and_statement_writes() {
             "{name}"
         );
         assert_eq!(value.to_string(), expected, "{name}");
+    }
+}
+
+#[test]
+fn io_array_reads_preserve_results_and_the_strict_eval_boundary() {
+    for (name, expected) in [
+        ("array_read_annotation", "4\n"),
+        ("array_read_write", "97\n"),
+    ] {
+        let source = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-array-syntax")
+            .join(format!("{name}.bend"));
+        let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+            .args(["--output-format", "json", "run"])
+            .arg(&source)
+            .env("BEND_GPU", "off")
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(0), "{name}: {:?}", output.stderr);
+        assert_eq!(output.stdout, expected.as_bytes());
+        assert!(output.stderr.is_empty());
+        // Selecting a pure helper does not bypass checking the entire IO book.
+        // This proof-mode exclusion is not runtime or diagnostic parity.
+        for entry in ["main", "main.out"] {
+            let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+                .args(["--output-format", "json", "eval"])
+                .arg(&source)
+                .args(["--entry", entry])
+                .env("BEND_GPU", "off")
+                .output()
+                .unwrap();
+            assert_eq!(output.status.code(), Some(1), "{name}: {entry}");
+            assert!(output.stdout.is_empty());
+            assert!(String::from_utf8_lossy(&output.stderr).contains("main: undefined name IO"));
+        }
     }
 }
