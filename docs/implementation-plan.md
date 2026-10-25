@@ -6228,3 +6228,27 @@ not full parity. Inputs, guards, budgets and cancellation boundaries stay frozen
 Reviewed compact evidence is pushed; unique bulk evidence remains outside Git.
 No desktop/GPU, merge or release. Next candidates: base/string_ops and
 eval/string_roundtrip, whose actual entry points are IO.
+
+### [x] 5.124 Qualify local string operations and bundled round trips
+
+Tested source `a6857164bbcd4fb6a0b3aecdac0344ba3c63583a` adds tests only. Originals retain 11 and 341 across
+five executable lanes twice; two companions add 28 output-line observations.
+Space-only local trim, Unicode split/search/slicing, empty-list join/split and NUL
+round-trip preservation agree. [Report](cpu-string-ops-roundtrip.md).
+
+Standard gate **1,165 / 0 / 49**; 37 focused passes; 40 exact executions among
+88 matrix observations, plus 24 checking probes. Strict IO exclusions and direct
+Node host failures remain separate. No production, dependency, policy or limit
+change. Full census not rerun: d224e79 remains the measured source with 300
+differences beyond 385 historical IO exclusions and six upstream stack failures.
+
+Coverage is **420 linked / 882 unlinked**: 527 compiled candidates, 341 checker
+negatives, 13 interpreter-profile cases and one checking-only module. All older
+unresolved contracts remain; links do not imply completed parity.
+
+The next substantive gap is now reproduced independently: pure
+parse/string_pattern_sugar matches "hi" upstream, but port loading refuses at the
+64-level pattern guard. Fourteen separate bounded observations retain interpreter/
+C O3/JS success, port checking/emission refusal and unrun port generated execution.
+No guard change or exception is approved by this report. Compact unique failure
+evidence is in Git; bulk artifacts remain local. No desktop/GPU, merge or release.

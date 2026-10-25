@@ -1,0 +1,215 @@
+{
+  "tested_source": "a6857164bbcd4fb6a0b3aecdac0344ba3c63583a",
+  "binary_sha256": "d66cc12c993a67d92ce0507af2854f65c1cc8326a8317fce27af893225669c97",
+  "production_tree": "bf393d614783a530f5b0f4aafa559fcdfee1f64d",
+  "production_changed": false,
+  "frozen_inputs": {
+    "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "production_tree": "bf393d614783a530f5b0f4aafa559fcdfee1f64d"
+  },
+  "runs": {
+    "focused": {
+      "source_commit": "34284dc4bf7aabcbf219dacd2b5c3e2a59748822",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_string_ops_roundtrip",
+        "--test",
+        "cpu_string_kit_algorithms",
+        "--test",
+        "cpu_map_set_lookups",
+        "--test",
+        "cpu_list_sort_map",
+        "--test",
+        "runtime_packed_words",
+        "--test",
+        "kernel_open_closures",
+        "--test",
+        "kernel_collections",
+        "--test",
+        "kernel_set_formatting"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 52.379331058007665,
+      "minimum_free": 11992064000,
+      "minimum_tmp_free": 3041837056,
+      "stop_reason": null,
+      "log_sha256": "6346e08427ba1ef32f631e0a4fc9b33b345e5ad21540dead64a367d80bc4a4ee"
+    },
+    "focused-clippy": {
+      "source_commit": "34284dc4bf7aabcbf219dacd2b5c3e2a59748822",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_string_ops_roundtrip",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 3.0164674510015175,
+      "minimum_free": 11992023040,
+      "minimum_tmp_free": 3042566144,
+      "stop_reason": null,
+      "log_sha256": "0b020ae0243669bd94c1341a3578bdfe27704ad0f8d9b56d108f3c9092478e66"
+    },
+    "full-gate": {
+      "source_commit": "a6857164bbcd4fb6a0b3aecdac0344ba3c63583a",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 665.5796684550005,
+      "minimum_free": 10766102528,
+      "minimum_tmp_free": 3005214720,
+      "stop_reason": null,
+      "log_sha256": "c2abf6e1ca0d44ceaba67c62a4ad2f9ded2cbe2029ca23f88bf94af5a11a1ca6"
+    }
+  },
+  "review": {
+    "reviewer": "/root/review_imported_printer",
+    "scope": "Read-only tests-only candidate review over34284dc4; unchanged originals/goldens and all28 expected output lines verified against source.",
+    "findings": [],
+    "reviewed_manifest_sha256": "64a62dded30cafa38fb546e8d93f26c9a182636719a75e80add87482c191f441",
+    "limits": "NUL controls establish round-trip preservation, not complete split partition structure. Executable evidence is separate from static review.",
+    "evidence_review": {
+      "tested_source": "a6857164bbcd4fb6a0b3aecdac0344ba3c63583a",
+      "matrix_observations": 88,
+      "execution_matches": 40,
+      "phase_observations": 24,
+      "separate_gap_observations": 14,
+      "focused_passes": 37,
+      "findings": [],
+      "gate_status_at_review": "pending; report writer requires completed passing gate",
+      "manifest_sha256": "569926f47896687dadeab740472c0694256df9fab91de843018da44f2845462e"
+    },
+    "next_gap_source_review": {
+      "reviewer": "/root/review_sharing",
+      "fixture": "parse/string_pattern_sugar.bend",
+      "recommendation": "Investigate literal Word lowering and pending-decision depth while preserving guard regressions; mechanism hypothesis only, no policy exception."
+    }
+  },
+  "checking_census": {
+    "renewed": false,
+    "last_tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+    "receipt": "cpu-list-sort-map-census.json",
+    "counts": {
+      "exact_rejection": 245,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "different_rejection": 191,
+      "oracle_or_infrastructure_failure": 6
+    },
+    "differences_outside_historical_IO": 300,
+    "historical_IO_exclusions": 385,
+    "oracle_failures": 6,
+    "reason": "Tests-only change; production tree identity verified. New family has separate 24 phase probes. Do not relabel old measurements as new."
+  },
+  "raw_evidence_manifest": {
+    "full-gate.log": {
+      "sha256": "c2abf6e1ca0d44ceaba67c62a4ad2f9ded2cbe2029ca23f88bf94af5a11a1ca6",
+      "bytes": 21306
+    },
+    "full-gate.json": {
+      "sha256": "1f787389ad189020cf00626dae2e53f71bbe5619cd62bd76e64d3ec9c8283ead",
+      "bytes": 35974
+    },
+    "snapshot.json": {
+      "sha256": "ddc1cc6621b90f4d3f1e8f16b174342d0f60a8c93f9a80820eb7e6427df0e2dc",
+      "bytes": 1224
+    },
+    "matrix/receipt.json": {
+      "sha256": "e7c49f0908f6bc2d060412e9b763dc7a6050ac2a9d2977a223428d46b72cef02",
+      "bytes": 46692
+    },
+    "phases.json": {
+      "sha256": "eff394f8b9f2a8e713add54ec654054826e9444ba1c5d5afce8d88cc7b6b96f7",
+      "bytes": 13167
+    },
+    "baseline.json": {
+      "sha256": "57d4a930a35c429510fb3dd704c226bf4fa574929311f736f543d3b36227a095",
+      "bytes": 3384
+    },
+    "baseline-oracles/receipt.json": {
+      "sha256": "c2d494a538bcc5778b726ad78e2c4533e8e4bc65194ee978864a166299987471",
+      "bytes": 14809
+    },
+    "edge-oracles/receipt.json": {
+      "sha256": "ca8becf633862e109982e29f59a52e6152275721aa769170647ea2c1d6a6dd49",
+      "bytes": 16125
+    },
+    "edge-preparation.json": {
+      "sha256": "3de8b6cf68ff83700c6de6e616a69b085015537012ba59a79013b4e9f91288b4",
+      "bytes": 761
+    },
+    "independent-review.json": {
+      "sha256": "af3135aa22c1b9c0c409466359a4c76fbf43cd4b72716f65994435ec6c5e44e8",
+      "bytes": 1209
+    },
+    "inactive-test-cache-reclaimed.json": {
+      "sha256": "927c9b3d7710151b582a056aaa07345ee19b704f1e3dd9698d6aa0a8b6770ab2",
+      "bytes": 39227
+    },
+    "mid-gate-cache-reclaimed.json": {
+      "sha256": "b802166f3437b20f6c63d2b65de0c104fc6c6d605e918f76b6de2bafa59f28b8",
+      "bytes": 968
+    },
+    "next-gap.json": {
+      "sha256": "53ff969ec1e67a74cce16e86711d5c4232461fef2e921ac5aa9dd91cbaa74097",
+      "bytes": 8686
+    },
+    "next-gap-before.json": {
+      "sha256": "b9af66df54252670480a901c9f6244cce78535a3b332e6a7eca12a7386d0cc40",
+      "bytes": 2852
+    }
+  }
+}

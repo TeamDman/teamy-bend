@@ -1,0 +1,159 @@
+{
+  "tested_source": "a6857164bbcd4fb6a0b3aecdac0344ba3c63583a",
+  "binary_sha256": "d66cc12c993a67d92ce0507af2854f65c1cc8326a8317fce27af893225669c97",
+  "fixture": "parse/string_pattern_sugar.bend",
+  "fixture_source": "# char and string literals as patterns.\n# ported from bend3: Base's String/Char, Bool result\nimport Base\n\nlaw is_hi:\n  for s: String\n  Bool\n\ndef is_hi(s):\n  match s:\n    case \"hi\":\n      True{}\n    case s:\n      False{}\n\nlaw main:\n  Bool\n\ndef main(): is_hi(\"hi\")\n\n#|True{}\n",
+  "fixture_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "unrun": [
+    "port generated C execution: load failure prevents artifact",
+    "port generated JS execution: load failure prevents artifact"
+  ],
+  "completed": true,
+  "upstream_phase": "accepted",
+  "license": "Fixture source is unchanged Apache-2.0 upstream content; see NOTICE.",
+  "observations": [
+    {
+      "lane": "upstream-check",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.2759454680199269,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "port-check",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2160017009882722,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "lane": "port-eval",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.17961876999470405,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "lane": "port-run",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.15471769002033398,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "lane": "port-strict-phase",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.09194547100923955,
+      "raw_stdout_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stdout": "load\n",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "port-executable-phase",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.09896176200709306,
+      "raw_stdout_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stdout": "load\n",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-direct",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.3799779520195443,
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stdout": "True{}\n",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "port-generate-c",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.17751878200215288,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "lane": "upstream-generate-c",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.5575171359814703,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-C-build-O3",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.3889513670001179,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-c",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.0019405310158617795,
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stdout": "True{}\n",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "port-generate-javascript",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.1728879350121133,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "lane": "upstream-generate-javascript",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.3444092429999728,
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-js",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.03915040401625447,
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stdout": "True{}\n",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    }
+  ],
+  "raw_receipt_sha256": "53ff969ec1e67a74cce16e86711d5c4232461fef2e921ac5aa9dd91cbaa74097",
+  "scope": "Current bounded gap reproduction only. No correction or guard-policy exception. Generated port executions are unrun because load failure prevents both artifacts."
+}

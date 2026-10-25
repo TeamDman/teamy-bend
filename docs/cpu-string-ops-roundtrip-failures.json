@@ -1,0 +1,184 @@
+{
+  "tested_source": "a6857164bbcd4fb6a0b3aecdac0344ba3c63583a",
+  "before_source": "237c527d099da0e8af42642620b8d48159a7a5b1",
+  "scope": "Original before outcomes and current unique host/strict-proof refusals. No production defect demonstrated. Runtime matches are separate. Private command paths omitted.",
+  "before": [
+    {
+      "case": "base/string_ops.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "base/string_ops.bend",
+      "lane": "port-check",
+      "fixture_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n299 | law main:\n300>|   IO(Unit)\n301 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "base/string_ops.bend",
+      "lane": "port-native",
+      "fixture_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 0,
+      "stdout": "11\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "eval/string_roundtrip.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "eval/string_roundtrip.bend",
+      "lane": "port-check",
+      "fixture_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n38 | law main:\n39>|   IO(Unit)\n40 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "eval/string_roundtrip.bend",
+      "lane": "port-native",
+      "fixture_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 0,
+      "stdout": "341\n",
+      "stderr": "",
+      "timed_out": false
+    }
+  ],
+  "current": [
+    {
+      "case": "original/string_ops.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/string_ops.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n299 | law main:\n300>|   IO(Unit)\n301 | \n",
+      "raw_stderr_sha256": "71972abaaef702d1341fa5c52fa109b105f0f7e8ce97bc9ac1ea0c18ad5e5e21"
+    },
+    {
+      "case": "original/string_ops.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "08a85c8fb997045b8156a5279fc66ec084968e6dd6c833568ab1daca749340a4",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n299 | law main:\n300>|   IO(Unit)\n301 | \n",
+      "raw_stderr_sha256": "71972abaaef702d1341fa5c52fa109b105f0f7e8ce97bc9ac1ea0c18ad5e5e21"
+    },
+    {
+      "case": "original/string_roundtrip.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/string_roundtrip.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n38 | law main:\n39>|   IO(Unit)\n40 | \n",
+      "raw_stderr_sha256": "2b8b57f90fd4651821ed8b400926b8450c11a708e06e59e6f24d5bf196710b41"
+    },
+    {
+      "case": "original/string_roundtrip.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "5e9f1a4f0d548c4d1e38c1700357c6d46f574c117e19e1e9120e37cbd07e5b11",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n38 | law main:\n39>|   IO(Unit)\n40 | \n",
+      "raw_stderr_sha256": "2b8b57f90fd4651821ed8b400926b8450c11a708e06e59e6f24d5bf196710b41"
+    },
+    {
+      "case": "positive/local-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "ea51221238118f6012178fae9375067f49798df195aa0063c866a926b1903a37",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/local-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "ea51221238118f6012178fae9375067f49798df195aa0063c866a926b1903a37",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_ops.main\n299 | law main:\n300>|   IO(Unit)\n301 | \n",
+      "raw_stderr_sha256": "a06673837912a8ce4fe34da227ad759a3b9fb6333aee4dddba001587b217cb6e"
+    },
+    {
+      "case": "positive/local-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "ea51221238118f6012178fae9375067f49798df195aa0063c866a926b1903a37",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_ops.main\n299 | law main:\n300>|   IO(Unit)\n301 | \n",
+      "raw_stderr_sha256": "a06673837912a8ce4fe34da227ad759a3b9fb6333aee4dddba001587b217cb6e"
+    },
+    {
+      "case": "positive/roundtrip-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "f345f41bda37eda830aa6f67518b0410533ca041160cdc4abb396276655cc3da",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/roundtrip-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "f345f41bda37eda830aa6f67518b0410533ca041160cdc4abb396276655cc3da",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_roundtrip.main\n38 | law main:\n39>|   IO(Unit)\n40 | \n",
+      "raw_stderr_sha256": "a5280778bc73eed3b35bc3fa3d04478b6a8f6ec80d2b0012a78905871048cbb8"
+    },
+    {
+      "case": "positive/roundtrip-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "f345f41bda37eda830aa6f67518b0410533ca041160cdc4abb396276655cc3da",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_roundtrip.main\n38 | law main:\n39>|   IO(Unit)\n40 | \n",
+      "raw_stderr_sha256": "a5280778bc73eed3b35bc3fa3d04478b6a8f6ec80d2b0012a78905871048cbb8"
+    }
+  ],
+  "raw_baseline_sha256": "57d4a930a35c429510fb3dd704c226bf4fa574929311f736f543d3b36227a095"
+}
