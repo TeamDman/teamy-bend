@@ -2580,3 +2580,15 @@ The complete [checking census](cpu-comptime-type-census.json) renews all **1,302
 Only four port stderr streams change: `check/error_window_filled_param_use`, `check/error_window_param_use`, `comptime/err_op_ns` and `comptime/wrong_type` become exact rejections. Port status/phase and upstream status/phase/streams are unchanged throughout; the six oracle failures are unchanged. There is no oracle-variation adjustment in this census. The two error-window gains are checking-only evidence, not additional executable qualifications. The fresh missing-IO symptom count is 386; it does not expand the historical 385-member subset. Earlier census files keep their original identities.
 
 Coverage 481 linked / 821 unlinked remains applicability-led. Nat-first pending, compact lowering unadopted, external invoke audit and other unwaived disagreements remain. Compact evidence committed; bulk evidence local.
+
+## Compile-time reference rebinding checkpoint
+
+Tested source `d0176c3a104688fbe21bb79d9e05330bdc9ce08f` carries existing per-use source metadata into reference-pattern refusals while preserving pointer identity, public errors, rejection order and resource guards. [Report](cpu-comptime-rebind.md).
+
+346 commands: 318 matching, eight strict IO, two retained normalization and 18 lambda diagnostic observations. Eight exact reference-pattern roots; 144 exact negative comparisons, 32 phase probes, 52 executions and 16 normalizations. Twelve emitted port artifacts byte-identical. Full gate **1244 / 0 / 49**. The local pure normalization remains `Nat.add(11n, 1n)` versus upstream `12n`; generated C/JS and explicit native IO execute correctly. No waiver or normalizer correction.
+
+The complete [checking census](cpu-comptime-rebind-census.json) renews all **1,302** originals: **366 both accept, 378 exact rejections, 494 acceptance disagreements, 58 different rejections and six oracle failures**. Both-accept establishes checking status only. All **385 historical IO members renew exactly**; outside that same subset the measured residual is **167 = 109 acceptance disagreements + 58 rejection differences**, down from 168. Historical triage labels for those residuals remain 109 acceptance/rejection mismatches, 29 diagnostic-only candidates and 29 other rejection differences; the labels do not waive observations or establish semantic parity.
+
+Only `comptime/err_rebind` changes, and only its port stderr: it now exactly matches upstream. Every acceptance status, failure phase and upstream stream is unchanged. The six upstream host-stack failures are unchanged; there is no oracle-variation adjustment in this census. The fresh missing-IO symptom count remains 386 and does not enlarge the historical 385-member subset. The authored local normalizer discrepancy is outside this inventory census and remains separately unresolved. Historical receipts retain their original source identities.
+
+Coverage 482 linked / 820 unlinked remains applicability-led. Base coordinates, nat_first, unadopted compact lowering, external invoke auditing and historical disagreements remain. Compact evidence committed; bulk evidence local.

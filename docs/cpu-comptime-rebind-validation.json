@@ -1,0 +1,929 @@
+{
+  "tested_source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+  "snapshot": {
+    "source_commit": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+    "source_tree": "36efd2e0a503f0e7217aa134c77ce1bd74853653",
+    "binary_sha256": "47898d6da2b9ae92ff8c0c2ea52730147989f8c0638034658fe477fab2bdbb61",
+    "binary_size": 27473088,
+    "working_binary": "$RUN/teamy-bend",
+    "archive": "$EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "239d0f09fe812520ea3a97273d08ff94d54337b812c97e6bea7d10d661b777fe",
+    "archive_size": 7116299,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "47898d6da2b9ae92ff8c0c2ea52730147989f8c0638034658fe477fab2bdbb61"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "standard_gate": {
+    "passed": 1244,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 184,
+    "exit": 0,
+    "seconds": 975.1678121879813,
+    "log_sha256": "b9ca3a560aed601bbcc0b6694d901633d855c3bc8c9c2d502a4e41ee13ba2e89"
+  },
+  "commands": [
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862126592,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 10.266474265983561,
+      "minimum_free": 11862118400,
+      "minimum_tmp_free": 3839082496,
+      "name": "focused",
+      "log_sha256": "ed599b524d21ca503d70682212d469c01218aa1ab7f423811ff4323269ffe08c",
+      "log_bytes": 1043,
+      "test_totals": {
+        "passed": 1,
+        "failed": 1,
+        "ignored": 0
+      },
+      "completed_groups": 1,
+      "disposition": "Historical failed candidate harness; later suites unrun. No final-source pass inferred."
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862097920,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 10.26638620599988,
+      "minimum_free": 11862089728,
+      "minimum_tmp_free": 3839545344,
+      "name": "focused-final",
+      "log_sha256": "ea649af4c8c73c5a20266ddfea21e74f5d1cbb03fd0d6ce338b364157354790a",
+      "log_bytes": 1043,
+      "test_totals": {
+        "passed": 1,
+        "failed": 1,
+        "ignored": 0
+      },
+      "completed_groups": 1,
+      "disposition": "Historical failed candidate harness; later suites unrun. No final-source pass inferred."
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862089728,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 0.2649511370109394,
+      "minimum_free": 11862081536,
+      "minimum_tmp_free": 3840303104,
+      "name": "focused-corrected",
+      "log_sha256": "8495c53399ea56d0e098c2f8bf104ec13b1ea8f37f8b5c9f51c7539fc9d1398e",
+      "log_bytes": 1471,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "Historical failed candidate harness; later suites unrun. No final-source pass inferred."
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862081536,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 6.666583711019484,
+      "minimum_free": 11862073344,
+      "minimum_tmp_free": 3840258048,
+      "name": "focused-complete",
+      "log_sha256": "0f8646349e68c0ebd54531bbf654167a4029754dc599e243d4932d217c7dc904",
+      "log_bytes": 1131,
+      "test_totals": {
+        "passed": 1,
+        "failed": 1,
+        "ignored": 0
+      },
+      "completed_groups": 1,
+      "disposition": "Historical failed candidate harness; later suites unrun. No final-source pass inferred."
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862020096,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 38.423808567022206,
+      "minimum_free": 11862011904,
+      "minimum_tmp_free": 3839627264,
+      "name": "focused-validated",
+      "log_sha256": "fefb130a0276e271b8a6e83d6a5263bf19c882bed714fe88cfa13e14f13d96a8",
+      "log_bytes": 2723,
+      "test_totals": {
+        "passed": 22,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 4,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "template_rebind_metadata"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862114304,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 6.215598962997319,
+      "minimum_free": 11862106112,
+      "minimum_tmp_free": 3840315392,
+      "name": "focused-unit",
+      "log_sha256": "47898e10dbf7b446a94c8b91b42e04b40b661079d82dde2e6207bcf7644271ba",
+      "log_bytes": 745,
+      "test_totals": {
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "pattern_load_boundary_preserves"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862036480,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 1.5171592340047937,
+      "minimum_free": 11862028288,
+      "minimum_tmp_free": 3840258048,
+      "name": "focused-boundary",
+      "log_sha256": "d259fa025b8ca26242896d6989908d73cc1134c608f9b56bc6fa8e442bfbedc0",
+      "log_bytes": 572,
+      "test_totals": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_rebind",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11836547072,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.317347538017202,
+      "minimum_free": 11836534784,
+      "minimum_tmp_free": 3806879744,
+      "name": "focused-lint",
+      "log_sha256": "ff1199796404963297a3e2fae445c8c2a5b7f31f64dbb16111351f52f7a6bda0",
+      "log_bytes": 115,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11861716992,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 975.1678121879813,
+      "minimum_free": 11836547072,
+      "minimum_tmp_free": 3802775552,
+      "name": "full-gate",
+      "log_sha256": "b9ca3a560aed601bbcc0b6694d901633d855c3bc8c9c2d502a4e41ee13ba2e89",
+      "log_bytes": 23430,
+      "test_totals": {
+        "passed": 1244,
+        "failed": 0,
+        "ignored": 49
+      },
+      "completed_groups": 184,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11844968448,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 121.04525614200975,
+      "minimum_free": 11842367488,
+      "minimum_tmp_free": 3806830592,
+      "name": "matrix-run",
+      "log_sha256": "7737343bf4bd0a040061e6be69c55b9a6e33c86dc713558446c537ca048b6a13",
+      "log_bytes": 730,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11844964352,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 284.61538808999467,
+      "minimum_free": 11837202432,
+      "minimum_tmp_free": 3802775552,
+      "name": "census-run",
+      "log_sha256": "3fcd8cb73c12fbb6c85a29bc7ac86ff987d137b7a626ffddf6ccadeb783f2747",
+      "log_bytes": 1268,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    }
+  ],
+  "retained_failed_attempts": [
+    {
+      "run": "focused",
+      "passed": 1,
+      "failed": 1,
+      "cause": "Assumed pure normalized12n; actual unchanged application Nat.add(11n,1n)."
+    },
+    {
+      "run": "focused-final",
+      "passed": 1,
+      "failed": 1,
+      "cause": "Harness replacement missed the original assertion; same normalization mismatch."
+    },
+    {
+      "run": "focused-corrected",
+      "passed": 0,
+      "failed": 0,
+      "cause": "Compilation refused missing test helper normalization_kernel alias; no tests ran."
+    },
+    {
+      "run": "focused-complete",
+      "passed": 1,
+      "failed": 1,
+      "cause": "Pure run_main also invokes normalization and retains the application; separate from C/JS execution."
+    }
+  ],
+  "source_identity": [
+    {
+      "file": "src/cli/checker_diagnostic.rs",
+      "sha256": "6bf91178202f88db785920816c6f4c708c91e6413da1c22105c8589ee8155fe5"
+    },
+    {
+      "file": "src/kernel/check.rs",
+      "sha256": "12db50964f6ee48509131cf76c719ac39f0266b91d77bd3677a71ff3ef0e98d8"
+    },
+    {
+      "file": "src/syntax/diagnostics.rs",
+      "sha256": "3f156a2e4594f5f7205272cef9a752d77c91044b74ab543623ac6e083c82cb29"
+    },
+    {
+      "file": "src/syntax/parser.rs",
+      "sha256": "6406f57ed8d0df6c6d1728777b85de898ffa513be55685426bed27e04e0b51a5"
+    },
+    {
+      "file": "tests/cpu_comptime_rebind.rs",
+      "sha256": "0df79da4c6aa75da8631f85acae3c4ffe084c5f371fcac1c827e044f88ee052d"
+    },
+    {
+      "file": "tests/cpu_template_occurrences.rs",
+      "sha256": "df0f3438f5639b9d031ec0ef94d62cc945bcefd16a2e1fc56323ad5df70c7399"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/NOTICE.md",
+      "sha256": "9d3a8bee7505f5fc87aee02fb2fb151f92a5eb429b2c78a89d412b04f6e5dfc4"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/README.md",
+      "sha256": "fdfb7d80dba2b958031f4278c56130009366997eb56e0da109a959a24537c7eb"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/before.json",
+      "sha256": "e8ed26bc8bd0cffc3e4e1f7197ada1891c1afdc23917bfbdcddaea74e76cbfdf"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/comptime/err_rebind.bend",
+      "sha256": "230120d044b1d72962db08e9c86739d815675a248d686246eba2b6631f2fe417"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/comptime/err_rebind.stderr.json",
+      "sha256": "89c9459b3b359c59163cc64d5d43e23b876444e0785cbdd5b52c9338768b0072"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/comptime/shadow_arg.bend",
+      "sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/imports/defs.bend",
+      "sha256": "ea9f831ea20f7dc871f2e89f5cd58947c5ff6e12b777b35e6c089aaa1eb2ec43"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative-cases.json",
+      "sha256": "c06e34b20f535fb828dbb989d6ca7016e4a80ced1f1d7c4c4b4e1dde844e9e6f"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/imported.bend",
+      "sha256": "b74c12121c7e7e8f7a614861da3488e1ccbb6c1345d36b242e65376b566a16a6"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/imported.stderr.json",
+      "sha256": "4b776339387fe08ae21ff5656edec8c06ae79996c8c29d754220beab654f8334"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/lambda.bend",
+      "sha256": "5ec03dc8604d3c1d282e9817c6b7550578457198d9719eb06ebe621947eb673d"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/lambda.stderr.json",
+      "sha256": "ca6133847f1b3b4b020c12f42c7ba29619ece3fc97ce4a59a7e67979baeb398d"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/local.bend",
+      "sha256": "468ff7e6cf7dd4709efd50f4e01ad0397ce101e7ced7702ea209dedf1e6624a2"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/local.stderr.json",
+      "sha256": "1eec43657a3ecc1b6ceacb6493d7b3e0ab92cec22c7c1d1acc133efb33fd0bfb"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/match.bend",
+      "sha256": "c7aea6e5f6d30e7c06cf3b4669441a1f6a287229a27339b0cfab897b79b21bbd"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/match.stderr.json",
+      "sha256": "87895eef36e68f9b49d0141cce368ef2988e304e4b8fb7222152c980c3533c9b"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/multiline.bend",
+      "sha256": "0b5dbfdc6a73320bbb6ff462482975c057dc2b24572f3e646515c3bc12bcce18"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/multiline.stderr.json",
+      "sha256": "ecbff8bec1e4ec055c2fdc3ee6b1cc3a6d19f7b969860e8d821cd64f6461922a"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/nested.bend",
+      "sha256": "a64437311a8bcc4ceff29154169b6fca3aba2100d05dd5759a743607a531781b"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/nested.stderr.json",
+      "sha256": "2726d02b5a2c901347bfda9bc6578e5cdb0d1056002297f1636b87f62aafb516"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/qualified.bend",
+      "sha256": "7ce7c76c63a075010c1caa44514a779c2dd81c903de321cff11fa067c00ce7d4"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/qualified.stderr.json",
+      "sha256": "e1bc033f40e6d9c11b8e79221d19c8cb56b4bd640fe05ff4bbbce9c89769e2ea"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/repeated.bend",
+      "sha256": "1e80bb865bd5aabca54533b799b652672938ffd49142ed823938d7d253358d99"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/negative/repeated.stderr.json",
+      "sha256": "e6864762b72fa7b7f15e5191c894eaf906a18d6bd6fa1abeabc9ee0504dc2b71"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive-cases.json",
+      "sha256": "6358af8f950459764f620560f9afa64a3490b9b50e6305a729bcbef011503e66"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive/imported.bend",
+      "sha256": "c6fca19784531ac52103b499f3bc164ef8d7d8093eef3df38a70765bf783821c"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive/local.bend",
+      "sha256": "86ef1e58c4b03978ce19ac1d527a885ebb58d1db519f325f7f81cff29d4877cd"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive/local_io.bend",
+      "sha256": "ba001eda33d8f409bc6d8ce77e470e7847aa7e0b41f46c0194c5a0bbfb963970"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend",
+      "sha256": "17c642e05f54a8febdc5aec5a91f6c992e0017061cf9134e99162d2a36852460"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-rebind/positive/repeated.bend",
+      "sha256": "52ee070496dfa24a19d20a4f020bc112a070f90a06a1b79d41dca9bb1f9ba793"
+    }
+  ],
+  "reviews": [
+    {
+      "reviewer": "review_sharing",
+      "disposition": "no blocking finding",
+      "baseline": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "scope": "Read-only final source/test review, no reviewer builds or edits; new files were untracked at review.",
+      "source_diff_sha256": "e8c2a8c711122f02d31e529e894b1862644992055d44fa71c374826fc9d55409",
+      "tracked_diff_sha256": "8ea2331d6a192ad8e8f90cd9fcfbc6a63cc759b64b841e934c511062dc1e4119",
+      "findings": [
+        "Per-use and constructor-field sources preserve shared references, pointer refusal, parser state, public errors and guards.",
+        "Structured rebinding refusal restricted to reference values; constructor and lambda behavior remain separate.",
+        "Focused corrected run22passed; provenance/state2passed; exact8negative goldens match upstream.",
+        "Pure run_main retains normalized application mismatch; C/JS runtime and explicit nativeIO wrapper validated separately. Fullgate and clean matrix pending."
+      ]
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Independent read-only completed matrix/source/artifact verification; no reviewer executions.",
+      "source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "commands": 346,
+      "matching": 318,
+      "strict_IO_observations": 8,
+      "retained_normalization_observations": 2,
+      "lambda_diagnostic_observations": 18,
+      "actual_executions": 52,
+      "normalization_observations": 16,
+      "exact_negative_streams": 144,
+      "separate_port_phase_probes": 32,
+      "exact_repeated_pairs": 155,
+      "byte_identical_artifact_pairs": 12,
+      "unexpected": 0,
+      "timeouts": 0,
+      "matrix_sha256": "7ce4b2d1084d2e3990996ac24f9f14720f94e4ca1b148bb1040af504426fb960",
+      "log_sha256": "7737343bf4bd0a040061e6be69c55b9a6e33c86dc713558446c537ca048b6a13",
+      "findings": [
+        "Retained local normalization mismatch distinct from actual C/JS and native IO execution.",
+        "Lambda phase-only and constructor-valued bindings unqualified.",
+        "Historical candidate normalization probe not relabeled as clean-source evidence.",
+        "Baseline artifacts, binary/archive/source identities and two pinned originals verified."
+      ]
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Independent read-only verification of1302checking rows and pinned source hashes; no builds or edits.",
+      "source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+      "counts": {
+        "exact_rejection": 378,
+        "both_accept": 366,
+        "acceptance_disagreement": 494,
+        "different_rejection": 58,
+        "oracle_or_infrastructure_failure": 6
+      },
+      "historical_IO_exactly_renewed": 385,
+      "residual": 167,
+      "residual_acceptance": 109,
+      "residual_rejection": 58,
+      "port_stderr_gains": [
+        "comptime/err_rebind.bend"
+      ],
+      "findings": [
+        "All statuses/phases and upstream streams unchanged; six host-stack failures unchanged.",
+        "Authored normalization mismatch separate from census and unwaived.",
+        "Baseline artifacts were emitted, not separately executed.",
+        "Lambda-binder control supplies a Ref argument; distinct syntax, not a lambda-valued argument."
+      ],
+      "raw_sha256": "ce712cf2aaaed3610391d0128d28f56ce6a0f92f67f38541f69f4d2e50fa7a4d",
+      "reconciliation_sha256": "bcb673ed230bd8f42077e21f77669552f1d2473faafe5419def09483276a960e",
+      "csv_sha256": "cff50062302af6236244e66adfcc7c293199b00052da58f2defd77a609fdebab"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Read-only prepared public artifacts/template review; final gate/rendered report pending.",
+      "results_sha256": "ecf1149d082f3ff03db654795cb33c6c84680463cbe1f61a55a7e23153eff83b",
+      "census_sha256": "1e75f604d4d22643707a97c95912a72e8cef02e1e4447602174c21bbcfaeee33",
+      "template_sha256": "139fe96814e2a97b94fbecba6ba16215298f5eb8d673ecd65c12fd06691d68f7",
+      "findings": [
+        "Public receipts, baseline30, four initial authored-control failures and historical normalization probe match raw evidence after redaction.",
+        "One-row delta reconstructs all1302current CSV observations; coverage482linked/820unlinked verified.",
+        "Normalization mismatch, lambda-binder diagnostics and constructor scope remain unqualified. Baseline artifacts emission-only, not executions.",
+        "Three partial1pass/1fail runs and compile-failed/no-test run retained.",
+        "API/status/Debug/cancellation caveats accurate. No private paths, addresses or credential patterns found."
+      ]
+    }
+  ],
+  "committed_source": {
+    "source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+    "base": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+    "src_diff_sha256": "e8c2a8c711122f02d31e529e894b1862644992055d44fa71c374826fc9d55409",
+    "tracked_review_sha256": "8ea2331d6a192ad8e8f90cd9fcfbc6a63cc759b64b841e934c511062dc1e4119",
+    "full_diff_sha256": "5dfd78ecb576ade77169c508e54ab53e5a7a9e7e12ae833668f31ee3aaa0ec1b"
+  },
+  "environment": {
+    "tools": [
+      {
+        "command": [
+          "rustc",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustc 1.96.0 (ac68faa20 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "cargo",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "cargo 1.96.0 (30a34c682 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "rustup",
+          "run",
+          "nightly-2026-05-24",
+          "rustfmt",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustfmt 1.9.0-nightly (23a3312d92 2026-05-23)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "node",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "v24.19.0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "$TOOLS/clang/usr/bin/clang-19",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: $TOOLS/clang/usr/lib/llvm-19/bin\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "pwsh",
+          "-NoLogo",
+          "-NoProfile",
+          "-Command",
+          "$PSVersionTable.PSVersion.ToString()"
+        ],
+        "exit": 0,
+        "stdout": "7.5.4\n",
+        "stderr": ""
+      }
+    ],
+    "refs": [
+      {
+        "path": "$REFERENCE",
+        "commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "dirty": ""
+      },
+      {
+        "path": "$DOCS",
+        "commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "dirty": ""
+      }
+    ],
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "free": {
+      "/workspace": 11837747200,
+      "/tmp": 3806523392
+    }
+  },
+  "post_gate_inputs": {
+    "source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+    "refs": [
+      {
+        "path": "$REFERENCE",
+        "commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "dirty": ""
+      },
+      {
+        "path": "$DOCS",
+        "commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "dirty": ""
+      }
+    ],
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "code_diff": ""
+  },
+  "whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "retained_limitations": [
+    "Pure local normalization/pure run_main retains Nat.add(11n,1n) vs upstream12n; no fix or exception.",
+    "Lambda-binder diagnostics remain phase-only; constructor-valued compile bindings unqualified.",
+    "Strict IO refusals separate from nativeIO/generated C/JS execution; direct upstream IO interpretation unrun.",
+    "Prior Base coordinate390vs1017, nat_first, compact-lowering, external invoke, oracle/host/foreign/resource and supplementary all-target lint gaps remain."
+  ],
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11836534784,
+    "minimum_tmp_bytes": 3802775552,
+    "unique_evidence_deleted": false,
+    "cache_actions": [],
+    "inherited_cache_configuration": "Existing verified debug/registry cache relocations from earlier checkpoint remain; no relocation or deletion this task."
+  },
+  "API": "Public ParseError fields/Display, signatures/types and plain loader Err unchanged; optional metadata, derived Debug and CLI diagnostics can change. Newly formatted invoke failures use existing Ok(CliOutput) exit_code1. External consumers remain unaudited."
+}

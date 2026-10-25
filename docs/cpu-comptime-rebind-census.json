@@ -1,0 +1,112 @@
+{
+  "source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+  "baseline_source": "54bc100bafda627fadd0443592be0e6200235838",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 378,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 58
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 167,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 58
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 29
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "comptime/err_rebind.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "comptime/err_rebind.bend",
+      "source_sha256": "230120d044b1d72962db08e9c86739d815675a248d686246eba2b6631f2fe417",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "11a64889abb73bd02a09988ec9f972853508a6d3ef36cba12c3452b9fd1c2933",
+      "after_stderr_sha256": "747c0ee8f7abf003959eb12de7af2f755d3b70229eed3f60574ee432d962aec6"
+    }
+  ],
+  "raw_observations_sha256": "ce712cf2aaaed3610391d0128d28f56ce6a0f92f67f38541f69f4d2e50fa7a4d",
+  "baseline_raw_sha256": "0de8bb98e4d2734cacc0c9704710cfb39af0938fb15b419de7290a7f5795d8d8",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "compact_changes": [
+    {
+      "fixture": "comptime/err_rebind.bend",
+      "source_sha256": "230120d044b1d72962db08e9c86739d815675a248d686246eba2b6631f2fe417",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REFERENCE/tests/comptime/err_rebind.bend:11:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n 9 | def app(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n10>|   f = Nat.add(x)\n11 |   f\n"
+      },
+      "upstream": {
+        "phase": "load",
+        "exit": 1,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n 9 | def app(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n10>|   f = Nat.add(x)\n11 |   f\n"
+      }
+    }
+  ],
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+    "binary_sha256": "47898d6da2b9ae92ff8c0c2ea52730147989f8c0638034658fe477fab2bdbb61",
+    "phase_probe_sha256": "13121593c7b86f244f3df12c40868fa9bdd0683672af55d376bb57bde50e168e",
+    "build_receipt_sha256": "805fd22d87e990186115eb72bb9f99a432cc99f47efe76a7c8c884dfdc478381",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 378,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 6,
+      "different_rejection": 58
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 552,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  },
+  "upstream_delta": []
+}
