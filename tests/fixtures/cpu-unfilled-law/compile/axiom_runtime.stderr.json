@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n"

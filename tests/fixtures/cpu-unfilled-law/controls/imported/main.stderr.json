@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n"

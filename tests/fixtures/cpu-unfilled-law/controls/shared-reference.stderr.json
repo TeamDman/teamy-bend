@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n"

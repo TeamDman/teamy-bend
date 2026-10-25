@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n"

@@ -1423,9 +1423,23 @@ impl Engine {
                 && !self.numeric_contracts.contains(name)
                 && !self.opaque_contracts.contains(name)
             {
-                return Err(KernelError::new(format!(
+                let mut error = KernelError::new(format!(
                     "unfilled law {name} cannot be used as live evidence"
-                )));
+                ));
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text(
+                            "a filled definition (an unfilled law is a dead claim: live code cannot use it)"
+                                .into(),
+                        ),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+                return Err(error);
             }
         }
         Ok((def.ty, Uses::new()))
@@ -2500,6 +2514,74 @@ mod reflexivity_diagnostic_tests {
     }
 
     #[test]
+    fn unfilled_law_diagnostics_preserve_demand_sharing_and_remaining_budget() {
+        let book = crate::syntax::parse("type N is Data:\n  Z{}\nlaw ghost: N -> N\n").unwrap();
+        let mut engine = empty_engine(&book).unwrap();
+        for declaration in &book.declarations {
+            match declaration {
+                Declaration::Adt(adt) => engine.validate_adt(adt).unwrap(),
+                Declaration::Def(def) => engine.validate_def(def).unwrap(),
+            }
+        }
+        let reference = term(Term::Ref("ghost".into()));
+        let unused = term(Term::Ref("later".into()));
+        let value = term(Term::App(Rc::clone(&reference), unused));
+        let before = format!("{value:?}");
+        let owners = Rc::strong_count(&reference);
+        let fresh = engine.fresh_id;
+        let initial = engine.fuel;
+        let error = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(
+            error.message,
+            "unfilled law ghost cannot be used as live evidence"
+        );
+        assert_eq!(error.to_string(), error.message);
+        let report = error.checker_diagnostic().unwrap();
+        assert_eq!(
+            report.expected,
+            "a filled definition (an unfilled law is a dead claim: live code cannot use it)"
+        );
+        assert_eq!(report.observed.as_deref(), Some("ghost"));
+        assert_eq!(report.term_identity, Rc::as_ptr(&reference) as usize);
+        assert_eq!(format!("{value:?}"), before);
+        assert_eq!(Rc::strong_count(&reference), owners);
+        assert_eq!(engine.fresh_id, fresh);
+        let spent = initial - engine.fuel;
+        engine.fuel = spent;
+        let exhausted = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(error, exhausted);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert!(exhausted.language_failure().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        engine.reset();
+        engine
+            .infer(
+                &Lhs::default(),
+                &reference,
+                Quant::None,
+                &Context::new(),
+                &[],
+            )
+            .unwrap();
+        let recursive = Lhs {
+            name: "ghost".into(),
+            ..Lhs::default()
+        };
+        let error = engine
+            .infer(&recursive, &reference, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(
+            error.message,
+            "recursive self-call must decrease structurally, left to right"
+        );
+        assert!(error.checker_diagnostic().is_none());
+    }
+
+    #[test]
     fn undefined_name_diagnostics_preserve_first_error_sharing_and_remaining_budget() {
         let book = crate::syntax::parse("type N is Data:\n  Z{}\n").unwrap();
         let mut engine = empty_engine(&book).unwrap();
@@ -3098,6 +3180,30 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-unfilled-law/check/assert_fill_scope.bend", &[][..]),
+            ("cpu-unfilled-law/check/axiom_use.bend", &[][..]),
+            ("cpu-unfilled-law/check/axiom_import_warn.bend", &[][..]),
+            ("cpu-unfilled-law/check/axiom_whitelist.bend", &[][..]),
+            (
+                "cpu-unfilled-law/check/forward_reference_scope.bend",
+                &[][..],
+            ),
+            ("cpu-unfilled-law/compile/axiom_runtime.bend", &[][..]),
+            ("cpu-unfilled-law/controls/multiline.bend", &[][..]),
+            ("cpu-unfilled-law/controls/macro.bend", &[][..]),
+            ("cpu-unfilled-law/controls/pattern.bend", &[][..]),
+            ("cpu-unfilled-law/controls/imported/main.bend", &[][..]),
+            ("cpu-unfilled-law/controls/shared-reference.bend", &[][..]),
+            ("cpu-unfilled-law/positive/filled.bend", &["main"][..]),
+            (
+                "cpu-unfilled-law/positive/dead-before-fill.bend",
+                &["main"][..],
+            ),
+            ("cpu-unfilled-law/positive/recursion.bend", &["main"][..]),
+            (
+                "cpu-unfilled-law/positive/imported/main.bend",
+                &["main"][..],
+            ),
             ("cpu-nested-kind/annotation-type.bend", &[][..]),
             ("cpu-nested-kind/annotation-value.bend", &[][..]),
             ("cpu-nested-kind/arrow-codomain.bend", &[][..]),

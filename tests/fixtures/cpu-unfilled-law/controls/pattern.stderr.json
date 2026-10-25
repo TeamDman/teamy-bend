@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n"

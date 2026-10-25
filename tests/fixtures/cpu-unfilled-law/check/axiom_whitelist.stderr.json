@@ -1,0 +1,1 @@
+"Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n"
