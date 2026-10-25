@@ -1,0 +1,92 @@
+{
+  "port_source": "59f04c46f6b3a503367c95884338f9404216f7d1",
+  "upstream_source": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "timeout_seconds": 30,
+  "scope": "Pre-fix exact streams/status for unchanged originals. Placeholder roots replace command paths only; stdout/stderr bytes are unchanged. Both lanes reject; locations differ.",
+  "rows": [
+    {
+      "fixture": "check/negative_data_field_000.bend",
+      "lane": "upstream",
+      "source_sha256": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : f\n- observed : f (consumed more than once)\nContext:\n- A : Type\nLocation: delta\n14 |   match d:\n15>|     case DCon{f}:\n16 |       f(DCon{f})\n",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/check/negative_data_field_000.bend"
+      ]
+    },
+    {
+      "fixture": "check/negative_data_field_000.bend",
+      "lane": "port",
+      "source_sha256": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdelta: binder f permits Lone use, observed Many\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m37\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "command": [
+        "$BEND",
+        "--output-format",
+        "json",
+        "check",
+        "$UPSTREAM/tests/check/negative_data_field_000.bend"
+      ]
+    },
+    {
+      "fixture": "check/negative_data_reuse.bend",
+      "lane": "upstream",
+      "source_sha256": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: omega\n15 |   match t:\n16>|     case Ln{f}:\n17 |       f(Ln{f})\n",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/check/negative_data_reuse.bend"
+      ]
+    },
+    {
+      "fixture": "check/negative_data_reuse.bend",
+      "lane": "port",
+      "source_sha256": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91momega: binder f permits Lone use, observed Many\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m37\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "command": [
+        "$BEND",
+        "--output-format",
+        "json",
+        "check",
+        "$UPSTREAM/tests/check/negative_data_reuse.bend"
+      ]
+    },
+    {
+      "fixture": "halt/contraction_growth.bend",
+      "lane": "upstream",
+      "source_sha256": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : p\n- observed : p (consumed more than once)\nLocation: grow\n27 |   match t:\n28>|     case S{p}:\n29 |       S{append(p, p)}\n",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/halt/contraction_growth.bend"
+      ]
+    },
+    {
+      "fixture": "halt/contraction_growth.bend",
+      "lane": "port",
+      "source_sha256": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mgrow: binder p permits Lone use, observed Many\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m37\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "command": [
+        "$BEND",
+        "--output-format",
+        "json",
+        "check",
+        "$UPSTREAM/tests/halt/contraction_growth.bend"
+      ]
+    }
+  ]
+}

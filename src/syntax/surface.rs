@@ -584,11 +584,14 @@ fn flatten_match_step(
             .iter()
             .map(|p| match p {
                 Pattern::Variable(v) => v.clone(),
-                Pattern::Constructor(_, _, _) => {
+                Pattern::Constructor(_, _, source) => {
                     let id = *fresh;
                     *fresh += 1;
                     let display = *display_fresh;
                     *display_fresh += 1;
+                    if let Some(origins) = origins {
+                        origins.binder_source(id, *source);
+                    }
                     Variable {
                         name: format!("_{display}"),
                         id,

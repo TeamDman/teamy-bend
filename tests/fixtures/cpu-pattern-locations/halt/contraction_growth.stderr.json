@@ -1,0 +1,1 @@
+"Error:\n- expected : p\n- observed : p (consumed more than once)\nLocation: grow\n27 |   match t:\n28>|     case S{p}:\n29 |       S{append(p, p)}\n"

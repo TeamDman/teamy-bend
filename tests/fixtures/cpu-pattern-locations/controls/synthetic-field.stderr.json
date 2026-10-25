@@ -1,0 +1,1 @@
+"Error:\n- expected : _5\n- observed : _5 (consumed more than once)\nLocation: bad\n6 |   match o:\n7>|     case W{A{}}:\n8 |       Pair{A{}, A{}}\n"

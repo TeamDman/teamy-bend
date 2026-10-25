@@ -1,0 +1,33 @@
+{
+  "Constructor": [
+    "P",
+    [
+      {
+        "Constructor": [
+          "S",
+          [
+            {
+              "Constructor": [
+                "Z",
+                []
+              ]
+            }
+          ]
+        ]
+      },
+      {
+        "Constructor": [
+          "S",
+          [
+            {
+              "Constructor": [
+                "Z",
+                []
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ]
+}

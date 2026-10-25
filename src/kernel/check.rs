@@ -2971,6 +2971,35 @@ mod reflexivity_diagnostic_tests {
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
             (
+                "cpu-pattern-locations/check/negative_data_field_000.bend",
+                &[][..],
+            ),
+            (
+                "cpu-pattern-locations/check/negative_data_reuse.bend",
+                &[][..],
+            ),
+            (
+                "cpu-pattern-locations/halt/contraction_growth.bend",
+                &[][..],
+            ),
+            ("cpu-pattern-locations/controls/fallback.bend", &[][..]),
+            ("cpu-pattern-locations/controls/first-field.bend", &[][..]),
+            ("cpu-pattern-locations/controls/imported/main.bend", &[][..]),
+            ("cpu-pattern-locations/controls/multiline.bend", &[][..]),
+            ("cpu-pattern-locations/controls/nested.bend", &[][..]),
+            ("cpu-pattern-locations/controls/row-priority.bend", &[][..]),
+            ("cpu-pattern-locations/controls/shadowed.bend", &[][..]),
+            (
+                "cpu-pattern-locations/controls/synthetic-field.bend",
+                &[][..],
+            ),
+            (
+                "cpu-pattern-locations/controls/reusable-refusal.bend",
+                &[][..],
+            ),
+            ("cpu-pattern-locations/positive/nested.bend", &["main"][..]),
+            ("cpu-pattern-locations/positive/reuse.bend", &["main"][..]),
+            (
                 "cpu-data-grades/diagnostics/goal_ladder_state_027.bend",
                 &[][..],
             ),

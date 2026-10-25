@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nContext:\n- A : Type\nLocation: delta\n14 |   match d:\n15>|     case DCon{f}:\n16 |       f(DCon{f})\n"

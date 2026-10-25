@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: bad\n5 |   match b:\n6>|     case B{L{f}}:\n7 |       f(L{f})\n"

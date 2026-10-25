@@ -1,0 +1,1 @@
+"Error:\n- expected : t\n- observed : t (consumed more than once)\nLocation: bad\n3 | type Pair is Type: P{x: T, y: T}\n4>| def bad(t: T) -> Pair:\n5 |   match t:\n"

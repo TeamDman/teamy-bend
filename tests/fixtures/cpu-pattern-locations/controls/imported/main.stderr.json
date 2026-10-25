@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: helper.bad\n6 |   match t:\n7>|     case L{f}:\n8 |       f(L{f})\n"

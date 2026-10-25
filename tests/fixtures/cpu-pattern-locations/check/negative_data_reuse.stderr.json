@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: omega\n15 |   match t:\n16>|     case Ln{f}:\n17 |       f(Ln{f})\n"

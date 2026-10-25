@@ -2007,9 +2007,19 @@ impl Parser<'_> {
                     return Err(self.error("a pattern binder must be one unqualified name"));
                 }
                 let reusable = self.is_reusable(value);
-                Ok(Pattern::Variable(
-                    self.bind_variable(name.clone(), reusable),
-                ))
+                let reusable_start = self.reusable.len();
+                let variable = self.bind_variable(name.clone(), reusable);
+                if let Some(origins) = &self.templates.diagnostics {
+                    // Flattening closes pattern fields with generated lambdas.
+                    // Keep the pattern's span on that fresh binder, without
+                    // changing the parsed reference or its shared identity.
+                    let source = origins.tracker.source(value);
+                    origins.tracker.binder_source(variable.id, source);
+                    for (binding, _) in &self.reusable[reusable_start..] {
+                        origins.tracker.binder_source(binding.id, source);
+                    }
+                }
+                Ok(Pattern::Variable(variable))
             }
             Term::Ctr { name, args } => {
                 let constructor = self.book.declarations.iter().find_map(|d| match d {

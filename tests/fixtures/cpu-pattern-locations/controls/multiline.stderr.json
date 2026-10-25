@@ -1,0 +1,1 @@
+"Error:\n- expected : f\n- observed : f (consumed more than once)\nLocation: bad\n7 |     case L{\n8>|       f\n9 |     }:\n"

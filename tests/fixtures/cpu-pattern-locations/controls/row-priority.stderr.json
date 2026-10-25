@@ -1,0 +1,1 @@
+"Error:\n- expected : first\n- observed : first (consumed more than once)\nLocation: bad\n5 |   match t, flag:\n6>|     case L{first}, A{}:\n7 |       first(L{x => x})\n"
