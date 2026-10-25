@@ -269,6 +269,8 @@ fn live_word_arguments_force_computed_tails_within_fixed_work_limits() {
         "Bool.show(low(U32.shln(lazy_word(), 1n)))",
         "U32.show(U32.mul(0, lazy_word()))",
         "Bool.show(low(U32.add(lazy_word(), 0)))",
+        "Bool.show(low(U32.sub(lazy_word(), 0)))",
+        "U32.show(U32.sub(0, lazy_word()))",
         "U32.show(U32.div(lazy_word(), 0))",
         "Bool.show(low(U32.mod(lazy_word(), 0)))",
         "U32.show(U32.shr(lazy_word()))",
@@ -373,8 +375,40 @@ def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 0)))
 }
 
 #[test]
+fn packed_subtraction_loops_keep_work_and_cancellation_limits() {
+    let fixture = Fixture::new(
+        r"import Base
+def count(n: Nat, acc: U32) -> U32:
+  match n:
+    case 0n: acc
+    case 1n+p: count(p, U32.sub(acc, 1))
+def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 0)))
+",
+    );
+    let checked = fixture.checked();
+    for cancel in [false, true] {
+        let calls = Cell::new(0);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| {
+                calls.set(calls.get() + 1);
+                cancel && calls.get() > 200
+            })
+            .unwrap_err();
+        let expected = if cancel {
+            "cancelled"
+        } else {
+            "step budget exhausted"
+        };
+        assert!(error.to_string().contains(expected), "{error}");
+        assert!(stdout.is_empty() && stderr.is_empty());
+    }
+}
+
+#[test]
 fn packed_binary_operations_keep_first_error_and_output_order() {
-    for operation in ["div", "mod", "and"] {
+    for operation in ["div", "mod", "and", "sub"] {
         let helper = format!(
             r#"{WORD_HELPERS}{LAZY_WORD}
 def reject(op: IO.OP<Unit>) -> U32:

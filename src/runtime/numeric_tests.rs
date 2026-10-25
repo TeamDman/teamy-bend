@@ -37,6 +37,7 @@ fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
     for operation in [
         PureOptimization::Inc,
         PureOptimization::Add,
+        PureOptimization::Sub,
         PureOptimization::Mul,
         PureOptimization::Shl,
         PureOptimization::Shr,
@@ -71,11 +72,11 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_quantity_signature() {
     let program = checked_program(
         include_str!("../syntax/base.bend"),
         &[
-            "U32", "U32.inc", "U32.add", "U32.mul", "U32.shl", "U32.shr", "U32.and", "U32.div",
-            "U32.mod",
+            "U32", "U32.inc", "U32.add", "U32.sub", "U32.mul", "U32.shl", "U32.shr", "U32.and",
+            "U32.div", "U32.mod",
         ],
     );
-    assert_eq!(program.optimizations.len(), 8);
+    assert_eq!(program.optimizations.len(), 9);
     assert!(program.numeric.is_empty());
     assert!(program.foreign.is_empty());
     let strict = Program::from_checked(&program.definitions, &program.datatypes);
@@ -83,6 +84,7 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_quantity_signature() {
     for operation in [
         PureOptimization::Inc,
         PureOptimization::Add,
+        PureOptimization::Sub,
         PureOptimization::Mul,
         PureOptimization::Shl,
         PureOptimization::Shr,
@@ -169,7 +171,7 @@ fn packed_program() -> Program {
         include_str!("../syntax/base.bend"),
         &[
             "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.inc", "U32.add",
-            "U32.mul", "U32.shl", "U32.shr", "U32.and", "U32.div", "U32.mod",
+            "U32.sub", "U32.mul", "U32.shl", "U32.shr", "U32.and", "U32.div", "U32.mod",
         ],
     )
 }
@@ -182,6 +184,12 @@ fn ordinary_word_optimizations_wrap_at_the_declared_width() {
         ("U32.inc", vec![0], 1),
         ("U32.inc", vec![u32::MAX], 0),
         ("U32.add", vec![u32::MAX, 1], 0),
+        ("U32.sub", vec![0, 1], u32::MAX),
+        ("U32.sub", vec![u32::MAX, u32::MAX], 0),
+        ("U32.sub", vec![u32::MAX, 0], u32::MAX),
+        ("U32.sub", vec![7, 3], 4),
+        ("U32.sub", vec![0x8000_0000, 1], 0x7fff_ffff),
+        ("U32.sub", vec![0, 0x8000_0000], 0x8000_0000),
         ("U32.mul", vec![0, u32::MAX], 0),
         ("U32.mul", vec![3, 7], 21),
         ("U32.mul", vec![65_535, 65_537], u32::MAX),
@@ -584,6 +592,7 @@ fn collection_preserves_original_arguments_when_ordinary_optimization_falls_back
     let program = packed_program();
     for (operation, left, right, expected) in [
         ("U32.add", "1", "2", "3"),
+        ("U32.sub", "1", "2", "4294967295"),
         ("U32.and", "3", "2", "2"),
         // Zero divisors exercise fallback and retained arguments without the
         // bitwise division body's cost under collection at every safe point.
@@ -737,4 +746,92 @@ fn shift_and_mask_fallback_keep_undemanded_word_bits_lazy() {
     }
     let error = program.evaluate("U32.and", &[ordinary, zero]).unwrap_err();
     assert!(error.to_string().contains("missing_bit"), "{error}");
+}
+
+#[test]
+fn subtraction_fallback_preserves_shallow_results_and_outer_match_order() {
+    let program = packed_program();
+    for (expression, expected) in [
+        (
+            "U32.sub(U32{missing_left}, U32{missing_right})",
+            "missing_left",
+        ),
+        ("U32.sub(0, U32{missing_right})", "missing_right"),
+    ] {
+        let mut machine = Machine::new(&program);
+        let call = machine
+            .expression(parse_term(expression).unwrap(), 0)
+            .unwrap();
+        // Even after a packed first argument, fallback returns the outer U32
+        // before demanding its Word field.
+        assert!(
+            matches!(machine.force(call).unwrap(), Value::Constructor { name, fields }
+            if name == "U32" && fields.len() == 1)
+        );
+        let error = machine.materialize(call, 0).unwrap_err();
+        assert!(
+            error.to_string().contains(expected),
+            "{expression}: {error}"
+        );
+    }
+
+    for (expression, expected) in [
+        ("U32.sub(missing_left, missing_right)", "missing_left"),
+        ("U32.sub(0, missing_right)", "missing_right"),
+        ("U32.sub(U32{missing_left}, missing_right)", "missing_right"),
+    ] {
+        let mut machine = Machine::new(&program);
+        let call = machine
+            .expression(parse_term(expression).unwrap(), 0)
+            .unwrap();
+        let error = machine.force(call).err().expect("force must reject");
+        assert!(
+            error.to_string().contains(expected),
+            "{expression}: {error}"
+        );
+    }
+}
+
+#[test]
+fn subtraction_packed_and_fallback_paths_keep_budget_and_cancellation_checks() {
+    let program = packed_program();
+    for expression in ["U32.sub(7, 3)", "U32.sub(U32{Word.zero(32n)}, 1)"] {
+        for cancel in [false, true] {
+            let mut machine = Machine::new(&program);
+            let call = machine
+                .expression(parse_term(expression).unwrap(), 0)
+                .unwrap();
+            if cancel {
+                machine.cancelled = Some(&|| true);
+            } else {
+                machine.remaining = 0;
+            }
+            let error = machine.force(call).err().expect("force must reject");
+            let expected = if cancel { "cancelled" } else { "step budget" };
+            assert!(
+                error.to_string().contains(expected),
+                "{expression}: {error}"
+            );
+        }
+    }
+    let mut machine = Machine::new(&program);
+    machine.remaining = 0;
+    let call = parse_term("U32.sub(7, 3)").unwrap();
+    assert!(
+        machine
+            .available_numeric(&call, 0)
+            .unwrap_err()
+            .to_string()
+            .contains("step budget")
+    );
+    machine.remaining = 1;
+    machine.cancelled = Some(&|| true);
+    assert!(
+        machine
+            .available_numeric(&call, 0)
+            .unwrap_err()
+            .to_string()
+            .contains("cancelled")
+    );
+    assert_eq!(machine.remaining, 1, "cancellation precedes charging");
 }

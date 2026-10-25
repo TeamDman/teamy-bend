@@ -24,13 +24,21 @@ fn decimal_readers_and_helpers_preserve_bounds_and_file_errors() {
         std::env::temp_dir().join(format!("teamy-bend-read-bounds-{}", std::process::id()));
     std::fs::create_dir(&artifact_path).unwrap();
     let artifacts = Artifacts(artifact_path);
-    let mut paths: Vec<_> = std::fs::read_dir(root.join("positive"))
-        .unwrap()
-        .map(|x| x.unwrap().path())
-        .filter(|p| p.extension().is_some_and(|ext| ext == "bend"))
-        .collect();
+    let mut paths = Vec::new();
+    for directory in ["positive", "negative"] {
+        paths.extend(
+            std::fs::read_dir(root.join(directory))
+                .unwrap()
+                .map(|entry| entry.unwrap().path())
+                .filter(|path| {
+                    path.extension()
+                        .is_some_and(|extension| extension == "bend")
+                }),
+        );
+    }
     paths.push(root.join("original/read_bounds.bend"));
     paths.push(root.join("original/show_read.bend"));
+    paths.push(root.join("unresolved/word-edges.bend"));
     paths.sort();
     for path in paths {
         let checked = check_executable(
@@ -38,8 +46,11 @@ fn decimal_readers_and_helpers_preserve_bounds_and_file_errors() {
         )
         .unwrap_or_else(|error| panic!("{}: {error}", path.display()));
         let expected = std::fs::read(path.with_extension("stdout")).unwrap();
-        let expected_stderr = Vec::<u8>::new();
-        let expected_code = 0_u32;
+        let (expected_code, expected_stderr) = if path.parent().unwrap().ends_with("negative") {
+            (1_u32, std::fs::read(path.with_extension("stderr")).unwrap())
+        } else {
+            (0_u32, Vec::new())
+        };
         // Reuse the checked book after completion and verify invocation
         // isolation through identical output and status.
         for _ in 0..2 {
