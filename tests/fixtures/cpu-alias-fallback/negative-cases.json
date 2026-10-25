@@ -1,0 +1,9 @@
+[
+  "negative/missing.bend",
+  "negative/nested.bend",
+  "negative/duplicate.bend",
+  "negative/typed_collision.bend",
+  "negative/completion_collision.bend",
+  "negative/constructor_missing.bend",
+  "negative/forward.bend"
+]

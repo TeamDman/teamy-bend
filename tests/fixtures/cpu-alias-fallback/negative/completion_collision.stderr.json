@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n4 | law D.value: U32\n5>| def D.value(): 9\n6 | \n"

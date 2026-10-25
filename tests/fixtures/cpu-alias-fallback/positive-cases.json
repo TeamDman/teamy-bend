@@ -1,0 +1,52 @@
+[
+  {
+    "case": "original/main.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "known/main.bend",
+    "expected": "3",
+    "io": false
+  },
+  {
+    "case": "nested/main.bend",
+    "expected": "5",
+    "io": false
+  },
+  {
+    "case": "law.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "template.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "constructor.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "known_ctor/main.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "known_template/main.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "undotted.bend",
+    "expected": "5",
+    "io": false
+  },
+  {
+    "case": "io.bend",
+    "expected": "9",
+    "io": true
+  }
+]

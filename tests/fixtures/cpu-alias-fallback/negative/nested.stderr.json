@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : D.local\nLocation: ../nested/module.value\n4 | def D.local() -> U32: 4\n5>| def value() -> U32: D.local()\n6 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : U32\nLocation: main\n4 | def D.value() -> Bool: True{}\n5>| def main() -> Bool: D.value()\n6 | \n"

@@ -458,12 +458,15 @@ impl Parser<'_> {
             })
     }
     fn resolve(&self, name: &str) -> String {
-        if let Some((head, tail)) = name.split_once('.')
+        let q = if let Some((head, tail)) = name.split_once('.')
             && let Some(namespace) = self.aliases.get(head)
         {
-            return format!("{namespace}.{tail}");
-        }
-        let q = self.qualify(name);
+            format!("{namespace}.{tail}")
+        } else {
+            self.qualify(name)
+        };
+        // An unknown aliased member falls back to the raw spelling, not to
+        // another namespace candidate. Existing aliased members still win.
         if self.known(&q) { q } else { name.into() }
     }
     fn variable(&mut self, name: &str, line: usize) -> Occurrence {

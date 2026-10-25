@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: D.local)\n- observed : '('\nLocation:\n4 | def D.local() -> U32: 9\n5>| def D.local() -> U32: 8\n6 | \n"

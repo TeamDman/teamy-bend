@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : D.later\nLocation: main\n3 | \n4>| def main() -> U32: D.later()\n5 | def D.later() -> U32: 9\n"

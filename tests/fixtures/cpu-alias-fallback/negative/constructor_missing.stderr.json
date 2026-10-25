@@ -1,0 +1,1 @@
+"Error:\n- expected : a declared constructor (U32 declares U32)\n- observed : D.Missing{}\nLocation: main\n3 | \n4>| def main() -> U32: D.Missing{}\n5 | \n"
