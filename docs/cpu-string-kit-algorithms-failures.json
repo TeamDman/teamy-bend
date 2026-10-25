@@ -1,0 +1,184 @@
+{
+  "tested_source": "237c527d099da0e8af42642620b8d48159a7a5b1",
+  "before_source": "6dc0d456e2a296bab513f8c067e5e70009d41e93",
+  "scope": "Original before outcomes and current unique host/strict-proof refusals. No production defect demonstrated. Runtime matches are separate. Private command paths omitted.",
+  "before": [
+    {
+      "case": "base/string_kit.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "base/string_kit.bend",
+      "lane": "port-check",
+      "fixture_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n11 | \n12>| def main() -> IO(Unit):\n13 |   do IO<Unit>:\n",
+      "timed_out": false
+    },
+    {
+      "case": "base/string_kit.bend",
+      "lane": "port-native",
+      "fixture_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 0,
+      "stdout": "5\nTrue\ncba\nTrue\nTrue\nTrue\nFalse\nTrue\nTrue\nFalse\nTrue\nhe\nllo\nSome(e)\nNone\ncba\nabc\na, b, c\n<>\n[a, b, , c]\n[x, y]\nababab\nHELLO 1\nhello 1\n<hi>\n<hi>\n<hi>\nTrue\nFalse\nTrue\nFalse\nTrue\nAb\n65\nB\nTrue\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "run/string_algorithms.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "run/string_algorithms.bend",
+      "lane": "port-check",
+      "fixture_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n259 | law main:\n260>|   IO(Unit)\n261 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "run/string_algorithms.bend",
+      "lane": "port-native",
+      "fixture_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false
+    }
+  ],
+  "current": [
+    {
+      "case": "original/string_algorithms.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/string_algorithms.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n259 | law main:\n260>|   IO(Unit)\n261 | \n",
+      "raw_stderr_sha256": "c168c2271a0439e07923b530ab87819addeb2c418c1b818384878daa9d336e78"
+    },
+    {
+      "case": "original/string_algorithms.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "b20ca36f67f1eba88ee4890ba9eb659b0b5f963da644b83e9c3f8c33224ea418",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n259 | law main:\n260>|   IO(Unit)\n261 | \n",
+      "raw_stderr_sha256": "c168c2271a0439e07923b530ab87819addeb2c418c1b818384878daa9d336e78"
+    },
+    {
+      "case": "original/string_kit.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/string_kit.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n11 | \n12>| def main() -> IO(Unit):\n13 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "23a549eb5382c27e8a09cdb92ac1e2d511317d53e51b09ef9ecdbcfa2a2138b4"
+    },
+    {
+      "case": "original/string_kit.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "e6896fe1f7d761aec1e4e89d2953e24c8308c5cb49e313f53bbe165d7edac9c6",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n11 | \n12>| def main() -> IO(Unit):\n13 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "23a549eb5382c27e8a09cdb92ac1e2d511317d53e51b09ef9ecdbcfa2a2138b4"
+    },
+    {
+      "case": "positive/algorithm-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "34202a4706683fa629e9455219bdc667ae946bee97df483ab5dbcd33a8b3ef08",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/algorithm-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "34202a4706683fa629e9455219bdc667ae946bee97df483ab5dbcd33a8b3ef08",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_algorithms.main\n259 | law main:\n260>|   IO(Unit)\n261 | \n",
+      "raw_stderr_sha256": "83a58464b678fa2961c7713f53c2abdec1dcf8a43e3c1d744f90b253c45f994a"
+    },
+    {
+      "case": "positive/algorithm-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "34202a4706683fa629e9455219bdc667ae946bee97df483ab5dbcd33a8b3ef08",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_algorithms.main\n259 | law main:\n260>|   IO(Unit)\n261 | \n",
+      "raw_stderr_sha256": "83a58464b678fa2961c7713f53c2abdec1dcf8a43e3c1d744f90b253c45f994a"
+    },
+    {
+      "case": "positive/bundled-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "0060bde4e94b7f9522e61c23a320f14a92d0b0973f6fd65eed43c10dc51d695a",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/bundled-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "0060bde4e94b7f9522e61c23a320f14a92d0b0973f6fd65eed43c10dc51d695a",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_kit.main\n11 | \n12>| def main() -> IO(Unit):\n13 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "9fcdc77fe6bc7ebe0c3368eebbd572ab9ef5198b3986fe0e42a057fa31efdc14"
+    },
+    {
+      "case": "positive/bundled-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "0060bde4e94b7f9522e61c23a320f14a92d0b0973f6fd65eed43c10dc51d695a",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/string_kit.main\n11 | \n12>| def main() -> IO(Unit):\n13 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "9fcdc77fe6bc7ebe0c3368eebbd572ab9ef5198b3986fe0e42a057fa31efdc14"
+    }
+  ],
+  "raw_baseline_sha256": "09d7bea0ea87c423cd6715420122da5bd83272445f539e0c4dba08a7db662e13"
+}

@@ -2051,3 +2051,25 @@ negatives, 13 interpreter-profile cases and one checking-only module. This is no
 full CPU parity. Frozen inputs, budgets, guards and cancellation boundaries retained.
 Compact evidence is pushed; unique bulk artifacts remain outside Git. No desktop,
 GPU, merge or release. Next bounded candidates: string_kit and string_algorithms.
+
+### [x] 5.123 Qualify bundled string kit and local algorithms
+
+Tested source `237c527d099da0e8af42642620b8d48159a7a5b1` adds tests only. Unchanged string_kit (36 lines) and
+string_algorithms (`4`) plus two companions (23 edge output lines) match across
+five executable lanes twice. No production defect or semantic change was found.
+Unicode/ASCII, empty fields, CRLF, internal NUL and local overlap/fuel/splice
+contracts are covered. [Report](cpu-string-kit-algorithms.md).
+
+Standard gate **1,164 / 0 / 49**; 36 focused tests; 88 matrix observations with
+40 exact executions; 24 phase observations; zero timeouts. Direct Node host
+failures and strict IO checking exclusions stay separate. The full census was
+not rerun: the last measured source remains d224e79, with 300 differences beyond
+385 historical IO exclusions plus six upstream stack failures. Production tree
+identity is verified; historical measurements and all unresolved contracts remain.
+
+Coverage is **418 linked / 884 unlinked**: 529 compiled candidates, 341 checker
+negatives, 13 interpreter-profile cases and one checking-only module. Links are
+not full parity. Inputs, guards, budgets and cancellation boundaries stay frozen.
+Reviewed compact evidence is pushed; unique bulk evidence remains outside Git.
+No desktop/GPU, merge or release. Next candidates: base/string_ops and
+eval/string_roundtrip, whose actual entry points are IO.
