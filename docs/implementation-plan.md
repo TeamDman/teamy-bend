@@ -6098,3 +6098,24 @@ controls remain refused; 12 process observations and six phase probes are retain
 No fix is included yet. Family coverage stays 410 linked / 892 unlinked; checking triage is
 separate from runtime qualification. No dependencies/toolchains/limits changed,
 no desktop/GPU/merge/release. Compact receipts are pushed; bulk evidence stays local.
+
+### [x] 5.118 Parse reusable Nat successor tails
+
+Tested source `b9fc3a7febb2a1a0a3ddef53395ee3ee69847196` corrects adjacent `1n++k` numeric-tail parsing,
+with transient token restoration for template replay. No checker/runtime policy or
+safety limit changes. Independent review completed. The unchanged original prints
+`22` in port native/C/JS and upstream C/JS; upstream direct Node remains host-blocked.
+Nine positive complete graphs and six negative cases retain precise lane results.
+[Report](cpu-reusable-nat.md). Standard gate **1,150 / 0 / 49**; 346 bounded matrix
+observations retain native String presentation, two diagnostic differences and the
+separate four-plus parser gap. Earlier failed test-harness attempts remain evidence.
+
+All 1,302 checking statuses are unchanged. One phase/diagnostic improves from load
+rejection to strict IO proof refusal; no extra IO waiver is added. Current residuals
+remain 300 beyond 385 historical IO exclusions, plus six upstream stack failures.
+Baseline 302 and current 149/109/42 classification identities remain distinct.
+Coverage is 411 linked / 891 unlinked (341 checker negatives, one checking-only,
+13 interpreter-only, 536 compiled candidates). Links are not universal parity.
+Frozen pins/dependencies/toolchains/budgets and all historical disagreements remain.
+Reviewed feature checkpoint only; no desktop/GPU, merge or release. Compact receipts
+are in Git; bulk unique evidence and snapshots remain local.

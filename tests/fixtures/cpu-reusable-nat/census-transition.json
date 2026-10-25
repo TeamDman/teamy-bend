@@ -1,0 +1,35 @@
+{
+  "fixture": "reg/cop_let_descent_escape.bend",
+  "source_sha256": "f309d5574bf12074a8f03ab079c187e77bec13672a149f19e61ffc8ca3132fa0",
+  "before_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+  "tested_source": "b9fc3a7febb2a1a0a3ddef53395ee3ee69847196",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "before": {
+    "upstream": {
+      "phase": "accepted",
+      "exit": 0,
+      "stdout_base64": "",
+      "stderr_base64": ""
+    },
+    "port": {
+      "phase": "load",
+      "exit": 1,
+      "stdout_base64": "",
+      "stderr_base64": "RXJyb3I6Ci0gZXhwZWN0ZWQgOiBhIHBhdHRlcm4gKGEgYmluZGVyIG9yIGEgY29uc3RydWN0b3IpCi0gb2JzZXJ2ZWQgOiBTdHJpbmcuYXBwZW5kKDFuLCBrKQpMb2NhdGlvbjoKMjMgfCAgICAgICBMZjJ7aX0KMjQ+fCAgICAgY2FzZSAxbisrazoKMjUgfCAgICAgICBOZDJ7Z2VuKGssIChpICogMiA6IFUzMikpLCBnZW4oaywgKGkgKiAyICsgMSA6IFUzMikpfQo="
+    }
+  },
+  "current": {
+    "upstream": {
+      "phase": "accepted",
+      "exit": 0,
+      "stdout_base64": "",
+      "stderr_base64": ""
+    },
+    "port": {
+      "phase": "check",
+      "exit": 1,
+      "stdout_base64": "",
+      "stderr_base64": "RXJyb3I6Ci0gZXhwZWN0ZWQgOiBhIGRlZmluZWQgbmFtZQotIG9ic2VydmVkIDogSU8KTG9jYXRpb246IG1haW4KNDQgfCBsYXcgbWFpbjoKNDU+fCAgIElPKFVuaXQpCjQ2IHwgCg=="
+    }
+  }
+}
