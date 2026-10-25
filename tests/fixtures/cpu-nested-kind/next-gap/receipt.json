@@ -1,0 +1,286 @@
+{
+  "tested_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+  "binary_sha256": "46957d205cb4ceb3c5cb55e060bf6cda987dc347f12e61cbd4fccf77ee1ad130",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "rows": [
+    {
+      "case": "tight",
+      "lane": "upstream",
+      "rep": 1,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/tight.bend"
+      ],
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "tight",
+      "lane": "port",
+      "rep": 1,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/tight.bend"
+      ],
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n++k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "tight",
+      "lane": "upstream",
+      "rep": 2,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/tight.bend"
+      ],
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "tight",
+      "lane": "port",
+      "rep": 2,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/tight.bend"
+      ],
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n++k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "spaced",
+      "lane": "upstream",
+      "rep": 1,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/spaced.bend"
+      ],
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : Nat.add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "spaced",
+      "lane": "port",
+      "rep": 1,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/spaced.bend"
+      ],
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : .add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "spaced",
+      "lane": "upstream",
+      "rep": 2,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/spaced.bend"
+      ],
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : Nat.add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "spaced",
+      "lane": "port",
+      "rep": 2,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/spaced.bend"
+      ],
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : .add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "ordinary",
+      "lane": "upstream",
+      "rep": 1,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/ordinary.bend"
+      ],
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "ordinary",
+      "lane": "port",
+      "rep": 1,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/ordinary.bend"
+      ],
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "ordinary",
+      "lane": "upstream",
+      "rep": 2,
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/next-gap/ordinary.bend"
+      ],
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    },
+    {
+      "case": "ordinary",
+      "lane": "port",
+      "rep": 2,
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/next-gap/ordinary.bend"
+      ],
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timeout_seconds": 30
+    }
+  ],
+  "scope": "Bounded independent parsing/strict-checking probe, not implementation or complete runtime qualification.",
+  "phases": [
+    {
+      "case": "tight",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$EVIDENCE/next-gap/tight.bend",
+        "$EVIDENCE/next-gap/tight.phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "tight",
+      "lane": "port",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$EVIDENCE/next-gap/tight.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "phase": {
+        "phase": "load"
+      }
+    },
+    {
+      "case": "spaced",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$EVIDENCE/next-gap/spaced.bend",
+        "$EVIDENCE/next-gap/spaced.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : Nat.add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "spaced",
+      "lane": "port",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$EVIDENCE/next-gap/spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "phase": {
+        "phase": "load"
+      }
+    },
+    {
+      "case": "ordinary",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$EVIDENCE/next-gap/ordinary.bend",
+        "$EVIDENCE/next-gap/ordinary.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "ordinary",
+      "lane": "port",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$EVIDENCE/next-gap/ordinary.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "phase": {
+        "phase": "check"
+      }
+    }
+  ]
+}

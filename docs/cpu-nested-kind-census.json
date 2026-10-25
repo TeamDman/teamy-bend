@@ -1,0 +1,44 @@
+{
+  "completed": true,
+  "full_parity": false,
+  "tested_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+  "binary_sha256": "46957d205cb4ceb3c5cb55e060bf6cda987dc347f12e61cbd4fccf77ee1ad130",
+  "phase_probe_sha256": "940c335c9b342c560fa52e45d0d1fdd5c6797023c29b4959574a8151e51b2669",
+  "build_receipt_sha256": "ccaf34b90d11fda5c8b69d1d2eccb9cae9beaac27ec5f177e6d7020841f7e4a8",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 245,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 191,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "missing_IO_candidates": 385,
+  "measured_differences": 685,
+  "scope": "Renewal of all1302 checking observations. Reuse baseline CSV with this delta; no duplicate full CSV or runtime claim.",
+  "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+  "baseline_summary": "cpu-checking-census.json",
+  "unchanged_port_statuses": 1302,
+  "historical_IO_unchanged": 385,
+  "non_IO_differences": 300,
+  "changed_port_streams": [
+    {
+      "fixture": "check/cop_dead_hypothesis_000.bend",
+      "fields": [
+        "stderr_base64"
+      ],
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection"
+    },
+    {
+      "fixture": "flatten/destructure_annotation_error.bend",
+      "fields": [
+        "stderr_base64"
+      ],
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection"
+    }
+  ],
+  "raw_receipt_sha256": "42520b5b945dfb208f275d16545d8b2f50a0931fe5f9da8927d418edf2b3e401"
+}

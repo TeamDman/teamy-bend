@@ -1921,3 +1921,25 @@ semantic/oracle/API gaps remain unwaived. Frozen inputs/limits and the acceptanc
 criterion remain intact. Reviewed source and compact receipts are pushed only to a
 feature branch; bulk logs and binary captures remain outside Git. Next independent
 work is nested kind provenance or the substantive datatype-declaration batch.
+
+### Nested-kind provenance and exhaustive checking triage
+
+Tested source `244b659c78caa56c4cc2d1df25daa9e693e591b8` closes nested-kind/annotation child provenance with
+three metadata additions; checking/runtime semantics and frozen limits are unchanged.
+Thirteen exact negatives, ownership/source-priority units and tracked/plain work
+controls pass. Independent review completed. Standard gate **1,143 / 0 / 49**;
+840 matrix observations retain existing failed/unrun lanes. [Report](cpu-nested-kind.md).
+
+The complete baseline 302 is explicitly triaged: 151 diagnostic-only candidates,
+109 acceptance mismatches and 42 other cause/phase/preemption differences. These
+are observational categories, not exact qualification or 302 CPU defects. Six Node
+oracle stack failures remain outside 302. Renewed full-census non-IO differences:
+300; all 1,302 port statuses remain unchanged. Historical receipts retain
+original source identities. No extra IO or resource waiver is introduced.
+
+Classification selects a substantive next task: a pure `1n++k` pattern yields 4n
+upstream but load-rejects as String.append in the port. Ordinary affine and spaced
+controls remain refused; 12 process observations and six phase probes are retained.
+No fix is included yet. Family coverage stays 410 linked / 892 unlinked; checking triage is
+separate from runtime qualification. No dependencies/toolchains/limits changed,
+no desktop/GPU/merge/release. Compact receipts are pushed; bulk evidence stays local.

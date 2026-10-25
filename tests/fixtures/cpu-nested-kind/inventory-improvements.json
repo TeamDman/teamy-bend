@@ -1,0 +1,44 @@
+[
+  {
+    "fixture": "check/cop_dead_hypothesis_000.bend",
+    "source_sha256": "bada184f94781dcc4d1ed215f0906d8f1250d8b701ab829649f7cacd67e758a2",
+    "before_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+    "tested_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+    "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "before_exit": 1,
+    "current_exit": 1,
+    "before_stdout": "",
+    "current_stdout": "",
+    "before_stderr": "Error: \n   0: \u001b[91mlaunder: type mismatch: expected Empty.absurd(Data, e); observed T\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+    "current_stderr": "Error:\n- expected : Empty.absurd(Data, e)\n- observed : T\nContext:\n- T : Type\n- e : Empty\n- x : T\nLocation: launder\n16 | def launder(T, e, x):\n17>|   +y = {x : Empty.absurd(Data, e)};\n18 |   Two2{y, y}\n",
+    "exact_upstream": true,
+    "command": [
+      "$BEND",
+      "--output-format",
+      "json",
+      "check",
+      "$UPSTREAM/tests/check/cop_dead_hypothesis_000.bend"
+    ]
+  },
+  {
+    "fixture": "flatten/destructure_annotation_error.bend",
+    "source_sha256": "5b078991630f4f712ea27375d6fbffa7663856d1298ad4e51e3cb44df8fd56e0",
+    "before_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+    "tested_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+    "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "before_exit": 1,
+    "current_exit": 1,
+    "before_stdout": "",
+    "current_stdout": "",
+    "before_stderr": "Error: \n   0: \u001b[91mswap: type mismatch: expected Bw7; observed Pw2\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+    "current_stderr": "Error:\n- expected : Bw7\n- observed : Pw2\nContext:\n- p : Pw2\nLocation: swap\n24 | def swap(p):\n25>|   swap.go({p : Bw7})\n26 | \n",
+    "exact_upstream": true,
+    "command": [
+      "$BEND",
+      "--output-format",
+      "json",
+      "check",
+      "$UPSTREAM/tests/flatten/destructure_annotation_error.bend"
+    ]
+  }
+]
