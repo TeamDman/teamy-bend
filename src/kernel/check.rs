@@ -458,6 +458,30 @@ impl Engine {
         self.diagnostic(lhs, value, expected, Some(observed), context)
     }
 
+    // Keep failure-only rendering temporaries out of every recursive checker
+    // frame, including successful application checks that never take this path.
+    #[inline(never)]
+    fn lambda_goal_mismatch(
+        &self,
+        lhs: &Lhs,
+        value: &TermRef,
+        ty: &TermRef,
+        context: &Context,
+    ) -> KernelError {
+        let mut error = mismatch(ty, value);
+        error.diagnostic = self
+            .term_diagnostic(
+                lhs,
+                value,
+                DiagnosticExpression::Term(ty),
+                DiagnosticExpression::Typeless(value),
+                context,
+            )
+            .ok()
+            .map(Box::new);
+        error
+    }
+
     fn diagnostic(
         &self,
         lhs: &Lhs,
@@ -1643,18 +1667,7 @@ impl Engine {
                     ..
                 } = t.as_ref()
                 else {
-                    let mut error = mismatch(ty, value);
-                    error.diagnostic = self
-                        .term_diagnostic(
-                            lhs,
-                            value,
-                            DiagnosticExpression::Term(ty),
-                            DiagnosticExpression::Typeless(value),
-                            context,
-                        )
-                        .ok()
-                        .map(Box::new);
-                    return Err(error);
+                    return Err(self.lambda_goal_mismatch(lhs, value, ty, context));
                 };
                 let x = self.fresh(name)?;
                 let Term::Var { id: xid, .. } = x.as_ref() else {
