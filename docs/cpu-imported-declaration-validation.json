@@ -1,0 +1,751 @@
+{
+  "tested_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+  "standard_gate": {
+    "passed": 1224,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 179,
+    "exit": 0,
+    "seconds": 896.7994699840201,
+    "log_sha256": "0fb0a0d149ce8f524cb48237f35b53a9ee8f5feeec00ced1d059719262d3168e"
+  },
+  "commands": [
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "--test",
+        "cpu_duplicate_declaration",
+        "--test",
+        "parser_templates",
+        "--test",
+        "parser"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897769984,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 23.330254167987732,
+      "minimum_free": 11897745408,
+      "minimum_tmp_free": 4685750272,
+      "log_sha256": "c567bf3fe4fe59e8e1c07be97738c33e52962e11e00b73c4c00df5a6d097b7ce",
+      "log_bytes": 4886,
+      "completed_test_groups": 4,
+      "test_totals": {
+        "passed": 54,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused"
+    },
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "foreign_declarations"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897724928,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 0.264310161001049,
+      "minimum_free": 11897716736,
+      "minimum_tmp_free": 4686200832,
+      "log_sha256": "b4db0aae5b87e2fc26ec0443bfacf2baaf592f1f2d542b6efd4e1c4257349ce6",
+      "log_bytes": 536,
+      "completed_test_groups": 0,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused-foreign"
+    },
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "foreign_declarations"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897716736,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 0.7178212150174659,
+      "minimum_free": 11897708544,
+      "minimum_tmp_free": 4686180352,
+      "log_sha256": "0ab3fec51ef45be7fe6c6bd07f2ea2977dc07d227039487e3ed05d9143314195",
+      "log_bytes": 1087,
+      "completed_test_groups": 1,
+      "test_totals": {
+        "passed": 0,
+        "failed": 1,
+        "ignored": 0
+      },
+      "name": "focused-foreign-final"
+    },
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "foreign_declarations"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897704448,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.5150135090225376,
+      "minimum_free": 11897696256,
+      "minimum_tmp_free": 4686180352,
+      "log_sha256": "6e56a491b4a34eefd704345caab9bd9fd68d60fb5f5141752f0be067bd442ef0",
+      "log_bytes": 346,
+      "completed_test_groups": 1,
+      "test_totals": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused-foreign-corrected"
+    },
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "--test",
+        "cpu_duplicate_declaration",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897696256,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 3.2178444099845365,
+      "minimum_free": 11897675776,
+      "minimum_tmp_free": 4686176256,
+      "log_sha256": "e2e10f3db1d8556e07ed77620d503a03875a62e5c7dbf21d54d7adc90c551614",
+      "log_bytes": 569,
+      "completed_test_groups": 0,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused-lint"
+    },
+    {
+      "source_commit": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_declaration_targets",
+        "--test",
+        "cpu_duplicate_declaration",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897671680,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.2646135109825991,
+      "minimum_free": 11897655296,
+      "minimum_tmp_free": 4686176256,
+      "log_sha256": "3d13c320e362a18504072264f7d56c54d8cfb3bed0341904f4e34865f962d1b2",
+      "log_bytes": 115,
+      "completed_test_groups": 0,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused-lint-corrected"
+    },
+    {
+      "source_commit": "757b2b571d53c66716ba93f444f3c6fd6764f19c",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "scheduler_spelling_and_user_foreign_symbols_do_not_mint_builtin_origin"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11879575552,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 5.06943485501688,
+      "minimum_free": 11879567360,
+      "minimum_tmp_free": 4643192832,
+      "log_sha256": "36cb2212afe35466c57b30ec5120a6149261f6642d64d99c65a06821c7059fe5",
+      "log_bytes": 620,
+      "completed_test_groups": 2,
+      "test_totals": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "focused-origin"
+    },
+    {
+      "source_commit": "757b2b571d53c66716ba93f444f3c6fd6764f19c",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897372672,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 111.7732382810209,
+      "minimum_free": 11879788544,
+      "minimum_tmp_free": 4655898624,
+      "log_sha256": "009f3cc998aeb7137db847acc1162d3be53c199e4c91ab47ee1d9f26da3c9365",
+      "log_bytes": 710543,
+      "completed_test_groups": 1,
+      "test_totals": {
+        "passed": 286,
+        "failed": 1,
+        "ignored": 1
+      },
+      "name": "full-gate"
+    },
+    {
+      "source_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11879510016,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 896.7994699840201,
+      "minimum_free": 11854147584,
+      "minimum_tmp_free": 4623634432,
+      "log_sha256": "0fb0a0d149ce8f524cb48237f35b53a9ee8f5feeec00ced1d059719262d3168e",
+      "log_bytes": 22838,
+      "completed_test_groups": 179,
+      "test_totals": {
+        "passed": 1224,
+        "failed": 0,
+        "ignored": 49
+      },
+      "name": "full-gate-final"
+    },
+    {
+      "source_commit": "757b2b571d53c66716ba93f444f3c6fd6764f19c",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": null,
+        "CARGO_PROFILE_TEST_DEBUG": null,
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": null,
+        "CARGO_NET_OFFLINE": null,
+        "BEND_GPU": null,
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880628224,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 61.18670977000147,
+      "minimum_free": 11879612416,
+      "minimum_tmp_free": 4652691456,
+      "log_sha256": "62049a5753336c6b223f1c1c8ffeca625b074ca978b75582333a91c41859b45a",
+      "log_bytes": 910,
+      "completed_test_groups": 0,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "matrix-run"
+    },
+    {
+      "source_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN_FINAL/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe-final",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862761472,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 281.2478614799911,
+      "minimum_free": 11854888960,
+      "minimum_tmp_free": 4623630336,
+      "log_sha256": "3eb388b44f44440835b81ac78581d3151b16f31736cdbb55d9fcd53ad3bb076d",
+      "log_bytes": 1268,
+      "completed_test_groups": 0,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "name": "census-run"
+    }
+  ],
+  "source_identity": {
+    "source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "files": [
+      {
+        "file": "src/kernel/check.rs",
+        "sha256": "c33ccef1f35d2bc849341ce6835b12a6991ea919dcf37ce32ab3d19bb2f4fde9"
+      },
+      {
+        "file": "src/syntax/diagnostics.rs",
+        "sha256": "4345597d73afb2fa1a887dc582c55e3081f8e6a89d6d7f117cd1573840ceeacb"
+      },
+      {
+        "file": "src/syntax/executable_tests.rs",
+        "sha256": "c46c2d42d620ca21e7225095808059d342a92aec7bbf5cab5c976ce528ca6911"
+      },
+      {
+        "file": "src/syntax/parser.rs",
+        "sha256": "ed9b900f8c8b97252fee0ff54564c804281cb014959858794816b307b0d18e60"
+      },
+      {
+        "file": "tests/cpu_declaration_targets.rs",
+        "sha256": "914c29a4dd352ca9f06828d52e30cac2f01aeffe2f1d2102f40d03e91681dd78"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/README.md",
+        "sha256": "f53955f457eae0afeb2980a7152e2c7cddbade5b28dda22a6d32e6b05b98afad"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/completed/defs.bend",
+        "sha256": "1b7ae8246c482dc0c7406879b678e507a5b3818f72101694ececd038b86d2d15"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/completed/main.bend",
+        "sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/defs.bend",
+        "sha256": "973b06004bd4cac78919935b61ba3cad8b608fe77aeb1b48be4695b6376506d4"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/duplicate.bend",
+        "sha256": "4f84063fcaf852c57da84aca8234dafb68bd92343ff485229599efa79aca545c"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/main.bend",
+        "sha256": "8fb4b8dd0c2642b8e1c9a0e9c5dd579589e745d00de12520c02ffbec20447a22"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/scheduler-main.bend",
+        "sha256": "db97b386041aa4c48a93d396210e7f0b524cc45bcb207ce8b6eb226554f5dda6"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/scheduler-root.bend",
+        "sha256": "e835ccf184b890f74bab925f0b9614d423a43d88bbb24fe7e3efc70783c99c87"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/scheduler.bend",
+        "sha256": "e835ccf184b890f74bab925f0b9614d423a43d88bbb24fe7e3efc70783c99c87"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/foreign/value.js",
+        "sha256": "fcef8f710cd85e80f3a2876a8602ba4c46852e1a1280483c7e883ee86cd5ca89"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/io/alias.bend",
+        "sha256": "486f54c9a8e38e4871d4a8c259726ac2a86c322b75916b01a3f84ab316ccb4c2"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/io/shadow.bend",
+        "sha256": "21e29b08aadedfc2a0e5930d255746d78436e0f55b638cf76de3b61dcd40d462"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative-cases.json",
+        "sha256": "d0838c11d42c245f4a737eb8eb05f1ad7cbbbcd9c1341800527ca710a2f4f9df"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/alias-duplicate.bend",
+        "sha256": "e325d1cfb10a919af0a919a2bb846adf267551300e6986f4c803e898865b4026"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/alias-duplicate.stderr.json",
+        "sha256": "ab96d0e786a755ff789f86e408bcb81ad3c41cb42925b46f8e1e7568e8207660"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/filled-completion.bend",
+        "sha256": "908aead99b7699dd657b4973c105f6e447227e24bc31e3aef0b0b51f34e90839"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/filled-completion.stderr.json",
+        "sha256": "f9c01418f299c740094322d023247e95890ef3b52118e8ab5b5d073d02cd8f7e"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/open-header.bend",
+        "sha256": "6ad616004ff6a4d6a9ae37d98850e4d81daa2e57a6cd9ac19be02ba4f0246af5"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/open-header.stderr.json",
+        "sha256": "685630de83db2232f837834f9e096eff94fe11f48db4c840a739ba7caf2c303a"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/open-unfilled.bend",
+        "sha256": "78998ad621205c2ba40557ff00e56995e5c74e2ecb8741895e7cbc436b0aa64c"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/open-unfilled.stderr.json",
+        "sha256": "64f16a47d78f74d72119307c5d25349c12bf672e186ae1c2b79138da6e506ab4"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/shadow/defs.bend",
+        "sha256": "acde8b3ecbfb2fa00fc6a9852f466ec68d0017fad542cc9d37aba1abcaa5e4d8"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/shadow/main.bend",
+        "sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/shadow/main.stderr.json",
+        "sha256": "d614dfcdde45cd439e93e33a07e3a507be8e3c73fecc6213664d48fe9118ccc6"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/template-clash.bend",
+        "sha256": "bb7d5be534eca8b1b02e0e44ea98eb5fee364f1500b54db3cdb5e51e85c82bb9"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/template-clash.stderr.json",
+        "sha256": "c1fa744e4bb61b3de3bd03bf6fd6be08cffec34a0ed7b9c5501b420ac9667bc3"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/type-clash.bend",
+        "sha256": "9038508261e96c71eda1c39c8e0d2580d5d786904e4301bc3b67d7e98a674219"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/type-clash.stderr.json",
+        "sha256": "d95e2ca38d8cfc4f2e83657fc83b4f3515fc63fbb7a67238ef9a008f61bd02b8"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/wrong-body.bend",
+        "sha256": "afa1d8affedcca8f6621f6b5ec9cd4d78ecd650e883e70830effa9cae28cbf62"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/negative/wrong-body.stderr.json",
+        "sha256": "3261f2ee5c8f3879413fabc47ac1e74dbe676be5484041bc828596f23476ca57"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/observe/main.bend",
+        "sha256": "98a1f9df1ed490f1fe2943f0ca2af729dd90dfe06f6493919420c8ba743c731a"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/open/defs.bend",
+        "sha256": "c6084fe193922ee0ba497e4aff1f4019cda971715b24862e2c5dfc75eac1d5eb"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/open/main.bend",
+        "sha256": "e8e959d9603d7a2b575faea38d6bbcb9030dcc753299d1e45b339ac584cafc1c"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/positive-cases.json",
+        "sha256": "1d5e7dd7183a39db3564f4eabad1b01133553f905bb7f989b46c50cc8403f2a8"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/specialization/defs.bend",
+        "sha256": "3379c328da0a6c3dd678c7529497d0195fdce22f74877234a15538315448b26e"
+      },
+      {
+        "file": "tests/fixtures/cpu-declaration-targets/specialization/main.bend",
+        "sha256": "f9c551a332bc5a7b215f3365fdfaa4a3728cfc955d626d42d426259980fed623"
+      }
+    ],
+    "source_unchanged": true
+  },
+  "reviews": [
+    {
+      "reviewer": "/root/review_sharing",
+      "result": "No blocking source/test finding",
+      "production_diff_sha256": "77e87ef61253959ebc4eaf17f09e7fac535f6a934365c973a1c8a312416be13f",
+      "reviewed_hash": "315863014eca6330c599286ee0aec9a24cea77b2bd0a80b91f536426c02105da",
+      "controls": [
+        "latest-event selection",
+        "completed-law history",
+        "ordinary imported/local definitions",
+        "open law completion and repeated aliases",
+        "template specialization",
+        "eight rejection goldens",
+        "foreign loading/checking only"
+      ],
+      "limitations": [
+        "foreign execution unqualified",
+        "Base-marked open-law completion unchanged",
+        "missing-parenthesis diagnostic order unchanged",
+        "reused fixtures are authored reproducers, not inventory originals"
+      ],
+      "read_only": true,
+      "final_implementation_source": "757b2b571d53c66716ba93f444f3c6fd6764f19c",
+      "final_production_diff_sha256": "77e87ef61253959ebc4eaf17f09e7fac535f6a934365c973a1c8a312416be13f",
+      "scheduler_adjustment_review": "Approved independently: qualified user scheduler declarations have no builtin origin; global builtin metadata/root collisions/forged IO controls remain. Initial gate failure retained. No foreign runtime claim.",
+      "final_test_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+      "scheduler_diff_sha256": "a3aab61a26c8b558889cb186304aa16a78822eb63d953bd5c66a519cd8f02690",
+      "final_review": "Actual final scheduler test and three fixtures inspected read-only, no blocker. Production source identical to757b2b5. Full gate pending at review time."
+    },
+    {
+      "reviewer": "/root/review_imported_printer",
+      "result": "No blocking evidence inconsistency",
+      "read_only": true,
+      "matrix_sha256": "fc60884999329f2f0fd7358dc35a824dd428770f6f8258024f59fc53f25fb021",
+      "scheduler_receipt_sha256": "678138ac550b337dec001d90a101fdf49ace853caeb4ecf0fb691ba2dbd2f734",
+      "commands": 396,
+      "matches": 368,
+      "upstream_JS_failures": 4,
+      "strict_IO_observations": 8,
+      "foreign_phase_only": 16,
+      "actual_execution": {
+        "succeeded": 64,
+        "failed": 4,
+        "native_IO_successes": 4
+      },
+      "initial_gate": {
+        "passed": 286,
+        "failed": 1,
+        "ignored": 1,
+        "complete": false
+      },
+      "matrix_source": "757b2b571d53c66716ba93f444f3c6fd6764f19c",
+      "final_test_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+      "not_attested": [
+        "final gate",
+        "census"
+      ]
+    },
+    {
+      "reviewer": "/root/review_imported_printer",
+      "result": "No blocking census issue",
+      "source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+      "raw_sha256": "221974617f19926525aaba144fd8a3047f6350139b86a902f18ed236494da948",
+      "reconciliation_sha256": "11b26c072a0d02abaf9808e803aad421741ae5f94ea1ed027afa3d5f879d8ce5",
+      "current_csv_sha256": "b47d5722bd7c20293643c427d76a4f32eb79af68a1bf0319cec02bfa34494f70",
+      "port_rows_unchanged": 1302,
+      "historical_IO_exact": 385,
+      "extra_IO_symptom_excluded": false,
+      "residual": 178,
+      "acceptance": 110,
+      "rejection": 68,
+      "oracle_failures": 5,
+      "linked": 471,
+      "unlinked": 831,
+      "read_only": true
+    }
+  ],
+  "failed_attempts": [
+    "Initial full gate757b2b5 stopped after286/1/1 because the old scheduler test demanded rejection of a valid qualified declaration. Later targets unrun; independently reviewed replacement preserves origin safety.",
+    "Authored foreign test first referenced a deliberately unavailable proof-normalization API; next used a prohibited non-IO foreign result. Those restrictions remain; corrected phase-only test passes.",
+    "Initial targeted Clippy rejected Case.case field naming; renamed the test type without suppression.",
+    "Four upstream JS wrapper executions fail at startup due generated hyphenated identifiers; no parity pass.",
+    "Exploratory BaseIOshadow harness expected an artifact to be absent despite successful emission; hypothesis disproven, no production defect established."
+  ],
+  "foreign_invalid_fixture_attempt": {
+    "value.js": "// SPDX-License-Identifier: MPL-2.0\n// Boundary fixture: foreign execution is not qualified by this batch.\n",
+    "duplicate.bend": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef value() -> U32: import \"value.js\"\ndef value() -> U32: 4\n",
+    "main.bend": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport defs.bend as D\ndef D.value() -> U32: 4\ndef main() -> U32: 0\n",
+    "defs.bend": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef value() -> U32: import \"value.js\"\n"
+  },
+  "external_invoke_consumers": "Not audited. Formatted refusals can return Ok with exit_code1; existing repository entrypoint consumes exit_code. No new public signature.",
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11854147584,
+    "minimum_tmp_bytes": 4623630336,
+    "cache_deletions": 0
+  }
+}

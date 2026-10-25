@@ -1,0 +1,603 @@
+{
+  "baseline": "9b1726c3d8b158b069c54de586818c53506526fe",
+  "rows": [
+    {
+      "case": "../cpu-duplicate-declaration/exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "$EVIDENCE/before-5f6b735784f119c4.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1538316730002407,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "../cpu-duplicate-declaration/exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13387360898195766
+    },
+    {
+      "case": "../cpu-duplicate-declaration/exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "$EVIDENCE/before-bb4af8793c70608c.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13233322300948203,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "../cpu-duplicate-declaration/exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/../cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12817754200659692
+    },
+    {
+      "case": "completed/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/completed/main.bend",
+        "$EVIDENCE/before-cb095a2f97c00709.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12653331199544482,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "completed/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/completed/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/completed/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1270152200013399
+    },
+    {
+      "case": "observe/main.bend",
+      "source_sha256": "98a1f9df1ed490f1fe2943f0ca2af729dd90dfe06f6493919420c8ba743c731a",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/observe/main.bend",
+        "$EVIDENCE/before-a0037d4146b43f34.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12982004001969472,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "observe/main.bend",
+      "source_sha256": "98a1f9df1ed490f1fe2943f0ca2af729dd90dfe06f6493919420c8ba743c731a",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/observe/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/observe/../completed/main.bend:4:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13149772901670076
+    },
+    {
+      "case": "open/main.bend",
+      "source_sha256": "e8e959d9603d7a2b575faea38d6bbcb9030dcc753299d1e45b339ac584cafc1c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/open/main.bend",
+        "$EVIDENCE/before-ab6951482041b393.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.132428646000335,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "open/main.bend",
+      "source_sha256": "e8e959d9603d7a2b575faea38d6bbcb9030dcc753299d1e45b339ac584cafc1c",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/open/main.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2418584630067926
+    },
+    {
+      "case": "specialization/main.bend",
+      "source_sha256": "f9c551a332bc5a7b215f3365fdfaa4a3728cfc955d626d42d426259980fed623",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/specialization/main.bend",
+        "$EVIDENCE/before-d5204ab84c1bb34c.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1168266489985399,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "specialization/main.bend",
+      "source_sha256": "f9c551a332bc5a7b215f3365fdfaa4a3728cfc955d626d42d426259980fed623",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/specialization/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/specialization/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1302050729864277
+    },
+    {
+      "case": "io/alias.bend",
+      "source_sha256": "486f54c9a8e38e4871d4a8c259726ac2a86c322b75916b01a3f84ab316ccb4c2",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/io/alias.bend",
+        "$EVIDENCE/before-f67625c0c7b5983f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12165310099953786,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "io/alias.bend",
+      "source_sha256": "486f54c9a8e38e4871d4a8c259726ac2a86c322b75916b01a3f84ab316ccb4c2",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/io/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/io/../../cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: ../../cpu-duplicate-declaration/exploratory/alias/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13109541300218552
+    },
+    {
+      "case": "io/shadow.bend",
+      "source_sha256": "21e29b08aadedfc2a0e5930d255746d78436e0f55b638cf76de3b61dcd40d462",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/io/shadow.bend",
+        "$EVIDENCE/before-e447af24fd0b3f5f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1308491500094533,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "io/shadow.bend",
+      "source_sha256": "21e29b08aadedfc2a0e5930d255746d78436e0f55b638cf76de3b61dcd40d462",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/io/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/io/../../cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12592395200044848
+    },
+    {
+      "case": "negative/alias-duplicate.bend",
+      "source_sha256": "e325d1cfb10a919af0a919a2bb846adf267551300e6986f4c803e898865b4026",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/alias-duplicate.bend",
+        "$EVIDENCE/before-54f0bd8644b2de81.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n4 | def D.value() -> U32: 4\n5>| def D.value() -> U32: 5\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.09292675301549025,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/alias-duplicate.bend",
+      "source_sha256": "e325d1cfb10a919af0a919a2bb846adf267551300e6986f4c803e898865b4026",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/alias-duplicate.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/alias-duplicate.bend:4:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12565591299789958
+    },
+    {
+      "case": "negative/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/shadow/main.bend",
+        "$EVIDENCE/before-a56bbb307018ff2f.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.Nat.add)\n- observed : '('\nLocation:\n3 | def Nat.add() -> U32: 7\n4>| def Nat.add() -> U32: 8\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09563798099406995,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/shadow/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12745282999821939
+    },
+    {
+      "case": "negative/filled-completion.bend",
+      "source_sha256": "908aead99b7699dd657b4973c105f6e447227e24bc31e3aef0b0b51f34e90839",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/filled-completion.bend",
+        "$EVIDENCE/before-1b60ea3a4a79b215.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '->'\n- observed : ':'\nLocation:\n3 | \n4>| def D.value(): 4\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09276596299605444,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/filled-completion.bend",
+      "source_sha256": "908aead99b7699dd657b4973c105f6e447227e24bc31e3aef0b0b51f34e90839",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/filled-completion.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/filled-completion.bend:4:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12911771098151803
+    },
+    {
+      "case": "negative/open-header.bend",
+      "source_sha256": "6ad616004ff6a4d6a9ae37d98850e4d81daa2e57a6cd9ac19be02ba4f0246af5",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/open-header.bend",
+        "$EVIDENCE/before-41cad03714ee2483.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : '-'\nLocation:\n3 | \n4>| def D.value() -> U32: 4\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.0961916959786322,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/open-header.bend",
+      "source_sha256": "6ad616004ff6a4d6a9ae37d98850e4d81daa2e57a6cd9ac19be02ba4f0246af5",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/open-header.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : '-'\nLocation:\n3 | \n4>| def D.value() -> U32: 4\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.1292228970269207
+    },
+    {
+      "case": "negative/type-clash.bend",
+      "source_sha256": "9038508261e96c71eda1c39c8e0d2580d5d786904e4301bc3b67d7e98a674219",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/type-clash.bend",
+        "$EVIDENCE/before-f5830e3b6800aec9.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n5 |   Item{}\n6>| def D.value() -> U32: 4\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.09258095701807179,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/type-clash.bend",
+      "source_sha256": "9038508261e96c71eda1c39c8e0d2580d5d786904e4301bc3b67d7e98a674219",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/type-clash.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/type-clash.bend:6:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13103213300928473
+    },
+    {
+      "case": "negative/wrong-body.bend",
+      "source_sha256": "afa1d8affedcca8f6621f6b5ec9cd4d78ecd650e883e70830effa9cae28cbf62",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/wrong-body.bend",
+        "$EVIDENCE/before-04d808cea302306c.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : U32\n- observed : Bool\nLocation: D.value\n3 | \n4>| def D.value() -> U32: True{}\n5 | def main() -> U32: D.value()\n",
+      "timed_out": false,
+      "seconds": 0.12412797700380906,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/wrong-body.bend",
+      "source_sha256": "afa1d8affedcca8f6621f6b5ec9cd4d78ecd650e883e70830effa9cae28cbf62",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/wrong-body.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/wrong-body.bend:4:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13038307498209178
+    },
+    {
+      "case": "negative/template-clash.bend",
+      "source_sha256": "bb7d5be534eca8b1b02e0e44ea98eb5fee364f1500b54db3cdb5e51e85c82bb9",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/template-clash.bend",
+        "$EVIDENCE/before-5626a045e34d83a4.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n4 | def D.value(~x: U32) -> U32: x\n5>| def D.value() -> U32: 4\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.10620294100954197,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/template-clash.bend",
+      "source_sha256": "bb7d5be534eca8b1b02e0e44ea98eb5fee364f1500b54db3cdb5e51e85c82bb9",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/template-clash.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-declaration-targets/negative/template-clash.bend:4:13: duplicate definition: ../completed/defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1315607990254648
+    },
+    {
+      "case": "negative/open-unfilled.bend",
+      "source_sha256": "78998ad621205c2ba40557ff00e56995e5c74e2ecb8741895e7cbc436b0aa64c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/open-unfilled.bend",
+        "$EVIDENCE/before-10fe6c39203cc7f1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+      "timed_out": false,
+      "seconds": 0.12076606301707216,
+      "phase": {
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      }
+    },
+    {
+      "case": "negative/open-unfilled.bend",
+      "source_sha256": "78998ad621205c2ba40557ff00e56995e5c74e2ecb8741895e7cbc436b0aa64c",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-declaration-targets/negative/open-unfilled.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+      "timed_out": false,
+      "seconds": 0.2555611459829379
+    }
+  ],
+  "completed": true,
+  "actual_binary_snapshot": {
+    "source_commit": "f0ff543052518d156537ac3380764b342d9e5dd2",
+    "source_tree": "1dd17540525d821c471fa5df6743ac0ad69ae899",
+    "binary_sha256": "e47186003ea805ba8679a9030cb78ada42f2170ac14009eb4b0d10c9ce8826d8",
+    "binary_size": 27475144,
+    "working_binary": "$BASELINE_RUN/teamy-bend",
+    "archive": "$BASELINE_EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "fa6bccea7930bad8135bd1f235e598e1618e4ec024ab0836a73655c00fd6b279",
+    "archive_size": 7133219,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "e47186003ea805ba8679a9030cb78ada42f2170ac14009eb4b0d10c9ce8826d8"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "identity_note": "Code baseline9b1726c is production-identical to the actual captured binary sourcef0ff543; preserve both commit identities."
+}

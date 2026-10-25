@@ -1,0 +1,148 @@
+{
+  "source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+  "baseline_source": "f0ff543052518d156537ac3380764b342d9e5dd2",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 368,
+    "acceptance_disagreement": 495,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 5,
+    "different_rejection": 68
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 178,
+  "residual_classifications": {
+    "acceptance_disagreement": 110,
+    "different_rejection": 68
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 39,
+    "new_or_unclassified": 1
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "flatten/literal_rows_cubic.bend",
+    "reg/dead_param_fork.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "flatten/literal_rows_cubic.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "flatten/literal_rows_cubic.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend"
+  ],
+  "port_stream_or_phase_changes": [],
+  "changes": [
+    {
+      "fixture": "flatten/literal_rows_cubic.bend",
+      "source_sha256": "27cf900cc11aaf0a52c7906790d4bbf893a251bf8620ec4c5b272362c6f4cc26",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03",
+      "after_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03"
+    },
+    {
+      "fixture": "reg/dead_param_fork.bend",
+      "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "620d569ebe27fcf3e3fba9c94f11c000a6c4ea36f6ba9bc04f14533c93647a6e",
+      "after_stderr_sha256": "620d569ebe27fcf3e3fba9c94f11c000a6c4ea36f6ba9bc04f14533c93647a6e"
+    }
+  ],
+  "raw_observations_sha256": "221974617f19926525aaba144fd8a3047f6350139b86a902f18ed236494da948",
+  "baseline_raw_sha256": "04552b404ba64c75c1b7a642b3b06cefb4b5e99b6b7b6fa167cad6dc625a4618",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "upstream_delta": [
+    {
+      "fixture": "flatten/literal_rows_cubic.bend",
+      "source_sha256": "27cf900cc11aaf0a52c7906790d4bbf893a251bf8620ec4c5b272362c6f4cc26",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "before_upstream_phase": "load",
+      "after_upstream_phase": "accepted",
+      "before_upstream_outcome": "host_stack_failure",
+      "after_upstream_outcome": "accepted",
+      "port_exit": 1,
+      "port_phase": "load",
+      "port_unchanged": true,
+      "engine_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0"
+    },
+    {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "oracle_or_infrastructure_failure",
+      "before_upstream_phase": "load",
+      "after_upstream_phase": "check",
+      "before_upstream_outcome": "host_stack_failure",
+      "after_upstream_outcome": "host_stack_failure",
+      "port_exit": 1,
+      "port_phase": "load",
+      "port_unchanged": true,
+      "engine_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0"
+    },
+    {
+      "fixture": "reg/dead_param_fork.bend",
+      "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "before_upstream_phase": "load",
+      "after_upstream_phase": "accepted",
+      "before_upstream_outcome": "host_stack_failure",
+      "after_upstream_outcome": "accepted",
+      "port_exit": 1,
+      "port_phase": "load",
+      "port_unchanged": true,
+      "engine_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0"
+    }
+  ],
+  "interpretation": "All 1,302 port observations unchanged. The 176 -> 178 residual exclusively reflects two recovered upstream oracles, not port regressions. Two corrected authored reproducers are outside the inventory. The 386 missing_IO_candidate symptoms do not broaden the 385 historical cohort.",
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "binary_sha256": "ea8c1dce363c32af5a30dc44a8692572e2d91843a42347e511541651e3206f85",
+    "phase_probe_sha256": "c9b76f376edf0fafc47178e0b56e552ee222b687c4a04f2f99373ee264cd69b3",
+    "build_receipt_sha256": "5f034396a767ad91e1636569b3c5a52a9c55579e21d12abc4ddfee55bbf5c0b3",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 368,
+      "acceptance_disagreement": 495,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 5,
+      "different_rejection": 68
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 563,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  },
+  "coverage": {
+    "linked": 471,
+    "unlinked": 831,
+    "unlinked_categories": {
+      "interpreter_or_compiled": 521,
+      "checker_negative": 296,
+      "interpreter_only": 13,
+      "checking_only": 1
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "strict_and_normalization": {
+    "tested_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "sources": {
+      "main.bend": {
+        "sha256": "ec114994fd17c96f29ebf9965df8e615e761b49d53181341f053d2beb6506ef4",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport library.bend as L\ndef main() -> U32: L.IO()\n"
+      },
+      "library.bend": {
+        "sha256": "0558adde0c20a78f8a82a6ced5b28ca14996fddc187eb7daa9dfa4828c09e72f",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef IO() -> U32: 7\n"
+      }
+    },
+    "rows": [
+      {
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$EVIDENCE/open-base-law/main.bend",
+          "$EVIDENCE/open-base-law/phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.32910991497919895
+      },
+      {
+        "lane": "upstream-normalize",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$EVIDENCE/open-base-law/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.42635067700757645
+      },
+      {
+        "lane": "port-check",
+        "command": [
+          "$RUN_FINAL/teamy-bend",
+          "check",
+          "$EVIDENCE/open-base-law/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6500347729888745
+      },
+      {
+        "lane": "port-run",
+        "command": [
+          "$RUN_FINAL/teamy-bend",
+          "run",
+          "$EVIDENCE/open-base-law/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7070408999861684
+      }
+    ],
+    "scope": "Exploratory only; no implementation or policy exception; no compiled execution"
+  },
+  "executable_followup": {
+    "tested_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "sources": {
+      "main.bend": {
+        "sha256": "ec114994fd17c96f29ebf9965df8e615e761b49d53181341f053d2beb6506ef4",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport library.bend as L\ndef main() -> U32: L.IO()\n"
+      },
+      "library.bend": {
+        "sha256": "0558adde0c20a78f8a82a6ced5b28ca14996fddc187eb7daa9dfa4828c09e72f",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef IO() -> U32: 7\n"
+      }
+    },
+    "scope": "Exploratory only; the speculative refusal was NOT reproduced. Compiled execution remains unrun.",
+    "observed": [
+      {
+        "lane": "port-executable-phase",
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": ""
+      },
+      {
+        "lane": "port-c-emission",
+        "exit": 0,
+        "artifact_sha256": "752899688ec22616f943f2f5354161003139b07042d02a1749711c1a3ac4fec9"
+      },
+      {
+        "lane": "upstream-c-emission",
+        "exit": 0,
+        "artifact_sha256": "f11bd5d4f297054420c2c3a9533aad1f7888ca0bc2fcbe435549938f60ac2525"
+      }
+    ],
+    "runner_failure": "A post-run assertion incorrectly required the port artifact to be absent. All three commands had already succeeded; no production error or known acceptance discrepancy was established. Raw emitted artifacts retained, source and earlier four observations unchanged."
+  },
+  "alias_fallback": {
+    "tested_source": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "sources": {
+      "main.bend": {
+        "sha256": "ef215372f78e5a710d879b79d3941bb7fdd0ee3be9c9f0209e49afbd7e8739fd",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport defs.bend as D\ndef D.local() -> U32: 9\ndef main() -> U32: D.local()\n"
+      },
+      "defs.bend": {
+        "sha256": "2d790d8b78c6b85f3ba986d8e61f29cc69887ac5668c6a2944bf3d7175f8f870",
+        "text": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef other() -> U32: 3\n"
+      }
+    },
+    "rows": [
+      {
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$EVIDENCE/alias-fallback/main.bend",
+          "$EVIDENCE/alias-fallback/phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.12595186501857825,
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "lane": "upstream-normalize",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$EVIDENCE/alias-fallback/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15186782600358129
+      },
+      {
+        "lane": "port-check",
+        "command": [
+          "$RUN_FINAL/teamy-bend",
+          "check",
+          "$EVIDENCE/alias-fallback/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a defined name\n- observed : defs.local\nLocation: main\n4 | def D.local() -> U32: 9\n5>| def main() -> U32: D.local()\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.24092914600623772
+      },
+      {
+        "lane": "port-executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe-final",
+          "$EVIDENCE/alias-fallback/main.bend",
+          "--executable"
+        ],
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.14727958201547153
+      }
+    ],
+    "scope": "Additional authored acceptance discrepancy, unqualified. No implementation or exception; generated execution unrun. Upstream parse_reso returns raw spelling when the aliased qualified member is unknown; port resolve currently returns the alias target unconditionally."
+  },
+  "claim": "Base IO-shadow probe establishes no additional defect. Separately, unknown alias-member fallback is a demonstrated checking acceptance discrepancy; four observations only, generated execution unrun. Neither is a policy exception."
+}
