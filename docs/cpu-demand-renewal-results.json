@@ -1,0 +1,548 @@
+{
+  "tested_source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+  "lane_counts": {
+    "pass": 46,
+    "accepted_upstream_c_wildcard_exception": 3,
+    "diagnostic_order_difference": 1
+  },
+  "repetitions": 2,
+  "exact_observations": 92,
+  "approved_wildcard_observations": 6,
+  "unresolved_error_order_observations": 2,
+  "runner_exit": 1,
+  "rows": [
+    {
+      "fixture": "unused_argument.bend",
+      "source_sha256": "5b3d8a487e3c56e778b465e641ccdbe130582d54b63abe776bc6ca4772d2e65e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    },
+    {
+      "fixture": "partial_add_overflow.bend",
+      "source_sha256": "cf652e56f978fc37bae59be4d1b8794da53cf31517221f6c18b2ca5e07bec7fa",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    },
+    {
+      "fixture": "partial_double_overflow.bend",
+      "source_sha256": "bb3a4962228f59d9cdea492e51b905969db96610e58b1a5e700764767b60769e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    },
+    {
+      "fixture": "unused_rhs_error.bend",
+      "source_sha256": "c6e79a1d103e0de8041b4bdafbad6ad9c9fc7ae7071c6444783d217fe6e8c60f",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: runtime fail-stop\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {
+        "upstream-c-1": {
+          "command": [
+            "<evidence>/demand-final/unused_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/unused_rhs_error/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 7,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "upstream-c-2": {
+          "command": [
+            "<evidence>/demand-final/unused_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/unused_rhs_error/upstream-c-2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 11,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "fixture": "ordinary_rhs_error.bend",
+      "source_sha256": "9e984e01470e4d8cca46c06c28051de53ceaf49aa71d196f2ac5bade7da4c105",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: runtime fail-stop\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {
+        "upstream-c-1": {
+          "command": [
+            "<evidence>/demand-final/ordinary_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/ordinary_rhs_error/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 3,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "upstream-c-2": {
+          "command": [
+            "<evidence>/demand-final/ordinary_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/ordinary_rhs_error/upstream-c-2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 3,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "fixture": "forced_request_wildcard.bend",
+      "source_sha256": "7aa7f1dc993235028f78f96cb6ce7c3729061812ecf0844f96bf5f0ff620dc87",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: runtime fail-stop\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {
+        "upstream-c-1": {
+          "command": [
+            "<evidence>/demand-final/forced_request_wildcard/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/forced_request_wildcard/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 4,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "0\n",
+          "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "upstream-c-2": {
+          "command": [
+            "<evidence>/demand-final/forced_request_wildcard/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/forced_request_wildcard/upstream-c-2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 4,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "0\n",
+          "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "stderr": "",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "fixture": "nat_first.bend",
+      "source_sha256": "d72c6f8c10a1ad4b5b15be113f6dabff9e565fb59e6b2f0c41f8f3f0c8a72766",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "before",
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "diagnostic_order_difference",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {
+        "upstream-c-1": {
+          "command": [
+            "<evidence>/demand-final/nat_first/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/nat_first/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 4,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "diagnostic_order_difference",
+          "phase": "execution",
+          "stdout": "before",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        "upstream-c-2": {
+          "command": [
+            "<evidence>/demand-final/nat_first/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "<evidence>/demand-final/nat_first/upstream-c-2",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 3,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "diagnostic_order_difference",
+          "phase": "execution",
+          "stdout": "before",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        }
+      }
+    },
+    {
+      "fixture": "request_first.bend",
+      "source_sha256": "7ec611452bbccf0dbe9cccc3d285b94b540af79177a21cf4286f53f35529f80f",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "before",
+        "stderr": "bend: runtime fail-stop\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    },
+    {
+      "fixture": "word_live_tail.bend",
+      "source_sha256": "da5b26d5334bfb9fb26a4acd59fa8aa69dd2817721ad1e4fe8b8d9e3fc839c9e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "bend: runtime fail-stop\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    },
+    {
+      "fixture": "erased_and_unselected.bend",
+      "source_sha256": "08254fee3e2e66221694d395eacdd71c8d882651369edc2e152ba84f0bcad828",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "exit": 0,
+        "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+        "stderr": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "nonpass_observations": {}
+    }
+  ],
+  "raw_receipt_sha256": "3f5f3518d4124d5821e73c8c80dfb4f54ad5fcd4a1e8fcade5136ec04dce38b3"
+}

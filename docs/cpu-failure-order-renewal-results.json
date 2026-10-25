@@ -1,0 +1,1580 @@
+{
+  "tested_source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+  "binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+  "rows": [
+    {
+      "fixture": "nat_first.bend",
+      "origin": "authored_control",
+      "source_sha256": "d72c6f8c10a1ad4b5b15be113f6dabff9e565fb59e6b2f0c41f8f3f0c8a72766",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "compiler_version": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: <clang-install>/usr/lib/llvm-19/bin\n",
+      "generated_sha256": {
+        "upstream.c": "b923f3bfdcc28ff39299fd720128d12bf84a0fdd7056dc1b872659e9e6bef330",
+        "upstream.js": "e845de2aa59dbfe0530660a72ea87e06c7fa9883de3d3b7d471b35a1c33986c5",
+        "port.c": "85f55d8821672ae96760dff6c412a117283ed3495f956908b3390c4879192958",
+        "port.js": "40d1fe9d4b19fc8290c17b2739e794a3a2cdd6fe1de7eb214e1c62d24109796d"
+      },
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "deterministic": true,
+      "observations": [
+        {
+          "step": "upstream-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream.c"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-compile-O0",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O0",
+            "<evidence>/order-final/nat_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream-O0"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O0-1",
+          "classification": "unresolved_C_error_order",
+          "command": [
+            "<evidence>/order-final/nat_first/upstream-O0",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O1",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O1",
+            "<evidence>/order-final/nat_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream-O1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O1-1",
+          "classification": "unresolved_C_error_order",
+          "command": [
+            "<evidence>/order-final/nat_first/upstream-O1",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O2",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O2",
+            "<evidence>/order-final/nat_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream-O2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O2-1",
+          "classification": "unresolved_C_error_order",
+          "command": [
+            "<evidence>/order-final/nat_first/upstream-O2",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O3",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "<evidence>/order-final/nat_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream-O3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O3-1",
+          "classification": "unresolved_C_error_order",
+          "command": [
+            "<evidence>/order-final/nat_first/upstream-O3",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first/upstream.js"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first/upstream.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "<evidence>/order-final/nat_first/port.c"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 236984,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "4b85a2c8ce1f412fbeeb460553b2a56101c28dd2a7190c0971d449e044aba51c",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-compile-strict",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "<evidence>/order-final/nat_first/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first/port-strict"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-c-strict-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first/port-strict",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "<evidence>/order-final/nat_first/port.js"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58566,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "f4cf6316af74bb3a436bc96e7b641433c8ce8d613b0a6de0d0591a95c0f37313",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first/port.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "native-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "run",
+            "<evidence>/order-final/nat_first/main.bend"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        }
+      ]
+    },
+    {
+      "fixture": "request_first.bend",
+      "origin": "authored_control",
+      "source_sha256": "7ec611452bbccf0dbe9cccc3d285b94b540af79177a21cf4286f53f35529f80f",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "compiler_version": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: <clang-install>/usr/lib/llvm-19/bin\n",
+      "generated_sha256": {
+        "upstream.c": "932baeb1a4d3c02387af7f8b8e8e9100f3c1d68e17da25f2eecd6fde03ba944c",
+        "upstream.js": "1f1f1d5759c33adaeac4336f086a292bdcdaf304aea8aef533ca45c05094a8a5",
+        "port.c": "7a79a2f54b7f538b93d53189970ce94105a4a6e8d149a8e527921f18e7f95caa",
+        "port.js": "d743ee888b611bd0ca86acec90b7321bb7a275fb461c53105a4688eedadeb078"
+      },
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "deterministic": true,
+      "observations": [
+        {
+          "step": "upstream-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/request_first/main.bend",
+            "-o",
+            "<evidence>/order-final/request_first/upstream.c"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-compile-O0",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O0",
+            "<evidence>/order-final/request_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/request_first/upstream-O0"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O0-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/request_first/upstream-O0",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O1",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O1",
+            "<evidence>/order-final/request_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/request_first/upstream-O1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O1-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/request_first/upstream-O1",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O2",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O2",
+            "<evidence>/order-final/request_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/request_first/upstream-O2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O2-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/request_first/upstream-O2",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O3",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "<evidence>/order-final/request_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/request_first/upstream-O3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O3-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/request_first/upstream-O3",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/request_first/main.bend",
+            "-o",
+            "<evidence>/order-final/request_first/upstream.js"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/request_first/upstream.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "port-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/request_first/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "<evidence>/order-final/request_first/port.c"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/request_first/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 236984,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "9e4b74c2764f1b4753d6f7d0983a6196d134dacbc296694bd4bfdb1e7b2027f7",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-compile-strict",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "<evidence>/order-final/request_first/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/request_first/port-strict"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-c-strict-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/request_first/port-strict",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "port-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/request_first/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "<evidence>/order-final/request_first/port.js"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/request_first/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58566,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "e9488ebc788c741c4ead11de3300a2fbfdfb79fc21abc1e7521e51ab8a9077b4",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/request_first/port.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "native-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "run",
+            "<evidence>/order-final/request_first/main.bend"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        }
+      ]
+    },
+    {
+      "fixture": "nat_first_indirect.bend",
+      "origin": "authored_control",
+      "source_sha256": "214a741f61b618998b662be5d0ba42c2dfa0d79bffee8a94ab37f6b68f3fecdf",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "compiler_version": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: <clang-install>/usr/lib/llvm-19/bin\n",
+      "generated_sha256": {
+        "upstream.c": "7c829948825d9e08438be71845b3f96ed062ae9d637b891b4bcd6480da8f68a9",
+        "upstream.js": "7fc817b30f2819bd6f993ff9e22c5224a7197c970809fe5b829809ff834f6c4c",
+        "port.c": "6a9f480f66c4a4909771af1eee5db69dcdee004d943aae1510b6f848c07d0374",
+        "port.js": "9d151d5cade2bf8a35b1573a044f4c40890c3251b169e0b8424da0b7d5509723"
+      },
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "deterministic": true,
+      "observations": [
+        {
+          "step": "upstream-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first_indirect/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream.c"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-compile-O0",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O0",
+            "<evidence>/order-final/nat_first_indirect/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream-O0"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O0-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_indirect/upstream-O0",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O1",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O1",
+            "<evidence>/order-final/nat_first_indirect/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream-O1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O1-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_indirect/upstream-O1",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O2",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O2",
+            "<evidence>/order-final/nat_first_indirect/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream-O2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O2-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_indirect/upstream-O2",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O3",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "<evidence>/order-final/nat_first_indirect/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream-O3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O3-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_indirect/upstream-O3",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first_indirect/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/upstream.js"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first_indirect/upstream.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first_indirect/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "<evidence>/order-final/nat_first_indirect/port.c"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first_indirect/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 239453,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "487dac3ab1430f1b0b5e2ee4a0b1aed0534937c6fe11ccb3cb3fd38379a2c39d",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-compile-strict",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "<evidence>/order-final/nat_first_indirect/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_indirect/port-strict"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-c-strict-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_indirect/port-strict",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first_indirect/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "<evidence>/order-final/nat_first_indirect/port.js"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first_indirect/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58767,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "bcad1fbbe423cb769b339a4fe2aad4e3404caa57cec5e919072faeaccd73c3be",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first_indirect/port.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "native-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "run",
+            "<evidence>/order-final/nat_first_indirect/main.bend"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        }
+      ]
+    },
+    {
+      "fixture": "nat_first_bound.bend",
+      "origin": "authored_control",
+      "source_sha256": "1e5ea7b6138935553260e9e7340f094512381e6dc56e6fe4b127637a817a5285",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "compiler_version": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: <clang-install>/usr/lib/llvm-19/bin\n",
+      "generated_sha256": {
+        "upstream.c": "2147e1b37900a854d712c8ae8d7f5b382d69551154c6adb58dc3e0a311ab6b28",
+        "upstream.js": "70d0d46fd087afb5b45085c4eeafbeaca54c6232a8523a4f142bfb203d453712",
+        "port.c": "afc6905eeb4c2ba92b87a7f43d85745bac116c9a13af7b39e29d763fcb2ca7f2",
+        "port.js": "36d4e5ae848440bb8db9a2a115afa6d499e61f0b16ab459c61c44105828d33a8"
+      },
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "deterministic": true,
+      "observations": [
+        {
+          "step": "upstream-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first_bound/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream.c"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-compile-O0",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O0",
+            "<evidence>/order-final/nat_first_bound/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream-O0"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O0-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_bound/upstream-O0",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O1",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O1",
+            "<evidence>/order-final/nat_first_bound/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream-O1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O1-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_bound/upstream-O1",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O2",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O2",
+            "<evidence>/order-final/nat_first_bound/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream-O2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O2-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_bound/upstream-O2",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-compile-O3",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "<evidence>/order-final/nat_first_bound/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream-O3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O3-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_bound/upstream-O3",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "upstream-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/nat_first_bound/main.bend",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/upstream.js"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first_bound/upstream.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first_bound/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "<evidence>/order-final/nat_first_bound/port.c"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first_bound/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 249023,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "b06320c0c5fa5dd72518b9d0e467962e85746b8b5ccbec3460eea1a59ac357ee",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-compile-strict",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "<evidence>/order-final/nat_first_bound/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/nat_first_bound/port-strict"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-c-strict-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/nat_first_bound/port-strict",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "port-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/nat_first_bound/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "<evidence>/order-final/nat_first_bound/port.js"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/nat_first_bound/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58815,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "1aa9009ec18d9f02165204f4ad4d1e15e0df5bf751f1ce09b1a69761c839ddd8",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/nat_first_bound/port.js"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        },
+        {
+          "step": "native-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "run",
+            "<evidence>/order-final/nat_first_bound/main.bend"
+          ],
+          "exit": 1,
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+          "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+          "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+        }
+      ]
+    },
+    {
+      "fixture": "word_live_tail.bend",
+      "origin": "authored_control",
+      "source_sha256": "da5b26d5334bfb9fb26a4acd59fa8aa69dd2817721ad1e4fe8b8d9e3fc839c9e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "port_dirty": false,
+      "port_binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "compiler_version": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: <clang-install>/usr/lib/llvm-19/bin\n",
+      "generated_sha256": {
+        "upstream.c": "98ff39c76f9fd24e4dc43cfc6ab2e18bbc0289a6ecc34afcb92d2caff9e2b6d5",
+        "upstream.js": "7ed7ba0479461c99bb6bb8b31ea2eb843031b7a157fa496d044887d62d78d7f1",
+        "port.c": "290625dbd6ebd9faed70ba663b6c8b9046de974d326230bd8a34eb2455132d48",
+        "port.js": "d19ec21c39aae893be7d82d63192f5561cd2a420431b6246721170fe5fb97671"
+      },
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "deterministic": true,
+      "observations": [
+        {
+          "step": "upstream-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/word_live_tail/main.bend",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream.c"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-compile-O0",
+          "classification": "oracle_build_failure_execution_unrun",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O0",
+            "<evidence>/order-final/word_live_tail/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream-O0"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "error: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\nerror: ran out of registers during register allocation\n12 errors generated.\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "f5e2f4fc5c75afbdd32d1ba33fb6562ce5c4e029398cf504c0520e869f1faea6"
+        },
+        {
+          "step": "upstream-compile-O1",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O1",
+            "<evidence>/order-final/word_live_tail/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream-O1"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O1-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/word_live_tail/upstream-O1",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O2",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O2",
+            "<evidence>/order-final/word_live_tail/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream-O2"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O2-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/word_live_tail/upstream-O2",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-compile-O3",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "<evidence>/order-final/word_live_tail/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream-O3"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-c-O3-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/word_live_tail/upstream-O3",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "upstream-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "node",
+            "main.ts",
+            "<evidence>/order-final/word_live_tail/main.bend",
+            "-o",
+            "<evidence>/order-final/word_live_tail/upstream.js"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "upstream-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/word_live_tail/upstream.js"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "port-generate-c",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/word_live_tail/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "<evidence>/order-final/word_live_tail/port.c"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/word_live_tail/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 558168,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "1ec2531a1c9281a3697088948362d2fb1ddb2b8e93722b2f580a5c45f600d151",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-compile-strict",
+          "classification": "compilation_only",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "<evidence>/order-final/word_live_tail/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "<evidence>/order-final/word_live_tail/port-strict"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-c-strict-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/word_live_tail/port-strict",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "port-generate-js",
+          "classification": "generation_only",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "compile",
+            "--executable",
+            "<evidence>/order-final/word_live_tail/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "<evidence>/order-final/word_live_tail/port.js"
+          ],
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"<evidence>/order-final/word_live_tail/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 61019,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "raw_stdout_sha256": "0be14c327835510890259c7c864caeddd7ffdd7626c949de8679e204f53d7171",
+          "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "step": "port-js-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "node",
+            "<evidence>/order-final/word_live_tail/port.js"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        },
+        {
+          "step": "native-1",
+          "classification": "exact_failure_contract",
+          "command": [
+            "<evidence>/order-final/teamy-bend",
+            "run",
+            "<evidence>/order-final/word_live_tail/main.bend"
+          ],
+          "exit": 1,
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n",
+          "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "generation": 20,
+    "compilation": 25,
+    "execution": 78
+  },
+  "exact_executions": 70,
+  "unresolved_order_observations": 8,
+  "primary_O3_unresolved_observations": 2,
+  "other_profile_unresolved_observations": 6,
+  "word_O0_execution_unrun": 2,
+  "all_generated_sources_unchanged_from_before": true,
+  "identical_second_execution_streams_deduplicated": true,
+  "before_source": "888861df8477723e8f6d714b780846fa0789da22",
+  "raw_receipt_sha256": "e37761b5fece60534f8563f858d2acaf56276b5bfa4ec0d250410b36a0740c0f",
+  "scope": "One diagnostic-order case repeated twice at four profiles. Only O3 is the primary oracle profile. Separate from approved wildcard exception; no new exception granted. Compilation failure is not an executed refusal. Paths/ANSI sanitized, raw hashes retained."
+}

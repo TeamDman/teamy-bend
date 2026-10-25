@@ -1,5 +1,8 @@
 # Competing runtime failures at the frozen upstream pin
 
+Later [renewal and precise pending decision](cpu-failure-order-renewal.md) preserves
+the discrepancy. The measurements below retain their historical source identity.
+
 Research candidate: `6e5bd61b5f2cf7e1e4de7c398f17cfe04a0150cb`.
 Target: [Bend e6676b0](https://github.com/bendlang/bend/tree/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599).
 This investigation changes no demand rule, failure ordering, resource limit or

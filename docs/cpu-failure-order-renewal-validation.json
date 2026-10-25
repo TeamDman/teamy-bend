@@ -1,0 +1,919 @@
+{
+  "tested_source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+  "production_tree": "28ba75d847809f32f0a1f10e891eaa756655984d",
+  "binary_sha256": "744b0c170bbfb8139675d276d69e80950ff8094a2fda97a13a40c2e900d7f786",
+  "gate_totals": [
+    1175,
+    0,
+    49
+  ],
+  "gate_retry": {
+    "first_source": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+    "first_completed_tests": [
+      745,
+      1,
+      48
+    ],
+    "cause": "Two legacy port diagnostic goldens now match upstream; first gate stopped at the first stale comparison. Only expected strings changed, old bytes preserved. Remaining tests were unrun in that attempt."
+  },
+  "source_equivalence": {
+    "implementation_source": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+    "final_gate_source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+    "production_and_integration_sources_unchanged": true,
+    "binary_identical": false,
+    "versions": [
+      {
+        "source": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+        "exit": 0,
+        "stdout": "<implementation-artifacts>/teamy-bend 0.1.0 (repo https://github.com/TeamDman/teamy-bend.git, branch investigate/cpu-failure-order-20261025, rev 197149a, worktree clean, built 2026-10-25 08:21:30 +00:00)\n",
+        "stderr": ""
+      },
+      {
+        "source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+        "exit": 0,
+        "stdout": "<artifacts>/teamy-bend 0.1.0 (repo https://github.com/TeamDman/teamy-bend.git, branch investigate/cpu-failure-order-20261025, rev d8122bf, worktree clean, built 2026-10-25 08:33:33 +00:00)\n",
+        "stderr": ""
+      }
+    ],
+    "scope": "Binary hashes differ, so fresh final-source runtime/diagnostic matrices are run; prior receipts are retained, never relabelled."
+  },
+  "runs": {
+    "focused-parser": {
+      "source_commit": "888861df8477723e8f6d714b780846fa0789da22",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "syntax::diagnostics::tests"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12620656640,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 5.620921950991033,
+      "minimum_free": 12620648448,
+      "minimum_tmp_free": 5351817216,
+      "log_sha256": "b745c8194a193b93b1fb3161a85762b96a63d33a1530897dcf9692d4ae64fdeb"
+    },
+    "full-gate-revised": {
+      "source_commit": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12510310400,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 697.7464223759889,
+      "minimum_free": 12400476160,
+      "minimum_tmp_free": 5295112192,
+      "log_sha256": "9f6b1069096b87abef5f50ee7ac247635a40a73cc6f69ddee1422c26323d2ddb"
+    },
+    "prefix-regression": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_prefix_markers",
+        "--test",
+        "cpu_reusable_nat"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12510380032,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 16.41871539602289,
+      "minimum_free": 12510371840,
+      "minimum_tmp_free": 5324140544,
+      "log_sha256": "1fc8375ab6a2e0eae9e400411d72b123104890d3147763c962ff25ff57aa1bf5"
+    },
+    "focused-clippy": {
+      "source_commit": "888861df8477723e8f6d714b780846fa0789da22",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_pattern_locations",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12620607488,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.1683364089985844,
+      "minimum_free": 12620578816,
+      "minimum_tmp_free": 5352144896,
+      "log_sha256": "7e9576fe1b0842ad27dca81dfd2ac67ad27c68c5ee5a1b2bed5bcbcbfa2b6431"
+    },
+    "token-matrix-final": {
+      "source_commit": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "dirty": false,
+      "command": [
+        "python3",
+        "<evidence>/token-matrix-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12416602112,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 37.64504278698587,
+      "minimum_free": 12400574464,
+      "minimum_tmp_free": 5296943104,
+      "log_sha256": "91954725616ea085c28d3e2e88f8e924332db5459221b2156675b02249dc7e40"
+    },
+    "focused-clippy-current": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_pattern_locations",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12510441472,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.270524225983536,
+      "minimum_free": 12510433280,
+      "minimum_tmp_free": 5324464128,
+      "log_sha256": "c9c3fed22efff6716f028cb15852539270820bcfc8aaf36d85fc70d35d8f4247"
+    },
+    "token-matrix": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": false,
+      "command": [
+        "python3",
+        "<evidence>/token-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12510773248,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 30.632566863991087,
+      "minimum_free": 12510638080,
+      "minimum_tmp_free": 5324447744,
+      "log_sha256": "91954725616ea085c28d3e2e88f8e924332db5459221b2156675b02249dc7e40"
+    },
+    "focused-cli-revised": {
+      "source_commit": "888861df8477723e8f6d714b780846fa0789da22",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_pattern_locations",
+        "invalid_tokens_keep_exact_source_diagnostics_and_failure_status"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12620615680,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 8.215918861998944,
+      "minimum_free": 12620607488,
+      "minimum_tmp_free": 5352148992,
+      "log_sha256": "9117027297639b24cb3a7458cc1000a404af11ae47c0616a163017f1ee6525fb"
+    },
+    "order-matrix": {
+      "source_commit": "888861df8477723e8f6d714b780846fa0789da22",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/compare-failure-order.py",
+        "--reference",
+        "<pinned-reference>",
+        "--output",
+        "<evidence>/order"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12668698624,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 15.670086244004779,
+      "minimum_free": 12620820480,
+      "minimum_tmp_free": 5357883392,
+      "log_sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957"
+    },
+    "demand-matrix-final": {
+      "source_commit": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/compare-cpu-negatives.ps1",
+        "-Reference",
+        "<pinned-reference>",
+        "-OutputDirectory",
+        "<evidence>/demand-final",
+        "-OracleOptimization",
+        "O3",
+        "-Suite",
+        "demand"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12455268352,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 36.42222875999869,
+      "minimum_free": 12400594944,
+      "minimum_tmp_free": 5296943104,
+      "log_sha256": "6ea3fd5e9b13e3634de1389280536c87e6f60ca2f60e027972739c2a5cc6d8da"
+    },
+    "full-gate": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12620369920,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 494.7480009709834,
+      "minimum_free": 12510412800,
+      "minimum_tmp_free": 5322780672,
+      "log_sha256": "de444b8dec0b9bca764d45c277c97de9c19a600ac1e746fab146e62cc53e465d"
+    },
+    "prefix-clippy": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_prefix_markers",
+        "--test",
+        "cpu_pattern_locations",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12510371840,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.3176426920108497,
+      "minimum_free": 12510343168,
+      "minimum_tmp_free": 5324492800,
+      "log_sha256": "7a928bde867a1d9091b6fe9e2facfa333fc3c8b5c0d78f56421bb9cc11c4847d"
+    },
+    "order-matrix-current": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/compare-failure-order.py",
+        "--reference",
+        "<pinned-reference>",
+        "--output",
+        "<evidence>/order-current"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12603641856,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 16.171810889005428,
+      "minimum_free": 12555755520,
+      "minimum_tmp_free": 5324468224,
+      "log_sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957"
+    },
+    "demand-matrix": {
+      "source_commit": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/compare-cpu-negatives.ps1",
+        "-Reference",
+        "<pinned-reference>",
+        "-OutputDirectory",
+        "<evidence>/demand",
+        "-OracleOptimization",
+        "O3",
+        "-Suite",
+        "demand"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12555755520,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 25.124429578980198,
+      "minimum_free": 12510777344,
+      "minimum_tmp_free": 5324468224,
+      "log_sha256": "6ea3fd5e9b13e3634de1389280536c87e6f60ca2f60e027972739c2a5cc6d8da"
+    },
+    "focused-cli": {
+      "source_commit": "888861df8477723e8f6d714b780846fa0789da22",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_token_expectations"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12620648448,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 11.222131108981557,
+      "minimum_free": 12620611584,
+      "minimum_tmp_free": 5352157184,
+      "log_sha256": "01c7b7b72ac81584d8c73b4eb503e0c923d97cc1a107bcc38e32c8e7ee1b041a"
+    },
+    "order-matrix-final": {
+      "source_commit": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/compare-failure-order.py",
+        "--reference",
+        "<pinned-reference>",
+        "--output",
+        "<evidence>/order-final"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12503150592,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 21.11106817299151,
+      "minimum_free": 12455268352,
+      "minimum_tmp_free": 5296988160,
+      "log_sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957"
+    }
+  },
+  "order": {
+    "primary_O3_unresolved_observations": 2,
+    "same_case_other_profiles_unresolved_observations": 6,
+    "exact_executions": 70,
+    "unrun_Word_O0_executions": 2,
+    "commands": 123,
+    "timeouts": 0,
+    "runtime_changed": false
+  },
+  "demand": {
+    "exact_executions": 92,
+    "approved_wildcard_observations": 6,
+    "unresolved_order_observations": 2,
+    "runner_exit": 1
+  },
+  "token": {
+    "exact_diagnostic_observations": 162,
+    "phase_probes": 54,
+    "originals": 5,
+    "controls": 4,
+    "program_execution_claimed": false
+  },
+  "coverage": {
+    "linked": 429,
+    "unlinked": 873,
+    "remaining": {
+      "checker_rejection": 336,
+      "interpretation_and_compiled_candidates": 523,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  },
+  "frozen": {
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "teamy_docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "lockfile_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "rust": "1.96.0",
+    "formatter": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7",
+    "limits_changed": false
+  },
+  "parser_review": {
+    "reviewer": "independent review_sharing agent",
+    "blocking_findings": [],
+    "scope": "Read-only production diff and baseline/golden review; no tests executed by reviewer.",
+    "findings": [
+      "Only metadata attached to existing invalid-identifier-start/EOF failures. Public errors, token consumption, acceptance, keyword handling, terms and guards unchanged.",
+      "Five originals verified byte-identical to pin. Nine expected diagnostics match upstream baseline.",
+      "Existing status-bearing CliOutput external caller caveat retained; production entry point checks exit_code.",
+      "Initial standalone test helper warnings resolved by moving test to existing target without warning suppression."
+    ],
+    "final_golden_review": {
+      "source": "d8122bf54fb0879a3307ee1873f5ec607a824e40",
+      "blocking_findings": [],
+      "verified": [
+        "Old goldens preserved byte-for-byte; both replacements match two upstream and two port observations.",
+        "Sources, rejection status and production code unchanged.",
+        "Final162 diagnostic/54 phase,92 exact demand/6 wildcard/2 order counts confirmed.",
+        "Initial gate745/1/48 with later tests unrun."
+      ],
+      "wording_correction_applied": "Explicitly name nat_first as the constructor-match control rather than ambiguous first.",
+      "gate_boundary": "No final full-gate result attested by reviewer; publication waits for successful renewed receipt."
+    }
+  },
+  "order_review": {
+    "reviewer": "independent review_imported_printer agent",
+    "source": "197149ab40b1cfc2281c3f8a9947cc9e411bc60b",
+    "conclusion": "No demonstrated port traversal defect; a separate runtime competing-error acceptance decision is required. Three approved demand choices and wildcard exception do not settle it.",
+    "verified": [
+      "All 20 generated C/JS artifacts match before/current actual bytes and hashes.",
+      "All 78 ordering execution streams/statuses and repeat pairs match before/current.",
+      "Ordering: 70 exact, 2 primary O3 and 6 supplemental profile mismatches; Word O0 one build failure and 2 unrun executions.",
+      "Demand: 92 exact, 6 approved wildcard, 2 unresolved order observations. Same order case in both matrices, not additional semantic gaps.",
+      "No runtime/compiler/kernel changes."
+    ],
+    "publication_correction": "Clang InstalledDir prefix redacted in compact public receipt; raw receipt and hashes unchanged.",
+    "scope": "Read-only source and evidence review; no builds or executions by reviewer. Full gate completion is separately attested by parent receipt."
+  },
+  "raw_evidence_manifest": {
+    "focused-parser.json": {
+      "sha256": "7549185fd9add17fb462fe27a8a2bcada0418ad85fa467724218da352dc52e95",
+      "bytes": 1238
+    },
+    "full-gate-revised.json": {
+      "sha256": "873aa53793fafc73d1d686421a23dd18795974a985593d8bddaf1b0f2f466516",
+      "bytes": 37632
+    },
+    "prefix-regression.json": {
+      "sha256": "d5d63f457ca6be1e9f0d0a99d2e2bb56068007f3546f4528f58b8fb614805190",
+      "bytes": 1899
+    },
+    "order-matrix-final.log": {
+      "sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957",
+      "bytes": 5639
+    },
+    "focused-clippy.json": {
+      "sha256": "87709c42fe212e9f9a3b032ff9773bec96215c8206deed5af9d8886880e7300c",
+      "bytes": 1168
+    },
+    "token-final.json": {
+      "sha256": "665a963ae16f4454e54b4f3e1f6c512e82dcbabba30e882cd129742c2cb5699a",
+      "bytes": 124716
+    },
+    "run-command.py": {
+      "sha256": "73d8744d648cc97d7880be6f7550729d7dd609df7cce8c7d5118f687c03d4d76",
+      "bytes": 2383
+    },
+    "full-gate.log": {
+      "sha256": "de444b8dec0b9bca764d45c277c97de9c19a600ac1e746fab146e62cc53e465d",
+      "bytes": 14377
+    },
+    "demand-matrix.log": {
+      "sha256": "6ea3fd5e9b13e3634de1389280536c87e6f60ca2f60e027972739c2a5cc6d8da",
+      "bytes": 1353
+    },
+    "demand-matrix-final.log": {
+      "sha256": "6ea3fd5e9b13e3634de1389280536c87e6f60ca2f60e027972739c2a5cc6d8da",
+      "bytes": 1353
+    },
+    "review-publication.py": {
+      "sha256": "e5ad93ff368cf19019deb321e1de9000df08cbb7ff3fab93288bbe41b90af8a6",
+      "bytes": 3059
+    },
+    "focused-cli.log": {
+      "sha256": "01c7b7b72ac81584d8c73b4eb503e0c923d97cc1a107bcc38e32c8e7ee1b041a",
+      "bytes": 1637
+    },
+    "token-matrix-final.json": {
+      "sha256": "1eae4ff372d182a7368058e58c2160af9c9653206b4d3465338defb2b94e7074",
+      "bytes": 2873
+    },
+    "order-matrix.log": {
+      "sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957",
+      "bytes": 5639
+    },
+    "token-matrix-final.py": {
+      "sha256": "328587cc465d98a01247b6fdf7eacd3593f4fb9a7b6d27bf993a84c770d910d1",
+      "bytes": 3126
+    },
+    "build-probe.py": {
+      "sha256": "1f416bb245973a5c99444835bf2100d564ff9de0e0536ce3c2023aa3f3481f1e",
+      "bytes": 1170
+    },
+    "token-matrix.py": {
+      "sha256": "21df560486c8fb0dad185b2a5ba905383f8d7e1af17f39c1a225c07f3c352adf",
+      "bytes": 3122
+    },
+    "build-probe-implementation.json": {
+      "sha256": "4770e46298da04d8a6c17547bd7974b1b6ea51815f5821475431e517abd8cfe2",
+      "bytes": 3197
+    },
+    "snapshot.json": {
+      "sha256": "5e53aa8c59334780feef446282657047ec6ad34a097739a9aceafdc22947527d",
+      "bytes": 1226
+    },
+    "focused-clippy-current.json": {
+      "sha256": "cbf32d00c4318717e894dfc3b34d85a112688cc36f178ff8b5b0ef7bf3d8840c",
+      "bytes": 1168
+    },
+    "initial-import-control.bend": {
+      "sha256": "d8cf9dc23278005669edcc4831bca426d1f171fe289fe41bb173d6058ebc8ac5",
+      "bytes": 81
+    },
+    "focused-clippy.log": {
+      "sha256": "7e9576fe1b0842ad27dca81dfd2ac67ad27c68c5ee5a1b2bed5bcbcbfa2b6431",
+      "bytes": 115
+    },
+    "token-matrix.json": {
+      "sha256": "1b57b6716cdffdb24993e84f724656fe6aef179ab7aa203267d43c74d4759075",
+      "bytes": 2560
+    },
+    "independent-parser-review.json": {
+      "sha256": "a9b14158b5f5a992c19247778ebaf2b30e9a9da6a506c6a8539088e7d2fef581",
+      "bytes": 1421
+    },
+    "focused-cli-revised.json": {
+      "sha256": "645feacbbe34c766dc068b988feb777062274eb6e5630a19895e2b6dc3238b31",
+      "bytes": 1515
+    },
+    "order-matrix.json": {
+      "sha256": "89f2f82f740a0467c4312902adf8e50053e6347b946be0fc79e663828990515d",
+      "bytes": 1811
+    },
+    "focused-cli-revised.log": {
+      "sha256": "9117027297639b24cb3a7458cc1000a404af11ae47c0616a163017f1ee6525fb",
+      "bytes": 407
+    },
+    "focused-clippy-current.log": {
+      "sha256": "c9c3fed22efff6716f028cb15852539270820bcfc8aaf36d85fc70d35d8f4247",
+      "bytes": 115
+    },
+    "token-matrix-final.log": {
+      "sha256": "91954725616ea085c28d3e2e88f8e924332db5459221b2156675b02249dc7e40",
+      "bytes": 795
+    },
+    "final-source-equivalence.json": {
+      "sha256": "a45c58594ca189c811f44c377da8da94c4eec3dcaac2fd9a5f059b2d9903f45e",
+      "bytes": 1094
+    },
+    "token-before.json": {
+      "sha256": "c2942d28b70c4985d70e7de91cf4d455277772997015492f806fb27df39a51b7",
+      "bytes": 23690
+    },
+    "build-probe.json": {
+      "sha256": "06da933dd77bc09e403d3d0a52a4167ca3afb1ccff5886157079b22c035d8cfb",
+      "bytes": 3197
+    },
+    "snapshot.py": {
+      "sha256": "e45c97c2d2e1aba35bd9cd70072aba1012341ddd34bb19b97f26a6e67ec05359",
+      "bytes": 2677
+    },
+    "snapshot-final.json": {
+      "sha256": "57bca32ba1b658147adac1ff2e5ef5ae3e63b0f52cb639aaa4f3bb4792259db2",
+      "bytes": 1230
+    },
+    "demand-matrix-final.json": {
+      "sha256": "fa5f9d31ae18052a96b5d64d9746f0af811b2f47b3b50fc404fad103534451aa",
+      "bytes": 3080
+    },
+    "full-gate.json": {
+      "sha256": "207be6c45c4eee301256bae30fda93941de6d86624ba437b49835a7e4e6abfeb",
+      "bytes": 27045
+    },
+    "order-matrix-current.log": {
+      "sha256": "1ca6cc7c22e9c547526cdb51de3b73a7ba16227640f98a06ee8da93a88ff6957",
+      "bytes": 5639
+    },
+    "prefix-clippy.log": {
+      "sha256": "7a928bde867a1d9091b6fe9e2facfa333fc3c8b5c0d78f56421bb9cc11c4847d",
+      "bytes": 115
+    },
+    "independent-order-review.json": {
+      "sha256": "fe1a6a1eaefe74f19e9dd56a926fcd5f37a9d76e542370cd2d4d6d46199173c7",
+      "bytes": 1079
+    },
+    "write-report.py": {
+      "sha256": "240778e9f87b60dd3d82e153315f464b4e95689cd85ca1db41ca1de0ccd61cd4",
+      "bytes": 14224
+    },
+    "prefix-clippy.json": {
+      "sha256": "b3b4060f4467e50b559a9890c874b525901dcb714f7bfc7f27cafcc70a6aee6b",
+      "bytes": 1105
+    },
+    "order-matrix-current.json": {
+      "sha256": "03a26ec94ab8a3182b19d56274ff61bd5a77c1fe55664e61343fbac65eba3488",
+      "bytes": 1923
+    },
+    "demand-matrix.json": {
+      "sha256": "3297fa0bdcf80f5078b5d9868b3d96f13e824e18d56d964bf54630e5555ec315",
+      "bytes": 2440
+    },
+    "prepare-evidence.py": {
+      "sha256": "f65f5e657e9c71a0f3f55ea8314e3088baa01c872d33bcec853773b37b858fee",
+      "bytes": 6304
+    },
+    "focused-parser.log": {
+      "sha256": "b745c8194a193b93b1fb3161a85762b96a63d33a1530897dcf9692d4ae64fdeb",
+      "bytes": 1168
+    },
+    "finalize-evidence.py": {
+      "sha256": "17d7ec89d32c68bcb7ab5a6052b7086cf5202dcd0266d52431f49bf9bc731d05",
+      "bytes": 9785
+    },
+    "full-gate-revised.log": {
+      "sha256": "9f6b1069096b87abef5f50ee7ac247635a40a73cc6f69ddee1422c26323d2ddb",
+      "bytes": 21653
+    },
+    "publish-checkpoint.py": {
+      "sha256": "c9d04308980afa3724668707ccf9a667e38248c66f029133db9294283db22843",
+      "bytes": 1971
+    },
+    "prefix-golden-renewal.json": {
+      "sha256": "b055661824f5b6372764781d75217513f7033bab95b22492b735dabead24f901",
+      "bytes": 4493
+    },
+    "token-current.json": {
+      "sha256": "a6b2cd544fcbe24af66327cb6bc065be311d7ea2638aa7ec11e58061b9a4a273",
+      "bytes": 125115
+    },
+    "prefix-regression.log": {
+      "sha256": "1fc8375ab6a2e0eae9e400411d72b123104890d3147763c962ff25ff57aa1bf5",
+      "bytes": 878
+    },
+    "token-matrix.log": {
+      "sha256": "91954725616ea085c28d3e2e88f8e924332db5459221b2156675b02249dc7e40",
+      "bytes": 795
+    },
+    "phase-probe.rs": {
+      "sha256": "cce521ff9779024e79c12d9747fc5defc37e19f89d5f79a2cb2ab4522931759c",
+      "bytes": 745
+    },
+    "token-before-initial-import.json": {
+      "sha256": "0d8c46303f2d57239aff604d2e658ddcbb641ab5e58ed0911c9ff0709c249662",
+      "bytes": 23808
+    },
+    "snapshot-final.py": {
+      "sha256": "6ee24ec8839add5f03a955d0d97ea2871818552939a6b3e25f8f2bd34bcb8e3b",
+      "bytes": 2703
+    },
+    "focused-cli.json": {
+      "sha256": "8be34a2498b8d3e660ad18970fa01082dff31df7ec3517ee7b58bb765242bc00",
+      "bytes": 1548
+    },
+    "order-matrix-final.json": {
+      "sha256": "be6c4b271bcc877e3de641fb4bba8b18adef232382ffd5f77f385ae10e741fa3",
+      "bytes": 2133
+    },
+    "demand/receipt.json": {
+      "sha256": "d01b2e78e448da8f4e401c23dfbc63d45387f1b72bf44bda901a8015facebcbe",
+      "bytes": 111329
+    },
+    "demand-final/receipt.json": {
+      "sha256": "3f5f3518d4124d5821e73c8c80dfb4f54ad5fcd4a1e8fcade5136ec04dce38b3",
+      "bytes": 113655
+    },
+    "order-final/receipt.json": {
+      "sha256": "e37761b5fece60534f8563f858d2acaf56276b5bfa4ec0d250410b36a0740c0f",
+      "bytes": 81546
+    },
+    "order/receipt.json": {
+      "sha256": "703e640b33286fa8f8b7aded1cfd6976d0c2688ac07d2c4b91fcb08ba52f5a66",
+      "bytes": 79741
+    },
+    "order-current/receipt.json": {
+      "sha256": "4dbbf0a342f0d1b00bc207c9f713f16a634aa86cdc851a66427fa9644ed9e9d7",
+      "bytes": 82150
+    }
+  },
+  "census": {
+    "full_rerun": false,
+    "historical_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+    "historical_differences_beyond_IO": 300,
+    "historical_IO_exclusions": 385,
+    "historical_upstream_stack_failures": 6,
+    "scope": "Only bounded diagnostic subset renewed; no subtraction from or redate of historical full census."
+  }
+}

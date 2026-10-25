@@ -2208,3 +2208,31 @@ load refusal is still substantive open work. All other prior semantic/host/resou
 API and supplementary-lint gaps remain unwaived. Frozen inputs and disk floors
 preserved; small receipts and reproduction instrumentation in Git, bulky local
 evidence separately identified. No desktop/GPU, installs, merge or release.
+
+
+### Competing-error decision and invalid-token diagnostics
+
+At clean tested source `d8122bf54fb0879a3307ee1873f5ec607a824e40`, the order question remains
+unresolved: **one direct Nat-first fixture, two primary O3 observations**. Independent
+review found no port traversal defect; C ANF hoists its request failure before an
+inline arithmetic failure. Six O0/O1/O2 observations reproduce the same case;
+these are separate from six approved wildcard observations. All 78 ordering
+executions match before/current, with 20 generated C/JS artifacts byte-identical.
+Word O0 still has a failed build and two unrun executions. Primary demand remains
+92 exact / 6 approved wildcard / 2 unresolved; required-parity runner exits 1.
+[Precise proposed decision, not adopted](cpu-failure-order-renewal.md).
+
+The independent metadata-only invalid-token correction closes five original
+source-load diagnostic gaps. Nine cases pass 162 exact stderr/status observations
+and 54 load-phase probes; no execution claim for rejected input. Public parser
+errors, acceptance, terms and guards are unchanged. Existing status-bearing CLI
+API caveats apply; external consumers were not audited. [Report](cpu-token-expectations.md).
+
+Gate **1,175 / 0 / 49**, targeted strict Clippy passes. Coverage **429 linked / 873
+unlinked**: 523 compiled candidates, 336 checker negatives, 13 interpreter profiles,
+one checking-only module. Linked receipts are not universal parity. Full census
+remains historical at d224e79 (300 differences outside 385 old IO exclusions,
+six upstream stack failures); this subset does not redate or subtract from it.
+Older host/foreign/resource/F32.read/erased-hole/API/supplementary-lint gaps remain.
+Compact-pattern research stays unadopted. Frozen inputs, guards, budgets and disk
+floors preserved. Small evidence committed; raw logs/binaries remain local.
