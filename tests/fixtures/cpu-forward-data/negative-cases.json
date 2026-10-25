@@ -1,0 +1,10 @@
+[
+  "check/forward_data_table.bend",
+  "negative/field.bend",
+  "negative/nested.bend",
+  "negative/context.bend",
+  "negative/imported/main.bend",
+  "negative/macro.bend",
+  "negative/non-adt.bend",
+  "negative/argument-first.bend"
+]

@@ -1,0 +1,1 @@
+"Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n"

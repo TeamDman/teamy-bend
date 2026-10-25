@@ -1298,7 +1298,23 @@ impl Engine {
                 Ok((self.substitute(body, *id, x), add(fu, xu)))
             }
             Term::Adt { name, .. } => {
-                let adt = self.adt(value)?;
+                let adt = self.adt(value).map_err(|mut error| {
+                    if !self.adts.contains_key(name) {
+                        error.diagnostic = self
+                            .diagnostic(
+                                lhs,
+                                value,
+                                DiagnosticExpression::Text(format!(
+                                    "a declared datatype (unknown: {name})"
+                                )),
+                                None,
+                                context,
+                            )
+                            .ok()
+                            .map(Box::new);
+                    }
+                    error
+                })?;
                 let telescope = arrows(&adt.parameters, Rc::clone(&adt.kind));
                 let (ty, uses) = self.check_arguments(lhs, &telescope, value, demand, context)?;
                 if name != &adt.name {
@@ -2489,6 +2505,99 @@ mod reflexivity_diagnostic_tests {
     use super::*;
 
     #[test]
+    fn unknown_datatype_diagnostics_preserve_identity_first_error_and_allowance() {
+        let value = term(Term::Adt {
+            name: "Missing".into(),
+            args: vec![term(Term::Hole("unvisited-argument".into()))],
+            excluded: vec!["UnvisitedConstructor".into()],
+        });
+        let owners = Rc::strong_count(&value);
+        let before = format!("{value:?}");
+        for demand in [Quant::None, Quant::Lone, Quant::Many] {
+            for context in [
+                Context::new(),
+                Context::from([(
+                    1,
+                    Binder {
+                        quant: Quant::Lone,
+                        name: "q".into(),
+                        id: 1,
+                        ty: term(Term::Qnt),
+                    },
+                )]),
+            ] {
+                let mut engine = empty_engine(&Book {
+                    declarations: vec![],
+                })
+                .unwrap();
+                let initial = (engine.fuel, engine.fresh_id);
+                let error = engine
+                    .infer(&Lhs::default(), &value, demand, &context, &[])
+                    .unwrap_err();
+                assert_eq!(error, KernelError::new("undefined datatype Missing"));
+                assert_eq!(error.to_string(), error.message);
+                let report = error.checker_diagnostic().unwrap();
+                assert_eq!(report.expected, "a declared datatype (unknown: Missing)");
+                assert_eq!(report.observed, None);
+                assert_eq!(report.rejected_identity, Rc::as_ptr(&value) as usize);
+                assert_eq!(report.context.len(), context.bindings.len());
+                assert_eq!(
+                    (engine.fuel, engine.fresh_id, engine.depth),
+                    (initial.0 - 1, initial.1, 0)
+                );
+                for (fuel, depth) in [(1, 0), (10, 127)] {
+                    engine.fuel = fuel;
+                    engine.depth = depth;
+                    let exhausted = engine
+                        .infer(&Lhs::default(), &value, demand, &context, &[])
+                        .unwrap_err();
+                    assert_eq!(exhausted, error);
+                    // Message-only empty contexts require no normalization;
+                    // do not invent a charge just to construct diagnostic text.
+                    assert_eq!(
+                        exhausted.checker_diagnostic().is_some(),
+                        context.bindings.is_empty()
+                    );
+                    assert!(exhausted.language_failure().is_none());
+                    assert_eq!((engine.fuel, engine.depth), (fuel - 1, depth));
+                }
+            }
+        }
+        assert_eq!(format!("{value:?}"), before);
+        assert_eq!(Rc::strong_count(&value), owners);
+    }
+
+    #[test]
+    fn known_datatype_lookup_errors_keep_their_existing_contract() {
+        let book =
+            crate::syntax::parse("type Known<-A: Type> is Type:\n  Item{value: A}\n").unwrap();
+        let checked = check_book(&book).unwrap();
+        for (args, excluded, expected) in [
+            (vec![], vec![], "Known needs 1 type parameters"),
+            (
+                vec![term(Term::Hole("unvisited-argument".into()))],
+                vec!["Unknown".into()],
+                "unknown excluded constructor",
+            ),
+        ] {
+            let value = term(Term::Adt {
+                name: "Known".into(),
+                args,
+                excluded,
+            });
+            let mut engine = checked.engine.clone();
+            engine.reset();
+            let initial = engine.fuel;
+            let error = engine
+                .infer(&Lhs::default(), &value, Quant::None, &Context::new(), &[])
+                .unwrap_err();
+            assert_eq!(error, KernelError::new(expected));
+            assert!(error.checker_diagnostic().is_none());
+            assert_eq!((engine.fuel, engine.depth), (initial - 1, 0));
+        }
+    }
+
+    #[test]
     fn family_head_diagnostics_preserve_rejection_identity_and_remaining_allowance() {
         let book =
             crate::syntax::parse("type Family<-A: Type> is Type:\n  Item{value: A}\n").unwrap();
@@ -3389,6 +3498,16 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-forward-data/check/forward_data_table.bend", &[][..]),
+            ("cpu-forward-data/negative/field.bend", &[][..]),
+            ("cpu-forward-data/negative/nested.bend", &[][..]),
+            ("cpu-forward-data/negative/context.bend", &[][..]),
+            ("cpu-forward-data/negative/imported/main.bend", &[][..]),
+            ("cpu-forward-data/negative/macro.bend", &[][..]),
+            ("cpu-forward-data/negative/non-adt.bend", &[][..]),
+            ("cpu-forward-data/negative/argument-first.bend", &[][..]),
+            ("cpu-forward-data/positive/earlier.bend", &["main"][..]),
+            ("cpu-forward-data/positive/recursive.bend", &["main"][..]),
             ("cpu-family-head/check/family_head_bare.bend", &[][..]),
             ("cpu-family-head/negative/domain.bend", &[][..]),
             ("cpu-family-head/negative/nested.bend", &[][..]),

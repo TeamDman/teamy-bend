@@ -1,0 +1,1 @@
+"Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n"

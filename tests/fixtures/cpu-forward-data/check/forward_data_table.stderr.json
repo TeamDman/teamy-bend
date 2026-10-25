@@ -1,0 +1,1 @@
+"Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n"
