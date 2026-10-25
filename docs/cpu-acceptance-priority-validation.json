@@ -1,0 +1,59 @@
+{
+  "tested_source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+  "standard_gate": {
+    "passed": 1183,
+    "failed": 0,
+    "ignored": 49,
+    "exit": 0,
+    "seconds": 690.9346563770087,
+    "log_sha256": "6caa2464bb289f1666ea222dcd92f18236d0a851195a0ea4210658979687e0b4",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    }
+  },
+  "focused_before_commit": {
+    "source_base": "b7649af34e59713c7a46d96ebf7fa5b0f61a6420",
+    "dirty": true,
+    "passed": 9,
+    "failed": 0,
+    "clippy_exit": 0,
+    "test_log_sha256": "18a33cf5b18e8ebe2d7c29c389e06e55ce35f5f5c87611591322a947a6dde4ff",
+    "clippy_log_sha256": "a9f27a118f6325fbf1aeebc4a924b9ec54079898a87a789c1a30ef1fd089554a"
+  },
+  "headroom": {
+    "minimum_workspace_GiB": 11.481006622314453,
+    "minimum_temporary_GiB": 4.849658966064453,
+    "workspace_now_GiB": 11.481006622314453,
+    "temporary_now_GiB": 4.8511962890625,
+    "cache_reclaimed": false
+  },
+  "production_src_tree": "c428a50c6f941fd31305faa327d20de81952ca3d",
+  "cargo_lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "independent_review": "Two reviewers confirmed cause/mode classification and no demonstrated production defect; one reviewed final tests, runner and compact evidence. Reviewer did not run tests.",
+  "unrun": [
+    "Full1302census (last59ac3fd)",
+    "Supplementary all-target Clippy",
+    "GPU/desktop/hardware",
+    "Six unstable upstream oracle renewals"
+  ],
+  "private_evidence_not_in_git": [
+    "Raw command/log captures",
+    "Generated C/JS/binaries",
+    "Lossless binary snapshot",
+    "Initial failed harness drafts/receipts"
+  ]
+}

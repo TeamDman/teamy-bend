@@ -2295,3 +2295,28 @@ host/resource/F32.read/foreign/hole/API/supplementary-lint differences remain un
 Frozen pins/dependencies/toolchains/limits, cancellation boundaries, disk floors and
 unique evidence retained. No installs, desktop/GPU, main merge or release. Raw logs
 and binary snapshots remain outside Git preservation.
+
+
+## Acceptance-mode census priority checkpoint
+
+Tested source `67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f` changes tests/harness only.
+[Classification and evidence](cpu-acceptance-priority.md) renew all 109 selected
+strict acceptance disagreements exactly: 92 executable-check acceptances,
+15 retained parser/flatten guards, two missing Window/Audio implementation surfaces.
+No row is waived and no production acceptance fix is claimed. Last full census
+remains 227 non-IO differences (109 acceptance + 118 rejection) and six separate
+upstream oracle failures at 59ac3fd; the 109 subset is freshly renewed here.
+
+The unchanged unsafe_many original returns 7 without calling twice. A live
+nested reusable-function companion returns 5n. Both agree in 20 five-lane runs
+plus four upstream direct-CLI observations. Four negative controls retain safe
+signature, source-hole and false-proof boundaries; strict-mode diagnostic
+exclusions remain distinct. Standard gate: 1,183 passed / 0 failed / 49 ignored.
+
+Coverage links: 444 linked / 858 unlinked (522 compiled candidates, 322 checker
+negatives, 13 interpreter profiles, one checking-only module). Links and mode
+classification do not establish full CPU parity. Nat-first remains pending,
+compact-pattern research unadopted; host/foreign/F32.read/hole/resource/oracle
+and supplementary-lint limitations remain. No production/API/dependency/toolchain,
+guard, budget or cancellation changes. No desktop/GPU, installs, merge or release.
+Raw logs, generated artifacts and binary snapshots remain outside Git preservation.

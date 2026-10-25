@@ -1,0 +1,77 @@
+{
+  "source": "59ac3fdbdd900be23e6516a3da84bafa31e7574a",
+  "rows": [
+    {
+      "fixture": "gfx/window.bend",
+      "lane": "upstream-direct-cli",
+      "command": [
+        "node",
+        "<upstream>/bend2/main.ts",
+        "<upstream>/tests/gfx/window.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n"
+    },
+    {
+      "fixture": "gfx/window.bend",
+      "lane": "port-run",
+      "command": [
+        "<baseline-bend>",
+        "run",
+        "<upstream>/tests/gfx/window.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : Window\nLocation: seen\n33 | \n34>| def seen(q: Window & Image & List<Event>) -> IO(Window & Image):\n35 |   (w, +im, evs) = q\n"
+    },
+    {
+      "fixture": "io/audio_open.bend",
+      "lane": "upstream-direct-cli",
+      "command": [
+        "node",
+        "<upstream>/bend2/main.ts",
+        "<upstream>/tests/io/audio_open.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n"
+    },
+    {
+      "fixture": "io/audio_open.bend",
+      "lane": "port-run",
+      "command": [
+        "<baseline-bend>",
+        "run",
+        "<upstream>/tests/io/audio_open.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : Audio\nLocation: wrote\n33 | law wrote:\n34>|   for r: Audio & U32\n35 |   IO(Unit)\n"
+    },
+    {
+      "fixture": "check/unsafe_many.bend",
+      "lane": "upstream-direct-cli",
+      "command": [
+        "node",
+        "<upstream>/bend2/main.ts",
+        "<upstream>/tests/check/unsafe_many.bend"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    },
+    {
+      "fixture": "check/unsafe_many.bend",
+      "lane": "port-run",
+      "command": [
+        "<baseline-bend>",
+        "run",
+        "<upstream>/tests/check/unsafe_many.bend"
+      ],
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": ""
+    }
+  ]
+}

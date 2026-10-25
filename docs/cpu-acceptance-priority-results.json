@@ -1,0 +1,2980 @@
+{
+  "tested_source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "full_parity": false,
+  "production_changed": false,
+  "counts": {
+    "execution_only_numeric_API": 38,
+    "execution_only_template": 3,
+    "execution_only_File_API": 8,
+    "retained_Nat_literal_128_guard": 10,
+    "retained_pattern_64_guard": 4,
+    "strict_unsafe_context_refusal": 3,
+    "missing_Window_Audio_implementation": 2,
+    "execution_only_Chan_API": 5,
+    "strict_foreign_refusal": 22,
+    "execution_only_network_API": 11,
+    "execution_only_private_request_constructor": 1,
+    "retained_telescope_128_guard": 1,
+    "execution_only_IO_API_newly_exposed": 1
+  },
+  "executable_phase_counts": {
+    "accepted": 92,
+    "load": 15,
+    "check": 2
+  },
+  "strict_subset_unchanged": 109,
+  "historical_IO_exclusions_changed": false,
+  "original_raw_sha256": "2eed81aa2c43c47cfe74af2dcd29861801a5f6230f0c33a49e6097078987b13d",
+  "build": {
+    "binary_sha256": "9c4aca046596c1f292910f9c2adb11d6474b56ac96858d23f7d3a16e1808fb25",
+    "probe_sha256": "45afbdc6bc934414e06405518e3aaa224b0f741500cf380f2eee332081868cbd",
+    "features": [
+      "default",
+      "extended_observability"
+    ],
+    "host_profile": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off"
+    }
+  },
+  "bounded_refusals": [
+    {
+      "fixture": "base/text_ops.bend",
+      "source_sha256": "509b5789efdc0de6d64408cfb72e3749a6e3016fe1483e501c89ff146a859bb4",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/base/text_ops.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/bf3904e6436b71113240d29216431df5bcc6ab7e708a9901fc9eb4b7b68001cc.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/base/text_ops.bend:100:26: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "da89b7658000763ff09fd4e4740d468f70faaa1c4e87fa9d8b06194352195130",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "check/residual_filter_wide.bend",
+      "source_sha256": "c2982bc08bdd61b33635afef8456b7821fbac51f7d1f58c6fd19a7b78838fe07",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/check/residual_filter_wide.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/0b05fd43943a9b476c34045ae7543e729932136e1762d785f05c2ecc92a2d138.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/check/residual_filter_wide.bend:214:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "142e0e8023b9a40c635d37e97b15e6ebee8ed8b86ce720fe102786d9a1b0fca0",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "compile/array_large_literal.bend",
+      "source_sha256": "d61aa81dd3560c1a5dee78215965dcfb580e5bd77c86a6fce6b0dd1d4beac031",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/compile/array_large_literal.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/84018351acb87225b4766fa048deced1dfb98ae566ca1c1751784e7905e3fead.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/compile/array_large_literal.bend:66:34: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "711dfeecfe7daa44c362e6af495cd9bff38abd94269e714a9ddccd87a5e0f044",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "compile/uint_literal_suffix.bend",
+      "source_sha256": "94c42d5e3d770dac15ed06c7e742ee7759313da68269901523d01de6833235da",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/compile/uint_literal_suffix.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/ac5ef63678d6892d41052ae616abf7d474de87f581ede830b0b03b91380fc1a7.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/compile/uint_literal_suffix.bend:13:32: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0fc3acc9951d4e74fbcd078226bdcc9f8e782c6d002cd75de4bdad728eb760fc",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "flatten/literal_rows_cubic.bend",
+      "source_sha256": "27cf900cc11aaf0a52c7906790d4bbf893a251bf8620ec4c5b272362c6f4cc26",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/flatten/literal_rows_cubic.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/b821b9de94dc83d2411acc95e3fb2de17a9ac6a31cd04d9ccd7715f9bfa4eba1.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/flatten/literal_rows_cubic.bend:142:14: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "8b4d65bdbf7016ec8de6bfeb884ce89248359f1d3aae294aedcb80d76e900057",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "gfx/window.bend",
+      "source_sha256": "b328e2f6292029ce886e5b96c39f16693131c698fc248db385c1a982d29e632e",
+      "phase": "check",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/gfx/window.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/c151f1c39ec4845553b406a1e851048bec0837f31a3284d86c429ce507ffea62.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : Window\nLocation: seen\n33 | \n34>| def seen(q: Window & Image & List<Event>) -> IO(Window & Image):\n35 |   (w, +im, evs) = q\n",
+      "original_stderr_sha256": "b6a6f4340b0a2f722605e4ee54f747537ddf59e04e0ce9d61f0bb6e72e9f1977",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "io/audio_open.bend",
+      "source_sha256": "6745e59a4dbacaad7eedcf611272504e1a9acbb08dbd183dbe57e0d02f8c3913",
+      "phase": "check",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/io/audio_open.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/7c05d9cb511b28e40001278147e088381b15e2dee07912be90e9ea48b94772b7.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : Audio\nLocation: wrote\n33 | law wrote:\n34>|   for r: Audio & U32\n35 |   IO(Unit)\n",
+      "original_stderr_sha256": "a21fddbb3ecdaa161cdcfab8422c5ed713bfd95f69461f4e1a6aa2ba9bf49673",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "io/tcp_send_slow_peer.bend",
+      "source_sha256": "9bd1f63265f03431a88327a944c77494e1b1b9eaf1125fc5eddb759a26b590b8",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/io/tcp_send_slow_peer.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/5f000369b8e20215caa3362b30fb36f683ad9843c4eed201afbe39a09232e893.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/io/tcp_send_slow_peer.bend:32:85: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "342f3d681fa882a8deca7901da5994febec82c10f33ba76a995af24d246c98ee",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "parse/string_pattern_sugar.bend",
+      "source_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/parse/string_pattern_sugar.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/3ac55b0665009570e65cfba7e9d14d55ec27daee8d62eefe8c0b0ac0765bbc0f.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/arity_wall.bend",
+      "source_sha256": "f2e6dd44789ba5a9c1594f180ec882354f4b84db897f89941e4cc58da4919e7a",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/arity_wall.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/d26f7042a3ae397f58685b98e257e644951762431499d1809b2f70be02bc362e.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/arity_wall.bend:10:1308: binder telescope exceeds the parser resource limit of 128\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "810320383a106547c8fbb766d153c5f079c8ec512e0d2fc5d33da292d00f0aab",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/array_half_loop.bend",
+      "source_sha256": "80c999b3833245e13e55b15b3dc0a05d0110a7883c30f03d85881488da24ffed",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/array_half_loop.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/6bc0dee72e687ea54918b631de73a3de8124fb4cd3a94fb36059d3ee8115558c.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/array_half_loop.bend:83:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "2f4a7ab27e08f81c23c66987d1791bacf969bdbf927cb46f4c9294532ff77e7c",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/array_node_loop.bend",
+      "source_sha256": "16d3db8bc3aae92dc1b2ea8eafcf6e2cd67991a1c0e41c02dddcc370096c83d6",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/array_node_loop.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/da6ced75e2aa4421026eecdab9a37dc35fbaaaf62a3d8eac02207a9d5111c6ac.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/array_node_loop.bend:80:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "1d70d0bc4582eea99b6492b1114dad168927d8e6f46ca7e4b595b1df9efbdfef",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/brw_twins.bend",
+      "source_sha256": "1334b207594ed1a5202dbf1af2089cab877a74c9df4d9e4db3c4946eb706f712",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/brw_twins.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/8579a8cea6daa6631fb5a49f2d3d4d1f6f83c6320393b8c337ffadeb0265e3fe.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/brw_twins.bend:58:60: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "1cea7ea6d959a5627e6478d7baa901c0ea34fb995439eb2b046ef2b3b4c2d77f",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/erased_arrow_apps.bend",
+      "source_sha256": "c9b4aa764e3c1f3626c29f6b9e398e8efad7c3ccbfaa92f576c8c9ac6ca543a7",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/erased_arrow_apps.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/01b944894a01c7ab099bff868e5a7bbc8e91a949af1d5e8c46b7acba8e31a958.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/erased_arrow_apps.bend:27:19: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "152c1b02253b5c6c80480f3f467ee4528635888acc73626a629c73b64abbc7f5",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/nat_chain.bend",
+      "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/nat_chain.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/36a7bfa13890fb64885a19e7a614a6b75ee71b9fb167e323b0621f2249422f3a.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "37c779342c0b12a391079d60345fa0049b5f2527324fba134459161413099462",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/nat_default.bend",
+      "source_sha256": "7c1c4e1377eafcd22e2268d70cce26501a050ca287533d153d33e137d3c39e67",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/nat_default.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/b708b35f8b258b4a73e6c6f614ee815fff05b19d33098161a5019a010b0ba660.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/nat_default.bend:14:5: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "108246a0e02de73694e975629a78c94c2995bb6a7eb6297e70b51ccc3e53a9e4",
+      "artifact_emitted": false,
+      "timed_out": false
+    },
+    {
+      "fixture": "reg/nat_table.bend",
+      "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+      "phase": "load",
+      "command": [
+        "<bend>",
+        "compile",
+        "<upstream>/tests/reg/nat_table.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<evidence>/renewed/5742c9c5a85be5915ebee53affabd83f291750271502aa12c98356fbbc61242e.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/reg/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "86a86fc6bf22b3684cbd05be435a95f9e164a8502b912cba6818cad763456dd9",
+      "artifact_emitted": false,
+      "timed_out": false
+    }
+  ],
+  "matrix": {
+    "tested_source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+    "binary_sha256": "9c4aca046596c1f292910f9c2adb11d6474b56ac96858d23f7d3a16e1808fb25",
+    "rows": [
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1531233710120432
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "native",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34938051301287487
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n7 | law twice:\n8>|   for f: @+g: (Nat -> Nat) -> Nat\n9 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2435818499943707
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n7 | law twice:\n8>|   for f: @+g: (Nat -> Nat) -> Nat\n9 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.23942085998714902
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15239326198934577
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "native",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3527117559860926
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n7 | law twice:\n8>|   for f: @+g: (Nat -> Nat) -> Nat\n9 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.24325001498800702
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n7 | law twice:\n8>|   for f: @+g: (Nat -> Nat) -> Nat\n9 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2384888119995594
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "-o",
+          "<artifacts>/unsafe_many/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15245859901187941,
+        "artifact_sha256": "cc7930c8f8468f90f3353310582f093dc541ad4ae81c961e5f6c8f91ff98e581"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-build-O3",
+        "command": [
+          "<clang>",
+          "-std=c11",
+          "-O3",
+          "<artifacts>/unsafe_many/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "<artifacts>/unsafe_many/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18303993198787794,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "-o",
+          "<artifacts>/unsafe_many/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15451430302346125,
+        "artifact_sha256": "ea8dc51163a389a05479b1068b8c04921111ad66bb535a56f4ca87bb6774ff41"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/unsafe_many/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/unsafe_many/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184719,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3609419669955969,
+        "artifact_sha256": "5941104170b65ca6cf3185debf74fc6aafb42fb01441206a839ab7370fac6c6f"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-build-O3",
+        "command": [
+          "<clang>",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "<artifacts>/unsafe_many/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "<artifacts>/unsafe_many/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4030940379889216,
+        "artifact_sha256": "acea9dbb5020dfbeddafb354041ee9834634fe7bcb8e00a392cb91f9d608283c"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/unsafe_many/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/unsafe_many/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52320,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34768159297527745,
+        "artifact_sha256": "ad6142f9001780933e051e095bdaae6b484cdcc150586e2c41213ba99d331519"
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-C-O3",
+        "command": [
+          "<artifacts>/unsafe_many/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001037895999616012
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "<artifacts>/unsafe_many/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.016952145990217105
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-C-O3",
+        "command": [
+          "<artifacts>/unsafe_many/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0016716709942556918
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "<artifacts>/unsafe_many/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.025379762024385855
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-C-O3",
+        "command": [
+          "<artifacts>/unsafe_many/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0008680940081831068
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "<artifacts>/unsafe_many/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01740906698978506
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-C-O3",
+        "command": [
+          "<artifacts>/unsafe_many/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0032982740085572004
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "<artifacts>/unsafe_many/port.js"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01747306200559251
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16237202999764122
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "native",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3511873300012667
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2695432479958981
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.24873317498713732
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15956909401575103
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "native",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.355305248987861
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2435737070045434
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2450145440234337
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "-o",
+          "<artifacts>/live/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17671686498215422,
+        "artifact_sha256": "9b35d15b699ec22ee2c2bbd694d2d38a0d79de26fde53b46b392eb19525a30b3"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-build-O3",
+        "command": [
+          "<clang>",
+          "-std=c11",
+          "-O3",
+          "<artifacts>/live/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "<artifacts>/live/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.20278991499799304,
+        "artifact_sha256": "937dbcf64185c02c3445a150c11d6e2cc6babb418748e99cd8743ecd25ff7633"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "-o",
+          "<artifacts>/live/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.14705732898437418,
+        "artifact_sha256": "ac8e639d9dfc7192532f1126c36d5e24a02c4209e95a284d0e8286bbf1ebfede"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/live/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/live/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 188784,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34954380002454855,
+        "artifact_sha256": "d8b96731c15ed172d3834fb56129f62765dd8767464997e78e19e874702878f3"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-build-O3",
+        "command": [
+          "<clang>",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "<artifacts>/live/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "<artifacts>/live/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4586246100079734,
+        "artifact_sha256": "03e91bb0391066627466893ca45778d153a0cb217f08b1a71a34f8ede4453a00"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/live/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/live/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52831,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34757723700022325,
+        "artifact_sha256": "be90bed7dc7d9dae5b32c65569ba6ad6ae89615e4c413bb3214eb63ab9439729"
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-C-O3",
+        "command": [
+          "<artifacts>/live/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0011498930107336491
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "<artifacts>/live/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01813787201535888
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-C-O3",
+        "command": [
+          "<artifacts>/live/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001480385020840913
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "<artifacts>/live/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.021566601004451513
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-C-O3",
+        "command": [
+          "<artifacts>/live/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0007733719830866903
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "<artifacts>/live/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01603887401870452
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-C-O3",
+        "command": [
+          "<artifacts>/live/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0014308109821286052
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "<artifacts>/live/port.js"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "5n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.018279423005878925
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.17793238000012934
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "-o",
+          "<artifacts>/safe/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.15886214902275242
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "-o",
+          "<artifacts>/safe/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.14681459998246282
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/safe/port.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2834495330171194
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/safe/port.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2823221840080805
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2458752040110994
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.240445503994124
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.28128465797635727
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.1462869840033818
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "-o",
+          "<artifacts>/safe/upstream.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.15146140300203115
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "-o",
+          "<artifacts>/safe/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.14859946799697354
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/safe/port.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.29384551200200804
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/safe/port.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.28074487499543466
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2430932789866347
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.25007883601938374
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2817943879927043
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.1519014179939404
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "-o",
+          "<artifacts>/later-safe/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.1511469550023321
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "-o",
+          "<artifacts>/later-safe/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.15349781699478626
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/later-safe/port.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.28050309501122683
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/later-safe/port.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2882062050048262
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2388524310081266
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.2504456089809537
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.29739173501729965
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.15158169702044688
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "-o",
+          "<artifacts>/later-safe/upstream.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.15052276899223216
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "-o",
+          "<artifacts>/later-safe/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.16023232997395098
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/later-safe/port.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.28710949601372704
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/later-safe/port.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.28413412399822846
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.23942930999328382
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.24065507698105648
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2979399819741957
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.1424763060058467
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "-o",
+          "<artifacts>/false-proof/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.1484436829923652
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "-o",
+          "<artifacts>/false-proof/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.15760773999500088
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/false-proof/port.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2852524600166362
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/false-proof/port.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.28910747202462517
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.24169905899907462
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.2380959099973552
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2856326010078192
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.1835580740007572
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "-o",
+          "<artifacts>/false-proof/upstream.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.17130850898684002
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "-o",
+          "<artifacts>/false-proof/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.17859001699252985
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/false-proof/port.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.5253558259864803
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/false-proof/port.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.433246845001122
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.34638826199807227
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.6125393229885958
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.49591184899327345
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.39402812501066364
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "-o",
+          "<artifacts>/source-hole/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3954617269919254
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "-o",
+          "<artifacts>/source-hole/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3171106929949019
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/source-hole/port.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.4368282750074286
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/source-hole/port.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3768807649903465
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.2935907880018931
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3743849960155785
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.6423840720090084
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.34372591000283137
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "-o",
+          "<artifacts>/source-hole/upstream.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.29909712000517175
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "<upstream>/bend2/main.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "-o",
+          "<artifacts>/source-hole/upstream.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.32031800600816496
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-generate-c",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/source-hole/port.c"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.4360163469973486
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-generate-js",
+        "command": [
+          "<bend>",
+          "compile",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/source-hole/port.js"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3647192269854713
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-check",
+        "command": [
+          "<bend>",
+          "check",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.6077179220155813
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-eval",
+        "command": [
+          "<bend>",
+          "eval",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mwrong: strict proof checking rejects unsafe and foreign definitions\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m28\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3907549270079471
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "port-run",
+        "command": [
+          "<bend>",
+          "run",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.4376574449997861
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.26804849799373187,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2958069979795255
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37672645002021454
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> {0n == 1n : Nat}: {==}\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.39123353399918415,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3105332779814489
+      },
+      {
+        "case": "false-proof.bend",
+        "source_sha256": "3f5eb377aec4dfc58e6c5360d005401453cfee971817c8b3868ba9edcea22123",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/false-proof.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5179417989857029
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.34017237499938346,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17328428200562485
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.268911975028459
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: wrong\n7 | def twice(f): f(x => 1n+x)\n8>| def wrong(+f: Nat -> Nat) -> Nat: f(0n)\n9 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3435778389975894,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1763666339975316
+      },
+      {
+        "case": "later-safe.bend",
+        "source_sha256": "2db6e1414e97b70e0b7fe9bd0c8563fbdc1bb327c6ee42d98f7bd3197b69722f",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/later-safe.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3164579049916938
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3809741330042016,
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3203418710036203
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5062531550065614
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3087935150251724,
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16080607200274244
+      },
+      {
+        "case": "live.bend",
+        "source_sha256": "c7a32d0948f177ca9277e5309637d9f8fbb916cdd578aa34f7f3aea98cecce85",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/live.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2845252300030552
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.347100290004164,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24458032799884677
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18530087600811385
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: twice\n3 | law twice:\n4>|   for f: @+g: (Nat -> Nat) -> Nat\n5 |   Nat\n",
+        "timed_out": false,
+        "seconds": 0.365438908978831,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.29601240999181755
+      },
+      {
+        "case": "safe.bend",
+        "source_sha256": "2f2de79a0cbd7afb78d1aeff01ebaf5e8cb32cdd2b4fc86bf265459504711c25",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/safe.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.26615200500236824
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.33395445501082577,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2268969949800521
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22248040401609614
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : ?todo\nLocation: wrong\n3 | @unsafe\n4>| def wrong() -> Nat: ?todo\n5 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2432262710062787,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22442978800972924
+      },
+      {
+        "case": "source-hole.bend",
+        "source_sha256": "571a1e39548dddedd17bddc9a99ea2e47d02c2fb00cc8259789c7025bc7b88cc",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/source-hole.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.20694080501561984
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.32222002299386077,
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17154389101779088
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3352362239966169
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "upstream-checking-only",
+        "command": [
+          "node",
+          "<repo>/scripts/checking-census/upstream.mjs",
+          "<upstream>/bend2/bend.ts",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "<artifacts>/phase.json"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2359777720121201,
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "strict-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1438477000046987
+      },
+      {
+        "case": "unsafe_many.bend",
+        "source_sha256": "24f5b93dfcb069b80ba6e1b9608365ad156cbca91925fb7fd3cfa08927159dc0",
+        "lane": "executable-phase",
+        "command": [
+          "<probe>",
+          "<repo>/tests/fixtures/cpu-acceptance-priority/unsafe_many.bend",
+          "--executable"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36076737998519093
+      }
+    ],
+    "phases": [],
+    "completed": true
+  },
+  "limitations": [
+    "92 accepted means executable checking only, not runtime parity",
+    "All109 strict acceptance disagreements remain; no policy exception added",
+    "Full1302 census not rerun here; last measured227 nonIO differences=109acceptance+118rejection, plus6 upstream failures at59ac3fd",
+    "nat_first remains pending and compact-pattern research unadopted",
+    "Phase-only unstable oracle sidecar lacks complete streams; no exact-pass credit",
+    "Early selection.json upstream-check label was wrong: direct CLI also runs main; corrected in report, raw file preserved",
+    "Original unsafe_many main does not call twice; live control does",
+    "No production fix warranted; existing mode/guard boundaries retained"
+  ],
+  "validation": "cpu-acceptance-priority-validation.json",
+  "negative_diagnostic_counts": {
+    "exact": 60,
+    "different_strict_mode_boundary": 12,
+    "new_exception": false
+  }
+}
