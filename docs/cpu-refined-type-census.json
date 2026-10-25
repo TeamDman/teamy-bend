@@ -1,0 +1,72 @@
+{
+  "source": "9a260404fbb5819870e48f14a78bb80b7afc9181",
+  "baseline_source": "b8a07c233ab3726d9152f13d465130ef1672bb20",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 355,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 81,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 190,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 81
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "diagnostic_only_candidate": 52,
+    "other_rejection_difference": 29
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "source_sha256": "94f3bea063702bb45afc86176e79cf49aec92cfb7191687bc96990cf5ee5007e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "a068a5c6ec36e8a5cf249d0c4648c82447071a93bb0737f09cd3e36dd51d30a6",
+      "after_stderr_sha256": "ffeddac9bbdaf1fb6a403ca6838ec165a8339370c76a006a0cbec3574ac563f7"
+    }
+  ],
+  "raw_observations_sha256": "4550f2d85fcfff99b1c4c669c536d4d1d77bbec361b93f11699a3b98f631c2d6",
+  "baseline_raw_sha256": "8d7599f5ad88274391015ad73a9a3f33c144052c74d412f27a8078da71142e4b",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "refined_type_diagnostic_changes": [
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "before_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat - [Zero]\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat<> - Zero{}\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat<> - Zero{}\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "unexpected_port_stream_changes": []
+}

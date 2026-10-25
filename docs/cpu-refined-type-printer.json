@@ -1,0 +1,324 @@
+{
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "scope": "programmatic printer terms only; no checking, normalization or execution claim",
+  "cases": [
+    {
+      "name": "plain",
+      "term": {
+        "$": "ADT",
+        "k": "N",
+        "x": [],
+        "r": []
+      },
+      "text": "N"
+    },
+    {
+      "name": "parameterized",
+      "term": {
+        "$": "ADT",
+        "k": "Box",
+        "x": [
+          {
+            "$": "Ref",
+            "k": "T"
+          }
+        ],
+        "r": []
+      },
+      "text": "Box<T>"
+    },
+    {
+      "name": "one",
+      "term": {
+        "$": "ADT",
+        "k": "N",
+        "x": [],
+        "r": [
+          "Z"
+        ]
+      },
+      "text": "N<> - Z{}"
+    },
+    {
+      "name": "multiple",
+      "term": {
+        "$": "ADT",
+        "k": "N",
+        "x": [],
+        "r": [
+          "Z",
+          "S"
+        ]
+      },
+      "text": "N<> - Z{} - S{}"
+    },
+    {
+      "name": "parameters",
+      "term": {
+        "$": "ADT",
+        "k": "Box",
+        "x": [
+          {
+            "$": "Ref",
+            "k": "T"
+          }
+        ],
+        "r": [
+          "Empty",
+          "Full"
+        ]
+      },
+      "text": "Box<T> - Empty{} - Full{}"
+    },
+    {
+      "name": "domain",
+      "term": {
+        "$": "All",
+        "k": "x",
+        "q": {
+          "$": "Lone"
+        },
+        "A": {
+          "$": "ADT",
+          "k": "N",
+          "x": [],
+          "r": [
+            "Z",
+            "S"
+          ]
+        },
+        "B": {
+          "$": "Ref",
+          "k": "R"
+        }
+      },
+      "text": "@x:(N<> - Z{} - S{}) -> R"
+    },
+    {
+      "name": "codomain",
+      "term": {
+        "$": "All",
+        "k": "x",
+        "q": {
+          "$": "Lone"
+        },
+        "A": {
+          "$": "Ref",
+          "k": "R"
+        },
+        "B": {
+          "$": "ADT",
+          "k": "N",
+          "x": [],
+          "r": [
+            "Z",
+            "S"
+          ]
+        }
+      },
+      "text": "@x:R -> N<> - Z{} - S{}"
+    },
+    {
+      "name": "application_head",
+      "term": {
+        "$": "App",
+        "f": {
+          "$": "ADT",
+          "k": "N",
+          "x": [],
+          "r": [
+            "Z",
+            "S"
+          ]
+        },
+        "x": {
+          "$": "Ref",
+          "k": "x"
+        }
+      },
+      "text": "(N<> - Z{} - S{})(x)"
+    },
+    {
+      "name": "argument",
+      "term": {
+        "$": "App",
+        "f": {
+          "$": "Ref",
+          "k": "f"
+        },
+        "x": {
+          "$": "ADT",
+          "k": "N",
+          "x": [],
+          "r": [
+            "Z",
+            "S"
+          ]
+        }
+      },
+      "text": "f(N<> - Z{} - S{})"
+    },
+    {
+      "name": "list_head",
+      "term": {
+        "$": "Ctr",
+        "k": "Con",
+        "x": [
+          {
+            "$": "ADT",
+            "k": "N",
+            "x": [],
+            "r": [
+              "Z",
+              "S"
+            ]
+          },
+          {
+            "$": "Ref",
+            "k": "tail"
+          }
+        ]
+      },
+      "text": "(N<> - Z{} - S{}) <> tail"
+    },
+    {
+      "name": "list_tail",
+      "term": {
+        "$": "Ctr",
+        "k": "Con",
+        "x": [
+          {
+            "$": "Ref",
+            "k": "head"
+          },
+          {
+            "$": "ADT",
+            "k": "N",
+            "x": [],
+            "r": [
+              "Z",
+              "S"
+            ]
+          }
+        ]
+      },
+      "text": "head <> N<> - Z{} - S{}"
+    },
+    {
+      "name": "constructor",
+      "term": {
+        "$": "Ctr",
+        "k": "Wrap",
+        "x": [
+          {
+            "$": "ADT",
+            "k": "N",
+            "x": [],
+            "r": [
+              "Z",
+              "S"
+            ]
+          }
+        ]
+      },
+      "text": "Wrap{N<> - Z{} - S{}}"
+    },
+    {
+      "name": "nested",
+      "term": {
+        "$": "ADT",
+        "k": "Box",
+        "x": [
+          {
+            "$": "ADT",
+            "k": "N",
+            "x": [],
+            "r": [
+              "Z",
+              "S"
+            ]
+          }
+        ],
+        "r": [
+          "Empty"
+        ]
+      },
+      "text": "Box<N<> - Z{} - S{}> - Empty{}"
+    },
+    {
+      "name": "annotation",
+      "term": {
+        "$": "Ann",
+        "x": {
+          "$": "Ref",
+          "k": "x"
+        },
+        "T": {
+          "$": "ADT",
+          "k": "N",
+          "x": [],
+          "r": [
+            "Z",
+            "S"
+          ]
+        }
+      },
+      "text": "{x : N<> - Z{} - S{}}"
+    },
+    {
+      "name": "nat_tail",
+      "term": {
+        "$": "Ctr",
+        "k": "Succ",
+        "x": [
+          {
+            "$": "ADT",
+            "k": "N",
+            "x": [],
+            "r": [
+              "Z",
+              "S"
+            ]
+          }
+        ]
+      },
+      "text": "1n+N<> - Z{} - S{}"
+    },
+    {
+      "name": "shadowed",
+      "term": {
+        "$": "Lam",
+        "k": "T",
+        "f": {
+          "$": "Lam",
+          "k": "T",
+          "f": {
+            "$": "ADT",
+            "k": "Box",
+            "x": [
+              {
+                "$": "Var",
+                "k": "T",
+                "i": 0
+              },
+              {
+                "$": "Var",
+                "k": "T",
+                "i": 1
+              }
+            ],
+            "r": [
+              "Empty"
+            ]
+          }
+        }
+      },
+      "text": "T => T => Box<T^0, T> - Empty{}"
+    }
+  ],
+  "oracle_command": [
+    "node",
+    "$EVIDENCE/renderer-oracle.mjs"
+  ],
+  "raw_sha256": "cb3f539b515b09a7040112fb91854ba232c9b16f3a1dfb08ed4dac0b1cb70bbe"
+}
