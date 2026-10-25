@@ -1,0 +1,17 @@
+[
+  {
+    "case": "positive/true_equation.bend",
+    "expected": "{==}",
+    "io": false
+  },
+  {
+    "case": "positive/partial_true.bend",
+    "expected": "{==}",
+    "io": false
+  },
+  {
+    "case": "positive/closed_io.bend",
+    "expected": "12",
+    "io": true
+  }
+]

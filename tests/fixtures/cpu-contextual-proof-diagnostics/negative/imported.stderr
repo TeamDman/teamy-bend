@@ -1,0 +1,9 @@
+Error:
+- expected : Nat
+- observed : non-inferrable term '{==}'
+Context:
+- x : Nat
+Location: ../imports/defs.bad
+2 | 
+3>| def bad(x: Nat) -> Nat: {==}
+4 | 

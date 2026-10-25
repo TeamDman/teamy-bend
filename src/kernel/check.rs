@@ -1767,7 +1767,18 @@ impl Engine {
             Term::Rfl => {
                 let t = self.whnf(ty)?;
                 let Term::Eql { left, right, .. } = t.as_ref() else {
-                    return Err(mismatch(ty, value));
+                    let mut error = mismatch(ty, value);
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Term(ty),
+                            DiagnosticExpression::Typeless(value),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 };
                 if !self.compare(Comparison::Equal, left, right)? {
                     let mut error = KernelError::new(format!(
@@ -4038,6 +4049,116 @@ mod reflexivity_diagnostic_tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn contextual_reflexivity_diagnostics_preserve_errors_sharing_and_live_allowance() {
+        let mut baseline = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let proof = term(Term::Rfl);
+        let expected = term(Term::Var {
+            name: "T".into(),
+            id: 1,
+        });
+        let resolved = kind(Quant::Lone);
+        baseline.aliases.insert(1, Rc::clone(&resolved));
+        let context = Context::from([(
+            1,
+            Binder {
+                name: "T".into(),
+                id: 1,
+                quant: Quant::Lone,
+                ty: kind(Quant::Many),
+            },
+        )]);
+        let raw_error = mismatch(&expected, &proof);
+        let before = format!("{proof:?} {expected:?} {context:?}");
+        let owners = Rc::strong_count(&resolved);
+        for fuel in [0, 1, 2, 3, 512] {
+            let mut engine = baseline.clone();
+            engine.fuel = fuel;
+            let fresh = engine.fresh_id;
+            let error = engine
+                .check(&Lhs::default(), &proof, Quant::Lone, &expected, &context)
+                .unwrap_err();
+            assert_eq!(engine.depth, 0);
+            assert_eq!(engine.fresh_id, fresh);
+            assert!(Rc::ptr_eq(&engine.aliases[&1], &resolved));
+            assert!(engine.normalization_memo.is_none());
+            if fuel < 3 {
+                assert!(error.message.contains("evaluation budget exhausted"));
+                assert!(error.checker_diagnostic().is_none());
+                assert_eq!(engine.fuel, 0);
+            } else {
+                assert_eq!(error, raw_error);
+                assert_eq!(error.to_string(), raw_error.to_string());
+                assert_eq!(engine.fuel, fuel - 3);
+                if fuel == 3 {
+                    assert!(error.checker_diagnostic().is_none());
+                } else {
+                    let report = error.checker_diagnostic().unwrap();
+                    assert_eq!(report.expected, resolved.to_string());
+                    assert_eq!(
+                        report.observed.as_deref(),
+                        Some("non-inferrable term '{==}'")
+                    );
+                    assert_eq!(
+                        report.expected_identity,
+                        Some(Rc::as_ptr(&expected) as usize)
+                    );
+                    assert_eq!(report.rejected_identity, Rc::as_ptr(&proof) as usize);
+                    assert_eq!(
+                        report.context,
+                        [("T".into(), kind(Quant::Many).to_string())]
+                    );
+                }
+            }
+            assert_eq!(format!("{proof:?} {expected:?} {context:?}"), before);
+        }
+        assert_eq!(Rc::strong_count(&resolved), owners);
+        baseline.depth = 127;
+        let error = baseline
+            .check(&Lhs::default(), &proof, Quant::Lone, &expected, &context)
+            .unwrap_err();
+        assert!(error.message.contains("kernel nesting limit exhausted"));
+        assert!(error.checker_diagnostic().is_none());
+        assert_eq!(baseline.depth, 127);
+    }
+
+    #[test]
+    fn contextual_reflexivity_rendering_depth_failure_keeps_the_original_rejection() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let leaf = term(Term::Qua(Quant::Lone));
+        let deep = (0..128).fold(Rc::clone(&leaf), |left, _| {
+            term(Term::Min(left, Rc::clone(&leaf)))
+        });
+        let expected = term(Term::Typ(deep));
+        let proof = term(Term::Rfl);
+        let before = format!("{expected:?}");
+        let fresh = engine.fresh_id;
+        engine.fuel = 512;
+        let error = engine
+            .check(
+                &Lhs::default(),
+                &proof,
+                Quant::Lone,
+                &expected,
+                &Context::new(),
+            )
+            .unwrap_err();
+        assert_eq!(error, mismatch(&expected, &proof));
+        assert!(error.checker_diagnostic().is_none());
+        assert_eq!(
+            (engine.fuel, engine.depth, engine.fresh_id),
+            (510, 0, fresh)
+        );
+        assert!(engine.normalization_memo.is_none());
+        assert_eq!(format!("{expected:?}"), before);
     }
 
     #[test]

@@ -1,0 +1,14 @@
+[
+  "check/default_arm_family.bend",
+  "check/neq_reflexivity.bend",
+  "negative/arrow.bend",
+  "negative/context.bend",
+  "negative/false_equation.bend",
+  "negative/imported.bend",
+  "negative/nested.bend",
+  "negative/partial_false.bend",
+  "negative/scalar.bend",
+  "negative/shadow.bend",
+  "negative/shadow_annotated.bend",
+  "negative/template.bend"
+]

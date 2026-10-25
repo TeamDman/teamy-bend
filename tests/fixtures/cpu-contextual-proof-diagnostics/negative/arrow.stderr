@@ -1,0 +1,7 @@
+Error:
+- expected : @_:Nat -> Nat
+- observed : non-inferrable term '{==}'
+Location: main
+2 | 
+3>| def main() -> Nat -> Nat: {==}
+4 | 

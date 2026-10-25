@@ -1,0 +1,10 @@
+Error:
+- expected : Nat
+- observed : non-inferrable term '{==}'
+Context:
+- x : Nat
+- x : Nat
+Location: bad
+4 |   +x = {1n : Nat}
+5>|   {==}
+6 | def main() -> Nat: bad(2n)

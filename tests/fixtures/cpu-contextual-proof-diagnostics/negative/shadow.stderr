@@ -1,0 +1,9 @@
+Error:
+- expected : an annotated term (cannot infer)
+- observed : 1n
+Context:
+- x : Nat
+Location: bad
+3 | def bad(x: Nat) -> Nat:
+4>|   +x = 1n
+5 |   {==}

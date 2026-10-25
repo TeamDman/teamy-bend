@@ -1,0 +1,7 @@
+Error:
+- expected : 1n
+- observed : 2n
+Location: main
+2 | 
+3>| def main() -> {1n == 2n : Nat}: {==}
+4 | 

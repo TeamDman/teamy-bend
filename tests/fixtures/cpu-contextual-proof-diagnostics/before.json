@@ -1,0 +1,299 @@
+{
+  "baseline": "18961bc77aa141ed01dae8c64031771ea6e77582",
+  "tested_source": "cd7cabbda37192a7d401d1b3b1a3b9caf37c9f7a",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "rows": [
+    {
+      "case": "check/default_arm_family.bend",
+      "source_sha256": "9fac80c3e2f18d063c2bc87eb94123fa7416c1c8c83b859210d8362e4d95b5f3",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Pq(b)\n- observed : non-inferrable term '{==}'\nContext:\n- b : Bq\nLocation: ev\n28 |     case c:\n29>|       {==}\n30 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d7170cbb4324a300e578357accb7a3d4bad6f5b84bd5a56371cc895873eeae53"
+    },
+    {
+      "case": "check/default_arm_family.bend",
+      "source_sha256": "9fac80c3e2f18d063c2bc87eb94123fa7416c1c8c83b859210d8362e4d95b5f3",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mev: type mismatch: expected Pq(b); observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "14bd08d59f3eb860652407d61428941bfee61606ae5734f7d44058e9ea05066d"
+    },
+    {
+      "case": "check/neq_reflexivity.bend",
+      "source_sha256": "05a47fa1309c7c5df8908a9acb40fbfd45e49d59c046eef2783a9a08dde277cd",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : @_:{0 == 0 : U32} -> Empty\n- observed : non-inferrable term '{==}'\nLocation: prf\n15 | def prf():\n16>|   {==}\n17 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5bd9a012f0faf26366999939fa510459ddb6407aaee940ea778d5a479e875732"
+    },
+    {
+      "case": "check/neq_reflexivity.bend",
+      "source_sha256": "05a47fa1309c7c5df8908a9acb40fbfd45e49d59c046eef2783a9a08dde277cd",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mprf: type mismatch: expected neg; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ff34ef921fd2241b6fda566b5a36d8e92955b15ca39c2f8cc95b18103c58ede5"
+    },
+    {
+      "case": "negative/arrow.bend",
+      "source_sha256": "9a8a1ccef73dac110babb75bfc39815715129795f742a603f0945e7ef7e56524",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : @_:Nat -> Nat\n- observed : non-inferrable term '{==}'\nLocation: main\n2 | \n3>| def main() -> Nat -> Nat: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "8541ae870e09d540f726a0774b960e7c4344c329916837d7f9a4352ca9954339"
+    },
+    {
+      "case": "negative/arrow.bend",
+      "source_sha256": "9a8a1ccef73dac110babb75bfc39815715129795f742a603f0945e7ef7e56524",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mmain: type mismatch: expected @_:Nat -> Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "c238032b88d2155572ce42af29f5435b702e1af5ddbc34242b9eeb498f1fe2c7"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0b4012807114c5e8b6bc70935bf9d172a9d248e1a66af7b2d6a8ff58868f0489",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nContext:\n- x : Nat\n- y : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat, y: Nat) -> Nat: {==}\n4 | def main() -> Nat: bad(1n, 2n)\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "2cf3f79226ac5978390135ca31d0890ead077bd788c476c16a242d5f1d7e2cb3"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0b4012807114c5e8b6bc70935bf9d172a9d248e1a66af7b2d6a8ff58868f0489",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "44d5c3f06d8672ab63b848434414836887b03dfb34f89a071047ec1bf3ee6e00"
+    },
+    {
+      "case": "negative/false_equation.bend",
+      "source_sha256": "87a53e5130b6799b23acc5fc4137b53dd4cce7a647178c06dc5667d2526c4862",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 1n\n- observed : 2n\nLocation: main\n2 | \n3>| def main() -> {1n == 2n : Nat}: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "663a56626f6c09d98ef7a8d864ba87d2c9dbfbdd05365f3dffa077162504135f"
+    },
+    {
+      "case": "negative/false_equation.bend",
+      "source_sha256": "87a53e5130b6799b23acc5fc4137b53dd4cce7a647178c06dc5667d2526c4862",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 1n\n- observed : 2n\nLocation: main\n2 | \n3>| def main() -> {1n == 2n : Nat}: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "663a56626f6c09d98ef7a8d864ba87d2c9dbfbdd05365f3dffa077162504135f"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nContext:\n- x : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(x: Nat) -> Nat: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9532043e322016c70fd8c1aea6480c15d0e8cb5cf98a9b68be128040ed5ea41c"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m../imports/defs.bad: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5f2f4a27e4c17fd44c08da5e722dc97fe80adbe1838595a2ed0b5c66e207602c"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "7c93e5a309763d86549b6f0cf80b671c26b03cc905efba31f729fb64b95b1ad6",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: {==}\n7 | def main() -> Nat: bad(2n)\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5a01a98c61e8bfcabc45672ad2f1057e7db5468f2c90745a16a4b9779388e18e"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "7c93e5a309763d86549b6f0cf80b671c26b03cc905efba31f729fb64b95b1ad6",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "44d5c3f06d8672ab63b848434414836887b03dfb34f89a071047ec1bf3ee6e00"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "28cea6a23d6d2a8e97034a8a0113b9c6c543bf0e42af85b231d3bfc760f5f4fd",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nLocation: main\n2 | \n3>| def main() -> Nat: {==}\n4 | \n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "acf57590a3dd44d92b79d229bd3fd66c79619030a56899fcb43f16ff30f4160f"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "28cea6a23d6d2a8e97034a8a0113b9c6c543bf0e42af85b231d3bfc760f5f4fd",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mmain: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "f35bbdfead75dd5991acce76ad4c06958c52741e72b059e46cb00cf5a736ed41"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "4cb5932eef4dfd26f30a98f7bf864dca7bf1d975166802d76000383bb4cb800d",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 1n\nContext:\n- x : Nat\nLocation: bad\n3 | def bad(x: Nat) -> Nat:\n4>|   +x = 1n\n5 |   {==}\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5c6b129a76c5fc3d4a80c85e20c7a1c028d14712e09a360bd38c61b27769a82b"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "4cb5932eef4dfd26f30a98f7bf864dca7bf1d975166802d76000383bb4cb800d",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 1n\nContext:\n- x : Nat\nLocation: bad\n3 | def bad(x: Nat) -> Nat:\n4>|   +x = 1n\n5 |   {==}\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5c6b129a76c5fc3d4a80c85e20c7a1c028d14712e09a360bd38c61b27769a82b"
+    },
+    {
+      "case": "positive/closed_io.bend",
+      "source_sha256": "38bb0c9cec79817949937d5272b2b014bcc3df65da6aedbc4496672255639427",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "stdout_raw_sha256": "a1fb50e6c86fae1679ef3351296fd6713411a08cf8dd1790a4fd05fae8688164",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/partial_true.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/partial_true.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/true_equation.bend",
+      "source_sha256": "83bbaa1f770989922c1111a033fb3ff7d78b5f237606858b9b91d2a1b30245d9",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/true_equation.bend",
+      "source_sha256": "83bbaa1f770989922c1111a033fb3ff7d78b5f237606858b9b91d2a1b30245d9",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/shadow_annotated.bend",
+      "source_sha256": "6a7ed0fc5eb332486680e70e4e78f165c14c2bdec1e47e7ad79f109e7ecde002",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nContext:\n- x : Nat\n- x : Nat\nLocation: bad\n4 |   +x = {1n : Nat}\n5>|   {==}\n6 | def main() -> Nat: bad(2n)\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "572588cc823ae470fae1ba507b489be7b914dd923bef67e82168e9bcf0a08c5f"
+    },
+    {
+      "case": "negative/shadow_annotated.bend",
+      "source_sha256": "6a7ed0fc5eb332486680e70e4e78f165c14c2bdec1e47e7ad79f109e7ecde002",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "44d5c3f06d8672ab63b848434414836887b03dfb34f89a071047ec1bf3ee6e00"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "15963fe1c050d689a636377528eec7e7dfd7961a4af2b8569ae20317de659fb5",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term '{==}'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: {==}\n4 | def main() -> Nat: bad(~1n)\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a4e53ddbffe81db22981d109b7e5fc80171686a49dc1312e3051903e35a2aff0"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "15963fe1c050d689a636377528eec7e7dfd7961a4af2b8569ae20317de659fb5",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad~0: type mismatch: expected Nat; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "c7a4940707c34b8088b2b297025b7aca14bc1067ba65ef86c8ff9b01b9de5bf3"
+    }
+  ],
+  "binary_sha256": "c24b9f1c08dbd49d1ef6cd60b6d4c72180d30039aa1d610c97004c1fa213c1c5",
+  "path_policy": "Only machine path prefixes are replaced with placeholders; raw stream hashes are retained."
+}
