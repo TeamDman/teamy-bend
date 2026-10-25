@@ -2612,6 +2612,69 @@ mod reflexivity_diagnostic_tests {
     }
 
     #[test]
+    fn synthesized_reference_origins_preserve_terms_sharing_and_checker_budgets() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-synthesized-origins");
+        let mut cases: Vec<String> = facet_json::from_str(
+            &std::fs::read_to_string(root.join("negative-cases.json")).unwrap(),
+        )
+        .unwrap();
+        cases.extend([
+            "positive/logical-sugar.bend".into(),
+            "positive/monadic-sugar.bend".into(),
+        ]);
+        for case in cases {
+            let path = root.join(&case);
+            let (book, origins) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            let plain = crate::syntax::load(&path).unwrap();
+            let original = format!("{book:?}");
+            assert_eq!(original, format!("{plain:?}"));
+            let mut ordinary = empty_engine(&book).unwrap();
+            let mut tracked = ordinary.clone();
+            tracked.origins = Some(origins.tracker.clone());
+            let mut rejected = false;
+            for declaration in &book.declarations {
+                let results = [&mut ordinary, &mut tracked].map(|engine| {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                });
+                assert_eq!(results[0], results[1], "{case}");
+                assert_eq!(
+                    (ordinary.fuel, ordinary.depth, ordinary.fresh_id),
+                    (tracked.fuel, tracked.depth, tracked.fresh_id),
+                    "{case}"
+                );
+                if results[0].is_err() {
+                    rejected = true;
+                    break;
+                }
+            }
+            assert_eq!(rejected, !case.starts_with("positive/"), "{case}");
+            assert_eq!(format!("{book:?}"), original);
+            if !rejected {
+                let checked =
+                    check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap();
+                assert!(checked.engine.origins.is_none());
+                drop(origins);
+                let baseline = check_book(&plain).unwrap();
+                assert_eq!(
+                    crate::protocol::DataValue::from_term(
+                        &checked.evaluate_data("main", &[]).unwrap()
+                    )
+                    .unwrap(),
+                    crate::protocol::DataValue::from_term(
+                        &baseline.evaluate_data("main", &[]).unwrap()
+                    )
+                    .unwrap()
+                );
+            }
+        }
+    }
+
+    #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
             (

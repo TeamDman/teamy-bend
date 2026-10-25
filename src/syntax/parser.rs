@@ -576,6 +576,15 @@ impl Parser<'_> {
         });
         Ok(())
     }
+    // Sugar keeps its fixed or already-resolved global name. Only the
+    // introducing token's diagnostic origin is attached; no core node changes.
+    fn reference_at(&mut self, name: String, line: usize) -> TermRef {
+        let value = term(Term::Ref(name));
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.node(&value, &self.label, line);
+        }
+        value
+    }
     fn law(&mut self) -> Result<(), ParseError> {
         let raw = self.name()?;
         let name = self.qualify(&raw);
@@ -588,6 +597,7 @@ impl Parser<'_> {
             if clauses.len() >= 128 {
                 return Err(self.error("law telescope exceeds the parser resource limit of 128"));
             }
+            let line = self.current().line;
             let all = self.take("for");
             if !all {
                 self.expect("exs")?;
@@ -597,13 +607,14 @@ impl Parser<'_> {
             let name = self.name()?;
             self.expect(":")?;
             let mut ty = self.expression(0)?;
+            let where_line = self.current().line;
             if self.take("where") {
                 let old = self.scope.len();
                 let v = self.open(name.clone());
                 let predicate = self.expression(0)?;
                 self.scope.truncate(old);
                 ty = apply(
-                    term(Term::Ref("Exists".into())),
+                    self.reference_at("Exists".into(), where_line),
                     [
                         ty,
                         term(Term::Lam {
@@ -624,16 +635,16 @@ impl Parser<'_> {
             if universal {
                 parameters.push(b.clone());
             }
-            clauses.push((all, b));
+            clauses.push((all, b, line));
         }
         let body = self.body(0)?;
         let mut ty = self.flatten_body(&body, &[])?;
-        for (all, b) in clauses.into_iter().rev() {
+        for (all, b, line) in clauses.into_iter().rev() {
             ty = if all {
                 arrows(&[b], ty)
             } else {
                 apply(
-                    term(Term::Ref("Exists".into())),
+                    self.reference_at("Exists".into(), line),
                     [
                         b.ty,
                         term(Term::Lam {
@@ -1331,6 +1342,7 @@ impl Parser<'_> {
             return self.do_statement(&module, &types, result.as_ref(), self.current().column);
         }
         if self.is("@") || self.is("&") {
+            let line = self.current().line;
             let exists = self.take("&");
             if !exists {
                 self.expect("@")?;
@@ -1358,7 +1370,7 @@ impl Parser<'_> {
             self.scope.truncate(old);
             return Ok(if exists {
                 apply(
-                    term(Term::Ref("Exists".into())),
+                    self.reference_at("Exists".into(), line),
                     [
                         domain,
                         term(Term::Lam {
@@ -1390,6 +1402,7 @@ impl Parser<'_> {
             }
             let left = self.expression(0)?;
             let equality = self.take("==");
+            let inequality_line = self.current().line;
             let unequal = !equality && self.take("!=");
             if equality || unequal {
                 let right = self.expression(0)?;
@@ -1404,7 +1417,7 @@ impl Parser<'_> {
                         name: v.name,
                         id: v.id,
                         domain: equation,
-                        body: term(Term::Ref("Empty".into())),
+                        body: self.reference_at("Empty".into(), inequality_line),
                     }));
                 }
                 return Ok(equation);
@@ -1714,9 +1727,10 @@ impl Parser<'_> {
         result: Option<&TermRef>,
         column: usize,
     ) -> Result<TermRef, ParseError> {
+        let line = self.current().line;
         if self.take("return") {
             let value = self.expression(0)?;
-            return Ok(self.do_call(module, "pure", types, [], result, [value]));
+            return Ok(self.do_call(&format!("{module}.pure"), types, [], result, [value], line));
         }
         let value = self.expression(0)?;
         let name = match value.as_ref() {
@@ -1775,8 +1789,7 @@ impl Parser<'_> {
             }))
         } else {
             Ok(self.do_call(
-                module,
-                "bind",
+                &format!("{module}.bind"),
                 types,
                 [ty],
                 result,
@@ -1788,17 +1801,18 @@ impl Parser<'_> {
                         body: tail,
                     }),
                 ],
+                line,
             ))
         }
     }
     fn do_call(
-        &self,
-        module: &str,
-        operation: &str,
+        &mut self,
+        name: &str,
         types: &[TermRef],
         before: impl IntoIterator<Item = TermRef>,
         result: Option<&TermRef>,
         after: impl IntoIterator<Item = TermRef>,
+        line: usize,
     ) -> TermRef {
         let arguments = types
             .iter()
@@ -1806,10 +1820,7 @@ impl Parser<'_> {
             .chain(before)
             .chain(result.map(Rc::clone))
             .chain(after);
-        apply(
-            term(Term::Ref(self.resolve(&format!("{module}.{operation}")))),
-            arguments,
-        )
+        apply(self.reference_at(self.resolve(name), line), arguments)
     }
     fn number(&mut self) -> Result<TermRef, ParseError> {
         let raw = self.bump();

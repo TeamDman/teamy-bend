@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Box.bind\nLocation: main\n13 |   do Box<>:\n14>|     x : U32 <- Mk{3}\n15 |     return x\n"

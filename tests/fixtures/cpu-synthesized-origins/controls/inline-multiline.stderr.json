@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Exists\nLocation: bad\n2 | def bad() -> Type:\n3>|   &x:\n4 |     Type ->\n"

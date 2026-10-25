@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Exists\nLocation: bad\n2 | law bad:\n3>|   exs\n4 |     x: Type\n"

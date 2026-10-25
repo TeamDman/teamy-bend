@@ -1,0 +1,14 @@
+[
+  "do_missing_bind.bend",
+  "empty_neq.bend",
+  "error_window_assert_exists.bend",
+  "error_window_inline_exists.bend",
+  "controls/do-missing-pure.bend",
+  "controls/do-step-bind.bend",
+  "controls/imported-bind/main.bend",
+  "controls/imported-exists/main.bend",
+  "controls/inline-multiline.bend",
+  "controls/law-multiline.bend",
+  "controls/neq-multiline.bend",
+  "controls/where-exists.bend"
+]

@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Box.pure\nLocation: main\n5 |   do Box<>:\n6>|     return\n7 |       Full{}\n"
