@@ -72,8 +72,9 @@ enum Generation {
 impl CompileArgs {
     /// Validate source and write the compiled program.
     ///
-    /// Classified source/checking and entry/printer failures write a language diagnostic and return
-    /// status-1 output. Callers must inspect `CliOutput::exit_code()`.
+    /// Classified source/checking, final open-law summaries and entry/printer
+    /// failures write a language diagnostic and return status-1 output. Callers
+    /// must inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
     /// Returns other source, proof, compilation, output or cancellation errors.

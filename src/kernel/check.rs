@@ -22,6 +22,7 @@ use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::error::Error;
 use std::fmt;
+use std::num::NonZeroUsize;
 use std::rc::Rc;
 
 type Uses = BTreeMap<usize, Quant>;
@@ -77,6 +78,8 @@ pub struct KernelError {
     pub message: String,
     kind: FailureKind,
     diagnostic: Option<Box<CheckerDiagnostic>>,
+    // Final inventory presentation only: no invented term identity or source span.
+    unfilled_law_count: Option<NonZeroUsize>,
 }
 
 // Optional presentation metadata does not change the existing error equality
@@ -144,7 +147,18 @@ impl KernelError {
             message: message.into(),
             kind: FailureKind::Internal,
             diagnostic: None,
+            unfilled_law_count: None,
         }
+    }
+
+    pub(super) fn unfilled_laws(names: &[&str]) -> Self {
+        let mut error = Self::new(format!("unfilled laws: {}", names.join(", ")));
+        error.unfilled_law_count = NonZeroUsize::new(names.len());
+        error
+    }
+
+    pub(crate) fn unfilled_law_count(&self) -> Option<usize> {
+        self.unfilled_law_count.map(NonZeroUsize::get)
     }
 
     pub(crate) fn request_out_of_band(message: impl Into<String>) -> Self {
@@ -152,6 +166,7 @@ impl KernelError {
             message: message.into(),
             kind: FailureKind::RequestOutOfBand,
             diagnostic: None,
+            unfilled_law_count: None,
         }
     }
 
@@ -160,6 +175,7 @@ impl KernelError {
             message: message.into(),
             kind: FailureKind::NatOverflow,
             diagnostic: None,
+            unfilled_law_count: None,
         }
     }
 
@@ -168,6 +184,7 @@ impl KernelError {
             message: message.into(),
             kind: FailureKind::ArrayDepth,
             diagnostic: None,
+            unfilled_law_count: None,
         }
     }
 
@@ -722,10 +739,7 @@ pub(crate) fn check_book_with_origins(
         .map(|d| d.name.as_str())
         .collect();
     if !open.is_empty() {
-        return Err(KernelError::new(format!(
-            "unfilled laws: {}",
-            open.join(", ")
-        )));
+        return Err(KernelError::unfilled_laws(&open));
     }
     engine.origins = None;
     let runtime = crate::runtime::Program::from_checked(&engine.defs, &engine.adts);
@@ -2511,6 +2525,33 @@ mod reflexivity_diagnostic_tests {
             ordinary
         );
         assert_eq!((engine.fuel, engine.depth), (0, 0));
+    }
+
+    #[test]
+    fn final_open_law_metadata_preserves_internal_error_identity() {
+        for names in [&[][..], &["one"][..], &["a", "b", "c"][..]] {
+            let error = KernelError::unfilled_laws(names);
+            let ordinary = KernelError::new(format!("unfilled laws: {}", names.join(", ")));
+            assert_eq!(error, ordinary);
+            assert_eq!(error.to_string(), ordinary.to_string());
+            assert_eq!(
+                error.unfilled_law_count(),
+                NonZeroUsize::new(names.len()).map(NonZeroUsize::get)
+            );
+            assert!(ordinary.unfilled_law_count().is_none());
+            assert!(error.language_failure().is_none());
+            assert!(error.checker_diagnostic().is_none());
+        }
+        let book = crate::syntax::parse("type N is Data: Z{}\nlaw z: N\nlaw a: N\n").unwrap();
+        let before = format!("{book:?}");
+        let error = check_book(&book).unwrap_err();
+        assert_eq!(error.message, "unfilled laws: a, z");
+        assert_eq!(error.unfilled_law_count(), Some(2));
+        assert_eq!(format!("{book:?}"), before);
+        check_book(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
     }
 
     #[test]

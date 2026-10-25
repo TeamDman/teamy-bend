@@ -24,6 +24,16 @@ fn emit(
     stderr: &mut impl Write,
 ) -> eyre::Result<CliOutput> {
     cancellation.bail_if_cancelled()?;
+    if let Some(count) = error.unfilled_law_count() {
+        tracing::debug!(internal_error = %error, "Bend check rejected");
+        let suffix = if count == 1 { "" } else { "s" };
+        return write_diagnostic(
+            &format!(
+                "Error: {count} TODO{suffix} found.\nThe code is incomplete, and not a valid proof yet.\n"
+            ),
+            stderr,
+        );
+    }
     let Some(report) = error.checker_diagnostic() else {
         return Err(eyre!("{error}"));
     };
@@ -128,6 +138,79 @@ mod tests {
             check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap_err(),
             origins,
         )
+    }
+
+    #[test]
+    fn final_open_law_summary_preserves_cancellation_writes_and_unclassified_errors() {
+        struct Writer(bool);
+        impl Write for Writer {
+            fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+                if self.0 {
+                    Err(io::Error::other("write failed"))
+                } else {
+                    Ok(bytes.len())
+                }
+            }
+            fn flush(&mut self) -> io::Result<()> {
+                Err(io::Error::other("flush failed"))
+            }
+        }
+        for file in [
+            "check/axiom_warn.bend",
+            "controls/multiple.bend",
+            "controls/imported/main.bend",
+        ] {
+            let (error, origins) = rejected(&format!("tests/fixtures/cpu-final-todo/{file}"));
+            assert!(error.checker_diagnostic().is_none());
+            let token = CancellationToken::new();
+            token.request_cancel("stop summary");
+            let mut bytes = Vec::new();
+            assert!(
+                emit(&error, &origins, &token, &mut bytes)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("stop summary")
+            );
+            assert!(bytes.is_empty());
+            for fail_write in [true, false] {
+                let failure = emit(
+                    &error,
+                    &origins,
+                    &CancellationToken::new(),
+                    &mut Writer(fail_write),
+                )
+                .unwrap_err();
+                assert!(failure.to_string().contains(if fail_write {
+                    "cannot write"
+                } else {
+                    "cannot flush"
+                }));
+            }
+            // Global inventories have no source span, even for programmatic books.
+            let output = emit(
+                &error,
+                &DiagnosticOrigins::default(),
+                &CancellationToken::new(),
+                &mut bytes,
+            )
+            .unwrap();
+            assert_eq!(output.exit_code(), 1);
+            let count = error.unfilled_law_count().unwrap();
+            let expected = format!(
+                "Error: {count} TODO{} found.\nThe code is incomplete, and not a valid proof yet.\n",
+                if count == 1 { "" } else { "s" }
+            );
+            assert_eq!(bytes, expected.as_bytes());
+            bytes.clear();
+            let ordinary = KernelError::new(&error.message);
+            assert_eq!(
+                emit(&ordinary, &origins, &CancellationToken::new(), &mut bytes)
+                    .unwrap_err()
+                    .to_string(),
+                error.to_string()
+            );
+            assert!(bytes.is_empty());
+        }
     }
 
     #[test]

@@ -1,0 +1,9 @@
+{
+  "check/axiom_warn.bend": "unfilled laws: ghost",
+  "grade/open_claim.bend": "unfilled laws: bogus",
+  "controls/multiple.bend": "unfilled laws: a, third, z",
+  "controls/no-main.bend": "unfilled laws: unused",
+  "controls/completed-subset.bend": "unfilled laws: three, two",
+  "controls/imported/main.bend": "unfilled laws: helper.one, helper.two",
+  "controls/base-single.bend": "unfilled laws: ghost"
+}

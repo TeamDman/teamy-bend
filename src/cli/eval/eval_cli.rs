@@ -29,8 +29,9 @@ struct EvalReport {
 impl EvalArgs {
     /// Check and evaluate the selected entry point.
     ///
-    /// Tracked checking/pattern-load failures write a Bend diagnostic and return output with
-    /// exit status 1. Callers must inspect `CliOutput::exit_code()`.
+    /// Tracked checking/pattern-load failures and final open-law summaries write
+    /// a Bend diagnostic and return output with exit status 1. Callers must
+    /// inspect `CliOutput::exit_code()`.
     ///
     /// # Errors
     /// Returns parse, check, evaluation or cancellation errors.

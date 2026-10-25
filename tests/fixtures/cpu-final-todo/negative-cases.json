@@ -1,0 +1,9 @@
+[
+  "check/axiom_warn.bend",
+  "grade/open_claim.bend",
+  "controls/multiple.bend",
+  "controls/no-main.bend",
+  "controls/completed-subset.bend",
+  "controls/imported/main.bend",
+  "controls/base-single.bend"
+]

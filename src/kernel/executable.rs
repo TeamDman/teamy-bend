@@ -504,10 +504,7 @@ pub(crate) fn check_executable_with_origins(
         .map(|definition| definition.name.as_str())
         .collect::<Vec<_>>();
     if !open.is_empty() {
-        return Err(KernelError::new(format!(
-            "unfilled laws: {}",
-            open.join(", ")
-        )));
+        return Err(KernelError::unfilled_laws(&open));
     }
     if source
         .foreign
