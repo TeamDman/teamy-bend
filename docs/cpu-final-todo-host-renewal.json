@@ -1,0 +1,640 @@
+{
+  "tested_source": "ca333c470dd227291ad45ab1b846a633fef730eb",
+  "rows": [
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/wrong-element.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "8422440d89239759026992798bf14b777649e22d246da461960dbc70a1dc57ea",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 34,
+      "new_host_line": 44,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "8422440d89239759026992798bf14b777649e22d246da461960dbc70a1dc57ea",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 34,
+      "new_host_line": 44,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "8422440d89239759026992798bf14b777649e22d246da461960dbc70a1dc57ea",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 34,
+      "new_host_line": 44,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/wrong-element.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "8422440d89239759026992798bf14b777649e22d246da461960dbc70a1dc57ea",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 34,
+      "new_host_line": 44,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "9f37ced16322276becff9cd60592c56b74bbdd671427e3d0ab4d4da03a61bcf7",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "9f37ced16322276becff9cd60592c56b74bbdd671427e3d0ab4d4da03a61bcf7",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "9f37ced16322276becff9cd60592c56b74bbdd671427e3d0ab4d4da03a61bcf7",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "9f37ced16322276becff9cd60592c56b74bbdd671427e3d0ab4d4da03a61bcf7",
+      "current_snapshot": "port-executable-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "a8390d4bc02675075c2ebfaec6a4ba031d61b954bbd1b3cbd2185ffd99ad13d3",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "ac924ad116d48397297a6bf6792a19625debab2f2625f9905b329249ddd5645e",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "f99d4ad5bf4f2c37dcdc32859b1b18e9e5baccdfc8c22f533ffefe961a3764c4",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    },
+    {
+      "fixture": "tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/unwritten-golden"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "old_snapshot_sha256": "fa15b925e0291fdd11fa8c13ef5838df648fc794cae5e141111744d548418602",
+      "current_snapshot": "port-current-stderr.json",
+      "old_host_line": 92,
+      "new_host_line": 102,
+      "other_bytes_identical": true
+    }
+  ],
+  "old_files_preserved": true
+}

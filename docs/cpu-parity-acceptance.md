@@ -2435,3 +2435,40 @@ supplementary-lint gaps remain. Next demonstrated independent diagnostic boundar
 axiom_warn/open_claim final TODO counts, without weakening incomplete-proof refusal.
 Frozen dependencies/toolchains/pins/budgets/cancellation and disk floors remain.
 Compact evidence is in Git; bulky unique raw logs and binaries remain local.
+
+
+## Final open-law TODO summaries
+
+Implementation/differential source `ca333c470dd227291ad45ab1b846a633fef730eb` preserves the existing
+final inventory rejection and adds private nonzero presentation metadata. Global
+pinned summaries deliberately have no Bend source span. Error message/equality,
+zero-inventory acceptance, erased/source-hole refusal, evaluation and budgets remain
+unchanged. CLI invoke returns existing status-bearing output; external caller audit
+remains outstanding. [Report and commands](cpu-final-todo-diagnostics.md).
+
+Two unchanged originals plus five authored summaries pass 126 exact stream commands
+and 42 additional check-phase probes. Positive/applicability matrices add 76 and 24
+commands: pure normalization, native IO and generated C/JS remain distinct. Empty
+modules check successfully; their emitters refuse missing Base before any missing-
+main boundary, with runtime unrun. Gate **1,198 / 0 / 49**, focused 338/0/1 and targeted
+Clippy pass. The successful full gate is at test-only `6507da388f35a88767d309b14878835bda0cdcec`,
+with identical production source. Initial ca333c4 gate failed on a stale host-line
+snapshot; six exact snapshots were renewed while preserving historical files and
+all assertions. Earlier three source-hole TODO differences remain unwaived.
+
+Full census: 366 both accept / 327 exact reject / 493 acceptance disagreements / 109 different rejections /
+7 host-stack failures. All port statuses/phases unchanged. Two summary gaps close;
+156 additional raw streams only move their host formatter source line and remain
+raw disagreements. Historical 385 IO members renew exactly; residual 217 = 108 acceptance
++ 109 rejection. The drop 222→217 includes three unstable upstream acceptance→stack
+transitions, not five port fixes. Supplemental probes remain mixed and do not replace
+raw counts. [Measured census](cpu-final-todo-census.json).
+
+Coverage 453/1,302 applicable originals; 849 unlinked = 522 compiled candidates + 313 checker
+negatives + 13 interpreter-only + 1 checking-only. Historical receipts remain tied to their
+commits. Nat-first stays pending, compact lowering unadopted, existing foreign/host/
+resource/F32.read/hole/API and supplementary-lint gaps remain. Next independent
+family: self-call refusal diagnostics for cop_circular_witness_000, descent_field_order
+and partial_self_call_stuck, preserving all descent guards. Inputs/toolchains/limits
+and disk floors remain frozen. Compact evidence is in Git; bulk raw logs/binaries
+remain local. No desktop/GPU, installation, main merge or release.

@@ -1,0 +1,2880 @@
+{
+  "tested_source": "ca333c470dd227291ad45ab1b846a633fef730eb",
+  "binary_sha256": "4f5caeec0bbe5b6fa5e23299c129453ed2db1c6d68928ced9b3ffa7ea1485cd3",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "completed": true,
+  "full_parity": false,
+  "negative": {
+    "exact_stream_observations": 126,
+    "separate_phase_probes": 42,
+    "rows": [
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.44011272201896645,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.35110710200387985,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.33660106200841255,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.01997052098158747,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.056669055018574,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.012781671975972131,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.021626968984492123,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.07409550601732917,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.03014849399914965,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.3876345660246443,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.3493934209982399,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.3052440989995375,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.02877733498462476,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.015624983992893249,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.03571279501193203,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.019390303001273423,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.019835826009511948,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.004445091006346047,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.30660518299555406,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.4071025129815098,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.2310037869901862,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.0597172700217925,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.02356277100625448,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.036923675012076274,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.03108217299450189,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.01954752000165172,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiple.bend",
+        "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.011903833015821874,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.3115039620024618,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.38218079798389226,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.23598891901201569,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.017089458007831126,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.04326244702679105,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.025095785007579252,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.02756951001356356,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.035654964012792334,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/no-main.bend",
+        "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.018787726992741227,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.2733724779973272,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.32525112698203884,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.29598781798267737,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.014104491012403741,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.038486792996991426,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.01974544397671707,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.015371869987575337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.011465510004200041,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.009593872004188597,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.4352933159971144,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.5183787220157683,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.5193607879919,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.8295282809995115,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 1.03153625401319,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 1.2159319889906328,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.6097970510018058,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.466084655985469,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.6622443950036541,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.36308477001148276,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.4576721750199795,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.5610275980143342,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.8280586769978981,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.7525893780111801,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.8929560820106417,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.42148891498800367,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.5068309799826238,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/base-single.bend",
+        "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n",
+        "timed_out": false,
+        "seconds": 0.4882102150004357,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_warn.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "grade/open_claim.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiple.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/no-main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/completed-subset.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "incomplete_proof"
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/base-single.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "27fd1c42b19a51098133fe83dd9d3eda12c4fe8e5984fea7e13d64a7ef4f80d3"
+  },
+  "positive": {
+    "observations": 76,
+    "lane_counts": {
+      "port-pure-normalization": 4,
+      "upstream-pure-normalization": 4,
+      "upstream-check": 6,
+      "strict-phase": 6,
+      "executable-phase": 6,
+      "strict-check": 6,
+      "upstream-generate-c": 3,
+      "upstream-build-O3": 3,
+      "upstream-generate-js": 3,
+      "port-generate-c": 3,
+      "port-build-O3": 3,
+      "port-generate-js": 3,
+      "upstream-C-O3": 6,
+      "upstream-JS": 6,
+      "port-C-O3": 6,
+      "port-JS": 6,
+      "native-runtime": 2
+    },
+    "rows": [
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.512700061983196,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5887716849974822,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "$RUN/positive-matrix/positive/filled/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6353006559947971,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.32116247998783365,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6866558080073446,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 27\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7474627959891222,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5831562980019953,
+        "artifact_sha256": "28d688b33bd3edc7104f0cb8e02b978cb3df35d4a7d22b11d0fd3b40ab6524a2"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/filled/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38446215700241737,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5417803000018466,
+        "artifact_sha256": "8b5db4e65e51d2decc976820cbe673937306508b46c93d15fe50fa4d37ca6c6a"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/filled/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/filled/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 188082,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1761492989899125,
+        "artifact_sha256": "5e5a82b4e21b28a92ce7945e7ed02bf7388609d8c5bce9e96c5a7db0f1451fb1"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/filled/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.256511051004054,
+        "artifact_sha256": "575693b0f933d804331b4fa87160f3729aa183859ea85bc147ac2376a0a36010"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/filled.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/filled/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/filled/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59793,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1125399919983465,
+        "artifact_sha256": "c501bf3b4b3418c55fcff5d58c6353c5d7c9dd96118a0608e5d7a23efa669d45"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/filled/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.008424188999924809,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/filled/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0308481490064878,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/filled/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0016276870155707002,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "0b82f4551488433eb74dc8f97baa1280f4163addbd9271e8de8f0a33be5347c5",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/filled/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08136102498974651,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.081468940974446,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5862064829852898,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "$RUN/positive-matrix/positive/erased-before-fill/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5256494510103948,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3575819559919182,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7992227509967051,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9903981260140426,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4810846869950183,
+        "artifact_sha256": "7ace79678e3a86fc9bab90a7e975ec673a40d767d9c0fb133f95ccde0085e2a8"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.44436911700177006,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5847929290030152,
+        "artifact_sha256": "590e5b3555476349c79294c30178c0c383b0f9cbf669fa250fcc54e65bbd0566"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/erased-before-fill/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/erased-before-fill/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186038,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8577253890107386,
+        "artifact_sha256": "cf35fd651c66699e508f84afe4fcd16171c231a8f45e22528de0d59d7cd98bea"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/erased-before-fill/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/erased-before-fill/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8391449370246846,
+        "artifact_sha256": "261040620e9fac7ccf29c76b7689701a71fe7c0082d9b57fe5fe9564e3a67392"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/erased-before-fill.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/erased-before-fill/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/erased-before-fill/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52482,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8910005200013984,
+        "artifact_sha256": "394a8052948014b939df2a4a83b825cda8bef6ff64565d320e9c4c17b826b724"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0034463430056348443,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/erased-before-fill/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.05889228999149054,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/erased-before-fill/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0024175810103770345,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/erased-before-fill/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.03917072099284269,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "native-runtime",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.956902056990657,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "$RUN/positive-matrix/positive/sealed/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4864230300008785,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.20592487099929713,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.44836387599934824,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n2 | \n3>| def main() -> IO(Unit): IO.print(F32.show(F32.add(1.5, 1.5)))\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.4972837810055353,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/sealed/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5040803030133247,
+        "artifact_sha256": "8bb97463f4932401af17cc3adb0a4edcee317e084a2041d5ebeb8122d79e9873"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/sealed/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/sealed/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8257967419922352,
+        "artifact_sha256": "1cf99068a3b34e370d00d091bbada5e2d6788fa1af7014e924bc983c65bcd1d5"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/sealed/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7102117300091777,
+        "artifact_sha256": "46c9d1e2185374eb9646709bc9c168fc040bcbb99337db104d65cffa347babcb"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/sealed/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/sealed/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 188009,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.0874690210039262,
+        "artifact_sha256": "8973f3db40c2749119c011e8fdf4bc5b9271b63d50c52e0c9d8908c313b27611"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/sealed/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/sealed/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.3224908650154248,
+        "artifact_sha256": "07f47ab8db5e36b383f29268a4f38550de8ea8788efaa30b9172ce9b7635c2da"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/sealed.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/sealed/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/sealed/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52795,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7194403239991516,
+        "artifact_sha256": "b037e17a0de9f278d507f8ead345a31784fdc1b477893abf07de1f12715d4478"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/sealed/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.026436743006343022,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/sealed/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.044229340011952445,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/sealed/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.006319765001535416,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/sealed.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/sealed/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06851383799221367,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "positive/filled.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/erased-before-fill.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "check",
+        "exit": 1,
+        "stderr": ""
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "check",
+        "exit": 1,
+        "stderr": ""
+      },
+      {
+        "case": "positive/sealed.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phases_already_in_command_count": true,
+    "raw_sha256": "060a90a7da67944587a64abdf31edb25eafe93fe1dca4fcc5a4d5319f606a7cf"
+  },
+  "checking_only": {
+    "observations": 24,
+    "rows": [
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend"
+        ],
+        "exit": 0,
+        "stdout": "All terms check.\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.398985861975234,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 0,\n  \"datatypes\": 0,\n  \"laws\": 0\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.023351487994659692,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend",
+          "-o",
+          "$RUN/checking-only/upstream.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.3671677089878358,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/checking-only/port.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.017224840994458646,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend",
+          "-o",
+          "$RUN/checking-only/upstream.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.44475958999828435,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/empty.bend",
+        "source_sha256": "c7765348ba8162b5d3a2595b3818917765c38fd3e4782b279a97131f6dfaddc5",
+        "rep": 1,
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/empty.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/checking-only/port.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.018529875989770517,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend"
+        ],
+        "exit": 0,
+        "stdout": "All terms check.\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36480330501217395,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 0,\n  \"datatypes\": 1,\n  \"laws\": 0\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.027422656974522397,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend",
+          "-o",
+          "$RUN/checking-only/upstream.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.2775879990076646,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/checking-only/port.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.03836235200287774,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend",
+          "-o",
+          "$RUN/checking-only/upstream.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.3441923299978953,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/datatype-only.bend",
+        "source_sha256": "4de9ad3406f198f064dfaae6a72abae7a0910be3b224e71476907ebb75a898de",
+        "rep": 1,
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-final-todo/positive/datatype-only.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/checking-only/port.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: a build needs import Base\n",
+        "timed_out": false,
+        "seconds": 0.02954630000749603,
+        "equal_repetitions": 2
+      }
+    ],
+    "raw_sha256": "ccc5a03c0bdf94347b32673ff85117389e48a22b660d43c84e9010f36fc20c62",
+    "scope": "Two zero-inventory modules check successfully; both executable emitters refuse first with Error: a build needs import Base. No runtime execution is reached; the missing-main boundary is not established by these controls."
+  },
+  "timeout_seconds": 30,
+  "negative_phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  },
+  "scope": [
+    "Final open-law summary only: source-hole policy unchanged",
+    "Negative emission refusal is not runtime execution",
+    "Two pure controls normalize; only sealed control runs native IO",
+    "C/JS executions distinct from checking, generations and builds",
+    "Upstream C actual O3; port C strict-warning O3",
+    "No desktop/GPU or mid-normalization cancellation claim"
+  ]
+}

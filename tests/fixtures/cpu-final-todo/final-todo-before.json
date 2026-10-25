@@ -1,0 +1,228 @@
+{
+  "before_source": "d85cab01eae230d423f718220d945c4cd0a25d62",
+  "before_binary_sha256": "98df6d782a0d567f5746961740de93da6d11c12b2a8e8bdd71a87855bdf5240b",
+  "after_source": "ca333c470dd227291ad45ab1b846a633fef730eb",
+  "after_binary_sha256": "4f5caeec0bbe5b6fa5e23299c129453ed2db1c6d68928ced9b3ffa7ea1485cd3",
+  "commands_each": 51,
+  "statuses_and_oracle_phases_unchanged": true,
+  "summary_diagnostics_fixed": [
+    {
+      "case": "check/axiom_warn.bend",
+      "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/check/axiom_warn.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: ghost",
+        "stderr_sha256": "0be7a30fcbc820adb7ce7552aaf566313cfe8b7dddb4b1b32998b177b28713a6"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "grade/open_claim.bend",
+      "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/grade/open_claim.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: bogus",
+        "stderr_sha256": "fd7815cf7d13d7d0f3a8f4aa653121a74316ff9791de5377ca52fb008bb2c2b8"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "controls/multiple.bend",
+      "source_sha256": "7e811381bce691eba5f1301a9b53b55f588ecfeccfcd366bfaa5a670f9ec3b1b",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/controls/multiple.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: a, third, z",
+        "stderr_sha256": "82011030d759516e0cef4db5adebda3cfb5fe33251bd064c932f3dd9088e13a2"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 3 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "controls/no-main.bend",
+      "source_sha256": "fc6d817f3cefa5174a9d27c4a3db9cd101415b58b02d0d494f3bfe27b7428372",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/controls/no-main.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: unused",
+        "stderr_sha256": "733dd96e12e36c399e412e0999060fc92524da1c9afb8f330dd888b221277191"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "controls/completed-subset.bend",
+      "source_sha256": "d5b845a14331bc50e5d5243f094b70ef7dea6d2ed1e120c12102fb58928b9c8a",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/controls/completed-subset.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: three, two",
+        "stderr_sha256": "6c2a405f86e458c9129c65f35442ab8cec0dea71aab6d74f84c83aaef8540038"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "source_sha256": "414f323825f716d0c467c18f185248ebc2cc32ba1a7dcda623de3934a808fba0",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/controls/imported/main.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: helper.one, helper.two",
+        "stderr_sha256": "b6073373dd4bb21e5831fa8e7d56343ddea814ab99aa64bb94d7a1504f396351"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    },
+    {
+      "case": "controls/base-single.bend",
+      "source_sha256": "bb578075c265c60d194d42599a12d0b9c510b5d40d22e48a4fc1164026cc5617",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-final-todo/controls/base-single.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "internal_message": "unfilled laws: ghost",
+        "stderr_sha256": "0be7a30fcbc820adb7ce7552aaf566313cfe8b7dddb4b1b32998b177b28713a6"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      }
+    }
+  ],
+  "byte_identical_observations": 41,
+  "host_implementation_location_only_changes": [
+    "guards/hole.bend",
+    "guards/erased-hole.bend",
+    "guards/mixed-hole-law.bend"
+  ],
+  "guards": [
+    {
+      "case": "guards/hole.bend",
+      "source_sha256": "e4f07a7a093e764c7b195be7cfb909e36ebcb610e290734f8184837009842be8",
+      "port": {
+        "exit": 1,
+        "internal_or_language_diagnostic": "main: unfinished proof hole ?TODO",
+        "before_stderr_sha256": "3428d3e68a7909bd61cbf1ad7dc13d0097ed2ac7b51a3105cf37c91790e71ebb",
+        "after_stderr_sha256": "f6f68392ddaf17adc8d59f0659c01c93a5f375c74944733c271646df81542835"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      },
+      "classification": "earlier source-hole refusal retained; TODO-summary discrepancy remains unwaived"
+    },
+    {
+      "case": "guards/erased-hole.bend",
+      "source_sha256": "bddf859169ed9a4316cf2d777245a0087d5d9255978f07548e4ddd127cf1cc79",
+      "port": {
+        "exit": 1,
+        "internal_or_language_diagnostic": "main: unfinished proof hole ?TODO",
+        "before_stderr_sha256": "3428d3e68a7909bd61cbf1ad7dc13d0097ed2ac7b51a3105cf37c91790e71ebb",
+        "after_stderr_sha256": "f6f68392ddaf17adc8d59f0659c01c93a5f375c74944733c271646df81542835"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      },
+      "classification": "earlier source-hole refusal retained; TODO-summary discrepancy remains unwaived"
+    },
+    {
+      "case": "guards/mixed-hole-law.bend",
+      "source_sha256": "648106e0a7f5e6313aeacc16b6951f8beb8699318e8c204709a27b85ab494a24",
+      "port": {
+        "exit": 1,
+        "internal_or_language_diagnostic": "main: unfinished proof hole ?TODO",
+        "before_stderr_sha256": "3428d3e68a7909bd61cbf1ad7dc13d0097ed2ac7b51a3105cf37c91790e71ebb",
+        "after_stderr_sha256": "f6f68392ddaf17adc8d59f0659c01c93a5f375c74944733c271646df81542835"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error: 2 TODOs found.\nThe code is incomplete, and not a valid proof yet.\n"
+      },
+      "classification": "earlier source-hole refusal retained; TODO-summary discrepancy remains unwaived"
+    },
+    {
+      "case": "guards/false-proof.bend",
+      "source_sha256": "8b2469437a7fb99198ca08c17be98109a923e9533b38011fb541a6cfb7ec0736",
+      "port": {
+        "exit": 1,
+        "internal_or_language_diagnostic": "Error:\n- expected : 0\n- observed : 1\nLocation: wrong\n3 | law unused: U32\n4>| def wrong() -> {0 == 1 : U32}: {==}\n5 | def main() -> U32: 7\n",
+        "before_stderr_sha256": "0e2fd9719ec9dcfd5599767b58adb76a9de92b1a905a8f975baeab9911b35ce3",
+        "after_stderr_sha256": "0e2fd9719ec9dcfd5599767b58adb76a9de92b1a905a8f975baeab9911b35ce3"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error:\n- expected : 0\n- observed : 1\nLocation: wrong\n3 | law unused: U32\n4>| def wrong() -> {0 == 1 : U32}: {==}\n5 | def main() -> U32: 7\n"
+      },
+      "classification": "earlier sourced rejection remains exact upstream"
+    },
+    {
+      "case": "guards/live-use.bend",
+      "source_sha256": "cbec408c50b60de4659c30b185649493b7624c87ced6c28ab89d9809a836a985",
+      "port": {
+        "exit": 1,
+        "internal_or_language_diagnostic": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nLocation: main\n3 | law ghost: U32\n4>| def main() -> U32: ghost\n5 | \n",
+        "before_stderr_sha256": "5010a2157feb00af93bf6c2f88ed2010dc945b6612a3945ec5e0724c19761990",
+        "after_stderr_sha256": "5010a2157feb00af93bf6c2f88ed2010dc945b6612a3945ec5e0724c19761990"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nLocation: main\n3 | law ghost: U32\n4>| def main() -> U32: ghost\n5 | \n"
+      },
+      "classification": "earlier sourced rejection remains exact upstream"
+    }
+  ],
+  "raw_before_sha256": "76ab2349ec1d05e7a71bcd10faab12d176248561ec2f8cf9af365a98e0f664ec",
+  "raw_after_sha256": "a10fc5bc62b7fc9e6a1c3f705b6c435724d752da3397bf83e629ce66626a2c68"
+}
