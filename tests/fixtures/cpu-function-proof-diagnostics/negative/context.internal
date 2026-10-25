@@ -1,0 +1,1 @@
+bad: type mismatch: expected {n == n : Nat}; observed x => n

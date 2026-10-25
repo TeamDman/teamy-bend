@@ -1,0 +1,579 @@
+{
+  "source": "762ad51b5ccf3f801df172578b48f0cbfb8b3ade",
+  "binary_source": "9d13eba51d51b2de7f5ab415770c355f86fc0e58",
+  "binary_sha256": "5247fbe78a948d85ca4cc6f9b8187799067ab1e4a0797324ad342522b52da18f",
+  "rows": [
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "seconds": 0.08800541900563985,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91madd_zero_eta: type mismatch: expected {(x => add(x, Z{})) == (x => x) : @_:N -> N}; observed x => add_zero(x)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.008930784999392927
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "seconds": 0.12864368400187232,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "seconds": 0.24235440301708877
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.13207873300416395,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mmain: type mismatch: expected Nat; observed x => x\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24370486399857327
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.11755203097709455,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mmain: type mismatch: expected {0n == 0n : Nat}; observed x => x\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24750408399268053
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "seconds": 0.12237362400628626,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected {n == n : Nat}; observed x => n\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24531040599686094
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "seconds": 0.11617194398422725,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Nat; observed x => p\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24017885100329295
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "seconds": 0.11839079001219943,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad~0: type mismatch: expected Nat; observed x => 1n\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2546780620177742
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "seconds": 0.1221356599999126,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Nat; observed x => x\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24268558499170467
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.14489784100442193,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m../imports/defs.bad: type mismatch: expected Nat; observed x => n\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2517134259978775
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.13354108098428696,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.24511992200859822
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.13428025200846605,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mmain: type mismatch: expected N; observed x => x\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24582864699186757
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12855110698728822,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 27\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2491356749960687
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12350404699100181,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24523957099881954
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12305909398128279,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.25463262398261577
+    }
+  ],
+  "public_error_rows": [
+    {
+      "case": "proof/no_funext_000.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "add_zero_eta: type mismatch: expected {(x => add(x, Z{})) == (x => x) : @_:N -> N}; observed x => add_zero(x)\n"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: binder k permits Lone use, observed Many\n"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: type mismatch: expected Nat; observed x => x\n"
+    },
+    {
+      "case": "negative/equation.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: type mismatch: expected {0n == 0n : Nat}; observed x => x\n"
+    },
+    {
+      "case": "negative/context.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bad: type mismatch: expected {n == n : Nat}; observed x => n\n"
+    },
+    {
+      "case": "negative/nested.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bad: type mismatch: expected Nat; observed x => p\n"
+    },
+    {
+      "case": "negative/template.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bad~0: type mismatch: expected Nat; observed x => 1n\n"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bad: type mismatch: expected Nat; observed x => x\n"
+    },
+    {
+      "case": "negative/imported.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "../imports/defs.bad: type mismatch: expected Nat; observed x => n\n"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: reflexivity requires equal endpoints: {Nat.add(11n) : @_:Nat -> Nat}(1n) != 13n\n"
+    },
+    {
+      "case": "negative/alias.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: type mismatch: expected N; observed x => x\n"
+    }
+  ]
+}

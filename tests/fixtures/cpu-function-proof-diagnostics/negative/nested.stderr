@@ -1,0 +1,9 @@
+Error:
+- expected : Nat
+- observed : non-inferrable term 'x => p'
+Context:
+- p : Nat
+Location: bad
+5 |     case 0n: 0n
+6>|     case 1n+p: x => p
+7 | def main() -> Nat: bad(2n)

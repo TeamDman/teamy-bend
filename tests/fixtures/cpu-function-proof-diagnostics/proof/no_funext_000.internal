@@ -1,0 +1,1 @@
+add_zero_eta: type mismatch: expected {(x => add(x, Z{})) == (x => x) : @_:N -> N}; observed x => add_zero(x)

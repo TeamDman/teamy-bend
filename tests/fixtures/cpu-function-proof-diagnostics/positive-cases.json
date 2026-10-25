@@ -1,0 +1,17 @@
+[
+  {
+    "case": "check/no_eta_conversion.bend",
+    "expected": "0",
+    "io": false
+  },
+  {
+    "case": "positive/closed_application.bend",
+    "expected": "12n",
+    "io": false
+  },
+  {
+    "case": "positive/function_refl.bend",
+    "expected": "{==}",
+    "io": false
+  }
+]

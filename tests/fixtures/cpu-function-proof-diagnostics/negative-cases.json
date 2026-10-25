@@ -1,0 +1,13 @@
+[
+  "proof/no_funext_000.bend",
+  "check/lambda_single_use.bend",
+  "negative/scalar.bend",
+  "negative/equation.bend",
+  "negative/context.bend",
+  "negative/nested.bend",
+  "negative/template.bend",
+  "negative/shadow.bend",
+  "negative/imported.bend",
+  "negative/partial_false.bend",
+  "negative/alias.bend"
+]

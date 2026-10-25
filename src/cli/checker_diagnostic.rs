@@ -270,6 +270,7 @@ mod tests {
     #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
         for name in [
+            "tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
             "tests/fixtures/cpu-contextual-proof-diagnostics/check/default_arm_family.bend",
             "tests/fixtures/cpu-contextual-proof-diagnostics/check/neq_reflexivity.bend",
             "tests/fixtures/cpu-let-kind-locations/reusable-field.bend",
@@ -467,6 +468,7 @@ mod tests {
             }
         }
         for name in [
+            "tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
             "tests/fixtures/cpu-contextual-proof-diagnostics/check/default_arm_family.bend",
             "tests/fixtures/cpu-contextual-proof-diagnostics/check/neq_reflexivity.bend",
             "tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend",

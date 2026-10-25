@@ -1,0 +1,7 @@
+Error:
+- expected : {0n == 0n : Nat}
+- observed : non-inferrable term 'x => x'
+Location: main
+2 | 
+3>| def main() -> {0n == 0n : Nat}: x => x
+4 | 
