@@ -1,0 +1,229 @@
+{
+  "tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+  "scope": "Independent static reviews and bounded validation receipts; focused candidate tests preceded the clean source commit. The clean full gate renews all source tests. Raw logs and captured binaries remain outside Git.",
+  "runs": {
+    "focused-unit": {
+      "source_commit": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "runtime::numeric::tests",
+        "--",
+        "--nocapture"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 5.06706831700285,
+      "minimum_free": 12136755200,
+      "minimum_tmp_free": 3148410880,
+      "stop_reason": null,
+      "log_sha256": "c05b0a8bce9abe23af996a4e939ee46949387a0c8d515bdf8b7349900b07fe67"
+    },
+    "focused": {
+      "source_commit": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_list_sort_map",
+        "--test",
+        "runtime_packed_words",
+        "--test",
+        "kernel_open_closures",
+        "--test",
+        "cpu_list_for_each",
+        "--test",
+        "parser_templates",
+        "--test",
+        "runtime_numeric"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 58.987624720000895,
+      "minimum_free": 12077883392,
+      "minimum_tmp_free": 3147001856,
+      "stop_reason": null,
+      "log_sha256": "ca757d9f58f313080de3ba2cb2351a0de7edfff2a48f16777dbfa7adc0581aa8"
+    },
+    "focused-clippy": {
+      "source_commit": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--lib",
+        "--test",
+        "cpu_list_sort_map",
+        "--test",
+        "runtime_packed_words",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 7.2678399049909785,
+      "minimum_free": 12025323520,
+      "minimum_tmp_free": 3148410880,
+      "stop_reason": null,
+      "log_sha256": "f1933246b7851ea588528557d3a4f422e41fc77f8a942988a28addc356df1cf1"
+    },
+    "full-gate": {
+      "source_commit": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 782.0011850390001,
+      "minimum_free": 10822021120,
+      "minimum_tmp_free": 3112923136,
+      "stop_reason": null,
+      "log_sha256": "d48213869bc9e8af3a936830c1102f60473a6d13bd397c30e209157e4495aeb8"
+    }
+  },
+  "frozen_inputs": {
+    "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+  },
+  "review": {
+    "base": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+    "reviewer": "review_imported_printer",
+    "production_diff_sha256": "234768b096ea498e85d6b50d87347ffcce3e41dd5e03c45b30b2c1f6794ad263",
+    "verdict": "No blocking findings. Static review only.",
+    "note": "completion/halt comment corrected to completion; no behavior change. Frozen origins/fallback/demand/GC/cancellation/limits unchanged.",
+    "evidence_review": {
+      "source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+      "manifest_sha256": "31b2a8ceed0a1babfa76f7d91b2bc3cd5f79fc51eaf201d794de1aef466fe21a",
+      "verdict": "No blocking evidence or draft-report findings; independent static review, no builds/tests/edits.",
+      "full_gate_pending_at_review": true
+    }
+  },
+  "raw_evidence_manifest": {
+    "full-gate.json": {
+      "sha256": "1083cfbb5a33ecdbf97f5a3057bc3434575b0e04afe2558345d94f5d68e18b7c",
+      "bytes": 42052
+    },
+    "full-gate.log": {
+      "sha256": "d48213869bc9e8af3a936830c1102f60473a6d13bd397c30e209157e4495aeb8",
+      "bytes": 21240
+    },
+    "focused-unit.json": {
+      "sha256": "5a17579f6f56d0c27df302389c90b7f39739cbcf26eee94b15bbab9514716366",
+      "bytes": 1260
+    },
+    "focused-unit.log": {
+      "sha256": "c05b0a8bce9abe23af996a4e939ee46949387a0c8d515bdf8b7349900b07fe67",
+      "bytes": 2247
+    },
+    "focused.json": {
+      "sha256": "b0b25b15afee2d993a7295118ef632bcbe1042f51c87ff9ea9fa20fbb654c896",
+      "bytes": 4264
+    },
+    "focused.log": {
+      "sha256": "ca757d9f58f313080de3ba2cb2351a0de7edfff2a48f16777dbfa7adc0581aa8",
+      "bytes": 6022
+    },
+    "focused-clippy.json": {
+      "sha256": "448f02b12ea667c7197eee540c3e564048977ab571bf209f590cb43ebf2c947a",
+      "bytes": 1428
+    },
+    "focused-clippy.log": {
+      "sha256": "f1933246b7851ea588528557d3a4f422e41fc77f8a942988a28addc356df1cf1",
+      "bytes": 1056
+    },
+    "snapshot.json": {
+      "sha256": "71461fbc337eedffef45d73442b3007362955e6cb2a10f0e66d65ac91675137a",
+      "bytes": 1210
+    },
+    "matrix/receipt.json": {
+      "sha256": "dd5bf74ecf022e3257ce83fa5030a2dadf26271596fbfe036526ba2864d6b681",
+      "bytes": 33914
+    },
+    "phases.json": {
+      "sha256": "b04a3845ee03090731734433786d3342f2dc7a4c83d6c1f07be8950227da70fc",
+      "bytes": 9695
+    },
+    "reductions/receipt.json": {
+      "sha256": "d669c7d0b8988fd9028a7138557125e224e3824d24750136841c84cca8d7257c",
+      "bytes": 10049
+    },
+    "work.json": {
+      "sha256": "4c289011d9a247ca111d87b353556da106a405a1e64b47dd5db97adc7299db09",
+      "bytes": 2023
+    },
+    "independent-review.json": {
+      "sha256": "8bf365bd3b827e1916ee0f9ea2eda062fa3394c214a8631de2a774d99b93cda1",
+      "bytes": 730
+    },
+    "inactive-test-cache-reclaimed.json": {
+      "sha256": "3cc2b03bdb973ef8d38bf5fd23a6bb99e7cfda52a0580a345d6ed86f00756626",
+      "bytes": 38710
+    },
+    "final-validation.json": {
+      "sha256": "80b3619108f66da760ca3e38c06187fe2b39991bf6ffc3a8b7f46e1541073b72",
+      "bytes": 724
+    }
+  },
+  "final_review": {
+    "reviewer": "review_imported_printer",
+    "scope": "Static documentation/receipt review after full gate; no builds/tests/edits by reviewer.",
+    "result": "No blocking findings. Clarified diagnostic candidates versus proven diagnostic-only cases, and 12 boundary output lines versus independently executed programs."
+  }
+}

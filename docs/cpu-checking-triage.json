@@ -1,6 +1,6 @@
 {
   "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
-  "current_tested_source": "2dacf522eba2665652036b7b6ed369a2ba2c16d3",
+  "current_tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
   "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
   "baseline_non_IO_differences": 302,
   "categories": {
@@ -78,10 +78,10 @@
     "diagnostic_only_candidate": 149,
     "other_rejection_difference": 42
   },
-  "csv_sha256": "99c206bc7277f3d538f5e1fa0e8ec3f1990567b9ce20c062da2b63bb9177c7b7",
+  "csv_sha256": "7d6d690e9c26970cb5ba5b91202f5b550bea176249d04a98c069dc259ee5331a",
   "independent_review_sha256": "de79c9e348409b9e878223f806e3e596ca65b8b88d4c7f520077da7bd5a30573",
   "baseline_observations_sha256": "9699ab35a48bcd26e1c8a2bbdaa0993308cc311bd19185b7be4069628f4f496a",
-  "current_observations_sha256": "51767cee2ac0421d72e976b246ed3afd3447df2716b278a9e35beb96a6b65a89",
+  "current_observations_sha256": "39f62d3f7ffedf41f06b1959b638c7e417648008e861173c220ef0467264d03e",
   "scope": "Observational triage only. Same phase or same suspected rule does not qualify exact diagnostics or runtime parity. Proof-mode availability/refusals are not automatically executable defects. Six oracle failures are outside 302; no new waiver.",
   "current_difference_scope": "300 differences outside the historical 385 IO exclusions; includes one newly exposed strict IO proof refusal, not automatically waived.",
   "new_missing_IO_candidates": [

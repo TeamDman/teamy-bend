@@ -1,0 +1,358 @@
+{
+  "tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+  "before_source": "2dacf522eba2665652036b7b6ed369a2ba2c16d3",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "scope": "Exact retained pre-fix original outcomes and corrected reduced programs; current nonzero outcomes are strict IO checking exclusions or direct Node host failures, not matched runtime executions. Private command paths omitted. Source roots only made repository-relative; raw streams retained including ANSI diagnostics.",
+  "before": [
+    {
+      "case": "base/list_sort.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "base/list_sort.bend",
+      "lane": "port-check",
+      "fixture_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n195 | law main:\n196>|   IO(Unit)\n197 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "base/list_sort.bend",
+      "lane": "port-native",
+      "fixture_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdata runtime step budget exhausted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_map_fold_ops.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_map_fold_ops.bend",
+      "lane": "port-check",
+      "fixture_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n153 | law main:\n154>|   IO(Unit)\n155 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_map_fold_ops.bend",
+      "lane": "port-native",
+      "fixture_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 0,
+      "stdout": "1111111\n",
+      "stderr": "",
+      "timed_out": false
+    }
+  ],
+  "reductions": [
+    {
+      "case": "empty",
+      "expression": "digest(lsort(Nil{}))",
+      "lane": "before",
+      "source_sha256": "b2a892d5b4de8dd00cf86728b75783734ba688191b118d9ea779596f83eeef3b",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "case": "empty",
+      "expression": "digest(lsort(Nil{}))",
+      "lane": "after",
+      "source_sha256": "b2a892d5b4de8dd00cf86728b75783734ba688191b118d9ea779596f83eeef3b",
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "case": "one",
+      "expression": "digest(lsort([1]))",
+      "lane": "before",
+      "source_sha256": "39c7fbcaff0273c43d7b4a8a0b273dee0e554349fc91fb5175697706094f7c65",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "case": "one",
+      "expression": "digest(lsort([1]))",
+      "lane": "after",
+      "source_sha256": "39c7fbcaff0273c43d7b4a8a0b273dee0e554349fc91fb5175697706094f7c65",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "case": "two",
+      "expression": "digest(lsort([2, 1]))",
+      "lane": "before",
+      "source_sha256": "2247b78e7cf80e0832d17280852de9cf45d4d1f3147dd84746563e9c3216e1c9",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdata runtime step budget exhausted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "case": "two",
+      "expression": "digest(lsort([2, 1]))",
+      "lane": "after",
+      "source_sha256": "2247b78e7cf80e0832d17280852de9cf45d4d1f3147dd84746563e9c3216e1c9",
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": ""
+    },
+    {
+      "case": "sorted",
+      "expression": "digest(lsort([1, 2, 3]))",
+      "lane": "before",
+      "source_sha256": "0ba3ff8d182bb63f17ad16649fffe65b130b2e092be55a9870e4fd6c8684b088",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdata runtime step budget exhausted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "case": "sorted",
+      "expression": "digest(lsort([1, 2, 3]))",
+      "lane": "after",
+      "source_sha256": "0ba3ff8d182bb63f17ad16649fffe65b130b2e092be55a9870e4fd6c8684b088",
+      "exit": 0,
+      "stdout": "123\n",
+      "stderr": ""
+    },
+    {
+      "case": "unsorted",
+      "expression": "digest(lsort([5, 3, 9, 1, 4]))",
+      "lane": "before",
+      "source_sha256": "f8388fbf85f370cd50828ccdd4cf17b9693754c59b0bc484a22faa84c8c14894",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdata runtime step budget exhausted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "case": "unsorted",
+      "expression": "digest(lsort([5, 3, 9, 1, 4]))",
+      "lane": "after",
+      "source_sha256": "f8388fbf85f370cd50828ccdd4cf17b9693754c59b0bc484a22faa84c8c14894",
+      "exit": 0,
+      "stdout": "13459\n",
+      "stderr": ""
+    },
+    {
+      "case": "highbit",
+      "expression": "big.x(lsort([4294967295, 0, 2147483648]))",
+      "lane": "before",
+      "source_sha256": "7eb52230fcd46fb2ad66d1b1a1f1d87a1dd7d9babb34c6b64b7632ad14efbfdd",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdata runtime step budget exhausted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    },
+    {
+      "case": "highbit",
+      "expression": "big.x(lsort([4294967295, 0, 2147483648]))",
+      "lane": "after",
+      "source_sha256": "7eb52230fcd46fb2ad66d1b1a1f1d87a1dd7d9babb34c6b64b7632ad14efbfdd",
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": ""
+    },
+    {
+      "case": "pass0",
+      "expression": "digest(spass(0n, [5, 3, 9, 1, 4], Nil{}, Nil{}))",
+      "lane": "before",
+      "source_sha256": "237454394d4b97c80294cc2abf77caf80dbd6290386f05c65cedf5f176aa0e33",
+      "exit": 0,
+      "stdout": "45391\n",
+      "stderr": ""
+    },
+    {
+      "case": "pass0",
+      "expression": "digest(spass(0n, [5, 3, 9, 1, 4], Nil{}, Nil{}))",
+      "lane": "after",
+      "source_sha256": "237454394d4b97c80294cc2abf77caf80dbd6290386f05c65cedf5f176aa0e33",
+      "exit": 0,
+      "stdout": "45391\n",
+      "stderr": ""
+    },
+    {
+      "case": "pass31",
+      "expression": "digest(spass(31n, [5, 3, 9, 1, 4], Nil{}, Nil{}))",
+      "lane": "before",
+      "source_sha256": "d5e1a749a6763996f2a7c9fbe503837007f0e35e1119ad2d6ebe30c2ac78dbf5",
+      "exit": 0,
+      "stdout": "53914\n",
+      "stderr": ""
+    },
+    {
+      "case": "pass31",
+      "expression": "digest(spass(31n, [5, 3, 9, 1, 4], Nil{}, Nil{}))",
+      "lane": "after",
+      "source_sha256": "d5e1a749a6763996f2a7c9fbe503837007f0e35e1119ad2d6ebe30c2ac78dbf5",
+      "exit": 0,
+      "stdout": "53914\n",
+      "stderr": ""
+    },
+    {
+      "case": "shift31",
+      "expression": "U32.shrn(4294967295, 31n)",
+      "lane": "before",
+      "source_sha256": "7a21208bd06a001b1023b90798157b16868b8c00ba0fd340a89f010bfb636360",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "case": "shift31",
+      "expression": "U32.shrn(4294967295, 31n)",
+      "lane": "after",
+      "source_sha256": "7a21208bd06a001b1023b90798157b16868b8c00ba0fd340a89f010bfb636360",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "case": "mask",
+      "expression": "U32.and(4294967295, 1)",
+      "lane": "before",
+      "source_sha256": "6d5ee6df8c0a5b45f90b5a9f57d956d321e84928afd1d315db2cd4911b162241",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    },
+    {
+      "case": "mask",
+      "expression": "U32.and(4294967295, 1)",
+      "lane": "after",
+      "source_sha256": "6d5ee6df8c0a5b45f90b5a9f57d956d321e84928afd1d315db2cd4911b162241",
+      "exit": 0,
+      "stdout": "1\n",
+      "stderr": ""
+    }
+  ],
+  "current": [
+    {
+      "case": "original/list_map_fold_ops.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_map_fold_ops.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n153 | law main:\n154>|   IO(Unit)\n155 | \n",
+      "original_stderr_sha256": "8c22b01a2b7b96ad22fe649aa52f8ffd18ab46ec28aa8f682d01968cc81362ab"
+    },
+    {
+      "case": "original/list_map_fold_ops.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "ddd1d5eb538c5fd8ca5b91c27af5625d86dc39dbb640845077a0656064a60eda",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n153 | law main:\n154>|   IO(Unit)\n155 | \n",
+      "original_stderr_sha256": "8c22b01a2b7b96ad22fe649aa52f8ffd18ab46ec28aa8f682d01968cc81362ab"
+    },
+    {
+      "case": "original/list_sort.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_sort.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n195 | law main:\n196>|   IO(Unit)\n197 | \n",
+      "original_stderr_sha256": "760bda13253171fc66e3da3b4e68186fcd33a10373b11598a5b7f4fcce67045c"
+    },
+    {
+      "case": "original/list_sort.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "b7e1a7187eb35e4253208fcdad5122311e4d936fb23198568568cb73db45746e",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n195 | law main:\n196>|   IO(Unit)\n197 | \n",
+      "original_stderr_sha256": "760bda13253171fc66e3da3b4e68186fcd33a10373b11598a5b7f4fcce67045c"
+    },
+    {
+      "case": "positive/word-boundaries.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "019202d653b28adca27c1d99fdb1e6f75e3a0ad4c89a82c5963a3195ccc84251",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/word-boundaries.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "019202d653b28adca27c1d99fdb1e6f75e3a0ad4c89a82c5963a3195ccc84251",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n25 | \n26>| def main() -> IO(Unit):\n27 |   do IO<Unit>:\n",
+      "original_stderr_sha256": "7742ed4de7f90e98c7f27ec97e51a3e4e3bf76ac4c57347f1983073a3190b582"
+    },
+    {
+      "case": "positive/word-boundaries.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "019202d653b28adca27c1d99fdb1e6f75e3a0ad4c89a82c5963a3195ccc84251",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n25 | \n26>| def main() -> IO(Unit):\n27 |   do IO<Unit>:\n",
+      "original_stderr_sha256": "7742ed4de7f90e98c7f27ec97e51a3e4e3bf76ac4c57347f1983073a3190b582"
+    }
+  ],
+  "checked_bodies": [
+    {
+      "name": "U32.shr",
+      "port_sha256": "60ef93cb38f4aea24f2cbc725a2703d1805c19cebc43c6a3ec6e8c37035e372d",
+      "upstream_sha256": "60ef93cb38f4aea24f2cbc725a2703d1805c19cebc43c6a3ec6e8c37035e372d",
+      "byte_identical": true
+    },
+    {
+      "name": "U32.and",
+      "port_sha256": "fedb19e5ebf0431033a68168131bed7f4b3353fb1ebcf5afe809d5ce36e0ced4",
+      "upstream_sha256": "fedb19e5ebf0431033a68168131bed7f4b3353fb1ebcf5afe809d5ce36e0ced4",
+      "byte_identical": true
+    },
+    {
+      "name": "U32.shrn",
+      "port_sha256": "28fc6e94dca97d103642e57e95b06ffa275a7297b800fa010ebb6b91cca9b3e8",
+      "upstream_sha256": "28fc6e94dca97d103642e57e95b06ffa275a7297b800fa010ebb6b91cca9b3e8",
+      "byte_identical": true
+    }
+  ],
+  "raw_baseline_sha256": "16aa4a2b4a70ef2acdb20ca31c366b23bd1c5a0b8aca856264640a02bba07d23",
+  "raw_reductions_sha256": "d669c7d0b8988fd9028a7138557125e224e3824d24750136841c84cca8d7257c"
+}

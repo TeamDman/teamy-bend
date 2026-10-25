@@ -2008,3 +2008,25 @@ Links do not establish full parity. Frozen inputs/limits and historical failures
 remain; inactive-cache safeguards retain source and unique evidence. Reviewed
 feature checkpoint only. Next substantive gap: radix/list-map-fold originals,
 with applicability established before execution; unqualified here.
+
+### [x] 5.121 Complete native radix sort within fixed work limits
+
+Tested source `d224e79d33b4a0ab26f701b57f448056b63b790a` adds sealed packed U32.shr/and execution through
+the existing lazy fallback, without changing checking, demand, accounting or
+budgets. The unchanged radix original now prints 6; list/map-fold remains
+1111111. Five executable lanes match both originals and the companion’s 12 boundary
+output lines, each program run twice. Independent review completed. [Report](cpu-list-sort-map.md).
+
+Standard gate **1,162 / 0 / 49**; focused 16 unit and 59 integration controls;
+66 matrix and 18 phase observations, no timeouts. Ten before/after reductions
+retain earlier budget failures. Direct Node host failures and strict IO checking
+exclusions remain distinct. All 1,302 port census phases/statuses/streams are
+unchanged: 300 differences beyond 385 historical IO exclusions plus six oracle
+stack failures. Historical triage identities and all unresolved contracts remain.
+
+Coverage is **414 linked / 888 unlinked**: 533 compiled candidates, 341 checker
+negatives, 13 interpreter-profile cases, one checking-only. Links do not establish
+full CPU parity. Frozen dependencies/toolchains/pin/limits retained, no new API
+changes. Safe-cache reclamation preserved unique evidence; bulk raw artifacts
+remain outside Git. Reviewed feature checkpoint only, no desktop/GPU/merge/release.
+Next independent runtime candidates: map_set_ops and list_string_lookups.
