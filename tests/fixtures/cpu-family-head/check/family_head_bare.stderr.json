@@ -1,0 +1,1 @@
+"Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n"

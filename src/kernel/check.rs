@@ -1395,9 +1395,18 @@ impl Engine {
         };
         if let Some(adt) = self.adts.get(name) {
             if !adt.parameters.is_empty() {
-                return Err(KernelError::new(
-                    "a parameterized datatype needs <...> arguments",
-                ));
+                let mut error = KernelError::new("a parameterized datatype needs <...> arguments");
+                error.diagnostic = self
+                    .term_diagnostic(
+                        lhs,
+                        value,
+                        DiagnosticExpression::Text(format!("a family instance (write {name}<..>)")),
+                        DiagnosticExpression::Term(value),
+                        context,
+                    )
+                    .ok()
+                    .map(Box::new);
+                return Err(error);
             }
             return Ok((Rc::clone(&adt.kind), Uses::new()));
         }
@@ -2480,6 +2489,61 @@ mod reflexivity_diagnostic_tests {
     use super::*;
 
     #[test]
+    fn family_head_diagnostics_preserve_rejection_identity_and_remaining_allowance() {
+        let book =
+            crate::syntax::parse("type Family<-A: Type> is Type:\n  Item{value: A}\n").unwrap();
+        let checked = check_book(&book).unwrap();
+        let unused = term(Term::Hole("unvisited-argument".into()));
+        for (value, observed) in [
+            (term(Term::Ref("Family".into())), "Family"),
+            (term(Term::GpuRef("Family".into())), "Family!"),
+        ] {
+            let owners = Rc::strong_count(&value);
+            let before = format!("{value:?}");
+            for demand in [Quant::None, Quant::Lone, Quant::Many] {
+                let mut engine = checked.engine.clone();
+                engine.reset();
+                let initial = (engine.fuel, engine.fresh_id);
+                let error = engine
+                    .infer(
+                        &Lhs::default(),
+                        &value,
+                        demand,
+                        &Context::new(),
+                        &[Rc::clone(&unused)],
+                    )
+                    .unwrap_err();
+                assert_eq!(
+                    error,
+                    KernelError::new("a parameterized datatype needs <...> arguments")
+                );
+                assert_eq!(error.to_string(), error.message);
+                let diagnostic = error.checker_diagnostic().unwrap();
+                assert_eq!(diagnostic.expected, "a family instance (write Family<..>)");
+                assert_eq!(diagnostic.observed.as_deref(), Some(observed));
+                assert_eq!(diagnostic.rejected_identity, Rc::as_ptr(&value) as usize);
+                assert_eq!(
+                    (engine.fuel, engine.fresh_id, engine.depth),
+                    (initial.0 - 1, initial.1, 0)
+                );
+                for (fuel, depth) in [(1, 0), (10, 127)] {
+                    engine.fuel = fuel;
+                    engine.depth = depth;
+                    let exhausted = engine
+                        .infer(&Lhs::default(), &value, demand, &Context::new(), &[])
+                        .unwrap_err();
+                    assert_eq!(exhausted, error);
+                    assert!(exhausted.checker_diagnostic().is_none());
+                    assert!(exhausted.language_failure().is_none());
+                    assert_eq!((engine.fuel, engine.depth), (fuel - 1, depth));
+                }
+            }
+            assert_eq!(format!("{value:?}"), before);
+            assert_eq!(Rc::strong_count(&value), owners);
+        }
+    }
+
+    #[test]
     fn let_kind_source_requires_the_live_expected_allocation() {
         let book = Book {
             declarations: vec![],
@@ -3325,6 +3389,19 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-family-head/check/family_head_bare.bend", &[][..]),
+            ("cpu-family-head/negative/domain.bend", &[][..]),
+            ("cpu-family-head/negative/nested.bend", &[][..]),
+            ("cpu-family-head/negative/imported/main.bend", &[][..]),
+            ("cpu-family-head/negative/macro.bend", &[][..]),
+            ("cpu-family-head/negative/local.bend", &[][..]),
+            ("cpu-family-head/negative/erased.bend", &[][..]),
+            ("cpu-family-head/negative/application.bend", &[][..]),
+            (
+                "cpu-family-head/positive/nonparameterized.bend",
+                &["main"][..],
+            ),
+            ("cpu-family-head/positive/instance.bend", &["main"][..]),
             ("cpu-unfilled-law/check/assert_fill_scope.bend", &[][..]),
             ("cpu-unfilled-law/check/axiom_use.bend", &[][..]),
             ("cpu-unfilled-law/check/axiom_import_warn.bend", &[][..]),

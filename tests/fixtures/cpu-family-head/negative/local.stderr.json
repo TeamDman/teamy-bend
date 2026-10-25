@@ -1,0 +1,1 @@
+"Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n"

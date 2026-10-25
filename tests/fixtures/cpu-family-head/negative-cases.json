@@ -1,0 +1,10 @@
+[
+  "check/family_head_bare.bend",
+  "negative/domain.bend",
+  "negative/nested.bend",
+  "negative/imported/main.bend",
+  "negative/macro.bend",
+  "negative/local.bend",
+  "negative/erased.bend",
+  "negative/application.bend"
+]

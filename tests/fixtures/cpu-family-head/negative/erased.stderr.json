@@ -1,0 +1,1 @@
+"Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n"
