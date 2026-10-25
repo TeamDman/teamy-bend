@@ -1,0 +1,1 @@
+"Error:\n- expected : Kind(&0)\n- observed : @_:Type -> Type\nContext:\n- f : @_:Type -> Type\n- g : @_:Type -> Type\nLocation: bad\n3 |   g = f\n4>|   {@-x: g -> Type : Type}\n5 | def main() -> Type: Type\n"

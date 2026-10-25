@@ -1,0 +1,33 @@
+{
+  "checkpoint": "d3259a053be6164305028fbbf427b767105f1b4a",
+  "tested_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+  "rows": [
+    {
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$FIXTURE"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Kind(&0)\n- observed : @_:Type -> Type\nContext:\n- f : @_:Type -> Type\nLocation: bad\n3 | def bad(f: Type -> Type) -> Type:\n4>|   +g = {x => x : @-x: f -> Type}\n5 |   Type\n",
+      "source_sha256": "ee6f35b989219c2e855888437bca4c80c29d8befeaff214c005701647eaad2e5",
+      "timeout_seconds": 30
+    },
+    {
+      "lane": "port",
+      "command": [
+        "$BEND_BEFORE",
+        "check",
+        "$FIXTURE"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Kind(&0); observed @_:Type -> Type\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "source_sha256": "ee6f35b989219c2e855888437bca4c80c29d8befeaff214c005701647eaad2e5",
+      "timeout_seconds": 30
+    }
+  ],
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599"
+}

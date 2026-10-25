@@ -3073,6 +3073,19 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-nested-kind/annotation-type.bend", &[][..]),
+            ("cpu-nested-kind/annotation-value.bend", &[][..]),
+            ("cpu-nested-kind/arrow-codomain.bend", &[][..]),
+            ("cpu-nested-kind/codomain.bend", &[][..]),
+            ("cpu-nested-kind/deeper-kind.bend", &[][..]),
+            ("cpu-nested-kind/domain-first.bend", &[][..]),
+            ("cpu-nested-kind/domain.bend", &[][..]),
+            ("cpu-nested-kind/imported/main.bend", &[][..]),
+            ("cpu-nested-kind/let-domain.bend", &[][..]),
+            ("cpu-nested-kind/multiline-annotation.bend", &[][..]),
+            ("cpu-nested-kind/multiline-domain.bend", &[][..]),
+            ("cpu-nested-kind/nested-codomain.bend", &[][..]),
+            ("cpu-nested-kind/reusable-domain.bend", &[][..]),
             ("cpu-let-kind-locations/reusable-field.bend", &[][..]),
             ("cpu-let-kind-locations/direct-let.bend", &[][..]),
             ("cpu-let-kind-locations/multiline-let.bend", &[][..]),

@@ -104,6 +104,8 @@ impl TermOrigins {
                 body,
             } => Some([Some(evidence), Some(motive), Some(body)]),
             Term::Lam { body, .. } => Some([Some(body), None, None]),
+            Term::All { domain, body, .. } => Some([Some(domain), Some(body), None]),
+            Term::Ann(value, ty) => Some([Some(value), Some(ty), None]),
             _ => None,
         };
         let child_origins = children.map(|children| {
@@ -438,6 +440,52 @@ mod tests {
             name: "x".into(),
             id,
         })
+    }
+
+    #[test]
+    fn type_children_keep_distinct_sources_without_owning_shared_replacements() {
+        for annotation in [false, true] {
+            let origins = TermOrigins::default();
+            let first = variable(7);
+            let second = variable(7);
+            origins.track(&first);
+            origins.track(&second);
+            let original = term(if annotation {
+                Term::Ann(Rc::clone(&first), Rc::clone(&second))
+            } else {
+                Term::All {
+                    quant: super::super::Quant::None,
+                    name: "y".into(),
+                    id: 8,
+                    domain: Rc::clone(&first),
+                    body: Rc::clone(&second),
+                }
+            });
+            origins.track(&original);
+            let replacement = variable(99);
+            let result = substitute_with_origins(&original, 7, &replacement, Some(&origins));
+            let (a, b) = match result.as_ref() {
+                Term::All { domain, body, .. } | Term::Ann(domain, body) => (domain, body),
+                _ => panic!("type parent"),
+            };
+            assert!(Rc::ptr_eq(a, &replacement) && Rc::ptr_eq(b, &replacement));
+            assert_eq!(Rc::strong_count(&replacement), 3);
+            assert_eq!(
+                origins.child_source(&result, 0, &replacement),
+                Some(Rc::as_ptr(&first) as usize)
+            );
+            assert_eq!(
+                origins.child_source(&result, 1, &replacement),
+                Some(Rc::as_ptr(&second) as usize)
+            );
+            assert_ne!(Rc::as_ptr(&first), Rc::as_ptr(&second));
+            // A separately sourced replacement keeps its own location.
+            origins.track(&replacement);
+            assert_eq!(origins.child_source(&result, 0, &replacement), None);
+            assert_eq!(origins.child_source(&result, 1, &replacement), None);
+            drop(origins);
+            assert_eq!(Rc::strong_count(&replacement), 3);
+        }
     }
 
     #[test]

@@ -203,3 +203,54 @@ fn reusable_lets_keep_exact_diagnostics_and_compilation_refusals() {
         }
     }
 }
+
+#[test]
+fn nested_kind_children_keep_exact_diagnostics_and_compilation_refusals() {
+    let cases: Vec<_> = facet_json::from_str::<Vec<String>>(include_str!(
+        "fixtures/cpu-nested-kind/negative-cases.json"
+    ))
+    .unwrap()
+    .into_iter()
+    .map(|case| {
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-nested-kind")
+            .join(case)
+    })
+    .collect();
+    assert_eq!(cases.len(), 13);
+    let artifacts = Artifacts::new("nested-kind-negative");
+    let destination = artifacts.0.join("unwritten");
+    for path in cases {
+        let expected: String = facet_json::from_str(
+            &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+        )
+        .unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&destination);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(
+                output.status.code(),
+                Some(1),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(output.stdout.is_empty());
+            assert_eq!(
+                output.stderr,
+                expected.as_bytes(),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(!destination.exists());
+        }
+    }
+}

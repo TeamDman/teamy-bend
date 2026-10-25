@@ -1419,6 +1419,7 @@ impl Parser<'_> {
         if matches!(
             value.as_ref(),
             Term::Typ(_)
+                | Term::All { .. }
                 | Term::Adt { .. }
                 | Term::Ctr { .. }
                 | Term::Rwt { .. }

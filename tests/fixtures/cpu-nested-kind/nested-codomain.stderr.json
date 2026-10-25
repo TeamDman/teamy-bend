@@ -1,0 +1,1 @@
+"Error:\n- expected : Type\n- observed : @_:Type -> Type\nContext:\n- f : @_:Type -> Type\n- x : Type\n- y : Type\nLocation: bad\n2 | def bad(f: Type -> Type) -> Type:\n3>|   {@x: Type -> @y: Type -> f : Type}\n4 | def main() -> Type: Type\n"

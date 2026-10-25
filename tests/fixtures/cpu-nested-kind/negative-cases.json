@@ -1,0 +1,15 @@
+[
+  "annotation-type.bend",
+  "annotation-value.bend",
+  "arrow-codomain.bend",
+  "codomain.bend",
+  "deeper-kind.bend",
+  "domain-first.bend",
+  "domain.bend",
+  "imported/main.bend",
+  "let-domain.bend",
+  "multiline-annotation.bend",
+  "multiline-domain.bend",
+  "nested-codomain.bend",
+  "reusable-domain.bend"
+]
