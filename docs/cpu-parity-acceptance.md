@@ -1810,3 +1810,35 @@ or GPU work. Disk preflight and floors are enforced; only verified inactive
 rebuildable caches are reclaimed. Unique historical evidence is preserved.
 Raw captures and receipts remain outside Git; reviewed feature publication
 preserves source and compact evidence without main merge or release.
+
+### Constructor-definition provenance checkpoint
+
+Tested source `1e8c0c3fba2315ecfeecfd86574044b3feb39608` corrects constructor-domain diagnostic labels without
+changing Lhs, internal errors, checking order or work. Reduced non-kind reports
+also preserve alias-body locations and parameter context. Seven unchanged
+originals and eleven adjacent controls match exactly at repeated CLI/compiler
+boundaries; eight further census-only changes remain distinct. All 15 changed
+stderr streams match the pinned checker. [Report](cpu-definition-provenance.md).
+
+The standard gate passes **1,126 / 0 / 49**. New and renewed matrices contain
+**687 observations**, zero timeouts and deterministic repeats, including retained
+C-generation and Node host failures; failed generation still has no execution
+credit. All 1,302 checking statuses remain unchanged. The old 489-case subset is
+31 exact / 385 strict IO exclusions / 73 unresolved. Six of ten prior diagnostic
+cells are now exact; three pattern anchors and unsafe_many remain unwaived.
+Supplementary all-target lint failures and all other historical disagreements
+remain open. Repository consumers handle status-bearing output; external
+consumers remain unaudited.
+
+`comptime/later_def` and four adjacent reproductions remain true source-location
+mismatches. Shared Ref identities protect compile binding behavior, so fresh-leaf
+and call-head-only shortcuts were rejected by review. Next is private per-use
+provenance carried separately from core terms; no new semantic policy is assumed.
+
+Coverage is **406 linked / 896 unlinked**, with unlinked categories 345 checker
+negatives, one checking-only, 13 interpreter-profile and 537 compiled candidates.
+No new runtime credit is assigned to negative fixtures or supplementary census
+observations. Dependencies, upstream, toolchains, budgets, guards and cancellation
+boundaries are unchanged. Disk preflight/floors and inactive-cache controls remain;
+unique raw evidence and captures are retained outside Git. Reviewed feature-branch
+preservation is separate from main merge, release or parity acceptance.
