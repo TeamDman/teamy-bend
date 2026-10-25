@@ -1,0 +1,32 @@
+[
+  {
+    "case": "known.bend",
+    "expected": "12",
+    "io": false
+  },
+  {
+    "case": "replay.bend",
+    "expected": "28",
+    "io": false
+  },
+  {
+    "case": "raw_fallback.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "known_precedence.bend",
+    "expected": "12",
+    "io": false
+  },
+  {
+    "case": "ordinary.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "nested.bend",
+    "expected": "12",
+    "io": false
+  }
+]

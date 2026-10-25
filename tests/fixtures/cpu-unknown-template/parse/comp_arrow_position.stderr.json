@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '~'\nLocation:\n11 | def f(x):\n12>|   h = {y => y : U32 -~> U32}\n13 |   h(x)\n"

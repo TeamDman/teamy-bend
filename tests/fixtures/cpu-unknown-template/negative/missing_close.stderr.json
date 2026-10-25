@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : end of input\nLocation:\n4 | def main() -> U32: D.pick(~9, 3\n5>| \n"

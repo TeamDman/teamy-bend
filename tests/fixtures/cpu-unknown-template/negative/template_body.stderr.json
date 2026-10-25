@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def wrapper(~x: U32) -> U32: D.missing(~x)\n5 | def main() -> U32: wrapper(~9)\n"

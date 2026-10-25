@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '~'\nLocation:\n5 | def main() -> Nat:\n6>|   Nat.add(~1n, 2n)\n7 | \n"

@@ -334,6 +334,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-unknown-template/negative/template_missing.bend",
+                "4>| def main() -> U32: D.missing(~9)",
+            ),
+            (
+                "cpu-unknown-template/negative/imported.bend",
+                "4>| def broken() -> U32: missing(~9)",
+            ),
+            (
                 "cpu-duplicate-declaration/check/data_table_checked_000.bend",
                 "11>| law String.eq:",
             ),

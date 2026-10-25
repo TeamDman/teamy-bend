@@ -1,0 +1,16 @@
+[
+  "negative/bare.bend",
+  "negative/imported.bend",
+  "negative/late_marker.bend",
+  "negative/missing_close.bend",
+  "negative/missing_member.bend",
+  "negative/multiline.bend",
+  "negative/ordinary.bend",
+  "negative/standalone.bend",
+  "negative/template_body.bend",
+  "negative/template_missing.bend",
+  "comptime/err_head.bend",
+  "comptime/err_later.bend",
+  "comptime/err_runtime.bend",
+  "parse/comp_arrow_position.bend"
+]

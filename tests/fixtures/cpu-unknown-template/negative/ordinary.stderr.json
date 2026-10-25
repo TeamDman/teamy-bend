@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def main() -> U32: D.ordinary(~9)\n5 | \n"
