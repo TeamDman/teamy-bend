@@ -1,0 +1,2 @@
+# Preserve the exact newline bytes exercised by this parser diagnostic.
+crlf.bend -text
