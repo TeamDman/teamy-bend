@@ -95,15 +95,15 @@ fn filled_erased_recursive_imported_and_sealed_definitions_remain_usable() {
         } else {
             "7\n"
         };
-        if name != "native-contract" {
+        if name == "native-contract" {
+            // Strict proof loading excludes IO; executable checking is separate.
+            check_book(&load(&path).unwrap()).unwrap_err();
+        } else {
             let checked = check_book(&load(&path).unwrap()).unwrap();
             assert_eq!(
                 checked.normalize_definition("main").unwrap().to_string(),
                 "7"
             );
-        } else {
-            // Strict proof loading excludes IO; executable checking is separate.
-            assert!(check_book(&load(&path).unwrap()).is_err());
         }
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
         for _ in 0..2 {
