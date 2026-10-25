@@ -575,8 +575,24 @@ def IO.now() -> IO(Nat): import "now.js"
 "#,
     );
     let path = fixture.write("main.bend", "import library.bend as L\n");
-    let duplicate =
-        load_executable(&path).expect_err("importing Base reserves its exact scheduler names");
+    let source = load_executable(&path).expect("qualified scheduler names are local declarations");
+    for (name, builtin) in [
+        ("IO.spawn", BuiltinForeign::Spawn),
+        ("IO.sleep", BuiltinForeign::Sleep),
+        ("IO.now", BuiltinForeign::Now),
+    ] {
+        let local = format!("library.{name}");
+        assert_eq!(source.foreign[&local].builtin, None, "{local}");
+        assert!(!source.base_names.contains(&local));
+        assert_eq!(source.foreign[name].builtin, Some(builtin), "{name}");
+        assert!(source.base_names.contains(name));
+    }
+    check_executable(&source).expect("qualified scheduler names remain foreign assumptions");
+    let collision = fixture.write(
+        "collision.bend",
+        "import Base\ndef IO.spawn(-A: Type, act: IO(A)) -> IO(Unit): import \"spawn.js\"\n",
+    );
+    let duplicate = load_executable(collision).expect_err("exact Base names remain reserved");
     assert!(
         duplicate.message.contains("duplicate definition: IO.spawn"),
         "{duplicate}"
