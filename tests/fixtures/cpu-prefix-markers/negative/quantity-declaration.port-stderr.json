@@ -1,1 +1,1 @@
-"Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+"Error:\n- expected : a name\n- observed : '+'\nLocation:\n2 | \n3>| def bad(++n: Nat) -> Nat: n\n4 | def main() -> Nat: bad(3n)\n"

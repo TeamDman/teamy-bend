@@ -19,3 +19,8 @@ Differing upstream and port diagnostics remain differences, not exact matches.
 No files are copied from upstream. The original predecessor fixture and receipts
 remain in `cpu-reusable-nat`; complete historical command logs and binary captures
 are outside Git. See `docs/cpu-prefix-markers.md` for the final qualification.
+
+The invalid-token diagnostic checkpoint renews `quantity-declaration` and
+`malformed`: their port stderr now exactly matches the pinned upstream strings.
+The earlier host-format outputs remain in `*.before-port-stderr.json`; all
+source programs and their rejection status are unchanged.
