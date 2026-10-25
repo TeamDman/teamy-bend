@@ -1,0 +1,72 @@
+{
+  "source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+  "baseline_source": "9a260404fbb5819870e48f14a78bb80b7afc9181",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 356,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 80,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 189,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 80
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "diagnostic_only_candidate": 51,
+    "other_rejection_difference": 29
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/family_head_bare.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/family_head_bare.bend",
+      "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "5222d258be3a5a67de82f302d84752289030e7b76eae05f8858576e5be3e708e",
+      "after_stderr_sha256": "3aa9ff11847e12464da63b0d3995173daadce445de4949cd46a38993ca2a855c"
+    }
+  ],
+  "raw_observations_sha256": "729ba583d189c54d79f4d3661ae6fa444fa2b6e00ae1c3cc51693ab8bd19fc02",
+  "baseline_raw_sha256": "4550f2d85fcfff99b1c4c669c536d4d1d77bbec361b93f11699a3b98f631c2d6",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "family_head_diagnostic_changes": [
+    {
+      "fixture": "check/family_head_bare.bend",
+      "before_stderr": "Error: \n   0: \u001b[91mbare: a parameterized datatype needs <...> arguments\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+      "upstream_stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "other_port_stream_changes": []
+}

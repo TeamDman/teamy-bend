@@ -1,0 +1,41 @@
+{
+  "tested_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+  "rows": [
+    {
+      "fixture": "check/book_prefix_arity.bend",
+      "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/book_prefix_arity.bend:12:5: duplicate constructor: K6\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+      "scope": "both reject; diagnostic/provenance discrepancy remains unqualified"
+    },
+    {
+      "fixture": "check/ctor_shared_tag.bend",
+      "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/ctor_shared_tag.bend:10:5: duplicate constructor: K5\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+      "scope": "both reject; diagnostic/provenance discrepancy remains unqualified"
+    },
+    {
+      "fixture": "check/forward_data_table.bend",
+      "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+      "classification": "different_rejection",
+      "port_phase": "check",
+      "upstream_phase": "check",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91mTwo: undefined datatype D3\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+      "scope": "both reject; diagnostic/provenance discrepancy remains unqualified"
+    }
+  ]
+}

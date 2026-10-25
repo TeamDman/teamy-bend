@@ -1,0 +1,2619 @@
+{
+  "tested_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "98345d1e3a50effe40654627908f6b41dd19416e5cec9eb675cabde5b42e18dc",
+  "completed": true,
+  "full_parity": false,
+  "timeout_seconds": 30,
+  "negative": {
+    "exact_stream_observations": 144,
+    "separate_phase_probes": 48,
+    "rows": [
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.4464321820123587,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.7054706790077034,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.5244993730157148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 1.0122032649815083,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.9863630510226358,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 1.1488033309869934,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 1.1102759880013764,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.9087747689918615,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/check/family_head_bare.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.5511241079948377,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.5560507090121973,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.5348832249874249,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.7688444950035773,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.8526183269859757,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.8179936000087764,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.892870043986477,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.7664076120126992,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.7345733960100915,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/domain.bend",
+        "source_sha256": "06c8295e90af3aa90a7cbc7baf901beef7ebff4299f680d91fd48673a2f4a46d",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/domain.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n2 | \n3>| def bad(x: List) -> U32: 0\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.6909152519947384,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4295811310003046,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4272064240067266,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.36502807697979733,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.7737025730020832,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.423987568996381,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4961441310006194,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.41436822700779885,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.5931940110167488,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "8c8ebc068f955a49fc8d5cfc3b53e7e2e2b957939e8c07b31120bfb21babaeae",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/nested.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nContext:\n- n : U32\nLocation: bad\n3 | def bad(+n: U32) -> Type:\n4>|   {List : Type}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.428411770000821,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3249820949858986,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.42383107598288916,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.39917304800474085,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.637063894973835,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.38135335000697523,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.33630217000609264,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.38300415899720974,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4079264089814387,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: helper.bad\n3 | def bad() -> Type:\n4>|   List\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3697490110062063,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.4582818819908425,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.43838959402637556,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.41796800700831227,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.6249479920079466,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.3989524559874553,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.44567598699359223,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.5948818469769321,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.3414502259984147,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "266f59e833ce917230729466ef5df6d9f856292be171c20ee88d3e40b0ae3fb2",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/macro.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n4 | def bad() -> U32:\n5>|   id(List, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.4775507570011541,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.21045155002502725,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.20979452700703405,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.19136909599183127,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.0173609750054311,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.01187521600513719,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.03312791499774903,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.0069245159975253046,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.0033174720010720193,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/local.bend",
+        "source_sha256": "48263bb9f7e2104b7beef8fc36d7a61c481592b719ac47394839ec13924666d6",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/local.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write Family<..>)\n- observed : Family\nLocation: bad\n4 | def bad() -> Type:\n5>|   Family\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.003118224994977936,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3903083800105378,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4363659060036298,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4033185619919095,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.626860309013864,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.34002620799583383,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.7500736840011086,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4639836330024991,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.38179442399996333,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/erased.bend",
+        "source_sha256": "b897d72c330f02cc07b66f9af7cb0e06df02b0596d18779c84a1b84e31f0c1d8",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/erased.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: main\n3 | def erase(-A: Type) -> U32: 0\n4>| def main() -> U32: erase(List)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.6933176180173177,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.33795139199355617,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3895038799964823,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3892737969872542,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.49921826299396344,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.39723294400027953,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3744501040200703,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3605093159712851,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.5733689350017812,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/application.bend",
+        "source_sha256": "53dae9a12684602021bc7810377088cf3431bf895ed644cd808cc0196a0bdaab",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/negative/application.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bad\n3 | def bad() -> Type:\n4>|   List(Missing)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.37169957900187,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/family_head_bare.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/domain.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/local.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/erased.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/application.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "9f8ad892a64ffc911907b1a2a38509412623779423c94ea84b8a15a88c1ce471"
+  },
+  "positive": {
+    "observations": 52,
+    "lane_counts": {
+      "port-pure-normalization": 4,
+      "upstream-pure-normalization": 4,
+      "upstream-check": 4,
+      "strict-phase": 4,
+      "executable-phase": 4,
+      "strict-check": 4,
+      "upstream-generate-c": 2,
+      "upstream-build-O3": 2,
+      "upstream-generate-js": 2,
+      "port-generate-c": 2,
+      "port-build-O3": 2,
+      "port-generate-js": 2,
+      "upstream-C-O3": 4,
+      "upstream-JS": 4,
+      "port-C-O3": 4,
+      "port-JS": 4
+    },
+    "rows": [
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1823679390072357,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5074666280124802,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "$RUN/positive-matrix/positive/nonparameterized/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4051343569881283,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2865663270058576,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6305592980061192,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 21,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5771642689942382,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.48136634498951025,
+        "artifact_sha256": "e6c519eecc565f410e8393dbf7733cebf074f6e4d014765175bb54d2ac7b277d"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.572702372999629,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6192647959978785,
+        "artifact_sha256": "49bfe4aad915fd69bde815d434655ecf2201f1e5a27ec0089c53ee46e99fd43a"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/nonparameterized/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/nonparameterized/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186098,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9176539359905291,
+        "artifact_sha256": "e4d3f6add94e91dd68b3e1b2c62200e3c605852da69934f262a0d3d1ebad1d71",
+        "before_artifact_sha256": "e4d3f6add94e91dd68b3e1b2c62200e3c605852da69934f262a0d3d1ebad1d71",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/nonparameterized/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/nonparameterized/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.6065302010101732,
+        "artifact_sha256": "e5da2869e079c53187f020e14387441585db8236c0ac03df6bc95f042667680e"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/nonparameterized/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/nonparameterized/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52811,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.340430008014664,
+        "artifact_sha256": "de60adcad64cc67cf71abe9622a2a3e30d657589a2dc3975f5ba3a6bfedb0a66",
+        "before_artifact_sha256": "de60adcad64cc67cf71abe9622a2a3e30d657589a2dc3975f5ba3a6bfedb0a66",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0011233140248805285,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/nonparameterized/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08709214499685913,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/nonparameterized/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.009565798012772575,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/nonparameterized/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08007020899094641,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.5914489870192483,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6217227809829637,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "$RUN/positive-matrix/positive/instance/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.41769947099965066,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4909883970103692,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8552501350059174,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1003605669829994,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/instance/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.42497433701646514,
+        "artifact_sha256": "a6245319755c5fa0bb535db9332f64ae5856f66edad366c08c1046f6dc9daa1d"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/instance/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/instance/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.33573604898992926,
+        "artifact_sha256": "a0c3d84ef6e64ba5094f9d0a0df416d2010728c7f0d3f26a0f70bb447ea94ea9"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/instance/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.45159346901346,
+        "artifact_sha256": "bd81ae1c5ab2d942f6d3712d2dd5ad7700a43836b227c6908da4c7a4194d26d9"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/instance/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/instance/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 189802,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8100033829978202,
+        "artifact_sha256": "4d4876bb36e77e8601a6c65d4cbd301ae728402776eafa31037402c0c66a442b",
+        "before_artifact_sha256": "4d4876bb36e77e8601a6c65d4cbd301ae728402776eafa31037402c0c66a442b",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/instance/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/instance/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1070843749912456,
+        "artifact_sha256": "1c5b8630f84a70d38ade0b0a809f6de4def259ff38fffc59751377e55c76eeff"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/instance/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/instance/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53036,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9022129039803986,
+        "artifact_sha256": "1e3e04fb5891b5ec5beb19758bbd106f0eb11e8d2011848a60b4cf8aba5e7dea",
+        "before_artifact_sha256": "1e3e04fb5891b5ec5beb19758bbd106f0eb11e8d2011848a60b4cf8aba5e7dea",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/instance/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.004199887014692649,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/instance/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06347737601026893,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/instance/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0052917989960405976,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/instance/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.05826227099169046,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/instance.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phases_already_in_command_count": true,
+    "raw_sha256": "c478d9ecc07e8b677e358f6eb498728cefec113f0b785cdfb80012c23bca2e8c"
+  },
+  "baseline_artifacts": {
+    "binary_source": "9a260404fbb5819870e48f14a78bb80b7afc9181",
+    "binary_sha256": "29aa6c827130b7c29b4fb410e720b1db5f76858bf120dea87b0241177019b862",
+    "scope": "baseline emission only; runtime qualified in final matrix",
+    "rows": [
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/nonparameterized/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/nonparameterized/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 186098,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/nonparameterized/before.c",
+        "artifact_sha256": "e4d3f6add94e91dd68b3e1b2c62200e3c605852da69934f262a0d3d1ebad1d71"
+      },
+      {
+        "case": "positive/nonparameterized.bend",
+        "source_sha256": "a9b0527425a2907d4ff1d43431f9cc390e14750e009dadf34d9e2ac0a6e21e1c",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/nonparameterized.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/nonparameterized/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/nonparameterized/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52811,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/nonparameterized/before.js",
+        "artifact_sha256": "de60adcad64cc67cf71abe9622a2a3e30d657589a2dc3975f5ba3a6bfedb0a66"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/instance/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/instance/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 189802,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/instance/before.c",
+        "artifact_sha256": "4d4876bb36e77e8601a6c65d4cbd301ae728402776eafa31037402c0c66a442b"
+      },
+      {
+        "case": "positive/instance.bend",
+        "source_sha256": "9e3cc74c0387ddf9fac77aa84f6e854a7717a7f19dd504efbaa685ad5d7bad39",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-family-head/positive/instance.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/instance/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/instance/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53036,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/instance/before.js",
+        "artifact_sha256": "1e3e04fb5891b5ec5beb19758bbd106f0eb11e8d2011848a60b4cf8aba5e7dea"
+      }
+    ]
+  },
+  "scope": [
+    "eight exact check-phase refusals; negative artifact emission/execution absent",
+    "two pure values: strict checking and normalization, not native IO",
+    "16 actual port/upstream C-O3/JS executions;12 build/generation;8 normalization;16 checking/phase",
+    "four generated port C/JS artifacts byte-identical to baseline; native binary hashes are not compared across commits",
+    "marked-reference unit checks spelling only; no GPU execution",
+    "no mid-normalization cancellation claim"
+  ],
+  "negative_phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+fixture,source_sha256,engine_commit,upstream_phase,upstream_exit,upstream_outcome,port_phase,port_exit,probe_exit,classification,missing_IO_candidate,renewed_historical_IO_member
+check/family_head_bare.bend,62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087,c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e,check,1,language_rejection,check,1,1,exact_rejection,false,false
