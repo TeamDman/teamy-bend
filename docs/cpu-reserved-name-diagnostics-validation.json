@@ -1,0 +1,407 @@
+{
+  "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+  "source_tree": "52cd9dcf4e221c647dfb952ba49f759f0d865d43",
+  "baseline_checkpoint": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+  "binary_sha256": "f76daae39266551cc7fb9af868d30a54a8f6096401770580e8a0961957443abc",
+  "post_gate_changes": "Documentation/receipts only after tested source; no source/test/fixture changes.",
+  "counts": {
+    "passed": 1270,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 188
+  },
+  "full_gate": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 11834646528,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1040.6837703080091,
+    "minimum_free": 11809148928,
+    "minimum_tmp_free": 3055661056
+  },
+  "controls": [
+    {
+      "name": "focused-state",
+      "recorded_head": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+      "recorded_dirty": true,
+      "working_tree_became": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "reserved_name",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 7.46808842199971,
+      "counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 2
+      },
+      "log_sha256": "294930d2d3126a6aae2ac2e583a31a02bc68a4c795613917a0b1b5ed8d18a94b",
+      "scope": "Precommit working tree; final full gate renews the committed source and raw fixture bytes."
+    },
+    {
+      "name": "focused-integration",
+      "recorded_head": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+      "recorded_dirty": true,
+      "working_tree_became": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_reserved_name_diagnostics",
+        "--test",
+        "cpu_function_proof_diagnostics",
+        "--test",
+        "cpu_duplicate_declaration",
+        "--test",
+        "cpu_unknown_template",
+        "--test",
+        "kernel_core",
+        "--test",
+        "kernel_normalization",
+        "--test",
+        "kernel_open_closures"
+      ],
+      "exit": 0,
+      "seconds": 114.2939422710042,
+      "counts": {
+        "passed": 66,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 7
+      },
+      "log_sha256": "6ca60825bd98db1901d2b61c4cabd23ded702f101fa4028c4235de74f42a3f53",
+      "scope": "Precommit working tree; final full gate renews the committed source and raw fixture bytes."
+    },
+    {
+      "name": "targeted-clippy",
+      "recorded_head": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+      "recorded_dirty": true,
+      "working_tree_became": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_reserved_name_diagnostics",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "seconds": 3.116539149021264,
+      "counts": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 0
+      },
+      "log_sha256": "33bdd0e55826d24d61396a6122b1ed9acbaa4ae7c0039e898448ec60a4279937",
+      "scope": "Precommit working tree; final full gate renews the committed source and raw fixture bytes."
+    }
+  ],
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "gate_log_sha256": "a5f200c8db9443a5bf3de24a7401fa8003c21b23d1827cdd4e37f455eaa719bd",
+  "matrix_raw_sha256": "44fafd08f2d9a7cfa3a8c17bfcdadb88a800527fd42c0401eb17b9b0c80eb176",
+  "census_raw_sha256": "2202d5edde3f33e6a37c07d51c705d73122270b9d648703c5a63fa75a44f672a",
+  "phase_probe_sha256": "eb1e8404afcce687bd20461c89fb4ffa7f4cb418170e579c7dce65aa57c5f1f6",
+  "independent_reviews": {
+    "review-source": {
+      "reviewer": "review_sharing",
+      "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "scope": "Read-only independent production/source/fixture review; no reviewer test execution.",
+      "findings": [],
+      "confirmed": [
+        "NameContext separates pinned name-slot keywords from distinct term-keyword contract. Cursor/fresh IDs/depth/tokens/error fields remain unchanged.",
+        "All 11 upstream originals byte-identical; all 19 negative goldens equal retained raw upstream streams.",
+        "All 56 fixture files at final source equal working bytes; CRLF raw input and stderr protected by -text attributes.",
+        "3 focused unit tests and 66 integration tests passed in owner records; full gate pending at review time.",
+        "Retained lambda/term/depth diagnostics unqualified; external invoke caller audit remains outstanding."
+      ],
+      "source_diff_sha256": "028f6adecb39660c9927843b31486c98724b62ddc152aead609b767fae6fbec8"
+    },
+    "review-matrix": {
+      "reviewer": "review_imported_printer",
+      "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "scope": "Read-only review of recorded evidence; no reviewer rerun.",
+      "findings": [],
+      "matrix_raw_sha256": "44fafd08f2d9a7cfa3a8c17bfcdadb88a800527fd42c0401eb17b9b0c80eb176",
+      "confirmed": {
+        "commands": 522,
+        "repeated_pairs": 249,
+        "exact_negative_streams": 342,
+        "negative_phase_probes": 76,
+        "generated_executions": 32,
+        "pure_normalizations": 16,
+        "baseline_byte_matches": 8,
+        "unexpected": 0,
+        "timeouts": 0
+      },
+      "limitations": [
+        "Full gate and census pending at this review.",
+        "Keep interrupted initial gate separate.",
+        "Canonical census delta must preserve upstream-only phase changes."
+      ]
+    },
+    "review-census": {
+      "reviewer": "review_imported_printer",
+      "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "scope": "Independent read-only raw census, compact matrix and retained-control review; no reviewer executions.",
+      "findings": [],
+      "confirmed": {
+        "total": 1302,
+        "counts": {
+          "both_accept": 366,
+          "exact_rejection": 391,
+          "acceptance_disagreement": 494,
+          "different_rejection": 45,
+          "oracle_or_infrastructure_failure": 6
+        },
+        "port_stderr_only_changes": 9,
+        "other_port_streams_unchanged": 1293,
+        "status_and_phase_changes": 0,
+        "upstream_stream_changes": 0,
+        "historical_IO_exactly_unchanged": 385,
+        "residual": 154,
+        "residual_acceptance": 109,
+        "residual_rejection": 45,
+        "canonical_delta_rows": 9,
+        "retained_commands": 30,
+        "retained_deterministic_pairs": 15,
+        "retained_diagnostic_differences": 3
+      },
+      "census_raw_sha256": "2202d5edde3f33e6a37c07d51c705d73122270b9d648703c5a63fa75a44f672a",
+      "reconciliation_sha256": "2b4a3f0a4b8d131e3b53a4eb21e99ac15ab3068c248d6993e67bf2f105e1b153",
+      "canonical_csv_sha256": "3880975bfc098731a8917e9cabb7a9628f41d528cc231dbf2a58c0a1c90d3789",
+      "public_matrix_sha256": "ba120f160e2f8b03389655739fae3abdc158d357355fc1781bf6b837c9829439",
+      "retained_raw_sha256": "da3da62c7f982d97a32003e3795304db7d275fb99e6093bdb9a19b37c9886daf",
+      "report_correction": "Corrected next-gap wording to the pinned one-name lambda-binder message, not the generic reserved-keyword message.",
+      "limitations": [
+        "Full gate pending at this review.",
+        "Existing unresolved/excluded/host/resource observations remain unwaived."
+      ]
+    },
+    "final_publication": {
+      "reviewer": "review_imported_printer",
+      "scope": "Final independent read-only report/receipt/source/gate review; no reviewer executions.",
+      "findings": [],
+      "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+      "counts": {
+        "passed": 1270,
+        "failed": 0,
+        "ignored": 49,
+        "groups": 188
+      },
+      "seconds": 1040.6837703080091,
+      "reviewed_report_sha256": "f218db73f4b7927bb7c2c0f3c8b7913426e441f28d6f71845662b073fa4c8c46",
+      "validation_before_attestation_sha256": "a841a0f8f675e34eecfd548db6dfb93e4542184a4fae019231e705b669af7688",
+      "gate_log_sha256": "a5f200c8db9443a5bf3de24a7401fa8003c21b23d1827cdd4e37f455eaa719bd",
+      "confirmed": [
+        "No post-gate source/test/fixture changes; only documentation and receipts.",
+        "Working/build/archive binary identity unchanged; frozen reference/docs/lock confirmed.",
+        "Interrupted f631f43 gate explicitly retained, never presented as passed.",
+        "Matrix, retained failures, census delta and499/803 linkage match raw evidence.",
+        "Public metadata/Debug and CLI status compatibility caveats retained."
+      ]
+    }
+  },
+  "census_command": [
+    "python3",
+    "scripts/checking-census/run.py",
+    "--reference",
+    "<reference>",
+    "--binary",
+    "<port>",
+    "--phase-probe",
+    "<evidence>/phase-probe",
+    "--output",
+    "<evidence>/census",
+    "--build-receipt",
+    "<evidence>/census-build.json"
+  ],
+  "whitespace_review": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "d1773a46cbabb7ed740d2c85a036647cb1dcb740..HEAD"
+    ],
+    "exit": 2,
+    "stdout": "tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.stderr:7: trailing whitespace.\n+3 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend:1: trailing whitespace.\n+# SPDX-License-Identifier: MPL-2.0\ntests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend:2: trailing whitespace.\n+def match\ntests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.stderr:5: trailing whitespace.\n+1 | # SPDX-License-Identifier: MPL-2.0\ntests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.stderr:6: trailing whitespace.\n+2>| def match\ntests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.stderr:7: trailing whitespace.\n+3 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/imported.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/imported.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/newline.stderr:8: trailing whitespace.\n+3 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-reserved-name-diagnostics/negative/tab.stderr:7: trailing whitespace.\n+3 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.stderr:7: trailing whitespace.\n+5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.stderr:7: trailing whitespace.\n+6 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend:16: trailing whitespace.\n+#|5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.stderr:5: trailing whitespace.\n+5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.stderr:7: trailing whitespace.\n+5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_lambda_binder.bend:12: trailing whitespace.\n+#|5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_lambda_binder.stderr:5: trailing whitespace.\n+5 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_lambda_binder.stderr:7: trailing whitespace.\n+7 | \ntests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.stderr:7: trailing whitespace.\n+10 | \n",
+    "stderr": "",
+    "scope": "Raw diagnostic goldens and deliberate CRLF input preserve pinned bytes; no blanket whitespace waiver.",
+    "verified_intentional_raw_bytes": [
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "6748b572608c5b51f5c52a052625c0bf7983bd04005e951555e0c059615aa7ba"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "5bc296db0334535f155cf2ee4e3be2b752368ef41731785d2c1d07b36443f259"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend",
+        "reason": "deliberate raw CRLF control",
+        "sha256": "d1a532b3a7747beea9248f6734ee69fe2686a4adc512b77c37d32ce0202455f9"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "9e4d76489e6d234b8e20ecd92f0cf5f9edd048e5b5ed8aaf60d33ac9193b6236"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/imported.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "517937beadf0ddd85b7fc77a5461f63e924775242fe4bdda46cf5ad76c41b23e"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "a0284b839d3036b5bc6ced86675bff952bb55403b8d45aceb33fd5f9179cc293"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "713d0b8dc8317885a5a18ea70e6e396363aa10d7705a970b4c7626a0659e3343"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "3a90211aa475d78f6d2fbbc29aede25d84751f391e785fce9b85ca19c01d2e37"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend",
+        "reason": "unchanged pinned source",
+        "sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "5ef2efee703370aecf53d99b6e59959dac62afe9e425b566cbc31c6296f45fa8"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_lambda_binder.bend",
+        "reason": "unchanged pinned source",
+        "sha256": "e29e465d780e9db9e74e14df88bfcac180dd306faa0b0b6692e594792dda85b2"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_lambda_binder.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "14701744d396c59aa3c018d4c4c578eb36f881b52a6c926ae8d8c5fd436986aa"
+      },
+      {
+        "path": "tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.stderr",
+        "reason": "raw upstream diagnostic golden already reviewed byte-for-byte",
+        "sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+      }
+    ],
+    "source_and_test_code_check_exit": 0
+  },
+  "limits": "No reference, dependency, toolchain, guard, budget, stack-size, cancellation or evaluation-order change.",
+  "unrun": "Invalid-source execution; native IO in this pure family; supplementary all-target Clippy; external invoke audit; desktop/GPU; newer upstream. No mid-normalization cancellation claim.",
+  "initial_gate": {
+    "source": "f631f43c8ac5acfc5eccbcaa40f058369aa07407",
+    "exit": 143,
+    "seconds": 20.005851851019543,
+    "completed": false,
+    "reason": "Stopped only the task-owned gate process group after discovering Git had normalized the deliberate CRLF fixture in the first commit. Shell lacked set -e and began gate after the byte-equality assertion failed. Added raw fixture attributes and explicitly renormalized the index; final clean source bytes verified before renewed gate.",
+    "log_sha256": "5a478088a043509af0cd05bd27fe6ae5711ba5b3c3a2188b7b1eafb7920fc748"
+  },
+  "earlier_attempts": [
+    {
+      "kind": "authoring",
+      "detail": "An authored U32 positive initially omitted explicit operator typing. Pinned upstream correctly rejected Nat/U32 mismatch; corrected in both lanes before validation. Original and failure retained locally."
+    },
+    {
+      "kind": "receipt harness",
+      "detail": "Initial Python text read translated raw CR to LF. Corrected comparison uses read_bytes().decode(); partial evidence retained. No production defect."
+    },
+    {
+      "kind": "snapshot preflight",
+      "detail": "An early snapshot call refused before tests started; no snapshot was created. Successful capture verifies matching default+extended_observability binary fingerprint and lossless archive."
+    }
+  ],
+  "storage": {
+    "build_preflight_gib": 11,
+    "workspace_stop_gib": 10,
+    "tmp_stop_gib": 1,
+    "installer_cache_move": "Existing installer cache bytes moved losslessly to temporary storage with original paths symlinked; installed tools unchanged. Lower-layer originals meant no workspace space was reclaimed. Hashes retained locally.",
+    "git_repack": "git repack -a -d --keep-unreachable reduced duplicate object storage by 44,003,328 bytes. All 7,732 object IDs and refs preserved; no unreachable pruning, source or evidence deletion.",
+    "git_object_set_sha256": "c0549b7a7d64e7883d0b74fbf2f5c796ba725c7381276a79bdc503a98f3517f0",
+    "cache_preflight_sha256": "eb1ab25ec2beff82ff893e3dabeb0ee3c338e7642e016d6e7f3e8bf33dbfbd80",
+    "git_storage_preflight_sha256": "891d489b165b18d2739f9491b940adb30c5632d581968168dabff7314e220ce7"
+  },
+  "coverage": {
+    "linked": 499,
+    "unlinked": 803,
+    "unlinked_categories": {
+      "checker_rejection": 269,
+      "interpretation_and_compiled_candidates": 520,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  },
+  "census_changed_rows": [
+    "parse/keyword_reserved.bend",
+    "parse/reserved_assert_name.bend",
+    "parse/reserved_ctor_field_000.bend",
+    "parse/reserved_ctor_field_001.bend",
+    "parse/reserved_def_name_001.bend",
+    "parse/reserved_def_name_002.bend",
+    "parse/reserved_pi_binder.bend",
+    "parse/reserved_type_name.bend",
+    "parse/reserved_type_param.bend"
+  ],
+  "public_compatibility": "Plain ParseError fields/message/Display and loader signatures unchanged. Source-aware optional diagnostic metadata and derived Debug may change. Newly formatted CLI failures use existing Ok(CliOutput)/exit_code1 instead of prior host Err; external invoke consumers remain unaudited."
+}

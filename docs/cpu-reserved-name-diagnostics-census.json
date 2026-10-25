@@ -1,0 +1,563 @@
+{
+  "source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+  "baseline_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 391,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 45
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 154,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 45
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 16
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "status_pair_changes": [],
+  "upstream_only_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "parse/keyword_reserved.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_assert_name.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_001.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_def_name_001.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_def_name_002.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_pi_binder.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_type_name.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_type_param.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "parse/keyword_reserved.bend",
+      "source_sha256": "b8b3adde9bc71863b928658fe777c5ee8b4ff081b4463451185a835773e3fd0d",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "a97bae642c61833c368f04bf7ea740b2fb7d6ea172708dd04fd542049f85409c",
+      "after_stderr_sha256": "b44f3921407bb8cc0d50f64e634616249701879e3be5db5bcf71ca1753d30282"
+    },
+    {
+      "fixture": "parse/reserved_assert_name.bend",
+      "source_sha256": "60153c8ab8bebe8bc7b52036b65a24f497dd87b8445f52d45128164021af2794",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "65a3c7e5abf10b5c712cbc6b752ca8584b0893a36cc3a5fc7f7785c938bd24cb",
+      "after_stderr_sha256": "ade6734c725f3d59cdf4f41153605536b47f628405c417d45b249c09702c557c"
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_000.bend",
+      "source_sha256": "a54ac10a088c92bdaf124e9317b0cc6140929251a1316e949218e436916ef5ec",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "e901482cfa0209b09f48f77b0e342075dcf7d475d2a97acedb3ffccc536303d9",
+      "after_stderr_sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_001.bend",
+      "source_sha256": "4b646f2741fa78182be7180f386d108bf6b6235dbd3b165047e08db88d536078",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "737e3d3b5c7ab89317b15c60d0e1b84b46fa2f6e392f6250656774266cea9e9a",
+      "after_stderr_sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+    },
+    {
+      "fixture": "parse/reserved_def_name_001.bend",
+      "source_sha256": "8026135e232ced8c3b62fd4a30eb8fe478b4c3dcbd5983be59d0013e2f4fbf0c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "e038775cee39288072613fda260bd3ef195ccec2f52251ac8491ea3b9d1dbd60",
+      "after_stderr_sha256": "8bd51b9f836638e6ebeed0e287545b2e80753938c92d44351ca32eac16e036cc"
+    },
+    {
+      "fixture": "parse/reserved_def_name_002.bend",
+      "source_sha256": "4d3e4bc7b81e5d42bc9c1fa124f47d49fac6746a85fea0c41251e19efcdd484b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "1055ff6aae08f446e19186df3e2843419256ee2ca9957701bc23fe38fcf55057",
+      "after_stderr_sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+    },
+    {
+      "fixture": "parse/reserved_pi_binder.bend",
+      "source_sha256": "0c69d3a3c8b59cb9324cbd493e15a65f02794bff374e8015d392599b4959663b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "14e2b775ebba9a80b4927bbb3065bd3bb93545930f56bb5f8dd74214b6959e1a",
+      "after_stderr_sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+    },
+    {
+      "fixture": "parse/reserved_type_name.bend",
+      "source_sha256": "63103bc19a49396cd2bef85d071150010733c9faf0b9e475221799430a8125b0",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "0f2c6061c0282bcee7bbea0942e14f69ab98cb7d41262d9f71e1593760640539",
+      "after_stderr_sha256": "f8f1640f671b6e5fef6d533f22bc382a53452ac2dc26cf2a20d3008859476f81"
+    },
+    {
+      "fixture": "parse/reserved_type_param.bend",
+      "source_sha256": "19fdc13d957d0b3be8dda09ce94ccf8c07a2286ef7ad83d2573c4e75398055af",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "0147a37cda1d77b335801748b3f1c9619940b75e7ecade991d7ade337bedbbb0",
+      "after_stderr_sha256": "7516bc9b06c535b023fdfa35e481b633522eeeff361d0a0262d9ef089fc438d9"
+    }
+  ],
+  "raw_observations_sha256": "2202d5edde3f33e6a37c07d51c705d73122270b9d648703c5a63fa75a44f672a",
+  "baseline_raw_sha256": "ed768303185ceeb7a9573a6e195f098e975f3891db0148eec88debcfcadb8e2e",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "compact_changes": [
+    {
+      "fixture": "parse/keyword_reserved.bend",
+      "source_sha256": "b8b3adde9bc71863b928658fe777c5ee8b4ff081b4463451185a835773e3fd0d",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/keyword_reserved.bend:6:5: expected a name, found \"law\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a97bae642c61833c368f04bf7ea740b2fb7d6ea172708dd04fd542049f85409c"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'law')\n- observed : ' '\nLocation:\n5 | # free: only book_load's import line reads it, never parse_name.\n6>| law law : Type\n7 | def law(): Type\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "b44f3921407bb8cc0d50f64e634616249701879e3be5db5bcf71ca1753d30282"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'law')\n- observed : ' '\nLocation:\n5 | # free: only book_load's import line reads it, never parse_name.\n6>| law law : Type\n7 | def law(): Type\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "b44f3921407bb8cc0d50f64e634616249701879e3be5db5bcf71ca1753d30282"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'law')\n- observed : ' '\nLocation:\n5 | # free: only book_load's import line reads it, never parse_name.\n6>| law law : Type\n7 | def law(): Type\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "b44f3921407bb8cc0d50f64e634616249701879e3be5db5bcf71ca1753d30282"
+      }
+    },
+    {
+      "fixture": "parse/reserved_assert_name.bend",
+      "source_sha256": "60153c8ab8bebe8bc7b52036b65a24f497dd87b8445f52d45128164021af2794",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_assert_name.bend:3:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "65a3c7e5abf10b5c712cbc6b752ca8584b0893a36cc3a5fc7f7785c938bd24cb"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| law match:\n4 |   Unit\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ade6734c725f3d59cdf4f41153605536b47f628405c417d45b249c09702c557c"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| law match:\n4 |   Unit\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ade6734c725f3d59cdf4f41153605536b47f628405c417d45b249c09702c557c"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| law match:\n4 |   Unit\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ade6734c725f3d59cdf4f41153605536b47f628405c417d45b249c09702c557c"
+      }
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_000.bend",
+      "source_sha256": "a54ac10a088c92bdaf124e9317b0cc6140929251a1316e949218e436916ef5ec",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_ctor_field_000.bend:4:7: expected a name, found \"Type\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "e901482cfa0209b09f48f77b0e342075dcf7d475d2a97acedb3ffccc536303d9"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ':'\nLocation:\n3 | type Kk8 is Data:\n4>|   Mk8{Type: Kk8}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ':'\nLocation:\n3 | type Kk8 is Data:\n4>|   Mk8{Type: Kk8}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ':'\nLocation:\n3 | type Kk8 is Data:\n4>|   Mk8{Type: Kk8}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+      }
+    },
+    {
+      "fixture": "parse/reserved_ctor_field_001.bend",
+      "source_sha256": "4b646f2741fa78182be7180f386d108bf6b6235dbd3b165047e08db88d536078",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_ctor_field_001.bend:5:7: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "737e3d3b5c7ab89317b15c60d0e1b84b46fa2f6e392f6250656774266cea9e9a"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n4 | type Kk9 is Data:\n5>|   Mk9{match: Unit}\n6 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n4 | type Kk9 is Data:\n5>|   Mk9{match: Unit}\n6 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n4 | type Kk9 is Data:\n5>|   Mk9{match: Unit}\n6 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+      }
+    },
+    {
+      "fixture": "parse/reserved_def_name_001.bend",
+      "source_sha256": "8026135e232ced8c3b62fd4a30eb8fe478b4c3dcbd5983be59d0013e2f4fbf0c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_def_name_001.bend:3:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "e038775cee39288072613fda260bd3ef195ccec2f52251ac8491ea3b9d1dbd60"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n2 | # ported from bend3\n3>| def match(x):\n4 |   x\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "8bd51b9f836638e6ebeed0e287545b2e80753938c92d44351ca32eac16e036cc"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n2 | # ported from bend3\n3>| def match(x):\n4 |   x\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "8bd51b9f836638e6ebeed0e287545b2e80753938c92d44351ca32eac16e036cc"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n2 | # ported from bend3\n3>| def match(x):\n4 |   x\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "8bd51b9f836638e6ebeed0e287545b2e80753938c92d44351ca32eac16e036cc"
+      }
+    },
+    {
+      "fixture": "parse/reserved_def_name_002.bend",
+      "source_sha256": "4d3e4bc7b81e5d42bc9c1fa124f47d49fac6746a85fea0c41251e19efcdd484b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_def_name_002.bend:4:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "1055ff6aae08f446e19186df3e2843419256ee2ca9957701bc23fe38fcf55057"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n3 | # ported from bend3\n4>| def match(): Unit{}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n3 | # ported from bend3\n4>| def match(): Unit{}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n3 | # ported from bend3\n4>| def match(): Unit{}\n5 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+      }
+    },
+    {
+      "fixture": "parse/reserved_pi_binder.bend",
+      "source_sha256": "0c69d3a3c8b59cb9324cbd493e15a65f02794bff374e8015d392599b4959663b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_pi_binder.bend:9:4: expected a name, found \"Type\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "14e2b775ebba9a80b4927bbb3065bd3bb93545930f56bb5f8dd74214b6959e1a"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ' '\nLocation:\n 8 | def main():\n 9>|   @Type -> x => Type\n10 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ' '\nLocation:\n 8 | def main():\n 9>|   @Type -> x => Type\n10 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ' '\nLocation:\n 8 | def main():\n 9>|   @Type -> x => Type\n10 | \n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+      }
+    },
+    {
+      "fixture": "parse/reserved_type_name.bend",
+      "source_sha256": "63103bc19a49396cd2bef85d071150010733c9faf0b9e475221799430a8125b0",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_type_name.bend:3:6: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "0f2c6061c0282bcee7bbea0942e14f69ab98cb7d41262d9f71e1593760640539"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| type match:\n4 |   Kk10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "f8f1640f671b6e5fef6d533f22bc382a53452ac2dc26cf2a20d3008859476f81"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| type match:\n4 |   Kk10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "f8f1640f671b6e5fef6d533f22bc382a53452ac2dc26cf2a20d3008859476f81"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| type match:\n4 |   Kk10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "f8f1640f671b6e5fef6d533f22bc382a53452ac2dc26cf2a20d3008859476f81"
+      }
+    },
+    {
+      "fixture": "parse/reserved_type_param.bend",
+      "source_sha256": "19fdc13d957d0b3be8dda09ce94ccf8c07a2286ef7ad83d2573c4e75398055af",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/parse/reserved_type_param.bend:4:10: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "0147a37cda1d77b335801748b3f1c9619940b75e7ecade991d7ade337bedbbb0"
+      },
+      "after_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n3 | # probe is `match`\n4>| type Bad<match: Type>:\n5 |   Bb10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7516bc9b06c535b023fdfa35e481b633522eeeff361d0a0262d9ef089fc438d9"
+      },
+      "before_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n3 | # probe is `match`\n4>| type Bad<match: Type>:\n5 |   Bb10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7516bc9b06c535b023fdfa35e481b633522eeeff361d0a0262d9ef089fc438d9"
+      },
+      "after_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n3 | # probe is `match`\n4>| type Bad<match: Type>:\n5 |   Bb10{}\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "7516bc9b06c535b023fdfa35e481b633522eeeff361d0a0262d9ef089fc438d9"
+      }
+    }
+  ],
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "de64abf0a7f4c844d2de1b0898af852f1af93d8d",
+    "binary_sha256": "f76daae39266551cc7fb9af868d30a54a8f6096401770580e8a0961957443abc",
+    "phase_probe_sha256": "eb1e8404afcce687bd20461c89fb4ffa7f4cb418170e579c7dce65aa57c5f1f6",
+    "build_receipt_sha256": "6560c93f894c5ba2281eb3e766d8eb2217bd9e4a2f578d00552b0e049b508a0b",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 391,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 6,
+      "different_rejection": 45
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 539,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  }
+}
