@@ -1,0 +1,864 @@
+{
+  "tested_source": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+  "binary_sha256": "01667a459d3defbe5a9e8a82a2242bd6a46473b5e0be086ba39546cb90292b28",
+  "aggregate_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+  "raw_receipt_sha256": "30662692969b4cb5bc0a7a4112b49123138960da8fc708dae11d04904685e327",
+  "rows": [
+    {
+      "case": "individual-01",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))"
+      ],
+      "source_sha256": "9a66e276cfb6f600ca26e0dea261f889cfff092ffc36542cdfa2c4a447cbbd4f",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4346447480202187,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-01.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-01",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))"
+      ],
+      "source_sha256": "9a66e276cfb6f600ca26e0dea261f889cfff092ffc36542cdfa2c4a447cbbd4f",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.434374636010034,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-01.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-02",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"0\")))"
+      ],
+      "source_sha256": "6a591eee2780628808b0e926f063d7abde4ef6a430c51ce65ced9532bcef3467",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.44737824000185356,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-02.bend"
+      ],
+      "stdout": "0\n",
+      "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-02",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"0\")))"
+      ],
+      "source_sha256": "6a591eee2780628808b0e926f063d7abde4ef6a430c51ce65ced9532bcef3467",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.44107403699308634,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-02.bend"
+      ],
+      "stdout": "0\n",
+      "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-03",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))"
+      ],
+      "source_sha256": "db6c80907a61a2e05f58692633fe3a1723967a5a15e45732e86d943222a1d875",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.5711450289818458,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-03.bend"
+      ],
+      "stdout": "4294967295\n",
+      "raw_stdout_sha256": "e65633bae2c4b3af83a315c42cf4acd12e7510275a1b6370fcbf9f51de1b2045",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-03",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))"
+      ],
+      "source_sha256": "db6c80907a61a2e05f58692633fe3a1723967a5a15e45732e86d943222a1d875",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.5881810409773607,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-03.bend"
+      ],
+      "stdout": "4294967295\n",
+      "raw_stdout_sha256": "e65633bae2c4b3af83a315c42cf4acd12e7510275a1b6370fcbf9f51de1b2045",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-04",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"4294967294\")))"
+      ],
+      "source_sha256": "68a30c0864b44d04fdff85f0c6d2c1062e9d61742a76557af62ca8c10c28aa69",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.48172332398826256,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-04.bend"
+      ],
+      "stdout": "4294967294\n",
+      "raw_stdout_sha256": "17946b925148aab08caaff97b5dcf95a6d2bbb1251a513ca2b42b113e812a66f",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-04",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"4294967294\")))"
+      ],
+      "source_sha256": "68a30c0864b44d04fdff85f0c6d2c1062e9d61742a76557af62ca8c10c28aa69",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4842962370021269,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-04.bend"
+      ],
+      "stdout": "4294967294\n",
+      "raw_stdout_sha256": "17946b925148aab08caaff97b5dcf95a6d2bbb1251a513ca2b42b113e812a66f",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-05",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"4294967296\")))"
+      ],
+      "source_sha256": "8b3d0ba8cb3e47c62a70576bd06313fbd4d4c6dc1a05afdd138241bb54f18485",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.49637956099468283,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-05.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-05",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"4294967296\")))"
+      ],
+      "source_sha256": "8b3d0ba8cb3e47c62a70576bd06313fbd4d4c6dc1a05afdd138241bb54f18485",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.5419057029939722,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-05.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-06",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"42949672950\")))"
+      ],
+      "source_sha256": "75474a646612b69fd6bba792ae8db9989d52c01dacc2d1b9b0f77dc7dd0442d9",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.49635040102293715,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-06.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-06",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"42949672950\")))"
+      ],
+      "source_sha256": "75474a646612b69fd6bba792ae8db9989d52c01dacc2d1b9b0f77dc7dd0442d9",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.5609043000149541,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-06.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-07",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"9999999999\")))"
+      ],
+      "source_sha256": "27defaf908ea45b6f2e814ff2da3114980f1987a22e511fb859be0da855b4254",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.478494048002176,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-07.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-07",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"9999999999\")))"
+      ],
+      "source_sha256": "27defaf908ea45b6f2e814ff2da3114980f1987a22e511fb859be0da855b4254",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.49241083301603794,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-07.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-08",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"+1\")))"
+      ],
+      "source_sha256": "639dc7e2ed91d7b19f6e7adeff389529993a641e97b8fca62e7f47946b739978",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43945002698455937,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-08.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-08",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"+1\")))"
+      ],
+      "source_sha256": "639dc7e2ed91d7b19f6e7adeff389529993a641e97b8fca62e7f47946b739978",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43591924602515064,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-08.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-09",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"-1\")))"
+      ],
+      "source_sha256": "5e7984d8cfdaaa8e72461ea304b087e444c60bdf4b1d0e21ea97836e36e09ed8",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43515990499872714,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-09.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-09",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"-1\")))"
+      ],
+      "source_sha256": "5e7984d8cfdaaa8e72461ea304b087e444c60bdf4b1d0e21ea97836e36e09ed8",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.435737205989426,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-09.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-10",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\" 1\")))"
+      ],
+      "source_sha256": "4d2f735a958e66cbf07895420fcb83ad31afea16ddf695b739186c3d69bd26de",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43397770400042646,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-10.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-10",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\" 1\")))"
+      ],
+      "source_sha256": "4d2f735a958e66cbf07895420fcb83ad31afea16ddf695b739186c3d69bd26de",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43477662300574593,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-10.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-11",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1 \")))"
+      ],
+      "source_sha256": "4c3577e97d05f86e525ae900bd4354c52d3008963c4c405536bf3d7af3286d74",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.43564201399567537,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-11.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-11",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1 \")))"
+      ],
+      "source_sha256": "4c3577e97d05f86e525ae900bd4354c52d3008963c4c405536bf3d7af3286d74",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4477235939993989,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-11.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-12",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1:\")))"
+      ],
+      "source_sha256": "a6897d9425cc6be691d4535eec910f07c3b022d773da71304c245aed159caf70",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4468936070043128,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-12.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-12",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1:\")))"
+      ],
+      "source_sha256": "a6897d9425cc6be691d4535eec910f07c3b022d773da71304c245aed159caf70",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.44477057398762554,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-12.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-13",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\u00e9\")))"
+      ],
+      "source_sha256": "a856488bb4f428e48f8724d4a3e74f4b2f47705bea921f1f334f5f8012fbd571",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4422491379955318,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-13.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-13",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\u00e9\")))"
+      ],
+      "source_sha256": "a856488bb4f428e48f8724d4a3e74f4b2f47705bea921f1f334f5f8012fbd571",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4540344059932977,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-13.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-14",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\u0661\")))"
+      ],
+      "source_sha256": "55909ba06ff5679efe3d516478bff9a3147c50ac8c091d3c7154e0fd18fc94b7",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.46983066998654976,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-14.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-14",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\u0661\")))"
+      ],
+      "source_sha256": "55909ba06ff5679efe3d516478bff9a3147c50ac8c091d3c7154e0fd18fc94b7",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.44110578097752295,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-14.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-15",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1\\0\")))"
+      ],
+      "source_sha256": "e89e40c94b1e0353599796939585a2c97dd81b96325789e93b5b12a90ebb173d",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.45136002701474354,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-15.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-15",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"1\\0\")))"
+      ],
+      "source_sha256": "e89e40c94b1e0353599796939585a2c97dd81b96325789e93b5b12a90ebb173d",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4449884800123982,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-15.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-16",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"0x10\")))"
+      ],
+      "source_sha256": "d516ae128c0e241ab8a485c3f4bad7d7eab4431228825c93531688d12496166d",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4803592750104144,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-16.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "individual-16",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"0x10\")))"
+      ],
+      "source_sha256": "d516ae128c0e241ab8a485c3f4bad7d7eab4431228825c93531688d12496166d",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.4564050000044517,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/individual-16.bend"
+      ],
+      "stdout": "None\n",
+      "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "prefix-04",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))"
+      ],
+      "source_sha256": "9607cc53bb37366e11496753687e4e73a44a3b98709ff66385972e0bf04ba8d1",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.62995133100776,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-04.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\n",
+      "raw_stdout_sha256": "05dcbe09e9f3a9371497d086129cef0dc6d135685b2511ade6b0e85d2996a472",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "prefix-04",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))"
+      ],
+      "source_sha256": "9607cc53bb37366e11496753687e4e73a44a3b98709ff66385972e0bf04ba8d1",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.6198994089791086,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-04.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\n",
+      "raw_stdout_sha256": "05dcbe09e9f3a9371497d086129cef0dc6d135685b2511ade6b0e85d2996a472",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "prefix-05",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))"
+      ],
+      "source_sha256": "cf949350ccba51599b35b1e4ba5e537cd53d36e1d99075efccd3ec9bc6c6b412",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.6619265069894027,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-05.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "prefix-05",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))"
+      ],
+      "source_sha256": "cf949350ccba51599b35b1e4ba5e537cd53d36e1d99075efccd3ec9bc6c6b412",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.659489856014261,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-05.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "prefix-06",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))",
+        "IO.print(R.mu(U32.read(\"42949672950\")))"
+      ],
+      "source_sha256": "66ce6eb5e3a3de88bcd631277bd30cb3a755f08b93e83509feabd39c437bfbc8",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.7014694820099976,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-06.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "Error: \n   0: data runtime step budget exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "bdcdd496ee25d36d4b24f80804d9c75003e409f42b521611db3d995e177b5a78"
+    },
+    {
+      "case": "prefix-06",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))",
+        "IO.print(R.mu(U32.read(\"42949672950\")))"
+      ],
+      "source_sha256": "66ce6eb5e3a3de88bcd631277bd30cb3a755f08b93e83509feabd39c437bfbc8",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.7162187799985986,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-06.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "Error: \n   0: data runtime step budget exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "bdcdd496ee25d36d4b24f80804d9c75003e409f42b521611db3d995e177b5a78"
+    },
+    {
+      "case": "prefix-16",
+      "rep": 1,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))",
+        "IO.print(R.mu(U32.read(\"42949672950\")))",
+        "IO.print(R.mu(U32.read(\"9999999999\")))",
+        "IO.print(R.mu(U32.read(\"+1\")))",
+        "IO.print(R.mu(U32.read(\"-1\")))",
+        "IO.print(R.mu(U32.read(\" 1\")))",
+        "IO.print(R.mu(U32.read(\"1 \")))",
+        "IO.print(R.mu(U32.read(\"1:\")))",
+        "IO.print(R.mu(U32.read(\"\u00e9\")))",
+        "IO.print(R.mu(U32.read(\"\u0661\")))",
+        "IO.print(R.mu(U32.read(\"1\\0\")))",
+        "IO.print(R.mu(U32.read(\"0x10\")))"
+      ],
+      "source_sha256": "f3a5eebd59b172322e27933e766fb987a5de209621af1c4d73882b0a54002db1",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.7390543929941487,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-16.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "Error: \n   0: data runtime step budget exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "bdcdd496ee25d36d4b24f80804d9c75003e409f42b521611db3d995e177b5a78"
+    },
+    {
+      "case": "prefix-16",
+      "rep": 2,
+      "expressions": [
+        "IO.print(R.mu(U32.read(\"\")))",
+        "IO.print(R.mu(U32.read(\"0\")))",
+        "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+        "IO.print(R.mu(U32.read(\"4294967294\")))",
+        "IO.print(R.mu(U32.read(\"4294967296\")))",
+        "IO.print(R.mu(U32.read(\"42949672950\")))",
+        "IO.print(R.mu(U32.read(\"9999999999\")))",
+        "IO.print(R.mu(U32.read(\"+1\")))",
+        "IO.print(R.mu(U32.read(\"-1\")))",
+        "IO.print(R.mu(U32.read(\" 1\")))",
+        "IO.print(R.mu(U32.read(\"1 \")))",
+        "IO.print(R.mu(U32.read(\"1:\")))",
+        "IO.print(R.mu(U32.read(\"\u00e9\")))",
+        "IO.print(R.mu(U32.read(\"\u0661\")))",
+        "IO.print(R.mu(U32.read(\"1\\0\")))",
+        "IO.print(R.mu(U32.read(\"0x10\")))"
+      ],
+      "source_sha256": "f3a5eebd59b172322e27933e766fb987a5de209621af1c4d73882b0a54002db1",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.742727687000297,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<artifacts>/isolation/prefix-16.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "Error: \n   0: data runtime step budget exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "bdcdd496ee25d36d4b24f80804d9c75003e409f42b521611db3d995e177b5a78"
+    }
+  ],
+  "completed": true,
+  "scope": "Native-only isolation; two repetitions of 16 individual cases and prefixes 4/5/6/16. 36 exact successes, 4 cumulative work refusals. No full parity or faulty-accounting conclusion."
+}

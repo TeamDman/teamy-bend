@@ -2152,3 +2152,27 @@ historical IO exclusions plus six upstream stack failures. Earlier unwaived
 semantics/host/API/oracle/lint cells and unqualified 688-vector exploration remain.
 Next independent substantive candidate is base/read_bounds, source-inspected only.
 Frozen dependencies/toolchains/reference/budgets retained; no desktop/GPU or release.
+
+### Decimal read bounds and retained aggregate work gap
+
+Tested clean source `7305b890a201ead43dd3029a6e8e40c9aba22409`; no production change. Original read_bounds
+matches native/port C/JS/upstream C; upstream JS prints its numeric prefix then
+fails importing bun:ffi. Original show_read matches all five lanes. Nat/helper
+controls match; file-error control retains the same JS host failure. The complete
+word aggregate fails native after five lines while all four generated lanes pass.
+[Report and contracts](cpu-read-bounds.md); no failed aggregate or host cell waived.
+
+Matrix 132 observations: 54 exact executions, 4 JS host failures, 2 native budget
+refusals; 36 separate checking probes. Native isolation 40 observations: 16 inputs
+individually pass twice, prefixes 4/5 pass and 6/16 fail. This is cumulative resource
+exhaustion, not proof of an accounting defect. Next measure packed/ordinary U32.sub
+and subsequent arithmetic fallback before considering a demand-preserving fix.
+
+Gate **1,170 / 0 / 49**, targeted test Clippy passes. Historical full census remains
+d224e79: 300 differences beyond 385 historical IO exclusions and six oracle stack
+failures; new phase evidence does not redate or waive that set. Coverage
+**424 linked / 878 unlinked**: 523 compiled candidates, 341 checker negatives,
+13 interpreter profiles, one checking-only module. read_bounds explicitly retains
+blocked upstream JS. Compact-pattern research and older disagreements remain open.
+Frozen inputs/budgets/guards retained; unique failures preserved; no desktop/GPU
+or install, merge or release.

@@ -1,0 +1,445 @@
+{
+  "tested_source": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+  "before_checkout_head": "456cff531dc579d02f7787d5be9ee46958db0edb",
+  "baseline": [
+    {
+      "lane": "native",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "exit": 0,
+      "seconds": 0.6880257859884296,
+      "command": [
+        "target/debug/teamy-bend",
+        "run",
+        "<pinned-reference>/tests/base/read_bounds.bend"
+      ],
+      "stdout": "99999999999999\n100000000000000\n281474976710655\nNone\nNone\n4294967295\nNone\nNone\nNone\n4294967295\n2 No such file or directory\n",
+      "raw_stdout_sha256": "5c6f929ae59c8d253665e3f3afe50be5d209eacddf080910aab28f56d48c2513",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "upstream-direct",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "exit": 1,
+      "seconds": 0.1939430059865117,
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<pinned-reference>/tests/base/read_bounds.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    }
+  ],
+  "current_unique": [
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.5514617580047343,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.6882220949919429,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "8d7ea1bcba7f81a2b761e5ab5b1b10c0fd6ef5fd837045c20d53f7d8fb2f866e"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.32283388799987733,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "8d7ea1bcba7f81a2b761e5ab5b1b10c0fd6ef5fd837045c20d53f7d8fb2f866e"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.018740719999186695,
+      "classification": "unresolved_upstream_bun_ffi_host",
+      "command": [
+        "node",
+        "<artifacts>/matrix/read_bounds/upstream.js"
+      ],
+      "stdout": "99999999999999\n100000000000000\n281474976710655\nNone\nNone\n4294967295\nNone\nNone\nNone\n4294967295\n",
+      "raw_stdout_sha256": "61f28a06fc2e3c36b5d2cd4827c084c46166ab3e31d2416ca38dd12092076630",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/read_bounds/upstream.js\n",
+      "raw_stderr_sha256": "36639c04b695ffb2c352ef99d195957ff7c0ceb09e540a8bc063d3726d712900"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2270047339843586,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2548579099820927,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n49 | law main:\n50>|   IO(Unit)\n51 | \n",
+      "raw_stderr_sha256": "d2c2691898212a0378678978e25d07a0dc6e6e4f7c1a89f748c19a9d997d47b9"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.26190256502013654,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n49 | law main:\n50>|   IO(Unit)\n51 | \n",
+      "raw_stderr_sha256": "d2c2691898212a0378678978e25d07a0dc6e6e4f7c1a89f748c19a9d997d47b9"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.16389226700994186,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2553484400268644,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.26388690300518647,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.01804307702695951,
+      "classification": "unresolved_upstream_bun_ffi_host",
+      "command": [
+        "node",
+        "<artifacts>/matrix/file-errors/upstream.js"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/file-errors/upstream.js\n",
+      "raw_stderr_sha256": "252b7197be71b9ba7a5fb4b65419579055d582d23dde0c65f585e39a807a5397"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.1911423540150281,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.26388529100222513,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2585762479866389,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.19351900499896146,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.25563261201023124,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2658458679798059,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.17368840801646002,
+      "classification": "unresolved_Node_host_failure",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-native",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.7355149280047044,
+      "classification": "unresolved_native_work_budget",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+      "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+      "stderr": "Error: \n   0: data runtime step budget exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "bdcdd496ee25d36d4b24f80804d9c75003e409f42b521611db3d995e177b5a78"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2608599000086542,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.26563629700103775,
+      "classification": "strict_IO_unavailable",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    }
+  ],
+  "literal_experiment": {
+    "source": "456cff531dc579d02f7787d5be9ee46958db0edb",
+    "fixture_sha256": "d3652fef72c506608bf2909ac68682baf8addc1ada8a0d965d2e23dfc5e8294a",
+    "fixture_source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport ../original/read_bounds.bend as R\n\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    Unit <- IO.print(R.mn(Nat.read.go(\"\", 281474976710655n)))\n    Unit <- IO.print(R.mn(Nat.read.go(\"4\", 28147497671065n)))\n    Unit <- IO.print(R.mn(Nat.read.go(\"5\", 28147497671065n)))\n    Unit <- IO.print(R.mn(Nat.read.go(\"6\", 28147497671065n)))\n    Unit <- IO.print(R.mn(Nat.read.go(\"0\", 28147497671066n)))\n    Unit <- IO.print(R.mn(Nat.read.if(\"\", 281474976710655n, 1, False{})))\n    Unit <- IO.print(R.mn(Nat.read.if(\"3\", 1n, 2, True{})))\n    Unit <- IO.print(R.mn(Nat.read.if(\"bad\", 281474976710655n, 999, False{})))\n    Unit <- IO.print(R.mu(U32.read.go(\"\", 4294967295)))\n    Unit <- IO.print(R.mu(U32.read.go(\"4\", 429496729)))\n    Unit <- IO.print(R.mu(U32.read.go(\"5\", 429496729)))\n    Unit <- IO.print(R.mu(U32.read.go(\"6\", 429496729)))\n    Unit <- IO.print(R.mu(U32.read.go(\"0\", 429496730)))\n    Unit <- IO.print(R.mu(U32.read.if(\"\", 4294967295, False{})))\n    Unit <- IO.print(R.mu(U32.read.if(\"3\", 12, True{})))\n    IO.print(R.mu(U32.read.if(\"bad\", 4294967295, False{})))\n",
+    "phase": "load",
+    "error": "Nat literals above 128 exceed the parser's resource limit",
+    "classification": "existing literal resource-policy refusal; not adopted as a passing runtime control",
+    "response": "Preserve failed fixture. Runtime helper controls use ordinary sealed arithmetic expressions instead; parser cap and129n regressions unchanged."
+  },
+  "scope": "Exact observed failures, not waivers. Strict_IO_unavailable raw label includes unavailable File declarations as well as IO; these symbols have different current diagnostics. Full word aggregate remains failed natively. Source-relative formatting strips ANSI and replaces private paths; raw stream hashes retained."
+}

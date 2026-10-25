@@ -1,0 +1,357 @@
+{
+  "tested_source": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+  "production_tree": "bf393d614783a530f5b0f4aafa559fcdfee1f64d",
+  "production_changed": false,
+  "binary_sha256": "01667a459d3defbe5a9e8a82a2242bd6a46473b5e0be086ba39546cb90292b28",
+  "frozen_inputs": {
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "lockfile_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "rust": "1.96.0",
+    "formatter": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7"
+  },
+  "gate_totals": [
+    1170,
+    0,
+    49
+  ],
+  "runs": {
+    "full-gate": {
+      "source_commit": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12785946624,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 675.8744887590001,
+      "minimum_free": 12768931840,
+      "minimum_tmp_free": 5401911296,
+      "log_sha256": "96fb6235a8eb094551446759dfca305c303e73053ce3a8f0fa07c7389c8b057f"
+    },
+    "focused-clippy": {
+      "source_commit": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_read_bounds",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12769038336,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.01616263599135,
+      "minimum_free": 12769009664,
+      "minimum_tmp_free": 5403291648,
+      "log_sha256": "b4a4cb65fff47f1aaa42478415350a853e9793940d6e99e96aafb0a7e4b34dfc"
+    },
+    "focused-preliminary": {
+      "source_commit": "456cff531dc579d02f7787d5be9ee46958db0edb",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_read_bounds",
+        "--test",
+        "kernel_numeric_text"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12786135040,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 5.820869846007554,
+      "minimum_free": 12786106368,
+      "minimum_tmp_free": 5442969600,
+      "log_sha256": "ebbf5ed8336579aa7250757e4eb89831d73f44cbd29db4780161b713f68f526d"
+    },
+    "focused-revised": {
+      "source_commit": "456cff531dc579d02f7787d5be9ee46958db0edb",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_read_bounds",
+        "--test",
+        "kernel_numeric_text"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12786089984,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 5.07085380598437,
+      "minimum_free": 12786081792,
+      "minimum_tmp_free": 5442076672,
+      "log_sha256": "f31a462a841371059a32347fd1c8de44502bf33e11db1caf843fcf64cb3d9c4e"
+    },
+    "focused-passing-controls": {
+      "source_commit": "456cff531dc579d02f7787d5be9ee46958db0edb",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_read_bounds",
+        "--test",
+        "kernel_numeric_text"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 12786057216,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 6.46604968101019,
+      "minimum_free": 12786049024,
+      "minimum_tmp_free": 5441896448,
+      "log_sha256": "dc73fcbed75f60414ae21b40e389ba2f31975e703ab30ac91b3cb928951e073a"
+    }
+  },
+  "matrix": {
+    "observations": 132,
+    "classifications": {
+      "unresolved_Node_host_failure": 12,
+      "exact_execution": 54,
+      "strict_IO_unavailable": 24,
+      "generation_only": 24,
+      "build_only": 12,
+      "unresolved_upstream_bun_ffi_host": 4,
+      "unresolved_native_work_budget": 2
+    },
+    "timeouts": 0,
+    "full_parity": false
+  },
+  "phase_probes": 36,
+  "isolation": {
+    "observations": 40,
+    "successes": 36,
+    "work_refusals": 4,
+    "scope": "native only"
+  },
+  "coverage": {
+    "linked": 424,
+    "unlinked": 878,
+    "remaining": {
+      "checker_rejection": 341,
+      "interpretation_and_compiled_candidates": 523,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  },
+  "review": {
+    "tested_source": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+    "production_changed": false,
+    "reviews": [
+      {
+        "reviewer": "independent pinned-contract reviewer",
+        "scope": "Numeric readers, helper contracts and empty-file-path errors",
+        "outcome": "No clear value divergence by source inspection; oracle execution required",
+        "findings": [
+          "Nonempty ASCII digits; Nat48 and U32 bounds; leading zeroes do not reduce numeric range.",
+          "Upstream U32 quotient predicate is equivalent to port digit/threshold test.",
+          "read.go empty input returns accumulator; public read empty input rejects; read.if trusts condition.",
+          "Valid empty path returns ENOENT; invalid mode precedes path opening, embedded NUL precedes mode.",
+          "Upstream generated JS error formatting depends on unavailable bun:ffi."
+        ]
+      },
+      {
+        "reviewer": "independent sharing/resource reviewer",
+        "scope": "Source7305b89, original attribution, tests and16 individual/4-prefix measurements",
+        "outcome": "No blocker to bounded qualification; keep aggregate unresolved",
+        "findings": [
+          "Originals byte-identical, exact statuses and cleanup correct; generated runtimes bounded.",
+          "Individual success and5-pass/6-fail prefix establish cumulative refusal, not a proven accounting/sharing defect.",
+          "U32.sub has no sealed numeric fast path; ordinary constructor result can cause following Add/shift paths to fall back.",
+          "Next measure packed/fallback counts and evaluator/environment/GC charges; consider packed-only subtraction only if evidence supports it.",
+          "Do not raise budgets, force ordinary lazy Word fields, change cancellation or count failed aggregate as qualified."
+        ]
+      }
+    ],
+    "resolution": "No production fix adopted; failed full aggregate remains a separate unresolved fixture with complete expected output. Existing safety and negative regressions retained.",
+    "final_evidence_review": {
+      "reviewer": "independent pinned-contract reviewer",
+      "source": "7305b890a201ead43dd3029a6e8e40c9aba22409",
+      "outcome": "No blocking finding; full gate was pending during this read-only review",
+      "matrix_sha256": "19e9e836b6e2e78b22e393927983da47a6d0340af5b930a05adba25326a59232",
+      "isolation_sha256": "30662692969b4cb5bc0a7a4112b49123138960da8fc708dae11d04904685e327",
+      "phases_sha256": "49514f7a29358277bd53fe40158a029b0ef8fd8378fbe166acc0bbbf59b52028",
+      "verified": "Original bytes/goldens;54 exact executions/4 JS host failures/2 native aggregate refusals;36 phase probes;40 isolation observations preserving expression order; no production changes or hidden waiver."
+    }
+  },
+  "raw_evidence_manifest": {
+    "full-gate.json": {
+      "sha256": "80343c310c91d2e78800d013d1da227340bc47268d2cbe259b46a695f307bb11",
+      "bytes": 36505
+    },
+    "full-gate.log": {
+      "sha256": "96fb6235a8eb094551446759dfca305c303e73053ce3a8f0fa07c7389c8b057f",
+      "bytes": 21647
+    },
+    "focused-clippy.json": {
+      "sha256": "261914b69d327bb06513791d5480a89390dcb28132ed0f22a1d8089ba076ea32",
+      "bytes": 1160
+    },
+    "focused-clippy.log": {
+      "sha256": "b4a4cb65fff47f1aaa42478415350a853e9793940d6e99e96aafb0a7e4b34dfc",
+      "bytes": 115
+    },
+    "focused-preliminary.json": {
+      "sha256": "57807916da5740cddb741b348fcf4d41fd74c47953a3d133f42645c116e12fad",
+      "bytes": 1270
+    },
+    "focused-preliminary.log": {
+      "sha256": "ebbf5ed8336579aa7250757e4eb89831d73f44cbd29db4780161b713f68f526d",
+      "bytes": 1079
+    },
+    "focused-revised.json": {
+      "sha256": "28629bcb020a50708c2ba1a443046543e7581a23fb4f7606ad2bfae262fea51e",
+      "bytes": 1268
+    },
+    "focused-revised.log": {
+      "sha256": "f31a462a841371059a32347fd1c8de44502bf33e11db1caf843fcf64cb3d9c4e",
+      "bytes": 924
+    },
+    "focused-passing-controls.json": {
+      "sha256": "c544b8dc5b60d562952b2a46c8929dd80330560f8ed0598b61d87a84d1cd74e8",
+      "bytes": 1372
+    },
+    "focused-passing-controls.log": {
+      "sha256": "dc73fcbed75f60414ae21b40e389ba2f31975e703ab30ac91b3cb928951e073a",
+      "bytes": 1084
+    },
+    "snapshot.json": {
+      "sha256": "de7498aea690f488c8d0bcdba03e05f7eec00d962eaa32e1085053fea13cad51",
+      "bytes": 1206
+    },
+    "matrix/receipt.json": {
+      "sha256": "19e9e836b6e2e78b22e393927983da47a6d0340af5b930a05adba25326a59232",
+      "bytes": 72179
+    },
+    "phases.json": {
+      "sha256": "49514f7a29358277bd53fe40158a029b0ef8fd8378fbe166acc0bbbf59b52028",
+      "bytes": 18839
+    },
+    "baseline.json": {
+      "sha256": "8be43cc601ee78e9ae1f8fcd49eb2fa0de7a1bde2ddb43c2fede8d48dfb9d86e",
+      "bytes": 998
+    },
+    "original-oracles.json": {
+      "sha256": "6cb2f7776880be3a3672c4629273b3ac70631e5f0dd3b9cbbae68381bd9e0691",
+      "bytes": 4946
+    },
+    "edge-native-before.json": {
+      "sha256": "8845834fd6936a280342b95f53837900fcf00587e729cf354311da9a10a5b34e",
+      "bytes": 2270
+    },
+    "helper-literal-refusal.json": {
+      "sha256": "215f131ca690f298628d0d4dfb57e26de5bce9ca995981c8dfc2ab2438e335ab",
+      "bytes": 1695
+    },
+    "word-isolation-before.json": {
+      "sha256": "f7917c535a99e196c1482c45c9839feb7344955d39a7f95ab4e2cee433b7a4a2",
+      "bytes": 14787
+    },
+    "word-isolation.json": {
+      "sha256": "30662692969b4cb5bc0a7a4112b49123138960da8fc708dae11d04904685e327",
+      "bytes": 25731
+    },
+    "independent-review.json": {
+      "sha256": "1fbe50368007c632ae735c2b5c68b67321967470f0bb8b9b41b8f4bd2b1bb745",
+      "bytes": 2701
+    }
+  },
+  "census": {
+    "full_rerun": false,
+    "last_tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+    "differences_beyond_historical_IO": 300,
+    "historical_IO_exclusions": 385,
+    "upstream_stack_failures": 6,
+    "reason": "No production change. 36 current load/check probes and executable qualification do not redate, subtract from or waive historical counts."
+  }
+}
