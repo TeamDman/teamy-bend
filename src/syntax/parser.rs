@@ -721,7 +721,21 @@ impl Parser<'_> {
             if let Some(tags) = self.constructor_tags.as_deref_mut() {
                 tags.insert(constructor.clone(), raw);
             }
-            if self.book.declarations.iter().any(|d|matches!(d,Declaration::Adt(a) if a.constructors.iter().any(|c|c.name==constructor))) || constructors.iter().any(|c:&ConstructorDecl|c.name==constructor) {return Err(self.error(format!("duplicate constructor: {constructor}")));}
+            if self.book.declarations.iter().any(|d| {
+                matches!(d, Declaration::Adt(a) if a.constructors.iter().any(|c| c.name == constructor))
+            }) || constructors.iter().any(|c: &ConstructorDecl| c.name == constructor)
+            {
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    let token = &self.tokens[self.at - 1];
+                    origins.duplicate_constructor(
+                        &self.label,
+                        token.line,
+                        token.column + token.text.chars().count() - 1,
+                        &constructor,
+                    );
+                }
+                return Err(self.error(format!("duplicate constructor: {constructor}")));
+            }
             self.expect("{")?;
             let old = self.scope.len();
             let fields = self.telescope("}")?;

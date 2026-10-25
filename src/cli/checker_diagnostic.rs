@@ -334,6 +334,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-duplicate-constructor/check/book_prefix_arity.bend",
+                "12>|   K6{a: Un6, b: Un6}",
+            ),
+            (
+                "cpu-duplicate-constructor/controls/imported/main.bend",
+                "5>|   Dup{}",
+            ),
+            (
                 "cpu-matched-values/arity_mismatch_000.bend",
                 "19>|     case Zw{}, x, Zw{}:",
             ),

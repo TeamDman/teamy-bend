@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n"

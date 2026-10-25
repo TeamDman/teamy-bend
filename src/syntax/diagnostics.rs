@@ -292,6 +292,37 @@ impl DiagnosticOrigins {
         });
     }
 
+    pub(super) fn duplicate_constructor(
+        &mut self,
+        label: &str,
+        line: usize,
+        after_name: usize,
+        name: &str,
+    ) {
+        self.load_failure = self.sources.get(label).and_then(|source| {
+            // Pinned parse_fail observes the character immediately after the
+            // name, before parse_eat skips whitespace/comments. Use the original
+            // display line: tokenization skips trivia and loading normalizes
+            // CRLF and missing final newlines. Keep the public parser cursor.
+            let observed = source.split_inclusive('\n').nth(line.checked_sub(1)?)?;
+            let length = observed.chars().count();
+            if after_name > length || after_name == length && observed.ends_with('\n') {
+                return None;
+            }
+            let observed = observed
+                .chars()
+                .nth(after_name)
+                .map_or_else(|| "end of input".into(), |c| format!("'{c}'"));
+            source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
+                content: LoadDiagnosticContent::ExpectedObserved {
+                    expected: format!("a fresh constructor name (duplicate declaration: {name})"),
+                    observed,
+                },
+                excerpt,
+            })
+        });
+    }
+
     pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
         self.expected_syntax(label, line, &format!("'{expected}'"), found);
     }
@@ -359,6 +390,77 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn duplicate_constructor_metadata_preserves_public_load_errors() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-duplicate-constructor");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-duplicate-constructor/negative-cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let executable = crate::syntax::load_executable(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            let tracked_executable = crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap();
+            assert!(plain.message.starts_with("duplicate constructor: "));
+            let expected: String = facet_json::from_str(
+                &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+            )
+            .unwrap();
+            assert_eq!(plain.to_string(), executable.to_string(), "{case}");
+            for failure in [tracked, tracked_executable] {
+                assert_eq!(plain.to_string(), failure.error.to_string(), "{case}");
+                assert_eq!(plain.message, failure.error.message);
+                assert_eq!(plain.source, failure.error.source);
+                assert_eq!(
+                    (plain.line, plain.column),
+                    (failure.error.line, failure.error.column)
+                );
+                let report = failure.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved {
+                    expected: want,
+                    observed,
+                } = report.content
+                else {
+                    panic!("expected the pinned parser category");
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {want}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    expected,
+                    "{case}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn duplicate_constructor_metadata_requires_an_actual_source_position() {
+        let mut origins = super::DiagnosticOrigins::default();
+        origins.duplicate_constructor("missing", 1, 0, "A");
+        assert!(origins.load_failure.is_none());
+        origins.source("known", "A");
+        for (line, column) in [(0, 0), (2, 0), (1, 2)] {
+            origins.duplicate_constructor("known", line, column, "A");
+            assert!(origins.load_failure.is_none());
+        }
+        origins.source("multiline", "A\nB");
+        origins.duplicate_constructor("multiline", 1, 2, "A");
+        assert!(origins.load_failure.is_none());
+        origins.source("trailing-newline", "A\n");
+        origins.duplicate_constructor("trailing-newline", 1, 2, "A");
+        assert!(origins.load_failure.is_none());
+        origins.duplicate_constructor("known", 1, 1, "A");
+        assert!(matches!(origins.load_failure.unwrap().content,
+            super::LoadDiagnosticContent::ExpectedObserved { observed, .. } if observed == "end of input"));
+    }
+
     #[test]
     fn unsupported_pattern_metadata_preserves_public_load_error() {
         for name in ["unsupported_pattern", "invalid_assign_target"] {

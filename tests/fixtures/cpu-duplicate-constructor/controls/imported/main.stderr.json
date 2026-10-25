@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n"

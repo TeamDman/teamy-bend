@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n"

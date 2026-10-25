@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n"

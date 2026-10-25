@@ -1,0 +1,14 @@
+[
+  "check/book_prefix_arity.bend",
+  "check/ctor_shared_tag.bend",
+  "compile/ctor_tag_dispatch_000.bend",
+  "compile/ctor_tag_dispatch_001.bend",
+  "controls/same-type.bend",
+  "controls/space.bend",
+  "controls/tab.bend",
+  "controls/comment.bend",
+  "controls/newline.bend",
+  "controls/eof.bend",
+  "controls/crlf.bend",
+  "controls/imported/main.bend"
+]

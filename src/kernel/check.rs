@@ -3506,6 +3506,14 @@ mod reflexivity_diagnostic_tests {
             ("cpu-forward-data/negative/macro.bend", &[][..]),
             ("cpu-forward-data/negative/non-adt.bend", &[][..]),
             ("cpu-forward-data/negative/argument-first.bend", &[][..]),
+            (
+                "cpu-duplicate-constructor/positive/distinct.bend",
+                &["main"][..],
+            ),
+            (
+                "cpu-duplicate-constructor/positive/imported/main.bend",
+                &["main"][..],
+            ),
             ("cpu-forward-data/positive/earlier.bend", &["main"][..]),
             ("cpu-forward-data/positive/recursive.bend", &["main"][..]),
             ("cpu-family-head/check/family_head_bare.bend", &[][..]),
