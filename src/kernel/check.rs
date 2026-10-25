@@ -118,11 +118,11 @@ impl DiagnosticExpression<'_> {
         match self {
             Self::Text(text) => Ok(text),
             Self::Term(value) => {
-                Ok(super::term::scoped(engine.normalize(value)?.as_ref(), scope).to_string())
+                Ok(super::term::diagnostic(engine.normalize(value)?.as_ref(), scope).to_string())
             }
             Self::Typeless(value) => Ok(format!(
                 "non-inferrable term '{}'",
-                super::term::scoped(engine.normalize(value)?.as_ref(), scope)
+                super::term::diagnostic(engine.normalize(value)?.as_ref(), scope)
             )),
         }
     }
@@ -489,8 +489,11 @@ impl Engine {
                     binder.name.clone(),
                     // A binder's type is outside its own scope. Later shadowing
                     // must not change the spelling of earlier context rows.
-                    super::term::scoped(display.normalize(&binder.ty)?.as_ref(), &scope[..index])
-                        .to_string(),
+                    super::term::diagnostic(
+                        display.normalize(&binder.ty)?.as_ref(),
+                        &scope[..index],
+                    )
+                    .to_string(),
                 ))
             })
             .collect::<Result<Vec<_>, KernelError>>()?;

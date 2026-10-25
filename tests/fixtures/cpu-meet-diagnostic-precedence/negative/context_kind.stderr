@@ -1,0 +1,10 @@
+Error:
+- expected : &0
+- observed : &1
+Context:
+- q : Quant
+- T : Kind(q <&> &1)
+Location: wrong
+6 |   {&0 == &1 : Quant}
+7>| def wrong(q, T): {==}
+8 | 

@@ -1,0 +1,7 @@
+Error:
+- expected : 12n
+- observed : 13n
+Location: main
+2 | 
+3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}
+4 | 

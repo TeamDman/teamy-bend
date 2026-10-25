@@ -432,10 +432,54 @@ impl fmt::Display for Quant {
 // the binder's level in this printed term, matching pinned term_show.
 struct ScopedTerm<'a> {
     value: &'a Term,
-    scope: &'a [(usize, &'a str)],
+    scope: PrintScope<'a>,
 }
 
-pub(super) fn scoped<'a>(value: &'a Term, scope: &'a [(usize, &'a str)]) -> impl fmt::Display + 'a {
+#[derive(Clone, Copy)]
+struct PrintScope<'a> {
+    binders: &'a [(usize, &'a str)],
+    diagnostic: bool,
+}
+
+impl PrintScope<'_> {
+    fn with_binders<'a>(self, binders: &'a [(usize, &'a str)]) -> PrintScope<'a> {
+        PrintScope {
+            binders,
+            diagnostic: self.diagnostic,
+        }
+    }
+}
+
+pub(super) fn scoped<'a>(
+    value: &'a Term,
+    binders: &'a [(usize, &'a str)],
+) -> impl fmt::Display + 'a {
+    within(
+        value,
+        PrintScope {
+            binders,
+            diagnostic: false,
+        },
+    )
+}
+
+// Pinned diagnostic expr_show uses term_show at precedence -1. Keep the public
+// Term Display (including internal KernelError messages) independent of this
+// source-facing presentation correction. No terms or scopes are transformed.
+pub(super) fn diagnostic<'a>(
+    value: &'a Term,
+    binders: &'a [(usize, &'a str)],
+) -> impl fmt::Display + 'a {
+    within(
+        value,
+        PrintScope {
+            binders,
+            diagnostic: true,
+        },
+    )
+}
+
+fn within<'a>(value: &'a Term, scope: PrintScope<'a>) -> ScopedTerm<'a> {
     ScopedTerm { value, scope }
 }
 
@@ -451,8 +495,8 @@ impl fmt::Display for ScopedTerm<'_> {
         match self.value {
             Term::Var { name, id } => {
                 f.write_str(name)?;
-                if let Some(level) = scope.iter().position(|(bound, _)| bound == id)
-                    && scope.iter().rposition(|(_, bound)| *bound == name) != Some(level)
+                if let Some(level) = scope.binders.iter().position(|(bound, _)| bound == id)
+                    && scope.binders.iter().rposition(|(_, bound)| *bound == name) != Some(level)
                 {
                     write!(f, "^{level}")?;
                 }
@@ -463,7 +507,7 @@ impl fmt::Display for ScopedTerm<'_> {
             Term::Typ(g) => match g.as_ref() {
                 Term::Qua(Quant::Lone) => f.write_str("Type"),
                 Term::Qua(Quant::Many) => f.write_str("Data"),
-                _ => write!(f, "Kind({})", scoped(g, scope)),
+                _ => write!(f, "Kind({})", within(g, scope)),
             },
             Term::Qnt => f.write_str("Quant"),
             Term::Qua(q) => write!(
@@ -476,11 +520,16 @@ impl fmt::Display for ScopedTerm<'_> {
                 }
             ),
             Term::Min(a, b) => {
-                f.write_str("(")?;
+                if !scope.diagnostic {
+                    f.write_str("(")?;
+                }
                 infix_operand(f, a, scope)?;
                 f.write_str(" <&> ")?;
                 infix_operand(f, b, scope)?;
-                f.write_str(")")
+                if !scope.diagnostic {
+                    f.write_str(")")?;
+                }
+                Ok(())
             }
             Term::All {
                 quant,
@@ -491,14 +540,18 @@ impl fmt::Display for ScopedTerm<'_> {
             } => {
                 write!(f, "@{quant}{name}:")?;
                 infix_operand(f, domain, scope)?;
-                let mut body_scope = scope.to_vec();
+                let mut body_scope = scope.binders.to_vec();
                 body_scope.push((*id, name));
-                write!(f, " -> {}", scoped(body, &body_scope))
+                write!(f, " -> {}", within(body, scope.with_binders(&body_scope)))
             }
             Term::Lam { name, id, body } => {
-                let mut body_scope = scope.to_vec();
+                let mut body_scope = scope.binders.to_vec();
                 body_scope.push((*id, name));
-                write!(f, "{name} => {}", scoped(body, &body_scope))
+                write!(
+                    f,
+                    "{name} => {}",
+                    within(body, scope.with_binders(&body_scope))
+                )
             }
             Term::App(..) => application(f, self.value, scope),
             Term::Adt {
@@ -528,14 +581,14 @@ impl fmt::Display for ScopedTerm<'_> {
                 body,
             } => rewrite(f, evidence, motive, body, scope),
             Term::Hole(name) => write!(f, "?{name}"),
-            Term::Ann(x, t) => write!(f, "{{{} : {}}}", scoped(x, scope), scoped(t, scope)),
+            Term::Ann(x, t) => write!(f, "{{{} : {}}}", within(x, scope), within(t, scope)),
             Term::Let { bindings, body } => {
-                let mut body_scope = scope.to_vec();
+                let mut body_scope = scope.binders.to_vec();
                 for b in bindings {
-                    write!(f, "{}{} = {}; ", b.quant, b.name, scoped(&b.value, scope))?;
+                    write!(f, "{}{} = {}; ", b.quant, b.name, within(&b.value, scope))?;
                     body_scope.push((b.id, &b.name));
                 }
-                write!(f, "{}", scoped(body, &body_scope))
+                write!(f, "{}", within(body, scope.with_binders(&body_scope)))
             }
         }
     }
@@ -545,10 +598,10 @@ fn reference(
     f: &mut fmt::Formatter<'_>,
     name: &str,
     gpu: bool,
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     f.write_str(name)?;
-    if scope.iter().any(|(_, bound)| *bound == name) {
+    if scope.binders.iter().any(|(_, bound)| *bound == name) {
         f.write_str("^")?;
     }
     if gpu {
@@ -557,7 +610,7 @@ fn reference(
     Ok(())
 }
 
-fn match_term(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+fn match_term(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     // Upstream term_show prints a consecutive fallback chain as
     // ordered arms in one match. An empty final fallback is implicit.
     f.write_str("\\{")?;
@@ -589,7 +642,7 @@ fn equation(
     left: &Term,
     right: &Term,
     ty: &Term,
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     f.write_str("{")?;
     match_branch(f, left, scope)?;
@@ -605,7 +658,7 @@ fn constructor(
     value: &Term,
     name: &str,
     args: &[TermRef],
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     if let Some((count, tail)) = nat_spine(value) {
         write!(f, "{count}n")?;
@@ -694,16 +747,17 @@ fn open_nat(value: &Term) -> bool {
     nat_spine(value).is_some_and(|(_, tail)| !empty_constructor(tail, "Zero"))
 }
 
-fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     // Arrow domains and quantitative-meet operands use upstream precedence 2.
     if matches!(value, Term::All { .. })
+        || (scope.diagnostic && matches!(value, Term::Min(..)))
         || open_nat(value)
         || open_list(value)
         || refined_datatype(value)
     {
-        write!(f, "({})", scoped(value, scope))
+        write!(f, "({})", within(value, scope))
     } else {
-        write!(f, "{}", scoped(value, scope))
+        write!(f, "{}", within(value, scope))
     }
 }
 
@@ -733,11 +787,7 @@ fn open_list(value: &Term) -> bool {
         && !complete_list(value)
 }
 
-fn cons_chain(
-    f: &mut fmt::Formatter<'_>,
-    mut value: &Term,
-    scope: &[(usize, &str)],
-) -> fmt::Result {
+fn cons_chain(f: &mut fmt::Formatter<'_>, mut value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     while let Term::Ctr { name, args } = value {
         if name != "Con" || args.len() != 2 {
             break;
@@ -754,9 +804,9 @@ fn cons_chain(
             || open_list(head)
             || refined_datatype(head)
         {
-            write!(f, "({})", scoped(head, scope))?;
+            write!(f, "({})", within(head, scope))?;
         } else {
-            write!(f, "{}", scoped(head, scope))?;
+            write!(f, "{}", within(head, scope))?;
         }
         f.write_str(" <> ")?;
         value = &args[1];
@@ -767,7 +817,7 @@ fn cons_chain(
 fn list_literal(
     f: &mut fmt::Formatter<'_>,
     mut value: &Term,
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     f.write_str("[")?;
     let mut first = true;
@@ -788,7 +838,7 @@ fn list_literal(
 fn tuple_literal(
     f: &mut fmt::Formatter<'_>,
     mut value: &Term,
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     f.write_str("(")?;
     while let Term::Ctr { name, args } = value {
@@ -842,7 +892,7 @@ fn literal_word(mut word: &TermRef) -> Option<u32> {
         .then_some(value)
 }
 
-fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     // Pinned term_show un-applies only the function spine, then prints its
     // arguments in source order. An annotation is a boundary, not another App.
     let mut head = value;
@@ -855,13 +905,14 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]
     if matches!(
         head,
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
-    ) || open_nat(head)
+    ) || (scope.diagnostic && matches!(head, Term::Min(..)))
+        || open_nat(head)
         || open_list(head)
         || refined_datatype(head)
     {
-        write!(f, "({})", scoped(head, scope))?;
+        write!(f, "({})", within(head, scope))?;
     } else {
-        write!(f, "{}", scoped(head, scope))?;
+        write!(f, "{}", within(head, scope))?;
     }
     f.write_str("(")?;
     for (index, value) in arguments.into_iter().rev().enumerate() {
@@ -873,12 +924,12 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]
     f.write_str(")")
 }
 
-fn argument(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+fn argument(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     // Arguments and literal sequence elements use upstream precedence 0.
     if matches!(value, Term::Let { .. }) {
-        write!(f, "({})", scoped(value, scope))
+        write!(f, "({})", within(value, scope))
     } else {
-        write!(f, "{}", scoped(value, scope))
+        write!(f, "{}", within(value, scope))
     }
 }
 
@@ -887,7 +938,7 @@ fn rewrite(
     evidence: &Term,
     motive: &Term,
     body: &Term,
-    scope: &[(usize, &str)],
+    scope: PrintScope<'_>,
 ) -> fmt::Result {
     // A surface rewrite stores two motive binders: the endpoint `_`, then the
     // optional equation name. Print under them without evaluating the motive.
@@ -898,7 +949,7 @@ fn rewrite(
     } else {
         outer
     };
-    let mut motive_scope = scope.to_vec();
+    let mut motive_scope = scope.binders.to_vec();
     let printed_motive = if let (
         Term::Lam {
             name: endpoint,
@@ -919,8 +970,8 @@ fn rewrite(
     };
     match_branch(f, evidence, scope)?;
     f.write_str(" : ")?;
-    match_branch(f, printed_motive, &motive_scope)?;
-    write!(f, "; {}", scoped(body, scope))
+    match_branch(f, printed_motive, scope.with_binders(&motive_scope))?;
+    write!(f, "; {}", within(body, scope))
 }
 
 fn without_annotations(mut value: &Term) -> &Term {
@@ -930,25 +981,25 @@ fn without_annotations(mut value: &Term) -> &Term {
     value
 }
 
-fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
+fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
     // Match branches use upstream precedence 1. These low-precedence forms
     // need parentheses; nested matches retain their own explicit delimiters.
     if matches!(
         value,
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. }
     ) {
-        write!(f, "({})", scoped(value, scope))
+        write!(f, "({})", within(value, scope))
     } else {
-        write!(f, "{}", scoped(value, scope))
+        write!(f, "{}", within(value, scope))
     }
 }
 
-fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef], scope: &[(usize, &str)]) -> fmt::Result {
+fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef], scope: PrintScope<'_>) -> fmt::Result {
     for (i, x) in values.iter().enumerate() {
         if i > 0 {
             f.write_str(", ")?;
         }
-        write!(f, "{}", scoped(x, scope))?;
+        write!(f, "{}", within(x, scope))?;
     }
     Ok(())
 }
@@ -1002,5 +1053,84 @@ mod inspection_tests {
                 .to_string()
                 .contains("input size limit")
         );
+    }
+}
+
+#[cfg(test)]
+mod diagnostic_precedence_tests {
+    use super::*;
+
+    #[derive(facet::Facet)]
+    struct Case {
+        source: String,
+        expected: String,
+        legacy: String,
+    }
+
+    #[test]
+    fn diagnostic_meet_precedence_preserves_graph_and_public_display() {
+        let cases: Vec<Case> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-meet-diagnostic-precedence/printer-cases.json"
+        ))
+        .unwrap();
+        assert_eq!(cases.len(), 17);
+        for case in cases {
+            let value = crate::syntax::parse_term(&case.source).unwrap();
+            let identity = Rc::as_ptr(&value);
+            let owners = Rc::strong_count(&value);
+            let structure = format!("{value:?}");
+            for _ in 0..2 {
+                assert_eq!(
+                    diagnostic(&value, &[]).to_string(),
+                    case.expected,
+                    "{}",
+                    case.source
+                );
+                assert_eq!(value.to_string(), case.legacy, "{}", case.source);
+                assert_eq!(Rc::as_ptr(&value), identity);
+                assert_eq!(Rc::strong_count(&value), owners);
+                assert_eq!(format!("{value:?}"), structure);
+            }
+        }
+    }
+
+    #[test]
+    fn diagnostic_meet_scope_preserves_shadowed_binders_and_guard_boundaries() {
+        let first = term(Term::Var {
+            name: "q".into(),
+            id: 7,
+        });
+        let second = term(Term::Var {
+            name: "q".into(),
+            id: 19,
+        });
+        let meet = term(Term::Min(Rc::clone(&first), Rc::clone(&second)));
+        let scope = [(7, "q"), (19, "q")];
+        assert_eq!(diagnostic(&meet, &scope).to_string(), "q^0 <&> q");
+        assert_eq!(scoped(&meet, &scope).to_string(), "(q^0 <&> q)");
+        let body = term(Term::Lam {
+            name: "q".into(),
+            id: 23,
+            body: Rc::clone(&meet),
+        });
+        assert_eq!(diagnostic(&body, &scope).to_string(), "q => q^0 <&> q^1");
+        assert_eq!(scoped(&body, &scope).to_string(), "q => (q^0 <&> q^1)");
+        let boundary = (0..127).fold(meet, |body, _| term(Term::Typ(body)));
+        assert!(inspect(&boundary).is_ok());
+        let original = format!("{boundary:?}");
+        assert!(
+            diagnostic(&boundary, &scope)
+                .to_string()
+                .contains("q^0 <&> q")
+        );
+        assert_eq!(format!("{boundary:?}"), original);
+        assert!(
+            inspect(&term(Term::Typ(boundary)))
+                .unwrap_err()
+                .to_string()
+                .contains("input nesting limit")
+        );
+        assert_eq!(Rc::strong_count(&first), 2);
+        assert_eq!(Rc::strong_count(&second), 2);
     }
 }

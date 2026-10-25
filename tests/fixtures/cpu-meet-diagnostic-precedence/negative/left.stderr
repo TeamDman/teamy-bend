@@ -1,0 +1,7 @@
+Error:
+- expected : (q <&> r) <&> &1
+- observed : &1
+Location: wrong
+6 | law wrong: {(q <&> r) <&> &1 == &1 : Quant}
+7>| def wrong(): {==}
+8 | def q(): &0

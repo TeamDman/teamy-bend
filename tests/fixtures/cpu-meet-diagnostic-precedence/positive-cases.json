@@ -1,0 +1,12 @@
+[
+  {
+    "case": "positive/closed.bend",
+    "expected": "{==}",
+    "io": false
+  },
+  {
+    "case": "positive/partial_true.bend",
+    "expected": "{==}",
+    "io": false
+  }
+]

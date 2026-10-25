@@ -1,0 +1,87 @@
+[
+  {
+    "source": "G.q <&> G.r",
+    "expected": "G.q <&> G.r",
+    "legacy": "(G.q <&> G.r)"
+  },
+  {
+    "source": "(G.q <&> G.r) <&> G.s",
+    "expected": "(G.q <&> G.r) <&> G.s",
+    "legacy": "((G.q <&> G.r) <&> G.s)"
+  },
+  {
+    "source": "G.q <&> (G.r <&> G.s)",
+    "expected": "G.q <&> (G.r <&> G.s)",
+    "legacy": "(G.q <&> (G.r <&> G.s))"
+  },
+  {
+    "source": "(G.q <&> G.r)(x)",
+    "expected": "(G.q <&> G.r)(x)",
+    "legacy": "(G.q <&> G.r)(x)"
+  },
+  {
+    "source": "G.f(G.q <&> G.r)",
+    "expected": "G.f(G.q <&> G.r)",
+    "legacy": "G.f((G.q <&> G.r))"
+  },
+  {
+    "source": "Kind(G.q <&> G.r)",
+    "expected": "Kind(G.q <&> G.r)",
+    "legacy": "Kind((G.q <&> G.r))"
+  },
+  {
+    "source": "C{G.q <&> G.r}",
+    "expected": "C{G.q <&> G.r}",
+    "legacy": "C{(G.q <&> G.r)}"
+  },
+  {
+    "source": "T<G.q <&> G.r>",
+    "expected": "T<G.q <&> G.r>",
+    "legacy": "T<(G.q <&> G.r)>"
+  },
+  {
+    "source": "{G.q <&> G.r == G.s : Quant}",
+    "expected": "{G.q <&> G.r == G.s : Quant}",
+    "legacy": "{(G.q <&> G.r) == G.s : Quant}"
+  },
+  {
+    "source": "{G.q <&> G.r : Quant}",
+    "expected": "{G.q <&> G.r : Quant}",
+    "legacy": "{(G.q <&> G.r) : Quant}"
+  },
+  {
+    "source": "@x:(G.q <&> G.r) -> G.q <&> G.r",
+    "expected": "@x:(G.q <&> G.r) -> G.q <&> G.r",
+    "legacy": "@x:(G.q <&> G.r) -> (G.q <&> G.r)"
+  },
+  {
+    "source": "x => G.q <&> G.r",
+    "expected": "x => G.q <&> G.r",
+    "legacy": "x => (G.q <&> G.r)"
+  },
+  {
+    "source": "\\{C: G.q <&> G.r; G.s}",
+    "expected": "\\{C: G.q <&> G.r; G.s}",
+    "legacy": "\\{C: (G.q <&> G.r); G.s}"
+  },
+  {
+    "source": "(G.q <&> G.r) <> G.tail",
+    "expected": "(G.q <&> G.r) <> G.tail",
+    "legacy": "((G.q <&> G.r)) <> G.tail"
+  },
+  {
+    "source": "Succ{G.q <&> G.r}",
+    "expected": "1n+G.q <&> G.r",
+    "legacy": "1n+(G.q <&> G.r)"
+  },
+  {
+    "source": "%G.e : G.q <&> G.r; G.s",
+    "expected": "%G.e : G.q <&> G.r; G.s",
+    "legacy": "%G.e : (G.q <&> G.r); G.s"
+  },
+  {
+    "source": "(x = G.q <&> G.r; x)",
+    "expected": "x = G.q <&> G.r; x",
+    "legacy": "x = (G.q <&> G.r); x"
+  }
+]

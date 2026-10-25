@@ -1,0 +1,502 @@
+{
+  "source": "51c8bed233810139d0dec43b51569ffb8c2f8f53",
+  "binary_source": "366c7487fa795685227c72fcdb58a1af4ab3f5df",
+  "binary_sha256": "56c86c247cecc796906ae05388013eee03914592c33149f0f6892c1440496b17",
+  "rows": [
+    {
+      "case": "check/meet_stuck_pending_ref.bend",
+      "source_sha256": "85215e04422678cd3c02a87b57aefe5d65935220a6ce2e15b10ec1887f4d8e94",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/check/meet_stuck_pending_ref.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : q <&> &1\n- observed : &1\nLocation: thm\n15 | def thm():\n16>|   {==}\n17 | \n",
+      "timed_out": false,
+      "seconds": 0.12749512199661694,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "check/meet_stuck_pending_ref.bend",
+      "source_sha256": "85215e04422678cd3c02a87b57aefe5d65935220a6ce2e15b10ec1887f4d8e94",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/check/meet_stuck_pending_ref.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (q <&> &1)\n- observed : &1\nLocation: thm\n15 | def thm():\n16>|   {==}\n17 | \n",
+      "timed_out": false,
+      "seconds": 0.24563292699167505
+    },
+    {
+      "case": "check/meet_charges_its_operands.bend",
+      "source_sha256": "248240f1f7916505b0df546ee9cfd3c4bf4221b5bc7e0e44b7765dd0fa860093",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/check/meet_charges_its_operands.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : q\n- observed : q (consumed more than once)\nLocation: dup\n18 | \n19>| def dup(q):\n20 |   P{q <&> &2, q <&> &2}\n",
+      "timed_out": false,
+      "seconds": 0.13074473501183093,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "check/meet_charges_its_operands.bend",
+      "source_sha256": "248240f1f7916505b0df546ee9cfd3c4bf4221b5bc7e0e44b7765dd0fa860093",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/check/meet_charges_its_operands.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : q\n- observed : q (consumed more than once)\nLocation: dup\n18 | \n19>| def dup(q):\n20 |   P{q <&> &2, q <&> &2}\n",
+      "timed_out": false,
+      "seconds": 0.26605361598194577
+    },
+    {
+      "case": "negative/left.bend",
+      "source_sha256": "e772bf63c2413beed124adb5d1ae9797132ccaeb664695e91b151d1e5b8e2b57",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/left.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (q <&> r) <&> &1\n- observed : &1\nLocation: wrong\n6 | law wrong: {(q <&> r) <&> &1 == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.15437388699501753,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/left.bend",
+      "source_sha256": "e772bf63c2413beed124adb5d1ae9797132ccaeb664695e91b151d1e5b8e2b57",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/left.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ((q <&> r) <&> &1)\n- observed : &1\nLocation: wrong\n6 | law wrong: {(q <&> r) <&> &1 == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.24656809799489565
+    },
+    {
+      "case": "negative/right.bend",
+      "source_sha256": "2b1afe329b2723a9175e45ffca0e3ec2385b5a17f94b89fdc086763e391be8b0",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/right.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : q <&> (r <&> &1)\n- observed : &1\nLocation: wrong\n6 | law wrong: {q <&> (r <&> &1) == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.15260967300855555,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/right.bend",
+      "source_sha256": "2b1afe329b2723a9175e45ffca0e3ec2385b5a17f94b89fdc086763e391be8b0",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/right.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (q <&> (r <&> &1))\n- observed : &1\nLocation: wrong\n6 | law wrong: {q <&> (r <&> &1) == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.24409941100748256
+    },
+    {
+      "case": "negative/both.bend",
+      "source_sha256": "13f3048394779620e5acbc9ea7471a9bc492c4451f6b37dcdea5ea5df0369832",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/both.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (q <&> r) <&> (s <&> &1)\n- observed : &1\nLocation: wrong\n6 | law wrong: {(q <&> r) <&> (s <&> &1) == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.13824260799447075,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/both.bend",
+      "source_sha256": "13f3048394779620e5acbc9ea7471a9bc492c4451f6b37dcdea5ea5df0369832",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/both.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ((q <&> r) <&> (s <&> &1))\n- observed : &1\nLocation: wrong\n6 | law wrong: {(q <&> r) <&> (s <&> &1) == &1 : Quant}\n7>| def wrong(): {==}\n8 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.25138885498745367
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "88783e8033829a1f7cdef7088f234148d6d8df6232f8d62dc8eeade3b7493774",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/context.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : q <&> &1\n- observed : &1\nContext:\n- q : Quant\nLocation: bad\n2 | \n3>| def bad(q: Quant) -> {q <&> &1 == &1 : Quant}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.13818921899655834,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "88783e8033829a1f7cdef7088f234148d6d8df6232f8d62dc8eeade3b7493774",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (q <&> &1)\n- observed : &1\nContext:\n- q : Quant\nLocation: bad\n2 | \n3>| def bad(q: Quant) -> {q <&> &1 == &1 : Quant}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.24786011999822222
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "49b274509e4a8b64a2d3ed6c4ac4925aba5566f79e04bd0a73c8e2c21a4905d4",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/imported.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ../imports/defs.q <&> &1\n- observed : &1\nLocation: ../imports/defs.wrong\n4 | law wrong: {q <&> &1 == &1 : Quant}\n5>| def wrong(): {==}\n6 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.1323614400171209,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "49b274509e4a8b64a2d3ed6c4ac4925aba5566f79e04bd0a73c8e2c21a4905d4",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : (../imports/defs.q <&> &1)\n- observed : &1\nLocation: ../imports/defs.wrong\n4 | law wrong: {q <&> &1 == &1 : Quant}\n5>| def wrong(): {==}\n6 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.24917398698744364
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/partial_false.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.14750071900198236,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.25226782899699174
+    },
+    {
+      "case": "negative/context_kind.bend",
+      "source_sha256": "479118ba58b7b5ffd83ca946df9f563685acc6962060e8546bc8d112915fde18",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/context_kind.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : &0\n- observed : &1\nContext:\n- q : Quant\n- T : Kind(q <&> &1)\nLocation: wrong\n6 |   {&0 == &1 : Quant}\n7>| def wrong(q, T): {==}\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.13592013999004848,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/context_kind.bend",
+      "source_sha256": "479118ba58b7b5ffd83ca946df9f563685acc6962060e8546bc8d112915fde18",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/context_kind.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : &0\n- observed : &1\nContext:\n- q : Quant\n- T : Kind((q <&> &1))\nLocation: wrong\n6 |   {&0 == &1 : Quant}\n7>| def wrong(q, T): {==}\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.2557852510071825
+    },
+    {
+      "case": "negative/observed.bend",
+      "source_sha256": "f79a235adf1c8002e41b4f8b3f15567bf2f2ee22f5f7ef41cf3c14876a851ea2",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/observed.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : &1\n- observed : q <&> &1\nLocation: wrong\n4 | law wrong: {&1 == q <&> &1 : Quant}\n5>| def wrong(): {==}\n6 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.13463176199002191,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/observed.bend",
+      "source_sha256": "f79a235adf1c8002e41b4f8b3f15567bf2f2ee22f5f7ef41cf3c14876a851ea2",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/negative/observed.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : &1\n- observed : (q <&> &1)\nLocation: wrong\n4 | law wrong: {&1 == q <&> &1 : Quant}\n5>| def wrong(): {==}\n6 | def q(): &0\n",
+      "timed_out": false,
+      "seconds": 0.26073416401050054
+    },
+    {
+      "case": "positive/closed.bend",
+      "source_sha256": "beda6fd532d2162977051d73e95d04542438c589ab04c8d7b05bb707dd4cc8f2",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/positive/closed.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1312383780023083,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/closed.bend",
+      "source_sha256": "beda6fd532d2162977051d73e95d04542438c589ab04c8d7b05bb707dd4cc8f2",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/positive/closed.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2473537889891304
+    },
+    {
+      "case": "positive/partial_true.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/positive/partial_true.bend",
+        "<evidence>/phase.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13130303300567903,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/partial_true.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "port",
+      "command": [
+        "<baseline>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-meet-diagnostic-precedence/positive/partial_true.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24710479800705798
+    }
+  ],
+  "public_error_rows": [
+    {
+      "case": "check/meet_stuck_pending_ref.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "thm: reflexivity requires equal endpoints: (q <&> &1) != &1\n"
+    },
+    {
+      "case": "check/meet_charges_its_operands.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "dup: binder q permits Lone use, observed Many\n"
+    },
+    {
+      "case": "negative/left.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "wrong: reflexivity requires equal endpoints: ((q <&> r) <&> &1) != &1\n"
+    },
+    {
+      "case": "negative/right.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "wrong: reflexivity requires equal endpoints: (q <&> (r <&> &1)) != &1\n"
+    },
+    {
+      "case": "negative/both.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "wrong: reflexivity requires equal endpoints: ((q <&> r) <&> (s <&> &1)) != &1\n"
+    },
+    {
+      "case": "negative/context.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bad: reflexivity requires equal endpoints: (q <&> &1) != &1\n"
+    },
+    {
+      "case": "negative/imported.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "../imports/defs.wrong: reflexivity requires equal endpoints: (../imports/defs.q <&> &1) != &1\n"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "main: reflexivity requires equal endpoints: {Nat.add(11n) : @_:Nat -> Nat}(1n) != 13n\n"
+    },
+    {
+      "case": "negative/context_kind.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "wrong: reflexivity requires equal endpoints: &0 != &1\n"
+    },
+    {
+      "case": "negative/observed.bend",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "wrong: reflexivity requires equal endpoints: &1 != (q <&> &1)\n"
+    }
+  ],
+  "note": "Environment-neutral command placeholders; exact source hashes, statuses and streams. Malformed authored import exploration remains separate local evidence."
+}

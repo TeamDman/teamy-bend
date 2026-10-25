@@ -1,0 +1,12 @@
+[
+  "check/meet_stuck_pending_ref.bend",
+  "check/meet_charges_its_operands.bend",
+  "negative/left.bend",
+  "negative/right.bend",
+  "negative/both.bend",
+  "negative/context.bend",
+  "negative/imported.bend",
+  "negative/partial_false.bend",
+  "negative/context_kind.bend",
+  "negative/observed.bend"
+]

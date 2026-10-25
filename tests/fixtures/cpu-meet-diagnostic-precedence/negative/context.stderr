@@ -1,0 +1,9 @@
+Error:
+- expected : q <&> &1
+- observed : &1
+Context:
+- q : Quant
+Location: bad
+2 | 
+3>| def bad(q: Quant) -> {q <&> &1 == &1 : Quant}: {==}
+4 | 
