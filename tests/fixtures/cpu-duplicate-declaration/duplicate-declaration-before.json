@@ -1,0 +1,258 @@
+{
+  "starting_checkpoint": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde",
+  "baseline_snapshot_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "same_production_source": true,
+  "before_binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+  "after_source": "f0ff543052518d156537ac3380764b342d9e5dd2",
+  "raw_baseline_sha256": "ac4127b1792629fe0cd5322ce5371a3fddedae9a926e20e297ca3dce4fade255",
+  "baseline_commands": 52,
+  "changes": [
+    {
+      "case": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend:11:14: duplicate declaration: String.eq\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n"
+      }
+    },
+    {
+      "case": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend:7:9: duplicate declaration: app\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n"
+      }
+    },
+    {
+      "case": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend:10:9: duplicate declaration: main\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n"
+      }
+    },
+    {
+      "case": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend:6:8: duplicate declaration: U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n"
+      }
+    },
+    {
+      "case": "controls/type-duplicate.bend",
+      "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend:4:8: duplicate declaration: A\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n"
+      }
+    },
+    {
+      "case": "controls/filled-def.bend",
+      "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend:4:11: duplicate definition: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/law-duplicate.bend",
+      "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend:4:10: duplicate declaration: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/space-def.bend",
+      "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend:4:12: duplicate definition: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/comment-def.bend",
+      "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend:5:4: duplicate definition: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n"
+      }
+    },
+    {
+      "case": "controls/template-trivia.bend",
+      "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend:5:4: duplicate declaration: app\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n"
+      }
+    },
+    {
+      "case": "controls/eof-law.bend",
+      "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend:5:1: duplicate declaration: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n"
+      }
+    },
+    {
+      "case": "controls/crlf-law.bend",
+      "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend:5:3: duplicate declaration: value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n"
+      }
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/defs.bend:4:10: duplicate declaration: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      }
+    }
+  ]
+}

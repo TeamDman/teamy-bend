@@ -1,0 +1,906 @@
+{
+  "tested_source": "f0ff543052518d156537ac3380764b342d9e5dd2",
+  "binary_sha256": "e47186003ea805ba8679a9030cb78ada42f2170ac14009eb4b0d10c9ce8826d8",
+  "completed": true,
+  "qualified": false,
+  "policy_exception": false,
+  "timeout_seconds": 30,
+  "command_observations": 74,
+  "rows": [
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "upstream-main",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\n'\nLocation:\n3 | def value() -> U32: 3\n4>| def value\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.2920151019934565,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.4311561629874632,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-eval",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.3057723160018213,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-run",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.3152240180061199,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/missing-paren/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.44344273800379597,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-javascript",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/missing-paren/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.3835973489913158,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-native",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/missing-paren/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.3764081260014791,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1803825460083317,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "port-executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.18767981699784286,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend",
+        "$RUN/exploratory-matrix/exploratory/missing-paren/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\n'\nLocation:\n3 | def value() -> U32: 3\n4>| def value\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.3257063700002618,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-main",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5208112699910998,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.44807076899451204,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-eval",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.4344048950006254,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-run",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.4572980759839993,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/alias/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.267127247992903,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-javascript",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/alias/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.4516451290110126,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-native",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/alias/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.23851046498748474,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1728992570133414,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1705774269939866,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "$RUN/exploratory-matrix/exploratory/alias/main/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.36166255301213823,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5333396980131511,
+      "artifact_sha256": "e34d6b220d79269d672adcd62683be7b80fdad5642233ec82532a25856d848da"
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4258528180071153
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4293249909824226,
+      "artifact_sha256": "d63d8caacdf99a4ca45ac98dda1ba2dbcc6e74d3465dffc7c56c128be6eb7342"
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001029574021231383,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/exploratory-matrix/exploratory/alias/main/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.04579943401040509,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-main",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5261445259966422,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.3896699729957618,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-eval",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.44639962798100896,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-run",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.47495006400276907,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.33241701099905185,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-javascript",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.6358623720007017,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-native",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/unwritten"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.3990385989891365,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17134192699450068,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "port-executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.20850650098873302,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4890997629845515,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4431527749984525,
+      "artifact_sha256": "f11bd5d4f297054420c2c3a9533aad1f7888ca0bc2fcbe435549938f60ac2525"
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4261735040054191
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend",
+        "-o",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.7253215490200091,
+      "artifact_sha256": "ea4584311a1758705f9a59ecb13beafa6186736a37380da912cd9786a052313d"
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0017312289855908602,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/exploratory-matrix/exploratory/shadow/main/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07618688498041593,
+      "equal_repetitions": 2
+    }
+  ],
+  "phases": [
+    {
+      "case": "exploratory/missing-paren.bend",
+      "rep": 1,
+      "phase": "load",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "exploratory/missing-paren.bend",
+      "rep": 2,
+      "phase": "load",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "exploratory/alias/main.bend",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "exploratory/shadow/main.bend",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    }
+  ],
+  "phases_already_counted": true,
+  "raw_sha256": "ea7ee6f2f18822e5f0469f58652a9cd1a1c4e5912627bb2aa7a4f6e2e17a40c3",
+  "before": {
+    "baseline": {
+      "source": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde",
+      "binary": "$BASELINE_RUN/teamy-bend",
+      "binary_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+      "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+    },
+    "rows": [
+      {
+        "case": "exploratory/missing-paren.bend",
+        "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+        "lane": "upstream",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\n'\nLocation:\n3 | def value() -> U32: 3\n4>| def value\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.1168034849979449
+      },
+      {
+        "case": "exploratory/missing-paren.bend",
+        "source_sha256": "a3909cd43ea63e6bfed4e999467371ab853a83428739c0eba42f050c7d855db2",
+        "lane": "port",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/missing-paren.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : '('\n- observed : end of input\nLocation:\n4 | def value\n5>| \n",
+        "timed_out": false,
+        "seconds": 0.12827256397577003
+      },
+      {
+        "case": "exploratory/alias/main.bend",
+        "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+        "lane": "upstream",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1683487510017585
+      },
+      {
+        "case": "exploratory/alias/main.bend",
+        "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+        "lane": "port",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/alias/main.bend:4:13: duplicate definition: defs.value\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.1276355950103607
+      },
+      {
+        "case": "exploratory/shadow/main.bend",
+        "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+        "lane": "upstream",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15175282998825423
+      },
+      {
+        "case": "exploratory/shadow/main.bend",
+        "source_sha256": "8498b5b4deb655dfc783eda7eef6565b14ed8f94bb0044a430f57c24f3867ea2",
+        "lane": "port",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-declaration/exploratory/shadow/defs.bend:3:13: duplicate definition: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.13039527300861664
+      }
+    ],
+    "completed": true
+  },
+  "scope": "Three retained discrepancies, not parity passes. Two upstream accepted programs have port load refusals; missing-parenthesis failures disagree diagnostically. No port execution or artifact is available for these cases.",
+  "upstream_source": {
+    "freshness": "bend2/bend.ts:2446",
+    "definition_name_selection": "bend2/bend.ts:2452",
+    "qualification_and_resolution": "bend2/bend.ts:1646"
+  },
+  "recommendation": "Next substantive task: repair declaration target selection to follow pinned parse_def while retaining unfilled-law completion, alias lookup and public error implications. This checkpoint does not change acceptance. Missing-parenthesis diagnostic order remains separately unresolved. No new semantic exception adopted."
+}

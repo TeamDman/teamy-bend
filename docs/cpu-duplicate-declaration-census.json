@@ -1,0 +1,184 @@
+{
+  "source": "f0ff543052518d156537ac3380764b342d9e5dd2",
+  "baseline_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 368,
+    "acceptance_disagreement": 493,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 7,
+    "different_rejection": 68
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 176,
+  "residual_classifications": {
+    "acceptance_disagreement": 108,
+    "different_rejection": 68
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 108,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 39
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "flatten/literal_rows_cubic.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "import/duplicate_name.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "7259078fd7de602eaf5b1505c52b9cad580eeeb07f149ca1f6cbb77d75c43006",
+      "after_stderr_sha256": "9a32493ed08d4b3c43cc2d1aea3e45d555ccd152175efd35a635013004c00531"
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "8809a3f1d9ee4313ee28d647a2d698f9f5e4f21606bf9b317b901f618a8d3682",
+      "after_stderr_sha256": "1a29412bc16fe26b8b92803002431f59b95940d7466076d8cab873d8c42ab45a"
+    },
+    {
+      "fixture": "flatten/literal_rows_cubic.bend",
+      "source_sha256": "27cf900cc11aaf0a52c7906790d4bbf893a251bf8620ec4c5b272362c6f4cc26",
+      "before_classification": "acceptance_disagreement",
+      "after_classification": "oracle_or_infrastructure_failure",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03",
+      "after_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03"
+    },
+    {
+      "fixture": "import/duplicate_name.bend",
+      "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "68ab885c913d793c9d0fd3fcd3b524ef3a6b28f0183e4093d870755d2523c37d",
+      "after_stderr_sha256": "88e3e86114c1e8886bbb0d2cca75858475eae28ee1e85065e6c27c38ae9bc5df"
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "4181b68697375ff3d3c64a00ebd45e2c59b4b498decd24c6710b7a016c5c6e13",
+      "after_stderr_sha256": "16dd52732ac0dcbfab2487e7722bdfba0619625b7d47fe4a41cd46d3729cadbf"
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "2fcb3fbec08b991cc2849aec759e7ebfab4ccd21480de6938d289026cd11cf90",
+      "after_stderr_sha256": "5ef2efee703370aecf53d99b6e59959dac62afe9e425b566cbc31c6296f45fa8"
+    }
+  ],
+  "raw_observations_sha256": "04552b404ba64c75c1b7a642b3b06cefb4b5e99b6b7b6fa167cad6dc625a4618",
+  "baseline_raw_sha256": "4ed16d2808ba73d76268bd1af2025a8c6c196f1c25968a034503ad40097e9ca7",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "duplicate_declaration_diagnostic_changes": [
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/data_table_checked_000.bend:11:14: duplicate declaration: String.eq\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+      "upstream_stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/comptime/err_dup.bend:7:9: duplicate declaration: app\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+      "upstream_stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "import/duplicate_name.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/import/duplicate_name.bend:7:12: duplicate declaration: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+      "upstream_stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/duplicate_declaration.bend:10:9: duplicate declaration: main\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+      "upstream_stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/reserved_def_name_000.bend:6:8: duplicate declaration: U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "upstream_stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "other_port_stream_changes": []
+}

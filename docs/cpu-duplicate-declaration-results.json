@@ -1,0 +1,4033 @@
+{
+  "tested_source": "f0ff543052518d156537ac3380764b342d9e5dd2",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "e47186003ea805ba8679a9030cb78ada42f2170ac14009eb4b0d10c9ce8826d8",
+  "completed": true,
+  "full_parity": false,
+  "timeout_seconds": 30,
+  "negative": {
+    "exact_stream_commands": 234,
+    "separate_phase_probes": 78,
+    "rows": [
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.33736525700078346,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.32119510701159015,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.2918269720103126,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.3428924319741782,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.3640131180000026,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.43168015699484386,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.4074786439887248,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.23371045902604237,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/check/data_table_checked_000.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+        "timed_out": false,
+        "seconds": 0.21114436001516879,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.37822834399412386,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.30755445998511277,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.33486196500598453,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.26499835299910046,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.27049369001179,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.25315977100399323,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.29330891600693576,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.171139702986693,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/comptime/err_dup.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+        "timed_out": false,
+        "seconds": 0.3830479549942538,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.19312182199792005,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.16250519300228916,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.2141880109847989,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.024522302992409095,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.019435005000559613,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.03563706300337799,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.015302467014407739,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.011520073021529242,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/duplicate_declaration.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+        "timed_out": false,
+        "seconds": 0.0115105579898227,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.30718066298868507,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.331244783999864,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.35451665497384965,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.3669741149933543,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.4435441839741543,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.2531792179797776,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.1830836670123972,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.38024358500842936,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/parse/reserved_def_name_000.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+        "timed_out": false,
+        "seconds": 0.38642713701119646,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.2312579739955254,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.2374693670135457,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.2751933390100021,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.011712368985172361,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.014079911983571947,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.01811045201611705,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.015752398991025984,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.01893832001951523,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "source_sha256": "f38b26f2fdf23cb66086b834ad456975eae0d2601d4dd3d423a9118932c2f3a1",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/type-duplicate.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n",
+        "timed_out": false,
+        "seconds": 0.007387475983705372,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3470493220083881,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3442705269844737,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.35128613401320763,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.2442499799944926,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.19699700002092868,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.17579372599720955,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.2742950469837524,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.41941389301791787,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "source_sha256": "63b6fcbfaeed24da67c7090d2d38bc27d035cfe7122acd581a4bd2f5753861a7",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/filled-def.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.6658736449899152,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3086034150037449,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.2972558400069829,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.25043774797813967,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3897825010062661,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.17993669398128986,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.19833161900169216,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.16886754299048334,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.27147694199811667,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "source_sha256": "9bf121d8d854a4c11f6e4cbc3f0785eb68149cf0362d113acad23cda79a0ca75",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/law-duplicate.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.33125859100255184,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3527217480004765,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.43536757901893,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4621141169918701,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.36799446601071395,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.21468078601174057,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.20030884401057847,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.22779563401127234,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.2970078240032308,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/space-def.bend",
+        "source_sha256": "9bf5067b40fcece73d05a01c70be13a1148aec02a5d7bec1bc5dcdb07d8f6590",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/space-def.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.42175683702225797,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.38590559500153176,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.26476082199951634,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.26293421201989986,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.3002263189991936,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.3575336170033552,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.3764205680054147,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.3755361720104702,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.4163534920080565,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "source_sha256": "12921304e6620dbe89174b5518139004587b6ad84ac3903f65362a9b7b2eca3d",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/comment-def.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n",
+        "timed_out": false,
+        "seconds": 0.35077041198383085,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.12004338297992945,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.11452215700410306,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.1257614020141773,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.1292924830049742,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.12418630500906147,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.13559387999703176,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.13780799999949522,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.1337271289958153,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "source_sha256": "07f9b373384dd6f25fc79ea847ec8c82f8ddfe7d84b956b41530785d7844c798",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/template-trivia.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n",
+        "timed_out": false,
+        "seconds": 0.14002393899136223,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.14307971301604994,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.15503558501950465,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.1326940389990341,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.13797742099268362,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.12660224401042797,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.13663069400354289,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.16008958499878645,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.14417260099435225,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "source_sha256": "5f6de4eec53565a690a7a15fa927716a707d0539eab96aabd660c2d5eda011d0",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/eof-law.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n",
+        "timed_out": false,
+        "seconds": 0.1456806880014483,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.1375809309829492,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.1427168220106978,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.14713665697490796,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.13982425301219337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.13073909698869102,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.15019968102569692,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.14285789197310805,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.1343855189916212,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "source_sha256": "39813b84f5b01a8c4adb41da2b78f003801225a23616d58de6222f7c057f536b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/crlf-law.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n",
+        "timed_out": false,
+        "seconds": 0.13762799100368284,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.131580801011296,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.14798720297403634,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix-final/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.12824257800821215,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.13250698099727742,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.12491539100301452,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.14177266499609686,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.14141797699267045,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.15265110199106857,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "cddb202f90cc4a53f342670eb4a6c28ed44622fca4a67c45eca48ccfffa982bb",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix-final/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.13404186800471507,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n"
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n"
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "check/data_table_checked_000.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n"
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n"
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "comptime/err_dup.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n"
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n"
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/duplicate_declaration.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n"
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n"
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "parse/reserved_def_name_000.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n"
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n"
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/type-duplicate.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n"
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '('\nLocation:\n3 | def value() -> U32: 3\n4>| def value() -> U32: 4\n5 | \n"
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/filled-def.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/law-duplicate.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n"
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : ' '\nLocation:\n3 | def value() -> U32: 3\n4>| def value () -> U32: 4\n5 | \n"
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/space-def.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n"
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n"
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/comment-def.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n"
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n"
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/template-trivia.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n"
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n"
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof-law.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n"
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n"
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/crlf-law.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "2d2a47664282d5226007b13069a060c572889563ebbd4dcbbd1d97e39d001787"
+  },
+  "adjacent": {
+    "exact_stream_commands": 18,
+    "separate_phase_probes": 6,
+    "rows": [
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$UPSTREAM/tests/import/duplicate_name.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.1680490209837444,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$UPSTREAM/tests/import/duplicate_name.bend",
+          "-o",
+          "$RUN/adjacent-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.14983074998599477,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$UPSTREAM/tests/import/duplicate_name.bend",
+          "-o",
+          "$RUN/adjacent-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.15037883599870838,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$UPSTREAM/tests/import/duplicate_name.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.1724497289978899,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$UPSTREAM/tests/import/duplicate_name.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.1458211860153824,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$UPSTREAM/tests/import/duplicate_name.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.14803133899113163,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$UPSTREAM/tests/import/duplicate_name.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/adjacent-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.1381729420099873,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$UPSTREAM/tests/import/duplicate_name.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/adjacent-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.16041174900601618,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$UPSTREAM/tests/import/duplicate_name.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/adjacent-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n",
+        "timed_out": false,
+        "seconds": 0.13740345000405796,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n"
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection",
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh name (duplicate declaration: Nat.add)\n- observed : ':'\nLocation:\n6 | \n7>| law Nat.add:\n8 |   for a: Nat\n"
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "import/duplicate_name.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      }
+    ],
+    "before": {
+      "source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$UPSTREAM/tests/import/duplicate_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/import/duplicate_name.bend:7:12: duplicate declaration: Nat.add\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "source_sha256": "408a1a2ebf1628588063519290da3d2869831d6ca6d5d07884d8a0fcb2f1bd3f"
+    },
+    "raw_sha256": "b86397a8bedb1637ccc4d6c4863db571cbf0e22bcb97ddd955f7e2e55f11712d"
+  },
+  "positive": {
+    "command_observations": 52,
+    "rows": [
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8706152449885849,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4148077579739038,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "$RUN/positive-matrix/positive/completion/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36170916201081127,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6003324640041683,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3549963049881626,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6549300309852697,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/completion/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5316032670089044,
+        "artifact_sha256": "ba17d97033ff80a62a85c3f3628e625ce08c53a72e46931cae0f3b6dff7e1783"
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/completion/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/completion/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4175574510009028,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/completion/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5961323819938116,
+        "artifact_sha256": "549726030d8e766b59ebcc9fc093782b6c0c135e1440abc84f80fbbe80c8743c"
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/completion/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/completion/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 189124,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.0684019040199928,
+        "artifact_sha256": "86dee8474ebc039490217af1af905521f727c4231f4e1b64bde0f1abcf1759c7",
+        "before_artifact_sha256": "86dee8474ebc039490217af1af905521f727c4231f4e1b64bde0f1abcf1759c7",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/completion/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/completion/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9476356240047608,
+        "artifact_sha256": "cac3f6bd4dbc24b1fec0d10ae86d5bc4aee2b8665fdd7aa9e15873e8abfa1fd2"
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/completion/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/completion/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60014,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8320185649790801,
+        "artifact_sha256": "9a3809038d1d7e305f31103fb67397fd385f63a86fdd7128ecaf9834fedf232b",
+        "before_artifact_sha256": "9a3809038d1d7e305f31103fb67397fd385f63a86fdd7128ecaf9834fedf232b",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/completion/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0036080849822610617,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/completion/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04515815497143194,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/completion/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.003520233993185684,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/completion/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.10845403099665418,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.2478355919884052,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5422136529814452,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "$RUN/positive-matrix/positive/imported/main/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.370545078010764,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3883571740007028,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5562947370053735,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.49660357300308533,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3941258170234505,
+        "artifact_sha256": "28d688b33bd3edc7104f0cb8e02b978cb3df35d4a7d22b11d0fd3b40ab6524a2"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/imported/main/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5100023749982938,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5014082289999351,
+        "artifact_sha256": "e080ddea681e6ac45f3752f0c4fa38f56e794b0fcdd64db3bf8e7927596a49c7"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/imported/main/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 188082,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1837049800087698,
+        "artifact_sha256": "5e5a82b4e21b28a92ce7945e7ed02bf7388609d8c5bce9e96c5a7db0f1451fb1",
+        "before_artifact_sha256": "5e5a82b4e21b28a92ce7945e7ed02bf7388609d8c5bce9e96c5a7db0f1451fb1",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/imported/main/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9349993350042496,
+        "artifact_sha256": "575693b0f933d804331b4fa87160f3729aa183859ea85bc147ac2376a0a36010"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/imported/main/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59793,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8870853369880933,
+        "artifact_sha256": "37540b948957e3275c1ecc57e9fd12d9123edc7ad96b2ea9c3203b4ec5eab226",
+        "before_artifact_sha256": "37540b948957e3275c1ecc57e9fd12d9123edc7ad96b2ea9c3203b4ec5eab226",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/imported/main/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.004351333016529679,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/imported/main/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08286563502042554,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/imported/main/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.006624519010074437,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/imported/main/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08567189599853009,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "positive/completion.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/completion.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/completion.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/completion.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/completion.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/completion.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phase_probes_already_counted": true,
+    "raw_sha256": "4d3d078c977089937d0e085562bcd6e24cc87614a52cdeec9330d56b6da720d5"
+  },
+  "baseline_artifacts": {
+    "binary_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+    "scope": "baseline emission only; runtime qualified in final matrix",
+    "rows": [
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/completion/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/completion/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 189124,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/completion/before.c",
+        "artifact_sha256": "86dee8474ebc039490217af1af905521f727c4231f4e1b64bde0f1abcf1759c7"
+      },
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/completion/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/completion/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60014,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/completion/before.js",
+        "artifact_sha256": "9a3809038d1d7e305f31103fb67397fd385f63a86fdd7128ecaf9834fedf232b"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/main/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/main/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 188082,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/main/before.c",
+        "artifact_sha256": "5e5a82b4e21b28a92ce7945e7ed02bf7388609d8c5bce9e96c5a7db0f1451fb1"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/main/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/main/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59793,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/main/before.js",
+        "artifact_sha256": "37540b948957e3275c1ecc57e9fd12d9123edc7ad96b2ea9c3203b4ec5eab226"
+      }
+    ]
+  },
+  "positive_check_baseline": {
+    "baseline": {
+      "source": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde",
+      "binary": "$BASELINE_RUN/teamy-bend",
+      "binary_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+      "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+    },
+    "rows": [
+      {
+        "case": "positive/completion.bend",
+        "source_sha256": "7adbbccf04a30adbd360a47f28a3b839d4e7f68d28bd8f2e4eef1bd0f90969bf",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/completion.bend"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "13f7079d034e3218b020e84867f532123cd19cdd71f076ebe76b3b96a0695d08",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-declaration/positive/imported/main.bend"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "qualified_matrix_commands": 388,
+  "scope": [
+    "13 load refusals plus one adjacent original exact;252diagnostic commands+84separatephaseprobes;negative artifacts absent and execution unrun",
+    "two positives:16 actual port/upstream C-O3/JS executions,8pure normalizations,12generation/build,16checking/phase",
+    "four port C/JS artifacts byte-identical to baseline",
+    "positive strict-check JSON matches old binary bytes; native pure observations are normalization",
+    "exploratory gaps are separately retained and never added to matching counts"
+  ],
+  "phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  }
+}
