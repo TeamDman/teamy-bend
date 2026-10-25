@@ -2236,3 +2236,28 @@ six upstream stack failures); this subset does not redate or subtract from it.
 Older host/foreign/resource/F32.read/erased-hole/API/supplementary-lint gaps remain.
 Compact-pattern research stays unadopted. Frozen inputs, guards, budgets and disk
 floors preserved. Small evidence committed; raw logs/binaries remain local.
+
+
+### Declaration-boundary diagnostic context
+
+At clean source `27204f16e87e57f4285610dc4cb0dab23b622988`, nine unchanged originals now match pinned
+source-load diagnostics. Constructor-row invalid starts use the outer declaration
+expectation; existing global declaration refusals retain Bend source excerpts.
+Metadata only: public errors, cursor, acceptance, terms, demand and limits unchanged.
+Independent source/evidence review completed. [Report](cpu-declaration-boundary.md).
+
+Fourteen negatives pass 252 exact diagnostics and 84 load-phase probes. Three
+positive controls pass 30 executable runs, six upstream interpreter results, six
+strict evaluations and six strict checks, plus 18 accepted-phase probes. Six C/JS
+artifacts are byte-identical before/current. No execution claim for rejected input;
+unsafe-decorator control is parser-only. Full gate **1,178 / 0 / 49**; focused checks
+74 passed and targeted strict Clippy passed. Historical census remains d224e79:
+300 outside 385 old IO exclusions, six upstream stack failures; not rerun globally.
+
+Coverage **438 linked / 864 unlinked**: 327 checker negatives, 523 compiled candidates,
+13 interpreter profiles, one checking-only module. Links are not universal parity.
+Two numeric lambda-arm diagnostic gaps were reproduced and remain unqualified.
+The nat_first decision, compact-pattern guard gap and all prior oracle/host/resource/
+F32.read/foreign/hole/API/supplementary-lint distinctions remain unwaived. No new
+semantic exception, dependency/toolchain/pin change, raised limit or cancellation
+claim. Disk floors and unique evidence preserved; bulk artifacts remain outside Git.
