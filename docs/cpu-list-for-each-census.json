@@ -1,0 +1,39 @@
+{
+  "completed": true,
+  "full_parity": false,
+  "tested_source": "2dacf522eba2665652036b7b6ed369a2ba2c16d3",
+  "binary_sha256": "8320c64076730199d255047d9d5d1dd4ac99bfcd72dc0186ce42621ef5d6fd4f",
+  "phase_probe_sha256": "ea25a6073876d77b206887137685415795e41e568ffc9fc187762c8f3023e21e",
+  "build_receipt_sha256": "3ad1f42f0dadc06af6ec10ccdbc64bf3bd7c56bb7b296bd870f48d6385a4b53c",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 245,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 191,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "missing_IO_candidates": 386,
+  "measured_differences": 685,
+  "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified.",
+  "before_source": "ead74b8db6e720be3047a434685cbaf55dc69dac",
+  "baseline_summary": "cpu-prefix-markers-census.json",
+  "unchanged_port_statuses": 1302,
+  "historical_IO_unchanged": 385,
+  "differences_outside_historical_IO": 300,
+  "new_missing_IO_candidates": [
+    "reg/cop_let_descent_escape.bend"
+  ],
+  "changes": [],
+  "upstream_phase_changes": [
+    {
+      "fixture": "reg/dead_param_fork.bend",
+      "before_phase": "load",
+      "after_phase": "check",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "oracle_or_infrastructure_failure"
+    }
+  ],
+  "raw_receipt_sha256": "51767cee2ac0421d72e976b246ed3afd3447df2716b278a9e35beb96a6b65a89"
+}

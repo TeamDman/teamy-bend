@@ -6139,3 +6139,27 @@ Frozen dependencies/toolchains/limits and all historical disagreements remain.
 Disk floors and inactive-cache controls preserved all source and unique evidence.
 Reviewed feature checkpoint only, no merge/release. Next substantive gap is the
 `base/list_fold` bundled `List.for_each(~...)` load refusal; not qualified here.
+
+### [x] 5.120 Renew List.for_each execution and strict-mode separation
+
+Tested source `2dacf522eba2665652036b7b6ed369a2ba2c16d3` renews the unchanged `base/list_fold.bend` across all
+five executable runtimes, with two repetitions and durable regression/ledger
+coverage. Its strict load refusal comes from the execution-only Base template;
+this was already executable at milestone 5.21, not a newly fixed runtime defect.
+Independent review found no justified production change. [Report](cpu-list-for-each.md).
+
+Seven authored positives include pure full-graph companions, empty/direct/nested
+callbacks and halt-after-output. Six negatives preserve executable rejection and
+strict-mode separation. Standard gate **1,159 / 0 / 49**; 288 matrix observations,
+84 phase probes, zero timeouts. Four executable diagnostics, direct upstream
+Node host failures and two generated-JS Bun-dependent cases remain explicit.
+All 1,302 port phases/statuses/streams and census classifications are unchanged;
+one known upstream stack failure varies from load to check. There remain 300
+differences beyond 385 historical IO exclusions plus six upstream stack failures. No new waiver; current triage residuals stay 149 / 109 / 42.
+
+One renewed original runtime link gives 412 linked / 890 unlinked (341 checker
+negatives, one checking-only, 13 interpreter-profile, 535 compiled candidates).
+Links do not establish full parity. Frozen inputs/limits and historical failures
+remain; inactive-cache safeguards retain source and unique evidence. Reviewed
+feature checkpoint only. Next substantive gap: radix/list-map-fold originals,
+with applicability established before execution; unqualified here.

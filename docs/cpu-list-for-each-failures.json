@@ -1,0 +1,823 @@
+{
+  "tested_source": "2dacf522eba2665652036b7b6ed369a2ba2c16d3",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "scope": "Unique nonzero process outcomes, including the qualified expected halt status7. Oracle failures and diagnostic discrepancies remain unqualified. Deterministic repeats confirmed; fixture paths made repository-relative and generated-artifact root replaced by <artifacts>, with original stderr hashes retained.",
+  "rows": [
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/false-proof.bend:5:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9e93e4dff0c1b62a047bfbf087317de3c194753ac53a7789eac762793c907995"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/false-proof.bend:5:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9e93e4dff0c1b62a047bfbf087317de3c194753ac53a7789eac762793c907995"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/false-proof.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "95c9f5ffe56c228a4d8f6229b29275c4272099f61f11ad8268c0cabe915148fe",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n",
+      "original_stderr_sha256": "9a5c06171a28e44784d8382e61ebb49cee2a08c7f8c9e4cdb155a8426aeac7c4"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/hole.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "69a552cbcf722b463d312edc04b299b36d8a1e2f3659f3bd48be62aeeff8d52c"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/hole.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "69a552cbcf722b463d312edc04b299b36d8a1e2f3659f3bd48be62aeeff8d52c"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/hole.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "fbe5714ff6f40f55a6f164da4bfefeb9d336cad28ef69b0d497b8a9c21e52577",
+      "exit": 1,
+      "classification": "exact_executable_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n",
+      "original_stderr_sha256": "66ed3e7c66979b0685423ebef55c42f2844fc21ab7483fa70dd45cd67fc4d9f5"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7fc1a2391123b8cf5449e92876f94ae0a5d0cd793d63b905a2021dd9e84d3cd7"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "345e0f1d02421db1863ac952adc8b0a3a53bffbf20277221d4b4222b7bc5c324"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-argument.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "abec669ab53806ddb670354a6ab4ea971b3b0309e2ce2a380699fe79c7da784c"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-argument.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "abec669ab53806ddb670354a6ab4ea971b3b0309e2ce2a380699fe79c7da784c"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7fc1a2391123b8cf5449e92876f94ae0a5d0cd793d63b905a2021dd9e84d3cd7"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7fc1a2391123b8cf5449e92876f94ae0a5d0cd793d63b905a2021dd9e84d3cd7"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "345e0f1d02421db1863ac952adc8b0a3a53bffbf20277221d4b4222b7bc5c324"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "345e0f1d02421db1863ac952adc8b0a3a53bffbf20277221d4b4222b7bc5c324"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "2c0abfe5c0aee3f37430118c5c9efd1e52352fdbf583ddd57bbb3a7e26816ed5",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "345e0f1d02421db1863ac952adc8b0a3a53bffbf20277221d4b4222b7bc5c324"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+      "original_stderr_sha256": "1e6b70e17726a49e97164a1489ad57319a2cc0495c3d07e9747b98cddcf2e3ba"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+      "original_stderr_sha256": "1e6b70e17726a49e97164a1489ad57319a2cc0495c3d07e9747b98cddcf2e3ba"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+      "original_stderr_sha256": "1e6b70e17726a49e97164a1489ad57319a2cc0495c3d07e9747b98cddcf2e3ba"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "e674e578fbbc2b9b6fcd48e111a2b0362dba9dc68a80ac74264809f1913b797d"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : String\n- observed : U32\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "29f0a85389854b6c38df3191f46fb466d24f0d246868ad2a85c95aa0804148d2"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "f10c372c461b9102d501dc175c5756bf185c997f2b7d79959acba0074f49c91a"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/wrong-element.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ec20c41941f9aed6a4cf14a61270685e3ca4776308474221dd755791a8406fe0"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/wrong-element.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ec20c41941f9aed6a4cf14a61270685e3ca4776308474221dd755791a8406fe0"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : String\n- observed : U32\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "29f0a85389854b6c38df3191f46fb466d24f0d246868ad2a85c95aa0804148d2"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : String\n- observed : U32\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "29f0a85389854b6c38df3191f46fb466d24f0d246868ad2a85c95aa0804148d2"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "f10c372c461b9102d501dc175c5756bf185c997f2b7d79959acba0074f49c91a"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "f10c372c461b9102d501dc175c5756bf185c997f2b7d79959acba0074f49c91a"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "2f278499072aaa28ce2f899fc290db78b50bf4fe5759840b29425f848a0be257",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mList.for_each~0: type mismatch: expected String; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "f10c372c461b9102d501dc175c5756bf185c997f2b7d79959acba0074f49c91a"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7179537ca1d2a03c0ce4e861869bdafdc52fabda9da06b78556aa3ac6af279a9"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-native-refuse",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "a0363c218be024af65d74224b7ee70abc5f21a2fcf15b5e849cc45d0ce2f53df"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/wrong-result.bend:4:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "faca7feddcb34222125527516fe7fa8e1c29ba704d102d29166e9514fc3d8934"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/wrong-result.bend:4:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "faca7feddcb34222125527516fe7fa8e1c29ba704d102d29166e9514fc3d8934"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7179537ca1d2a03c0ce4e861869bdafdc52fabda9da06b78556aa3ac6af279a9"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n1016 |     case h <> t:\n1017>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n1018 | \n",
+      "original_stderr_sha256": "7179537ca1d2a03c0ce4e861869bdafdc52fabda9da06b78556aa3ac6af279a9"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "a0363c218be024af65d74224b7ee70abc5f21a2fcf15b5e849cc45d0ce2f53df"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "a0363c218be024af65d74224b7ee70abc5f21a2fcf15b5e849cc45d0ce2f53df"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "f01d28e490e6c8e7c4a7738461f463cdef5be9e8ad9216aa2ccef64fcb9a1180",
+      "exit": 1,
+      "classification": "unresolved_executable_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- observed : @-R:Type -> @k:(@_:U32 -> IO.OP<R>) -> IO.OP<R>\nContext:\n- a : Quant\n- A : Data\n- f : @_:U32 -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : U32\n- t : List<&2, U32>\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n",
+      "original_stderr_sha256": "a0363c218be024af65d74224b7ee70abc5f21a2fcf15b5e849cc45d0ce2f53df"
+    },
+    {
+      "case": "positive/direct.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "663ca502a2d3f043b89becc2f5c99ec566ca137e5f0bf0cd20c2d8d4c71f048a",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/direct.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "663ca502a2d3f043b89becc2f5c99ec566ca137e5f0bf0cd20c2d8d4c71f048a",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/direct.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "a9a6113ab514c7f654b0d8176dad5e5eb7d2acb2e93c98c0d64f77a2c5d6adb1"
+    },
+    {
+      "case": "positive/direct.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "663ca502a2d3f043b89becc2f5c99ec566ca137e5f0bf0cd20c2d8d4c71f048a",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/direct.bend:3:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "a9a6113ab514c7f654b0d8176dad5e5eb7d2acb2e93c98c0d64f77a2c5d6adb1"
+    },
+    {
+      "case": "positive/empty.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3e8fb2206e9a50ff9d7302bf614864358160a59d22a58c6d5d4a8f7f627ff3d9",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/empty.bend:7:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ada651e9b5c5699f2f5e2295db73a11da28f7d8a911717f5b83603d8ae23aad7"
+    },
+    {
+      "case": "positive/empty.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3e8fb2206e9a50ff9d7302bf614864358160a59d22a58c6d5d4a8f7f627ff3d9",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/empty.bend:7:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ada651e9b5c5699f2f5e2295db73a11da28f7d8a911717f5b83603d8ae23aad7"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "port-native",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 7,
+      "classification": "exact_execution",
+      "stdout": "first\n",
+      "stderr": "stop\n",
+      "original_stderr_sha256": "a11c3d917a2149a4b548217038bc8f2dd2130a1966e0c7af5c4225d81f25a8c3"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/halt.bend:8:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "d97ba356cb67aec3a872147d7338382179a5c23bd4075d205562b0c3a6f7254c"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/halt.bend:8:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "d97ba356cb67aec3a872147d7338382179a5c23bd4075d205562b0c3a6f7254c"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "upstream-C-O3",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 7,
+      "classification": "exact_execution",
+      "stdout": "first\n",
+      "stderr": "stop\n",
+      "original_stderr_sha256": "a11c3d917a2149a4b548217038bc8f2dd2130a1966e0c7af5c4225d81f25a8c3"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 7,
+      "classification": "exact_execution",
+      "stdout": "first\n",
+      "stderr": "stop\n",
+      "original_stderr_sha256": "a11c3d917a2149a4b548217038bc8f2dd2130a1966e0c7af5c4225d81f25a8c3"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "port-C-O3",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 7,
+      "classification": "exact_execution",
+      "stdout": "first\n",
+      "stderr": "stop\n",
+      "original_stderr_sha256": "a11c3d917a2149a4b548217038bc8f2dd2130a1966e0c7af5c4225d81f25a8c3"
+    },
+    {
+      "case": "positive/halt.bend",
+      "lane": "port-JS",
+      "source_sha256": "c0587babd18039c1c7b3e2b86c4284a032c2307fc0233b7e2416d551a5d26cd7",
+      "exit": 7,
+      "classification": "exact_execution",
+      "stdout": "first\n",
+      "stderr": "stop\n",
+      "original_stderr_sha256": "a11c3d917a2149a4b548217038bc8f2dd2130a1966e0c7af5c4225d81f25a8c3"
+    },
+    {
+      "case": "positive/nested.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "1fe3f765313b75219480d0febdf13de9f7c20ed1757bf9dd28a002f693e9ca42",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/nested.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "1fe3f765313b75219480d0febdf13de9f7c20ed1757bf9dd28a002f693e9ca42",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/nested.bend:7:55: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "a26a8063140aa187678bc25913d2a2b2c73598699d4f37cce85d38a5d0e674f1"
+    },
+    {
+      "case": "positive/nested.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "1fe3f765313b75219480d0febdf13de9f7c20ed1757bf9dd28a002f693e9ca42",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/nested.bend:7:55: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "a26a8063140aa187678bc25913d2a2b2c73598699d4f37cce85d38a5d0e674f1"
+    },
+    {
+      "case": "positive/nested.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "1fe3f765313b75219480d0febdf13de9f7c20ed1757bf9dd28a002f693e9ca42",
+      "exit": 1,
+      "classification": "unresolved_upstream_JS_Bun_host_failure",
+      "stdout": "",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/nested/upstream.js\n",
+      "original_stderr_sha256": "06c8a2e681a3631dbc357ada519c445262a443edfddb0a3ac5073f8f56ee3449"
+    },
+    {
+      "case": "positive/sequence.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "44f1481cb500ba7e38b132551ed3721962adb29caa4d1e9e9406cc5b485216ca",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/sequence.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "44f1481cb500ba7e38b132551ed3721962adb29caa4d1e9e9406cc5b485216ca",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/sequence.bend:7:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "29528c9516eaa460eb242d76bc068cc9c72db0bd976489ab229b1a8783009fa3"
+    },
+    {
+      "case": "positive/sequence.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "44f1481cb500ba7e38b132551ed3721962adb29caa4d1e9e9406cc5b485216ca",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/positive/sequence.bend:7:39: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "29528c9516eaa460eb242d76bc068cc9c72db0bd976489ab229b1a8783009fa3"
+    },
+    {
+      "case": "positive/sequence.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "44f1481cb500ba7e38b132551ed3721962adb29caa4d1e9e9406cc5b485216ca",
+      "exit": 1,
+      "classification": "unresolved_upstream_JS_Bun_host_failure",
+      "stdout": "",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/sequence/upstream.js\n",
+      "original_stderr_sha256": "aeaf980f7c84f2bea4a7a56d3d5561c3cddc44795dcf571bd5f12db01146e08b"
+    },
+    {
+      "case": "original/list_fold.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "99d0d1ee86621a581040e188ad1e7d7aea37a26a546e35b1fbf3e94f73d6dfa3",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_fold.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "99d0d1ee86621a581040e188ad1e7d7aea37a26a546e35b1fbf3e94f73d6dfa3",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/original/list_fold.bend:38:19: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ac9a73ca8c224c1fbc5be2a5463fe14b9c0874def554cbda3411c8a2a85c5924"
+    },
+    {
+      "case": "original/list_fold.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "99d0d1ee86621a581040e188ad1e7d7aea37a26a546e35b1fbf3e94f73d6dfa3",
+      "exit": 1,
+      "classification": "strict_effect_template_unavailable",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/original/list_fold.bend:38:19: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "ac9a73ca8c224c1fbc5be2a5463fe14b9c0874def554cbda3411c8a2a85c5924"
+    }
+  ],
+  "unrun": [
+    {
+      "case": "negative/false-proof.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/hole.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/missing-argument.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/missing-marker.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/wrong-element.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/wrong-result.bend",
+      "reason": "Executable checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "positive/nested.bend",
+      "lane": "upstream-JS",
+      "reason": "Command executed but Bend body could not complete: Node lacks bun:ffi. Successful execution remains unavailable; no installation."
+    },
+    {
+      "case": "positive/sequence.bend",
+      "lane": "upstream-JS",
+      "reason": "Command executed but Bend body could not complete: Node lacks bun:ffi. Successful execution remains unavailable; no installation."
+    }
+  ]
+}
