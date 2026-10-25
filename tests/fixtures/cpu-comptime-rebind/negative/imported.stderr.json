@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : ../imports/defs.inc\nLocation:\n3 | \n4>| def main() -> Nat: D.bad(~D.inc, 10n)(1n)\n5 | \n"

@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
+import Base
+import ../imports/defs.bend as D
+def main() -> Nat: D.bad(~D.inc, 10n)(1n)

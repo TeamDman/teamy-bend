@@ -1,0 +1,10 @@
+[
+  "comptime/err_rebind.bend",
+  "negative/local.bend",
+  "negative/multiline.bend",
+  "negative/imported.bend",
+  "negative/qualified.bend",
+  "negative/nested.bend",
+  "negative/repeated.bend",
+  "negative/match.bend"
+]

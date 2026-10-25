@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : later\nLocation:\n4 |   match x:\n5>|     case n: Z{}\n6 | def main() -> N: app(~later, Z{})\n"

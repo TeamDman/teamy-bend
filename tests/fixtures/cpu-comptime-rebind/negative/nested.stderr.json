@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n5 | def bad(~f: Nat -> Nat, x: Wrap) -> Nat:\n6>|   Wrap{f} = x\n7 |   f(1n)\n"

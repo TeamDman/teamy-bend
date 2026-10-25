@@ -192,16 +192,17 @@ impl DiagnosticOrigins {
                 });
     }
 
-    pub(super) fn unsupported_pattern(&mut self, value: &TermRef) {
-        self.load_failure =
-            self.excerpt(self.tracker.source(value))
-                .map(|excerpt| LoadDiagnostic {
-                    content: LoadDiagnosticContent::ExpectedObserved {
-                        expected: "a pattern (a binder or a constructor)".into(),
-                        observed: value.to_string(),
-                    },
-                    excerpt,
-                });
+    pub(super) fn unsupported_pattern(&mut self, value: &TermRef, source: Option<usize>) {
+        self.load_failure = source
+            .and_then(|source| self.excerpt(source))
+            .or_else(|| self.excerpt(self.tracker.source(value)))
+            .map(|excerpt| LoadDiagnostic {
+                content: LoadDiagnosticContent::ExpectedObserved {
+                    expected: "a pattern (a binder or a constructor)".into(),
+                    observed: value.to_string(),
+                },
+                excerpt,
+            });
     }
 
     pub(crate) fn match_excerpt(&self, site: MatchSite) -> Option<String> {
@@ -676,6 +677,56 @@ mod tests {
         origins.expected_after_name("known", 1, 1, "A");
         assert!(matches!(origins.load_failure.unwrap().content,
             super::LoadDiagnosticContent::ExpectedObserved { observed, .. } if observed == "end of input"));
+    }
+
+    #[test]
+    fn template_rebind_metadata_preserves_public_load_errors_and_per_use_sources() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-comptime-rebind");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-comptime-rebind/negative-cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert_eq!(
+                plain.message,
+                "a template argument cannot be rebound as a pattern"
+            );
+            assert!(matches!(tracked.diagnostic.unwrap().content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                if expected == "a pattern (a binder or a constructor)"));
+        }
+        let value = crate::kernel::term(crate::kernel::Term::Ref("inc".into()));
+        let mut origins = super::DiagnosticOrigins::default();
+        origins.unsupported_pattern(&value, Some(usize::MAX));
+        assert!(origins.load_failure.is_none());
+        origins.source("shared", "old\ninc\nnext\nuse\nend");
+        origins.node(&value, "shared", 2);
+        let occurrence = origins.anchor("shared", 4);
+        let owners = std::rc::Rc::strong_count(&value);
+        origins.unsupported_pattern(&value, Some(occurrence));
+        assert!(
+            origins
+                .load_failure
+                .as_ref()
+                .unwrap()
+                .excerpt
+                .contains("4>| use")
+        );
+        origins.unsupported_pattern(&value, Some(usize::MAX));
+        assert!(
+            origins
+                .load_failure
+                .as_ref()
+                .unwrap()
+                .excerpt
+                .contains("2>| inc")
+        );
+        assert_eq!(std::rc::Rc::strong_count(&value), owners);
     }
 
     #[test]

@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n4 | def bad(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n5>|   f =\n6 |     Nat.add(x)\n"

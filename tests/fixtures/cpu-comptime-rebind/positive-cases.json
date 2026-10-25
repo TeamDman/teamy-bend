@@ -1,0 +1,38 @@
+[
+  {
+    "case": "positive/local.bend",
+    "expected": "12n",
+    "io": false,
+    "port_normalized": "Nat.add(11n, 1n)"
+  },
+  {
+    "case": "positive/ordinary.bend",
+    "expected": "4n",
+    "io": false,
+    "port_normalized": "4n"
+  },
+  {
+    "case": "positive/repeated.bend",
+    "expected": "5n",
+    "io": false,
+    "port_normalized": "5n"
+  },
+  {
+    "case": "positive/imported.bend",
+    "expected": "8n",
+    "io": false,
+    "port_normalized": "8n"
+  },
+  {
+    "case": "comptime/shadow_arg.bend",
+    "expected": "12",
+    "io": true,
+    "port_normalized": "12"
+  },
+  {
+    "case": "positive/local_io.bend",
+    "expected": "12",
+    "port_normalized": "12",
+    "io": true
+  }
+]

@@ -337,6 +337,18 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-comptime-rebind/comptime/err_rebind.bend",
+                "10>|   f = Nat.add(x)",
+            ),
+            (
+                "cpu-comptime-rebind/negative/imported.bend",
+                "4>| def main() -> Nat: D.bad(~D.inc, 10n)(1n)",
+            ),
+            (
+                "cpu-comptime-rebind/negative/nested.bend",
+                "6>|   Wrap{f} = x",
+            ),
+            (
                 "cpu-untyped-binder/comptime/err_untyped.bend",
                 "4>| def app(~f, x: Nat) -> Nat:",
             ),

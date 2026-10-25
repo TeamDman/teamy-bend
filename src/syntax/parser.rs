@@ -2121,8 +2121,13 @@ impl Parser<'_> {
             .into())
         }
     }
-    fn pattern(&mut self, value: &TermRef) -> Result<Pattern, ParseError> {
+    fn pattern(&mut self, value: &TermRef, source: Option<usize>) -> Result<Pattern, ParseError> {
         if self.is_compile_binding(value) {
+            if matches!(value.as_ref(), Term::Ref(_))
+                && let Some(origins) = &mut self.templates.diagnostics
+            {
+                origins.unsupported_pattern(value, source);
+            }
             return Err(self.error("a template argument cannot be rebound as a pattern"));
         }
         match value.as_ref() {
@@ -2163,10 +2168,16 @@ impl Parser<'_> {
                         c.fields.len()
                     )));
                 }
-                let fields = args
-                    .iter()
-                    .map(|a| self.pattern(a))
-                    .collect::<Result<Vec<_>, _>>()?;
+                let fields =
+                    args.iter()
+                        .enumerate()
+                        .map(|(index, argument)| {
+                            let source = self.templates.diagnostics.as_ref().and_then(|origins| {
+                                origins.tracker.occurrence_source(value, index)
+                            });
+                            self.pattern(argument, source)
+                        })
+                        .collect::<Result<Vec<_>, _>>()?;
                 Ok(Pattern::Constructor(
                     name.clone(),
                     fields,
@@ -2178,7 +2189,7 @@ impl Parser<'_> {
             }
             _ => {
                 if let Some(origins) = &mut self.templates.diagnostics {
-                    origins.unsupported_pattern(value);
+                    origins.unsupported_pattern(value, source);
                 }
                 Err(self.error("a pattern must be a binder or constructor"))
             }
@@ -2270,7 +2281,7 @@ impl Parser<'_> {
                 let old = self.scope.len();
                 let patterns = patterns
                     .iter()
-                    .map(|p| self.pattern(p))
+                    .map(|p| self.pattern(p, p.source))
                     .collect::<Result<Vec<_>, _>>()?;
                 let body = self.body(row_column)?;
                 self.scope.truncate(old);
@@ -2333,7 +2344,7 @@ impl Parser<'_> {
         let old = self.scope.len();
         let patterns = patterns
             .iter()
-            .map(|p| self.pattern(p))
+            .map(|p| self.pattern(p, p.source))
             .collect::<Result<Vec<_>, _>>()?;
         if let Some(origins) = &mut self.templates.diagnostics {
             for pattern in &patterns {
@@ -3366,6 +3377,99 @@ mod occurrence_tests {
             let before = format!("{:?}", p.tokens);
             p.expression(0).expect_err("malformed tail");
             assert_eq!(format!("{:?}", p.tokens), before);
+        }
+    }
+
+    #[test]
+    fn template_rebind_metadata_preserves_state_sharing_and_earlier_depth_guard() {
+        for constructor in [false, true] {
+            for (source, guarded) in [
+                ("f = y\nf".to_owned(), false),
+                (
+                    format!("f = {}y{}\nf", "(".repeat(80), ")".repeat(80)),
+                    true,
+                ),
+            ] {
+                let mut states = Vec::new();
+                for tracked in [false, true] {
+                    let mut book = Book::default();
+                    let mut fresh = 1;
+                    let mut templates = Templates {
+                        diagnostics: tracked
+                            .then(super::super::diagnostics::DiagnosticOrigins::default),
+                        ..Templates::default()
+                    };
+                    if let Some(origins) = &mut templates.diagnostics {
+                        origins.source("<rebind>", &source);
+                    }
+                    let value = term(if constructor {
+                        Term::Ctr {
+                            name: "Z".into(),
+                            args: Vec::new(),
+                        }
+                    } else {
+                        Term::Ref("inc".into())
+                    });
+                    let mut parser = Parser {
+                        tokens: lex(&source, "<rebind>").unwrap(),
+                        at: 0,
+                        label: "<rebind>".into(),
+                        namespace: String::new(),
+                        aliases: BTreeMap::new(),
+                        scope: vec![Variable {
+                            name: "f".into(),
+                            id: 0,
+                        }],
+                        fresh: &mut fresh,
+                        display_fresh: 0,
+                        book: &mut book,
+                        depth: 0,
+                        reusable: Vec::new(),
+                        reusable_markers: BTreeSet::new(),
+                        templates: &mut templates,
+                        instance_name: None,
+                        instance_arguments: VecDeque::new(),
+                        compile_bindings: BTreeMap::from([(
+                            0,
+                            Occurrence {
+                                value: Rc::clone(&value),
+                                source: None,
+                                bare_name: !constructor,
+                            },
+                        )]),
+                        foreign: None,
+                        constructor_tags: None,
+                        origin: SourceOrigin::Standalone,
+                    };
+                    let tokens = format!("{:?}", parser.tokens);
+                    let owners = Rc::strong_count(&value);
+                    let error = parser.body(0).unwrap_err();
+                    assert_eq!(error.message.contains("resource limit"), guarded);
+                    if !guarded {
+                        assert_eq!(
+                            error.message,
+                            "a template argument cannot be rebound as a pattern"
+                        );
+                    }
+                    assert_eq!(format!("{:?}", parser.tokens), tokens);
+                    assert!(Rc::ptr_eq(&parser.compile_bindings[&0], &value));
+                    assert_eq!(Rc::strong_count(&value), owners);
+                    states.push((
+                        error.to_string(),
+                        parser.at,
+                        *parser.fresh,
+                        parser.depth,
+                        parser.scope.len(),
+                    ));
+                    if let Some(origins) = &mut parser.templates.diagnostics {
+                        assert_eq!(
+                            origins.load_failure(error).diagnostic.is_some(),
+                            !guarded && !constructor
+                        );
+                    }
+                }
+                assert_eq!(states[0], states[1]);
+            }
         }
     }
 

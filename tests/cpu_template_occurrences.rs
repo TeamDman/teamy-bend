@@ -116,10 +116,17 @@ fn shared_compile_bindings_still_refuse_lambda_and_pattern_rebinding() {
             let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
             assert_eq!(output.status.code(), Some(1));
             assert!(output.stdout.is_empty());
-            assert!(String::from_utf8_lossy(&output.stderr).contains(message));
+            if name == "pattern-binder" {
+                let expected: String = facet_json::from_str(
+                    &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+                )
+                .unwrap();
+                assert_eq!(output.stderr, expected.as_bytes());
+            } else {
+                assert!(String::from_utf8_lossy(&output.stderr).contains(message));
+            }
         }
-        // Upstream's load refusal is retained in stderr.json. Its spelling and
-        // source presentation are separate, still unqualified diagnostic cells.
+        // Lambda-binder spelling remains a separate unqualified diagnostic.
     }
 }
 

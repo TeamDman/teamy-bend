@@ -1,0 +1,881 @@
+{
+  "baseline": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+  "rows": [
+    {
+      "case": "positive/local.bend",
+      "source_sha256": "86ef1e58c4b03978ce19ac1d527a885ebb58d1db519f325f7f81cff29d4877cd",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local.bend",
+        "$EVIDENCE/before-7b6a04e8e55b598d.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13133122501312755,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/local.bend",
+      "source_sha256": "86ef1e58c4b03978ce19ac1d527a885ebb58d1db519f325f7f81cff29d4877cd",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24888327499502338
+    },
+    {
+      "case": "positive/ordinary.bend",
+      "source_sha256": "17c642e05f54a8febdc5aec5a91f6c992e0017061cf9134e99162d2a36852460",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend",
+        "$EVIDENCE/before-5a64bea384bda85f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15357163100270554,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/ordinary.bend",
+      "source_sha256": "17c642e05f54a8febdc5aec5a91f6c992e0017061cf9134e99162d2a36852460",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.27213287400081754
+    },
+    {
+      "case": "positive/repeated.bend",
+      "source_sha256": "52ee070496dfa24a19d20a4f020bc112a070f90a06a1b79d41dca9bb1f9ba793",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/repeated.bend",
+        "$EVIDENCE/before-c8bc4a9ba3a2f903.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14312222297303379,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/repeated.bend",
+      "source_sha256": "52ee070496dfa24a19d20a4f020bc112a070f90a06a1b79d41dca9bb1f9ba793",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/repeated.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24716916200122796
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "c6fca19784531ac52103b499f3bc164ef8d7d8093eef3df38a70765bf783821c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend",
+        "$EVIDENCE/before-6b3a948eda9ae4f0.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12770606100093573,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "c6fca19784531ac52103b499f3bc164ef8d7d8093eef3df38a70765bf783821c",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24480662497808225
+    },
+    {
+      "case": "comptime/shadow_arg.bend",
+      "source_sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/comptime/shadow_arg.bend",
+        "$EVIDENCE/before-39f187068cf4f5b3.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13394734699977562,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "comptime/shadow_arg.bend",
+      "source_sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/comptime/shadow_arg.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n12 | \n13>| def main() -> IO(Unit):\n14 |   n = sum(List.map(~Nat, ~Nat, ~(h => Nat.mul(h, 2n)), [1n, 2n, 3n]))\n",
+      "timed_out": false,
+      "seconds": 0.24313219499890693
+    },
+    {
+      "case": "comptime/err_rebind.bend",
+      "source_sha256": "230120d044b1d72962db08e9c86739d815675a248d686246eba2b6631f2fe417",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/comptime/err_rebind.bend",
+        "$EVIDENCE/before-191e56fe9faecaa3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n 9 | def app(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n10>|   f = Nat.add(x)\n11 |   f\n",
+      "timed_out": false,
+      "seconds": 0.09540566900977865,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_rebind.bend",
+      "source_sha256": "230120d044b1d72962db08e9c86739d815675a248d686246eba2b6631f2fe417",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/comptime/err_rebind.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/comptime/err_rebind.bend:11:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12902652102638967
+    },
+    {
+      "case": "negative/local.bend",
+      "source_sha256": "468ff7e6cf7dd4709efd50f4e01ad0397ce101e7ced7702ea209dedf1e6624a2",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/local.bend",
+        "$EVIDENCE/before-382c2246295c5c3b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n4 | def bad(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n5>|   f = Nat.add(x)\n6 |   f\n",
+      "timed_out": false,
+      "seconds": 0.1034128209867049,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/local.bend",
+      "source_sha256": "468ff7e6cf7dd4709efd50f4e01ad0397ce101e7ced7702ea209dedf1e6624a2",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/local.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/local.bend:6:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12479977498878725
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "0b5dbfdc6a73320bbb6ff462482975c057dc2b24572f3e646515c3bc12bcce18",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/multiline.bend",
+        "$EVIDENCE/before-c4259654a002b02b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n4 | def bad(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n5>|   f =\n6 |     Nat.add(x)\n",
+      "timed_out": false,
+      "seconds": 0.09405213798163459,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "0b5dbfdc6a73320bbb6ff462482975c057dc2b24572f3e646515c3bc12bcce18",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/multiline.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/multiline.bend:7:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12866006497642957
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "b74c12121c7e7e8f7a614861da3488e1ccbb6c1345d36b242e65376b566a16a6",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/imported.bend",
+        "$EVIDENCE/before-d7077e5c2bdeb0eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : ../imports/defs.inc\nLocation:\n3 | \n4>| def main() -> Nat: D.bad(~D.inc, 10n)(1n)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.10813531599706039,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "b74c12121c7e7e8f7a614861da3488e1ccbb6c1345d36b242e65376b566a16a6",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/../imports/defs.bend:6:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12758997699711472
+    },
+    {
+      "case": "negative/qualified.bend",
+      "source_sha256": "7ce7c76c63a075010c1caa44514a779c2dd81c903de321cff11fa067c00ce7d4",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend",
+        "$EVIDENCE/before-212a98cdf50ac845.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : ../imports/defs.inc\nLocation:\n6 |   f\n7>| def main() -> Nat: bad(~D.inc, 10n)(1n)\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.09868094700505026,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/qualified.bend",
+      "source_sha256": "7ce7c76c63a075010c1caa44514a779c2dd81c903de321cff11fa067c00ce7d4",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend:6:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12488292800844647
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "a64437311a8bcc4ceff29154169b6fca3aba2100d05dd5759a743607a531781b",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/nested.bend",
+        "$EVIDENCE/before-b4dba05cf9b0461e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n5 | def bad(~f: Nat -> Nat, x: Wrap) -> Nat:\n6>|   Wrap{f} = x\n7 |   f(1n)\n",
+      "timed_out": false,
+      "seconds": 0.09499250398948789,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "a64437311a8bcc4ceff29154169b6fca3aba2100d05dd5759a743607a531781b",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/nested.bend:7:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.14320583298103884
+    },
+    {
+      "case": "negative/repeated.bend",
+      "source_sha256": "1e80bb865bd5aabca54533b799b652672938ffd49142ed823938d7d253358d99",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/repeated.bend",
+        "$EVIDENCE/before-ba212195d52371a6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n5 |   g = f(x)\n6>|   f = Nat.add(g)\n7 |   f\n",
+      "timed_out": false,
+      "seconds": 0.09807574597653002,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/repeated.bend",
+      "source_sha256": "1e80bb865bd5aabca54533b799b652672938ffd49142ed823938d7d253358d99",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/repeated.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/repeated.bend:7:3: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13004923998960294
+    },
+    {
+      "case": "negative/match.bend",
+      "source_sha256": "c7aea6e5f6d30e7c06cf3b4669441a1f6a287229a27339b0cfab897b79b21bbd",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/match.bend",
+        "$EVIDENCE/before-e9078f8434144673.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : later\nLocation:\n4 |   match x:\n5>|     case n: Z{}\n6 | def main() -> N: app(~later, Z{})\n",
+      "timed_out": false,
+      "seconds": 0.10252982098609209,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/match.bend",
+      "source_sha256": "c7aea6e5f6d30e7c06cf3b4669441a1f6a287229a27339b0cfab897b79b21bbd",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/match.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/match.bend:5:13: a template argument cannot be rebound as a pattern\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.005906397971557453
+    },
+    {
+      "case": "negative/lambda.bend",
+      "source_sha256": "5ec03dc8604d3c1d282e9817c6b7550578457198d9719eb06ebe621947eb673d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/lambda.bend",
+        "$EVIDENCE/before-c070a5a2efbb97c7.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a lambda binder (one name: k => body)\n- observed : ' '\nLocation:\n2 | type N is Data: Z{}\n3>| def app(~n: N) -> N -> N: n => n\n4 | def main() -> N -> N: app(~later)\n",
+      "timed_out": false,
+      "seconds": 0.09415131001151167,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/lambda.bend",
+      "source_sha256": "5ec03dc8604d3c1d282e9817c6b7550578457198d9719eb06ebe621947eb673d",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/negative/lambda.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/lambda.bend:3:32: a template argument cannot be rebound as a lambda binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.006029592012055218
+    },
+    {
+      "case": "positive/local_io.bend",
+      "source_sha256": "ba001eda33d8f409bc6d8ce77e470e7847aa7e0b41f46c0194c5a0bbfb963970",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local_io.bend",
+        "$EVIDENCE/before-a2c0c3431cefcc42.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1314142849878408,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/local_io.bend",
+      "source_sha256": "ba001eda33d8f409bc6d8ce77e470e7847aa7e0b41f46c0194c5a0bbfb963970",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local_io.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 |   g\n7>| def main() -> IO(Unit): IO.print(Nat.show(good(~inc, 10n)(1n)))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.24448422598652542
+    }
+  ],
+  "completed": true,
+  "snapshot": {
+    "source": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+    "baseline_source": "54bc100bafda627fadd0443592be0e6200235838",
+    "baseline_binary": "$BASELINE_RUN/teamy-bend",
+    "baseline_sha256": "9c7635f045865c402c892bfa8c6243c7c6545222822da3e3ed06e10dec1459f1",
+    "refs": {
+      "$REFERENCE": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "$DOCS": "50e89d6897ce2a65167ef65b17c5fa83fe849158"
+    },
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "free": {
+      "/workspace": 11862429696,
+      "/tmp": 3856424960
+    }
+  },
+  "initial_authored_controls": {
+    "disposition": "Unqualified setup attempts retained. Missing .bend import suffixes and relative parent prefix corrected; nested constructor scrutinee replaced with a parameter to reach the intended nested-pattern refusal. Originals unchanged.",
+    "cases": [
+      {
+        "case": "positive/imported.bend",
+        "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport imports/defs as D\ndef main() -> Nat: D.good(~D.inc, 7n)\n",
+        "observations": [
+          {
+            "case": "positive/imported.bend",
+            "source_sha256": "dbe6d9d915fb23b59ae15c6817b1891b4373ab9aa1e202db680965b6f5fc4558",
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$REPO/scripts/checking-census/upstream.mjs",
+              "$REFERENCE/bend2/bend.ts",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend",
+              "$EVIDENCE/before-6b3a948eda9ae4f0.json"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error:\n- expected : an import of a .bend file\n- observed : 'imports/defs'\nLocation:\n2 | import Base\n3>| import imports/defs as D\n4 | def main() -> Nat: D.good(~D.inc, 7n)\n",
+            "timed_out": false,
+            "seconds": 0.09446888099773787,
+            "phase": {
+              "phase": "load",
+              "outcome": "language_rejection"
+            }
+          },
+          {
+            "case": "positive/imported.bend",
+            "source_sha256": "dbe6d9d915fb23b59ae15c6817b1891b4373ab9aa1e202db680965b6f5fc4558",
+            "lane": "port-check",
+            "command": [
+              "$BASELINE_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend:3:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+            "timed_out": false,
+            "seconds": 0.12531485699582845
+          }
+        ]
+      },
+      {
+        "case": "negative/imported.bend",
+        "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport imports/defs as D\ndef main() -> Nat: D.bad(~D.inc, 10n)(1n)\n",
+        "observations": [
+          {
+            "case": "negative/imported.bend",
+            "source_sha256": "99740fc5bd98c975c7f9b389d0534170994f1532ef7390a3c9fbfd61122720c7",
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$REPO/scripts/checking-census/upstream.mjs",
+              "$REFERENCE/bend2/bend.ts",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/imported.bend",
+              "$EVIDENCE/before-d7077e5c2bdeb0eb.json"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error:\n- expected : an import of a .bend file\n- observed : 'imports/defs'\nLocation:\n2 | import Base\n3>| import imports/defs as D\n4 | def main() -> Nat: D.bad(~D.inc, 10n)(1n)\n",
+            "timed_out": false,
+            "seconds": 0.09634221199667081,
+            "phase": {
+              "phase": "load",
+              "outcome": "language_rejection"
+            }
+          },
+          {
+            "case": "negative/imported.bend",
+            "source_sha256": "99740fc5bd98c975c7f9b389d0534170994f1532ef7390a3c9fbfd61122720c7",
+            "lane": "port-check",
+            "command": [
+              "$BASELINE_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/imported.bend"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/imported.bend:3:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+            "timed_out": false,
+            "seconds": 0.15165433700894937
+          }
+        ]
+      },
+      {
+        "case": "negative/qualified.bend",
+        "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport imports/defs as D\ndef bad(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n  f = Nat.add(x)\n  f\ndef main() -> Nat: bad(~D.inc, 10n)(1n)\n",
+        "observations": [
+          {
+            "case": "negative/qualified.bend",
+            "source_sha256": "f1b655c04a79ae383bcb3cec023e9d7127a7e2b92c3e8c50cb8a0befdc915571",
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$REPO/scripts/checking-census/upstream.mjs",
+              "$REFERENCE/bend2/bend.ts",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend",
+              "$EVIDENCE/before-212a98cdf50ac845.json"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error:\n- expected : an import of a .bend file\n- observed : 'imports/defs'\nLocation:\n2 | import Base\n3>| import imports/defs as D\n4 | def bad(~f: Nat -> Nat, x: Nat) -> Nat -> Nat:\n",
+            "timed_out": false,
+            "seconds": 0.10810078997747041,
+            "phase": {
+              "phase": "load",
+              "outcome": "language_rejection"
+            }
+          },
+          {
+            "case": "negative/qualified.bend",
+            "source_sha256": "f1b655c04a79ae383bcb3cec023e9d7127a7e2b92c3e8c50cb8a0befdc915571",
+            "lane": "port-check",
+            "command": [
+              "$BASELINE_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-comptime-rebind/negative/qualified.bend:3:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+            "timed_out": false,
+            "seconds": 0.13010779698379338
+          }
+        ]
+      },
+      {
+        "case": "negative/nested.bend",
+        "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ntype Wrap is Type: Wrap{f: Nat -> Nat}\ndef inc(n: Nat) -> Nat: 1n+n\ndef bad(~f: Nat -> Nat, x: Nat) -> Nat:\n  Wrap{f} = Wrap{Nat.add(x)}\n  f(1n)\ndef main() -> Nat: bad(~inc, 10n)\n",
+        "observations": [
+          {
+            "case": "negative/nested.bend",
+            "source_sha256": "d2f5da3108fae6c70d6e56db98ce938e09db586a9bc40fe8f69c60e4a2c498b3",
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$REPO/scripts/checking-census/upstream.mjs",
+              "$REFERENCE/bend2/bend.ts",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/nested.bend",
+              "$EVIDENCE/before-b4dba05cf9b0461e.json"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n5 | def bad(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   Wrap{f} = Wrap{Nat.add(x)}\n7 |   f(1n)\n",
+            "timed_out": false,
+            "seconds": 0.12217785700340755,
+            "phase": {
+              "phase": "load",
+              "outcome": "language_rejection"
+            }
+          },
+          {
+            "case": "negative/nested.bend",
+            "source_sha256": "d2f5da3108fae6c70d6e56db98ce938e09db586a9bc40fe8f69c60e4a2c498b3",
+            "lane": "port-check",
+            "command": [
+              "$BASELINE_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-comptime-rebind/negative/nested.bend"
+            ],
+            "exit": 1,
+            "stdout": "",
+            "stderr": "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n5 | def bad(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   Wrap{f} = Wrap{Nat.add(x)}\n7 |   f(1n)\n",
+            "timed_out": false,
+            "seconds": 0.14210706498124637
+          }
+        ]
+      }
+    ]
+  },
+  "normalization_probe": [
+    {
+      "case": "local",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REFERENCE/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local.bend"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "local",
+      "lane": "baseline",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local.bend"
+      ],
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "local",
+      "lane": "candidate",
+      "command": [
+        "target/debug/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/local.bend"
+      ],
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "ordinary",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REFERENCE/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": ""
+    },
+    {
+      "case": "ordinary",
+      "lane": "baseline",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": ""
+    },
+    {
+      "case": "ordinary",
+      "lane": "candidate",
+      "command": [
+        "target/debug/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": ""
+    },
+    {
+      "case": "repeated",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REFERENCE/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/repeated.bend"
+      ],
+      "exit": 0,
+      "stdout": "5n\n",
+      "stderr": ""
+    },
+    {
+      "case": "repeated",
+      "lane": "baseline",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/repeated.bend"
+      ],
+      "exit": 0,
+      "stdout": "5n\n",
+      "stderr": ""
+    },
+    {
+      "case": "repeated",
+      "lane": "candidate",
+      "command": [
+        "target/debug/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/repeated.bend"
+      ],
+      "exit": 0,
+      "stdout": "5n\n",
+      "stderr": ""
+    },
+    {
+      "case": "imported",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REFERENCE/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "8n\n",
+      "stderr": ""
+    },
+    {
+      "case": "imported",
+      "lane": "baseline",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "8n\n",
+      "stderr": ""
+    },
+    {
+      "case": "imported",
+      "lane": "candidate",
+      "command": [
+        "target/debug/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-comptime-rebind/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "8n\n",
+      "stderr": ""
+    }
+  ],
+  "retained_normalization_gap": "positive/local: pinned upstream normalization12n, baseline and candidate Nat.add(11n, 1n). Pure run_main uses normalization and shares this discrepancy. Explicit IO wrapper and generated C/JS runtime results are separate qualification lanes. No normalizer change."
+}

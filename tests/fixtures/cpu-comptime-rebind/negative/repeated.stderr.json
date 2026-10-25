@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : inc\nLocation:\n5 |   g = f(x)\n6>|   f = Nat.add(g)\n7 |   f\n"
