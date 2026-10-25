@@ -1,0 +1,212 @@
+{
+  "baseline": "e9d5ba36bed063704bce19da28997805c49988db",
+  "rows": [
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/annotated.bend",
+      "source_sha256": "cca2ef0230949ce1677b1ee75c22e5ed127da349d2e9e101b25eb2c6c4baa426",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/annotated.bend",
+      "source_sha256": "cca2ef0230949ce1677b1ee75c22e5ed127da349d2e9e101b25eb2c6c4baa426",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/bad_recursion.bend",
+      "source_sha256": "1f4b07450adb3d3a86674b193517e0ef2aa377360573eeaa4e188c4e78c9a5b4",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : Nat\nLocation: loop\n2 | \n3>| def loop(n: Nat) -> Nat: {Nat.add(loop(n)) : Nat -> Nat}(1n)\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/bad_recursion.bend",
+      "source_sha256": "1f4b07450adb3d3a86674b193517e0ef2aa377360573eeaa4e188c4e78c9a5b4",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : Nat\nLocation: loop\n2 | \n3>| def loop(n: Nat) -> Nat: {Nat.add(loop(n)) : Nat -> Nat}(1n)\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/direct.bend",
+      "source_sha256": "36f37bb0b8f3b4d9d6b038ca8e274fc885091cdd2e52765d2494d725bb3fbd1b",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/direct.bend",
+      "source_sha256": "36f37bb0b8f3b4d9d6b038ca8e274fc885091cdd2e52765d2494d725bb3fbd1b",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/false_proof.bend",
+      "source_sha256": "fe479a9f4f863c3adb2f220efeeb0205895b7640ed38ab7c0049bebba3c7b434",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: wrong\n2 | \n3>| def wrong() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/false_proof.bend",
+      "source_sha256": "fe479a9f4f863c3adb2f220efeeb0205895b7640ed38ab7c0049bebba3c7b434",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat.add(11n, 1n)\n- observed : 13n\nLocation: wrong\n2 | \n3>| def wrong() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/hole.bend",
+      "source_sha256": "19ab4af4c7afd4a2def81ac5d0b343cfa7143a87165f81d0b210dbd046a6359a",
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : ?unfinished\nLocation: main\n2 | \n3>| def main() -> Nat: {Nat.add(?unfinished) : Nat -> Nat}(1n)\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/hole.bend",
+      "source_sha256": "19ab4af4c7afd4a2def81ac5d0b343cfa7143a87165f81d0b210dbd046a6359a",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : ?unfinished\nLocation: main\n2 | \n3>| def main() -> Nat: {Nat.add(?unfinished) : Nat -> Nat}(1n)\n4 | \n"
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/let_head.bend",
+      "source_sha256": "58609c1a072dae221b13ab91c7a507cd0a225dbf2a7421cfc42b507d207d6de5",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/let_head.bend",
+      "source_sha256": "58609c1a072dae221b13ab91c7a507cd0a225dbf2a7421cfc42b507d207d6de5",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/open.bend",
+      "source_sha256": "def68a82841d7b5a339d74acf04faad6658ea5771a38d0e83a31ca93fa84e3e1",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "x => Nat.add(x, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/open.bend",
+      "source_sha256": "def68a82841d7b5a339d74acf04faad6658ea5771a38d0e83a31ca93fa84e3e1",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "x => Nat.add(x, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/partial.bend",
+      "source_sha256": "b81ecf94779a6c8a443e8068a91caf6356eb194f8e33e932e297800b9518fbf4",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "Nat.add(11n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/partial.bend",
+      "source_sha256": "b81ecf94779a6c8a443e8068a91caf6356eb194f8e33e932e297800b9518fbf4",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "Nat.add(11n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-comptime-rebind/positive/local.bend",
+      "source_sha256": "86ef1e58c4b03978ce19ac1d527a885ebb58d1db519f325f7f81cff29d4877cd",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-comptime-rebind/positive/local.bend",
+      "source_sha256": "86ef1e58c4b03978ce19ac1d527a885ebb58d1db519f325f7f81cff29d4877cd",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/ordinary.bend",
+      "source_sha256": "c9874d49330a5e440840ad3f35983d2ec5c361b4b7426d3c89a8fc2ed8bdada0",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/ordinary.bend",
+      "source_sha256": "c9874d49330a5e440840ad3f35983d2ec5c361b4b7426d3c89a8fc2ed8bdada0",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "Nat.add(11n, 1n)\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/multiple.bend",
+      "source_sha256": "a36dbe580982c58b976d40b01491d87c7fa323261e2468e53032c69c532fd65e",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "S{Z{}}\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/multiple.bend",
+      "source_sha256": "a36dbe580982c58b976d40b01491d87c7fa323261e2468e53032c69c532fd65e",
+      "lane": "port",
+      "exit": 0,
+      "stdout": "pick(Z{}, Z{}, S{Z{}})\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/true_proof.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": ""
+    },
+    {
+      "case": "tests/fixtures/cpu-closed-partial-normalization/true_proof.bend",
+      "source_sha256": "703b46443d9eed100b66ade176b8d32717ec41ee09732d2b4e04a807b7118747",
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat.add(11n, 1n)\n- observed : 12n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 12n : Nat}: {==}\n4 | \n"
+    }
+  ],
+  "tested_source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+  "binary_sha256": "47898d6da2b9ae92ff8c0c2ea52730147989f8c0638034658fe477fab2bdbb61",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "command_templates": {
+    "port": [
+      "teamy-bend",
+      "run",
+      "<case>"
+    ],
+    "upstream": [
+      "node",
+      "<reference>/bend2/main.ts",
+      "<case>"
+    ]
+  }
+}

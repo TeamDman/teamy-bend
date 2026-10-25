@@ -1,0 +1,9 @@
+Error:
+- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)
+- observed : loop
+Context:
+- n : Nat
+Location: loop
+2 | 
+3>| def loop(n: Nat) -> Nat: {Nat.add(loop(n)) : Nat -> Nat}(1n)
+4 | 

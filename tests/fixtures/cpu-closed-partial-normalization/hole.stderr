@@ -1,0 +1,7 @@
+Error:
+- expected : Nat
+- observed : ?unfinished
+Location: main
+2 | 
+3>| def main() -> Nat: {Nat.add(?unfinished) : Nat -> Nat}(1n)
+4 | 

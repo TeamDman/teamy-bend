@@ -27,6 +27,104 @@ const CASES: [&str; 9] = [
 ];
 
 #[test]
+fn computed_partial_applications_normalize_complete_closed_and_open_graphs() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-closed-partial-normalization");
+    for name in [
+        "direct",
+        "annotated",
+        "let_head",
+        "ordinary",
+        "multiple",
+        "open",
+        "partial",
+        "true_proof",
+    ] {
+        let path = root.join(format!("{name}.bend"));
+        let book = load(&path).unwrap();
+        let checked = check_book(&book).unwrap();
+        let expected = std::fs::read_to_string(path.with_extension("stdout")).unwrap();
+        let oracle = parse_term(expected.trim()).unwrap();
+        for actual in [
+            checked.normalize_definition("main").unwrap(),
+            checked.evaluate("main", &[]).unwrap(),
+        ] {
+            assert_eq!(format!("{actual}\n"), expected, "{name}");
+            assert_eq!(
+                shape_in_book(&actual, &book).unwrap(),
+                shape_in_book(&oracle, &book).unwrap(),
+                "{name}"
+            );
+        }
+    }
+    // Preserve the exact original template/let reproducer, independently of its printer.
+    let book = load(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-comptime-rebind/positive/local.bend"),
+    )
+    .unwrap();
+    let checked = check_book(&book).unwrap();
+    for value in [
+        checked.normalize_definition("main").unwrap(),
+        checked.evaluate("main", &[]).unwrap(),
+    ] {
+        assert_eq!(value.to_string(), "12n");
+        assert!(matches!(value.as_ref(), Term::Ctr { .. }));
+        assert_eq!(
+            shape_in_book(&value, &book).unwrap(),
+            shape_in_book(&parse_term("12n").unwrap(), &book).unwrap()
+        );
+    }
+}
+
+#[test]
+fn computed_open_partials_accept_closed_inputs_without_changing_the_open_graph() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-closed-partial-normalization");
+    for name in ["open", "partial"] {
+        let source = std::fs::read_to_string(root.join(format!("{name}.bend"))).unwrap();
+        let source = source.replace("import Base\n", include_str!("../src/syntax/base.bend"));
+        let book = parse(&format!("{source}\ndef apply(x: Nat) -> Nat: main(x)\n")).unwrap();
+        let checked = check_book(&book).unwrap();
+        let before = checked.normalize_definition("main").unwrap();
+        for input in [0, 1, 11] {
+            let value = checked
+                .evaluate("apply", &[parse_term(&format!("{input}n")).unwrap()])
+                .unwrap();
+            let result = if name == "open" {
+                input + 1
+            } else {
+                input + 11
+            };
+            let expected = parse_term(&format!("{result}n")).unwrap();
+            assert_eq!(
+                shape_in_book(&value, &book).unwrap(),
+                shape_in_book(&expected, &book).unwrap()
+            );
+        }
+        let after = checked.normalize_definition("main").unwrap();
+        assert_eq!(
+            shape_in_book(&before, &book).unwrap(),
+            shape_in_book(&after, &book).unwrap()
+        );
+    }
+}
+
+#[test]
+fn computed_partial_reduction_cannot_accept_false_proofs_holes_or_nontermination() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-closed-partial-normalization");
+    for (name, message) in [
+        ("false_proof", "reflexivity requires equal endpoints"),
+        ("hole", "unfinished proof hole"),
+        ("bad_recursion", "must decrease structurally"),
+    ] {
+        let error = check_book(&load(root.join(format!("{name}.bend"))).unwrap()).unwrap_err();
+        assert!(error.to_string().contains(message), "{name}: {error}");
+    }
+}
+
+#[test]
 fn blocked_named_calls_preserve_pinned_open_graphs_and_exact_text() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-blocked-named-calls");
     for name in [

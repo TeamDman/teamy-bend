@@ -3,7 +3,7 @@
     "case": "positive/local.bend",
     "expected": "12n",
     "io": false,
-    "port_normalized": "Nat.add(11n, 1n)"
+    "port_normalized": "12n"
   },
   {
     "case": "positive/ordinary.bend",

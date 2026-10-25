@@ -202,7 +202,15 @@ impl Engine {
                 None => result = term(Term::App(result, arg)),
             }
         }
-        if progressed {
+        // Reducing a computed head can reveal a partial named call. Retrying
+        // its rebuilt spine lets these outer arguments saturate it. The direct
+        // named path above still stops on underapplication or blocked matching.
+        // Keep every existing consume charge and pay the usual tail retry step.
+        let mut rebuilt_head = &result;
+        while let Term::App(function, _) = rebuilt_head.as_ref() {
+            rebuilt_head = function;
+        }
+        if progressed || matches!(rebuilt_head.as_ref(), Term::Ref(_) | Term::GpuRef(_)) {
             Ok(ControlFlow::Continue(result))
         } else {
             Ok(ControlFlow::Break(result))

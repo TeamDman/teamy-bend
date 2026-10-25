@@ -70,7 +70,7 @@ fn template_rebind_controls_keep_successful_values_and_runtime_results() {
         }
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
         // Pure run_main uses normalization; executable C/JS and explicit IO
-        // below have separate expectations for the retained local-call gap.
+        // below remain distinct from pure normalization evidence.
         let native_expected = format!(
             "{}\n",
             if case.io {
@@ -141,5 +141,24 @@ fn template_reference_pattern_errors_keep_exact_sources_and_exit_status() {
             assert_eq!(output.stderr, expected.as_bytes(), "{case}: {operation}");
             assert!(!output_path.exists());
         }
+    }
+}
+
+#[test]
+fn repaired_partial_normalization_respects_both_cancellation_boundaries() {
+    let checked =
+        check_executable(&load_executable(root().join("positive/local.bend")).unwrap()).unwrap();
+    for cancel_at in [1, 2] {
+        let observations = std::cell::Cell::new(0);
+        let (mut stdout, mut stderr) = (Vec::new(), Vec::new());
+        let error = checked
+            .run_main(&mut stdout, &mut stderr, &|| {
+                observations.set(observations.get() + 1);
+                observations.get() == cancel_at
+            })
+            .unwrap_err();
+        assert!(error.to_string().contains("execution cancelled"));
+        assert_eq!(observations.get(), cancel_at);
+        assert!(stdout.is_empty() && stderr.is_empty());
     }
 }

@@ -2199,6 +2199,187 @@ mod depth_tests {
         ))
     }
 
+    fn partial_application_engine() -> Engine {
+        let book = crate::syntax::parse(
+            "type N is Data:\n  Z{}\n  S{p: N}\n\
+             def choose(a: N, b: N) -> N:\n  match a:\n\
+                 case Z{}: b\n    case S{p}: p\n",
+        )
+        .unwrap();
+        check_book(&book).unwrap().engine
+    }
+
+    fn computed_partial_call(first: TermRef, second: TermRef) -> TermRef {
+        term(Term::App(
+            term(Term::Ann(
+                term(Term::App(term(Term::Ref("choose".into())), first)),
+                term(Term::Typ(term(Term::Qua(Quant::Lone)))),
+            )),
+            second,
+        ))
+    }
+
+    #[test]
+    fn computed_partial_calls_preserve_lazy_fields_shared_inputs_and_open_heads() {
+        let mut engine = partial_application_engine();
+        let zero = term(Term::Ctr {
+            name: "Z".into(),
+            args: vec![],
+        });
+        let successor = term(Term::Ctr {
+            name: "S".into(),
+            args: vec![Rc::clone(&zero)],
+        });
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 10_000,
+        });
+        engine.aliases.insert(10_000, Rc::clone(&cycle));
+        let call = computed_partial_call(successor, Rc::clone(&cycle));
+        let before = format!("{call:?}");
+        let owners = Rc::strong_count(&cycle);
+        engine.fuel = 512;
+        for _ in 0..2 {
+            assert!(Rc::ptr_eq(&engine.whnf(&call).unwrap(), &zero));
+            assert_eq!(engine.depth, 0);
+        }
+        assert!(engine.fuel < 512);
+        assert_eq!(format!("{call:?}"), before);
+        assert_eq!(Rc::strong_count(&cycle), owners);
+        let free = term(Term::Var {
+            name: "free".into(),
+            id: 10_001,
+        });
+        let stuck = engine
+            .whnf(&computed_partial_call(Rc::clone(&free), Rc::clone(&cycle)))
+            .unwrap();
+        let (head, args) = super::super::reduce::spine(&stuck);
+        assert!(matches!(head.as_ref(), Term::Ref(name) if name == "choose"));
+        assert_eq!(args.len(), 2);
+        assert!(Rc::ptr_eq(&args[0], &free));
+        assert!(Rc::ptr_eq(&args[1], &cycle));
+        assert!(Rc::ptr_eq(&engine.whnf(&stuck).unwrap(), &stuck));
+    }
+
+    #[test]
+    fn computed_named_heads_stop_when_under_applied_unknown_or_unfilled() {
+        let mut engine = partial_application_engine();
+        let mut unfilled = engine.defs["choose"].clone();
+        unfilled.body = None;
+        Rc::make_mut(&mut engine.defs).insert("unfilled".into(), unfilled);
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 10_000,
+        });
+        engine.aliases.insert(10_000, Rc::clone(&cycle));
+        for name in ["choose", "unknown", "unfilled"] {
+            let call = term(Term::App(
+                term(Term::Ann(term(Term::Ref(name.into())), term(Term::Qnt))),
+                Rc::clone(&cycle),
+            ));
+            engine.fuel = 128;
+            let value = engine.whnf(&call).unwrap();
+            let (head, args) = super::super::reduce::spine(&value);
+            assert!(matches!(head.as_ref(), Term::Ref(actual) if actual == name));
+            assert_eq!(args.len(), 1);
+            assert!(Rc::ptr_eq(&args[0], &cycle));
+            // Initial/head/consume WHNF plus annotation and retry tail steps.
+            assert_eq!(128 - engine.fuel, 5);
+            assert_eq!(engine.depth, 0);
+        }
+        let saturated = term(Term::App(
+            term(Term::Ann(
+                term(Term::App(
+                    term(Term::Ref("unfilled".into())),
+                    Rc::clone(&cycle),
+                )),
+                term(Term::Qnt),
+            )),
+            Rc::clone(&cycle),
+        ));
+        engine.fuel = 128;
+        let value = engine.whnf(&saturated).unwrap();
+        let (head, args) = super::super::reduce::spine(&value);
+        assert!(matches!(head.as_ref(), Term::Ref(name) if name == "unfilled"));
+        assert_eq!(args.len(), 2);
+        assert!(args.iter().all(|arg| Rc::ptr_eq(arg, &cycle)));
+        assert_eq!(128 - engine.fuel, 5);
+        assert_eq!(engine.depth, 0);
+    }
+
+    #[test]
+    fn computed_partial_calls_keep_exact_fuel_depth_and_memo_cleanup() {
+        let engine = partial_application_engine();
+        let zero = term(Term::Ctr {
+            name: "Z".into(),
+            args: vec![],
+        });
+        let call = computed_partial_call(Rc::clone(&zero), zero);
+        let mut measured = engine.clone();
+        measured.fuel = 512;
+        assert_eq!(measured.normalize(&call).unwrap().to_string(), "Z{}");
+        let required = 512 - measured.fuel;
+        assert!(required > 1 && required < 512);
+        for fuel in [0, required - 1, required] {
+            let mut bounded = engine.clone();
+            bounded.fuel = fuel;
+            let result = bounded.normalize(&call);
+            if fuel == required {
+                assert_eq!(result.unwrap().to_string(), "Z{}");
+            } else {
+                assert!(
+                    result
+                        .unwrap_err()
+                        .to_string()
+                        .contains("evaluation budget exhausted")
+                );
+            }
+            assert_eq!(bounded.fuel, 0);
+            assert_eq!(bounded.depth, 0);
+            assert!(bounded.normalization_memo.is_none());
+        }
+        let mut nested = engine;
+        nested.depth = 127;
+        assert!(
+            nested
+                .normalize(&call)
+                .unwrap_err()
+                .to_string()
+                .contains("kernel nesting limit exhausted")
+        );
+        assert_eq!(nested.depth, 127);
+        assert!(nested.normalization_memo.is_none());
+    }
+
+    #[test]
+    fn computed_partial_calls_preserve_first_demanded_failure() {
+        let cycle = term(Term::Var {
+            name: "cycle".into(),
+            id: 10_000,
+        });
+        let leaf = term(Term::Qua(Quant::Lone));
+        let deep = (0..128).fold(Rc::clone(&leaf), |left, _| {
+            term(Term::Min(left, Rc::clone(&leaf)))
+        });
+        for (first, second, expected) in [
+            (
+                Rc::clone(&cycle),
+                Rc::clone(&deep),
+                "evaluation budget exhausted",
+            ),
+            (deep, Rc::clone(&cycle), "kernel nesting limit exhausted"),
+        ] {
+            let mut engine = partial_application_engine();
+            engine.aliases.insert(10_000, Rc::clone(&cycle));
+            engine.fuel = 512;
+            let error = engine
+                .whnf(&computed_partial_call(first, second))
+                .unwrap_err();
+            assert!(error.to_string().contains(expected), "{error}");
+            assert_eq!(engine.depth, 0);
+        }
+    }
+
     #[test]
     fn named_patterns_keep_shared_stuck_calls_and_do_not_force_later_fields() {
         let mut engine = named_pattern_engine();
