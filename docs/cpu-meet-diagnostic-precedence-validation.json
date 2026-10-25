@@ -1,0 +1,217 @@
+{
+  "post_gate_changes": "Documentation/receipts and one test-comment wording correction only; validate exact non-comment identity before publication.",
+  "tested_source": "9d13eba51d51b2de7f5ab415770c355f86fc0e58",
+  "source_tree": "bc426e30b35df9fa73e09a2ebbe989774f97204a",
+  "binary_sha256": "5247fbe78a948d85ca4cc6f9b8187799067ab1e4a0797324ad342522b52da18f",
+  "full_gate": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 11884756992,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1021.0346547759837,
+    "minimum_free": 11859750912,
+    "minimum_tmp_free": 3312062464
+  },
+  "counts": {
+    "passed": 1260,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 186
+  },
+  "controls": [
+    {
+      "name": "focused-state",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "diagnostic_meet",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 5.221159539010841,
+      "counts": {
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 2
+      },
+      "log_sha256": "f1d00ca36911d780df443a2faf664799899eadf4a348d46e7489a1d78b56211f"
+    },
+    {
+      "name": "focused-integration",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_meet_diagnostic_precedence",
+        "--test",
+        "cpu_contextual_proof_diagnostics",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "kernel_normalization",
+        "--test",
+        "kernel_open_closures"
+      ],
+      "exit": 0,
+      "seconds": 111.92246568799601,
+      "counts": {
+        "passed": 46,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 5
+      },
+      "log_sha256": "2a73d765d1042f47b653b2800d772640f203e8f712c7b66d0b7a8b981f5c3b81"
+    },
+    {
+      "name": "focused-final-cases",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_meet_diagnostic_precedence"
+      ],
+      "exit": 0,
+      "seconds": 18.81912350098719,
+      "counts": {
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 1
+      },
+      "log_sha256": "bf89cc0d1ecf1d33c19bdacf08c4c72a9193080a30cf4567a05043b4029360a5"
+    },
+    {
+      "name": "focused-boundary",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "diagnostic"
+      ],
+      "exit": 0,
+      "seconds": 53.53041923898854,
+      "counts": {
+        "passed": 62,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 2
+      },
+      "log_sha256": "c175a1ca888db9dea830fa7df8cbeab47242f898ac040f60988fdbba85b8a11a"
+    },
+    {
+      "name": "targeted-clippy",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_meet_diagnostic_precedence",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "seconds": 3.1164402670110576,
+      "counts": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 0
+      },
+      "log_sha256": "33bdd0e55826d24d61396a6122b1ed9acbaa4ae7c0039e898448ec60a4279937"
+    }
+  ],
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "gate_log_sha256": "2d1f34fe4b25eba3e3450bbf589a0d1e8dce5ece1890aec71365d7216fd8be96",
+  "matrix_raw_sha256": "2302d97bff10dc67cf1f4aafb60a16cdc71ed117f68c05adccad3831228b4156",
+  "census_raw_sha256": "aab4d6d7fc0beb4d5938a43e757b40e0285cf23bd313abd76d1127a2da3f880f",
+  "phase_probe_sha256": "ba9bf7c6efde3f7bd91212111d51a4042c63fd8bd429d2ae73dd48ee1952b7ae",
+  "review_source_sha256": "89132859a30ce27feb0776bb46220cbb7eb3b105edbca9239781f9e289d82a13",
+  "review_matrix_sha256": "8a3f6891c75630acff2765f4206158b9bd8b3b83626d17a53c6718d214c0e216",
+  "review_census_sha256": "f0d782d00266db097f4145985127c2b498bb02035b3b6f2180dea0d8d24d44f4",
+  "whitespace_review": {
+    "full_diff_exit": 2,
+    "full_diff_stdout": "tests/fixtures/cpu-meet-diagnostic-precedence/check/meet_charges_its_operands.bend:26: trailing whitespace.\n+#|18 | \ntests/fixtures/cpu-meet-diagnostic-precedence/check/meet_charges_its_operands.stderr:5: trailing whitespace.\n+18 | \ntests/fixtures/cpu-meet-diagnostic-precedence/check/meet_stuck_pending_ref.stderr:7: trailing whitespace.\n+17 | \ntests/fixtures/cpu-meet-diagnostic-precedence/negative/context.stderr:7: trailing whitespace.\n+2 | \ntests/fixtures/cpu-meet-diagnostic-precedence/negative/context.stderr:9: trailing whitespace.\n+4 | \ntests/fixtures/cpu-meet-diagnostic-precedence/negative/context_kind.stderr:10: trailing whitespace.\n+8 | \ntests/fixtures/cpu-meet-diagnostic-precedence/negative/partial_false.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-meet-diagnostic-precedence/negative/partial_false.stderr:7: trailing whitespace.\n+4 | \n",
+    "code_diff_exit": 0,
+    "reason": "Only original fixture and exact stderr source-window spaces reported. Preserved byte-for-byte rather than altering upstream source or diagnostic contracts."
+  },
+  "census_command": [
+    "python3",
+    "scripts/checking-census/run.py",
+    "--reference",
+    "<reference>",
+    "--binary",
+    "<port>",
+    "--phase-probe",
+    "<evidence>/phase-probe",
+    "--output",
+    "<evidence>/census",
+    "--build-receipt",
+    "<evidence>/census-build.json"
+  ],
+  "limits": "No guard, budget, cancellation, dependency, toolchain or reference changes. Existing cache links retained; no further cache reclamation required.",
+  "unrun": "Invalid-source execution, native IO in this family, supplementary all-target Clippy, external invoke audit, desktop/GPU and newer upstream remain unqualified. Pure run_main is normalization, not native IO. No mid-normalization cancellation claim.",
+  "coverage": {
+    "linked": 486,
+    "unlinked": 816,
+    "unlinked_categories": {
+      "checker_rejection": 281,
+      "interpretation_and_compiled_candidates": 521,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  },
+  "post_gate_comment": {
+    "tested_source": "9d13eba51d51b2de7f5ab415770c355f86fc0e58",
+    "only_non_documentation_change": "tests/cpu_meet_diagnostic_precedence.rs",
+    "removed_comment": "        // Pure run_main uses normalization; executable C/JS and explicit IO\n        // below remain distinct from pure normalization evidence.",
+    "added_comment": "        // Both controls are pure proofs: run_main is normalization.\n        // Generated C/JS execution remains separate evidence.",
+    "exact_replacement_verified": true,
+    "before_sha256": "e594025ddf59ab12a88807f054a6d0273485e3d787dd1f1267619aada67bff0b",
+    "after_sha256": "31b46ac2d75e04b6ea2a74e9a2c6e6ef3014e31b68045bfeae12366a41c01d31",
+    "production_and_fixture_diff_empty": true
+  }
+}

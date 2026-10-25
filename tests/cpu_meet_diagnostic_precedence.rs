@@ -68,8 +68,8 @@ fn meet_controls_keep_successful_values_and_runtime_results() {
             );
         }
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
-        // Pure run_main uses normalization; executable C/JS and explicit IO
-        // below remain distinct from pure normalization evidence.
+        // Both controls are pure proofs: run_main is normalization.
+        // Generated C/JS execution remains separate evidence.
         let native_expected = format!("{}\n", case.expected);
         for _ in 0..2 {
             let (mut stdout, mut stderr) = (Vec::new(), Vec::new());
