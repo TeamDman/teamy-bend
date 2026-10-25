@@ -514,3 +514,32 @@ fn nat_pattern_boundaries_retain_guards_and_closed_values() {
         );
     }
 }
+
+#[test]
+fn erased_and_reusable_bindings_keep_checked_outputs() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-erased-binder-diagnostics/positive");
+    for (name, expected) in [
+        ("erased", "7"),
+        ("plus", "6"),
+        ("subtraction", "5"),
+        ("template", "7"),
+    ] {
+        let path = root.join(format!("{name}.bend"));
+        let book = load(&path).unwrap();
+        let checked = teamy_bend::kernel::check_book(&book).unwrap();
+        assert_eq!(
+            checked.normalize_definition("main").unwrap().to_string(),
+            expected
+        );
+        let output = executable_c_compiler::bounded(
+            Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+                .arg("run")
+                .arg(&path),
+            Duration::from_secs(20),
+        );
+        assert_eq!(output.status.code(), Some(0));
+        assert_eq!(output.stdout, format!("{expected}\n").as_bytes());
+        assert!(output.stderr.is_empty());
+    }
+}
