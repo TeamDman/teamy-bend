@@ -1160,57 +1160,8 @@ impl Engine {
                 };
                 Ok((Rc::clone(&b.ty), usage(*id, demand)))
             }
-            Term::Ref(name) | Term::GpuRef(name) => {
-                if let Some(adt) = self.adts.get(name) {
-                    if !adt.parameters.is_empty() {
-                        return Err(KernelError::new(
-                            "a parameterized datatype needs <...> arguments",
-                        ));
-                    }
-                    return Ok((Rc::clone(&adt.kind), Uses::new()));
-                }
-                let Some(def) = self.defs.get(name).cloned() else {
-                    let mut error = KernelError::new(format!("undefined name {name}"));
-                    error.diagnostic = self
-                        .term_diagnostic(
-                            lhs,
-                            value,
-                            DiagnosticExpression::Text("a defined name".into()),
-                            DiagnosticExpression::Term(value),
-                            context,
-                        )
-                        .ok()
-                        .map(Box::new);
-                    return Err(error);
-                };
-                if demand != Quant::None {
-                    if name == &lhs.name && !lhs.unsafe_ {
-                        let (_, columns) = spine(&lhs.equation);
-                        let mut order = std::cmp::Ordering::Equal;
-                        for ((arg, col), quant) in arguments.iter().zip(&columns).zip(&lhs.quants) {
-                            if order != std::cmp::Ordering::Equal {
-                                break;
-                            }
-                            order = self.descend(*quant, arg, col)?;
-                        }
-                        if order != std::cmp::Ordering::Less {
-                            return Err(KernelError::new(
-                                "recursive self-call must decrease structurally, left to right",
-                            ));
-                        }
-                    }
-                    if name != &lhs.name
-                        && def.body.is_none()
-                        && !self.foreign_contracts.contains(name)
-                        && !self.numeric_contracts.contains(name)
-                        && !self.opaque_contracts.contains(name)
-                    {
-                        return Err(KernelError::new(format!(
-                            "unfilled law {name} cannot be used as live evidence"
-                        )));
-                    }
-                }
-                Ok((def.ty, Uses::new()))
+            Term::Ref(_) | Term::GpuRef(_) => {
+                self.infer_reference(lhs, value, demand, context, arguments)
             }
             Term::Typ(g) => {
                 self.check(lhs, g, Quant::None, &term(Term::Qnt), context)
@@ -1385,6 +1336,72 @@ impl Engine {
                 Err(error)
             }
         }
+    }
+
+    // Reference-specific locals must not occupy every recursive application
+    // frame in unoptimized builds. This rule uses its caller's existing work
+    // and depth frame; it adds no checking step or change in evaluation order.
+    fn infer_reference(
+        &mut self,
+        lhs: &Lhs,
+        value: &TermRef,
+        demand: Quant,
+        context: &Context,
+        arguments: &[TermRef],
+    ) -> Result<(TermRef, Uses), KernelError> {
+        let (Term::Ref(name) | Term::GpuRef(name)) = value.as_ref() else {
+            unreachable!("reference inference rule");
+        };
+        if let Some(adt) = self.adts.get(name) {
+            if !adt.parameters.is_empty() {
+                return Err(KernelError::new(
+                    "a parameterized datatype needs <...> arguments",
+                ));
+            }
+            return Ok((Rc::clone(&adt.kind), Uses::new()));
+        }
+        let Some(def) = self.defs.get(name).cloned() else {
+            let mut error = KernelError::new(format!("undefined name {name}"));
+            error.diagnostic = self
+                .term_diagnostic(
+                    lhs,
+                    value,
+                    DiagnosticExpression::Text("a defined name".into()),
+                    DiagnosticExpression::Term(value),
+                    context,
+                )
+                .ok()
+                .map(Box::new);
+            return Err(error);
+        };
+        if demand != Quant::None {
+            if name == &lhs.name && !lhs.unsafe_ {
+                let (_, columns) = spine(&lhs.equation);
+                let mut order = std::cmp::Ordering::Equal;
+                for ((arg, col), quant) in arguments.iter().zip(&columns).zip(&lhs.quants) {
+                    if order != std::cmp::Ordering::Equal {
+                        break;
+                    }
+                    order = self.descend(*quant, arg, col)?;
+                }
+                if order != std::cmp::Ordering::Less {
+                    return Err(KernelError::new(
+                        "recursive self-call must decrease structurally, left to right",
+                    ));
+                }
+            }
+            if name != &lhs.name
+                && def.body.is_none()
+                && !self.foreign_contracts.contains(name)
+                && !self.numeric_contracts.contains(name)
+                && !self.opaque_contracts.contains(name)
+            {
+                return Err(KernelError::new(format!(
+                    "unfilled law {name} cannot be used as live evidence"
+                )));
+            }
+        }
+        Ok((def.ty, Uses::new()))
     }
 
     fn check_arguments(
