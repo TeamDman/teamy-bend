@@ -2030,3 +2030,24 @@ full CPU parity. Frozen dependencies/toolchains/pin/limits retained, no new API
 changes. Safe-cache reclamation preserved unique evidence; bulk raw artifacts
 remain outside Git. Reviewed feature checkpoint only, no desktop/GPU/merge/release.
 Next independent runtime candidates: map_set_ops and list_string_lookups.
+
+### [x] 5.122 Qualify Map/Set and list/string executable originals
+
+Tested source `6dc0d456e2a296bab513f8c067e5e70009d41e93` adds tests only. The unchanged map/set and list/string
+originals retain 11111 and 1111 across five executable lanes twice. Two companions
+add 20 output lines for empty/NUL keys, replacement/deletion, Unicode, Set duplicates,
+list bounds and fixture-local search/trim. No production defect or fix was found.
+Independent review strengthened repeated-pop checking. [Report](cpu-map-set-lookups.md).
+
+Standard gate **1,163 / 0 / 49**; 35 focused tests; 88 matrix and 24 phase
+observations, zero timeouts. Direct Node host failures and strict IO checking
+exclusions remain separate. The full checking census was not rerun: its last
+measured source remains d224e79, with 300 differences beyond 385 historical IO
+exclusions plus six upstream stack failures. Production tree identity is verified;
+old measurements are not relabelled. All earlier unresolved contracts remain.
+
+Coverage is **416 linked / 886 unlinked**: 531 compiled candidates, 341 checker
+negatives, 13 interpreter-profile cases and one checking-only module. This is not
+full CPU parity. Frozen inputs, budgets, guards and cancellation boundaries retained.
+Compact evidence is pushed; unique bulk artifacts remain outside Git. No desktop,
+GPU, merge or release. Next bounded candidates: string_kit and string_algorithms.

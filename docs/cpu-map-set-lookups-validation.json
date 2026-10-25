@@ -1,0 +1,197 @@
+{
+  "tested_source": "6dc0d456e2a296bab513f8c067e5e70009d41e93",
+  "binary_sha256": "da198c85de69f80ebcab06786a61815d0cc3137c297d43d0c1bc38770a8d3094",
+  "production_tree": "bf393d614783a530f5b0f4aafa559fcdfee1f64d",
+  "production_changed": false,
+  "frozen_inputs": {
+    "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "production_tree": "bf393d614783a530f5b0f4aafa559fcdfee1f64d"
+  },
+  "runs": {
+    "focused-reviewed": {
+      "source_commit": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_map_set_lookups",
+        "--test",
+        "cpu_list_sort_map",
+        "--test",
+        "runtime_packed_words",
+        "--test",
+        "kernel_open_closures",
+        "--test",
+        "kernel_collections",
+        "--test",
+        "kernel_set_formatting"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 41.3763082009973,
+      "minimum_free": 12031746048,
+      "minimum_tmp_free": 3114135552,
+      "stop_reason": null,
+      "log_sha256": "8c87f701c5ca5dbe4212c8e5196418e09ba2f3ade4a585505f9f8db6d670a107"
+    },
+    "focused-clippy": {
+      "source_commit": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "-p",
+        "teamy-bend",
+        "--locked",
+        "--all-features",
+        "--test",
+        "cpu_map_set_lookups",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 3.066307069006143,
+      "minimum_free": 12034375680,
+      "minimum_tmp_free": 3115335680,
+      "stop_reason": null,
+      "log_sha256": "a9f27a118f6325fbf1aeebc4a924b9ec54079898a87a789c1a30ef1fd089554a"
+    },
+    "full-gate": {
+      "source_commit": "6dc0d456e2a296bab513f8c067e5e70009d41e93",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "timeout_seconds": 1200,
+      "exit": 0,
+      "seconds": 657.3825168960029,
+      "minimum_free": 10838609920,
+      "minimum_tmp_free": 3076714496,
+      "stop_reason": null,
+      "log_sha256": "aa1d9024889acd8eb62224ff59460dfbfba7fd00d0920ce5288633f55a4a44dd"
+    }
+  },
+  "review": {
+    "base": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03",
+    "reviewer": "review_imported_printer",
+    "verdict": "No remaining source-review blockers; static review only.",
+    "corrected_manifest_sha256": "ebe2c4047b206849d22b27c5604ed9f92aff9d6ea0391298370edf0b9f17b064",
+    "correction": "Repeated pop now requires both Some{1} and None; prior aggregate could hide compensating failures. Original and weaker preparation evidence preserved.",
+    "production_changes": false,
+    "evidence_review": {
+      "source": "6dc0d456e2a296bab513f8c067e5e70009d41e93",
+      "manifest_sha256": "62f4eae76885ddcaaddaad71e7f71b53a71369a48ceac25bc824374d5051e220",
+      "result": "No blocking evidence or draft-report findings. Full gate pending at review; generator requires success. Static review only."
+    }
+  },
+  "checking_census": {
+    "renewed": false,
+    "last_tested_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+    "receipt": "cpu-list-sort-map-census.json",
+    "counts": {
+      "exact_rejection": 245,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "different_rejection": 191,
+      "oracle_or_infrastructure_failure": 6
+    },
+    "differences_outside_historical_IO": 300,
+    "historical_IO_exclusions": 385,
+    "oracle_failures": 6,
+    "reason": "Tests-only change; production tree identity verified. New family has separate 24 phase probes. Do not relabel old measurements as new."
+  },
+  "raw_evidence_manifest": {
+    "full-gate.log": {
+      "sha256": "aa1d9024889acd8eb62224ff59460dfbfba7fd00d0920ce5288633f55a4a44dd",
+      "bytes": 21080
+    },
+    "full-gate.json": {
+      "sha256": "7983174a985f68e5f4cc7b0745ac123b02488c5542d02463c27441e19a6ff837",
+      "bytes": 35534
+    },
+    "snapshot.json": {
+      "sha256": "b48c1bd3ae3e07d8afbbc9a042f8fed35f0945b2b5449e471f95c6e605ce06a9",
+      "bytes": 1214
+    },
+    "matrix/receipt.json": {
+      "sha256": "9ca4d681a4ff85a673274c37111d0d9de1b06bc5a8bbd320f080f02da20c55f7",
+      "bytes": 45434
+    },
+    "phases.json": {
+      "sha256": "e115cd885d7d20e52ea8dbe7edc936af9cd2f7a915f648246d033cd36f4a3e92",
+      "bytes": 12975
+    },
+    "baseline.json": {
+      "sha256": "a8f64ba08cb59d26e583d2fd1439857f0439f216c49cb71dd1f55bdb33ca7af2",
+      "bytes": 3369
+    },
+    "baseline-oracles/receipt.json": {
+      "sha256": "0f1fdaecada4a1ca021e3903a04909ba26191cc9294eee19708face591faabe3",
+      "bytes": 14735
+    },
+    "edge-oracles/receipt.json": {
+      "sha256": "72135eba0d05362820a65fd01c0fec95942468cd0dd4116b141b467885c19269",
+      "bytes": 7043
+    },
+    "edge-oracles-reviewed/receipt.json": {
+      "sha256": "144f9908a4468ee6e099ee11b78047720fa4029cbcf78ad8beb65af02116c485",
+      "bytes": 7186
+    },
+    "edge-preparation.json": {
+      "sha256": "245e01b8b7bd444ba0d959a799099fd9521116a4cdb19fecebcc934f53cf3613",
+      "bytes": 1706
+    },
+    "edge-preparation-corrected.json": {
+      "sha256": "4f9fd8517ba3f88db7d7c8da9b2834683ae7e23dbccbd288e874f984ae32c00f",
+      "bytes": 639
+    },
+    "independent-review.json": {
+      "sha256": "5db7e62f0c8d0c41c41be17d24bce2f8b6e9e6595abf980cca879afdcf106f69",
+      "bytes": 787
+    },
+    "inactive-test-cache-reclaimed.json": {
+      "sha256": "4beadd81c0a35a75275c310868dc26ed9008a4bc55409936310bbdbf729c7af9",
+      "bytes": 38972
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "tested_source": "6dc0d456e2a296bab513f8c067e5e70009d41e93",
+  "before_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+  "scope": "Original before outcomes; current unique host/strict-proof refusals; and a rejected authored preparation, not a demonstrated port defect. Runtime matches are separate. Private command paths omitted.",
+  "before": [
+    {
+      "case": "run/map_set_ops.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "run/map_set_ops.bend",
+      "lane": "port-check",
+      "fixture_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n267 | law main:\n268>|   IO(Unit)\n269 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "run/map_set_ops.bend",
+      "lane": "port-native",
+      "fixture_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 0,
+      "stdout": "11111\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_string_lookups.bend",
+      "lane": "upstream-direct",
+      "fixture_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_string_lookups.bend",
+      "lane": "port-check",
+      "fixture_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n266 | law main:\n267>|   IO(Unit)\n268 | \n",
+      "timed_out": false
+    },
+    {
+      "case": "run/list_string_lookups.bend",
+      "lane": "port-native",
+      "fixture_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 0,
+      "stdout": "1111\n",
+      "stderr": "",
+      "timed_out": false
+    }
+  ],
+  "current": [
+    {
+      "case": "original/list_string_lookups.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_string_lookups.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n266 | law main:\n267>|   IO(Unit)\n268 | \n",
+      "raw_stderr_sha256": "6a355b76137f8cdddb160eba29abf67d2db0a40420548013e27b9a8b02310a0d"
+    },
+    {
+      "case": "original/list_string_lookups.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3df46a95ed2fe83826c094dbc7b5e3f971a83085b515484b743f48c0cd8eeb30",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n266 | law main:\n267>|   IO(Unit)\n268 | \n",
+      "raw_stderr_sha256": "6a355b76137f8cdddb160eba29abf67d2db0a40420548013e27b9a8b02310a0d"
+    },
+    {
+      "case": "original/map_set_ops.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/map_set_ops.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n267 | law main:\n268>|   IO(Unit)\n269 | \n",
+      "raw_stderr_sha256": "4cbac5b6bee22ac528995a0d97d213d5f4b466fc851e7edd7862f41d6967e4e2"
+    },
+    {
+      "case": "original/map_set_ops.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "60966d2aa182c2aabf20eb63270f57c7d8c5f2dc56872e7fed54dab34940c8c6",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n267 | law main:\n268>|   IO(Unit)\n269 | \n",
+      "raw_stderr_sha256": "4cbac5b6bee22ac528995a0d97d213d5f4b466fc851e7edd7862f41d6967e4e2"
+    },
+    {
+      "case": "positive/list-string-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "eeb9975712166451ae010b951ee1cd1b7a5b0c03e80c7465996273016b090c22",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/list-string-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "eeb9975712166451ae010b951ee1cd1b7a5b0c03e80c7465996273016b090c22",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_string_lookups.main\n266 | law main:\n267>|   IO(Unit)\n268 | \n",
+      "raw_stderr_sha256": "dbff8d81da4aba26ddd92567b825b38c8797acf813b9441af85678c297d6946d"
+    },
+    {
+      "case": "positive/list-string-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "eeb9975712166451ae010b951ee1cd1b7a5b0c03e80c7465996273016b090c22",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_string_lookups.main\n266 | law main:\n267>|   IO(Unit)\n268 | \n",
+      "raw_stderr_sha256": "dbff8d81da4aba26ddd92567b825b38c8797acf813b9441af85678c297d6946d"
+    },
+    {
+      "case": "positive/map-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "8e544295192a8de457c0c6474875333b6b16a53b9b1dc433708af1f334651224",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/map-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "8e544295192a8de457c0c6474875333b6b16a53b9b1dc433708af1f334651224",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/map_set_ops.main\n267 | law main:\n268>|   IO(Unit)\n269 | \n",
+      "raw_stderr_sha256": "cf1f3a5b019a85ff9f1628e1df81a5d303f6b69ce0c9e6403c372777f574998a"
+    },
+    {
+      "case": "positive/map-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "8e544295192a8de457c0c6474875333b6b16a53b9b1dc433708af1f334651224",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/map_set_ops.main\n267 | law main:\n268>|   IO(Unit)\n269 | \n",
+      "raw_stderr_sha256": "cf1f3a5b019a85ff9f1628e1df81a5d303f6b69ce0c9e6403c372777f574998a"
+    }
+  ],
+  "preparation": {
+    "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport ../original/map_set_ops.bend as M\n\ndef nul() -> String: SCon{Chr{0}, SNil{}}\ndef edge() -> Map<&2, U32>: Map.from_list(&2, U32, [(\"\", 1), (nul(), 2)])\ndef value(r: Map<&2, U32> & U32) -> U32:\n  (m, x) = r\n  x\ndef twice() -> U32:\n  (m, first) = Map.pop(&2, U32, edge(), \"\")\n  (m2, second) = Map.pop(&2, U32, m, \"\")\n  U32.add(Maybe.default(&2, U32, first, 99), M.is_none(second))\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, Map.new(&2, U32), \"\"))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, edge(), \"\"))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, edge(), nul()))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, Map.set(&2, U32, edge(), \"\", 9), \"\"))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, Map.set(&2, U32, edge(), \"\", 9), nul()))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, Map.del(&2, U32, edge(), \"\"), nul()))))\n    Unit <- IO.print(U32.show(value(Map.get(U32, 99, Map.del(&2, U32, edge(), nul()), \"\"))))\n    Unit <- IO.print(U32.show(twice()))\n    Unit <- IO.print(M.Str.join(Map.keys(&2, U32, Map.from_list(&2, U32, [(\"\ud83d\ude42\", 3), (\"\u00e9\", 2), (\"\", 1)]))))\n    Unit <- IO.print(U32.show(U32.from_nat(Set.size(Set.from_list([\"\", \"\u00e9\", \"\u00e9\"])))))\n    IO.print(M.Str.join(Set.to_list(Set.del(Set.from_list([\"\", \"\u00e9\", \"\u00e9\"]), \"\"))))\n",
+    "source_sha256": "538e654ed7005a1f432253c6c4438348d88347f8e985b3f4a8a75e4d9cbb9148",
+    "rows": [
+      {
+        "case": "map-edges.bend",
+        "lane": "upstream",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n10 | def twice() -> U32:\n11>|   (m, first) = Map.pop(&2, U32, edge(), \"\")\n12 |   (m2, second) = Map.pop(&2, U32, m, \"\")\n"
+      },
+      {
+        "case": "map-edges.bend",
+        "lane": "native",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a parameter or field scrutinee (a match cannot scrutinize a computed value: give it its own def)\nLocation:\n10 | def twice() -> U32:\n11>|   (m, first) = Map.pop(&2, U32, edge(), \"\")\n12 |   (m2, second) = Map.pop(&2, U32, m, \"\")\n"
+      }
+    ]
+  },
+  "review_correction": {
+    "before_expression": "U32.add(Maybe.default(&2, U32, first, 99), M.is_none(second))",
+    "before_expected_line_8": "2",
+    "after_expression": "U32.mul(M.got(first, 1), M.is_none(second))",
+    "after_expected_line_8": "1",
+    "before_source_sha256": "4a0c6bdaa91504782809181c514eac3465aa6d462e2ce8228038d7b0de740ddd",
+    "reason": "Require both expected pop results rather than allowing compensating wrong values."
+  },
+  "raw_baseline_sha256": "a8f64ba08cb59d26e583d2fd1439857f0439f216c49cb71dd1f55bdb33ca7af2"
+}
