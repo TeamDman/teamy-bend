@@ -5997,3 +5997,30 @@ observations. Dependencies, upstream, toolchains, budgets, guards and cancellati
 boundaries are unchanged. Disk preflight/floors and inactive-cache controls remain;
 unique raw evidence and captures are retained outside Git. Reviewed feature-branch
 preservation is separate from main merge, release or parity acceptance.
+
+### [x] 5.114 Preserve compile-time argument occurrence diagnostics
+
+Tested source `59f04c46f6b3a503367c95884338f9404216f7d1` closes `comptime/later_def` and four retained adjacent
+source-window differences without copying reference nodes or changing pointer-based
+macro behavior. Private occurrence anchors survive forwarding, lambda substitution,
+constructor fields and quantified datatype syntax. Independent review corrected
+three propagation omissions before final acceptance. [Report](cpu-template-occurrences.md).
+
+The full gate passes **1,135 / 0 / 49**. Twenty exact negative cases and two positive
+programs are qualified; two additional macro-rebinding load refusals still have
+unqualified diagnostic differences. New/renewed matrices contain **696 observations**,
+zero timeouts and deterministic repeats. All 1,302 checking statuses are unchanged;
+only `later_def` changes stderr, now exactly upstream. The prior 489-case subset is
+32 exact / 385 strict IO proof exclusions / 72 unresolved. Historical host/generation
+failures, unrun executions, semantic disagreements and supplementary lint failures
+remain explicit. No higher limits, new policy exceptions or cancellation claims.
+
+Coverage is **407 linked / 895 unlinked**: 344 checker negatives, one checking-only,
+13 interpreter-profile and 537 compiled candidates remain unlinked. Links include
+partial/blocked/historical evidence, not universal parity. Next are the three
+remaining pattern-anchor cells; the substantive applicability-first candidates are
+`parse/datatype_declaration_form`, `empty_datatype` and `empty_param_group`.
+The two earlier candidates' host-stack failures were corrected by extracting unchanged
+reference/parser rules; both failed gates remain historical evidence. No stack or budget
+was increased. All frozen inputs and API caveats remain. Reviewed publication preserves
+Git content; unique raw evidence and binary captures remain outside Git.
