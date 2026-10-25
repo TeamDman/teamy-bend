@@ -1,0 +1,7 @@
+[
+  {
+    "case": "parse/uppercase_binder.bend",
+    "expected": "Qv2{}",
+    "io": false
+  }
+]

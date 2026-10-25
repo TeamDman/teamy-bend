@@ -1,0 +1,7 @@
+Error:
+- expected : a lambda binder (one name: k => body)
+- observed : ' '
+Location:
+2 | type N is Data: Z{}
+3>| def main() -> N: Z{} => Z{}
+4 | 

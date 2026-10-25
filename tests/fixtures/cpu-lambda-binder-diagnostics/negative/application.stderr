@@ -1,0 +1,7 @@
+Error:
+- expected : a lambda binder (one name: k => body)
+- observed : ' '
+Location:
+2 | def id(x: Type) -> Type: x
+3>| def main() -> Type: id(Type) => Type
+4 | 

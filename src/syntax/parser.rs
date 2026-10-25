@@ -382,7 +382,7 @@ impl Parser<'_> {
                 if invalid_start {
                     origins.expected_syntax(&self.label, token.line, expected, &token.text);
                 } else if !matches!(context, NameContext::Term) {
-                    origins.expected_after_name(
+                    origins.expected_after_token(
                         &self.label,
                         token.line,
                         token.column + token.text.chars().count() - 1,
@@ -717,7 +717,7 @@ impl Parser<'_> {
             // Definitions have already consumed '(' at their existing refusal.
             // Keep that public error cursor; upstream observes the raw name end.
             let token = &self.tokens[declaration_at];
-            origins.expected_after_name(
+            origins.expected_after_token(
                 &self.label,
                 token.line,
                 token.column + token.text.chars().count() - 1,
@@ -783,7 +783,7 @@ impl Parser<'_> {
             {
                 if let Some(origins) = &mut self.templates.diagnostics {
                     let token = &self.tokens[self.at - 1];
-                    origins.expected_after_name(
+                    origins.expected_after_token(
                         &self.label,
                         token.line,
                         token.column + token.text.chars().count() - 1,
@@ -1326,6 +1326,22 @@ impl Parser<'_> {
         result?;
         Ok(Some(instance))
     }
+    // Keep failure-only formatting outside the recursive expression frame.
+    #[inline(never)]
+    fn lambda_binder_error(&mut self) -> ParseError {
+        let arrow = &self.tokens[self.at - 1];
+        debug_assert_eq!(arrow.text, "=>");
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.expected_after_token(
+                &self.label,
+                arrow.line,
+                arrow.column + 1,
+                "a lambda binder (one name: k => body)",
+            );
+        }
+        self.error("a lambda binder must be one name")
+    }
+
     fn expression(&mut self, min: u8) -> Result<Occurrence, ParseError> {
         if self.depth >= 64 {
             return Err(self.error("expression nesting exceeds the parser resource limit of 64"));
@@ -1452,7 +1468,7 @@ impl Parser<'_> {
                 }
                 let name = match out.as_ref() {
                     Term::Ref(n) | Term::Var { name: n, .. } => n.clone(),
-                    _ => return Err(self.error("a lambda binder must be one name")),
+                    _ => return Err(self.lambda_binder_error()),
                 };
                 let old = self.scope.len();
                 let reusable = self.is_reusable(&out);
@@ -3367,6 +3383,81 @@ pub fn load_executable_with_sources(
 #[cfg(test)]
 mod occurrence_tests {
     use super::*;
+
+    #[test]
+    fn lambda_binder_diagnostic_preserves_parser_state() {
+        for suffix in ["Type", " # comment", "\tType", "\nType", "\r\nType", ""] {
+            let source = format!("=>{suffix}");
+            let mut book = Book::default();
+            let mut fresh = 17;
+            let mut templates = Templates {
+                diagnostics: Some(super::super::diagnostics::DiagnosticOrigins::default()),
+                ..Templates::default()
+            };
+            templates
+                .diagnostics
+                .as_mut()
+                .unwrap()
+                .source("<name>", &source);
+            let mut parser = Parser {
+                tokens: lex(&source, "<name>").unwrap(),
+                at: 1,
+                label: "<name>".into(),
+                namespace: String::new(),
+                aliases: BTreeMap::new(),
+                scope: Vec::new(),
+                fresh: &mut fresh,
+                display_fresh: 11,
+                book: &mut book,
+                depth: 5,
+                reusable: Vec::new(),
+                reusable_markers: BTreeSet::new(),
+                templates: &mut templates,
+                instance_name: None,
+                instance_arguments: VecDeque::new(),
+                compile_bindings: BTreeMap::new(),
+                foreign: None,
+                constructor_tags: None,
+                origin: SourceOrigin::Standalone,
+            };
+            let tokens = format!("{:?}", parser.tokens);
+            let error = parser.lambda_binder_error();
+            assert_eq!(error.message, "a lambda binder must be one name");
+            let current = &parser.tokens[parser.at];
+            assert_eq!((error.line, error.column), (current.line, current.column));
+            assert_eq!(
+                (parser.at, *parser.fresh, parser.display_fresh, parser.depth),
+                (1, 17, 11, 5)
+            );
+            assert_eq!(format!("{:?}", parser.tokens), tokens);
+            assert!(parser.book.declarations.is_empty());
+            assert!(
+                parser.scope.is_empty() && parser.aliases.is_empty() && parser.reusable.is_empty()
+            );
+            let tracked = parser
+                .templates
+                .diagnostics
+                .as_mut()
+                .unwrap()
+                .load_failure(error);
+            let report = tracked.diagnostic.unwrap();
+            let super::super::diagnostics::LoadDiagnosticContent::ExpectedObserved {
+                expected,
+                observed,
+            } = report.content
+            else {
+                panic!("expected lambda diagnostic")
+            };
+            assert_eq!(expected, "a lambda binder (one name: k => body)");
+            assert_eq!(
+                observed,
+                suffix
+                    .chars()
+                    .next()
+                    .map_or_else(|| "end of input".into(), |c| format!("'{c}'"))
+            );
+        }
+    }
 
     #[test]
     fn reserved_name_diagnostics_preserve_cursor_fresh_state_and_term_context() {

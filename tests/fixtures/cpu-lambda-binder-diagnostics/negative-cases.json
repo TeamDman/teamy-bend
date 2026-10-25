@@ -1,0 +1,18 @@
+[
+  "parse/reserved_lambda_binder.bend",
+  "negative/scalar.bend",
+  "negative/unit.bend",
+  "negative/parenthesized.bend",
+  "negative/application.bend",
+  "negative/constructor.bend",
+  "negative/adjacent.bend",
+  "negative/comment.bend",
+  "negative/newline.bend",
+  "negative/tab.bend",
+  "negative/eof.bend",
+  "negative/crlf.bend",
+  "negative/imported.bend",
+  "negative/template.bend",
+  "negative/arrow-line.bend",
+  "negative/malformed-body.bend"
+]

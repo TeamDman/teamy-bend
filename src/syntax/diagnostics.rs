@@ -298,26 +298,26 @@ impl DiagnosticOrigins {
         });
     }
 
-    pub(super) fn expected_after_name(
+    pub(super) fn expected_after_token(
         &mut self,
         label: &str,
         line: usize,
-        after_name: usize,
+        after_token: usize,
         expected: &str,
     ) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Pinned parse_fail observes the character immediately after the
-            // name, before parse_eat skips whitespace/comments. Use the original
+            // token, before the next parser step skips whitespace/comments. Use the original
             // display line: tokenization skips trivia and loading normalizes
             // CRLF and missing final newlines. Keep the public parser cursor.
             let observed = source.split_inclusive('\n').nth(line.checked_sub(1)?)?;
             let length = observed.chars().count();
-            if after_name > length || after_name == length && observed.ends_with('\n') {
+            if after_token > length || after_token == length && observed.ends_with('\n') {
                 return None;
             }
             let observed = observed
                 .chars()
-                .nth(after_name)
+                .nth(after_token)
                 .map_or_else(|| "end of input".into(), |c| format!("'{c}'"));
             source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
                 content: LoadDiagnosticContent::ExpectedObserved {
@@ -415,7 +415,7 @@ mod tests {
     }
 
     #[derive(facet::Facet)]
-    struct ReservedNameError {
+    struct ExpectedLoadError {
         case: String,
         line: usize,
         column: usize,
@@ -427,7 +427,7 @@ mod tests {
     fn reserved_name_metadata_preserves_public_errors_and_original_sources() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-reserved-name-diagnostics");
-        let cases: Vec<ReservedNameError> = facet_json::from_str(include_str!(
+        let cases: Vec<ExpectedLoadError> = facet_json::from_str(include_str!(
             "../../tests/fixtures/cpu-reserved-name-diagnostics/public-errors.json"
         ))
         .unwrap();
@@ -452,9 +452,7 @@ mod tests {
                     "{}",
                     case.case
                 );
-                if case.case == "parse/reserved_lambda_binder.bend"
-                    || case.case.starts_with("controls/")
-                {
+                if case.case.starts_with("controls/") {
                     assert!(tracked.diagnostic.is_none(), "{}", case.case);
                     continue;
                 }
@@ -474,6 +472,86 @@ mod tests {
                     case.case
                 );
             }
+        }
+    }
+
+    #[test]
+    fn lambda_binder_metadata_preserves_public_errors_and_sources() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-lambda-binder-diagnostics");
+        let cases: Vec<ExpectedLoadError> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-lambda-binder-diagnostics/public-errors.json"
+        ))
+        .unwrap();
+        assert_eq!(cases.len(), 19);
+        for case in cases {
+            let path = root.join(&case.case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            assert_eq!((plain.line, plain.column), (case.line, case.column));
+            assert_eq!(plain.message, case.message);
+            assert_eq!(std::path::Path::new(&plain.source), root.join(&case.source));
+            assert_eq!(
+                plain.to_string(),
+                crate::syntax::load_executable(&path)
+                    .unwrap_err()
+                    .to_string()
+            );
+            for tracked in [
+                crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+                crate::syntax::load_executable_with_diagnostics(&path)
+                    .err()
+                    .unwrap(),
+            ] {
+                assert_eq!(
+                    plain.to_string(),
+                    tracked.error.to_string(),
+                    "{}",
+                    case.case
+                );
+                if case.case.starts_with("controls/") {
+                    if case.case == "controls/earlier-syntax.bend" {
+                        assert!(matches!(tracked.diagnostic.unwrap().content,
+                            super::LoadDiagnosticContent::ExpectedObserved { expected, .. } if expected == "')'"));
+                    } else {
+                        assert!(tracked.diagnostic.is_none());
+                    }
+                    continue;
+                }
+                let report = tracked.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved { expected, observed } =
+                    report.content
+                else {
+                    panic!("expected a source diagnostic")
+                };
+                assert_eq!(expected, "a lambda binder (one name: k => body)");
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(path.with_extension("stderr")).unwrap(),
+                    "{}",
+                    case.case
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn lambda_binder_tracking_preserves_successful_complete_books() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-lambda-binder-diagnostics");
+        for case in [
+            "parse/uppercase_binder.bend",
+            "positive/uppercase.bend",
+            "positive/ordinary.bend",
+            "positive/reusable.bend",
+            "positive/nested.bend",
+        ] {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap();
+            let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            assert_eq!(format!("{plain:?}"), format!("{tracked:?}"));
         }
     }
 
@@ -741,20 +819,20 @@ mod tests {
     #[test]
     fn duplicate_constructor_metadata_requires_an_actual_source_position() {
         let mut origins = super::DiagnosticOrigins::default();
-        origins.expected_after_name("missing", 1, 0, "A");
+        origins.expected_after_token("missing", 1, 0, "A");
         assert!(origins.load_failure.is_none());
         origins.source("known", "A");
         for (line, column) in [(0, 0), (2, 0), (1, 2)] {
-            origins.expected_after_name("known", line, column, "A");
+            origins.expected_after_token("known", line, column, "A");
             assert!(origins.load_failure.is_none());
         }
         origins.source("multiline", "A\nB");
-        origins.expected_after_name("multiline", 1, 2, "A");
+        origins.expected_after_token("multiline", 1, 2, "A");
         assert!(origins.load_failure.is_none());
         origins.source("trailing-newline", "A\n");
-        origins.expected_after_name("trailing-newline", 1, 2, "A");
+        origins.expected_after_token("trailing-newline", 1, 2, "A");
         assert!(origins.load_failure.is_none());
-        origins.expected_after_name("known", 1, 1, "A");
+        origins.expected_after_token("known", 1, 1, "A");
         assert!(matches!(origins.load_failure.unwrap().content,
             super::LoadDiagnosticContent::ExpectedObserved { observed, .. } if observed == "end of input"));
     }

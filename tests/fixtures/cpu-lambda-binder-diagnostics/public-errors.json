@@ -1,0 +1,135 @@
+[
+  {
+    "case": "parse/reserved_lambda_binder.bend",
+    "line": 6,
+    "column": 21,
+    "message": "a lambda binder must be one name",
+    "source": "parse/reserved_lambda_binder.bend"
+  },
+  {
+    "case": "negative/scalar.bend",
+    "line": 2,
+    "column": 26,
+    "message": "a lambda binder must be one name",
+    "source": "negative/scalar.bend"
+  },
+  {
+    "case": "negative/unit.bend",
+    "line": 2,
+    "column": 29,
+    "message": "a lambda binder must be one name",
+    "source": "negative/unit.bend"
+  },
+  {
+    "case": "negative/parenthesized.bend",
+    "line": 2,
+    "column": 31,
+    "message": "a lambda binder must be one name",
+    "source": "negative/parenthesized.bend"
+  },
+  {
+    "case": "negative/application.bend",
+    "line": 3,
+    "column": 33,
+    "message": "a lambda binder must be one name",
+    "source": "negative/application.bend"
+  },
+  {
+    "case": "negative/constructor.bend",
+    "line": 3,
+    "column": 25,
+    "message": "a lambda binder must be one name",
+    "source": "negative/constructor.bend"
+  },
+  {
+    "case": "negative/adjacent.bend",
+    "line": 2,
+    "column": 27,
+    "message": "a lambda binder must be one name",
+    "source": "negative/adjacent.bend"
+  },
+  {
+    "case": "negative/comment.bend",
+    "line": 3,
+    "column": 3,
+    "message": "a lambda binder must be one name",
+    "source": "negative/comment.bend"
+  },
+  {
+    "case": "negative/newline.bend",
+    "line": 3,
+    "column": 3,
+    "message": "a lambda binder must be one name",
+    "source": "negative/newline.bend"
+  },
+  {
+    "case": "negative/tab.bend",
+    "line": 2,
+    "column": 28,
+    "message": "a lambda binder must be one name",
+    "source": "negative/tab.bend"
+  },
+  {
+    "case": "negative/eof.bend",
+    "line": 3,
+    "column": 1,
+    "message": "a lambda binder must be one name",
+    "source": "negative/eof.bend"
+  },
+  {
+    "case": "negative/crlf.bend",
+    "line": 3,
+    "column": 3,
+    "message": "a lambda binder must be one name",
+    "source": "negative/crlf.bend"
+  },
+  {
+    "case": "negative/imported.bend",
+    "line": 2,
+    "column": 30,
+    "message": "a lambda binder must be one name",
+    "source": "negative/imports/bad.bend"
+  },
+  {
+    "case": "negative/template.bend",
+    "line": 2,
+    "column": 36,
+    "message": "a lambda binder must be one name",
+    "source": "negative/template.bend"
+  },
+  {
+    "case": "negative/arrow-line.bend",
+    "line": 4,
+    "column": 8,
+    "message": "a lambda binder must be one name",
+    "source": "negative/arrow-line.bend"
+  },
+  {
+    "case": "negative/malformed-body.bend",
+    "line": 2,
+    "column": 27,
+    "message": "a lambda binder must be one name",
+    "source": "negative/malformed-body.bend"
+  },
+  {
+    "case": "controls/compile-binding.bend",
+    "line": 3,
+    "column": 32,
+    "message": "a template argument cannot be rebound as a lambda binder",
+    "source": "controls/compile-binding.bend"
+  },
+  {
+    "case": "controls/depth.bend",
+    "line": 2,
+    "column": 53,
+    "message": "body nesting exceeds the parser resource limit of 64",
+    "source": "controls/depth.bend"
+  },
+  {
+    "case": "controls/earlier-syntax.bend",
+    "line": 2,
+    "column": 27,
+    "message": "expected \")\", found \"]\"",
+    "source": "controls/earlier-syntax.bend"
+  }
+]

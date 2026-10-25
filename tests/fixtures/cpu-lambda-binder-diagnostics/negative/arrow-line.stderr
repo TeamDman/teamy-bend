@@ -1,0 +1,7 @@
+Error:
+- expected : a lambda binder (one name: k => body)
+- observed : ' '
+Location:
+3 |   (Type)
+4>|     => Type
+5 | 

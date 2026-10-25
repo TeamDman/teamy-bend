@@ -1,0 +1,8 @@
+Error:
+- expected : a lambda binder (one name: k => body)
+- observed : '
+'
+Location:
+1 | # SPDX-License-Identifier: MPL-2.0
+2>| def main() -> Type: Type=>
+3 |   Type

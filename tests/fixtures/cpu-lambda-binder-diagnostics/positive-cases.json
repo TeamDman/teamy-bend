@@ -1,0 +1,22 @@
+[
+  {
+    "case": "positive/ordinary.bend",
+    "expected": "7",
+    "io": false
+  },
+  {
+    "case": "positive/reusable.bend",
+    "expected": "6",
+    "io": false
+  },
+  {
+    "case": "positive/nested.bend",
+    "expected": "13",
+    "io": false
+  },
+  {
+    "case": "positive/uppercase.bend",
+    "expected": "8",
+    "io": false
+  }
+]

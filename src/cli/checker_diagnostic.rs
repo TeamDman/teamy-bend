@@ -352,6 +352,10 @@ mod tests {
                 "3>| def match(x):",
             ),
             (
+                "cpu-lambda-binder-diagnostics/parse/reserved_lambda_binder.bend",
+                "6>| def main(): Type => Type",
+            ),
+            (
                 "cpu-comptime-rebind/negative/nested.bend",
                 "6>|   Wrap{f} = x",
             ),
