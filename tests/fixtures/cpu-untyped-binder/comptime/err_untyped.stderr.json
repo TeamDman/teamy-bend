@@ -1,0 +1,1 @@
+"Error:\n- expected : ':'\n- observed : ','\nLocation:\n3 | \n4>| def app(~f, x: Nat) -> Nat:\n5 |   f(x)\n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : ':'\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~n) -> U32: 0\n4 | \n"

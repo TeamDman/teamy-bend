@@ -1,0 +1,1 @@
+"Error:\n- expected : ':'\n- observed : '>'\nLocation:\n2 | \n3>| type Box<-A> is Data:\n4 |   Pack{}\n"

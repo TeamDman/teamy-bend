@@ -334,6 +334,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-untyped-binder/comptime/err_untyped.bend",
+                "4>| def app(~f, x: Nat) -> Nat:",
+            ),
+            (
+                "cpu-untyped-binder/negative/imported.bend",
+                "3>| def bad(~n, x: U32) -> U32: x",
+            ),
+            (
                 "cpu-unknown-template/negative/template_missing.bend",
                 "4>| def main() -> U32: D.missing(~9)",
             ),

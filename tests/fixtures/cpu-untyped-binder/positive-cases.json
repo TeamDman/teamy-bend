@@ -1,0 +1,32 @@
+[
+  {
+    "case": "positive/typed.bend",
+    "expected": "4n",
+    "io": false
+  },
+  {
+    "case": "positive/imported.bend",
+    "expected": "24",
+    "io": false
+  },
+  {
+    "case": "positive/quantified.bend",
+    "expected": "6",
+    "io": false
+  },
+  {
+    "case": "positive/bare.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "comptime/two_instances.bend",
+    "expected": "34",
+    "io": true
+  },
+  {
+    "case": "comptime/value_type.bend",
+    "expected": "25",
+    "io": true
+  }
+]

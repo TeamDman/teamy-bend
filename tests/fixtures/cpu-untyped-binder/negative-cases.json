@@ -1,0 +1,14 @@
+[
+  "comptime/err_untyped.bend",
+  "negative/tilde_close.bend",
+  "negative/tilde_eof.bend",
+  "negative/erased_comma.bend",
+  "negative/many_close.bend",
+  "negative/multiline.bend",
+  "negative/imported.bend",
+  "negative/data.bend",
+  "negative/field.bend",
+  "negative/missing_name.bend",
+  "negative/missing_type.bend",
+  "comptime/err_missing.bend"
+]

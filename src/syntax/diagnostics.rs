@@ -450,6 +450,65 @@ mod tests {
     }
 
     #[test]
+    fn quantified_binder_metadata_preserves_public_errors_and_imported_sources() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-untyped-binder");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-untyped-binder/negative-cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            if matches!(
+                case.as_str(),
+                "negative/missing_name.bend"
+                    | "negative/missing_type.bend"
+                    | "comptime/err_missing.bend"
+                    | "comptime/wrong_type.bend"
+            ) {
+                continue;
+            }
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let executable = crate::syntax::load_executable(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            let tracked_executable = crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap();
+            assert_eq!(plain.message, "expected a type after a quantified binder");
+            let expected: String = facet_json::from_str(
+                &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+            )
+            .unwrap();
+            assert_eq!(plain.to_string(), executable.to_string(), "{case}");
+            for failure in [tracked, tracked_executable] {
+                assert_eq!(plain.to_string(), failure.error.to_string(), "{case}");
+                assert_eq!(plain.message, failure.error.message);
+                assert_eq!(plain.source, failure.error.source);
+                assert_eq!(
+                    (plain.line, plain.column),
+                    (failure.error.line, failure.error.column)
+                );
+                let report = failure.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved {
+                    expected: want,
+                    observed,
+                } = report.content
+                else {
+                    panic!("expected the pinned parser category");
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {want}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    expected,
+                    "{case}"
+                );
+            }
+        }
+    }
+
+    #[test]
     fn duplicate_constructor_metadata_preserves_public_load_errors() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-duplicate-constructor");

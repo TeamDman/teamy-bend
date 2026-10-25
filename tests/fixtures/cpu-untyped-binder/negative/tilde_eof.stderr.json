@@ -1,0 +1,1 @@
+"Error:\n- expected : ':'\n- observed : end of input\nLocation:\n2 | \n3>| def bad(~n\n"

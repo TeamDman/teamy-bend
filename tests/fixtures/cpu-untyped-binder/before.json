@@ -1,0 +1,753 @@
+{
+  "baseline": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+  "rows": [
+    {
+      "case": "positive/typed.bend",
+      "source_sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/typed.bend",
+        "$EVIDENCE/before-f773c999f5397961.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1224359329789877,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/typed.bend",
+      "source_sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/typed.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.23945583999739029
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "26e8cff767e3be2069c14fd6a72bcdbc5ee2fda5a1537558b6935a60a1975218",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/imported.bend",
+        "$EVIDENCE/before-6b3a948eda9ae4f0.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14204846799839288,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "26e8cff767e3be2069c14fd6a72bcdbc5ee2fda5a1537558b6935a60a1975218",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2452905730169732
+    },
+    {
+      "case": "positive/quantified.bend",
+      "source_sha256": "967a2af0a21e8df2dadd8d294e9070c3cfc4443d88d49eef3f58bf43e750535b",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/quantified.bend",
+        "$EVIDENCE/before-275746ff4916bc2d.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1371901000093203,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/quantified.bend",
+      "source_sha256": "967a2af0a21e8df2dadd8d294e9070c3cfc4443d88d49eef3f58bf43e750535b",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/quantified.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24476458900608122
+    },
+    {
+      "case": "positive/bare.bend",
+      "source_sha256": "790a75bbc79f74ffa91730b21f7748e34b96624ad19718a32e162ec0afdd4c7b",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/bare.bend",
+        "$EVIDENCE/before-e3ac481fcea97d93.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1354210439894814,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/bare.bend",
+      "source_sha256": "790a75bbc79f74ffa91730b21f7748e34b96624ad19718a32e162ec0afdd4c7b",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/positive/bare.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.243511042004684
+    },
+    {
+      "case": "comptime/two_instances.bend",
+      "source_sha256": "0204080251435327470ddb01befc50ade1d81f10324149ba32514358ca8f3d4a",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/two_instances.bend",
+        "$EVIDENCE/before-df1f2f752e9f9cba.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13485282799229026,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "comptime/two_instances.bend",
+      "source_sha256": "0204080251435327470ddb01befc50ade1d81f10324149ba32514358ca8f3d4a",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/two_instances.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n15 | \n16>| def main() -> IO(Unit):\n17 |   a = sum(List.map(~Nat, ~Nat, ~inc, [1n, 2n, 3n]))\n",
+      "timed_out": false,
+      "seconds": 0.24488409698824398
+    },
+    {
+      "case": "comptime/value_type.bend",
+      "source_sha256": "b7b00d0029c744ec5fc7ba0655a58f9a9f5d2170f8e3dbfbac35db806a7a45f7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/value_type.bend",
+        "$EVIDENCE/before-360b1deb5624507f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1578555449959822,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "comptime/value_type.bend",
+      "source_sha256": "b7b00d0029c744ec5fc7ba0655a58f9a9f5d2170f8e3dbfbac35db806a7a45f7",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/value_type.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n14 | \n15>| def main() -> IO(Unit):\n16 |   a = scale(~3, 5)\n",
+      "timed_out": false,
+      "seconds": 0.24750636299722828
+    },
+    {
+      "case": "comptime/err_untyped.bend",
+      "source_sha256": "1e99fe4295bd6e416cd73487e86896cdf4db22782fc0ff214ea64ea37bc41eec",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/err_untyped.bend",
+        "$EVIDENCE/before-aaf49cd5a16b09ba.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ','\nLocation:\n3 | \n4>| def app(~f, x: Nat) -> Nat:\n5 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.10646785201970488,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_untyped.bend",
+      "source_sha256": "1e99fe4295bd6e416cd73487e86896cdf4db22782fc0ff214ea64ea37bc41eec",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/err_untyped.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/comptime/err_untyped.bend:4:11: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1640663180151023
+    },
+    {
+      "case": "negative/tilde_close.bend",
+      "source_sha256": "0231697d36079be5454df371efb07428c5e8947f7830a46e64797b5e2b43e493",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_close.bend",
+        "$EVIDENCE/before-a53b13a5a22b4b81.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~n) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.10667079198174179,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/tilde_close.bend",
+      "source_sha256": "0231697d36079be5454df371efb07428c5e8947f7830a46e64797b5e2b43e493",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_close.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_close.bend:3:11: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12437673099339008
+    },
+    {
+      "case": "negative/tilde_eof.bend",
+      "source_sha256": "744bfce98df61b77105c771e423e737dfad554fc0f586e10f0c132761d55e4bc",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_eof.bend",
+        "$EVIDENCE/before-70def0197f405b28.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : end of input\nLocation:\n2 | \n3>| def bad(~n\n",
+      "timed_out": false,
+      "seconds": 0.0990946069941856,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/tilde_eof.bend",
+      "source_sha256": "744bfce98df61b77105c771e423e737dfad554fc0f586e10f0c132761d55e4bc",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/tilde_eof.bend:4:1: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13618782701087184
+    },
+    {
+      "case": "negative/erased_comma.bend",
+      "source_sha256": "96126384eeb40a7418de8596a9a15d7fb9619b108099347825dfe6f97d2bfd22",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/erased_comma.bend",
+        "$EVIDENCE/before-ce503961266d7a39.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ','\nLocation:\n2 | \n3>| def bad(-n, x: U32) -> U32: x\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09906857801252045,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/erased_comma.bend",
+      "source_sha256": "96126384eeb40a7418de8596a9a15d7fb9619b108099347825dfe6f97d2bfd22",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/erased_comma.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/erased_comma.bend:3:11: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13226512298570015
+    },
+    {
+      "case": "negative/many_close.bend",
+      "source_sha256": "2c79ea6fdc2fd9534a9ef84ebabd0f562f88257ca5743345cbce135568d0be83",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/many_close.bend",
+        "$EVIDENCE/before-b48d2a514948b0e5.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ')'\nLocation:\n2 | \n3>| def bad(+n) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.10722861398244277,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/many_close.bend",
+      "source_sha256": "2c79ea6fdc2fd9534a9ef84ebabd0f562f88257ca5743345cbce135568d0be83",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/many_close.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/many_close.bend:3:11: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1304176389821805
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "75be9a77fa580b16b48cd847f6cfd6fd0d576b614ef6a6f74bc73bcabfeadd40",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/multiline.bend",
+        "$EVIDENCE/before-c4259654a002b02b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ','\nLocation:\n4 |   ~n\n5>|   , x: U32\n6 | ) -> U32: x\n",
+      "timed_out": false,
+      "seconds": 0.11408718000166118,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "75be9a77fa580b16b48cd847f6cfd6fd0d576b614ef6a6f74bc73bcabfeadd40",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/multiline.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/multiline.bend:5:3: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1325143720023334
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "2d5d3a819b82ce990e7267b4bb847cf69ad37c36c6c936b2d6bea407870c1760",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/imported.bend",
+        "$EVIDENCE/before-d7077e5c2bdeb0eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : ','\nLocation:\n2 | \n3>| def bad(~n, x: U32) -> U32: x\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.10730784200131893,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "2d5d3a819b82ce990e7267b4bb847cf69ad37c36c6c936b2d6bea407870c1760",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/../imports/bad.bend:3:11: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13641426200047135
+    },
+    {
+      "case": "negative/data.bend",
+      "source_sha256": "1496c837a072cf7c2ea3bbb214cddf804296e2adbab5bc65922329b6105e2b01",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/data.bend",
+        "$EVIDENCE/before-0109b1061dfb8074.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : '>'\nLocation:\n2 | \n3>| type Box<-A> is Data:\n4 |   Pack{}\n",
+      "timed_out": false,
+      "seconds": 0.12282476699328981,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/data.bend",
+      "source_sha256": "1496c837a072cf7c2ea3bbb214cddf804296e2adbab5bc65922329b6105e2b01",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/data.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/data.bend:3:12: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.15868073399178684
+    },
+    {
+      "case": "negative/field.bend",
+      "source_sha256": "ec92c9d1f61234a62d22ad94949462369d93dd94a52eaa385bcaadc9bc7ce80a",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/field.bend",
+        "$EVIDENCE/before-0b7deaca862b3f41.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : ':'\n- observed : '}'\nLocation:\n3 | type Box is Data:\n4>|   Pack{+x}\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09942538899485953,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/field.bend",
+      "source_sha256": "ec92c9d1f61234a62d22ad94949462369d93dd94a52eaa385bcaadc9bc7ce80a",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/field.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-untyped-binder/negative/field.bend:4:10: expected a type after a quantified binder\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13247397201485
+    },
+    {
+      "case": "negative/missing_name.bend",
+      "source_sha256": "00ed63df642096cc7199ab5c76e0ef76b7e2b457f2ffce67709f24a16d751271",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/missing_name.bend",
+        "$EVIDENCE/before-4f813521ed55a6a8.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.11949748097686097,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/missing_name.bend",
+      "source_sha256": "00ed63df642096cc7199ab5c76e0ef76b7e2b457f2ffce67709f24a16d751271",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/missing_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.12719968499732204
+    },
+    {
+      "case": "negative/missing_type.bend",
+      "source_sha256": "cf1e9e920b8cb4274135733a4a894f3dcfc69188c9c05dc75fdf3efaf75e1b1f",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/missing_type.bend",
+        "$EVIDENCE/before-5eaa3e72f1381fd6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~n:) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09661816697916947,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/missing_type.bend",
+      "source_sha256": "cf1e9e920b8cb4274135733a4a894f3dcfc69188c9c05dc75fdf3efaf75e1b1f",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/negative/missing_type.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ')'\nLocation:\n2 | \n3>| def bad(~n:) -> U32: 0\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.12088321597548202
+    },
+    {
+      "case": "comptime/err_missing.bend",
+      "source_sha256": "15d39adea1e3f05b813bca2abdf7dfc5423a91c32f613c1a942780ca1794b4fa",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/err_missing.bend",
+        "$EVIDENCE/before-ea57acc8ff2a6c4d.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : -f\n- observed : f\nLocation: app~0\n5 | \n6>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n7 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.13617906201398,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_missing.bend",
+      "source_sha256": "15d39adea1e3f05b813bca2abdf7dfc5423a91c32f613c1a942780ca1794b4fa",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/err_missing.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : -f\n- observed : f\nLocation: app~0\n5 | \n6>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n7 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.25023510699975304
+    },
+    {
+      "case": "comptime/wrong_type.bend",
+      "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/wrong_type.bend",
+        "$EVIDENCE/before-abd213f841bbd5eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n5 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   f(x)\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.12181493299431168,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/wrong_type.bend",
+      "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-untyped-binder/comptime/wrong_type.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.25672827899688855
+    }
+  ],
+  "completed": true,
+  "actual_baseline_snapshot": {
+    "source_commit": "e9638be533aed465820168ced57b6f27f54e82d9",
+    "source_tree": "fe14a1a6ce684658acf7d40256f3319d12186148",
+    "binary_sha256": "0a4c0722d2cdec0d96944b8f99f8018f1c5156f07bf882bdce8b4307949f3aa6",
+    "binary_size": 27467336,
+    "working_binary": "$BASELINE_RUN/teamy-bend",
+    "archive": "$BASELINE_EVIDENCE/snapshot-renewed/teamy-bend.gz",
+    "archive_sha256": "c8ada47f9cec68e55790d37880087736a36ae21576d638c104b6e932673b3b39",
+    "archive_size": 7111278,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "0a4c0722d2cdec0d96944b8f99f8018f1c5156f07bf882bdce8b4307949f3aa6"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "identity_note": "Published cd75675 is production-identical to captured source e9638be; both identities retained.",
+  "invalid_authored_control": {
+    "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef keep(q, x: U32) -> U32: x\ndef main() -> U32: keep(+, 9)\n",
+    "rows": [
+      {
+        "case": "positive/bare.bend",
+        "source_sha256": "cfc09e2f680572594769d60ede11ab7821a4a311936f1d8f31b4280ae0b3eaad",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-untyped-binder/positive/bare.bend",
+          "$EVIDENCE/before-e3ac481fcea97d93.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : ','\nLocation:\n3 | def keep(q, x: U32) -> U32: x\n4>| def main() -> U32: keep(+, 9)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.0977380970143713,
+        "phase": {
+          "phase": "load",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "positive/bare.bend",
+        "source_sha256": "cfc09e2f680572594769d60ede11ab7821a4a311936f1d8f31b4280ae0b3eaad",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-untyped-binder/positive/bare.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : ','\nLocation:\n3 | def keep(q, x: U32) -> U32: x\n4>| def main() -> U32: keep(+, 9)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.13227072200970724
+      }
+    ],
+    "reason": "Authored + is not a quantity literal. Both parsers reject; corrected control uses pinned &2 syntax. Not a port fix."
+  }
+}

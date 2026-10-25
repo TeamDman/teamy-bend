@@ -1,0 +1,1 @@
+"Error:\n- expected : ':'\n- observed : ','\nLocation:\n4 |   ~n\n5>|   , x: U32\n6 | ) -> U32: x\n"
