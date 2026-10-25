@@ -1633,7 +1633,20 @@ impl Parser<'_> {
                 if self.take(":") {
                     let name = match value.as_ref() {
                         Term::Ref(n) | Term::Var { name: n, .. } => self.resolve(n),
-                        _ => return Err(self.error("a lambda-match arm needs a constructor name")),
+                        _ => {
+                            // Upstream treats a non-name term as the fallback
+                            // and expects its closing brace at this colon.
+                            // Preserve our consumed cursor and public error.
+                            // GpuRef has a distinct upstream representation;
+                            // retain that separate refusal unchanged.
+                            let colon = &self.tokens[self.at - 1];
+                            if !matches!(value.as_ref(), Term::GpuRef(_))
+                                && let Some(origins) = &mut self.templates.diagnostics
+                            {
+                                origins.expected_token(&self.label, colon.line, "}", &colon.text);
+                            }
+                            return Err(self.error("a lambda-match arm needs a constructor name"));
+                        }
                     };
                     let arm = self.expression(0)?;
                     let source = self.templates.diagnostics.as_ref().map_or_else(

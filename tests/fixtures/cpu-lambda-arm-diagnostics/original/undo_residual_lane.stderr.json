@@ -1,0 +1,1 @@
+"Error:\n- expected : '}'\n- observed : ':'\nLocation:\n7 | law bad:\n8>|   @f:(U32 -> U32 -> U32) -> @y:U32 -> {(\\{0: 0; 1+: f(y)})(2) == f(y, 2) : U32}\n9 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : '}'\n- observed : ':'\nLocation:\n24 |   p = {P8a{k, (k + 1 : U32)} : P8a}\n25>|   \\{0: eat(p, 7); n => eat(p, n)}\n26 | \n"

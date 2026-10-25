@@ -510,6 +510,54 @@ mod tests {
     }
 
     #[test]
+    fn lambda_arm_context_preserves_public_errors_and_colon_provenance() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-lambda-arm-diagnostics");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-lambda-arm-diagnostics/cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string(), "{case}");
+            if matches!(
+                case.as_str(),
+                "controls/missing-close.bend" | "controls/missing-body.bend"
+            ) {
+                continue; // Separate existing parser errors, checked exactly by the CLI test.
+            }
+            assert_eq!(plain.message, "a lambda-match arm needs a constructor name");
+            let diagnostic = tracked.diagnostic.unwrap();
+            assert!(matches!(diagnostic.content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected, observed }
+                if expected == "'}'" && observed == "':'"));
+            if matches!(
+                case.as_str(),
+                "controls/multiline.bend" | "controls/imported/main.bend"
+            ) {
+                assert_eq!(plain.line, 5); // The unchanged public error is after the colon.
+                assert!(diagnostic.excerpt.contains("4>|     :"));
+                assert!(!diagnostic.excerpt.contains("H.bad()"));
+            }
+        }
+        // A shared compile-bound Ref stays a named arm during parsing. Its
+        // bare constructor argument is deliberately not a valid checked value.
+        let path = root.join("controls/shared-ref-head.bend");
+        let plain = crate::syntax::load(&path).unwrap();
+        let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+        assert_eq!(format!("{plain:?}"), format!("{tracked:?}"));
+        assert_eq!(
+            crate::kernel::check_book(&plain).err().unwrap().to_string(),
+            crate::kernel::check_book(&tracked)
+                .err()
+                .unwrap()
+                .to_string()
+        );
+    }
+
+    #[test]
     fn local_binding_metadata_preserves_the_public_parse_error() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-destructure/destructure_let_001.bend");

@@ -366,3 +366,71 @@ fn valid_datatype_boundaries_keep_complete_normal_values() {
         assert_eq!(shape_in_book(&value, &book).unwrap(), expected_shape);
     }
 }
+
+#[test]
+fn lambda_arm_boundaries_keep_exact_diagnostics_and_failure_status() {
+    let root =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-lambda-arm-diagnostics");
+    let cases: Vec<String> = facet_json::from_str(include_str!(
+        "fixtures/cpu-lambda-arm-diagnostics/cases.json"
+    ))
+    .unwrap();
+    let destination = std::env::temp_dir().join(format!(
+        "teamy-bend-lambda-arm-refusal-unwritten-{}",
+        std::process::id()
+    ));
+    assert!(!destination.exists());
+    for case in cases {
+        let path = root.join(case);
+        let expected: String = facet_json::from_str(
+            &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+        )
+        .unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&destination);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(
+                output.status.code(),
+                Some(1),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(output.stdout.is_empty(), "{}: {operation}", path.display());
+            assert_eq!(
+                output.stderr,
+                expected.as_bytes(),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(!destination.exists());
+        }
+    }
+}
+
+#[test]
+fn named_lambda_arms_and_fallbacks_keep_complete_normal_values() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-lambda-arm-diagnostics/positive");
+    for name in ["constructors", "fallback", "function-tail", "numeric-tail"] {
+        let path = root.join(format!("{name}.bend"));
+        let expected_text = std::fs::read_to_string(path.with_extension("stdout")).unwrap();
+        let expected = parse_term(expected_text.trim()).unwrap();
+        let expected_shape = shape_in_book(&expected, &load(&path).unwrap()).unwrap();
+        let book = load(&path).unwrap();
+        let checked = check_book(&book).unwrap();
+        let normal = checked.normalize_definition("main").unwrap();
+        assert_eq!(format!("{normal}\n"), expected_text);
+        assert_eq!(shape_in_book(&normal, &book).unwrap(), expected_shape);
+        let value = checked.evaluate_data("main", &[]).unwrap();
+        assert_eq!(shape_in_book(&value, &book).unwrap(), expected_shape);
+    }
+}

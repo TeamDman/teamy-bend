@@ -1,0 +1,1 @@
+"Error:\n- expected : '}'\n- observed : ':'\nLocation:\n11 | def f(n, y):\n12>|   (\\{0: 7; k => (k * 2 : U32)}(n : U32) + y : U32)\n13 | \n"

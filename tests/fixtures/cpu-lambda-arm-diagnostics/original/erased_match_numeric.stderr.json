@@ -1,0 +1,1 @@
+"Error:\n- expected : '}'\n- observed : ':'\nLocation:\n10 | def hidden():\n11>|   \\{0: 0; (1)}\n12 | \n"

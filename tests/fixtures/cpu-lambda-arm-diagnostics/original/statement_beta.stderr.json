@@ -1,0 +1,1 @@
+"Error:\n- expected : '}'\n- observed : ':'\nLocation:\n18 | def main():\n19>|   usem(\\{0: 9; n => (n * 2 : U32)})\n20 | \n"
