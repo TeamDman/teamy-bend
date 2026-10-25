@@ -1,0 +1,179 @@
+{
+  "tested_source": "366c7487fa795685227c72fcdb58a1af4ab3f5df",
+  "source_tree": "b651a32a99ae9c803055b29d42a966f81caf6a6b",
+  "binary_sha256": "56c86c247cecc796906ae05388013eee03914592c33149f0f6892c1440496b17",
+  "full_gate": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 11910955008,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 991.6641733610013,
+    "minimum_free": 11885842432,
+    "minimum_tmp_free": 3377582080
+  },
+  "counts": {
+    "passed": 1256,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 185
+  },
+  "gate_log_sha256": "6b9f1619e58d095dca003a9988e664b53e8e4daa7ad4fbbbfd32fb14634cdc38",
+  "matrix_raw_sha256": "b8d3daadbb85fd77fbca904a31953a831bd087d0c037bc593a4e25e8ae3e66a2",
+  "census_raw_sha256": "c01e7649cc7a3b62997f01aab9f083c81e62f77545896290ab3860e83b348fe1",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "review_source_sha256": "463c20fb7e25d055bee9c510c1991ce76a4c37690a576e4e20cacff7080b7b0e",
+  "review_matrix_sha256": "2287d9179c4223a2a38d8c14e8546140002d88da3d40a9c7b297a7ea2a993823",
+  "review_census_sha256": "fb6bd6a605dd10fe953f15422ccbf92519297e1114b06209199b0b2394e8837e",
+  "controls": [
+    {
+      "name": "focused-state",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "contextual_reflexivity",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 4.9296414489799645,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "groups": 2,
+      "log_sha256": "ff8b733b6d2a7471273fc67e1feceb785c77f236edd69026e403785a114177fc"
+    },
+    {
+      "name": "focused-integration",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_contextual_proof_diagnostics",
+        "--test",
+        "cpu_comptime_rebind",
+        "--test",
+        "kernel_normalization",
+        "--test",
+        "kernel_open_closures"
+      ],
+      "exit": 0,
+      "seconds": 96.29498990401044,
+      "passed": 44,
+      "failed": 0,
+      "ignored": 0,
+      "groups": 4,
+      "log_sha256": "e45e8a6fdd2f42c1f6e04f8ebdce98f5e662371a3026b1a6c879a33efeaa1fed"
+    },
+    {
+      "name": "focused-boundary",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "cli::checker_diagnostic::tests"
+      ],
+      "exit": 0,
+      "seconds": 2.3650848630059045,
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "groups": 2,
+      "log_sha256": "46d8e3a8a39070183c00b73927b09b55373a1173c9b1ec353ce0425f11392d91"
+    },
+    {
+      "name": "targeted-clippy",
+      "precommit_working_tree": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_contextual_proof_diagnostics",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "seconds": 3.1665421679790597,
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "groups": 0,
+      "log_sha256": "18cb53a69b6a972f3dff49b602dbe7ad00d7ddbe52b32d15398e615f7ec5ac93"
+    }
+  ],
+  "phase_probe_sha256": "c0746d9cf590a697835437ed84b5d85fbd6d96032da85a77f7de9a4ca97b2c8a",
+  "phase_probe_source_sha256": "c760067e1e4e8d06dafae783b13ee950c18014e5877d8b98706b058747d9bdc8",
+  "census_command": [
+    "python3",
+    "scripts/checking-census/run.py",
+    "--reference",
+    "<reference>",
+    "--binary",
+    "<port>",
+    "--phase-probe",
+    "<evidence>/phase-probe",
+    "--output",
+    "<evidence>/census",
+    "--build-receipt",
+    "<evidence>/census-build.json"
+  ],
+  "cache_preservation": {
+    "cargo_files": 5257,
+    "cargo_bytes_relocated": 198876287,
+    "cargo_measured_workspace_gain": 618496,
+    "executable_bytes": 135705808,
+    "executable_sha256": "0042129f64b9d84cba9abc0ec0229b6a50b2846350bdc3a5dcdbd4a0c11e338c",
+    "archive_bytes": 35358253,
+    "archive_sha256": "7b0d8b146e9e20eecc0bea4282d2d58dab9a785c815944dda8ba4626425fdb14",
+    "executable_measured_workspace_gain": 100347904,
+    "preservation": "Inactive cache contents verified before relocation; original paths remain symlinks. Historical executable also has a verified lossless archive. Source and unique failure evidence retained; caches and bulk archives are outside Git."
+  },
+  "unrun": "Invalid originals and authored negatives stop at checking, with no executable artifacts or runtime claim. Strict IO proof exclusions, external invoke audit, supplementary all-target Clippy, GPU/desktop and newer upstream remain unqualified. No mid-normalization cancellation claim.",
+  "coverage": {
+    "linked": 484,
+    "unlinked": 818,
+    "unlinked_categories": {
+      "checker_rejection": 283,
+      "interpretation_and_compiled_candidates": 521,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  }
+}

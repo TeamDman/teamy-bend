@@ -1,0 +1,149 @@
+{
+  "source": "366c7487fa795685227c72fcdb58a1af4ab3f5df",
+  "baseline_source": "cd7cabbda37192a7d401d1b3b1a3b9caf37c9f7a",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 380,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 56
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 165,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 56
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 27
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/default_arm_family.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/neq_reflexivity.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/default_arm_family.bend",
+      "source_sha256": "9fac80c3e2f18d063c2bc87eb94123fa7416c1c8c83b859210d8362e4d95b5f3",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "14bd08d59f3eb860652407d61428941bfee61606ae5734f7d44058e9ea05066d",
+      "after_stderr_sha256": "d7170cbb4324a300e578357accb7a3d4bad6f5b84bd5a56371cc895873eeae53"
+    },
+    {
+      "fixture": "check/neq_reflexivity.bend",
+      "source_sha256": "05a47fa1309c7c5df8908a9acb40fbfd45e49d59c046eef2783a9a08dde277cd",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "ff34ef921fd2241b6fda566b5a36d8e92955b15ca39c2f8cc95b18103c58ede5",
+      "after_stderr_sha256": "5bd9a012f0faf26366999939fa510459ddb6407aaee940ea778d5a479e875732"
+    }
+  ],
+  "raw_observations_sha256": "c01e7649cc7a3b62997f01aab9f083c81e62f77545896290ab3860e83b348fe1",
+  "baseline_raw_sha256": "92e61541f4bced1b8be461c0b25ada0a8a7648423249a4751113cb01625ab227",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "compact_changes": [
+    {
+      "fixture": "check/default_arm_family.bend",
+      "source_sha256": "9fac80c3e2f18d063c2bc87eb94123fa7416c1c8c83b859210d8362e4d95b5f3",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mev: type mismatch: expected Pq(b); observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after_port": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Pq(b)\n- observed : non-inferrable term '{==}'\nContext:\n- b : Bq\nLocation: ev\n28 |     case c:\n29>|       {==}\n30 | \n"
+      },
+      "upstream": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Pq(b)\n- observed : non-inferrable term '{==}'\nContext:\n- b : Bq\nLocation: ev\n28 |     case c:\n29>|       {==}\n30 | \n"
+      }
+    },
+    {
+      "fixture": "check/neq_reflexivity.bend",
+      "source_sha256": "05a47fa1309c7c5df8908a9acb40fbfd45e49d59c046eef2783a9a08dde277cd",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "before_port": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mprf: type mismatch: expected neg; observed {==}\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after_port": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : @_:{0 == 0 : U32} -> Empty\n- observed : non-inferrable term '{==}'\nLocation: prf\n15 | def prf():\n16>|   {==}\n17 | \n"
+      },
+      "upstream": {
+        "phase": "check",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : @_:{0 == 0 : U32} -> Empty\n- observed : non-inferrable term '{==}'\nLocation: prf\n15 | def prf():\n16>|   {==}\n17 | \n"
+      }
+    }
+  ],
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "366c7487fa795685227c72fcdb58a1af4ab3f5df",
+    "binary_sha256": "56c86c247cecc796906ae05388013eee03914592c33149f0f6892c1440496b17",
+    "phase_probe_sha256": "c0746d9cf590a697835437ed84b5d85fbd6d96032da85a77f7de9a4ca97b2c8a",
+    "build_receipt_sha256": "2d1aec1259b3239b3ae042510bd2f3cdc9c73e3dfd501d5eeb8b6114571dbc5b",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 380,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 6,
+      "different_rejection": 56
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 550,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  }
+}
