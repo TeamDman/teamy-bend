@@ -1,0 +1,137 @@
+{
+  "source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "baseline_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 357,
+    "acceptance_disagreement": 495,
+    "both_accept": 366,
+    "different_rejection": 79,
+    "oracle_or_infrastructure_failure": 5
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 189,
+  "residual_classifications": {
+    "acceptance_disagreement": 110,
+    "different_rejection": 79
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "diagnostic_only_candidate": 50,
+    "other_rejection_difference": 29,
+    "new_or_unclassified": 1
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/forward_data_table.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/forward_data_table.bend",
+      "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "9b23acbf1bb4fbc1aead8b04d6cf7ed9758e030078e66735b2bb23b438acc32d",
+      "after_stderr_sha256": "d02d84b79b8bb8d3dfe6d42f47f97511a46eda0be136841ac8cd83ed236317ac"
+    },
+    {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c",
+      "after_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c"
+    }
+  ],
+  "raw_observations_sha256": "d97c07d5680715164a3ad67363cc6fd846d5bdb68b8d9dcf20e01a7865cd2337",
+  "baseline_raw_sha256": "729ba583d189c54d79f4d3661ae6fa444fa2b6e00ae1c3cc51693ab8bd19fc02",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "unknown_datatype_diagnostic_changes": [
+    {
+      "fixture": "check/forward_data_table.bend",
+      "before_stderr": "Error: \n   0: \u001b[91mTwo: undefined datatype D3\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+      "upstream_stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "other_port_stream_changes": [],
+  "unstable_oracle_transition": {
+    "fixture": "reg/borrow_fork_hold.bend",
+    "before_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+    "after_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+    "before": {
+      "source_commit": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+      "classification": "oracle_or_infrastructure_failure",
+      "upstream": {
+        "exit": 1,
+        "phase": "load",
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n"
+      },
+      "port": {
+        "exit": 1,
+        "phase": "load",
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/reg/borrow_fork_hold.bend:42:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251"
+    },
+    "after": {
+      "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+      "classification": "acceptance_disagreement",
+      "upstream": {
+        "exit": 0,
+        "phase": "accepted",
+        "timed_out": false,
+        "stdout": "",
+        "stderr": ""
+      },
+      "port": {
+        "exit": 1,
+        "phase": "load",
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/reg/borrow_fork_hold.bend:42:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251"
+    },
+    "scope": "Known unstable upstream stack oracle completed on this run; port unchanged. Current acceptance disagreement is retained, not a new port regression or waived policy exception. This checking observation qualifies no runtime lane."
+  },
+  "residual_count_reconciliation": {
+    "previous": 189,
+    "port_diagnostic_closed": 1,
+    "known_unstable_oracle_now_measured_as_acceptance_disagreement": 1,
+    "current": 189
+  }
+}

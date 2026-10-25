@@ -1,0 +1,540 @@
+{
+  "tested_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "snapshot": {
+    "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+    "source_tree": "616a36840e788144cb47f143d42a6c621bf178c9",
+    "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+    "binary_size": 27471880,
+    "archive_sha256": "2fc5bafc8857928222845ce2fd2b927f1a25539baed9aa00740be5e8b099e733",
+    "archive_size": 7114975,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073"
+      }
+    ]
+  },
+  "build": {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "-C",
+      "debuginfo=0",
+      "$REPO/scripts/checking-census/phase-probe.rs",
+      "--extern",
+      "teamy_bend=$REPO/target/debug/deps/libteamy_bend-74a120e44f279a46.rlib",
+      "-L",
+      "dependency=$REPO/target/debug/deps",
+      "-o",
+      "$EVIDENCE/phase-probe"
+    ],
+    "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+    "rlib_sha256": "9fe8a5376b8d47a3e68a0a02e851cd6425aba334736d384bc535c621642a82e1",
+    "cargo_fingerprint": {
+      "rustc": 16696009966390864400,
+      "features": "[\"default\", \"extended_observability\"]",
+      "declared_features": "[\"default\", \"extended_observability\", \"tracy\"]",
+      "target": 3711020382214544299,
+      "profile": 4000329519511807648,
+      "path": 10763286916239946207,
+      "deps": [
+        [
+          987910214981000494,
+          "arbitrary",
+          false,
+          5452526485928618512
+        ],
+        [
+          2636299918121164457,
+          "socket2",
+          false,
+          3462672464787218007
+        ],
+        [
+          2716495650848533533,
+          "directories_next",
+          false,
+          7597756631528583102
+        ],
+        [
+          4289391297033898176,
+          "facet_pretty",
+          false,
+          661608528918056960
+        ],
+        [
+          4371022286835655106,
+          "facet",
+          false,
+          7154018940403867566
+        ],
+        [
+          5380358770761950913,
+          "tracing_subscriber",
+          false,
+          13248555277594674122
+        ],
+        [
+          7098700569944897890,
+          "libc",
+          false,
+          18440068434989699453
+        ],
+        [
+          7455154039531220218,
+          "teamy_cancellation",
+          false,
+          7123446357136914165
+        ],
+        [
+          9206635739968092262,
+          "facet_json",
+          false,
+          2340901294373375864
+        ],
+        [
+          9394460649638301237,
+          "tokio",
+          false,
+          14105617600381377558
+        ],
+        [
+          10141565841938428598,
+          "build_script_build",
+          false,
+          1186336326246738946
+        ],
+        [
+          11572704223576832424,
+          "open",
+          false,
+          13207949908176173387
+        ],
+        [
+          13435147900633593047,
+          "facet_csv",
+          false,
+          2271760857650493397
+        ],
+        [
+          14757622794040968908,
+          "tracing",
+          false,
+          14311375975235900415
+        ],
+        [
+          16117757646811882223,
+          "chrono",
+          false,
+          2641341933216355841
+        ],
+        [
+          16142802950189143282,
+          "figue",
+          false,
+          4455076316585769612
+        ],
+        [
+          16661324460137237341,
+          "color_eyre",
+          false,
+          12986095737036479449
+        ],
+        [
+          17390555767770508988,
+          "eyre",
+          false,
+          1650844428397224202
+        ]
+      ],
+      "local": [
+        {
+          "CheckDepInfo": {
+            "dep_info": "debug/.fingerprint/teamy-bend-74a120e44f279a46/dep-lib-teamy_bend",
+            "checksum": false
+          }
+        }
+      ],
+      "rustflags": [],
+      "config": 8247474407144887393,
+      "compile_kind": 0
+    },
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+    "phase_probe_sha256": "c59025f2b2e19b893a4a681bdbaafacd4ba8c03836f81e2bf8364a5a43985fe8"
+  },
+  "checks": {
+    "focused-provenance": {
+      "source_commit": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "source_origins_preserve_checker_work_terms_and_successful_evaluation"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11976839168,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 25.071418359992094,
+      "minimum_free": 11976830976,
+      "minimum_tmp_free": 4817534976,
+      "log_sha256": "9d276453b248f4a27650d4f20be9ea1e5f00b5c0a029210028ab75d4dd35e25f"
+    },
+    "focused-final": {
+      "source_commit": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_forward_data",
+        "--test",
+        "cpu_family_heads",
+        "--test",
+        "cpu_refined_types",
+        "--test",
+        "kernel_descent_alias"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11976830976,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 30.722984758001985,
+      "minimum_free": 11976814592,
+      "minimum_tmp_free": 4817534976,
+      "log_sha256": "ec911fbba695142c7902c121f0b84c0d0bc1c4a07dce27f26abeede9425c0ba6"
+    },
+    "focused-clippy": {
+      "source_commit": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_forward_data",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11976814592,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.0661136049893685,
+      "minimum_free": 11976785920,
+      "minimum_tmp_free": 4817530880,
+      "log_sha256": "982d74d3d8d608a9c4bca31a3c529c6b5ff0cd9f5047186dbe4778cda918580d"
+    },
+    "full-gate": {
+      "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11976609792,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 879.9546858060057,
+      "minimum_free": 11951824896,
+      "minimum_tmp_free": 4787113984,
+      "log_sha256": "1f752dd105b078a8e2f6807b124437462d1de5b872962b82b844548fdb794daa"
+    },
+    "baseline-final-run": {
+      "source_commit": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "dirty": true,
+      "command": [
+        "python3",
+        "$EVIDENCE/baseline-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": null,
+        "CARGO_PROFILE_TEST_DEBUG": null,
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": null,
+        "CARGO_NET_OFFLINE": null,
+        "BEND_GPU": null,
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11977027584,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 4.874495994998142,
+      "minimum_free": 11976962048,
+      "minimum_tmp_free": 4832505856,
+      "log_sha256": "6e436dd5517f7cb6d76dff3075f998ef0628894c49e997a8b43dc0020242dace"
+    },
+    "artifacts-before-final-run": {
+      "source_commit": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "dirty": true,
+      "command": [
+        "python3",
+        "$EVIDENCE/artifacts-before-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11976851456,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.81555331099662,
+      "minimum_free": 11976839168,
+      "minimum_tmp_free": 4817534976,
+      "log_sha256": "bd2beaea0f662d32afb9ab0ccaaf2ef9dd0f9d922ff10d46a752d1d957d2b98f"
+    },
+    "negative-run": {
+      "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/negative-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11959894016,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 86.38318108799285,
+      "minimum_free": 11957932032,
+      "minimum_tmp_free": 4788817920,
+      "log_sha256": "ea294323749617a5dba4cdaa1e8efe353bafd8616abf54038e8307d6590d690c"
+    },
+    "positive-run": {
+      "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/positive-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11959889920,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 20.077098987007048,
+      "minimum_free": 11959361536,
+      "minimum_tmp_free": 4788817920,
+      "log_sha256": "3c2b8ef1c213b5dd718af834510896c61a40c7b8f5f73f99a890407368016de7"
+    },
+    "census-run": {
+      "source_commit": "5013562f98204d5e4694486d0a3f77f366345b7d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$UPSTREAM",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11959898112,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 278.83272437698906,
+      "minimum_free": 11952156672,
+      "minimum_tmp_free": 4786262016,
+      "log_sha256": "637043b83a9f93084f0683a0bc5f17e6ba71ecaa88bcebee49fd891313f423ed"
+    }
+  },
+  "full_gate_totals": {
+    "passed": 1212,
+    "failed": 0,
+    "ignored": 49,
+    "result_groups": 176
+  },
+  "focused_totals": {
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "result_groups": 6
+  },
+  "source_review": {
+    "reviewer": "review_sharing",
+    "blocking_findings": [],
+    "scope": "read-only design and actual source/fixture/test review",
+    "verified": [
+      "only unknown/non-ADT name inference attaches message-only metadata; existing error text retained",
+      "existing arity/exclusion errors, argument order and other ADT callers unchanged",
+      "empty context formatting needs no normalization budget; context exhaustion retains rejection/state",
+      "8 goldens and hashes match32-command pinned baseline; original unchanged",
+      "constructor labels/import/template source provenance through existing machinery",
+      "all10 fixtures in tracked/plain work and semantic comparison",
+      "same status-bearing Ok exit_code contract; external invoke audit outstanding"
+    ],
+    "fixture_correction_review": "Independent reviewer confirmed only explicit U32 annotation was added; recursive structure/call/result and production code unchanged. Initial focused exit101 retained; corrected provenance1/integrations9 and strict Clippy pass."
+  },
+  "evidence_review": {
+    "reviewer": "review_imported_printer",
+    "blocking_findings": [],
+    "tested_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+    "scope": "Independent read-only review; no executions or edits",
+    "baseline_commands": 32,
+    "negative_streams": 144,
+    "negative_phase_probes": 48,
+    "positive_commands": 52,
+    "actual_executions": 16,
+    "byte_identical_artifact_pairs": 4,
+    "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+    "negative_sha256": "ddbdb32d272c495656350c0826d59bffbb8e5174a31aa7fac852781ebfceb9a7",
+    "matrix_sha256": "76b2f5c6036a8ee7c4baca52fa5e9f03d5cf968c55eb9e029362a6695dd45ff8",
+    "baseline_sha256": "180b6b4e0debc846300dd2d52d8d2657e8cd740433664a834513c5ec79baa00b",
+    "verified": [
+      "Initial failed emission receipt and focused 286/1/1 exit101 preserved; annotated control reuses 2 unchanged prior emissions, adds 2 corrected emissions",
+      "Corrected provenance 1/0/0 and integration 9/0/0; production unchanged by fixture correction",
+      "Working/build/gzip identity, baseline source identity and frozen pins verified",
+      "When metadata/source/writer available, newly formatted failures use existing Ok with exit_code1 instead of prior unstructured Err; missing provenance or failed presentation/cancellation/output writing retain Err",
+      "Private diagnostic metadata and derived Debug can change; internal message/Display/Eq/signatures unchanged; external audit outstanding"
+    ],
+    "gate_census_final_artifacts": "pending",
+    "census_review": {
+      "total": 1302,
+      "counts": {
+        "both_accept": 366,
+        "exact_rejection": 357,
+        "acceptance_disagreement": 495,
+        "different_rejection": 79,
+        "oracle_or_infrastructure_failure": 5
+      },
+      "port_changes": [
+        "check/forward_data_table.bend stderr only"
+      ],
+      "other_port_changes": [],
+      "upstream_changes": [
+        "reg/borrow_fork_hold.bend load stack failure to acceptance; port guard unchanged"
+      ],
+      "historical_IO_exact": 385,
+      "residual": 189,
+      "residual_arithmetic": "189 - 1 port diagnostic fix + 1 unstable oracle reclassification = 189; 110 acceptance and 79 rejection differences",
+      "current_csv_sha256": "652f84a4368cdd470cc906da2ef13cda0ff3631c492d0cee83f0c9693cc4d8bf",
+      "raw_census_sha256": "d97c07d5680715164a3ad67363cc6fd846d5bdb68b8d9dcf20e01a7865cd2337",
+      "reconciliation_sha256": "1e83777ef7dd63717389826e97d9b29d252d06a1df19a3a70d56ab855642d566",
+      "next_case_phases_verified": true,
+      "gate_final_artifacts": "pending"
+    }
+  },
+  "api_contract": "Public KernelError message/Display/Eq/shape retained. The crate-private checker_diagnostic() now supplies metadata for this rejection and derived Debug can differ; CLI renders pinned Bend stderr and these rejections take its existing status-bearing Ok with exit_code() == 1 path instead of the previous unstructured Err; process status remains 1. Consumers must inspect exit_code(); external invoke-caller audit remains outstanding. No signature, semantic term field, checking/evaluation/termination, limits or cancellation change."
+}

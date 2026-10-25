@@ -1,0 +1,2618 @@
+{
+  "tested_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+  "completed": true,
+  "full_parity": false,
+  "timeout_seconds": 30,
+  "negative": {
+    "exact_stream_observations": 144,
+    "separate_phase_probes": 48,
+    "rows": [
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.299084580008639,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.4999988830240909,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.4956657860020641,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.3876252170011867,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.5945363350037951,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.8212560649844818,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 1.3884961269795895,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.6700462269946001,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n",
+        "timed_out": false,
+        "seconds": 0.8477656939940061,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.4232049169950187,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.5914992850157432,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.4299786729970947,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.6746297840145417,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.41330127298715524,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.6778475330211222,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.7316340589895844,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.7725904269900639,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/field.bend",
+        "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n",
+        "timed_out": false,
+        "seconds": 0.7219930660212412,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4276893519854639,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.346921137010213,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3824207489960827,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4576899509993382,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.44979921597405337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.42887686600442976,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.3927214410214219,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.5838151269999798,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/nested.bend",
+        "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.6971278880082536,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.19368006099830382,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.28275446299812756,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.2506030729855411,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.042010856996057555,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.023640469007659703,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.010688723996281624,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.02367816597688943,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.04272152599878609,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/context.bend",
+        "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.02502225700300187,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.42960553799639456,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.44538501600618474,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.5192289070109837,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.5798809549887665,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 1.353725654014852,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.9893879369774368,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.4198109520075377,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.975770303979516,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.8643263289995957,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.3790198619826697,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.695177521003643,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.5669512219901662,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.7451444840116892,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.6573800399783067,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 1.0860922050196677,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 1.0750203460047487,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.899958799011074,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/macro.bend",
+        "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.7897640689916443,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.43512072900193743,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.53467752301367,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.5694868080026936,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.9008518189948518,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.5922219349886291,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.7442360410059337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.952299326978391,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.7963102520152461,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n",
+        "timed_out": false,
+        "seconds": 1.341240606008796,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.2142375879921019,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.28897813698858954,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.2801592189935036,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.0160749799979385,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.01440239799558185,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.015126615995541215,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.04679079199559055,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.01092278299620375,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.018769364018226042,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_data_table.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/field.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/nested.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/context.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/macro.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/non-adt.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "negative/argument-first.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "ddbdb32d272c495656350c0826d59bffbb8e5174a31aa7fac852781ebfceb9a7"
+  },
+  "positive": {
+    "observations": 52,
+    "lane_counts": {
+      "port-pure-normalization": 4,
+      "upstream-pure-normalization": 4,
+      "upstream-check": 4,
+      "strict-phase": 4,
+      "executable-phase": 4,
+      "strict-check": 4,
+      "upstream-generate-c": 2,
+      "upstream-build-O3": 2,
+      "upstream-generate-js": 2,
+      "port-generate-c": 2,
+      "port-build-O3": 2,
+      "port-generate-js": 2,
+      "upstream-C-O3": 4,
+      "upstream-JS": 4,
+      "port-C-O3": 4,
+      "port-JS": 4
+    },
+    "rows": [
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8675713260017801,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4887561479990836,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "$RUN/positive-matrix/positive/earlier/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3326836850028485,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3598736120038666,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.44959858601214364,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 22,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.32367842900566757,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/earlier/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5128776550118346,
+        "artifact_sha256": "39dd576001ecfc1af9faa14806b3b61ae1a2f671a4902e20bfb094288822396f"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/earlier/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/earlier/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.45011203800095245,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/earlier/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5492991579812951,
+        "artifact_sha256": "577cdfb0801b49b3bcd781d06b958b8cd9b7a217b0b288b9ed5f418c887209cf"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/earlier/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/earlier/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 185614,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6495512489927933,
+        "artifact_sha256": "cf84ed31cf72e75087029a967c25fdeabaa7798f9720baaaf229ff2132c10b90",
+        "before_artifact_sha256": "cf84ed31cf72e75087029a967c25fdeabaa7798f9720baaaf229ff2132c10b90",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/earlier/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/earlier/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6962181220005732,
+        "artifact_sha256": "f5a5ef0f679ed625d2b6cbd7d0b2137c8ef67e6857d19f5eb7c1daa98468bc09"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/earlier/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/earlier/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53095,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6323212790011894,
+        "artifact_sha256": "408e53e6fc77d1a025032be4a987994c7062952e914108100e7b9b2ac689999d",
+        "before_artifact_sha256": "408e53e6fc77d1a025032be4a987994c7062952e914108100e7b9b2ac689999d",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/earlier/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.002041781001025811,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/earlier/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.02104851699550636,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/earlier/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0016723920125514269,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/earlier/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04720326201641001,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7760718390054535,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.43520984798669815,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "$RUN/positive-matrix/positive/recursive/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4570072880014777,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3033681999950204,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5271516180073377,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 21,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6139284270175267,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/recursive/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5115982160205022,
+        "artifact_sha256": "52fac5d370db85777429de975c240ef6c0e3722ad8994c753fdc913a26175901"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/recursive/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/recursive/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4938381300016772,
+        "artifact_sha256": "d15cf5b2dfb697047f57cee995ea48ffb602121bb4e966220f24775234dbf545"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/recursive/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5384065480029676,
+        "artifact_sha256": "bb5ec9be68287e17ea4e001d0841cf0ae585d9a0a3094196544d78146ed531b1"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/recursive/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/recursive/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 191168,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9635896979889367,
+        "artifact_sha256": "d871a84ea5e882a143d7c57ad3c1f9997e131c123751f04bcbf8464392c1865a",
+        "before_artifact_sha256": "d871a84ea5e882a143d7c57ad3c1f9997e131c123751f04bcbf8464392c1865a",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/recursive/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/recursive/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1184503939875867,
+        "artifact_sha256": "83cec2ae2e6527fdc847cab3aaa4838af7238822c387ed3e888bc67decba90d4"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/recursive/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/recursive/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60410,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7432193410058971,
+        "artifact_sha256": "55e20066d96bfe66a830d5b46eb1632b6dd476d064205e884e4e68eda45ddb9b",
+        "before_artifact_sha256": "55e20066d96bfe66a830d5b46eb1632b6dd476d064205e884e4e68eda45ddb9b",
+        "byte_identical_to_baseline": true
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/recursive/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.00687719599227421,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/recursive/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.05829660201561637,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/recursive/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0018797910015564412,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/recursive/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.10129165000398643,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "positive/earlier.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/earlier.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/earlier.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/earlier.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursive.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phases_already_in_command_count": true,
+    "raw_sha256": "76b2f5c6036a8ee7c4baca52fa5e9f03d5cf968c55eb9e029362a6695dd45ff8"
+  },
+  "baseline_artifacts": {
+    "binary_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+    "binary_sha256": "98345d1e3a50effe40654627908f6b41dd19416e5cec9eb675cabde5b42e18dc",
+    "scope": "baseline emission only; runtime qualified in final matrix",
+    "rows": [
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/earlier/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/earlier/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 185614,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/earlier/before.c",
+        "artifact_sha256": "cf84ed31cf72e75087029a967c25fdeabaa7798f9720baaaf229ff2132c10b90"
+      },
+      {
+        "case": "positive/earlier.bend",
+        "source_sha256": "d7acae323955920e7bf30465e0de16ed355c5c3b74f30379c3e5d3a80b81aba1",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/earlier.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/earlier/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/earlier/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53095,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/earlier/before.js",
+        "artifact_sha256": "408e53e6fc77d1a025032be4a987994c7062952e914108100e7b9b2ac689999d"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/recursive-corrected/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/recursive-corrected/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 191168,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/recursive-corrected/before.c",
+        "artifact_sha256": "d871a84ea5e882a143d7c57ad3c1f9997e131c123751f04bcbf8464392c1865a"
+      },
+      {
+        "case": "positive/recursive.bend",
+        "source_sha256": "68b66a66d003da6806a11b18f5173c90a8dcb82035f4667bfaf79ed64cdaaac0",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/recursive-corrected/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/recursive-corrected/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60410,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/recursive-corrected/before.js",
+        "artifact_sha256": "55e20066d96bfe66a830d5b46eb1632b6dd476d064205e884e4e68eda45ddb9b"
+      }
+    ]
+  },
+  "scope": [
+    "eight exact check-phase refusals; negative artifact emission/execution absent",
+    "two pure values: strict checking and normalization, not native IO",
+    "16 actual port/upstream C-O3/JS executions;12 build/generation;8 normalization;16 checking/phase",
+    "four generated port C/JS artifacts byte-identical to baseline; native binary hashes are not compared across commits",
+    "no mid-normalization cancellation claim"
+  ],
+  "negative_phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  }
+}

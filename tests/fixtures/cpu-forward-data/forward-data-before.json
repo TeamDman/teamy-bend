@@ -1,0 +1,208 @@
+{
+  "baseline_snapshot_source": "c7519a0d1a5efeb872ccc6b1ab011e1b85f04b2e",
+  "starting_checkpoint": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+  "same_production_source": true,
+  "before_binary_sha256": "98345d1e3a50effe40654627908f6b41dd19416e5cec9eb675cabde5b42e18dc",
+  "after_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "raw_baseline_sha256": "180b6b4e0debc846300dd2d52d8d2657e8cd740433664a834513c5ec79baa00b",
+  "baseline_commands": 32,
+  "changes": [
+    {
+      "case": "check/forward_data_table.bend",
+      "source_sha256": "781832a1369e5d906d02f250d52dc76a420f522aeee8d875a829f5e021e8de22",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/check/forward_data_table.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mTwo: undefined datatype D3\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: D3)\nLocation: MkTwo\n10 | type Two is Type:\n11>|   MkTwo{a: D3<U32>, b: D3<U32>}\n12 | \n"
+      }
+    },
+    {
+      "case": "negative/field.bend",
+      "source_sha256": "294bf62db19f118eae5416acba40b644d2db2f72e804253f631209a31de35c71",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/field.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mWrapper: undefined datatype Later\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Later)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Later<U32>}\n5 | type Later<-A: Type> is Type:\n"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "50b64e0afeeddc3c06c1237bf1e5874b3abc1edeed95b1b92f4c9092b0a05f02",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/nested.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mWrapper: undefined datatype Missing\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{values: List<&1, Missing<U32>>}\n5 | \n"
+      }
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "fa29e15e3f9fdbf996168f48b85a2f90e801e417c9d57e595184a5d93cea41e1",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/context.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mContainer: undefined datatype Missing\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nContext:\n- A     : Type\n- first : A\nLocation: Contained\n2 | type Container<-A: Type> is Type:\n3>|   Contained{first: A, second: Missing<A>}\n4 | \n"
+      }
+    },
+    {
+      "case": "negative/imported/main.bend",
+      "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/imported/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mhelper.Wrapper: undefined datatype Future\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Future)\nLocation: helper.Wrapped\n3 | type Wrapper is Type:\n4>|   Wrapped{value: Future<U32>}\n5 | \n"
+      }
+    },
+    {
+      "case": "negative/macro.bend",
+      "source_sha256": "958f33a2406e4af73d4218f6c3a6e4b21f569f2293fa1707473021ffeb93d581",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/macro.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mbad: undefined datatype Missing\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: bad\n4 | def bad() -> U32:\n5>|   field(Missing<U32>, 0)\n6 | \n"
+      }
+    },
+    {
+      "case": "negative/non-adt.bend",
+      "source_sha256": "f42a9f653094359ee7444799c15bcb11bee7e20128fad73e45eb77044eddef69",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/non-adt.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mWrapper: undefined datatype Existing\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Existing)\nLocation: Wrapped\n4 | type Wrapper is Type:\n5>|   Wrapped{value: Existing<U32>}\n6 | \n"
+      }
+    },
+    {
+      "case": "negative/argument-first.bend",
+      "source_sha256": "5760b2edf20d2d75ea98ca614b42652c35c825d69fee4584af9f229b855740fa",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-forward-data/negative/argument-first.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mWrapper: undefined datatype Missing\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- message  : a declared datatype (unknown: Missing)\nLocation: Wrapped\n2 | type Wrapper is Type:\n3>|   Wrapped{value: Missing<AlsoMissing>}\n4 | \n"
+      }
+    }
+  ],
+  "initial_experiments": [
+    {
+      "case": "initial-recursive-positive-draft",
+      "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ntype Chain is Data:\n  End{}\n  Link{value: U32, rest: Chain}\ndef total(xs: Chain) -> U32:\n  match xs:\n    case End{}: 0\n    case Link{x, xs}: x + total(xs)\ndef main() -> U32: total(Link{3, Link{4, End{}}})\n",
+      "source_sha256": "ec7f982fd0b291c085e0cb1ce2931ad7121a8485eb70189e8559a7a9dbae767f",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-forward-data/positive/recursive.bend"
+        ],
+        "source_sha256": "ec7f982fd0b291c085e0cb1ce2931ad7121a8485eb70189e8559a7a9dbae767f",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x  : U32\n- xs : Chain\nLocation: total\n 8 |     case End{}: 0\n 9>|     case Link{x, xs}: x + total(xs)\n10 | def main() -> U32: total(Link{3, Link{4, End{}}})\n"
+      },
+      "old_port": {
+        "case": "positive/recursive.bend",
+        "source_sha256": "ec7f982fd0b291c085e0cb1ce2931ad7121a8485eb70189e8559a7a9dbae767f",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-forward-data/positive/recursive.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/recursive/before.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mtotal: type mismatch: expected Nat; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "artifact": "$BASELINE_ARTIFACTS/recursive/before.c",
+        "artifact_sha256": null
+      },
+      "focused_result": {
+        "passed": 286,
+        "failed": 1,
+        "ignored": 1,
+        "exit": 101
+      },
+      "focused_raw_log_sha256": "da760cbbb1da077c67048c3a8b1e775ea90ecd999332847d0ce37843c4105df5",
+      "scope": "Unannotated + defaults to Nat; both implementations reject the authored U32 control. Corrected fixture adds an explicit U32 annotation. No production fix for this drafting error; initial emission/focused runs remain failed."
+    }
+  ]
+}

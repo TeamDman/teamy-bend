@@ -1,0 +1,53 @@
+{
+  "tested_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "rows": [
+    {
+      "fixture": "check/book_prefix_arity.bend",
+      "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/book_prefix_arity.bend:12:5: duplicate constructor: K6\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+      "scope": "both reject during load; exact diagnostics remain different; no runtime qualification"
+    },
+    {
+      "fixture": "check/ctor_shared_tag.bend",
+      "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/ctor_shared_tag.bend:10:5: duplicate constructor: K5\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+      "scope": "both reject during load; exact diagnostics remain different; no runtime qualification"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_000.bend",
+      "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/compile/ctor_tag_dispatch_000.bend:11:5: duplicate constructor: K7\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+      "scope": "both reject during load; exact diagnostics remain different; no runtime qualification"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_001.bend",
+      "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+      "classification": "different_rejection",
+      "port_phase": "load",
+      "upstream_phase": "load",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/compile/ctor_tag_dispatch_001.bend:11:7: duplicate constructor: Mk8b\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+      "scope": "both reject during load; exact diagnostics remain different; no runtime qualification"
+    }
+  ]
+}
