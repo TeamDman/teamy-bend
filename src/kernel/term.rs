@@ -507,13 +507,13 @@ impl fmt::Display for ScopedTerm<'_> {
                 excluded,
             } => {
                 f.write_str(name)?;
-                if !args.is_empty() {
+                if !args.is_empty() || !excluded.is_empty() {
                     f.write_str("<")?;
                     list(f, args, scope)?;
                     f.write_str(">")?;
                 }
-                if !excluded.is_empty() {
-                    write!(f, " - [{}]", excluded.join(", "))?;
+                for constructor in excluded {
+                    write!(f, " - {constructor}{{}}")?;
                 }
                 Ok(())
             }
@@ -696,11 +696,21 @@ fn open_nat(value: &Term) -> bool {
 
 fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]) -> fmt::Result {
     // Arrow domains and quantitative-meet operands use upstream precedence 2.
-    if matches!(value, Term::All { .. }) || open_nat(value) || open_list(value) {
+    if matches!(value, Term::All { .. })
+        || open_nat(value)
+        || open_list(value)
+        || refined_datatype(value)
+    {
         write!(f, "({})", scoped(value, scope))
     } else {
         write!(f, "{}", scoped(value, scope))
     }
+}
+
+fn refined_datatype(value: &Term) -> bool {
+    // Pinned ADT exclusions have precedence 1. Inspect syntax only: printing
+    // cannot evaluate parameters or change the ordered semantic exclusion list.
+    matches!(value, Term::Adt { excluded, .. } if !excluded.is_empty())
 }
 
 fn complete_list(mut value: &Term) -> bool {
@@ -742,6 +752,7 @@ fn cons_chain(
                 | Term::Min(_, _)
         ) || open_nat(head)
             || open_list(head)
+            || refined_datatype(head)
         {
             write!(f, "({})", scoped(head, scope))?;
         } else {
@@ -846,6 +857,7 @@ fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: &[(usize, &str)]
         Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
     ) || open_nat(head)
         || open_list(head)
+        || refined_datatype(head)
     {
         write!(f, "({})", scoped(head, scope))?;
     } else {

@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- t : T<> - A{} - B{}\nLocation: loop\n10 |     case B{}: 1\n11>|     case t: loop(t)\n12 | def main() -> U32: loop(C{7})\n"

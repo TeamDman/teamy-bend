@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- xs : List<&2, U32> - Nil{}\nLocation: loop\n5 |     case Nil{}: 0\n6>|     case xs: loop(xs)\n7 | def main() -> U32: loop([7, 8])\n"

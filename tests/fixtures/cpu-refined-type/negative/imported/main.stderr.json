@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : helper.loop\nContext:\n- t : helper.T<> - helper.A{} - helper.B{}\nLocation: helper.loop\n10 |     case B{}: 1\n11>|     case t: loop(t)\n12 | \n"

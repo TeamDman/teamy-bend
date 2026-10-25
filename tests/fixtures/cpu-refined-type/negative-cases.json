@@ -1,0 +1,7 @@
+[
+  "halt/non_structural_descent.bend",
+  "negative/multiple.bend",
+  "negative/parameterized.bend",
+  "negative/imported/main.bend",
+  "negative/false-proof.bend"
+]

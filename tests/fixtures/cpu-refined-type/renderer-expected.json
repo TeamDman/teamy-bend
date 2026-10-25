@@ -1,0 +1,18 @@
+{
+  "plain": "N",
+  "parameterized": "Box<T>",
+  "one": "N<> - Z{}",
+  "multiple": "N<> - Z{} - S{}",
+  "parameters": "Box<T> - Empty{} - Full{}",
+  "domain": "@x:(N<> - Z{} - S{}) -> R",
+  "codomain": "@x:R -> N<> - Z{} - S{}",
+  "application_head": "(N<> - Z{} - S{})(x)",
+  "argument": "f(N<> - Z{} - S{})",
+  "list_head": "(N<> - Z{} - S{}) <> tail",
+  "list_tail": "head <> N<> - Z{} - S{}",
+  "constructor": "Wrap{N<> - Z{} - S{}}",
+  "nested": "Box<N<> - Z{} - S{}> - Empty{}",
+  "annotation": "{x : N<> - Z{} - S{}}",
+  "nat_tail": "1n+N<> - Z{} - S{}",
+  "shadowed": "T => T => Box<T^0, T> - Empty{}"
+}

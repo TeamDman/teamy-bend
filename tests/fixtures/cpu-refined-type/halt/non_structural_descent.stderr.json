@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat<> - Zero{}\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n"

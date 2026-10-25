@@ -1,0 +1,1 @@
+"Error:\n- expected : n\n- observed : 0n\nContext:\n- n : Nat<> - Zero{}\nLocation: bad\n 8 |     case 0n: {==}\n 9>|     case n: {==}\n10 | \n"
