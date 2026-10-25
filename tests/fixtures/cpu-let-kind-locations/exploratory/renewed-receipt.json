@@ -1,0 +1,164 @@
+{
+  "tested_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+  "binary_sha256": "fa2c59592c3aa484fee7c7d84fb9608c16ee4bb4013e4fa03d1780ccbf2f18cd",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "rows": [
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/deeper-kind.bend",
+      "source_sha256": "ee6f35b989219c2e855888437bca4c80c29d8befeaff214c005701647eaad2e5",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/deeper-kind.bend",
+        "$EVIDENCE/deeper-kind.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Kind(&0)\n- observed : @_:Type -> Type\nContext:\n- f : @_:Type -> Type\nLocation: bad\n3 | def bad(f: Type -> Type) -> Type:\n4>|   +g = {x => x : @-x: f -> Type}\n5 |   Type\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/deeper-kind.bend",
+      "source_sha256": "ee6f35b989219c2e855888437bca4c80c29d8befeaff214c005701647eaad2e5",
+      "lane": "port",
+      "command": [
+        "$BEND",
+        "check",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/deeper-kind.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Kind(&0); observed @_:Type -> Type\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "check"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/inner-inference.bend",
+      "source_sha256": "5c70e1848b10bfc76634215c4921ddbf3341fc5d647d1931f5e6a549fb3d0363",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/inner-inference.bend",
+        "$EVIDENCE/inner-inference.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : Missing\nContext:\n- f : @_:T -> T\nLocation: bad\n3 | def bad(f: T -> T) -> T:\n4>|   +g = (Missing(f) : T -> T)\n5 |   g(L{f})\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/inner-inference.bend",
+      "source_sha256": "5c70e1848b10bfc76634215c4921ddbf3341fc5d647d1931f5e6a549fb3d0363",
+      "lane": "port",
+      "command": [
+        "$BEND",
+        "check",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/inner-inference.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-let-kind-locations/exploratory/inner-inference.bend:4:28: operators need a named type after ':'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "load"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/parallel-let.bend",
+      "source_sha256": "ffea7afed938ee284c840d2e031a899e02762b1d25a48876ceb875297505b0d2",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/parallel-let.bend",
+        "$EVIDENCE/parallel-let.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ','\nLocation:\n3 | def bad(f: T -> T) -> T:\n4>|   +g +h = f, f\n5 |   g(L{h})\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/parallel-let.bend",
+      "source_sha256": "ffea7afed938ee284c840d2e031a899e02762b1d25a48876ceb875297505b0d2",
+      "lane": "port",
+      "command": [
+        "$BEND",
+        "check",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/parallel-let.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-let-kind-locations/exploratory/parallel-let.bend:4:12: expected a name, found \",\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "load"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/reusable-lambda.bend",
+      "source_sha256": "a1046c9052842485e2485e278fa2cc0ad75dc1cda8ad79f156665a9c0718d137",
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/reusable-lambda.bend",
+        "$EVIDENCE/reusable-lambda.phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '>'\nLocation:\n3 | def bad(f: T -> T) -> T:\n4>|   (+g => g(L{g}))(f)\n5 | def main() -> T: L{t => t}\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    },
+    {
+      "fixture": "tests/fixtures/cpu-let-kind-locations/exploratory/reusable-lambda.bend",
+      "source_sha256": "a1046c9052842485e2485e278fa2cc0ad75dc1cda8ad79f156665a9c0718d137",
+      "lane": "port",
+      "command": [
+        "$BEND",
+        "check",
+        "tests/fixtures/cpu-let-kind-locations/exploratory/reusable-lambda.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: term needs an expected type or annotation: +g = f; g(L{g})\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m34\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout_seconds": 30,
+      "phase": {
+        "phase": "check"
+      },
+      "classification": "unresolved_exploratory_not_inventory_qualification"
+    }
+  ],
+  "scope": "Renewal of retained exploratory failures, not exact matches or inventory credit; language/runtime semantics unchanged."
+}

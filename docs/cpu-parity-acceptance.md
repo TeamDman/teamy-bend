@@ -1896,3 +1896,28 @@ substantive datatype-declaration/empty-datatype/empty-parameter batch remains
 unqualified. Compact unique original failure streams are now committed with the
 fixtures; bulk raw evidence and captured binaries remain outside Git. Disk floors
 and inactive-cache safeguards remain. Feature checkpoint only, no merge or release.
+
+### Reusable-let locations and full checking census
+
+Tested source `ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac` closes reusable-let expected-kind source locations,
+including unchanged `check/cop_let_formation`. Six exact controls plus identity,
+unsourced fallback, default-stack, sharing, work and cancellation regressions pass.
+The standard gate is **1,141 / 0 / 49**; 606 bounded matrix observations preserve
+existing failed/unrun lanes. [Report](cpu-let-kind-locations.md).
+
+The full 1,302-fixture checking census now measures **366 both-accept, 243 exact
+rejections, 193 differing rejections, 494 acceptance disagreements and six upstream
+Node stack failures**. Of 687 differences, 385 exactly renew documented strict-IO
+proof exclusions: **302 differences remain beyond that subset, plus six oracle
+failures**. The older 489 subset remains 32 exact / 385 IO / 72 other; 72 is not the
+global residual count. All port statuses are unchanged. Of 196 stderr changes,
+195 are host-source-line shifts; one language diagnostic improves exactly. No
+comparison was weakened to ignore those shifts.
+
+Family links remain 410 / 892 unlinked (341 checker negatives, one checking-only,
+13 interpreter-profile, 537 compiled candidates); census evidence is separate from
+runtime qualification. Four exploratory diagnostic/phase differences and all prior
+semantic/oracle/API gaps remain unwaived. Frozen inputs/limits and the acceptance
+criterion remain intact. Reviewed source and compact receipts are pushed only to a
+feature branch; bulk logs and binary captures remain outside Git. Next independent
+work is nested kind provenance or the substantive datatype-declaration batch.

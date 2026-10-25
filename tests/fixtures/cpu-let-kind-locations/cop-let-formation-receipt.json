@@ -1,0 +1,49 @@
+{
+  "fixture": "check/cop_let_formation.bend",
+  "source_sha256": "3bafe5df8a8b46d163b73fbb4acb5b75ba34e597bb441b94cfce0e5ce2f88ec0",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "before_source": "3b144f16f1a6dd5344a668dc0bd31a488c602aeb",
+  "tested_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+  "command_roots_are_placeholders": true,
+  "observations": [
+    {
+      "lane": "prior-port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mdupl: type mismatch: expected Data; observed Type\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m37\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "command": [
+        "$BEND_BEFORE",
+        "--output-format",
+        "json",
+        "check",
+        "$UPSTREAM/tests/check/cop_let_formation.bend"
+      ]
+    },
+    {
+      "lane": "current-port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Data\n- observed : Type\nContext:\n- T : Type\n- a : T\nLocation: dupl\n11 | def dupl(T, a):\n12>|   +x = a\n13 |   (x, x)\n",
+      "command": [
+        "$BEND_TESTED",
+        "--output-format",
+        "json",
+        "check",
+        "$UPSTREAM/tests/check/cop_let_formation.bend"
+      ]
+    },
+    {
+      "lane": "upstream",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Data\n- observed : Type\nContext:\n- T : Type\n- a : T\nLocation: dupl\n11 | def dupl(T, a):\n12>|   +x = a\n13 |   (x, x)\n",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$UPSTREAM/tests/check/cop_let_formation.bend",
+        "$EVIDENCE/census/5c993dd181ec629853ce9091f92e43361c7c32623800035fae8379816ea91ac7.phase.json"
+      ]
+    }
+  ]
+}

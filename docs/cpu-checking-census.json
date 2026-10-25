@@ -1,0 +1,74 @@
+{
+  "completed": true,
+  "full_parity": false,
+  "tested_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+  "binary_sha256": "fa2c59592c3aa484fee7c7d84fb9608c16ee4bb4013e4fa03d1780ccbf2f18cd",
+  "phase_probe_sha256": "719e87283a7a6ea8aeb4fb506dd6f9ef3d10ca936162914d7fc4630b566a0780",
+  "build_receipt_sha256": "25261d2aab50a453c7f46ddc117b92c4f9f91ecfb0b45724d30610622095aa31",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 243,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 193,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "missing_IO_candidates": 385,
+  "measured_differences": 687,
+  "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified.",
+  "raw_observations_sha256": "9699ab35a48bcd26e1c8a2bbdaa0993308cc311bd19185b7be4069628f4f496a",
+  "compact_csv_sha256": "b8f39121560c3ec3bc9839429257e7ec01824499b45a5bc5b8a2c3b7058a9a27",
+  "historical_489_subset": {
+    "counts": {
+      "exact_rejection": 32,
+      "acceptance_disagreement": 449,
+      "different_rejection": 8
+    },
+    "historical_IO_exclusions_with_identical_current_source_status_streams": 385,
+    "remaining_measured_differences": 72
+  },
+  "differences_beyond_historical_IO_subset": 302,
+  "unchanged_port_statuses": 1302,
+  "changed_port_stderr": 196,
+  "host_Rust_line_only_changes": 195,
+  "exact_language_diagnostic_improvements": [
+    "check/cop_let_formation.bend"
+  ],
+  "oracle_failures": [
+    {
+      "fixture": "check/bystander_hypothesis_cost.bend",
+      "outcome": "host_stack_failure"
+    },
+    {
+      "fixture": "check/deep_hyp_rewrite.bend",
+      "outcome": "host_stack_failure"
+    },
+    {
+      "fixture": "page/deep_list_walk.bend",
+      "outcome": "host_stack_failure"
+    },
+    {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "outcome": "host_stack_failure"
+    },
+    {
+      "fixture": "reg/dead_param_fork.bend",
+      "outcome": "host_stack_failure"
+    },
+    {
+      "fixture": "rfc/share_loop.bend",
+      "outcome": "host_stack_failure"
+    }
+  ],
+  "non_IO_acceptance_symptom_triage": {
+    "numeric_name_unavailable_in_proof_mode": 38,
+    "other_unqualified_acceptance_difference": 25,
+    "File_type_unavailable_in_proof_mode": 8,
+    "Nat_literal_parser_limit": 10,
+    "pattern_depth_limit": 4,
+    "explicit_unsafe_proof_refusal": 2,
+    "explicit_foreign_proof_refusal": 22
+  },
+  "runtime_parity_established": false
+}
