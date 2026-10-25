@@ -1,0 +1,84 @@
+diff --git a/src/syntax/surface.rs b/src/syntax/surface.rs
+index 67e8d5b..baf6a67 100644
+--- a/src/syntax/surface.rs
++++ b/src/syntax/surface.rs
+@@ -333,6 +333,8 @@ fn flatten_at(
+     origins: Option<&TermOrigins>,
+ ) -> Result<SurfaceTerm, FlattenError> {
+     if depth >= 64 {
++        #[cfg(test)]
++        pattern_trace::failure(depth, 0);
+         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
+     }
+     match body {
+@@ -457,10 +459,16 @@ fn flatten_match(
+     // column per bit, which need not double its Rust recursion depth. Retain
+     // bounded pending work and compile fallbacks only after their arms, keeping
+     // the original term, fresh-name sequence and first-error ordering.
++    #[cfg(test)]
++    let mut _pending_measure = pattern_trace::Pending::new();
+     let mut state: Option<MatchState> = None;
+     let mut pending: Vec<(String, usize, MatchState)> = Vec::new();
+     loop {
++        #[cfg(test)]
++        _pending_measure.set(pending.len());
+         if depth + pending.len() >= 64 {
++            #[cfg(test)]
++            pattern_trace::failure(depth, pending.len());
+             return Err("pattern compilation exceeds the resource limit of 64 levels".into());
+         }
+         let (scrutinees, rows, vars) = state.as_ref().map_or((scrutinees, rows, vars), |s| {
+@@ -521,6 +529,8 @@ fn flatten_match_step(
+     origins: Option<&TermOrigins>,
+ ) -> Result<MatchStep, FlattenError> {
+     if depth >= 64 {
++        #[cfg(test)]
++        pattern_trace::failure(depth, 0);
+         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
+     }
+     if scrutinees.is_empty() {
+@@ -668,6 +678,8 @@ fn flatten_match_step(
+                 },
+             });
+         }
++        #[cfg(test)]
++        let _constructor_measure = pattern_trace::Constructor::new(name, &positive, &negative);
+         let arm = flatten_match(
+             &next_scrutinees,
+             &positive,
+@@ -781,3 +793,35 @@ mod tests {
+         assert_eq!(plain.origin, first.origin);
+     }
+ }
++
++#[cfg(test)]
++mod pattern_trace {
++    use super::*;
++    use std::cell::RefCell;
++    #[derive(Default)]
++    struct State { enabled: bool, constructors: Vec<(String, usize, usize)>, nullary: usize, peak_states: usize }
++    thread_local! { static STATE: RefCell<State> = RefCell::new(State::default()); }
++    fn nodes(p: &Pattern) -> usize { match p { Pattern::Variable(_) => 1, Pattern::Constructor(_, xs, _) => 1 + xs.iter().map(nodes).sum::<usize>() } }
++    pub struct Constructor;
++    impl Constructor {
++        pub fn new(name: &str, positive: &[Row], negative: &[Row]) -> Self {
++            STATE.with(|s| { let mut s=s.borrow_mut(); if s.enabled { s.constructors.push((name.into(), positive.len()+negative.len(), positive.iter().chain(negative).flat_map(|r| &r.patterns).map(nodes).sum())); s.peak_states=s.peak_states.max(s.constructors.len()+s.nullary); } }); Self
++        }
++    }
++    impl Drop for Constructor { fn drop(&mut self) { STATE.with(|s| { let mut s=s.borrow_mut(); if s.enabled { s.constructors.pop(); } }); } }
++    pub struct Pending(usize);
++    impl Pending {
++        pub fn new() -> Self { Self(0) }
++        pub fn set(&mut self, n: usize) { STATE.with(|s| { let mut s=s.borrow_mut(); if s.enabled { s.nullary=s.nullary-self.0+n; s.peak_states=s.peak_states.max(s.constructors.len()+s.nullary); } }); self.0=n; }
++    }
++    impl Drop for Pending { fn drop(&mut self) { STATE.with(|s| { let mut s=s.borrow_mut(); if s.enabled { s.nullary-=self.0; } }); } }
++    pub fn failure(depth: usize, pending: usize) { STATE.with(|s| { let s=s.borrow(); if s.enabled { eprintln!("TRACE failure depth={depth} local_pending={pending} active_constructor_frames={} nullary_states={} peak_states={} retained_rows={} owned_pattern_nodes={} path={:?}",s.constructors.len(),s.nullary,s.peak_states,s.constructors.iter().map(|x| x.1).sum::<usize>(),s.constructors.iter().map(|x| x.2).sum::<usize>(),s.constructors.iter().map(|x| &x.0).collect::<Vec<_>>()); } }); }
++    #[test]
++    fn bounded_literal_probe() {
++        let file=std::env::var("TEAMY_PATTERN_TRACE_FILE").unwrap();
++        STATE.with(|s| s.borrow_mut().enabled=true);
++        let result=crate::syntax::load(file);
++        STATE.with(|s| { let mut s=s.borrow_mut(); eprintln!("TRACE outcome={} peak_states={}", if result.is_ok() {"loaded"} else {"refused"},s.peak_states); s.enabled=false; });
++        if let Err(e)=result { eprintln!("TRACE error={}",e.message); }
++    }
++}

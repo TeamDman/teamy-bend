@@ -1,0 +1,229 @@
+{
+  "base": "6c2ba98c964247fc424a1d57ef2772dbfe2a16eb",
+  "accepted": false,
+  "patch_sha256": "3f04599f61d00312e7d8ce812d5a750333a31bb82a2242f5c84bc801acd32dbf",
+  "binary_sha256": "fd7d7bc580c48d875fee3d4cefb4b657aca01a4f09caca16d2dc7a1bec643872",
+  "structure": [
+    {
+      "definition": "is_hi",
+      "depth": 138,
+      "tree_nodes": 610,
+      "complete_alpha_tree_equal": true,
+      "canonical_sha256": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69",
+      "bytes": 4281
+    },
+    {
+      "definition": "main",
+      "depth": 37,
+      "tree_nodes": 139,
+      "complete_alpha_tree_equal": true,
+      "canonical_sha256": "6b4a45915a4bf203285e2a3a3a6ab3f985adce902de29a5b8c6aa520d96ffa28",
+      "bytes": 1574
+    }
+  ],
+  "candidate_boundaries": [
+    {
+      "lane": "check",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12727861598250456
+    },
+    {
+      "lane": "eval",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12871463401825167
+    },
+    {
+      "lane": "run",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.14181606299825944
+    },
+    {
+      "lane": "compile-c",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13825963501585647
+    },
+    {
+      "lane": "compile-js",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13782035000622272
+    }
+  ],
+  "candidate_controls": [
+    {
+      "case": "columns65.bend",
+      "source_sha256": "ba1fa59e2a3c840eaab6f2d4e3b207dafb95b525c8295aa900f45ea6a25ec206",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: <evidence>/probes/columns65.bend:5:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1554793689865619
+    },
+    {
+      "case": "columns8.bend",
+      "source_sha256": "304a0f0028e2dda08583862599974e9964257b5ede161a38f5745fd125356982",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : cases for False\n- observed : \\{}\nLocation: f\n2 | def f(x0: Bool, x1: Bool, x2: Bool, x3: Bool, x4: Bool, x5: Bool, x6: Bool, x7: Bool) -> Bool:\n3>|   match x0, x1, x2, x3, x4, x5, x6, x7:\n4 |     case True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}: True{}\n",
+      "seconds": 0.2866557610104792
+    },
+    {
+      "case": "emoji.bend",
+      "source_sha256": "9247fb7e6bca936226839fa5b12e373a2c615b8dab306ab1a0a434d4ec4cb0a6",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.36878827499458566
+    },
+    {
+      "case": "empty.bend",
+      "source_sha256": "0267351a6c126923c52e4773117f48d900c7b275d2b0afc1eeacf094200f90ae",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.3595582039852161
+    },
+    {
+      "case": "nat32.bend",
+      "source_sha256": "97da7feea0130f847a50731cc9faf5049d9b740131ba563b08fd229bd243e9cf",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.36070206901058555
+    },
+    {
+      "case": "nat65.bend",
+      "source_sha256": "2deb1246e1fc470fd5b83d4dc89872df0e6e5f4dd4fdf934f1fee16e3889e011",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: <evidence>/probes/nat65.bend:6:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13592575801885687
+    },
+    {
+      "case": "one.bend",
+      "source_sha256": "47dc364f19c171591aa67a4964d641823653b59c562e85f189066ab43ad9e1b2",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.3580469529842958
+    },
+    {
+      "case": "pair-nat16.bend",
+      "source_sha256": "ab578c2dc18a2b25d9927645e0e03e0c27565b3d1d7bca5b810251d996d03ab6",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.36242318199947476
+    },
+    {
+      "case": "pair-nat32.bend",
+      "source_sha256": "84533eaa81dc54707d9f66534dc41f8cbbd27dd00095fa187783a176a496b348",
+      "exit": 0,
+      "stdout": "True{}\n",
+      "stderr": "",
+      "seconds": 0.3752449949970469
+    },
+    {
+      "case": "two.bend",
+      "source_sha256": "83451edaf69f00d082cfec1548ff1c696dbdcbd6614edd3cdc6e934b536ceb87",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: kernel input nesting limit exhausted; proof not accepted\n\nLocation:\n   src/cli/checker_diagnostic.rs:28\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.15990608400898054
+    }
+  ],
+  "candidate_controls_scope": "Exploratory native outputs only; not a full candidate runtime/diagnostic/resource qualification. Pre-nesting-restriction exploratory receipt is retained privately but not attributed to this final patch.",
+  "instrumentation": {
+    "raw_receipt_sha256": "8c3dab64838e6afeca414e4bb5360130baa701f4eb709acb98715e02ab7cd3df",
+    "raw_base_field": "6c2ba98c964247fc424a1d57ef2772dbfe2a59748822",
+    "correct_base": "6c2ba98c964247fc424a1d57ef2772dbfe2a16eb",
+    "metadata_correction": "Raw base was invalid44chars; preserved, corrected separately.",
+    "instrumented_source_sha256": "ccfc141337e87d99905b8736f381ebf7eeac720943be59a399e2f412f31016a5",
+    "binary_sha256": "4f1784758d103e981336e364f6c0fd6d98d4c2b5799dc11bf223fe68837959c8",
+    "scope": "Diagnostic-only measurements with unchanged guards. Counts include Base loading; owned pattern-node count is the sum in active constructor-frame row copies, not unique TermRef nodes or bytes. The test records load outcomes and does not assert parity.",
+    "measurements": [
+      {
+        "case": "columns65.bend",
+        "source_sha256": "ba1fa59e2a3c840eaab6f2d4e3b207dafb95b525c8295aa900f45ea6a25ec206",
+        "stderr": "TRACE failure depth=1 local_pending=63 active_constructor_frames=0 nullary_states=63 peak_states=63 retained_rows=0 owned_pattern_nodes=0 path=[]\nTRACE outcome=refused peak_states=63\nTRACE error=pattern compilation exceeds the resource limit of 64 levels\n"
+      },
+      {
+        "case": "columns8.bend",
+        "source_sha256": "304a0f0028e2dda08583862599974e9964257b5ede161a38f5745fd125356982",
+        "stderr": "TRACE outcome=loaded peak_states=18\n"
+      },
+      {
+        "case": "emoji.bend",
+        "source_sha256": "9247fb7e6bca936226839fa5b12e373a2c615b8dab306ab1a0a434d4ec4cb0a6",
+        "stderr": "TRACE outcome=loaded peak_states=69\n"
+      },
+      {
+        "case": "empty.bend",
+        "source_sha256": "0267351a6c126923c52e4773117f48d900c7b275d2b0afc1eeacf094200f90ae",
+        "stderr": "TRACE outcome=loaded peak_states=18\n"
+      },
+      {
+        "case": "nat32.bend",
+        "source_sha256": "97da7feea0130f847a50731cc9faf5049d9b740131ba563b08fd229bd243e9cf",
+        "stderr": "TRACE outcome=loaded peak_states=33\n"
+      },
+      {
+        "case": "nat65.bend",
+        "source_sha256": "2deb1246e1fc470fd5b83d4dc89872df0e6e5f4dd4fdf934f1fee16e3889e011",
+        "stderr": "TRACE failure depth=64 local_pending=0 active_constructor_frames=63 nullary_states=0 peak_states=63 retained_rows=189 owned_pattern_nodes=2268 path=[\"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\"]\nTRACE outcome=refused peak_states=63\nTRACE error=pattern compilation exceeds the resource limit of 64 levels\n"
+      },
+      {
+        "case": "one.bend",
+        "source_sha256": "47dc364f19c171591aa67a4964d641823653b59c562e85f189066ab43ad9e1b2",
+        "stderr": "TRACE outcome=loaded peak_states=69\n"
+      },
+      {
+        "case": "pair-nat16.bend",
+        "source_sha256": "ab578c2dc18a2b25d9927645e0e03e0c27565b3d1d7bca5b810251d996d03ab6",
+        "stderr": "TRACE outcome=loaded peak_states=35\n"
+      },
+      {
+        "case": "pair-nat32.bend",
+        "source_sha256": "84533eaa81dc54707d9f66534dc41f8cbbd27dd00095fa187783a176a496b348",
+        "stderr": "TRACE failure depth=64 local_pending=0 active_constructor_frames=63 nullary_states=1 peak_states=64 retained_rows=189 owned_pattern_nodes=2366 path=[\"P\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\", \"Succ\"]\nTRACE outcome=refused peak_states=64\nTRACE error=pattern compilation exceeds the resource limit of 64 levels\n"
+      },
+      {
+        "case": "two.bend",
+        "source_sha256": "83451edaf69f00d082cfec1548ff1c696dbdcbd6614edd3cdc6e934b536ceb87",
+        "stderr": "TRACE failure depth=63 local_pending=1 active_constructor_frames=62 nullary_states=57 peak_states=119 retained_rows=186 owned_pattern_nodes=5180 path=[\"SCon\", \"Chr\", \"U32\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"SCon\", \"Chr\", \"U32\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\", \"WCon\"]\nTRACE outcome=refused peak_states=119\nTRACE error=pattern compilation exceeds the resource limit of 64 levels\n"
+      }
+    ]
+  },
+  "review": {
+    "disposition": "Archive experiment; do not adopt production change",
+    "reason": "Original core alpha-tree depth138 exceeds unchanged input guard128. Nested deferred-error risk was mitigated by disabling nested fragmentation, but full candidate graph/provenance/error-order/work accounting validation remains incomplete.",
+    "reviewers": [
+      "review_sharing",
+      "review_imported_printer"
+    ]
+  },
+  "unrun": [
+    "candidate C execution: emission failed",
+    "candidate JS execution: emission failed"
+  ],
+  "control_sources": {
+    "columns65.bend": "import Base\ndef f(x0: Bool, x1: Bool, x2: Bool, x3: Bool, x4: Bool, x5: Bool, x6: Bool, x7: Bool, x8: Bool, x9: Bool, x10: Bool, x11: Bool, x12: Bool, x13: Bool, x14: Bool, x15: Bool, x16: Bool, x17: Bool, x18: Bool, x19: Bool, x20: Bool, x21: Bool, x22: Bool, x23: Bool, x24: Bool, x25: Bool, x26: Bool, x27: Bool, x28: Bool, x29: Bool, x30: Bool, x31: Bool, x32: Bool, x33: Bool, x34: Bool, x35: Bool, x36: Bool, x37: Bool, x38: Bool, x39: Bool, x40: Bool, x41: Bool, x42: Bool, x43: Bool, x44: Bool, x45: Bool, x46: Bool, x47: Bool, x48: Bool, x49: Bool, x50: Bool, x51: Bool, x52: Bool, x53: Bool, x54: Bool, x55: Bool, x56: Bool, x57: Bool, x58: Bool, x59: Bool, x60: Bool, x61: Bool, x62: Bool, x63: Bool, x64: Bool) -> Bool:\n  match x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28, x29, x30, x31, x32, x33, x34, x35, x36, x37, x38, x39, x40, x41, x42, x43, x44, x45, x46, x47, x48, x49, x50, x51, x52, x53, x54, x55, x56, x57, x58, x59, x60, x61, x62, x63, x64:\n    case True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}: True{}\ndef main() -> Bool: f(True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{})\n",
+    "columns8.bend": "import Base\ndef f(x0: Bool, x1: Bool, x2: Bool, x3: Bool, x4: Bool, x5: Bool, x6: Bool, x7: Bool) -> Bool:\n  match x0, x1, x2, x3, x4, x5, x6, x7:\n    case True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{}: True{}\ndef main() -> Bool: f(True{}, True{}, True{}, True{}, True{}, True{}, True{}, True{})\n",
+    "emoji.bend": "import Base\ndef f(s: String) -> Bool:\n  match s:\n    case \"🙂\": True{}\n    case s: False{}\ndef main() -> Bool: f(\"🙂\")\n",
+    "empty.bend": "import Base\ndef f(s: String) -> Bool:\n  match s:\n    case \"\": True{}\n    case s: False{}\ndef main() -> Bool: f(\"\")\n",
+    "nat32.bend": "import Base\ndef f(n: Nat) -> Bool:\n  match n:\n    case 32n: True{}\n    case n: False{}\ndef main() -> Bool: f(32n)\n",
+    "nat65.bend": "import Base\ndef f(n: Nat) -> Bool:\n  match n:\n    case 65n: True{}\n    case n: False{}\ndef main() -> Bool: f(65n)\n",
+    "one.bend": "import Base\ndef f(s: String) -> Bool:\n  match s:\n    case \"h\": True{}\n    case s: False{}\ndef main() -> Bool: f(\"h\")\n",
+    "pair-nat16.bend": "import Base\ntype P is Data:\n  P{a: Nat, b: Nat}\ndef f(p: P) -> Bool:\n  match p:\n    case P{16n, 16n}: True{}\n    case p: False{}\ndef main() -> Bool: f(P{16n, 16n})\n",
+    "pair-nat32.bend": "import Base\ntype P is Data:\n  P{a: Nat, b: Nat}\ndef f(p: P) -> Bool:\n  match p:\n    case P{32n, 32n}: True{}\n    case p: False{}\ndef main() -> Bool: f(P{32n, 32n})\n",
+    "two.bend": "import Base\ndef f(s: String) -> Bool:\n  match s:\n    case \"hi\": True{}\n    case s: False{}\ndef main() -> Bool: f(\"hi\")\n"
+  }
+}

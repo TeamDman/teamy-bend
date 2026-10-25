@@ -2097,3 +2097,37 @@ parse/string_pattern_sugar matches "hi" upstream, but port loading refuses at th
 C O3/JS success, port checking/emission refusal and unrun port generated execution.
 No guard change or exception is approved by this report. Compact unique failure
 evidence is in Git; bulk artifacts remain local. No desktop/GPU, merge or release.
+
+
+## String-pattern depth investigation: unresolved original
+
+At `a6a62afea10d57d6142855a3ceaf2d71f9e14c26`, the standard gate is
+**1,168 / 0 / 49**, with 70 exact executions for seven bounded literal-pattern
+companions and 278 total matrix observations. This does not qualify the original
+`parse/string_pattern_sugar.bend`: upstream accepts and executes `True{}`, while
+production still refuses loading at the 64-level pattern compiler guard.
+[Report, sources and compact failure evidence](cpu-string-pattern-depth.md).
+
+A separately archived, unaccepted field-fragment experiment retires compiler
+working states and loads the original, but reveals a second refusal: the complete
+upstream-equivalent alpha-tree has depth 138 (root 0), exceeding the unchanged 128
+kernel input guard. Independent review recommends no production adoption. The
+next substantive work is a reviewed compact-lowering design that preserves
+constructor, checking, normalization and demand semantics plus all guards; a
+graph-preserving traversal adjustment alone cannot close this fixture. No limit
+change, skipping of shared nodes, unsupported-host waiver or new exception was
+made. Candidate generated execution remains unrun because emission is refused.
+
+The original checking disagreement was renewed twice. The full census remains
+historical at d224e79: 300 differences beyond 385 historical IO exclusions plus six
+upstream stack failures. Coverage remains 420 linked / 882 unlinked; failed or
+exploratory observations do not create qualified inventory coverage. The retained
+wrong-type companion matches the checking diagnostic; Nat65 and 65-column guard
+controls retain their distinct acceptance/phase disagreements. All earlier open
+semantics, host, foreign, API and supplementary-lint cells remain unwaived.
+
+The initial gate's disk-floor stop and the incomplete 110-observation harness run
+are preserved separately from the successful renewed gate and completed matrix.
+Inactive rebuildable caches were reclaimed/relocated with byte verification;
+unique historical evidence was retained. No dependencies, toolchains, upstream
+pins, budgets, cancellation or demand policy changed.

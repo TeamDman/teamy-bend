@@ -55,7 +55,8 @@ for case in sorted(fixtures.rglob('*.bend')):
  if case.parent.name=='positive':
   expected=case.with_suffix('.stdout').read_text()
   for x in [x for x in d['rows'] if x['case']==label]:
-   if x['lane'] in ['port-native','port-C-O3','port-JS','upstream-C-O3','upstream-JS','upstream-interpreter','port-eval']:assert (x['exit'],x['stdout'],x['stderr'])==(0,expected,''),x
+   if x['lane'] in ['port-native','port-C-O3','port-JS','upstream-C-O3','upstream-JS','upstream-interpreter']:assert (x['exit'],x['stdout'],x['stderr'])==(0,expected,''),x
+   elif x['lane']=='port-eval':assert (x['exit'],x['stdout'],x['stderr'])==(0,json.dumps(dict(entry='main',value=expected.rstrip('\n')),indent=2)+'\n',''),x
    else:assert x['exit']==0,x
  else:
   rows=[x for x in d['rows'] if x['case']==label]
