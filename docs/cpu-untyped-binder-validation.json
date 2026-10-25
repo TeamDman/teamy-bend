@@ -1,0 +1,708 @@
+{
+  "tested_source": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+  "snapshot": {
+    "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+    "source_tree": "428bb03240ab83048253334240ff5ff0dd6ee096",
+    "binary_sha256": "333916d7f261f5afd652ead30fdf9e498a3b784afd03d77fb4a904389292ae82",
+    "binary_size": 27468240,
+    "working_binary": "$RUN/teamy-bend",
+    "archive": "$EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "48fd159d8894f64ed6e21ec4dbad100aab15d0085773607c1ba9088bfeb1fbc1",
+    "archive_size": 7129689,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "333916d7f261f5afd652ead30fdf9e498a3b784afd03d77fb4a904389292ae82"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "standard_gate": {
+    "passed": 1236,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 182,
+    "exit": 0,
+    "seconds": 943.27041723,
+    "log_sha256": "17256e1eb611e1ddd1b9d7718e72a778349c78c47b57e0a74ee434b00106d9ea"
+  },
+  "commands": [
+    {
+      "source_commit": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_untyped_binder",
+        "--test",
+        "parser_templates"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11914850304,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 14.9692370989942,
+      "minimum_free": 11914842112,
+      "minimum_tmp_free": 3897880576,
+      "name": "focused",
+      "log_sha256": "ef871ef704efeeb52b3eecca9415485a36a0d020e4695a363756e264a6aafe62",
+      "log_bytes": 1809,
+      "test_totals": {
+        "passed": 16,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2
+    },
+    {
+      "source_commit": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "quantified_binder"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11914842112,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 7.868582819006406,
+      "minimum_free": 11914833920,
+      "minimum_tmp_free": 3898802176,
+      "name": "focused-unit",
+      "log_sha256": "24581e8c8d1f3c697942fcd64433f2025ce3000e8fd2cf5c9afe29b1528d9a44",
+      "log_bytes": 742,
+      "test_totals": {
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2
+    },
+    {
+      "source_commit": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "pattern_load_boundary_preserves"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11914801152,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 1.1162682120047975,
+      "minimum_free": 11914792960,
+      "minimum_tmp_free": 3910709248,
+      "name": "focused-boundary",
+      "log_sha256": "9ac3ed8d8f8a32ed3004dd88e522fc1c7f2bb673fa2aceface3620539b94d3b2",
+      "log_bytes": 572,
+      "test_totals": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2
+    },
+    {
+      "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_untyped_binder",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11889143808,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.067473709990736,
+      "minimum_free": 11889135616,
+      "minimum_tmp_free": 3905695744,
+      "name": "focused-lint",
+      "log_sha256": "a9f27a118f6325fbf1aeebc4a924b9ec54079898a87a789c1a30ef1fd089554a",
+      "log_bytes": 115,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11914469376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 943.27041723,
+      "minimum_free": 11889143808,
+      "minimum_tmp_free": 3903795200,
+      "name": "full-gate",
+      "log_sha256": "17256e1eb611e1ddd1b9d7718e72a778349c78c47b57e0a74ee434b00106d9ea",
+      "log_bytes": 23349,
+      "test_totals": {
+        "passed": 1236,
+        "failed": 0,
+        "ignored": 49
+      },
+      "completed_groups": 182
+    },
+    {
+      "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897708544,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 154.5557848039898,
+      "minimum_free": 11893751808,
+      "minimum_tmp_free": 3905630208,
+      "name": "matrix-run",
+      "log_sha256": "d9ee1053a0712203bf68e8a19007737c1e86183e0a6f78a3716907550961544e",
+      "log_bytes": 955,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11897675776,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 298.3534823830123,
+      "minimum_free": 11889844224,
+      "minimum_tmp_free": 3904126976,
+      "name": "census-run",
+      "log_sha256": "b1b049c757a346384199934702e8536941161c3fba441c33057c987592af0e99",
+      "log_bytes": 1268,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    }
+  ],
+  "source_identity": [
+    {
+      "file": "src/cli/checker_diagnostic.rs",
+      "sha256": "403764d4f70a87f8dff4e2c09d322ebd8d9c326b1185d6f55b02963b19c41fa6"
+    },
+    {
+      "file": "src/kernel/check.rs",
+      "sha256": "b113cdf6cc08626dac659a026f7e69db055674dbe56617cc9bfce31fbd510f94"
+    },
+    {
+      "file": "src/syntax/diagnostics.rs",
+      "sha256": "9403af4b7f0864fe6395ee87fbf2caec025ae42bef86dd5aefda7a99b7da5bcf"
+    },
+    {
+      "file": "src/syntax/parser.rs",
+      "sha256": "441bdac88dcef8587ef116bb1a488715cf5a2fafddd5f8027bf551b21d2c2d84"
+    },
+    {
+      "file": "tests/cpu_untyped_binder.rs",
+      "sha256": "bc4eff0df9c7d6839e409727b049e487dfb3175bbf6086d42e92e2600e266224"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/NOTICE.md",
+      "sha256": "98c772cc5a21faad4130fbfe2201667f171ccae2892cb18adbee1d5a277b2a65"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/README.md",
+      "sha256": "6f2b612bc8cdac1e13a93c66b839f2c78b80e1292b658bb53d2ec120e7b455b1"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/before.json",
+      "sha256": "65d8afedff2f42d958b6473c2c3fbe92adcd5017ee81127acede16e86e3d9dcb"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/err_missing.bend",
+      "sha256": "15d39adea1e3f05b813bca2abdf7dfc5423a91c32f613c1a942780ca1794b4fa"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/err_missing.stderr.json",
+      "sha256": "67b6f5520348462ac402faaf78f4231361206b02d64015aa385fa04d1f9c7bc3"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/err_untyped.bend",
+      "sha256": "1e99fe4295bd6e416cd73487e86896cdf4db22782fc0ff214ea64ea37bc41eec"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/err_untyped.stderr.json",
+      "sha256": "634655ff330c0665f201773af0d58bdc10357f1e01f4bc64f8fa854f414c5e1d"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/two_instances.bend",
+      "sha256": "0204080251435327470ddb01befc50ade1d81f10324149ba32514358ca8f3d4a"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/value_type.bend",
+      "sha256": "b7b00d0029c744ec5fc7ba0655a58f9a9f5d2170f8e3dbfbac35db806a7a45f7"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/comptime/wrong_type.bend",
+      "sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/imports/bad.bend",
+      "sha256": "08c2cc4aa069bc34ea03976194ca3f80caab10766bcc72a00f363b0dd9ed886c"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/imports/typed.bend",
+      "sha256": "45db669bc4efb4eb169eb5f33c9b69eac65f531f331a7d825d3534ac6cb1e16d"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative-cases.json",
+      "sha256": "572d9a7a3e2a1111df57aa1fd5a735b8c6631f7e7eb150e36f58367b7381803d"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/data.bend",
+      "sha256": "1496c837a072cf7c2ea3bbb214cddf804296e2adbab5bc65922329b6105e2b01"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/data.stderr.json",
+      "sha256": "6092a3f6c77c36bd627ce24d4d87c96d36fc7a1706fcd3341a5d4f6d3fba181c"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/erased_comma.bend",
+      "sha256": "96126384eeb40a7418de8596a9a15d7fb9619b108099347825dfe6f97d2bfd22"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/erased_comma.stderr.json",
+      "sha256": "4789307d8c75f1527eb14cc950742671d02456bc6241672cca2d160daf968172"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/field.bend",
+      "sha256": "ec92c9d1f61234a62d22ad94949462369d93dd94a52eaa385bcaadc9bc7ce80a"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/field.stderr.json",
+      "sha256": "d84e730dc0a315cae274b36cccfd83b65fdb7932934c650f0f9952c147b2e203"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/imported.bend",
+      "sha256": "2d5d3a819b82ce990e7267b4bb847cf69ad37c36c6c936b2d6bea407870c1760"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/imported.stderr.json",
+      "sha256": "d154d4b9217eba8dcc2b29c0dbc5d504bdf679aa397906de1be03e9ad5fd8cbf"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/many_close.bend",
+      "sha256": "2c79ea6fdc2fd9534a9ef84ebabd0f562f88257ca5743345cbce135568d0be83"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/many_close.stderr.json",
+      "sha256": "732eae035a6f28a270d7e30804392322cd222b80dbebbbe364a40aed7888064f"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/missing_name.bend",
+      "sha256": "00ed63df642096cc7199ab5c76e0ef76b7e2b457f2ffce67709f24a16d751271"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/missing_name.stderr.json",
+      "sha256": "1a4056632cc48b5b52f48c34b928f4676c2373a9337b595d5d232804ee7fe6a8"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/missing_type.bend",
+      "sha256": "cf1e9e920b8cb4274135733a4a894f3dcfc69188c9c05dc75fdf3efaf75e1b1f"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/missing_type.stderr.json",
+      "sha256": "d9b4fff8f483beaea67c51f02565fc446f9c44183fcd584c8f865699cd9f0821"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/multiline.bend",
+      "sha256": "75be9a77fa580b16b48cd847f6cfd6fd0d576b614ef6a6f74bc73bcabfeadd40"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/multiline.stderr.json",
+      "sha256": "3d5061f0de59e9245f90fceee53cac62a53dae38ea76d22f233542b0783e0bf8"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/tilde_close.bend",
+      "sha256": "0231697d36079be5454df371efb07428c5e8947f7830a46e64797b5e2b43e493"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/tilde_close.stderr.json",
+      "sha256": "14bcddeea5e36fb95335f768ad1b946c30d4a978d1a1962fab5c8766ef08d822"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/tilde_eof.bend",
+      "sha256": "744bfce98df61b77105c771e423e737dfad554fc0f586e10f0c132761d55e4bc"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/negative/tilde_eof.stderr.json",
+      "sha256": "6d7706907c151234579083163b7602e444ffeb4859ac3bd66ec30833c1e0e22a"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/positive-cases.json",
+      "sha256": "85bc7204cb0bd554fd2a2e0735d385224a1d27931b0a73946bddeeefd43adc5b"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/positive/bare.bend",
+      "sha256": "790a75bbc79f74ffa91730b21f7748e34b96624ad19718a32e162ec0afdd4c7b"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/positive/imported.bend",
+      "sha256": "26e8cff767e3be2069c14fd6a72bcdbc5ee2fda5a1537558b6935a60a1975218"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/positive/quantified.bend",
+      "sha256": "967a2af0a21e8df2dadd8d294e9070c3cfc4443d88d49eef3f58bf43e750535b"
+    },
+    {
+      "file": "tests/fixtures/cpu-untyped-binder/positive/typed.bend",
+      "sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98"
+    }
+  ],
+  "reviews": [
+    {
+      "reviewer": "review_sharing",
+      "disposition": "no blocking finding",
+      "scope": "Four production metadata lines plus regression fixtures/tests; read-only source review, no reviewer build/test.",
+      "findings": [
+        "Optional colon metadata at unchanged quantified-binder refusal; no token/fresh-ID/core changes; earlier128binder guard remains first.",
+        "Tracked/plain public fields and Display, tokens/cursor/fresh state,127-vs128 binder guard, imported provenance, cancellation/writer/status/fallback covered.",
+        "All5 originals and12 exact goldens verified; six upstream positives accepted. wrong_type remains unresolved and outside exact manifest; later phase probes required."
+      ],
+      "diff_sha256": "5b52a6ad952014a9dcff7e261e12d331b96eb4226ef9e57d382555b575844f97"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "source": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "scope": "Read-only independent verification; no reviewer builds/execution.",
+      "findings": [
+        "All434 rows and source hashes verified;199 repeated lane pairs deterministic.",
+        "408matching,8strictIO,18retainedwrong_type;52actual executions and16pure normalizations.",
+        "All12 baseline artifacts byte-identical; O3 profile and binary/archive identities verified."
+      ],
+      "matrix_sha256": "1c80fe32ffdd590bbdef328b8d8751f1de0dcf1d21089f8f45d0c24143962cf4"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "source": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+      "scope": "Independent reclassification of all1302 rows against prior raw evidence; no full-gate attestation.",
+      "findings": [
+        "Only err_untyped stderr changes, now exact upstream; all statuses/phases and upstream streams unchanged.",
+        "Historical385 IO cohort renews exactly; residual172=109acceptance+63rejection;6 unchanged upstream stack failures separate."
+      ],
+      "raw_sha256": "bc0ea38df485cf0498fccb0a6ac6e9cb5b70f9a0c6c019f3197c1162e6d4c71f",
+      "reconciliation_sha256": "dcac5cd02d6a809e152cf4046a0d46fd20f3f4594d1bbfa1d86da96b39372cd3"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Prepared public artifacts and report template; full gate and rendered report still pending.",
+      "findings": [
+        "Complete public receipts match retained evidence after path redaction.",
+        "One-row canonical delta reconstructs all1302 current rows byte-exact.",
+        "478linked/824unlinked:521compiled-interpreter candidates,289checker rejection,13interpreter-only,1checking-only. wrong_type explicitly unresolved.",
+        "API status-bearing Ok and external caller audit caveat accurate; no mid-normalization cancellation claimed.",
+        "No private absolute paths or credential patterns found."
+      ],
+      "hashes": {
+        "docs/cpu-untyped-binder-results.json": "18d3c4f783d9041a05cd6ab2082ac38a646ca6cd5fbf9b8fde77d6f6c6fdbe5f",
+        "docs/cpu-untyped-binder-census.json": "08a7c31ffe51edc7a6cd2ba3ee0162ffda2869da3085c77898814088fdfb2fb1",
+        "docs/cpu-untyped-binder-census-delta.csv": "6b4bfeadc8b966fde2bdef8bfd0dd520b7b0c437149b6328f8f3518214d17683",
+        "docs/cpu-untyped-binder-evidence.csv": "bd7d549961abc073ada92c6c2d9372c50e060131a2a7500608ab64907e266fde",
+        "tests/fixtures/cpu-untyped-binder/before.json": "65d8afedff2f42d958b6473c2c3fbe92adcd5017ee81127acede16e86e3d9dcb"
+      },
+      "template_sha256": "e4ac9a06f49ee01f08056145affed5a9b2e4707fbe2358249d19c02fe116a311"
+    }
+  ],
+  "environment": {
+    "tools": [
+      {
+        "command": [
+          "rustc",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustc 1.96.0 (ac68faa20 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "cargo",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "cargo 1.96.0 (30a34c682 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "rustup",
+          "run",
+          "nightly-2026-05-24",
+          "rustfmt",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustfmt 1.9.0-nightly (23a3312d92 2026-05-23)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "node",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "v24.19.0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "$TOOLS/clang/usr/bin/clang-19",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: $TOOLS/clang/usr/lib/llvm-19/bin\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "pwsh",
+          "-NoLogo",
+          "-NoProfile",
+          "-Command",
+          "$PSVersionTable.PSVersion.ToString()"
+        ],
+        "exit": 0,
+        "stdout": "7.5.4\n",
+        "stderr": ""
+      }
+    ],
+    "refs": [
+      {
+        "path": "$REFERENCE",
+        "commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "dirty": ""
+      },
+      {
+        "path": "$DOCS",
+        "commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "dirty": ""
+      }
+    ],
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "free": {
+      "/workspace": 11895271424,
+      "/tmp": 3905642496
+    }
+  },
+  "whitespace_check": {
+    "commands": [
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+          "792aaf0abbb5f3c20a046ab39ecc66967350c2b1"
+        ],
+        "exit": 2,
+        "stdout": "tests/fixtures/cpu-untyped-binder/comptime/err_missing.bend:16: trailing whitespace.\n+#|5 | \ntests/fixtures/cpu-untyped-binder/comptime/err_untyped.bend:14: trailing whitespace.\n+#|3 | \ntests/fixtures/cpu-untyped-binder/comptime/wrong_type.bend:20: trailing whitespace.\n+#|7 | \n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+          "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+          "--",
+          "src",
+          "tests/cpu_untyped_binder.rs",
+          "tests/fixtures/cpu-untyped-binder/positive",
+          "tests/fixtures/cpu-untyped-binder/negative",
+          "tests/fixtures/cpu-untyped-binder/imports"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "scope": "Three whitespace warnings are unchanged upstream #| source-window blank lines in err_missing, err_untyped and wrong_type. Preserve exact original bytes/attribution. Authored source check passes."
+  },
+  "retained_limitations": [
+    "An initial authored + quantity literal was rejected by both parsers; corrected to pinned &2. Initial source/streams retained in before.json.",
+    "wrong_type retains different checking diagnostic text. Its phase probes do not establish exact parity.",
+    "Strict IO checking refusals are distinct from actual native IO and generated C/JS execution. Direct upstream IO interpretation unrun.",
+    "External invoke consumers remain unaudited. Prior oracle/host/foreign/resource and supplementary all-target lint failures are not qualified here."
+  ],
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11889135616,
+    "minimum_tmp_bytes": 3897880576,
+    "unique_evidence_deleted": false,
+    "cache_actions": [
+      {
+        "kind": "inactive_registry_source_cache_relocation",
+        "identity_verified": true,
+        "files": 13254,
+        "workspace_reclaimed": false,
+        "reason": "Lower-layer overlay data; original logical path and bytes retained."
+      },
+      {
+        "kind": "inactive_debug_cache_relocation",
+        "identity_verified": true,
+        "entries": 3997,
+        "reclaimed_bytes": 75653120,
+        "reason": "Upper-layer rebuildable artifacts relocated; future debug outputs use temporary storage; source/evidence unchanged."
+      }
+    ]
+  },
+  "API": "Plain parser/loader Err fields and Display unchanged; newly formatted CLI invoke failures use existing Ok(CliOutput) with exit_code1. External consumers remain unaudited. No public signature/type changes."
+}

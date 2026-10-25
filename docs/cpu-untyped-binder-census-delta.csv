@@ -1,0 +1,2 @@
+fixture,source_sha256,engine_commit,upstream_phase,upstream_exit,upstream_outcome,port_phase,port_exit,probe_exit,classification,missing_IO_candidate,renewed_historical_IO_member
+comptime/err_untyped.bend,1e99fe4295bd6e416cd73487e86896cdf4db22782fc0ff214ea64ea37bc41eec,792aaf0abbb5f3c20a046ab39ecc66967350c2b1,load,1,language_rejection,load,1,1,exact_rejection,false,false
