@@ -1,0 +1,884 @@
+{
+  "tested_source": "e9638be533aed465820168ced57b6f27f54e82d9",
+  "renewed_snapshot": {
+    "source_commit": "e9638be533aed465820168ced57b6f27f54e82d9",
+    "source_tree": "fe14a1a6ce684658acf7d40256f3319d12186148",
+    "binary_sha256": "0a4c0722d2cdec0d96944b8f99f8018f1c5156f07bf882bdce8b4307949f3aa6",
+    "binary_size": 27467336,
+    "working_binary": "$GATE_RUN/teamy-bend",
+    "archive": "$EVIDENCE/snapshot-renewed/teamy-bend.gz",
+    "archive_sha256": "c8ada47f9cec68e55790d37880087736a36ae21576d638c104b6e932673b3b39",
+    "archive_size": 7111278,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "0a4c0722d2cdec0d96944b8f99f8018f1c5156f07bf882bdce8b4307949f3aa6"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "comparison_source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+  "failed_gate_and_renewal": {
+    "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+    "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+    "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+    "before": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+    "after": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+    "rows": [
+      {
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "$RENEWAL_RUN/phase.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.10314051201567054
+      },
+      {
+        "lane": "upstream-c",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "-o",
+          "$RENEWAL_RUN/unwritten.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.11009434002335183
+      },
+      {
+        "lane": "upstream-js",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "-o",
+          "$RENEWAL_RUN/unwritten.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13461427399306558
+      },
+      {
+        "lane": "run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.14063712398638017
+      },
+      {
+        "lane": "c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.14125709800282493
+      },
+      {
+        "lane": "javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13749125800677575
+      },
+      {
+        "lane": "native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13342718497733586
+      }
+    ],
+    "phase": {
+      "phase": "load",
+      "outcome": "language_rejection"
+    },
+    "interpretation": "The full gate found a stale current golden for an intentionally changed tilde diagnostic. Both pinned generators and checker agree exactly with new port rejection. Original and historical stderr receipts remain unchanged; current golden is renewed."
+  },
+  "preparation_refusals": {
+    "first_sanitize_attempt": "Refused writing public receipt because fresh renewal temporary path had not yet been mapped. No file written. Mapping corrected; path-free receipt then emitted.",
+    "source_unchanged": true
+  },
+  "standard_gate": {
+    "passed": 1232,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 181,
+    "exit": 0,
+    "seconds": 792.9947937670222,
+    "log_sha256": "6f4b262beb5aa37c9c710d85b4ba7258655d9f93ec96e4bc9295949897dedd84"
+  },
+  "commands": [
+    {
+      "source_commit": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_unknown_template",
+        "--test",
+        "cpu_alias_fallback",
+        "--test",
+        "parser_templates",
+        "--test",
+        "parser"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880382464,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 26.17227014101809,
+      "minimum_free": 11880353792,
+      "minimum_tmp_free": 4506247168,
+      "name": "focused",
+      "log_sha256": "84ec5dba65eea9ea9535ed04d5070dacea15e3f41f3d0189b6b4822795336d61",
+      "log_bytes": 4913,
+      "test_totals": {
+        "passed": 55,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 4
+    },
+    {
+      "source_commit": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880353792,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 89.05379850897589,
+      "minimum_free": 11880280064,
+      "minimum_tmp_free": 4502466560,
+      "name": "unit-controls",
+      "log_sha256": "38fb3e72793a01a112f5561e199e86a3c46a53c9250a529e6da89d55cb5452a7",
+      "log_bytes": 32196,
+      "test_totals": {
+        "passed": 290,
+        "failed": 0,
+        "ignored": 1
+      },
+      "completed_groups": 2
+    },
+    {
+      "source_commit": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_unknown_template",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880280064,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.1698177159996703,
+      "minimum_free": 11880214528,
+      "minimum_tmp_free": 4505038848,
+      "name": "focused-lint",
+      "log_sha256": "2392eb061d91844de6c88109da24f7e3e7a1121439f73355a30d5744149d935e",
+      "log_bytes": 115,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_unknown_template"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880157184,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 16.167378968006233,
+      "minimum_free": 11880148992,
+      "minimum_tmp_free": 4504735744,
+      "name": "focused-final",
+      "log_sha256": "39e181470fa186a045b0865b118b312c06ddd347eb0d76c2f255c17752b1e5ad",
+      "log_bytes": 471,
+      "test_totals": {
+        "passed": 2,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 1
+    },
+    {
+      "source_commit": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_unknown_template",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11880148992,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.26428117099567316,
+      "minimum_free": 11880140800,
+      "minimum_tmp_free": 4505071616,
+      "name": "focused-final-lint",
+      "log_sha256": "3d13c320e362a18504072264f7d56c54d8cfb3bed0341904f4e34865f962d1b2",
+      "log_bytes": 115,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_list_for_each",
+        "--test",
+        "cpu_unknown_template"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11847139328,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 20.008048610005062,
+      "minimum_free": 11847131136,
+      "minimum_tmp_free": 4445294592,
+      "name": "marker-renewal-focused",
+      "log_sha256": "8747929d8696eee426e21edde98529df6983e3ec04356885a01de8d3e7cfb1e4",
+      "log_bytes": 912,
+      "test_totals": {
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2
+    },
+    {
+      "source_commit": "e9638be533aed465820168ced57b6f27f54e82d9",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11847016448,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 792.9947937670222,
+      "minimum_free": 11839762432,
+      "minimum_tmp_free": 4417122304,
+      "name": "full-gate-renewed",
+      "log_sha256": "6f4b262beb5aa37c9c710d85b4ba7258655d9f93ec96e4bc9295949897dedd84",
+      "log_bytes": 22962,
+      "test_totals": {
+        "passed": 1232,
+        "failed": 0,
+        "ignored": 49
+      },
+      "completed_groups": 181
+    },
+    {
+      "source_commit": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11855761408,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 154.13840126700234,
+      "minimum_free": 11851603968,
+      "minimum_tmp_free": 4446720000,
+      "name": "matrix-run",
+      "log_sha256": "46ecc9a33395d6d5018a57de916c41ca5463416957fbdbc81369a7274ad58fbf",
+      "log_bytes": 1024,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11855732736,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 285.4166628109815,
+      "minimum_free": 11847876608,
+      "minimum_tmp_free": 4442152960,
+      "name": "census-run",
+      "log_sha256": "2621daa51b9115ef71d12de8b668922f09ebbb1aede1a7a59652277b5d960d4c",
+      "log_bytes": 1268,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    }
+  ],
+  "source_identity": [
+    {
+      "file": "docs/cpu-unknown-template-census-delta.csv",
+      "sha256": "9ba7c7cd9028911558cf57d1407f860fff0f98ea9dcfeca81e6162b1de4f34b2"
+    },
+    {
+      "file": "docs/cpu-unknown-template-census.json",
+      "sha256": "86a1ef7f70f2a02a8a1e59f70e31a3e23608b86eab82295618b0299ce43b50b8"
+    },
+    {
+      "file": "docs/cpu-unknown-template-evidence.csv",
+      "sha256": "73f17f22041065b63c4c9e68adc89828801a2fe434caf0910bb9acba181b2898"
+    },
+    {
+      "file": "docs/cpu-unknown-template-renewal.json",
+      "sha256": "8fe10158c4dae6f6f3e1f094ed8e1b2ea8da1bd39720e7cd2fe6df884b534de4"
+    },
+    {
+      "file": "docs/cpu-unknown-template-results.json",
+      "sha256": "9c0868f37b8a8687b9723bb27235cab42780b8caf0cd262dfb07eeeb48580cbf"
+    },
+    {
+      "file": "src/cli/checker_diagnostic.rs",
+      "sha256": "327ad990e2d56a2b2b6a997163fe2fb3d48b5d8d97af71258866f5ae2ac7c2c5"
+    },
+    {
+      "file": "src/kernel/check.rs",
+      "sha256": "7a1f7e1cce55b91dcf5215025e4103a6e9ee1b6d52272fc632af9d2ca6f86f3e"
+    },
+    {
+      "file": "src/syntax/diagnostics.rs",
+      "sha256": "a9fd220fdc6a54751fa61b4c75c67e5199494cd24cb7d1663a8820316293d5a9"
+    },
+    {
+      "file": "src/syntax/parser.rs",
+      "sha256": "7f3669d716dd6dc7b63cac5e7939f1d7f064d586b6793860f8179150043a4f9f"
+    },
+    {
+      "file": "tests/cpu_unknown_template.rs",
+      "sha256": "de7e3a7079acc9d3cbbfa186df2d41e03f1dcb77ca9782db7b1370dda4ee4e58"
+    },
+    {
+      "file": "tests/fixtures/cpu-list-for-each/negative/missing-marker.port-executable-current-stderr.json",
+      "sha256": "68115d0a8e1927c03782050438bd33c4a9d419d6201f3446400120a0dbc265e2"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/NOTICE.md",
+      "sha256": "335f1cd25011fe798af6c276b8df5662011a35e741d3186a104c81e0ec6385f1"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/README.md",
+      "sha256": "24cc941045528febc8a462521a97c431833ee2dcbe0c91ba6b45d9c27c92fb1e"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/before.json",
+      "sha256": "3e6be5615de9557e91d662519d2d07253664be27c0713a58d05a805fcf2c83e9"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_head.bend",
+      "sha256": "de473f77092e9e37bd94cefb79d15c501a2f25c780f081d05e53a1f05eacd9df"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_head.stderr.json",
+      "sha256": "f1fc968b17ae0eb38b7f8303e5f4e7ab5084e0ec8ca00483091ad4e31828a5f0"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_later.bend",
+      "sha256": "e0e3158738da81de5711beea66b58498204c9da354f97cb73f8608093d23e3a7"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_later.stderr.json",
+      "sha256": "a2af14820073b4ab45a319a3abf34a45f78eb0be29bffd11d57b68cff31ebf73"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_runtime.bend",
+      "sha256": "f382d5426f7914778ac6229a360e212a46ea33536861d74afe30273025726f33"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/comptime/err_runtime.stderr.json",
+      "sha256": "c6d8eef1d6a6429b2492ae9fb0c97d36b831e9743596f5b1cf9424f5666bdf5d"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/imports/broken.bend",
+      "sha256": "5298de97cffb6bf2ec730270aae327175aa67ff3640ba23695d71f30821d2391"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/imports/defs.bend",
+      "sha256": "f79b5e4a5846755b59f82e34cfe257a5b9a94ce91631eb297f6af860417a4590"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/known.bend",
+      "sha256": "9dea9ef2b4be16c23f9275b8b2b749e96746aed6acb5c31e2da8445f8e46828d"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/known_precedence.bend",
+      "sha256": "a0289c6af38dee1be6f08fff741cb8562add9c0610f2628597c7e3ae3e33e7a7"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative-cases.json",
+      "sha256": "50e706c079b0624d98ed4ab4ad538b87c8b5302476b10335db370830adfee080"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/bare.bend",
+      "sha256": "299eaa529a966f0565c8e355122e37a01d149e4234231db3d42df6b25415a622"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/bare.stderr.json",
+      "sha256": "a79f776ef9e1d54bcc2d7c9e09f0a9c0a3b6ea74b8dbfa084cddd4c9d7372b4a"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/imported.bend",
+      "sha256": "645f09f58ac38af38825a89848aa67981b0c6a9b9585118d643e697e235c0ac1"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/imported.stderr.json",
+      "sha256": "cb4c2840eae541b17c04dcf2649887132f725e6d4b25adb2168c0db9e9b4374d"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/late_marker.bend",
+      "sha256": "7384b75513d629cb249937ec525e1b19db1cd1caeec2e2c76576eb25a9efd70e"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/late_marker.stderr.json",
+      "sha256": "8e344d182d31089e04fbfeb75d7d13fe17346428eef4d608158169840cf403c4"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/missing_close.bend",
+      "sha256": "588f37f3d7aa4add54ac13f772231a83959168ef8a8ea41f62c80ef41403f8d7"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/missing_close.stderr.json",
+      "sha256": "7a3e862d39c12cc669fb607a9a784984e2b116c76cf058c73ea6092dd277e6e7"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/missing_member.bend",
+      "sha256": "3fe1e0d7414ad2087ec403ca4fea674c30682ccc1e9abecf399c1dea540bb7af"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/missing_member.stderr.json",
+      "sha256": "91775d0e7cab1cf22112c9373fdc1b6b0537f4b14b7e554b3b1c5a0c68093aec"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/multiline.bend",
+      "sha256": "2db9ce6f1d1375d724ab09a29298491dfc5797d2db6e5573abeabeb81ecd471f"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/multiline.stderr.json",
+      "sha256": "b1c3d81949f85cc9dea1442d0ed922aeac559bc314c175223eb44f1f55199b49"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/ordinary.bend",
+      "sha256": "fa24c234e4e5d426cf5712df6af08daf23eba6eced92b40b1438d7cae2dbad7e"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/ordinary.stderr.json",
+      "sha256": "d5d21681c28f7ef9668e013cbb5e13bcf2fd54dece53df12efebeacfe3053e32"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/standalone.bend",
+      "sha256": "3bf71398170a298d047fac21ceb0ca069eb48750c250cf6c69edc107847525cf"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/standalone.stderr.json",
+      "sha256": "ef823ff662179b88e74ba2604e4ac194c3f4f3e74ccfe7ee1f1c65e841624c05"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/template_body.bend",
+      "sha256": "19deabd8f5cc978c4f4892bf9af2d3a16d9054953f1694ac8d652e0789494315"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/template_body.stderr.json",
+      "sha256": "0d5939ea0001793edf2e381eacd752dd9806689f981a4d05c997e59ac02aa235"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/template_missing.bend",
+      "sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/negative/template_missing.stderr.json",
+      "sha256": "787945b3b09610708439e09aeb7f74904becc108e17776a4823b9972c27235ac"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/nested.bend",
+      "sha256": "49c6cd90a77717192a1800cc57a8fc4d3df742d8fb441d45a2ae2a13ae1a6753"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/ordinary.bend",
+      "sha256": "b1991dee46b6760ee226ab2e23061bee85cf8a6b8ea45e76000d4b569be658d8"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/original/defs.bend",
+      "sha256": "2d790d8b78c6b85f3ba986d8e61f29cc69887ac5668c6a2944bf3d7175f8f870"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/parse/comp_arrow_position.bend",
+      "sha256": "d89649615070aa7b4e2957050e821e7a9613f4e7099424d7e84a0205e66719d9"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/parse/comp_arrow_position.stderr.json",
+      "sha256": "925bdef5ccda609b4feacac93884c1507fdc2adba68374d4aa2fc8a1ade8b8a2"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/positive-cases.json",
+      "sha256": "51b165f8f99509d39bf8b9cda983f791446a13c5790c48f3668cc5a83856636b"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/raw_fallback.bend",
+      "sha256": "4f2ace1c5c4070adbedcca198618b7e1c756a12a17894d23a19518b7b14f9170"
+    },
+    {
+      "file": "tests/fixtures/cpu-unknown-template/replay.bend",
+      "sha256": "a678d6cdaa1dffdfe658d689c7eaf4ecd9974e21b4fd62e9ef984f0e880996c7"
+    }
+  ],
+  "reviews": [
+    {
+      "reviewer": "review_sharing",
+      "approval": "No blocking findings in four-line diagnostic metadata correction, regression controls or four added originals",
+      "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "read_only": true,
+      "builds_or_tests_by_reviewer": false,
+      "reviewed_tracked_diff_sha256": "e7e084a4171031dfcff2cb98ec5c578824581006fac9a64e039730e901973c82",
+      "findings": [
+        "Public ParseError fields/Display and cursor remain unchanged; metadata attaches only at existing tilde refusal.",
+        "Expression64 and argument128 guards keep priority; tokens/cursor/fresh IDs and absent guard metadata compared.",
+        "Erased-body name override remains unchanged.",
+        "14 upstream negative goldens and six accepted positives verified;12 prior diagnostic differences and2 existing matches.",
+        "Four originals and two reused authored files byte-identical; attribution verified.",
+        "Imported/multiline/template sources, CLI cancellation/writer/status and tracked/plain work controls cover the boundary.",
+        "External invoke consumers remain unaudited; formatted CLI failures require exit_code checking."
+      ]
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "approval": "No blocking evidence finding",
+      "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "matrix_sha256": "595d815c761ac2d3b921524c3dfa6e2881950ffc1eaa346f48a8678dedb37c48",
+      "commands": 464,
+      "matches": 464,
+      "unexpected": 0,
+      "timeouts": 0,
+      "actual_C_JS_executions": 48,
+      "pure_normalizations": 24,
+      "exact_negative_comparisons": 252,
+      "negative_port_phase_probes": 56,
+      "load_negative_roots": 13,
+      "check_negative_roots": 1,
+      "byte_identical_artifacts": 12,
+      "diagnostic_improvements": 12,
+      "adjacent_existing_matches": 2,
+      "repeats_deterministic": true,
+      "read_only": true,
+      "not_attested": [
+        "full gate",
+        "census"
+      ]
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "approval": "No blocking census finding",
+      "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+      "read_only": true,
+      "hashes": {
+        "raw": "9002070af1de6b47c925567189d6cc4fb88923811bd799b7c0a90f2eb5509a08",
+        "reconciliation": "9f0f2803694a592dff5d635755ad7a07e6ab3deaec65cbfa50c7978fac634a22",
+        "csv": "ae65c03a954801f83c934a9ea5e66f77518b7a921edf1a9b7e25cb27e71fd948"
+      },
+      "counts": {
+        "both_accept": 366,
+        "exact_rejection": 372,
+        "acceptance_disagreement": 494,
+        "different_rejection": 64,
+        "oracle_failures": 6
+      },
+      "all_statuses_and_phases_unchanged": true,
+      "all_upstream_streams_unchanged": true,
+      "port_stderr_changes": 7,
+      "exact_fixes": 4,
+      "remaining_strict_load_disagreements": [
+        "base/list_fold.bend",
+        "gfx/app_linear.bend",
+        "gfx/app_play.bend"
+      ],
+      "historical_IO_exact_renewal": 385,
+      "residual": 173,
+      "canonical_status_delta_rows": 4,
+      "full_gate_attested": false
+    },
+    {
+      "reviewer": "review_sharing",
+      "approval": "Justified golden renewal, no weakened assertion",
+      "read_only": true,
+      "golden_sha256": "68115d0a8e1927c03782050438bd33c4a9d419d6201f3446400120a0dbc265e2",
+      "checks": [
+        "New current golden byte-identical to existing upstream golden; old current golden preserved in receipt.",
+        "All7recorded lanes:exit1,emptystdout,identicalstderr,noartifact.",
+        "Test assertions unchanged:complete stderr bytes,status1,emptystdout,nooutput.",
+        "Production unchanged; failedgate remains historical; renewedgate uses separate test/evidencecommit."
+      ]
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "approval": "No blocking finding in golden renewal or identity split",
+      "read_only": true,
+      "checks": {
+        "public_renewal": "8fe10158c4dae6f6f3e1f094ed8e1b2ea8da1bd39720e7cd2fe6df884b534de4",
+        "renewed_snapshot": "ed3a080b073530a995f2432c5d89e8f2ca36579f41761eb21efac7f88c5c9ed8"
+      },
+      "failed_gate": {
+        "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+        "passed": 764,
+        "failed": 1,
+        "ignored": 48,
+        "groups": 98,
+        "later_targets": "unrun"
+      },
+      "production_identity_unchanged": true,
+      "matrix_census_identity_preserved": true,
+      "renewed_gate_attested": false
+    }
+  ],
+  "rejected_snapshot": {
+    "kind": "snapshot attempted during all-features build/test transition",
+    "accepted": false,
+    "reason": "Feature fingerprint was default+extended_observability+tracy; required default+extended_observability. No matrix/census started.",
+    "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+    "captured_binary_sha256": "d53337f6525933376710b79f9d7003a4fd99f5b2c01063d8016b1d56db0bcb64",
+    "archive_sha256": "964c53807a37dd1d92860ba24c01869fc7dda8dc46287913ea7f9e412026cc01",
+    "followup": "Identity assertion prevented accepting the Tracy snapshot. A later default+extended_observability snapshot succeeded before any matrix/census run."
+  },
+  "retained_limitations": [
+    "Initial authored U32 addition controls used default Nat operators; both implementations correctly refused; invalid sources and receipts retained.",
+    "Rejected all-feature Tracy capture was not used for differential observations.",
+    "Focused/library receipts precede the final four-original expansion; full gate tests the committed complete manifests.",
+    "External invoke callers remain unaudited; foreign/IO/device runtime lanes and historical oracle failures are not qualified here."
+  ],
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11839762432,
+    "minimum_tmp_bytes": 4417122304,
+    "unique_evidence_deleted": false
+  },
+  "API": "Plain parser/loader Err fields and Display unchanged; newly formatted CLI invoke failures use existing Ok(CliOutput) with exit_code1. External consumers remain unaudited. No public signature/type changes."
+}
