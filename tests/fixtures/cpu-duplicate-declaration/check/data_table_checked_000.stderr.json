@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '\r'\nLocation:\n3 | law value: U32\r\n4>| law value\r\n5 |   : U32\r\n"

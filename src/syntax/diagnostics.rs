@@ -292,12 +292,12 @@ impl DiagnosticOrigins {
         });
     }
 
-    pub(super) fn duplicate_constructor(
+    pub(super) fn expected_after_name(
         &mut self,
         label: &str,
         line: usize,
         after_name: usize,
-        name: &str,
+        expected: &str,
     ) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Pinned parse_fail observes the character immediately after the
@@ -315,7 +315,7 @@ impl DiagnosticOrigins {
                 .map_or_else(|| "end of input".into(), |c| format!("'{c}'"));
             source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
                 content: LoadDiagnosticContent::ExpectedObserved {
-                    expected: format!("a fresh constructor name (duplicate declaration: {name})"),
+                    expected: expected.to_owned(),
                     observed,
                 },
                 excerpt,
@@ -441,22 +441,103 @@ mod tests {
     }
 
     #[test]
+    fn duplicate_declaration_metadata_preserves_public_load_errors() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-duplicate-declaration");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-duplicate-declaration/negative-cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let executable = crate::syntax::load_executable(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            let tracked_executable = crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap();
+            assert!(
+                plain.message.starts_with("duplicate declaration: ")
+                    || plain.message.starts_with("duplicate definition: ")
+            );
+            let expected: String = facet_json::from_str(
+                &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+            )
+            .unwrap();
+            assert_eq!(plain.to_string(), executable.to_string(), "{case}");
+            for failure in [tracked, tracked_executable] {
+                assert_eq!(plain.to_string(), failure.error.to_string(), "{case}");
+                assert_eq!(plain.message, failure.error.message);
+                assert_eq!(plain.source, failure.error.source);
+                assert_eq!(
+                    (plain.line, plain.column),
+                    (failure.error.line, failure.error.column)
+                );
+                let report = failure.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved {
+                    expected: want,
+                    observed,
+                } = report.content
+                else {
+                    panic!("expected the pinned parser category");
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {want}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    expected,
+                    "{case}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn duplicate_declaration_metadata_does_not_disguise_distinct_targets_or_earlier_errors() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-duplicate-declaration/exploratory");
+        for case in ["alias/main.bend", "shadow/main.bend", "missing-paren.bend"] {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let executable = crate::syntax::load_executable(&path).unwrap_err();
+            assert_eq!(plain.to_string(), executable.to_string());
+            for tracked in [
+                crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+                crate::syntax::load_executable_with_diagnostics(&path)
+                    .err()
+                    .unwrap(),
+            ] {
+                assert_eq!(plain.to_string(), tracked.error.to_string());
+                if case == "missing-paren.bend" {
+                    assert!(matches!(tracked.diagnostic.unwrap().content,
+                        super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                        if expected == "'('"));
+                } else {
+                    assert!(plain.message.starts_with("duplicate definition: "));
+                    assert!(tracked.diagnostic.is_none());
+                }
+            }
+        }
+    }
+
+    #[test]
     fn duplicate_constructor_metadata_requires_an_actual_source_position() {
         let mut origins = super::DiagnosticOrigins::default();
-        origins.duplicate_constructor("missing", 1, 0, "A");
+        origins.expected_after_name("missing", 1, 0, "A");
         assert!(origins.load_failure.is_none());
         origins.source("known", "A");
         for (line, column) in [(0, 0), (2, 0), (1, 2)] {
-            origins.duplicate_constructor("known", line, column, "A");
+            origins.expected_after_name("known", line, column, "A");
             assert!(origins.load_failure.is_none());
         }
         origins.source("multiline", "A\nB");
-        origins.duplicate_constructor("multiline", 1, 2, "A");
+        origins.expected_after_name("multiline", 1, 2, "A");
         assert!(origins.load_failure.is_none());
         origins.source("trailing-newline", "A\n");
-        origins.duplicate_constructor("trailing-newline", 1, 2, "A");
+        origins.expected_after_name("trailing-newline", 1, 2, "A");
         assert!(origins.load_failure.is_none());
-        origins.duplicate_constructor("known", 1, 1, "A");
+        origins.expected_after_name("known", 1, 1, "A");
         assert!(matches!(origins.load_failure.unwrap().content,
             super::LoadDiagnosticContent::ExpectedObserved { observed, .. } if observed == "end of input"));
     }

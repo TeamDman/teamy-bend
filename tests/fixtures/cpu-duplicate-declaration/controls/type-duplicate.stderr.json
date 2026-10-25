@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: A)\n- observed : ' '\nLocation:\n3 |   MkA{}\n4>| type A is Data:\n5 |   Other{}\n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : end of input\nLocation:\n3 | law value: U32\n4>| law value\n"

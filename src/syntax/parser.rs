@@ -671,22 +671,51 @@ impl Parser<'_> {
         }
         Ok(())
     }
-    fn require_fresh(&self, name: &str) -> Result<(), ParseError> {
+    fn require_fresh(&mut self, name: &str, declaration_at: usize) -> Result<(), ParseError> {
         if self.templates.declarations.contains_key(name)
             || self.book.declarations.iter().any(|d| match d {
                 Declaration::Adt(d) => d.name == name,
                 Declaration::Def(d) => d.name == name,
             })
         {
+            self.record_duplicate_declaration(name, declaration_at);
             Err(self.error(format!("duplicate declaration: {name}")))
         } else {
             Ok(())
         }
     }
+    fn record_duplicate_declaration(&mut self, name: &str, declaration_at: usize) {
+        if let Some(origins) = &mut self.templates.diagnostics {
+            // Definitions have already consumed '(' at their existing refusal.
+            // Keep that public error cursor; upstream observes the raw name end.
+            let token = &self.tokens[declaration_at];
+            origins.expected_after_name(
+                &self.label,
+                token.line,
+                token.column + token.text.chars().count() - 1,
+                &format!("a fresh name (duplicate declaration: {name})"),
+            );
+        }
+    }
+    fn duplicate_definition_error(
+        &mut self,
+        name: &str,
+        raw: &str,
+        declaration_at: usize,
+    ) -> ParseError {
+        // Upstream freshens the qualified declaration spelling, which can
+        // differ from our resolved prior (aliases/global shadowing). Retain
+        // those existing refusals without claiming a matching diagnostic.
+        if name == self.qualify(raw) {
+            self.record_duplicate_declaration(name, declaration_at);
+        }
+        self.error(format!("duplicate definition: {name}"))
+    }
     fn datatype(&mut self) -> Result<(), ParseError> {
+        let declaration_at = self.at;
         let raw = self.name()?;
         let name = self.qualify(&raw);
-        self.require_fresh(&name)?;
+        self.require_fresh(&name, declaration_at)?;
         let erased_first = self.is("<-");
         if erased_first {
             let token = &mut self.tokens[self.at];
@@ -727,11 +756,11 @@ impl Parser<'_> {
             {
                 if let Some(origins) = &mut self.templates.diagnostics {
                     let token = &self.tokens[self.at - 1];
-                    origins.duplicate_constructor(
+                    origins.expected_after_name(
                         &self.label,
                         token.line,
                         token.column + token.text.chars().count() - 1,
-                        &constructor,
+                        &format!("a fresh constructor name (duplicate declaration: {constructor})"),
                     );
                 }
                 return Err(self.error(format!("duplicate constructor: {constructor}")));
@@ -763,9 +792,10 @@ impl Parser<'_> {
         value
     }
     fn law(&mut self) -> Result<(), ParseError> {
+        let declaration_at = self.at;
         let raw = self.name()?;
         let name = self.qualify(&raw);
-        self.require_fresh(&name)?;
+        self.require_fresh(&name, declaration_at)?;
         self.expect(":")?;
         let mut clauses = Vec::new();
         let mut parameters = Vec::new();
@@ -857,12 +887,12 @@ impl Parser<'_> {
         let completing_law = prior.is_some();
         let (parameters, ty, vars) = if let Some(prior) = prior {
             if prior.body.is_some() || prior.foreign {
-                return Err(self.error(format!("duplicate definition: {name}")));
+                return Err(self.duplicate_definition_error(&name, &raw, declaration_at));
             }
             let vars = self.completion_variables()?;
             (prior.parameters, prior.ty, vars)
         } else {
-            self.require_fresh(&name)?;
+            self.require_fresh(&name, declaration_at)?;
             if template {
                 self.templates.declarations.insert(
                     name.clone(),

@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: value)\n- observed : '#'\nLocation:\n3 | def value() -> U32: 3\n4>| def value# retained raw cursor\n5 |   () -> U32: 4\n"

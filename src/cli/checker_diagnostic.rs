@@ -334,6 +334,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-duplicate-declaration/check/data_table_checked_000.bend",
+                "11>| law String.eq:",
+            ),
+            (
+                "cpu-duplicate-declaration/controls/imported/main.bend",
+                "4>| law value: U32",
+            ),
+            (
                 "cpu-duplicate-constructor/check/book_prefix_arity.bend",
                 "12>|   K6{a: Un6, b: Un6}",
             ),

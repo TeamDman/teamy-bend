@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: defs.value)\n- observed : ':'\nLocation:\n3 | law value: U32\n4>| law value: U32\n5 | \n"

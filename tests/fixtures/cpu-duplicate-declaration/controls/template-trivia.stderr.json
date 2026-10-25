@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '\n'\nLocation:\n3 | def app(~f: U32 -> U32, x: U32) -> U32: f(x)\n4>| def app\n5 |   (~f: U32 -> U32, x: U32) -> U32: f(x)\n"

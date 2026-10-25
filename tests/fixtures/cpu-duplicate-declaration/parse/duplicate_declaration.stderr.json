@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n"

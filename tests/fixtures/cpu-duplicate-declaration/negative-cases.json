@@ -1,0 +1,15 @@
+[
+  "check/data_table_checked_000.bend",
+  "comptime/err_dup.bend",
+  "parse/duplicate_declaration.bend",
+  "parse/reserved_def_name_000.bend",
+  "controls/type-duplicate.bend",
+  "controls/filled-def.bend",
+  "controls/law-duplicate.bend",
+  "controls/space-def.bend",
+  "controls/comment-def.bend",
+  "controls/template-trivia.bend",
+  "controls/eof-law.bend",
+  "controls/crlf-law.bend",
+  "controls/imported/main.bend"
+]

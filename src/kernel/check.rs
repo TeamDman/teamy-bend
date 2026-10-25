@@ -3514,6 +3514,14 @@ mod reflexivity_diagnostic_tests {
                 "cpu-duplicate-constructor/positive/imported/main.bend",
                 &["main"][..],
             ),
+            (
+                "cpu-duplicate-declaration/positive/completion.bend",
+                &["main"][..],
+            ),
+            (
+                "cpu-duplicate-declaration/positive/imported/main.bend",
+                &["main"][..],
+            ),
             ("cpu-forward-data/positive/earlier.bend", &["main"][..]),
             ("cpu-forward-data/positive/recursive.bend", &["main"][..]),
             ("cpu-family-head/check/family_head_bare.bend", &[][..]),

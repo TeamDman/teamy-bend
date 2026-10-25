@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n"
