@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing\nContext:\n- f : @_:T -> T\nLocation: bad\n4 |   +g =\n5>|     Missing\n6 |   f(L{f})\n"

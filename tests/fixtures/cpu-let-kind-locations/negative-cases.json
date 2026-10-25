@@ -1,0 +1,8 @@
+[
+  "reusable-field.bend",
+  "direct-let.bend",
+  "multiline-let.bend",
+  "nested-let.bend",
+  "inference-first.bend",
+  "imported/main.bend"
+]

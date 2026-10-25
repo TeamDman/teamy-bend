@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : ','\nLocation:\n3 | def bad(f: T -> T) -> T:\n4>|   +g +h = f, f\n5 |   g(L{h})\n"

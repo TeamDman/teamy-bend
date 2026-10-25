@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nContext:\n- f : @_:T -> T\nLocation: bad\n2 | type T is Type:\n3>|   L{f: T -> T}\n4 |   V{}\n"

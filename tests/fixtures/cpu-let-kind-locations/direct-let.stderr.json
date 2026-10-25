@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nContext:\n- f : @_:T -> T\nLocation: bad\n3 | def bad(f: T -> T) -> T:\n4>|   +g = f\n5 |   g(L{f})\n"

@@ -27,10 +27,7 @@ fn emit(
     let Some(report) = error.checker_diagnostic() else {
         return Err(eyre!("{error}"));
     };
-    let excerpt = report.match_site.map_or_else(
-        || origins.excerpt(report.term_identity),
-        |site| origins.match_excerpt(site),
-    );
+    let excerpt = diagnostic_excerpt(report, origins);
     let Some(excerpt) = excerpt else {
         // Programmatically constructed or untracked terms keep the ordinary
         // host diagnostic. Never guess a source line from an error string.
@@ -61,6 +58,21 @@ fn emit(
         .expect("String formatting");
     tracing::debug!(internal_error = %error, "Bend check rejected");
     write_diagnostic(&diagnostic, stderr)
+}
+
+fn diagnostic_excerpt(
+    report: &crate::kernel::CheckerDiagnostic,
+    origins: &DiagnosticOrigins,
+) -> Option<String> {
+    report
+        .preferred_source
+        .and_then(|source| origins.excerpt(source))
+        .or_else(|| {
+            report.match_site.map_or_else(
+                || origins.excerpt(report.term_identity),
+                |site| origins.match_excerpt(site),
+            )
+        })
 }
 
 pub(super) fn reject_load(
@@ -119,8 +131,64 @@ mod tests {
     }
 
     #[test]
+    fn unsourced_let_keeps_the_original_diagnostic_excerpt() {
+        use crate::kernel::Declaration;
+        use crate::kernel::Term;
+        use crate::kernel::term;
+        use std::rc::Rc;
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-let-kind-locations/direct-let.bend");
+        let (mut book, origins) = load_with_diagnostics(path).unwrap();
+        let before = format!("{book:?}");
+        let definition = book
+            .declarations
+            .iter_mut()
+            .find_map(|item| match item {
+                Declaration::Def(d) if d.name == "bad" => Some(d),
+                _ => None,
+            })
+            .unwrap();
+        let Term::Lam { name, id, body } = definition.body.as_ref().unwrap().as_ref() else {
+            panic!("outer function")
+        };
+        let Term::Let {
+            bindings,
+            body: continuation,
+        } = body.as_ref()
+        else {
+            panic!("let")
+        };
+        let untracked = term(Term::Let {
+            bindings: bindings.clone(),
+            body: Rc::clone(continuation),
+        });
+        let identity = Rc::as_ptr(&untracked) as usize;
+        definition.body = Some(term(Term::Lam {
+            name: name.clone(),
+            id: *id,
+            body: untracked,
+        }));
+        assert_eq!(format!("{book:?}"), before);
+        assert!(origins.excerpt(identity).is_none());
+        let error = check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap_err();
+        let report = error.checker_diagnostic().unwrap();
+        assert!(report.preferred_source.is_some());
+        assert!(origins.excerpt(report.preferred_source.unwrap()).is_none());
+        let mut bytes = Vec::new();
+        let result = emit(&error, &origins, &CancellationToken::new(), &mut bytes).unwrap();
+        assert_eq!(result.exit_code(), 1);
+        let expected: String = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-let-kind-locations/direct-let-unsourced.stderr.json"
+        ))
+        .unwrap();
+        assert_eq!(bytes, expected.as_bytes());
+    }
+
+    #[test]
     fn cancellation_and_untracked_errors_never_emit_a_partial_language_report() {
         for name in [
+            "tests/fixtures/cpu-let-kind-locations/reusable-field.bend",
+            "tests/fixtures/cpu-let-kind-locations/inference-first.bend",
             "tests/fixtures/cpu-match-guards/match_not_datatype.bend",
             "tests/fixtures/cpu-match-guards/error_window_match_repeated.bend",
             "tests/fixtures/cpu-match-guards/erased_match_ctor.bend",

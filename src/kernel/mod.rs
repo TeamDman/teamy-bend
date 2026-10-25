@@ -16,6 +16,7 @@ mod reduce;
 mod term;
 
 pub use check::CheckedBook;
+pub(crate) use check::CheckerDiagnostic;
 pub use check::KernelError;
 pub use check::check_book;
 pub(crate) use check::check_book_with_origins;

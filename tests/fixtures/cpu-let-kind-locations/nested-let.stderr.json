@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nContext:\n- f : @_:T -> T\n- g : @_:T -> T\nLocation: bad\n4 |   g = f\n5>|   +h = g\n6 |   h(L{t => t})\n"

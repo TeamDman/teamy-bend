@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '>'\nLocation:\n3 | def bad(f: T -> T) -> T:\n4>|   (+g => g(L{g}))(f)\n5 | def main() -> T: L{t => t}\n"

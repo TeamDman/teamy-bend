@@ -86,17 +86,17 @@ fn pattern_fields_keep_exact_diagnostics_and_compilation_refusals() {
 }
 
 #[test]
-fn reusable_function_field_retains_the_unresolved_kind_location() {
+fn reusable_function_field_reports_the_let_kind_location() {
     let path = root().join("controls/reusable-refusal.bend");
     let upstream: String = facet_json::from_str(include_str!(
         "fixtures/cpu-pattern-locations/controls/reusable-refusal.stderr.json"
     ))
     .unwrap();
-    let expected: String = facet_json::from_str(include_str!(
+    let historical: String = facet_json::from_str(include_str!(
         "fixtures/cpu-pattern-locations/controls/reusable-refusal.port-stderr.json"
     ))
     .unwrap();
-    assert_ne!(expected, upstream); // Still an unresolved diagnostic cell.
+    assert_ne!(historical, upstream); // Preserve the earlier failed observation.
     let book = load(&path).unwrap();
     check_book(&book).unwrap_err();
     for operation in ["check", "eval", "run"] {
@@ -105,7 +105,7 @@ fn reusable_function_field_retains_the_unresolved_kind_location() {
         let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
         assert_eq!(output.status.code(), Some(1));
         assert!(output.stdout.is_empty());
-        assert_eq!(output.stderr, expected.as_bytes());
+        assert_eq!(output.stderr, upstream.as_bytes());
     }
 }
 
@@ -149,6 +149,57 @@ fn nested_and_reusable_pattern_values_keep_graphs_and_runtime_values() {
                     facet_json::from_str(std::str::from_utf8(&output.stdout).unwrap()).unwrap();
                 assert_eq!(printed.value, expected_value);
             }
+        }
+    }
+}
+
+#[test]
+fn reusable_lets_keep_exact_diagnostics_and_compilation_refusals() {
+    let cases: Vec<_> = facet_json::from_str::<Vec<String>>(include_str!(
+        "fixtures/cpu-let-kind-locations/negative-cases.json"
+    ))
+    .unwrap()
+    .into_iter()
+    .map(|case| {
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-let-kind-locations")
+            .join(case)
+    })
+    .collect();
+    assert_eq!(cases.len(), 6);
+    let artifacts = Artifacts::new("let-negative");
+    let destination = artifacts.0.join("unwritten");
+    for path in cases {
+        let expected: String = facet_json::from_str(
+            &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+        )
+        .unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&destination);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(
+                output.status.code(),
+                Some(1),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(output.stdout.is_empty());
+            assert_eq!(
+                output.stderr,
+                expected.as_bytes(),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(!destination.exists());
         }
     }
 }

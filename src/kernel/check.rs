@@ -93,6 +93,10 @@ pub(crate) struct CheckerDiagnostic {
     // Keep the rejected node separate from the display source: transformed
     // descendants may share a source root without being the same occurrence.
     rejected_identity: usize,
+    // Compared only while the caller's expected term is still alive. Never
+    // dereferenced or rendered; structural/text equality is not sufficient.
+    expected_identity: Option<usize>,
+    pub(crate) preferred_source: Option<usize>,
     pub(crate) match_site: Option<super::origins::MatchSite>,
     pub(crate) definition: String,
     pub(crate) expected: String,
@@ -452,6 +456,10 @@ impl Engine {
             .diagnostic_values()
             .map(|binder| (binder.id, binder.name.as_str()))
             .collect::<Vec<_>>();
+        let expected_identity = match &expected {
+            DiagnosticExpression::Term(value) => Some(Rc::as_ptr(value) as usize),
+            DiagnosticExpression::Text(_) | DiagnosticExpression::Typeless(_) => None,
+        };
         let expected = expected.render(&mut display, &scope)?;
         let observed = observed
             .map(|value| value.render(&mut display, &scope))
@@ -471,6 +479,8 @@ impl Engine {
             .collect::<Result<Vec<_>, KernelError>>()?;
         Ok(CheckerDiagnostic {
             rejected_identity: Rc::as_ptr(value) as usize,
+            expected_identity,
+            preferred_source: None,
             // Never dereferenced. The loader weakly anchors source allocation identities.
             term_identity: self.origins.as_ref().map_or_else(
                 || Rc::as_ptr(value) as usize,
@@ -526,6 +536,23 @@ impl Engine {
             .ok()
             .map(Box::new);
         Err(error)
+    }
+
+    fn let_kind_diagnostic(
+        &self,
+        mut error: KernelError,
+        kind: &TermRef,
+        value: &TermRef,
+    ) -> KernelError {
+        if let Some(report) = &mut error.diagnostic
+            && report.expected_identity == Some(Rc::as_ptr(kind) as usize)
+            && let Some(origins) = &self.origins
+        {
+            // Like upstream check-let's err.exp === kind. Preserve the old
+            // location for rendering when this generated let has no span.
+            report.preferred_source = Some(origins.source(value));
+        }
+        error
     }
 
     fn child_diagnostic(
@@ -1453,6 +1480,58 @@ impl Engine {
         self.depth -= 1;
         result
     }
+    // Keep let-local diagnostic state out of the recursive catch-all frame.
+    // This extraction adds no logical check, step, enter, or fresh allowance.
+    fn check_let(
+        &mut self,
+        lhs: &Lhs,
+        value: &TermRef,
+        demand: Quant,
+        ty: &TermRef,
+        context: &Context,
+    ) -> Result<Uses, KernelError> {
+        let Term::Let { bindings, body } = value.as_ref() else {
+            unreachable!()
+        };
+        let mut next = context.clone();
+        let mut uses = Uses::new();
+        let mut binders = Vec::new();
+        for (index, b) in bindings.iter().enumerate() {
+            if next.contains_key(b.id) {
+                return Err(KernelError::new("duplicate let binder identifier"));
+            }
+            let (t, u) = self
+                .infer(lhs, &b.value, b.quant.demand(demand), context, &[])
+                .map_err(|error| self.child_diagnostic(error, value, index + 1, &b.value))?;
+            let kind = lhs.domain_kind(b.quant);
+            self.check(lhs, &t, Quant::None, &kind, context)
+                .map_err(|error| self.let_kind_diagnostic(error, &kind, value))?;
+            let binder = Binder {
+                quant: b.quant,
+                name: b.name.clone(),
+                id: b.id,
+                ty: t,
+            };
+            next.insert(b.id, binder.clone());
+            binders.push(binder);
+            uses = add(uses, u);
+        }
+        for b in bindings {
+            self.aliases.insert(b.id, Rc::clone(&b.value));
+        }
+        let result = self
+            .check(lhs, body, demand, ty, &next)
+            .map_err(|error| self.child_diagnostic(error, value, 0, body));
+        for b in bindings {
+            self.aliases.remove(&b.id);
+        }
+        let mut body_uses = result?;
+        for b in &binders {
+            self.check_usage(lhs, value, b, &mut body_uses, context)?;
+        }
+        Ok(add(uses, body_uses))
+    }
+
     #[expect(
         clippy::too_many_lines,
         reason = "Keeping the bidirectional checking rules in one exhaustive match makes the trusted kernel auditable."
@@ -1526,45 +1605,7 @@ impl Engine {
                 self.check_usage(&lhs, value, &binder, &mut uses, context)?;
                 return Ok(uses);
             }
-            Term::Let { bindings, body } => {
-                let mut next = context.clone();
-                let mut uses = Uses::new();
-                let mut binders = Vec::new();
-                for (index, b) in bindings.iter().enumerate() {
-                    if next.contains_key(b.id) {
-                        return Err(KernelError::new("duplicate let binder identifier"));
-                    }
-                    let (t, u) = self
-                        .infer(lhs, &b.value, b.quant.demand(demand), context, &[])
-                        .map_err(|error| {
-                            self.child_diagnostic(error, value, index + 1, &b.value)
-                        })?;
-                    self.check(lhs, &t, Quant::None, &lhs.domain_kind(b.quant), context)?;
-                    let binder = Binder {
-                        quant: b.quant,
-                        name: b.name.clone(),
-                        id: b.id,
-                        ty: t,
-                    };
-                    next.insert(b.id, binder.clone());
-                    binders.push(binder);
-                    uses = add(uses, u);
-                }
-                for b in bindings {
-                    self.aliases.insert(b.id, Rc::clone(&b.value));
-                }
-                let result = self
-                    .check(lhs, body, demand, ty, &next)
-                    .map_err(|error| self.child_diagnostic(error, value, 0, body));
-                for b in bindings {
-                    self.aliases.remove(&b.id);
-                }
-                let mut body_uses = result?;
-                for b in &binders {
-                    self.check_usage(lhs, value, b, &mut body_uses, context)?;
-                }
-                return Ok(add(uses, body_uses));
-            }
+            Term::Let { .. } => return self.check_let(lhs, value, demand, ty, context),
             Term::Ctr { name, args } => {
                 let t = self.whnf(ty)?;
                 let adt = self.adt(&t).map_err(|mut error| {
@@ -2397,6 +2438,68 @@ mod reflexivity_diagnostic_tests {
     use super::*;
 
     #[test]
+    fn let_kind_source_requires_the_live_expected_allocation() {
+        let book = Book {
+            declarations: vec![],
+        };
+        let mut engine = empty_engine(&book).unwrap();
+        engine.origins = Some(super::super::origins::TermOrigins::default());
+        let kind = term(Term::Typ(term(Term::Qua(Quant::Many))));
+        let other = term(Term::Typ(term(Term::Qua(Quant::Many))));
+        let rejected = term(Term::Typ(term(Term::Qua(Quant::Lone))));
+        let site = term(Term::Ref("let-site".into()));
+        let owners = Rc::strong_count(&kind);
+        let state = (engine.fuel, engine.depth, engine.fresh_id);
+        for (expected, matches) in [
+            (DiagnosticExpression::Term(&kind), true),
+            (DiagnosticExpression::Term(&other), false),
+            (DiagnosticExpression::Text(kind.to_string()), false),
+            (DiagnosticExpression::Typeless(&kind), false),
+        ] {
+            let report = engine
+                .term_diagnostic(
+                    &Lhs::default(),
+                    &rejected,
+                    expected,
+                    DiagnosticExpression::Term(&rejected),
+                    &Context::new(),
+                )
+                .unwrap();
+            let mut error = KernelError::new("first error");
+            error.diagnostic = Some(Box::new(report.clone()));
+            let relocated = engine.let_kind_diagnostic(error.clone(), &kind, &site);
+            assert_eq!(error, relocated);
+            let after = relocated.checker_diagnostic().unwrap();
+            assert_eq!(
+                after.preferred_source,
+                matches.then_some(Rc::as_ptr(&site) as usize)
+            );
+            let mut original = after.clone();
+            original.preferred_source = None;
+            assert_eq!(original, report);
+            assert_eq!(Rc::strong_count(&kind), owners);
+            assert_eq!((engine.fuel, engine.depth, engine.fresh_id), state);
+        }
+        // Display exhaustion cannot turn the original rejection into success,
+        // acquire fresh evaluation work, or change structural depth.
+        engine.fuel = 0;
+        let report = engine.term_diagnostic(
+            &Lhs::default(),
+            &rejected,
+            DiagnosticExpression::Term(&kind),
+            DiagnosticExpression::Term(&rejected),
+            &Context::new(),
+        );
+        assert!(report.unwrap_err().to_string().contains("budget exhausted"));
+        let ordinary = KernelError::new("first error");
+        assert_eq!(
+            engine.let_kind_diagnostic(ordinary.clone(), &kind, &site),
+            ordinary
+        );
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+    }
+
+    #[test]
     fn undefined_name_diagnostics_preserve_first_error_sharing_and_remaining_budget() {
         let book = crate::syntax::parse("type N is Data:\n  Z{}\n").unwrap();
         let mut engine = empty_engine(&book).unwrap();
@@ -2970,6 +3073,12 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn source_origins_preserve_checker_work_terms_and_successful_evaluation() {
         for (name, entries) in [
+            ("cpu-let-kind-locations/reusable-field.bend", &[][..]),
+            ("cpu-let-kind-locations/direct-let.bend", &[][..]),
+            ("cpu-let-kind-locations/multiline-let.bend", &[][..]),
+            ("cpu-let-kind-locations/nested-let.bend", &[][..]),
+            ("cpu-let-kind-locations/inference-first.bend", &[][..]),
+            ("cpu-let-kind-locations/imported/main.bend", &[][..]),
             (
                 "cpu-pattern-locations/check/negative_data_field_000.bend",
                 &[][..],

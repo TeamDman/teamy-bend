@@ -1,0 +1,33 @@
+{
+  "port_source": "3b144f16f1a6dd5344a668dc0bd31a488c602aeb",
+  "port_checkpoint": "6d6a03ea88188523361858abdb5d383e6bd723fd",
+  "upstream_source": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "fixture": "reusable-field.bend",
+  "source_sha256": "04ca5e18c09c3ca3c35e62121820ad7a3c3c0dfb0de247b0919c529b45740523",
+  "timeout_seconds": 30,
+  "rows": [
+    {
+      "lane": "upstream",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$FIXTURE"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Data\n- observed : Type\nContext:\n- f : @_:T -> T\nLocation: bad\n6 |   match t:\n7>|     case L{+f}:\n8 |       f(L{f})\n"
+    },
+    {
+      "lane": "port",
+      "command": [
+        "$BEND",
+        "check",
+        "$FIXTURE"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Data\n- observed : Type\nContext:\n- f : @_:T -> T\nLocation: bad\n2 | type T is Type:\n3>|   L{f: T -> T}\n4 |   V{}\n"
+    }
+  ],
+  "scope": "Pre-fix checking refusal; status agrees, location differs. Command roots are placeholders; exact stream bytes retained."
+}
