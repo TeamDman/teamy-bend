@@ -1,0 +1,485 @@
+{
+  "tested_source": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+  "standard_gate": {
+    "passed": 1228,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 180,
+    "exit": 0,
+    "seconds": 917.7398459990218,
+    "log_sha256": "a8ad7c2666bae23a7707674920102e954f51927706739ea7b35c286efe31b199"
+  },
+  "commands": [
+    {
+      "source_commit": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_alias_fallback",
+        "--test",
+        "cpu_declaration_targets",
+        "--test",
+        "parser_templates",
+        "--test",
+        "parser"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11906580480,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 24.571074347011745,
+      "minimum_free": 11906543616,
+      "minimum_tmp_free": 4523159552,
+      "log_sha256": "3c7f28a5bd805fd8a3e51a65370bc94b775450d74afe5424fa5b86e3b510ad5e",
+      "log_bytes": 5075,
+      "name": "focused",
+      "test_totals": {
+        "passed": 57,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 4
+    },
+    {
+      "source_commit": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_alias_fallback",
+        "--test",
+        "cpu_declaration_targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11906543616,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.1712418829847593,
+      "minimum_free": 11906514944,
+      "minimum_tmp_free": 4531789824,
+      "log_sha256": "7e9576fe1b0842ad27dca81dfd2ac67ad27c68c5ee5a1b2bed5bcbcbfa2b6431",
+      "log_bytes": 115,
+      "name": "focused-lint",
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11906232320,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 917.7398459990218,
+      "minimum_free": 11880939520,
+      "minimum_tmp_free": 4519337984,
+      "log_sha256": "a8ad7c2666bae23a7707674920102e954f51927706739ea7b35c286efe31b199",
+      "log_bytes": 22957,
+      "name": "full-gate",
+      "test_totals": {
+        "passed": 1228,
+        "failed": 0,
+        "ignored": 49
+      },
+      "completed_groups": 180
+    },
+    {
+      "source_commit": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11889491968,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 107.33762416199897,
+      "minimum_free": 11888263168,
+      "minimum_tmp_free": 4521058304,
+      "log_sha256": "b81ccebffb07c5c70ef13aeda4bb0c6a0407b81ec72f54982be4ab012cca8496",
+      "log_bytes": 842,
+      "name": "matrix-run",
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    },
+    {
+      "source_commit": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11889233920,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 276.3283741569903,
+      "minimum_free": 11881619456,
+      "minimum_tmp_free": 4519555072,
+      "log_sha256": "09bfb415887c99c10fe3ba373021618cc8b7b714b19649f6b04befbf2d93c0bf",
+      "log_bytes": 1268,
+      "name": "census-run",
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0
+    }
+  ],
+  "source_identity": [
+    {
+      "file": "src/kernel/check.rs",
+      "sha256": "4d676639bcf68c502091416cb024cda602f4ccadd867244515c158457067c777"
+    },
+    {
+      "file": "src/syntax/parser.rs",
+      "sha256": "2c86574f7c176c37968052e662ab7d3ff4cd4384829386f2c0b773d84a1b94fb"
+    },
+    {
+      "file": "tests/cpu_alias_fallback.rs",
+      "sha256": "c48de423e42593c49ef9aeb94a38c90d2342a9cdab1a70812b92c696e66e0025"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/README.md",
+      "sha256": "9f94dc6cf5c308bfc5a789bcff2fbfcc6f922b1e50f52acff66b06daab59cdc6"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/constructor.bend",
+      "sha256": "5c208951ebaf9c19d3e525ab4cec75f984153126195ced3db67060753010a455"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/io.bend",
+      "sha256": "1cba930e4e67cb0b8c22de684f6b9c76d50b935df7606c639116c8ad746adc1c"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known/defs.bend",
+      "sha256": "bb7162cdcbce093254dac1e93fa9ac388cc22e278d8eb602696f0108bb4c917a"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known/main.bend",
+      "sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known_ctor/defs.bend",
+      "sha256": "830fddbda88391de27c8e0cb27f40f27c328c9bd3c13d7a20be97a402758c8c6"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known_ctor/main.bend",
+      "sha256": "9f004bd2f8803534ac78f783df3a17ef49e4e98a06252983af5a0a5efea75bd4"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known_template/defs.bend",
+      "sha256": "6f541a7c163c464ffcd9e0e5318a4a03ac2b5cea52e93bd58d0f5aac9e3f87b1"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/known_template/main.bend",
+      "sha256": "219147af48326c74d3da6fd3dbdcfe4a408987d14c7dadb7bffec879a5b22ed4"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/law.bend",
+      "sha256": "142921d7345f9dee8bb446d94ad835ef427931f7f5f6ab41457d99bbd09ba897"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative-cases.json",
+      "sha256": "5026b876661be2aec43989b4574acf75d6b890f63363e69ba118dc2d4d30879b"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/completion_collision.bend",
+      "sha256": "5973cb2a139bd0de2468d3e3e0ec2a1082e48417d15adf4a3eff73eca9bc5a4f"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/completion_collision.stderr.json",
+      "sha256": "ad11deee872433c01e3593f942e1ede7b31201c351e37133f9a9b2682f881cc0"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/constructor_missing.bend",
+      "sha256": "09dfd44d0c143537b4d0f7ddeed4beb43d306e6d283de2d98faf30f452ecd53a"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/constructor_missing.stderr.json",
+      "sha256": "ec4b1d4d760b72f172dac7129db4e427fc133920da4ded5e93952bbc5ceeea58"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/duplicate.bend",
+      "sha256": "74cfc591d0e009435626f52369ad25a1f09030fa90ef19d17a08615284ebb788"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/duplicate.stderr.json",
+      "sha256": "57e2f1468984363386dba854862ff3da939a14c3cec9ab05a25f7538619b1569"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/forward.bend",
+      "sha256": "85c2beb7fa36ec23583d965125397ca7f4d2f57a3c228b329d4b748bff91f180"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/forward.stderr.json",
+      "sha256": "1067faeb1ec8c91527c6f152ff15a3cf813a6cfdeb39450ed2030a2853befd8d"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/missing.bend",
+      "sha256": "6b38d5c0de08a56fe797fe30c9b237d1a2ec407b2c88aabc78c136fec8ed42c0"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/missing.stderr.json",
+      "sha256": "862511764406c040ff5b2e11b62bbf335666ac9010937bf53033c592c158f508"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/nested.bend",
+      "sha256": "055fdbc84e7fd761c069a4ec6c65eb8d2006d91e22daa2d39ccc36db87207985"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/nested.stderr.json",
+      "sha256": "1275713e67b71c8ead4e56f44e172345c7c9fd4bfa116dff2e04727c468e3508"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/template_missing.bend",
+      "sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/typed_collision.bend",
+      "sha256": "689412a33e66b619c8a531a36b1b4fbcb38bea8681e397ad357524dd0ec23542"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/negative/typed_collision.stderr.json",
+      "sha256": "6267f3d14c1998cf634e426e771151fe3370a1a35441fe541fdab738a099506f"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/nested/base.bend",
+      "sha256": "4d72a8d6550ea05c18cf69fce397cc1f40da59ad1ffa34b17ea8070cf2e2b644"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/nested/defs.bend",
+      "sha256": "2d790d8b78c6b85f3ba986d8e61f29cc69887ac5668c6a2944bf3d7175f8f870"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/nested/main.bend",
+      "sha256": "fd376a51eaca5c5e226de9aa8a39f11e903d6bd955860dd876ffff0c3b1f0b1e"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/nested/module.bend",
+      "sha256": "872ae47fbbffc8f8d05c82ca730937f5c6c3c8c3e2ecda68bb82cdacc75422e1"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/original/defs.bend",
+      "sha256": "2d790d8b78c6b85f3ba986d8e61f29cc69887ac5668c6a2944bf3d7175f8f870"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/original/main.bend",
+      "sha256": "ef215372f78e5a710d879b79d3941bb7fdd0ee3be9c9f0209e49afbd7e8739fd"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/phase-only-cases.json",
+      "sha256": "1b21759e3e442c8a6973a50bdeaf750459eba6d09f104847d45cd364dd8483ae"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/positive-cases.json",
+      "sha256": "5ccc83215ffbd4ccd5696a9231b09a6a60a507327fe6d28d2043fd34401a1673"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/template.bend",
+      "sha256": "470aded82537eb05561c5f0d3de154bc11ac189346c64f4eb2d3bb254f9a3170"
+    },
+    {
+      "file": "tests/fixtures/cpu-alias-fallback/undotted.bend",
+      "sha256": "519cf1b3c38d5c176c247991d02a907c3c6d5f5fc57a92cc40bd21afdfed0a42"
+    }
+  ],
+  "reviews": [
+    {
+      "reviewer": "/root/review_sharing",
+      "approval": "No blocking finding in resolver or tests",
+      "production_diff_sha256": "ff0b3bb82f79c8d061a3a82dbeae1ff41d6ef5cd4a5f91f5ff1408273bc77503",
+      "mode": "read-only; no builds or tests",
+      "controls": [
+        "known definition/constructor/template precedence",
+        "nested raw fallback, no second namespace lookup",
+        "raw law completion/template specialization/constructor",
+        "undotted names",
+        "seven exact rejection goldens",
+        "unknown template load-phase-only refusal",
+        "original two files byte-identical"
+      ],
+      "guards_unchanged": true
+    },
+    {
+      "reviewer": "/root/review_imported_printer",
+      "approval": "No blocking matrix/evidence finding",
+      "source": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+      "matrix_sha256": "9a19d091c5df19c0ccd03ecf4b3a9988aea75e26dc028e514172a9fd4232b24f",
+      "commands": 430,
+      "matches": 408,
+      "strict_IO": 4,
+      "phase_only_diagnostic_mismatch": 18,
+      "actual_execution_successes": 82,
+      "pure_normalizations": 36,
+      "exact_negative_comparisons": 126,
+      "negative_port_phase_probes": 28,
+      "byte_identical_artifacts": 8,
+      "focused_tests": {
+        "passed": 57,
+        "failed": 0,
+        "ignored": 0
+      },
+      "read_only": true,
+      "not_attested": [
+        "full gate",
+        "census"
+      ]
+    },
+    {
+      "reviewer": "/root/review_imported_printer",
+      "approval": "No blocking census finding",
+      "source": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+      "raw_sha256": "443d3c7fbc77808e2766187dae78631306f6e9bac84d35777e4999f5748edc26",
+      "reconciliation_sha256": "f28f9ae653311cf83f95b6921a461a91416984ad492ac612b53c948be501b78b",
+      "current_csv_sha256": "14220c94d161e20502a766217a0bbe5ff18963ea81d17a450e851d88158f73ee",
+      "port_rows_unchanged": 1302,
+      "historical_IO_unchanged": 385,
+      "residual": 177,
+      "acceptance": 109,
+      "rejection": 68,
+      "oracle_failures": 6,
+      "coverage": {
+        "linked": 471,
+        "unlinked": 831
+      },
+      "read_only": true
+    }
+  ],
+  "cache_preflight": {
+    "actions": [
+      {
+        "cache": "build",
+        "bytes": 78730041,
+        "relocated": true,
+        "original_path_preserved_as_symlink": true
+      },
+      {
+        "cache": "examples",
+        "bytes": 22447552,
+        "relocated": true,
+        "original_path_preserved_as_symlink": true
+      }
+    ],
+    "reason": "Workspace tools contain approximately19GiB historical evidence. Relocate only inactive rebuildable host build/example caches before new builds; no source or unique evidence deleted.",
+    "free_bytes": {
+      "workspace": 11906912256,
+      "temporary": 4523159552
+    }
+  },
+  "retained_limits": [
+    "Initial authored nested positive had an import after a definition; both parsers rejected. Original invalid source and initial baseline retained separately from corrected control.",
+    "An early reconciliation attempt asserted because the census had not reached 1,302 rows. No partial totals or summary accepted; completed reconciliation separately attested.",
+    "Unknown-template diagnostics remain different despite load-phase agreement.",
+    "Historical foreign/oracle failures and external invoke caller audit remain unqualified."
+  ],
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11880939520,
+    "minimum_tmp_bytes": 4519337984,
+    "unique_evidence_deleted": false
+  },
+  "API": "No new public signatures/types. Corrected name resolution intentionally changes acceptance and undefined-name text. Existing formatted invoke failures use Ok(CliOutput) with exit_code() == 1; external consumers remain unaudited."
+}

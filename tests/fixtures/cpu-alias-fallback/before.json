@@ -1,0 +1,720 @@
+{
+  "baseline": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c",
+  "rows": [
+    {
+      "case": "original/main.bend",
+      "source_sha256": "ef215372f78e5a710d879b79d3941bb7fdd0ee3be9c9f0209e49afbd7e8739fd",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/original/main.bend",
+        "$EVIDENCE/before-5c405d48c61a2ce1.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1482585019839462,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "original/main.bend",
+      "source_sha256": "ef215372f78e5a710d879b79d3941bb7fdd0ee3be9c9f0209e49afbd7e8739fd",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/original/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : defs.local\nLocation: main\n4 | def D.local() -> U32: 9\n5>| def main() -> U32: D.local()\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.2597601930028759
+    },
+    {
+      "case": "known/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known/main.bend",
+        "$EVIDENCE/before-c03eb73551380ec3.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1458664580131881,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "known/main.bend",
+      "source_sha256": "e679ebbd54c26a9f085d4ef739ffa87b8449a1d7b16f866a4d4e2f8694078564",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known/main.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2576860490080435
+    },
+    {
+      "case": "nested/main.bend",
+      "source_sha256": "fd376a51eaca5c5e226de9aa8a39f11e903d6bd955860dd876ffff0c3b1f0b1e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/nested/main.bend",
+        "$EVIDENCE/before-b7eb43f9af5c709a.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12689663300989196,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "nested/main.bend",
+      "source_sha256": "fd376a51eaca5c5e226de9aa8a39f11e903d6bd955860dd876ffff0c3b1f0b1e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/nested/main.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : defs.add\nLocation: base.value\n4 | def Nat.add() -> U32: 4\n5>| def value() -> Nat: Nat.add(2n, 3n)\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.26389630799531005
+    },
+    {
+      "case": "law.bend",
+      "source_sha256": "142921d7345f9dee8bb446d94ad835ef427931f7f5f6ab41457d99bbd09ba897",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/law.bend",
+        "$EVIDENCE/before-0de822f38cdb440a.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.137743652012432,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "law.bend",
+      "source_sha256": "142921d7345f9dee8bb446d94ad835ef427931f7f5f6ab41457d99bbd09ba897",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/law.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.local)\n- observed : '('\nLocation:\n4 | law D.local: U32\n5>| def D.local(): 9\n6 | def main() -> U32: D.local()\n",
+      "timed_out": false,
+      "seconds": 0.15790796699002385
+    },
+    {
+      "case": "template.bend",
+      "source_sha256": "470aded82537eb05561c5f0d3de154bc11ac189346c64f4eb2d3bb254f9a3170",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/template.bend",
+        "$EVIDENCE/before-850cd1153567a7c7.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1605321270180866,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "template.bend",
+      "source_sha256": "470aded82537eb05561c5f0d3de154bc11ac189346c64f4eb2d3bb254f9a3170",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-alias-fallback/template.bend:5:28: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.16096930799540132
+    },
+    {
+      "case": "constructor.bend",
+      "source_sha256": "5c208951ebaf9c19d3e525ab4cec75f984153126195ced3db67060753010a455",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/constructor.bend",
+        "$EVIDENCE/before-463469e168e4277d.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1267427839920856,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "constructor.bend",
+      "source_sha256": "5c208951ebaf9c19d3e525ab4cec75f984153126195ced3db67060753010a455",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/constructor.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : a declared constructor (unknown: original/defs.Hold)\nLocation:\n7 |   match value:\n8>|     case D.Hold{value}: value\n9 | def main() -> U32: get(D.Hold{9})\n",
+      "timed_out": false,
+      "seconds": 0.12642639898695052
+    },
+    {
+      "case": "known_ctor/main.bend",
+      "source_sha256": "9f004bd2f8803534ac78f783df3a17ef49e4e98a06252983af5a0a5efea75bd4",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known_ctor/main.bend",
+        "$EVIDENCE/before-4a2f4cb72bed1715.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12722853300510906,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "known_ctor/main.bend",
+      "source_sha256": "9f004bd2f8803534ac78f783df3a17ef49e4e98a06252983af5a0a5efea75bd4",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known_ctor/main.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 22,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24447214000974782
+    },
+    {
+      "case": "known_template/main.bend",
+      "source_sha256": "219147af48326c74d3da6fd3dbdcfe4a408987d14c7dadb7bffec879a5b22ed4",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known_template/main.bend",
+        "$EVIDENCE/before-fc7953c82c3c5cad.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13136582099832594,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "known_template/main.bend",
+      "source_sha256": "219147af48326c74d3da6fd3dbdcfe4a408987d14c7dadb7bffec879a5b22ed4",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/known_template/main.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2535575150104705
+    },
+    {
+      "case": "undotted.bend",
+      "source_sha256": "519cf1b3c38d5c176c247991d02a907c3c6d5f5fc57a92cc40bd21afdfed0a42",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/undotted.bend",
+        "$EVIDENCE/before-ea1d5a883f62dd70.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12109041400253773,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "undotted.bend",
+      "source_sha256": "519cf1b3c38d5c176c247991d02a907c3c6d5f5fc57a92cc40bd21afdfed0a42",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/undotted.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2557705320068635
+    },
+    {
+      "case": "io.bend",
+      "source_sha256": "1cba930e4e67cb0b8c22de684f6b9c76d50b935df7606c639116c8ad746adc1c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/io.bend",
+        "$EVIDENCE/before-83b585b12199f053.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12339800101472065,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "io.bend",
+      "source_sha256": "1cba930e4e67cb0b8c22de684f6b9c76d50b935df7606c639116c8ad746adc1c",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/io.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n4 | def D.local() -> U32: 9\n5>| def main() -> IO(Unit): IO.print(U32.show(D.local()))\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.24516175797907636
+    },
+    {
+      "case": "negative/missing.bend",
+      "source_sha256": "6b38d5c0de08a56fe797fe30c9b237d1a2ec407b2c88aabc78c136fec8ed42c0",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/missing.bend",
+        "$EVIDENCE/before-2e5e07cb7dc176d5.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : D.missing\nLocation: main\n3 | \n4>| def main() -> U32: D.missing()\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.1272859479940962,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/missing.bend",
+      "source_sha256": "6b38d5c0de08a56fe797fe30c9b237d1a2ec407b2c88aabc78c136fec8ed42c0",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/missing.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : ../original/defs.missing\nLocation: main\n3 | \n4>| def main() -> U32: D.missing()\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.24364600999979302
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "055fdbc84e7fd761c069a4ec6c65eb8d2006d91e22daa2d39ccc36db87207985",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/nested.bend",
+        "$EVIDENCE/before-b4dba05cf9b0461e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : D.local\nLocation: ../nested/module.value\n4 | def D.local() -> U32: 4\n5>| def value() -> U32: D.local()\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.12256650300696492,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "055fdbc84e7fd761c069a4ec6c65eb8d2006d91e22daa2d39ccc36db87207985",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : ../nested/defs.local\nLocation: ../nested/module.value\n4 | def D.local() -> U32: 4\n5>| def value() -> U32: D.local()\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.2473514500015881
+    },
+    {
+      "case": "negative/duplicate.bend",
+      "source_sha256": "74cfc591d0e009435626f52369ad25a1f09030fa90ef19d17a08615284ebb788",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/duplicate.bend",
+        "$EVIDENCE/before-88c9548faf6636e6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.local)\n- observed : '('\nLocation:\n4 | def D.local() -> U32: 9\n5>| def D.local() -> U32: 8\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.09748189299716614,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/duplicate.bend",
+      "source_sha256": "74cfc591d0e009435626f52369ad25a1f09030fa90ef19d17a08615284ebb788",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/duplicate.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.local)\n- observed : '('\nLocation:\n4 | def D.local() -> U32: 9\n5>| def D.local() -> U32: 8\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.1277677610050887
+    },
+    {
+      "case": "negative/typed_collision.bend",
+      "source_sha256": "689412a33e66b619c8a531a36b1b4fbcb38bea8681e397ad357524dd0ec23542",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/typed_collision.bend",
+        "$EVIDENCE/before-72d1c0a69ae5f8f3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : U32\nLocation: main\n4 | def D.value() -> Bool: True{}\n5>| def main() -> Bool: D.value()\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.12949501399998553,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/typed_collision.bend",
+      "source_sha256": "689412a33e66b619c8a531a36b1b4fbcb38bea8681e397ad357524dd0ec23542",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/typed_collision.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : U32\nLocation: main\n4 | def D.value() -> Bool: True{}\n5>| def main() -> Bool: D.value()\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.24715806200401857
+    },
+    {
+      "case": "negative/completion_collision.bend",
+      "source_sha256": "5973cb2a139bd0de2468d3e3e0ec2a1082e48417d15adf4a3eff73eca9bc5a4f",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/completion_collision.bend",
+        "$EVIDENCE/before-5783bc6b563ff2e2.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n4 | law D.value: U32\n5>| def D.value(): 9\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.09615274699172005,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/completion_collision.bend",
+      "source_sha256": "5973cb2a139bd0de2468d3e3e0ec2a1082e48417d15adf4a3eff73eca9bc5a4f",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/completion_collision.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: D.value)\n- observed : '('\nLocation:\n4 | law D.value: U32\n5>| def D.value(): 9\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.12795915099559352
+    },
+    {
+      "case": "negative/constructor_missing.bend",
+      "source_sha256": "09dfd44d0c143537b4d0f7ddeed4beb43d306e6d283de2d98faf30f452ecd53a",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/constructor_missing.bend",
+        "$EVIDENCE/before-4bf4368c0c8eeb93.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a declared constructor (U32 declares U32)\n- observed : D.Missing{}\nLocation: main\n3 | \n4>| def main() -> U32: D.Missing{}\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.11761656997259706,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/constructor_missing.bend",
+      "source_sha256": "09dfd44d0c143537b4d0f7ddeed4beb43d306e6d283de2d98faf30f452ecd53a",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/constructor_missing.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a declared constructor (U32 declares U32)\n- observed : ../original/defs.Missing{}\nLocation: main\n3 | \n4>| def main() -> U32: D.Missing{}\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.24428364299819805
+    },
+    {
+      "case": "negative/forward.bend",
+      "source_sha256": "85c2beb7fa36ec23583d965125397ca7f4d2f57a3c228b329d4b748bff91f180",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/forward.bend",
+        "$EVIDENCE/before-bc12b6dc9be3ff62.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : D.later\nLocation: main\n3 | \n4>| def main() -> U32: D.later()\n5 | def D.later() -> U32: 9\n",
+      "timed_out": false,
+      "seconds": 0.1200409310113173,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/forward.bend",
+      "source_sha256": "85c2beb7fa36ec23583d965125397ca7f4d2f57a3c228b329d4b748bff91f180",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/forward.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : ../original/defs.later\nLocation: main\n3 | \n4>| def main() -> U32: D.later()\n5 | def D.later() -> U32: 9\n",
+      "timed_out": false,
+      "seconds": 0.24590731100761332
+    },
+    {
+      "case": "negative/template_missing.bend",
+      "source_sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/template_missing.bend",
+        "$EVIDENCE/before-e7d6d6750001c83e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def main() -> U32: D.missing(~9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09467381399008445,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/template_missing.bend",
+      "source_sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-alias-fallback/negative/template_missing.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-alias-fallback/negative/template_missing.bend:4:30: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12828447300125845
+    }
+  ],
+  "completed": true,
+  "actual_binary_snapshot": {
+    "source_commit": "e0a09940c4d0d9317dc5a457af3f256105baf7f0",
+    "source_tree": "4e119578890dd251480147e786d8a3e2cd5d73d2",
+    "binary_sha256": "ea8c1dce363c32af5a30dc44a8692572e2d91843a42347e511541651e3206f85",
+    "binary_size": 27467480,
+    "working_binary": "$BASELINE_RUN/teamy-bend",
+    "archive": "$BASELINE_EVIDENCE/snapshot-final/teamy-bend.gz",
+    "archive_sha256": "ef96155ba86bc867280402c7144e751180e0f02516187a1987e10d82f678b5b8",
+    "archive_size": 7122117,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "ea8c1dce363c32af5a30dc44a8692572e2d91843a42347e511541651e3206f85"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "identity_note": "Code baseline9dfa470 is production-identical to the captured binary source e0a09940. Keep both identities.",
+  "initial_invalid_control": {
+    "source": {
+      "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef D.local() -> U32: 9\nimport module.bend as M\ndef main() -> U32: M.value()\n",
+      "reason": "Authored positive placed an import after a definition; both parsers correctly reject it. Preserve the initial baseline, replace this positive with a valid raw Base-name fallback control."
+    },
+    "rows": [
+      {
+        "case": "nested/main.bend",
+        "source_sha256": "9e867890993b6dcaa1271c36f8056031e1039676e24625e0ab3762bbb245b00b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-alias-fallback/nested/main.bend",
+          "$EVIDENCE/before-b7eb43f9af5c709a.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 'def', 'type' or 'law'\n- observed : 'i'\nLocation:\n3 | def D.local() -> U32: 9\n4>| import module.bend as M\n5 | def main() -> U32: M.value()\n",
+        "timed_out": false,
+        "seconds": 0.10677834297530353,
+        "phase": {
+          "phase": "load",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "nested/main.bend",
+        "source_sha256": "9e867890993b6dcaa1271c36f8056031e1039676e24625e0ab3762bbb245b00b",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-alias-fallback/nested/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 'def', 'type' or 'law'\n- observed : 'i'\nLocation:\n3 | def D.local() -> U32: 9\n4>| import module.bend as M\n5 | def main() -> U32: M.value()\n",
+        "timed_out": false,
+        "seconds": 0.1241757029783912
+      }
+    ],
+    "initial_complete_receipt_sha256": "245d40fe007f2db3efbdef25a9088d77fd45c96431136be222694228b1378528"
+  }
+}
