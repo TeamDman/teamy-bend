@@ -11,6 +11,32 @@ use crate::kernel::origins::substitute_with_origins;
 use crate::kernel::term;
 use std::rc::Rc;
 
+// A parsed occurrence carries diagnostic-only syntax information beside the
+// exact shared core value. In particular, macro identity still uses its Rc.
+#[derive(Clone, Debug)]
+pub(super) struct Occurrence {
+    pub value: TermRef,
+    pub source: Option<usize>,
+    pub bare_name: bool,
+}
+
+impl From<TermRef> for Occurrence {
+    fn from(value: TermRef) -> Self {
+        Self {
+            value,
+            source: None,
+            bare_name: false,
+        }
+    }
+}
+
+impl std::ops::Deref for Occurrence {
+    type Target = TermRef;
+    fn deref(&self) -> &TermRef {
+        &self.value
+    }
+}
+
 #[derive(Clone, Debug)]
 pub(super) struct Variable {
     pub name: String,
@@ -65,6 +91,8 @@ pub(super) struct SurfaceTerm {
     value: TermRef,
     origin: usize,
     match_site: MatchSite,
+    explicit_source: Option<usize>,
+    bare_name: bool,
 }
 
 impl SurfaceTerm {
@@ -74,6 +102,27 @@ impl SurfaceTerm {
             value,
             origin,
             match_site: MatchSite::Expression(origin),
+            explicit_source: None,
+            bare_name: false,
+        }
+    }
+
+    pub(super) fn occurrence(value: Occurrence, origins: Option<&TermOrigins>) -> Self {
+        let mut result = Self::new(value.value, origins);
+        if let Some(source) = value.source {
+            result.origin = source;
+            result.match_site = MatchSite::Expression(source);
+        }
+        result.explicit_source = value.source;
+        result.bare_name = value.bare_name;
+        result
+    }
+
+    pub(super) fn into_occurrence(self) -> Occurrence {
+        Occurrence {
+            value: self.value,
+            source: self.explicit_source,
+            bare_name: self.bare_name,
         }
     }
 
@@ -100,6 +149,7 @@ impl SurfaceTerm {
         let value = binder.lambda(self.value);
         if let Some(origins) = origins {
             origins.binder_node(binder.id, &value);
+            origins.occurrence_children(&value, [self.explicit_source]);
         }
         Self::parent(value, [Some(self.origin), None, None], origins)
     }
@@ -118,6 +168,9 @@ impl SurfaceTerm {
             arm: arm.value,
             fallback: fallback.value,
         });
+        if let Some(origins) = origins {
+            origins.occurrence_children(&value, [arm.explicit_source, fallback.explicit_source]);
+        }
         if let (Some(origins), Some(source)) = (origins, constructor_origin) {
             origins.match_constructor(&value, source);
         }
@@ -134,6 +187,8 @@ impl SurfaceTerm {
             value: substitute_with_origins(&self.value, id, replacement, origins),
             origin: self.origin,
             match_site: self.match_site,
+            explicit_source: self.explicit_source,
+            bare_name: self.bare_name,
         }
     }
 }
@@ -259,14 +314,14 @@ impl From<&str> for FlattenError {
     }
 }
 
-pub(super) fn flatten(
+pub(super) fn flatten_occurrence(
     body: &Body,
     vars: &[Variable],
     fresh: &mut usize,
     display_fresh: &mut usize,
     origins: Option<&TermOrigins>,
-) -> Result<TermRef, FlattenError> {
-    flatten_at(body, vars, fresh, display_fresh, 0, origins).map(|value| value.value)
+) -> Result<Occurrence, FlattenError> {
+    flatten_at(body, vars, fresh, display_fresh, 0, origins).map(SurfaceTerm::into_occurrence)
 }
 
 fn flatten_at(
@@ -329,6 +384,8 @@ fn flatten_at(
                     Term::Lam { body, .. } => {
                         let origin = origins.and_then(|o| o.child_source(&tail.value, 0, body));
                         let mut next = SurfaceTerm::new(Rc::clone(body), origins);
+                        next.explicit_source =
+                            origins.and_then(|o| o.occurrence_source(&tail.value, 0));
                         if let Some(origin) = origin {
                             next.origin = origin;
                         }
@@ -352,6 +409,13 @@ fn flatten_at(
                     .collect(),
                 body: tail.value,
             });
+            if let Some(origins) = origins {
+                origins.occurrence_children(
+                    &value,
+                    std::iter::once(tail.explicit_source)
+                        .chain(values.iter().map(|v| v.explicit_source)),
+                );
+            }
             if let Some(origins) = origins
                 && let Some(binder) = bindings.first()
             {

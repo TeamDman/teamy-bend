@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- macro : @_:N -> N\n- n     : N\nLocation: app~0\n3 | def app(~macro: N -> N, ~n: N) -> N:\n4>|   macro(n)\n5 | def main() -> N: app(~(x => S{x}), ~later)\n"

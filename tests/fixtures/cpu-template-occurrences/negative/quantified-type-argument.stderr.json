@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Later\nContext:\n- T : Type\nLocation: app~0\n3 | type Box<g, -A: Kind(g)> is Kind(g): B{x: A}\n4>| def app(~T: Type) -> +Box<&1, T>:\n5 |   B{Z{}}\n"

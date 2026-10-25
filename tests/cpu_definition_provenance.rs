@@ -74,7 +74,7 @@ fn constructor_definition_failures_keep_exact_labels_windows_and_status() {
 }
 
 #[test]
-fn pending_template_origins_preserve_rejection_without_claiming_diagnostic_parity() {
+fn retained_template_failures_preserve_internal_error_and_rejection() {
     let cases: Vec<String> = facet_json::from_str(include_str!(
         "fixtures/cpu-definition-provenance/pending-cases.json"
     ))
@@ -94,8 +94,8 @@ fn pending_template_origins_preserve_rejection_without_claiming_diagnostic_parit
         assert_eq!(output.status.code(), Some(1), "{case}");
         assert!(output.stdout.is_empty());
         assert!(String::from_utf8_lossy(&output.stderr).contains("- observed : later\n"));
-        // Upstream source windows are retained as evidence, not asserted equal
-        // until occurrence provenance can preserve shared compile bindings.
+        // Historical phase control; cpu_template_occurrences now checks the
+        // retained upstream source windows exactly across CLI boundaries.
     }
 }
 

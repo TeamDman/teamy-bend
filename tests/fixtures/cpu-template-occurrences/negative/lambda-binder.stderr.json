@@ -1,0 +1,1 @@
+"Error:\n- expected : a lambda binder (one name: k => body)\n- observed : ' '\nLocation:\n2 | type N is Data: Z{}\n3>| def app(~n: N) -> N -> N: n => n\n4 | def main() -> N -> N: app(~later)\n"

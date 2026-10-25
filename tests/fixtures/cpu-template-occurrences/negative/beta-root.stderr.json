@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- n : N\nLocation: app~0\n3 | def app(~n: N) -> N:\n4>|   (x => n)(Z{})\n5 | def main() -> N: app(~later)\n"

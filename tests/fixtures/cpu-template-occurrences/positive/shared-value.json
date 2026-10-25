@@ -1,0 +1,25 @@
+{
+  "Constructor": [
+    "R",
+    [
+      {
+        "Constructor": [
+          "Z",
+          []
+        ]
+      },
+      {
+        "Constructor": [
+          "Z",
+          []
+        ]
+      },
+      {
+        "Constructor": [
+          "Z",
+          []
+        ]
+      }
+    ]
+  ]
+}

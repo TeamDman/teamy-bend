@@ -1,0 +1,1 @@
+"Error:\n- expected : an annotated term (cannot infer)\n- observed : S{later}\nContext:\n- n : N\nLocation: app~0\n3 | def app(~n: N) -> N:\n4>|   (x => S{x})(n)\n5 | def main() -> N: app(~later)\n"

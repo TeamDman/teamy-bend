@@ -1,0 +1,16 @@
+[
+  "negative/nested-forward.bend",
+  "negative/ordinary-argument.bend",
+  "negative/constructor-fourth-field.bend",
+  "negative/parent-not-function.bend",
+  "negative/multiline-parentheses.bend",
+  "negative/macro-root.bend",
+  "negative/macro-field.bend",
+  "negative/shared-two-uses.bend",
+  "negative/do-assignment-tail.bend",
+  "negative/captured-macro-root.bend",
+  "negative/beta-root.bend",
+  "negative/beta-argument.bend",
+  "negative/beta-nested.bend",
+  "negative/quantified-type-argument.bend"
+]

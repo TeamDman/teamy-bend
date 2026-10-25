@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- n : N\nLocation: pack~0\n4 | def pack(~n: N) -> Four:\n5>|   Four{Z{}, Z{}, Z{}, n}\n6 | def main() -> Four: pack(~later)\n"

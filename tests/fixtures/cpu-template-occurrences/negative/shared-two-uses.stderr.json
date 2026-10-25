@@ -1,0 +1,1 @@
+"Error:\n- expected : Other\n- observed : N\nContext:\n- n : N\nLocation: app~0\n7 |   P{n,\n8>|     n}\n9 | def main() -> Pair: app(~zero)\n"

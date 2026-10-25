@@ -16,6 +16,7 @@ pub(crate) struct DiagnosticOrigins {
     // Loader-wide fresh binder IDs survive Body cloning/substitution unchanged.
     // This index owns source text only; no core term or strong term edge is added.
     local_binders: BTreeMap<usize, (Rc<str>, usize)>,
+    binder_types: BTreeMap<usize, usize>,
     sources: BTreeMap<String, Rc<str>>,
     nodes: BTreeMap<usize, TermOrigin>,
     match_locations: BTreeMap<usize, TermOrigin>,
@@ -48,6 +49,20 @@ struct TermOrigin {
 }
 
 impl DiagnosticOrigins {
+    pub(super) fn binder_type(&mut self, id: usize, source: Option<usize>) {
+        if let Some(source) = source {
+            self.binder_types.insert(id, source);
+        }
+    }
+    pub(super) fn type_source(&self, id: usize) -> Option<usize> {
+        self.binder_types.get(&id).copied()
+    }
+    pub(super) fn anchor(&mut self, label: &str, line: usize) -> usize {
+        // Reserve a weak source identity, never a semantic variable/binder ID.
+        let anchor = crate::kernel::term(Term::Ref(String::new()));
+        self.node(&anchor, label, line);
+        self.tracker.source(&anchor)
+    }
     pub(super) fn source(&mut self, label: &str, source: &str) {
         self.sources
             .entry(label.to_owned())
@@ -112,7 +127,35 @@ impl DiagnosticOrigins {
         }
     }
 
-    pub(super) fn grown(&mut self, value: &TermRef, head: &TermRef, label: &str, line: usize) {
+    pub(super) fn occurrence_parent(&mut self, value: &TermRef, source: usize) -> bool {
+        let Some(origin) = self.nodes.get(&source) else {
+            return false;
+        };
+        let position = (Rc::clone(&origin.source), origin.line);
+        self.tracker.track(value);
+        self.nodes
+            .entry(Rc::as_ptr(value) as usize)
+            .or_insert_with(|| TermOrigin {
+                _node: Rc::downgrade(value),
+                source: position.0,
+                line: position.1,
+            });
+        true
+    }
+
+    pub(super) fn grown(
+        &mut self,
+        value: &TermRef,
+        head: &TermRef,
+        explicit: Option<usize>,
+        label: &str,
+        line: usize,
+    ) {
+        if let Some(source) = explicit
+            && self.occurrence_parent(value, source)
+        {
+            return;
+        }
         let position = self
             .nodes
             .get(&self.tracker.source(head))

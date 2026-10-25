@@ -90,6 +90,9 @@ impl PartialEq for KernelError {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct CheckerDiagnostic {
     pub(crate) term_identity: usize,
+    // Keep the rejected node separate from the display source: transformed
+    // descendants may share a source root without being the same occurrence.
+    rejected_identity: usize,
     pub(crate) match_site: Option<super::origins::MatchSite>,
     pub(crate) definition: String,
     pub(crate) expected: String,
@@ -467,6 +470,7 @@ impl Engine {
             })
             .collect::<Result<Vec<_>, KernelError>>()?;
         Ok(CheckerDiagnostic {
+            rejected_identity: Rc::as_ptr(value) as usize,
             // Never dereferenced. The loader weakly anchors source allocation identities.
             term_identity: self.origins.as_ref().map_or_else(
                 || Rc::as_ptr(value) as usize,
@@ -533,13 +537,17 @@ impl Engine {
     ) -> KernelError {
         if let Some(report) = &mut error.diagnostic
             && report.match_site.is_none()
-            && report.term_identity == Rc::as_ptr(child) as usize
-            && let Some(source) = self
-                .origins
-                .as_ref()
-                .and_then(|origins| origins.child_source(parent, index, child))
+            && let Some(origins) = &self.origins
         {
-            report.term_identity = source;
+            if report.rejected_identity == Rc::as_ptr(child) as usize
+                && let Some(source) = origins.occurrence_source(parent, index)
+            {
+                report.term_identity = source;
+            } else if report.term_identity == Rc::as_ptr(child) as usize
+                && let Some(source) = origins.child_source(parent, index, child)
+            {
+                report.term_identity = source;
+            }
         }
         error
     }
@@ -1205,15 +1213,20 @@ impl Engine {
                 Ok((def.ty, Uses::new()))
             }
             Term::Typ(g) => {
-                self.check(lhs, g, Quant::None, &term(Term::Qnt), context)?;
+                self.check(lhs, g, Quant::None, &term(Term::Qnt), context)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, g))?;
                 Ok((kind(Quant::Lone), Uses::new()))
             }
             Term::Qnt => Ok((kind(Quant::Lone), Uses::new())),
             Term::Qua(_) => Ok((term(Term::Qnt), Uses::new())),
             Term::Min(a, b) => {
-                let a = self.check(lhs, a, demand, &term(Term::Qnt), context)?;
-                let b = self.check(lhs, b, demand, &term(Term::Qnt), context)?;
-                Ok((term(Term::Qnt), add(a, b)))
+                let a_uses = self
+                    .check(lhs, a, demand, &term(Term::Qnt), context)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, a))?;
+                let b_uses = self
+                    .check(lhs, b, demand, &term(Term::Qnt), context)
+                    .map_err(|error| self.child_diagnostic(error, value, 1, b))?;
+                Ok((term(Term::Qnt), add(a_uses, b_uses)))
             }
             Term::All {
                 quant,
@@ -1222,7 +1235,8 @@ impl Engine {
                 domain,
                 body,
             } => {
-                self.check(lhs, domain, Quant::None, &lhs.domain_kind(*quant), context)?;
+                self.check(lhs, domain, Quant::None, &lhs.domain_kind(*quant), context)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, domain))?;
                 let mut context = context.clone();
                 if context
                     .insert(
@@ -1238,22 +1252,31 @@ impl Engine {
                 {
                     return Err(KernelError::new("duplicate binder identifier"));
                 }
-                self.check(lhs, body, Quant::None, &kind(Quant::Lone), &context)?;
+                self.check(lhs, body, Quant::None, &kind(Quant::Lone), &context)
+                    .map_err(|error| self.child_diagnostic(error, value, 1, body))?;
                 Ok((kind(Quant::Lone), Uses::new()))
             }
             Term::App(f, x) => {
                 if let Term::Lam { id, body, .. } = f.as_ref() {
-                    return self.infer(
-                        lhs,
-                        &self.substitute(body, *id, x),
-                        demand,
-                        context,
-                        arguments,
-                    );
+                    let reduced = self.substitute(body, *id, x);
+                    if let Some(origins) = &self.origins
+                        && let Some(source) = origins.occurrence_source(value, 1)
+                    {
+                        origins.substituted_occurrence(body, &reduced, *id, source);
+                    }
+                    return self.infer(lhs, &reduced, demand, context, arguments).map_err(|error| {
+                        if matches!(body.as_ref(), Term::Var { id: variable, .. } if variable == id) {
+                            self.child_diagnostic(error, value, 1, x)
+                        } else {
+                            self.child_diagnostic(error, f, 0, &reduced)
+                        }
+                    });
                 }
                 let mut args = vec![Rc::clone(x)];
                 args.extend(arguments.iter().map(Rc::clone));
-                let (function_type, fu) = self.infer(lhs, f, demand, context, &args)?;
+                let (function_type, fu) = self
+                    .infer(lhs, f, demand, context, &args)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, f))?;
                 let ft = self.whnf(&function_type)?;
                 let Term::All {
                     quant,
@@ -1277,13 +1300,15 @@ impl Engine {
                         .map(Box::new);
                     return Err(error);
                 };
-                let xu = self.check(lhs, x, quant.demand(demand), domain, context)?;
+                let xu = self
+                    .check(lhs, x, quant.demand(demand), domain, context)
+                    .map_err(|error| self.child_diagnostic(error, value, 1, x))?;
                 Ok((self.substitute(body, *id, x), add(fu, xu)))
             }
-            Term::Adt { name, args, .. } => {
+            Term::Adt { name, .. } => {
                 let adt = self.adt(value)?;
                 let telescope = arrows(&adt.parameters, Rc::clone(&adt.kind));
-                let (ty, uses) = self.check_arguments(lhs, &telescope, args, demand, context)?;
+                let (ty, uses) = self.check_arguments(lhs, &telescope, value, demand, context)?;
                 if name != &adt.name {
                     return Err(KernelError::new("datatype name mismatch"));
                 }
@@ -1301,8 +1326,11 @@ impl Engine {
                 Ok((kind(Quant::Many), Uses::new()))
             }
             Term::Ann(x, ty) => {
-                self.check(lhs, ty, Quant::None, &kind(Quant::Lone), context)?;
-                let uses = self.check(lhs, x, demand, ty, context)?;
+                self.check(lhs, ty, Quant::None, &kind(Quant::Lone), context)
+                    .map_err(|error| self.child_diagnostic(error, value, 1, ty))?;
+                let uses = self
+                    .check(lhs, x, demand, ty, context)
+                    .map_err(|error| self.child_diagnostic(error, value, 0, x))?;
                 Ok((Rc::clone(ty), uses))
             }
             Term::Ctr { name, .. } => {
@@ -1363,13 +1391,16 @@ impl Engine {
         &mut self,
         lhs: &Lhs,
         telescope: &TermRef,
-        args: &[TermRef],
+        value: &TermRef,
         demand: Quant,
         context: &Context,
     ) -> Result<(TermRef, Uses), KernelError> {
+        let (Term::Adt { args, .. } | Term::Ctr { args, .. }) = value.as_ref() else {
+            unreachable!("argument-bearing term");
+        };
         let mut tel = Rc::clone(telescope);
         let mut uses = Uses::new();
-        for arg in args {
+        for (index, arg) in args.iter().enumerate() {
             let t = self.whnf(&tel)?;
             let Term::All {
                 quant,
@@ -1383,7 +1414,8 @@ impl Engine {
             };
             uses = add(
                 uses,
-                self.check(lhs, arg, quant.demand(demand), domain, context)?,
+                self.check(lhs, arg, quant.demand(demand), domain, context)
+                    .map_err(|error| self.child_diagnostic(error, value, index, arg))?,
             );
             tel = self.substitute(body, *id, arg);
         }
@@ -1481,11 +1513,15 @@ impl Engine {
                 let mut next = context.clone();
                 let mut uses = Uses::new();
                 let mut binders = Vec::new();
-                for b in bindings {
+                for (index, b) in bindings.iter().enumerate() {
                     if next.contains_key(b.id) {
                         return Err(KernelError::new("duplicate let binder identifier"));
                     }
-                    let (t, u) = self.infer(lhs, &b.value, b.quant.demand(demand), context, &[])?;
+                    let (t, u) = self
+                        .infer(lhs, &b.value, b.quant.demand(demand), context, &[])
+                        .map_err(|error| {
+                            self.child_diagnostic(error, value, index + 1, &b.value)
+                        })?;
                     self.check(lhs, &t, Quant::None, &lhs.domain_kind(b.quant), context)?;
                     let binder = Binder {
                         quant: b.quant,
@@ -1597,7 +1633,7 @@ impl Engine {
                 };
                 let telescope = arrows(&Self::fields(&adt, constructor, parameters), Rc::clone(&t));
                 return self
-                    .check_arguments(lhs, &telescope, args, demand, context)
+                    .check_arguments(lhs, &telescope, value, demand, context)
                     .map(|(_, u)| u);
             }
             Term::Mat { .. } | Term::Efq => {
@@ -1625,7 +1661,9 @@ impl Engine {
                 motive,
                 body,
             } => {
-                let (evidence_type, eu) = self.infer(lhs, evidence, demand, context, &[])?;
+                let (evidence_type, eu) = self
+                    .infer(lhs, evidence, demand, context, &[])
+                    .map_err(|error| self.child_diagnostic(error, value, 0, evidence))?;
                 let et = self.whnf(&evidence_type)?;
                 let Term::Eql {
                     left,
@@ -1692,7 +1730,9 @@ impl Engine {
                     return Err(error);
                 }
                 let premise = apply(Rc::clone(motive), [Rc::clone(left), term(Term::Rfl)]);
-                let bu = self.check(lhs, body, demand, &premise, context)?;
+                let bu = self
+                    .check(lhs, body, demand, &premise, context)
+                    .map_err(|error| self.child_diagnostic(error, value, 2, body))?;
                 return Ok(add(eu, bu));
             }
             _ => (),
@@ -2717,6 +2757,132 @@ mod reflexivity_diagnostic_tests {
             "kernel evaluation budget exhausted; proof not accepted"
         );
         assert!(error.checker_diagnostic().is_none());
+    }
+
+    #[test]
+    fn occurrence_diagnostics_match_rejected_nodes_not_shared_source_roots() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let origins = super::super::origins::TermOrigins::default();
+        engine.origins = Some(origins.clone());
+        let missing = term(Term::Ref("missing".into()));
+        let compound = term(Term::App(Rc::clone(&missing), term(Term::Rfl)));
+        let parent = term(Term::Ctr {
+            name: "Wrap".into(),
+            args: vec![Rc::clone(&compound)],
+        });
+        origins.track(&compound);
+        // Model a transformed descendant that carries the compound source.
+        origins.transformed(&compound, &missing);
+        origins.occurrence_children(&parent, [Some(99)]);
+        let error = engine
+            .infer(&Lhs::default(), &missing, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        let original_source = error.checker_diagnostic().unwrap().term_identity;
+        assert_eq!(original_source, origins.source(&compound));
+        let error = engine.child_diagnostic(error, &parent, 0, &compound);
+        assert_eq!(
+            error.checker_diagnostic().unwrap().term_identity,
+            original_source
+        );
+        origins.occurrence_children(&compound, [Some(101), None]);
+        let error = engine.child_diagnostic(error, &compound, 0, &missing);
+        assert_eq!(error.checker_diagnostic().unwrap().term_identity, 101);
+        let spent = 2_000_000 - engine.fuel;
+        engine.reset();
+        engine.fuel = spent;
+        let error = engine
+            .infer(&Lhs::default(), &missing, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(error.message, "undefined name missing");
+        assert!(error.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        engine.reset();
+        let unsourced = term(Term::Ref("unsourced".into()));
+        let fallback = term(Term::Lam {
+            name: "x".into(),
+            id: 1,
+            body: Rc::clone(&unsourced),
+        });
+        origins.surface_children(&fallback, [Some(103), None, None]);
+        let error = engine
+            .infer(
+                &Lhs::default(),
+                &unsourced,
+                Quant::Lone,
+                &Context::new(),
+                &[],
+            )
+            .unwrap_err();
+        let error = engine.child_diagnostic(error, &fallback, 0, &unsourced);
+        assert_eq!(error.checker_diagnostic().unwrap().term_identity, 103);
+    }
+
+    #[test]
+    fn template_occurrences_preserve_structure_work_and_runtime() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-template-occurrences");
+        let mut cases: Vec<String> = facet_json::from_str(
+            &std::fs::read_to_string(root.join("negative-cases.json")).unwrap(),
+        )
+        .unwrap();
+        cases.extend([
+            "positive/macro-cache.bend".into(),
+            "positive/shared-value.bend".into(),
+        ]);
+        for case in cases {
+            let path = root.join(&case);
+            let (book, origins) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            let plain = crate::syntax::load(&path).unwrap();
+            let original = format!("{book:?}");
+            assert_eq!(original, format!("{plain:?}"));
+            let mut ordinary = empty_engine(&book).unwrap();
+            let mut tracked = ordinary.clone();
+            tracked.origins = Some(origins.tracker.clone());
+            let mut rejected = false;
+            for declaration in &book.declarations {
+                let results = [&mut ordinary, &mut tracked].map(|engine| {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                });
+                assert_eq!(results[0], results[1], "{case}");
+                assert_eq!(
+                    (ordinary.fuel, ordinary.depth, ordinary.fresh_id),
+                    (tracked.fuel, tracked.depth, tracked.fresh_id),
+                    "{case}"
+                );
+                if results[0].is_err() {
+                    rejected = true;
+                    break;
+                }
+            }
+            assert_eq!(rejected, !case.starts_with("positive/"), "{case}");
+            assert_eq!(format!("{book:?}"), original);
+            drop(tracked);
+            drop(ordinary);
+            if !rejected {
+                let checked =
+                    check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap();
+                assert!(checked.engine.origins.is_none());
+                drop(origins);
+                let baseline = check_book(&plain).unwrap();
+                assert_eq!(
+                    crate::protocol::DataValue::from_term(
+                        &checked.evaluate_data("main", &[]).unwrap()
+                    )
+                    .unwrap(),
+                    crate::protocol::DataValue::from_term(
+                        &baseline.evaluate_data("main", &[]).unwrap()
+                    )
+                    .unwrap()
+                );
+            }
+        }
     }
 
     #[test]

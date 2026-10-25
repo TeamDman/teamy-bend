@@ -1,0 +1,1 @@
+"Error:\n- expected : a function type\n- observed : N\nContext:\n- n : N\nLocation: app~0\n4 | def app(~n: N) -> N:\n5>|   n(Z{})\n6 | def main() -> N: app(~zero)\n"

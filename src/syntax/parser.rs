@@ -9,11 +9,12 @@ use super::executable::ForeignTarget;
 use super::executable::NumericIntrinsic;
 use super::executable::OpaqueType;
 use super::surface::Body;
+use super::surface::Occurrence;
 use super::surface::Pattern;
 use super::surface::Row;
 use super::surface::SurfaceTerm;
 use super::surface::Variable;
-use super::surface::flatten;
+use super::surface::flatten_occurrence;
 use crate::kernel::AdtDecl;
 use crate::kernel::Binder;
 use crate::kernel::Book;
@@ -270,8 +271,8 @@ struct Parser<'a> {
     reusable_markers: BTreeSet<usize>,
     templates: &'a mut Templates,
     instance_name: Option<String>,
-    instance_arguments: VecDeque<TermRef>,
-    compile_bindings: BTreeMap<usize, TermRef>,
+    instance_arguments: VecDeque<Occurrence>,
+    compile_bindings: BTreeMap<usize, Occurrence>,
     foreign: Option<&'a mut BTreeMap<String, ForeignDefinition>>,
     constructor_tags: Option<&'a mut BTreeMap<String, String>>,
     origin: SourceOrigin,
@@ -340,7 +341,15 @@ impl Parser<'_> {
         Ok(self.bump())
     }
     fn flatten_body(&mut self, body: &Body, vars: &[Variable]) -> Result<TermRef, ParseError> {
-        flatten(
+        self.flatten_body_occurrence(body, vars)
+            .map(|value| value.value)
+    }
+    fn flatten_body_occurrence(
+        &mut self,
+        body: &Body,
+        vars: &[Variable],
+    ) -> Result<Occurrence, ParseError> {
+        flatten_occurrence(
             body,
             vars,
             self.fresh,
@@ -424,24 +433,132 @@ impl Parser<'_> {
         let q = self.qualify(name);
         if self.known(&q) { q } else { name.into() }
     }
-    fn variable(&self, name: &str) -> TermRef {
-        self.scope
-            .iter()
-            .rev()
-            .find(|v| v.name == name)
-            .map_or_else(
-                || term(Term::Ref(self.resolve(name))),
-                |variable| {
-                    self.compile_bindings
-                        .get(&variable.id)
-                        .map_or_else(|| variable.term(), Rc::clone)
-                },
-            )
+    fn variable(&mut self, name: &str, line: usize) -> Occurrence {
+        if let Some(variable) = self.scope.iter().rev().find(|v| v.name == name) {
+            if let Some(bound) = self.compile_bindings.get(&variable.id) {
+                let mut result = bound.clone();
+                if result.bare_name {
+                    result.source = self
+                        .templates
+                        .diagnostics
+                        .as_mut()
+                        .map(|origins| origins.anchor(&self.label, line));
+                }
+                result.bare_name = false;
+                return result;
+            }
+            return variable.term().into();
+        }
+        let resolved = self.resolve(name);
+        Occurrence {
+            bare_name: resolved == name
+                && !name.contains('.')
+                && !self.templates.declarations.contains_key(name),
+            value: term(Term::Ref(resolved)),
+            source: None,
+        }
+    }
+    fn occurrence_node(
+        &self,
+        value: Term,
+        sources: impl IntoIterator<Item = Option<usize>>,
+    ) -> Occurrence {
+        let value = term(value);
+        if let Some(origins) = &self.templates.diagnostics {
+            origins.tracker.occurrence_children(&value, sources);
+        }
+        value.into()
+    }
+    fn application(&mut self, f: Occurrence, x: Occurrence) -> Occurrence {
+        let sources = [f.source, x.source];
+        let head_source = self
+            .templates
+            .diagnostics
+            .as_ref()
+            .map(|o| f.source.unwrap_or_else(|| o.tracker.source(&f.value)));
+        let result = self.occurrence_node(Term::App(f.value, x.value), sources);
+        if let (Some(origins), Some(source)) = (&mut self.templates.diagnostics, head_source) {
+            origins.occurrence_parent(&result, source);
+        }
+        result
+    }
+    fn applications(
+        &mut self,
+        head: TermRef,
+        args: impl IntoIterator<Item = Occurrence>,
+    ) -> Occurrence {
+        args.into_iter()
+            .fold(head.into(), |f, x| self.application(f, x))
+    }
+    fn constructor(&self, name: String, args: Vec<Occurrence>) -> Occurrence {
+        let sources: Vec<_> = args.iter().map(|x| x.source).collect();
+        self.occurrence_node(
+            Term::Ctr {
+                name,
+                args: args.into_iter().map(|x| x.value).collect(),
+            },
+            sources,
+        )
+    }
+    fn lambda(&self, name: String, id: usize, body: Occurrence) -> Occurrence {
+        let sources = [body.source];
+        self.occurrence_node(
+            Term::Lam {
+                name,
+                id,
+                body: body.value,
+            },
+            sources,
+        )
+    }
+    fn annotation(&self, value: Occurrence, ty: Occurrence) -> Occurrence {
+        let sources = [value.source, ty.source];
+        self.occurrence_node(Term::Ann(value.value, ty.value), sources)
+    }
+    fn all(
+        &self,
+        quant: Quant,
+        name: String,
+        id: usize,
+        domain: Occurrence,
+        body: Occurrence,
+    ) -> Occurrence {
+        let sources = [domain.source, body.source];
+        self.occurrence_node(
+            Term::All {
+                quant,
+                name,
+                id,
+                domain: domain.value,
+                body: body.value,
+            },
+            sources,
+        )
+    }
+    fn occurrence_arrows(&self, binders: &[Binder], mut result: Occurrence) -> TermRef {
+        for binder in binders.iter().rev() {
+            let source = self
+                .templates
+                .diagnostics
+                .as_ref()
+                .and_then(|origins| origins.type_source(binder.id));
+            let domain = Occurrence {
+                value: Rc::clone(&binder.ty),
+                source,
+                bare_name: false,
+            };
+            result = self.all(binder.quant, binder.name.clone(), binder.id, domain, result);
+        }
+        result.value
+    }
+    fn qualify_occurrence(&self, mut value: Occurrence, namespace: &str) -> Occurrence {
+        value.value = self.qualify_operators(&value.value, namespace);
+        value
     }
     fn is_compile_binding(&self, value: &TermRef) -> bool {
         self.compile_bindings
             .values()
-            .any(|bound| Rc::ptr_eq(bound, value))
+            .any(|bound| Rc::ptr_eq(&bound.value, value))
     }
     fn quant(&mut self) -> Quant {
         if self.take("-") {
@@ -469,13 +586,14 @@ impl Parser<'_> {
             let (quant, ty) = if self.take(":") {
                 (quant, self.expression(0)?)
             } else if quant == Quant::Lone {
-                (Quant::None, term(Term::Qnt))
+                (Quant::None, term(Term::Qnt).into())
             } else {
                 return Err(self.error("expected a type after a quantified binder"));
             };
             let variable = self.open(name.clone());
             if let Some(origins) = &mut self.templates.diagnostics {
                 origins.binder(variable.id, &self.label, line);
+                origins.binder_type(variable.id, ty.source);
             }
             if compile_time && let Some(argument) = self.instance_arguments.pop_front() {
                 self.compile_bindings.insert(variable.id, argument);
@@ -484,7 +602,7 @@ impl Parser<'_> {
                 quant,
                 name,
                 id: variable.id,
-                ty,
+                ty: ty.value,
             });
             self.take(",");
         }
@@ -571,7 +689,7 @@ impl Parser<'_> {
         self.book.declarations[index] = Declaration::Adt(AdtDecl {
             name,
             parameters,
-            kind,
+            kind: kind.value,
             constructors,
         });
         Ok(())
@@ -613,24 +731,15 @@ impl Parser<'_> {
                 let v = self.open(name.clone());
                 let predicate = self.expression(0)?;
                 self.scope.truncate(old);
-                ty = apply(
-                    self.reference_at("Exists".into(), where_line),
-                    [
-                        ty,
-                        term(Term::Lam {
-                            name: name.clone(),
-                            id: v.id,
-                            body: predicate,
-                        }),
-                    ],
-                );
+                let head = self.reference_at("Exists".into(), where_line);
+                ty = self.applications(head, [ty, self.lambda(name.clone(), v.id, predicate)]);
             }
             let v = self.open(name.clone());
             let b = Binder {
                 quant,
                 name,
                 id: v.id,
-                ty,
+                ty: ty.value,
             };
             if universal {
                 parameters.push(b.clone());
@@ -713,7 +822,7 @@ impl Parser<'_> {
             let parameters = self.telescope(")")?;
             self.expect("->")?;
             let result = self.expression(0)?;
-            let ty = arrows(&parameters, result);
+            let ty = self.occurrence_arrows(&parameters, result);
             let vars = parameters
                 .iter()
                 .map(|b| Variable {
@@ -956,7 +1065,7 @@ impl Parser<'_> {
         Ok(imports)
     }
 
-    fn call(&mut self, mut function: TermRef) -> Result<TermRef, ParseError> {
+    fn call(&mut self, mut function: Occurrence) -> Result<Occurrence, ParseError> {
         let template = match function.as_ref() {
             Term::Ref(name) | Term::GpuRef(name)
                 if self.templates.declarations.contains_key(name) =>
@@ -976,7 +1085,7 @@ impl Parser<'_> {
                 // Operators in a compile argument are fixed at that argument's
                 // boundary, before an enclosing caller annotation can name them.
                 let argument = self.expression(0)?;
-                compile_arguments.push(self.qualify_operators(&argument, &self.resolve("Nat")));
+                compile_arguments.push(self.qualify_occurrence(argument, &self.resolve("Nat")));
                 self.take(",");
             }
         }
@@ -984,7 +1093,7 @@ impl Parser<'_> {
         if let Some(name) = template
             && let Some(instance) = self.specialize(&name, &compile_arguments)?
         {
-            function = term(if matches!(function.as_ref(), Term::GpuRef(_)) {
+            function.value = term(if matches!(function.as_ref(), Term::GpuRef(_)) {
                 Term::GpuRef(instance)
             } else {
                 Term::Ref(instance)
@@ -996,14 +1105,35 @@ impl Parser<'_> {
             {
                 // Upstream Sub is resolved before live checking: duplicating a
                 // macro parameter duplicates caller syntax, not an affine Lam.
-                crate::kernel::origins::substitute_with_origins(
+                let result = crate::kernel::origins::substitute_with_origins(
                     body,
                     *id,
                     &argument,
                     self.templates.diagnostics.as_ref().map(|o| &o.tracker),
-                )
+                );
+                let root_replaced =
+                    matches!(body.as_ref(), Term::Var { id: variable, .. } if variable == id);
+                if let (Some(origins), Some(source)) =
+                    (&self.templates.diagnostics, argument.source)
+                {
+                    origins
+                        .tracker
+                        .substituted_occurrence(body, &result, *id, source);
+                }
+                Occurrence {
+                    value: result,
+                    source: if root_replaced {
+                        argument.source
+                    } else {
+                        self.templates
+                            .diagnostics
+                            .as_ref()
+                            .and_then(|o| o.tracker.occurrence_source(&function, 0))
+                    },
+                    bare_name: root_replaced && argument.bare_name,
+                }
             } else {
-                term(Term::App(function, argument))
+                self.application(function, argument)
             };
         }
         Ok(function)
@@ -1012,9 +1142,13 @@ impl Parser<'_> {
     fn specialize(
         &mut self,
         name: &str,
-        arguments: &[TermRef],
+        arguments: &[Occurrence],
     ) -> Result<Option<String>, ParseError> {
-        let Some(key) = template_key(arguments).map_err(|error| self.error(error))? else {
+        let values: Vec<_> = arguments
+            .iter()
+            .map(|argument| Rc::clone(&argument.value))
+            .collect();
+        let Some(key) = template_key(&values).map_err(|error| self.error(error))? else {
             // Open arguments must keep the undefined template name. In
             // particular a caller-local variable never becomes a global Ref.
             return Ok(None);
@@ -1057,7 +1191,7 @@ impl Parser<'_> {
             reusable_markers: BTreeSet::new(),
             templates: self.templates,
             instance_name: Some(instance.clone()),
-            instance_arguments: arguments.iter().map(Rc::clone).collect(),
+            instance_arguments: arguments.iter().cloned().collect(),
             compile_bindings: BTreeMap::new(),
             foreign: self.foreign.as_deref_mut(),
             constructor_tags: self.constructor_tags.as_deref_mut(),
@@ -1068,7 +1202,7 @@ impl Parser<'_> {
         result?;
         Ok(Some(instance))
     }
-    fn expression(&mut self, min: u8) -> Result<TermRef, ParseError> {
+    fn expression(&mut self, min: u8) -> Result<Occurrence, ParseError> {
         if self.depth >= 64 {
             return Err(self.error("expression nesting exceeds the parser resource limit of 64"));
         }
@@ -1086,7 +1220,7 @@ impl Parser<'_> {
         clippy::too_many_lines,
         reason = "Pratt parser alternatives share precedence and source adjacency state"
     )]
-    fn expression_inner(&mut self, min: u8) -> Result<TermRef, ParseError> {
+    fn expression_inner(&mut self, min: u8) -> Result<Occurrence, ParseError> {
         let line = self.current().line;
         let mut out = self.atom()?;
         let mut operations = 0;
@@ -1105,7 +1239,7 @@ impl Parser<'_> {
                 let (Term::Ref(name) | Term::GpuRef(name)) = out.as_ref() else {
                     return Err(self.error("a named def before ! (only f!(..) offloads)"));
                 };
-                out = term(Term::GpuRef(name.clone()));
+                out.value = term(Term::GpuRef(name.clone()));
                 self.bump();
                 continue;
             }
@@ -1118,17 +1252,17 @@ impl Parser<'_> {
                 self.bump();
                 let index = self.expression(0)?;
                 self.expect("]")?;
-                let index = self.qualify_operators(&index, "U32");
+                let index = self.qualify_occurrence(index, "U32");
                 if self.take("<-") {
                     let value = self.expression(2)?;
-                    out = apply(
+                    out = self.applications(
                         term(Term::Ref("Array.set".into())),
-                        [term(Term::Ref("U32".into())), out, index, value],
+                        [term(Term::Ref("U32".into())).into(), out, index, value],
                     );
                 } else {
-                    out = apply(
+                    out = self.applications(
                         term(Term::Ref("Array.get".into())),
-                        [term(Term::Ref("U32".into())), out, index],
+                        [term(Term::Ref("U32".into())).into(), out, index],
                     );
                 }
                 continue;
@@ -1164,21 +1298,25 @@ impl Parser<'_> {
                         if args.len() + quantities == adt.parameters.len() {
                             args.splice(
                                 0..0,
-                                (0..quantities).map(|_| term(Term::Qua(Quant::Lone))),
+                                (0..quantities).map(|_| term(Term::Qua(Quant::Lone)).into()),
                             );
                         }
                     }
-                    let grown = term(Term::Adt {
-                        name,
-                        args,
-                        excluded: Vec::new(),
-                    });
+                    let sources: Vec<_> = args.iter().map(|x| x.source).collect();
+                    let grown = self.occurrence_node(
+                        Term::Adt {
+                            name,
+                            args: args.into_iter().map(|x| x.value).collect(),
+                            excluded: Vec::new(),
+                        },
+                        sources,
+                    );
                     if let Some(origins) = &mut self.templates.diagnostics {
-                        origins.grown(&grown, &out, &self.label, line);
+                        origins.grown(&grown, &out, out.source, &self.label, line);
                     }
                     out = grown;
                 } else {
-                    out = apply(term(Term::Ref(".is_lt".into())), [out, first]);
+                    out = self.applications(term(Term::Ref(".is_lt".into())), [out, first]);
                 }
                 continue;
             }
@@ -1196,7 +1334,7 @@ impl Parser<'_> {
                 let reusable = self.is_reusable(&out);
                 let v = self.bind_variable(name.clone(), reusable);
                 let body = self.body(self.current().column.saturating_sub(1))?;
-                out = self.flatten_body(&body, &[v])?;
+                out = self.flatten_body_occurrence(&body, &[v])?;
                 if let Some(origins) = &mut self.templates.diagnostics {
                     origins.node(&out, &self.label, line);
                 }
@@ -1206,15 +1344,9 @@ impl Parser<'_> {
             if min == 0 && self.take("->") {
                 let body = self.expression(0)?;
                 let v = self.fresh_variable("_".into());
-                let grown = term(Term::All {
-                    quant: Quant::Lone,
-                    name: v.name,
-                    id: v.id,
-                    domain: Rc::clone(&out),
-                    body,
-                });
+                let grown = self.all(Quant::Lone, v.name, v.id, out.clone(), body);
                 if let Some(origins) = &mut self.templates.diagnostics {
-                    origins.grown(&grown, &out, &self.label, line);
+                    origins.grown(&grown, &out, out.source, &self.label, line);
                 }
                 out = grown;
                 continue;
@@ -1251,18 +1383,18 @@ impl Parser<'_> {
             let op = self.bump();
             let b = self.expression(if right { prec } else { prec + 1 })?;
             out = match op.as_str() {
-                "<&>" => term(Term::Min(out, b)),
+                "<&>" => {
+                    let sources = [out.source, b.source];
+                    self.occurrence_node(Term::Min(out.value, b.value), sources)
+                }
                 "<>" => {
-                    let value = term(Term::Ctr {
-                        name: "Con".into(),
-                        args: vec![out, b],
-                    });
+                    let value = self.constructor("Con".into(), vec![out, b]);
                     if let Some(origins) = &mut self.templates.diagnostics {
                         origins.node(&value, &self.label, line);
                     }
                     value
                 }
-                _ => apply(term(Term::Ref(method.into())), [out, b]),
+                _ => self.applications(term(Term::Ref(method.into())), [out, b]),
             };
         }
         if let Some(origins) = &mut self.templates.diagnostics {
@@ -1270,7 +1402,7 @@ impl Parser<'_> {
         }
         Ok(out)
     }
-    fn arguments(&mut self, close: &str) -> Result<Vec<TermRef>, ParseError> {
+    fn arguments(&mut self, close: &str) -> Result<Vec<Occurrence>, ParseError> {
         let mut xs = Vec::new();
         while !self.take(close) {
             if xs.len() >= 128 {
@@ -1281,7 +1413,7 @@ impl Parser<'_> {
         }
         Ok(xs)
     }
-    fn atom(&mut self) -> Result<TermRef, ParseError> {
+    fn atom(&mut self) -> Result<Occurrence, ParseError> {
         let line = self.current().line;
         let value = self.atom_inner()?;
         if matches!(
@@ -1309,26 +1441,27 @@ impl Parser<'_> {
         clippy::too_many_lines,
         reason = "Surface forms are kept in upstream grammar order for auditability"
     )]
-    fn atom_inner(&mut self) -> Result<TermRef, ParseError> {
+    fn atom_inner(&mut self) -> Result<Occurrence, ParseError> {
         if self.is("~") {
             return Err(self.error(
                 "~ arguments require a previously declared template head and leading argument position",
             ));
         }
         if self.take("Type") {
-            return Ok(term(Term::Typ(term(Term::Qua(Quant::Lone)))));
+            return Ok(term(Term::Typ(term(Term::Qua(Quant::Lone)))).into());
         }
         if self.take("Data") {
-            return Ok(term(Term::Typ(term(Term::Qua(Quant::Many)))));
+            return Ok(term(Term::Typ(term(Term::Qua(Quant::Many)))).into());
         }
         if self.take("Quant") {
-            return Ok(term(Term::Qnt));
+            return Ok(term(Term::Qnt).into());
         }
         if self.take("Kind") {
             self.expect("(")?;
             let g = self.expression(0)?;
             self.expect(")")?;
-            return Ok(term(Term::Typ(g)));
+            let sources = [g.source];
+            return Ok(self.occurrence_node(Term::Typ(g.value), sources));
         }
         if self.take("do") {
             let module = self.name()?;
@@ -1357,7 +1490,7 @@ impl Parser<'_> {
                 };
                 if let Some(q) = q {
                     self.bump();
-                    return Ok(term(Term::Qua(q)));
+                    return Ok(term(Term::Qua(q)).into());
                 }
             }
             let quant = if exists { Quant::Lone } else { self.quant() };
@@ -1370,25 +1503,10 @@ impl Parser<'_> {
             let body = self.expression(0)?;
             self.scope.truncate(old);
             return Ok(if exists {
-                apply(
-                    self.reference_at("Exists".into(), line),
-                    [
-                        domain,
-                        term(Term::Lam {
-                            name,
-                            id: v.id,
-                            body,
-                        }),
-                    ],
-                )
+                let head = self.reference_at("Exists".into(), line);
+                self.applications(head, [domain, self.lambda(name, v.id, body)])
             } else {
-                term(Term::All {
-                    quant,
-                    name,
-                    id: v.id,
-                    domain,
-                    body,
-                })
+                self.all(quant, name, v.id, domain, body)
             });
         }
         if self.take("{") {
@@ -1399,7 +1517,7 @@ impl Parser<'_> {
                 if let Some(origins) = &mut self.templates.diagnostics {
                     origins.node(&proof, &self.label, line);
                 }
-                return Ok(proof);
+                return Ok(proof.into());
             }
             let left = self.expression(0)?;
             let equality = self.take("==");
@@ -1410,27 +1528,30 @@ impl Parser<'_> {
                 self.expect(":")?;
                 let ty = self.expression(0)?;
                 self.expect("}")?;
-                let equation = term(Term::Eql { left, right, ty });
+                let sources = [left.source, right.source, ty.source];
+                let equation = self.occurrence_node(
+                    Term::Eql {
+                        left: left.value,
+                        right: right.value,
+                        ty: ty.value,
+                    },
+                    sources,
+                );
                 if unequal {
                     let v = self.fresh_variable("_".into());
-                    return Ok(term(Term::All {
-                        quant: Quant::Lone,
-                        name: v.name,
-                        id: v.id,
-                        domain: equation,
-                        body: self.reference_at("Empty".into(), inequality_line),
-                    }));
+                    let body = self.reference_at("Empty".into(), inequality_line).into();
+                    return Ok(self.all(Quant::Lone, v.name, v.id, equation, body));
                 }
                 return Ok(equation);
             }
             self.expect(":")?;
             let ty = self.expression(0)?;
             self.expect("}")?;
-            return Ok(term(Term::Ann(left, ty)));
+            return Ok(self.annotation(left, ty));
         }
         if self.take("(") {
             let body = self.body(self.current().column.saturating_sub(1))?;
-            let mut out = self.flatten_body(&body, &[])?;
+            let mut out = self.flatten_body_occurrence(&body, &[])?;
             if self.take(",") {
                 let mut values = vec![out];
                 loop {
@@ -1441,17 +1562,14 @@ impl Parser<'_> {
                 }
                 let last = values.pop().expect("at least two tuple values");
                 out = values.into_iter().rev().fold(last, |tail, head| {
-                    term(Term::Ctr {
-                        name: "Tuple".into(),
-                        args: vec![head, tail],
-                    })
+                    self.constructor("Tuple".into(), vec![head, tail])
                 });
             }
             if self.take(":") {
                 let ty = self.expression(0)?;
                 let name = type_head(&ty)
                     .ok_or_else(|| self.error("operators need a named type after ':'"))?;
-                out = self.qualify_operators(&out, &name);
+                out = self.qualify_occurrence(out, &name);
             }
             self.expect(")")?;
             return Ok(out);
@@ -1460,7 +1578,7 @@ impl Parser<'_> {
             let match_line = self.tokens[self.at - 1].line;
             self.expect("{")?;
             let mut arms = Vec::new();
-            let mut tail = term(Term::Efq);
+            let mut tail: Occurrence = term(Term::Efq).into();
             if let Some(origins) = &mut self.templates.diagnostics {
                 origins.node(&tail, &self.label, match_line);
             }
@@ -1486,11 +1604,15 @@ impl Parser<'_> {
                 }
             }
             for (constructor, arm, source) in arms.into_iter().rev() {
-                tail = term(Term::Mat {
-                    constructor,
-                    arm,
-                    fallback: tail,
-                });
+                let sources = [arm.source, tail.source];
+                tail = self.occurrence_node(
+                    Term::Mat {
+                        constructor,
+                        arm: arm.value,
+                        fallback: tail.value,
+                    },
+                    sources,
+                );
                 if let Some(origins) = &mut self.templates.diagnostics {
                     origins.node(&tail, &self.label, match_line);
                     origins.tracker.match_constructor(&tail, source);
@@ -1520,32 +1642,28 @@ impl Parser<'_> {
             self.scope.truncate(old);
             self.take(";");
             let body = self.body(self.current().column.saturating_sub(1))?;
-            let body = self.flatten_body(&body, &[])?;
-            let proof_motive = term(Term::Lam {
-                name,
-                id: e.id,
-                body: motive,
-            });
+            let body = self.flatten_body_occurrence(&body, &[])?;
+            let proof_motive = self.lambda(name, e.id, motive);
             if let Some(origins) = &mut self.templates.diagnostics {
                 origins.node(&proof_motive, &self.label, binder_line);
             }
-            let motive = term(Term::Lam {
-                name: x.name,
-                id: x.id,
-                body: proof_motive,
-            });
+            let motive = self.lambda(x.name, x.id, proof_motive);
             if let Some(origins) = &mut self.templates.diagnostics {
                 origins.node(&motive, &self.label, rewrite_line);
             }
-            return Ok(term(Term::Rwt {
-                evidence,
-                motive,
-                body,
-            }));
+            let sources = [evidence.source, motive.source, body.source];
+            return Ok(self.occurrence_node(
+                Term::Rwt {
+                    evidence: evidence.value,
+                    motive: motive.value,
+                    body: body.value,
+                },
+                sources,
+            ));
         }
         if self.take("?") {
             let name = self.name()?;
-            return Ok(term(Term::Hole(name)));
+            return Ok(term(Term::Hole(name)).into());
         }
         if self.take("[") {
             let mut values = if self.is("]") {
@@ -1568,32 +1686,25 @@ impl Parser<'_> {
                     if !count.is_power_of_two() {
                         return Err(self.error("array count must be a power of two"));
                     }
-                    nat_term(count.ilog2())
+                    nat_term(count.ilog2()).into()
                 } else {
                     size
                 };
                 let namespace = type_head(&ty)
                     .ok_or_else(|| self.error("array operators need a named element type"))?;
-                let value = self.qualify_operators(&values.remove(0), &namespace);
-                return Ok(apply(
-                    term(Term::Ref("Array.new".into())),
-                    [ty, depth, value],
-                ));
+                let value = self.qualify_occurrence(values.remove(0), &namespace);
+                return Ok(
+                    self.applications(term(Term::Ref("Array.new".into())), [ty, depth, value])
+                );
             }
             self.take(",");
             values.extend(self.arguments("]")?);
-            return Ok(values.into_iter().rev().fold(
-                term(Term::Ctr {
-                    name: "Nil".into(),
-                    args: Vec::new(),
-                }),
-                |tail, head| {
-                    term(Term::Ctr {
-                        name: "Con".into(),
-                        args: vec![head, tail],
-                    })
-                },
-            ));
+            return Ok(values
+                .into_iter()
+                .rev()
+                .fold(self.constructor("Nil".into(), Vec::new()), |tail, head| {
+                    self.constructor("Con".into(), vec![head, tail])
+                }));
         }
         if self.take("+") {
             let value = self.expression(12)?;
@@ -1615,7 +1726,7 @@ impl Parser<'_> {
                     if let Some(origins) = &self.templates.diagnostics {
                         origins.tracker.reusable_marker(marker.id);
                     }
-                    return Ok(marker.term());
+                    return Ok(marker.term().into());
                 }
                 return Err(self.error("+ needs a quantified datatype or a binder"));
             };
@@ -1637,11 +1748,26 @@ impl Parser<'_> {
             for arg in args.iter_mut().take(count) {
                 *arg = term(Term::Qua(Quant::Many));
             }
-            return Ok(term(Term::Adt {
-                name,
-                args,
-                excluded: Vec::new(),
-            }));
+            let sources: Vec<_> = (0..args.len())
+                .map(|index| {
+                    if index < count {
+                        None
+                    } else {
+                        self.templates
+                            .diagnostics
+                            .as_ref()
+                            .and_then(|o| o.tracker.occurrence_source(&value, index))
+                    }
+                })
+                .collect();
+            return Ok(self.occurrence_node(
+                Term::Adt {
+                    name,
+                    args,
+                    excluded: Vec::new(),
+                },
+                sources,
+            ));
         }
         if self
             .current()
@@ -1664,34 +1790,36 @@ impl Parser<'_> {
                 return Ok(term(Term::Ctr {
                     name: "Chr".into(),
                     args: vec![u32_term(u32::from(chars[0]))],
-                }));
+                })
+                .into());
             }
-            return Ok(chars.into_iter().rev().fold(
-                term(Term::Ctr {
-                    name: "SNil".into(),
-                    args: Vec::new(),
-                }),
-                |tail, c| {
+            return Ok(chars
+                .into_iter()
+                .rev()
+                .fold(
                     term(Term::Ctr {
-                        name: "SCon".into(),
-                        args: vec![
-                            term(Term::Ctr {
-                                name: "Chr".into(),
-                                args: vec![u32_term(u32::from(c))],
-                            }),
-                            tail,
-                        ],
-                    })
-                },
-            ));
+                        name: "SNil".into(),
+                        args: Vec::new(),
+                    }),
+                    |tail, c| {
+                        term(Term::Ctr {
+                            name: "SCon".into(),
+                            args: vec![
+                                term(Term::Ctr {
+                                    name: "Chr".into(),
+                                    args: vec![u32_term(u32::from(c))],
+                                }),
+                                tail,
+                            ],
+                        })
+                    },
+                )
+                .into());
         }
         let name = self.name()?;
         if self.at > 0 && self.tokens[self.at - 1].end == self.current().start && self.take("{") {
             let args = self.arguments("}")?;
-            Ok(term(Term::Ctr {
-                name: self.resolve(&name),
-                args,
-            }))
+            Ok(self.constructor(self.resolve(&name), args))
         } else {
             // The pinned parser allocates an identity for an unresolved simple
             // name before it becomes a binder or a global reference. Track that
@@ -1703,16 +1831,16 @@ impl Parser<'_> {
             {
                 self.display_fresh += 1;
             }
-            Ok(self.variable(&name))
+            Ok(self.variable(&name, self.tokens[self.at - 1].line))
         }
     }
     fn do_statement(
         &mut self,
         module: &str,
-        types: &[TermRef],
-        result: Option<&TermRef>,
+        types: &[Occurrence],
+        result: Option<&Occurrence>,
         column: usize,
-    ) -> Result<TermRef, ParseError> {
+    ) -> Result<Occurrence, ParseError> {
         if self.depth >= 64 {
             return Err(self.error("do nesting exceeds the parser resource limit of 64"));
         }
@@ -1724,10 +1852,10 @@ impl Parser<'_> {
     fn do_statement_inner(
         &mut self,
         module: &str,
-        types: &[TermRef],
-        result: Option<&TermRef>,
+        types: &[Occurrence],
+        result: Option<&Occurrence>,
         column: usize,
-    ) -> Result<TermRef, ParseError> {
+    ) -> Result<Occurrence, ParseError> {
         let line = self.current().line;
         if self.take("return") {
             let value = self.expression(0)?;
@@ -1743,9 +1871,9 @@ impl Parser<'_> {
         let ty = if annotated {
             self.expression(1)?
         } else if step {
-            self.variable("Unit")
+            self.variable("Unit", self.current().line)
         } else {
-            Rc::clone(&value)
+            value.clone()
         };
         let assignment = annotated && self.take("=");
         if !assignment {
@@ -1756,7 +1884,7 @@ impl Parser<'_> {
             }
         }
         let bound = if step {
-            Rc::clone(&value)
+            value.clone()
         } else {
             self.expression(0)?
         };
@@ -1773,35 +1901,33 @@ impl Parser<'_> {
         );
         let rebindings = std::mem::take(&mut self.reusable);
         let tail = self.do_statement(module, types, result, column)?;
-        let tail = self.flatten_body(
+        let tail = self.flatten_body_occurrence(
             &Body::Reply(self.surface_term(tail)).with_reusable(&rebindings),
             &[],
         )?;
         self.scope.truncate(old);
         if assignment {
-            Ok(term(Term::Let {
-                bindings: vec![crate::kernel::LetBinding {
-                    quant: Quant::Lone,
-                    name: variable.name,
-                    id: variable.id,
-                    value: term(Term::Ann(bound, ty)),
-                }],
-                body: tail,
-            }))
+            let value = self.annotation(bound, ty);
+            let sources = [tail.source, value.source];
+            Ok(self.occurrence_node(
+                Term::Let {
+                    bindings: vec![crate::kernel::LetBinding {
+                        quant: Quant::Lone,
+                        name: variable.name,
+                        id: variable.id,
+                        value: value.value,
+                    }],
+                    body: tail.value,
+                },
+                sources,
+            ))
         } else {
             Ok(self.do_call(
                 &format!("{module}.bind"),
                 types,
                 [ty],
                 result,
-                [
-                    bound,
-                    term(Term::Lam {
-                        name: variable.name,
-                        id: variable.id,
-                        body: tail,
-                    }),
-                ],
+                [bound, self.lambda(variable.name, variable.id, tail)],
                 line,
             ))
         }
@@ -1809,21 +1935,22 @@ impl Parser<'_> {
     fn do_call(
         &mut self,
         name: &str,
-        types: &[TermRef],
-        before: impl IntoIterator<Item = TermRef>,
-        result: Option<&TermRef>,
-        after: impl IntoIterator<Item = TermRef>,
+        types: &[Occurrence],
+        before: impl IntoIterator<Item = Occurrence>,
+        result: Option<&Occurrence>,
+        after: impl IntoIterator<Item = Occurrence>,
         line: usize,
-    ) -> TermRef {
+    ) -> Occurrence {
         let arguments = types
             .iter()
-            .map(Rc::clone)
+            .cloned()
             .chain(before)
-            .chain(result.map(Rc::clone))
+            .chain(result.cloned())
             .chain(after);
-        apply(self.reference_at(self.resolve(name), line), arguments)
+        let head = self.reference_at(self.resolve(name), line);
+        self.applications(head, arguments)
     }
-    fn number(&mut self) -> Result<TermRef, ParseError> {
+    fn number(&mut self) -> Result<Occurrence, ParseError> {
         let raw = self.bump();
         if let Some(digits) = raw.strip_suffix('n') {
             let count = digits
@@ -1838,16 +1965,10 @@ impl Parser<'_> {
             let mut value = if glued && self.take("+") {
                 self.expression(0)?
             } else {
-                term(Term::Ctr {
-                    name: "Zero".into(),
-                    args: Vec::new(),
-                })
+                self.constructor("Zero".into(), Vec::new())
             };
             for _ in 0..count {
-                value = term(Term::Ctr {
-                    name: "Succ".into(),
-                    args: vec![value],
-                });
+                value = self.constructor("Succ".into(), vec![value]);
             }
             Ok(value)
         } else if raw.contains('.') {
@@ -1859,11 +1980,13 @@ impl Parser<'_> {
             Ok(term(Term::Ctr {
                 name: "F32".into(),
                 args: vec![word_term(value.to_bits())],
-            }))
+            })
+            .into())
         } else {
             Ok(u32_term(raw.parse::<u32>().map_err(|error| {
                 self.error(format!("U32 literal must be at most 4294967295: {error}"))
-            })?))
+            })?)
+            .into())
         }
     }
     fn pattern(&mut self, value: &TermRef) -> Result<Pattern, ParseError> {
@@ -1919,20 +2042,20 @@ impl Parser<'_> {
             }
         }
     }
-    fn surface_term(&self, value: TermRef) -> SurfaceTerm {
-        SurfaceTerm::new(
+    fn surface_term(&self, value: Occurrence) -> SurfaceTerm {
+        SurfaceTerm::occurrence(
             value,
             self.templates.diagnostics.as_ref().map(|o| &o.tracker),
         )
     }
-    fn scrutinees(&self, values: Vec<TermRef>) -> Vec<SurfaceTerm> {
+    fn scrutinees(&self, values: Vec<Occurrence>) -> Vec<SurfaceTerm> {
         let origins = self.templates.diagnostics.as_ref().map(|o| &o.tracker);
         values
             .into_iter()
-            .map(|value| SurfaceTerm::new(value, origins))
+            .map(|value| SurfaceTerm::occurrence(value, origins))
             .collect()
     }
-    fn terms_before_colon(&mut self) -> Result<Vec<TermRef>, ParseError> {
+    fn terms_before_colon(&mut self) -> Result<Vec<Occurrence>, ParseError> {
         let mut terms = Vec::new();
         loop {
             let line = self.current().line;
@@ -2006,7 +2129,7 @@ impl Parser<'_> {
         let mut values = Vec::new();
         if quant != Quant::Lone && self.tokens.get(self.at + 1).is_some_and(|t| t.text == "=") {
             let name = self.name()?;
-            patterns.push(term(Term::Ref(name)));
+            patterns.push(term(Term::Ref(name)).into());
             self.expect("=")?;
         } else {
             self.at = start;
@@ -2028,7 +2151,7 @@ impl Parser<'_> {
                     || !self.is("") && self.current().column == self.tokens[start].column;
                 if let Some(variable) = array_write_binder(&patterns[0]).filter(|_| more) {
                     values.push(patterns.remove(0));
-                    patterns.push(variable);
+                    patterns.push(variable.into());
                 } else {
                     return Ok(Body::Reply(self.surface_term(patterns.remove(0))));
                 }
@@ -3045,4 +3168,90 @@ pub fn load_executable_with_sources(
         base_names: loader.base_names,
     };
     Ok((source, loader.seen.into_keys().collect()))
+}
+
+#[cfg(test)]
+mod occurrence_tests {
+    use super::*;
+
+    fn root() -> PathBuf {
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-template-occurrences")
+    }
+
+    #[test]
+    fn per_use_sources_keep_shared_reference_identity_and_ownership() {
+        let path = root().join("positive/shared-value.bend");
+        let (book, origins) = load_with_diagnostics(&path).unwrap();
+        let plain = load(&path).unwrap();
+        assert_eq!(format!("{book:?}"), format!("{plain:?}"));
+        let Declaration::Def(pack) = book
+            .declarations
+            .iter()
+            .find(|d| matches!(d, Declaration::Def(d) if d.name == "pack~0"))
+            .unwrap()
+        else {
+            panic!("pack");
+        };
+        let Term::Lam { body, .. } = pack.body.as_ref().unwrap().as_ref() else {
+            panic!("compile binder");
+        };
+        let Term::Ctr { args, .. } = body.as_ref() else {
+            panic!("three shared uses");
+        };
+        assert_eq!(args.len(), 3);
+        assert!(matches!(args[0].as_ref(), Term::Ref(name) if name == "zero"));
+        assert!(args.iter().all(|arg| Rc::ptr_eq(arg, &args[0])));
+        let Declaration::Def(main) = book
+            .declarations
+            .iter()
+            .find(|d| matches!(d, Declaration::Def(d) if d.name == "main"))
+            .unwrap()
+        else {
+            panic!("main");
+        };
+        let Term::App(_, argument) = main.body.as_ref().unwrap().as_ref() else {
+            panic!("call");
+        };
+        assert!(Rc::ptr_eq(argument, &args[0]));
+        assert_eq!(Rc::strong_count(argument), 4);
+        let sources: Vec<_> = (0..3)
+            .map(|i| origins.tracker.occurrence_source(body, i).unwrap())
+            .collect();
+        assert_eq!(sources.iter().collect::<BTreeSet<_>>().len(), 3);
+        assert!(
+            sources
+                .iter()
+                .all(|source| *source != origins.tracker.source(argument))
+        );
+        drop(origins);
+        assert_eq!(Rc::strong_count(argument), 4);
+        crate::kernel::check_book(&book)
+            .unwrap()
+            .evaluate_data("main", &[])
+            .unwrap();
+    }
+
+    #[test]
+    fn occurrence_metadata_does_not_split_template_cache_keys() {
+        let path = root().join("positive/macro-cache.bend");
+        let (book, origins) = load_with_diagnostics(&path).unwrap();
+        let plain = load(&path).unwrap();
+        assert_eq!(format!("{book:?}"), format!("{plain:?}"));
+        for prefix in ["inner~", "outer~", "macro~"] {
+            let names: Vec<_> = book
+                .declarations
+                .iter()
+                .filter_map(|declaration| match declaration {
+                    Declaration::Def(d) if d.name.starts_with(prefix) => Some(d.name.as_str()),
+                    _ => None,
+                })
+                .collect();
+            assert_eq!(names, vec![format!("{prefix}0")]);
+        }
+        drop(origins);
+        crate::kernel::check_book(&book)
+            .unwrap()
+            .evaluate_data("main", &[])
+            .unwrap();
+    }
 }

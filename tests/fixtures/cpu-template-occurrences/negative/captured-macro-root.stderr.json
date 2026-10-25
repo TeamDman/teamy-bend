@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- f : @_:N -> N\nLocation: inner~0\n4 | def outer(~n: N) -> N:\n5>|   inner(~(x => n))\n6 | def main() -> N: outer(~later)\n"

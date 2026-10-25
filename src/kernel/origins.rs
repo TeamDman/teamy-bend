@@ -42,6 +42,9 @@ struct Origin {
     // Per-occurrence anchors survive binder substitution even when several
     // variable uses share one replacement allocation. No strong term edges.
     child_origins: Option<[Option<usize>; 3]>,
+    // Explicit template uses can override a shared Ref's caller origin. These
+    // are distinct from fallback origins and support arbitrary field indices.
+    occurrence_children: Vec<Option<usize>>,
     match_site: Option<MatchSite>,
     constructor_source: Option<usize>,
 }
@@ -52,6 +55,7 @@ impl Origin {
             node: Rc::downgrade(node),
             source: self.source,
             child_origins: self.child_origins,
+            occurrence_children: self.occurrence_children.clone(),
             match_site: self.match_site,
             constructor_source: self.constructor_source,
         }
@@ -113,6 +117,7 @@ impl TermOrigins {
             node: Rc::downgrade(value),
             source: key,
             child_origins,
+            occurrence_children: Vec::new(),
             match_site: None,
             constructor_source: None,
         });
@@ -128,6 +133,72 @@ impl TermOrigins {
             .get_mut(&(Rc::as_ptr(value) as usize))
             .expect("tracked surface parent")
             .child_origins = Some(children);
+    }
+
+    pub(crate) fn occurrence_children(
+        &self,
+        value: &TermRef,
+        children: impl IntoIterator<Item = Option<usize>>,
+    ) {
+        let children: Vec<_> = children.into_iter().collect();
+        if children.iter().all(Option::is_none) {
+            return;
+        }
+        self.track(value);
+        self.0
+            .borrow_mut()
+            .nodes
+            .get_mut(&(Rc::as_ptr(value) as usize))
+            .expect("tracked occurrence parent")
+            .occurrence_children = children;
+    }
+
+    pub(crate) fn occurrence_source(&self, parent: &TermRef, index: usize) -> Option<usize> {
+        self.0
+            .borrow()
+            .nodes
+            .get(&(Rc::as_ptr(parent) as usize))?
+            .occurrence_children
+            .get(index)
+            .copied()
+            .flatten()
+    }
+
+    // After parser macro or checker beta substitution, attach the
+    // replacement occurrence to actual changed parent edges, never to the
+    // shared replacement node. Binder shadowing mirrors core substitution.
+    pub(crate) fn substituted_occurrence(
+        &self,
+        before: &TermRef,
+        after: &TermRef,
+        target: usize,
+        source: usize,
+    ) {
+        let mut pending = vec![(before, after)];
+        while let Some((before, after)) = pending.pop() {
+            if Rc::ptr_eq(before, after) {
+                continue;
+            }
+            let old_children = substitution_children(before, target);
+            let new_children = substitution_children(after, target);
+            for ((index, old), (_, new)) in old_children.into_iter().zip(new_children) {
+                if matches!(old.as_ref(), Term::Var { id, .. } if *id == target) {
+                    self.track(after);
+                    let mut origins = self.0.borrow_mut();
+                    let children = &mut origins
+                        .nodes
+                        .get_mut(&(Rc::as_ptr(after) as usize))
+                        .expect("tracked substitution parent")
+                        .occurrence_children;
+                    if children.len() <= index {
+                        children.resize(index + 1, None);
+                    }
+                    children[index] = Some(source);
+                } else {
+                    pending.push((old, new));
+                }
+            }
+        }
     }
 
     pub(crate) fn surface_match(&self, value: &TermRef, site: MatchSite) {
@@ -194,7 +265,7 @@ impl TermOrigins {
             .nodes
             .get(&(Rc::as_ptr(parent) as usize))?
             .child_origins
-            .and_then(|children| children[operand])
+            .and_then(|children| children.get(operand).copied().flatten())
     }
 
     /// Propagate along an actual substitution/qualification result. These
@@ -297,6 +368,53 @@ impl TermOrigins {
     }
 }
 
+fn substitution_children(value: &TermRef, target: usize) -> Vec<(usize, &TermRef)> {
+    match value.as_ref() {
+        Term::Typ(g) => vec![(0, g)],
+        Term::Lam { id, body, .. } if *id != target => vec![(0, body)],
+        Term::All {
+            id, domain, body, ..
+        } => {
+            let mut children = vec![(0, domain)];
+            if *id != target {
+                children.push((1, body));
+            }
+            children
+        }
+        Term::Min(a, b)
+        | Term::App(a, b)
+        | Term::Ann(a, b)
+        | Term::Mat {
+            arm: a,
+            fallback: b,
+            ..
+        } => vec![(0, a), (1, b)],
+        Term::Ctr { args, .. } | Term::Adt { args, .. } => args.iter().enumerate().collect(),
+        Term::Eql {
+            left: a,
+            right: b,
+            ty: c,
+        }
+        | Term::Rwt {
+            evidence: a,
+            motive: b,
+            body: c,
+        } => vec![(0, a), (1, b), (2, c)],
+        Term::Let { bindings, body } => {
+            let mut children: Vec<_> = bindings
+                .iter()
+                .enumerate()
+                .map(|(i, b)| (i + 1, &b.value))
+                .collect();
+            if !bindings.iter().any(|b| b.id == target) {
+                children.push((0, body));
+            }
+            children
+        }
+        _ => Vec::new(),
+    }
+}
+
 pub(crate) fn substitute_with_origins(
     value: &TermRef,
     target: usize,
@@ -320,6 +438,46 @@ mod tests {
             name: "x".into(),
             id,
         })
+    }
+
+    #[test]
+    fn macro_occurrences_map_changed_edges_without_copying_or_crossing_binders() {
+        let origins = TermOrigins::default();
+        let replacement = term(Term::Ref("same".into()));
+        let bound = variable(7);
+        let shadow = term(Term::Lam {
+            name: "x".into(),
+            id: 7,
+            body: Rc::clone(&bound),
+        });
+        let original = term(Term::Ctr {
+            name: "Four".into(),
+            args: vec![
+                Rc::clone(&bound),
+                Rc::clone(&shadow),
+                Rc::clone(&bound),
+                Rc::clone(&bound),
+            ],
+        });
+        let result = substitute_with_origins(&original, 7, &replacement, Some(&origins));
+        origins.substituted_occurrence(&original, &result, 7, 99);
+        let Term::Ctr { args, .. } = result.as_ref() else {
+            panic!("constructor");
+        };
+        for index in [0, 2, 3] {
+            assert!(Rc::ptr_eq(&args[index], &replacement));
+            assert_eq!(origins.occurrence_source(&result, index), Some(99));
+        }
+        assert!(Rc::ptr_eq(&args[1], &shadow));
+        assert_eq!(origins.occurrence_source(&result, 1), None);
+        assert_eq!(origins.occurrence_source(&shadow, 0), None);
+        assert_eq!(
+            origins.source(&replacement),
+            Rc::as_ptr(&replacement) as usize
+        );
+        assert_eq!(Rc::strong_count(&replacement), 4);
+        drop(origins);
+        assert_eq!(Rc::strong_count(&replacement), 4);
     }
 
     #[test]
