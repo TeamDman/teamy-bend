@@ -2173,6 +2173,19 @@ impl Parser<'_> {
             .map(SurfaceTerm::statement_scrutinee)
             .collect())
     }
+    fn invalid_erased_name(&self, quant: Quant) -> Option<Token> {
+        // Pinned parse_body_stmt demands a name after an erased-let marker.
+        // Preserve our public error/cursor and only attach optional metadata.
+        // expression() must enter below its guard: a resource refusal precedes
+        // the syntax diagnostic for the still-unparsed marker.
+        (self.depth < 64
+            && quant == Quant::None
+            && !self
+                .current()
+                .text
+                .starts_with(|c: char| c.is_ascii_alphabetic() || c == '_'))
+        .then(|| self.current().clone())
+    }
     fn body_inner(&mut self, column: usize) -> Result<Body, ParseError> {
         let match_line = self.current().line;
         if self.take("match") {
@@ -2203,19 +2216,7 @@ impl Parser<'_> {
         }
         let start = self.at;
         let mut quant = self.quant();
-        // Pinned parse_body_stmt demands a name after an erased-let marker
-        // before deciding whether this is a binding. Preserve our parser's
-        // existing error/cursor; only its optional source diagnostic follows
-        // that earlier grammar boundary when expression parsing fails.
-        // expression() must enter below its guard; a resource refusal takes
-        // precedence over the diagnostic for the still-unparsed marker.
-        let erased_name = (self.depth < 64
-            && quant == Quant::None
-            && !self
-                .current()
-                .text
-                .starts_with(|c: char| c.is_ascii_alphabetic() || c == '_'))
-        .then(|| self.current().clone());
+        let erased_name = self.invalid_erased_name(quant);
         let mut patterns = Vec::new();
         let mut values = Vec::new();
         if quant != Quant::Lone && self.tokens.get(self.at + 1).is_some_and(|t| t.text == "=") {
