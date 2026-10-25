@@ -1621,45 +1621,7 @@ impl Parser<'_> {
             return Ok(tail);
         }
         if self.take("%") {
-            let rewrite_line = self.tokens[self.at - 1].line;
-            let binder_line = self.current().line;
-            let first = self.expression(0)?;
-            let (name, evidence) = if self.take("@") {
-                let name = match first.as_ref() {
-                    Term::Ref(n) | Term::Var { name: n, .. } => n.clone(),
-                    _ => return Err(self.error("rewrite binder must be a name")),
-                };
-                (name, self.expression(0)?)
-            } else {
-                (String::new(), first)
-            };
-            self.expect(":")?;
-            let old = self.scope.len();
-            let x = self.fresh_variable("_".into());
-            self.scope.push(x.clone());
-            let e = self.open(name.clone());
-            let motive = self.expression(0)?;
-            self.scope.truncate(old);
-            self.take(";");
-            let body = self.body(self.current().column.saturating_sub(1))?;
-            let body = self.flatten_body_occurrence(&body, &[])?;
-            let proof_motive = self.lambda(name, e.id, motive);
-            if let Some(origins) = &mut self.templates.diagnostics {
-                origins.node(&proof_motive, &self.label, binder_line);
-            }
-            let motive = self.lambda(x.name, x.id, proof_motive);
-            if let Some(origins) = &mut self.templates.diagnostics {
-                origins.node(&motive, &self.label, rewrite_line);
-            }
-            let sources = [evidence.source, motive.source, body.source];
-            return Ok(self.occurrence_node(
-                Term::Rwt {
-                    evidence: evidence.value,
-                    motive: motive.value,
-                    body: body.value,
-                },
-                sources,
-            ));
+            return self.rewrite_atom();
         }
         if self.take("?") {
             let name = self.name()?;
@@ -1707,67 +1669,7 @@ impl Parser<'_> {
                 }));
         }
         if self.take("+") {
-            let value = self.expression(12)?;
-            let name =
-                type_head(&value).ok_or_else(|| self.error("+ needs a quantified datatype"))?;
-            let Some(Declaration::Adt(adt)) = self
-                .book
-                .declarations
-                .iter()
-                .find(|d| matches!(d,Declaration::Adt(a) if a.name==name))
-            else {
-                if matches!(value.as_ref(), Term::Ref(_) | Term::Var { .. }) {
-                    // The + marker has a sentinel identity upstream, not a
-                    // fresh display number. Our semantic ID still stays unique.
-                    let id = *self.fresh;
-                    *self.fresh += 1;
-                    let marker = Variable { name, id };
-                    self.reusable_markers.insert(marker.id);
-                    if let Some(origins) = &self.templates.diagnostics {
-                        origins.tracker.reusable_marker(marker.id);
-                    }
-                    return Ok(marker.term().into());
-                }
-                return Err(self.error("+ needs a quantified datatype or a binder"));
-            };
-            let count = adt
-                .parameters
-                .iter()
-                .take_while(|b| matches!(b.ty.as_ref(), Term::Qnt))
-                .count();
-            let mut args = match value.as_ref() {
-                Term::Adt { args, .. } => args.clone(),
-                _ if adt.parameters.len() == count => {
-                    (0..count).map(|_| term(Term::Qua(Quant::Many))).collect()
-                }
-                _ => return Err(self.error("+ needs all datatype arguments")),
-            };
-            if count == 0 {
-                return Err(self.error("+ needs a datatype with quantity parameters"));
-            }
-            for arg in args.iter_mut().take(count) {
-                *arg = term(Term::Qua(Quant::Many));
-            }
-            let sources: Vec<_> = (0..args.len())
-                .map(|index| {
-                    if index < count {
-                        None
-                    } else {
-                        self.templates
-                            .diagnostics
-                            .as_ref()
-                            .and_then(|o| o.tracker.occurrence_source(&value, index))
-                    }
-                })
-                .collect();
-            return Ok(self.occurrence_node(
-                Term::Adt {
-                    name,
-                    args,
-                    excluded: Vec::new(),
-                },
-                sources,
-            ));
+            return self.quantified_atom();
         }
         if self
             .current()
@@ -1834,6 +1736,111 @@ impl Parser<'_> {
             Ok(self.variable(&name, self.tokens[self.at - 1].line))
         }
     }
+    fn rewrite_atom(&mut self) -> Result<Occurrence, ParseError> {
+        let rewrite_line = self.tokens[self.at - 1].line;
+        let binder_line = self.current().line;
+        let first = self.expression(0)?;
+        let (name, evidence) = if self.take("@") {
+            let name = match first.as_ref() {
+                Term::Ref(n) | Term::Var { name: n, .. } => n.clone(),
+                _ => return Err(self.error("rewrite binder must be a name")),
+            };
+            (name, self.expression(0)?)
+        } else {
+            (String::new(), first)
+        };
+        self.expect(":")?;
+        let old = self.scope.len();
+        let x = self.fresh_variable("_".into());
+        self.scope.push(x.clone());
+        let e = self.open(name.clone());
+        let motive = self.expression(0)?;
+        self.scope.truncate(old);
+        self.take(";");
+        let body = self.body(self.current().column.saturating_sub(1))?;
+        let body = self.flatten_body_occurrence(&body, &[])?;
+        let proof_motive = self.lambda(name, e.id, motive);
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.node(&proof_motive, &self.label, binder_line);
+        }
+        let motive = self.lambda(x.name, x.id, proof_motive);
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.node(&motive, &self.label, rewrite_line);
+        }
+        let sources = [evidence.source, motive.source, body.source];
+        Ok(self.occurrence_node(
+            Term::Rwt {
+                evidence: evidence.value,
+                motive: motive.value,
+                body: body.value,
+            },
+            sources,
+        ))
+    }
+
+    fn quantified_atom(&mut self) -> Result<Occurrence, ParseError> {
+        let value = self.expression(12)?;
+        let name = type_head(&value).ok_or_else(|| self.error("+ needs a quantified datatype"))?;
+        let Some(Declaration::Adt(adt)) = self
+            .book
+            .declarations
+            .iter()
+            .find(|d| matches!(d,Declaration::Adt(a) if a.name==name))
+        else {
+            if matches!(value.as_ref(), Term::Ref(_) | Term::Var { .. }) {
+                // The + marker has a sentinel identity upstream, not a
+                // fresh display number. Our semantic ID still stays unique.
+                let id = *self.fresh;
+                *self.fresh += 1;
+                let marker = Variable { name, id };
+                self.reusable_markers.insert(marker.id);
+                if let Some(origins) = &self.templates.diagnostics {
+                    origins.tracker.reusable_marker(marker.id);
+                }
+                return Ok(marker.term().into());
+            }
+            return Err(self.error("+ needs a quantified datatype or a binder"));
+        };
+        let count = adt
+            .parameters
+            .iter()
+            .take_while(|b| matches!(b.ty.as_ref(), Term::Qnt))
+            .count();
+        let mut args = match value.as_ref() {
+            Term::Adt { args, .. } => args.clone(),
+            _ if adt.parameters.len() == count => {
+                (0..count).map(|_| term(Term::Qua(Quant::Many))).collect()
+            }
+            _ => return Err(self.error("+ needs all datatype arguments")),
+        };
+        if count == 0 {
+            return Err(self.error("+ needs a datatype with quantity parameters"));
+        }
+        for arg in args.iter_mut().take(count) {
+            *arg = term(Term::Qua(Quant::Many));
+        }
+        let sources: Vec<_> = (0..args.len())
+            .map(|index| {
+                if index < count {
+                    None
+                } else {
+                    self.templates
+                        .diagnostics
+                        .as_ref()
+                        .and_then(|o| o.tracker.occurrence_source(&value, index))
+                }
+            })
+            .collect();
+        Ok(self.occurrence_node(
+            Term::Adt {
+                name,
+                args,
+                excluded: Vec::new(),
+            },
+            sources,
+        ))
+    }
+
     fn do_statement(
         &mut self,
         module: &str,

@@ -166,3 +166,15 @@ fn template_macro_cache_and_shared_values_keep_graphs_and_runtime_values() {
         }
     }
 }
+
+#[test]
+fn occurrence_parser_keeps_nested_rule_guards_on_the_default_stack() {
+    for source in [
+        format!("{}x", "+ ".repeat(64)),
+        format!("{}x", "@x:Type -> ".repeat(64)),
+        format!("{}x", "%r: Type; ".repeat(64)),
+    ] {
+        let error = parse_term(&source).expect_err("original parser nesting guard");
+        assert!(error.message.contains("resource limit of 64"), "{error}");
+    }
+}
