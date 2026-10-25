@@ -2636,3 +2636,24 @@ Renewed checking census: 366 both accept, 391 exact rejections, 494 acceptance d
 Tested `169934b2c9ceabfb27040d31442e6bbc838ebbd9` matches the existing non-name lambda refusal without changing acceptance, public ParseError, cursor or guards. [Report and commands](cpu-lambda-binder-diagnostics.md). Gate **1276 passed / 0 failed / 49 ignored**; focused 70 passed (three renewed after stronger lint-compliant assertions). Matrix 456 commands plus 58 adjacent observations retained losslessly. Uppercase original normalizes; C/JS emission correctly refuses missing Base and execution remains unrun. Template negative covers declaration loading, not helper specialization replay.
 
 Census: 366 both accept, 392 exact rejection, 495 acceptance disagreement, 44 different rejection, 5 current oracle failures. Historical 385 IO cohort renewed exactly; current 154 residuals = 110 acceptance + 44 rejection. One port stderr fix; borrow_fork_hold oracle variation reintroduces one measurable unchanged port refusal. Neither a regression nor waiver. Linkage 500 linked / 802 unlinked is not full parity. External invoke audit/Base coordinates/nat_first/compact lowering/supplementary lints remain open. Disposable bytecode cleanup and directly packed new Git objects preserve source/evidence and unchanged floors; bulk raw evidence remains local.
+
+## Import-header diagnostic checkpoint
+
+Tested `ec91a1634d410781623961607b9cf85aab2e5f87` corrects four pinned load diagnostics without changing rejection,
+public ParseError or safety contracts. [Report and commands](cpu-import-header-diagnostics.md).
+Gate **1282 passed / 0 failed / 49 ignored**. The 364-command matrix, 48 adjacent observations and
+24 direct original observations are retained. Three valid controls have 24 generated
+C/JS executions; native pure normalization stays separate. Six adjacent differences
+remain unwaived.
+
+Renewed census: 366 both accept, 396 exact rejection, 494 acceptance disagreement,
+40 different rejection, 6 oracle failures. Historical 385 IO cohort exactly renewed;
+current 149 residuals = 109 acceptance + 40 rejection. Four port stderr fixes; the
+additional count reduction is borrow_fork_hold upstream stack instability, not
+improvement. Coverage 504 linked / 798 unlinked is linkage, not universal parity.
+Prior semantic/API/resource/oracle limits remain open.
+
+User-authorized verified archival recovered 1,287,000,064 workspace bytes while
+preserving source and unique evidence; historical binary paths require explicit
+restoration. All resource floors remain unchanged. Raw archives and pending
+Library artifacts remain local.
