@@ -1,0 +1,4346 @@
+{
+  "tested_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+  "binary_sha256": "05f2155a4c3889943f3c3a2f417f861d152b0ef808edd15137f781347a8f6140",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "unexpected": [],
+  "completed": true,
+  "command_count": 320,
+  "repeated_pairs": 151,
+  "actual_executions": 24,
+  "normalization_observations": 12,
+  "exact_negative_observations": 198,
+  "negative_phase_probes": 44,
+  "artifact_byte_matches": 6,
+  "scopes": {
+    "matching": 320
+  },
+  "matrix_raw_sha256": "e6137819cd15463d5c333253abf7725f13c5f581a8bc2dda12f38d2adc698bce",
+  "path_policy": "Only machine paths are replaced by placeholders; <cc> is TEAMY_BEND_CC, pinned Clang19.1.7. Raw stream hashes remain exact. Rows collapse only after equal exit/stdout/stderr. Six saved positive port artifacts are baseline-byte-identical; no general repeated-generation claim.",
+  "rows": [
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-pure-normalization",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.0614589499891736,
+        0.9794386230059899
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-pure-normalization",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.45295960997464135,
+        0.32830935998936184
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "<work>/matrix/positive-0/phase-1.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.44949924398679286,
+        0.4138392440218013
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3034174909989815,
+        0.3689895900024567
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5511574250122067,
+        0.6588089739962015
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "strict-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 27\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.748659973993199,
+        0.7548094800149556
+      ],
+      "stdout_raw_sha256": "b47ec95d710a81a9346b9803c9321fd8e01230fd6b05d4360c22c9c9fd4b3999",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "-o",
+        "<work>/matrix/positive-0/upstream.c"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.617000519996509
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "75ad0d538f46b511703a727b60ff18314d18cdc19f0cc3a7d07af1bddc389bab"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "<work>/matrix/positive-0/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-0/upstream.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.510617109015584
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "522c97fb810e320a95d5eff641edefb9886a188600e4dc7496e9610ecdc6aa22"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "-o",
+        "<work>/matrix/positive-0/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.5808065170131158
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "05cc556019a172faa8c0c18c43a5309e7210552a39b5dbf1b578db6b2dee08c3"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-generate-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/positive-0/port.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-0/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184750,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        1.00107523999759
+      ],
+      "stdout_raw_sha256": "2d799e6d0399483db82eb7d2aa88a1279d00e8c5a393d4a9253b200b17746073",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e774f8ad6a9c144367598f74e137a4b41e3f7c0763bc6c315948ed4a328e1c76",
+      "before_artifact_sha256": "e774f8ad6a9c144367598f74e137a4b41e3f7c0763bc6c315948ed4a328e1c76",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<work>/matrix/positive-0/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-0/port.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        1.115355873014778
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "210e3d2695192656fef091a19b813929582ffb65dbdcc907cf48607d740613c5"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-generate-js",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/no_eta_conversion.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/positive-0/port.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-0/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52320,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.7489582049893215
+      ],
+      "stdout_raw_sha256": "9376cc5fe3946ff14258e8423b4add4efdf188fee8289034cbda416119c4f9e3",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "a362477748faff183f07f6b150061c640c27a0650f2f5903f38f4b7dd578b50f",
+      "before_artifact_sha256": "a362477748faff183f07f6b150061c640c27a0650f2f5903f38f4b7dd578b50f",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<work>/matrix/positive-0/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.0036449510080274194,
+        0.0009654680034145713
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-0/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.043668164988048375,
+        0.03585638900403865
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-C-O3",
+      "command": [
+        "<work>/matrix/positive-0/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.0053076359909027815,
+        0.0030474299855995923
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "source_sha256": "58749594ae70b44f23c4589435a8c742ba39dc376c416fe592f0d926bebec69e",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-0/port.js"
+      ],
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.05958411199389957,
+        0.08372339801280759
+      ],
+      "stdout_raw_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-pure-normalization",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5904029819939751,
+        0.9881852260150481
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-pure-normalization",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3636382699769456,
+        0.5103028739977162
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "<work>/matrix/positive-1/phase-1.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.36535929297679104,
+        0.40795113099738955
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.33582702701096423,
+        0.4704592899943236
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5636213410180062,
+        0.3834986339788884
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "strict-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6856716029869858,
+        0.44832312798826024
+      ],
+      "stdout_raw_sha256": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "-o",
+        "<work>/matrix/positive-1/upstream.c"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.5416906530153938
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "1dfe598568078d27f839b3090c4bf1aba7e4eb640b0f2776a0e2ecf70ac57cc3"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "<work>/matrix/positive-1/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-1/upstream.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.5121802249923348
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "364baf3b642c854dbe396ac3ab12d2551cde66e953ce5070546e55d0d5e0c60d"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "-o",
+        "<work>/matrix/positive-1/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.5264002069889102
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "41fa7238e26cfdcc88e1d9de21e55e1c667af781b1623bfe3624e71e30515a78"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-generate-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/positive-1/port.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-1/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186395,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.9123773160099518
+      ],
+      "stdout_raw_sha256": "5e591e3255944ff4730250c82195330e694c6932f861085968c734fc9e6dbba0",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "d3541626a109877b7c41c38fcbc478fa19809712c9f85dc5edcc528f964b42bb",
+      "before_artifact_sha256": "d3541626a109877b7c41c38fcbc478fa19809712c9f85dc5edcc528f964b42bb",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<work>/matrix/positive-1/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-1/port.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.7663222969858907
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "9aba43f54cf3dc24d97d72c62fab11320a49650b0d6212ff648a254573ff889d"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-generate-js",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/closed_application.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/positive-1/port.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-1/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53088,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.9876240729936399
+      ],
+      "stdout_raw_sha256": "d44b1af5aa824a10a116f14f15e0356181d3ac71c0e74498d85e01937b4edae5",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "56ea8726e4e9d8801fe029d98327e09fcdef44a36718821c5637b1f9fa515c84",
+      "before_artifact_sha256": "56ea8726e4e9d8801fe029d98327e09fcdef44a36718821c5637b1f9fa515c84",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<work>/matrix/positive-1/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.0011603989987634122,
+        0.002973248978378251
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-1/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.05424156499793753,
+        0.07209711102768779
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-C-O3",
+      "command": [
+        "<work>/matrix/positive-1/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.002616237004986033,
+        0.007050052023259923
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "source_sha256": "08fdf05401b2c2ff2b6791747a120f5d2e72447bb1e8c4bd8c2631e88805111f",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-1/port.js"
+      ],
+      "exit": 0,
+      "stdout": "12n\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.06692166198627092,
+        0.06940383001347072
+      ],
+      "stdout_raw_sha256": "1656e1775b25ef1432e071833c62e230331c2a8bad1f31aca32de1e7132a78bf",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-pure-normalization",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.923795495997183,
+        0.9568908519868273
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-pure-normalization",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6355285510071553,
+        0.39475163602037355
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "<work>/matrix/positive-2/phase-1.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.45530559300095774,
+        0.3660379770153668
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3107547510007862,
+        0.3633565829950385
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5702383600000758,
+        0.6029077309940476
+      ],
+      "stdout_raw_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "strict-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5170466180134099,
+        0.7192351460107602
+      ],
+      "stdout_raw_sha256": "52736bd8762ad7d189b98a27dffa952d6dd0fb9b839cc40080a7815dc2acaebc",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "-o",
+        "<work>/matrix/positive-2/upstream.c"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.4420109029742889
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "2e7f7af6a149b064819924687d24b08a335730ab9e0e25b56a848cc2fdaaab25"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "<work>/matrix/positive-2/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-2/upstream.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.4844788459886331
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "6ff1d0b352fdc1002b949be55a91c1c247ff76a5ecbc702a08b67628a280241d"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "-o",
+        "<work>/matrix/positive-2/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.4094377429864835
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "702e46cc959a553593e564796607116a028bdddf6533cbbcf0d103bce892acdf"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-generate-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/positive-2/port.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-2/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184678,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        1.1487710429937579
+      ],
+      "stdout_raw_sha256": "bc3c40a04dd82d6c284bf3b546b43a3e084a5370a25cf4ddd76d28312fac66a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "7c72d60899b597b91a752e7898eaf634ab267e8c5c23779682574eff547949c8",
+      "before_artifact_sha256": "7c72d60899b597b91a752e7898eaf634ab267e8c5c23779682574eff547949c8",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-build-O3",
+      "command": [
+        "<cc>",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<work>/matrix/positive-2/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<work>/matrix/positive-2/port.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        1.1224656779959332
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "37b8feb6104b7ae034c53c3ff621290422f17f883ca405f4292143377288e2a0"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-generate-js",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/positive/function_refl.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/positive-2/port.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<work>/matrix/positive-2/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52325,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 1,
+      "seconds": [
+        0.914526486012619
+      ],
+      "stdout_raw_sha256": "3d1dd08333846c3983da224cf65836c32a913d58b70e9058a538acb340b3b747",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "29d56b50d7fad49fceba5325a00db79a1ac2f83a9adf706ec82278b1fe9d8bb0",
+      "before_artifact_sha256": "29d56b50d7fad49fceba5325a00db79a1ac2f83a9adf706ec82278b1fe9d8bb0",
+      "byte_identical_to_baseline": true
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<work>/matrix/positive-2/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.0013333600072655827,
+        0.005503347987541929
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-2/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.06750378999277018,
+        0.08463386597577482
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-C-O3",
+      "command": [
+        "<work>/matrix/positive-2/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.001995603000978008,
+        0.00436531298328191
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "source_sha256": "bccdabed87a874c4afd2c618c7b6622f2b646e9ea58e4399530e4db9beae1550",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<work>/matrix/positive-2/port.js"
+      ],
+      "exit": 0,
+      "stdout": "{==}\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.07448960200417787,
+        0.05597683001542464
+      ],
+      "stdout_raw_sha256": "07d27b4ac87f12a951524b9d32a72a950d2669603a656ead0c7a87165dc71c70",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "<work>/matrix/negative-0/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2899767959897872,
+        0.1894818739965558
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "-o",
+        "<work>/matrix/negative-0/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2739056420105044,
+        0.19676965899998322
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "-o",
+        "<work>/matrix/negative-0/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.22444736698525958,
+        0.19003881799289957
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.016529061016626656,
+        0.015996518020983785
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.025796436006203294,
+        0.03641222801525146
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.011950500978855416,
+        0.006924023007741198
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-0/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.008742783014895394,
+        0.00726125601795502
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-0/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.010860968002816662,
+        0.005402217007940635
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-0/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {(x => add(x, Z{})) == (x => x) : @_:N -> N}\n- observed : non-inferrable term 'x => add_zero(x)'\nLocation: add_zero_eta\n35 | \n36>| def add_zero_eta(): x => add_zero(x)\n37 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.022494415985420346,
+        0.004599651991156861
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a3cf693f244b36184955e9623356b41e9e3053f2199e1814dbed01759bf9e63f"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.004778798000188544,
+        0.0026908779982477427
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "source_sha256": "1461e5df9f539038e576be793c8be9847e2ed7010e76a106931a95a19553b068",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.008948239003075287,
+        0.007462685985956341
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "<work>/matrix/negative-1/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.36276176301180385,
+        0.31865955199464224
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "-o",
+        "<work>/matrix/negative-1/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.43683536900789477,
+        0.37300944901653565
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "-o",
+        "<work>/matrix/negative-1/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.29180137399816886,
+        0.399100744019961
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.47241849298006855,
+        0.29808635800145566
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4763497090025339,
+        0.3169687229965348
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.41266114299651235,
+        0.5231173440115526
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-1/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.40221822800231166,
+        0.45217413001228124
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-1/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.42887226000311784,
+        0.39508925800328143
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-1/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nContext:\n- k0 : @_:Unit -> @_:U32 -> U32\nLocation: main\n14 |   k0 = {(d => x => x) : Unit -> U32 -> U32}\n15>|   k = k0(Unit{})\n16 |   P12{k, k}\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.40593569597695023,
+        0.5498210809892043
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6e02d29ccc9e0ca895da72f2f719828af5979859528ded89b9e244ec8abc9c9d"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.1735865370137617,
+        0.2652167860069312
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "source_sha256": "85c092f9bda4f23c91978fc6529d0f5cf27d41b25d29ba45e683909c2956af3d",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/check/lambda_single_use.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2818402670091018,
+        0.18791765000787564
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "<work>/matrix/negative-2/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2922376450151205,
+        0.36948146400391124
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "-o",
+        "<work>/matrix/negative-2/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4011270819755737,
+        0.3655483850161545
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "-o",
+        "<work>/matrix/negative-2/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4046489839965943,
+        0.3718948900059331
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5381307109782938,
+        0.7438748800195754
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.838772187998984,
+        0.41924733799532987
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6010361039952841,
+        0.567884607007727
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-2/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4173704760032706,
+        0.7267553139827214
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-2/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7464398650045041,
+        0.8006781709846109
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-2/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> Nat: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5403436239867005,
+        0.7102486130024772
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7fc2e65e20cb35a7a575dcbb00bb7208e3bf3d2323e76d373fd8f9fd55f59ec0"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.15284383902326226,
+        0.24364036798942834
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "source_sha256": "2a69d96c9982f49c367fd6289597f18d25cf4a827697b76b87f47fcd5d299394",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/scalar.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.19716952598537318,
+        0.24924153697793372
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "<work>/matrix/negative-3/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3228510949993506,
+        0.3632734130078461
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "-o",
+        "<work>/matrix/negative-3/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.43771126499632373,
+        0.4328255289874505
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "-o",
+        "<work>/matrix/negative-3/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.34348957901238464,
+        0.3683636900095735
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.31541741199907847,
+        0.3845652820018586
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.48420646699378267,
+        0.45684518801863305
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6085478019958828,
+        0.35815772498608567
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-3/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5935424499912187,
+        0.465850117005175
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-3/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5539783590065781,
+        0.49046538601396605
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-3/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {0n == 0n : Nat}\n- observed : non-inferrable term 'x => x'\nLocation: main\n2 | \n3>| def main() -> {0n == 0n : Nat}: x => x\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5177834650094155,
+        0.6303973540198058
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "30a18ca680f02304a712d34f765839692f2ee0ee0d790e5031896580135b1000"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2674824009882286,
+        0.154277720983373
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/equation.bend",
+      "source_sha256": "123b596b1e05c010be717061dc33c3fbbbdcaa554b07e8ecd3fa77e3d2df5f76",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/equation.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.18837219098350033,
+        0.19348530899151228
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "<work>/matrix/negative-4/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.35063687001820654,
+        0.3462948679807596
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "-o",
+        "<work>/matrix/negative-4/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.29197496999404393,
+        0.4878449040115811
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "-o",
+        "<work>/matrix/negative-4/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.40997712101670913,
+        0.40024924199678935
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6268018090049736,
+        0.36670905799837783
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.33738957400782965,
+        0.5130372359999456
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8191783110087272,
+        0.4271033040131442
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-4/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.49916618000133894,
+        0.5779073899902869
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-4/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.578964462998556,
+        0.4950036220252514
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-4/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : {n == n : Nat}\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: bad\n2 | \n3>| def bad(n: Nat) -> {n == n : Nat}: x => n\n4 | def main() -> {1n == 1n : Nat}: bad(1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4052501849946566,
+        0.47336729199741967
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6576b187c15f263f1d10c89c75afd3166445355a97473a6b1541de28ac50dd21"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.28496005601482466,
+        0.18569811500492506
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/context.bend",
+      "source_sha256": "0d4fae843c983021fa8aaee2da10a49de643a9603854a33c99f804a01ec8a958",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/context.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.27117327001178637,
+        0.2558923600008711
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "<work>/matrix/negative-5/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.416617843991844,
+        0.3894867959897965
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "-o",
+        "<work>/matrix/negative-5/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.37218665701220743,
+        0.4927815289993305
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "-o",
+        "<work>/matrix/negative-5/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.31309358900762163,
+        0.4179895090055652
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4424595189921092,
+        0.7701171310036443
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5127486959972885,
+        0.7860691649839282
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3952249260037206,
+        0.967645683005685
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-5/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.48195520500303246,
+        0.7206385570170823
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-5/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4702417950029485,
+        0.7013449119986035
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-5/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => p'\nContext:\n- p : Nat\nLocation: bad\n5 |     case 0n: 0n\n6>|     case 1n+p: x => p\n7 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3817171450064052,
+        0.6783881809969898
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "71f7aeed31dd0c5b563ef43cd07b747f8694cd67adc2d6cc42f980c96ba59cde"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.19714750998537056,
+        0.15580852099810727
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "c41b967713e5420166f98fc41289ff2bbe4406527c5bb326a6306f8d02fdcdc4",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/nested.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.19370638599502854,
+        0.39004226398537867
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "<work>/matrix/negative-6/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.38150790098006837,
+        0.5427110830205493
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "-o",
+        "<work>/matrix/negative-6/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5882625009980984,
+        0.8435052410059143
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "-o",
+        "<work>/matrix/negative-6/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6101225790043827,
+        0.7791127179807518
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6120058890082873,
+        1.2995973810029682
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.2638652099994943,
+        0.7566131119965576
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.3412883760174736,
+        1.3034621530096047
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-6/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8294487759994809,
+        0.91094817101839
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-6/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8519996019895189,
+        0.5415878620115109
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-6/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => 1n'\nContext:\n- n : Nat\nLocation: bad~0\n2 | \n3>| def bad(~n: Nat) -> Nat: x => n\n4 | def main() -> Nat: bad(~1n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.3907554280012846,
+        0.6936731210153084
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b3a0956155d287b5aa990bbbc9c2ff0e0256e1aecd2dfc6a41ca2769c16c96c4"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.45859915399341844,
+        0.4417416710057296
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/template.bend",
+      "source_sha256": "c829e41ec1e3436902d5a33bad5cfcaef48bd314a378420e4117db8b53381ba3",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/template.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4572654950025026,
+        0.5054142019944265
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "<work>/matrix/negative-7/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.49076141201658174,
+        0.4092347119876649
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "-o",
+        "<work>/matrix/negative-7/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.561888956988696,
+        0.5076777279900853
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "-o",
+        "<work>/matrix/negative-7/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.42635770299239084,
+        0.5653480250039138
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7464184159762226,
+        0.534472771018045
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.651387476013042,
+        0.48915064899483696
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.2504050389979966,
+        1.1189771210192703
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-7/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8626766020024661,
+        0.7560190329968464
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-7/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.0389853499946184,
+        0.9336930440040305
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-7/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Nat: x => x\n4 | def main() -> Nat: bad(2n)\n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8112230180122424,
+        1.0385956610261928
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d75a21d6f0ed7b25784ad3af961ebd0345fa17efffbc46a63916609ddc66f92f"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3728040400019381,
+        0.3259994810214266
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "source_sha256": "d77731e014e939405a2a77c849f870421e61b726f56c516b622027ca1db3eb30",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/shadow.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3859761130006518,
+        0.319571553991409
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "<work>/matrix/negative-8/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5746642260055523,
+        0.5144695530179888
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "-o",
+        "<work>/matrix/negative-8/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6260209580068476,
+        0.5762353530153632
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "-o",
+        "<work>/matrix/negative-8/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5219173980003688,
+        0.5112230170052499
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7219444430083968,
+        0.5793429760087747
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7018474910000805,
+        0.6632827680150513
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.1104115959897172,
+        1.1036618779762648
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-8/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.0724757020070683,
+        0.8354256640013773
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-8/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.2456862080143765,
+        0.8803022610081825
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-8/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => n'\nContext:\n- n : Nat\nLocation: ../imports/defs.bad\n2 | \n3>| def bad(n: Nat) -> Nat: x => n\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7510294489911757,
+        1.0325742480054032
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9cc57b1f5a566d08334c4fe7ca506f3805c7f5d04038fa49152d8ff21d6bd944"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.39258146201609634,
+        0.37186704800114967
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "066f607085a62044ad2d269fa74f93e187e27a78f60f4d08646301e6f4954f74",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/imported.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.42806886800099164,
+        0.379635588004021
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "<work>/matrix/negative-9/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.4493136680102907,
+        0.41131253499770537
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "-o",
+        "<work>/matrix/negative-9/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6217972690064926,
+        0.7111892859975342
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "-o",
+        "<work>/matrix/negative-9/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5632126609853003,
+        0.5733485269884113
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8855341860034969,
+        1.1334223089797888
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7972210959997028,
+        0.829639756004326
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7582111030060332,
+        0.8967834420036525
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-9/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.7035494249721523,
+        0.6640398640010972
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-9/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8843040519859642,
+        0.6737704810220748
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-9/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 12n\n- observed : 13n\nLocation: main\n2 | \n3>| def main() -> {{Nat.add(11n) : Nat -> Nat}(1n) == 13n : Nat}: {==}\n4 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8689939109899569,
+        1.725365021993639
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ded92e91f80768ada44e6002d6092caacc5b97570136c801e2e7d7c083eeaf4b"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.3196232669870369,
+        0.28524672499042936
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "source_sha256": "c8cec6657f8aed2cc07ccbcd86d13721963a26aa6f525f6c278184088ed0a464",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.442128902010154,
+        0.3673613639839459
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "<work>/matrix/negative-10/phase-1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.48940855299588293,
+        0.33640868999646045
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "-o",
+        "<work>/matrix/negative-10/unwritten.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5368913169950247,
+        0.44029444802436046
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<reference>/bend2/main.ts",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "-o",
+        "<work>/matrix/negative-10/unwritten.js"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5070095949922688,
+        0.5586500719946343
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-check",
+      "command": [
+        "<work>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.8874919790250715,
+        0.7225491509889252
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-eval",
+      "command": [
+        "<work>/teamy-bend",
+        "eval",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6484686990152113,
+        0.5367141040042043
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-run",
+      "command": [
+        "<work>/teamy-bend",
+        "run",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.5516244680038653,
+        0.9662428629817441
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-c",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<work>/matrix/negative-10/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        1.1816809329902753,
+        0.6319543959980365
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-javascript",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<work>/matrix/negative-10/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.6786001400032546,
+        0.9435208660142962
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "port-native",
+      "command": [
+        "<work>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "<work>/matrix/negative-10/unwritten"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : non-inferrable term 'x => x'\nLocation: main\n3 | def N() -> Data: Nat\n4>| def main() -> N: x => x\n5 | \n",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.93130315101007,
+        0.9175654480059166
+      ],
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "75f8b018fd4629755e16b5ffc3263101a90249fb5aa7016711fc2c8f35de7436"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "strict-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.2844192530028522,
+        0.38862493200576864
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/alias.bend",
+      "source_sha256": "43e31f50cf8ad956e50b7a729e73a9091feb0ffe64f67191cb98f980147ff350",
+      "lane": "executable-phase",
+      "command": [
+        "<evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-function-proof-diagnostics/negative/alias.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "scope": "matching",
+      "observations": 2,
+      "seconds": [
+        0.30481267799041234,
+        0.3719790089817252
+      ],
+      "stdout_raw_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "phases": [
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "check/no_eta_conversion.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/closed_application.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "positive/function_refl.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "proof/no_funext_000.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "check/lambda_single_use.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/scalar.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/equation.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/equation.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/context.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/context.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/shadow.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/partial_false.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/alias.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "check",
+      "outcome": "language_rejection"
+    },
+    {
+      "case": "negative/alias.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "check",
+      "outcome": "language_rejection"
+    }
+  ]
+}

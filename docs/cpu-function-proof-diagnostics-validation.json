@@ -1,0 +1,439 @@
+{
+  "post_gate_changes": "Documentation and receipts only; no source/test/fixture change after the tested commit.",
+  "tested_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+  "source_tree": "6fb06154902bffaebf1de1d7ff9e6fb4c4055749",
+  "binary_sha256": "05f2155a4c3889943f3c3a2f417f861d152b0ef808edd15137f781347a8f6140",
+  "full_gate": {
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 11833200640,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1037.3738994140003,
+    "minimum_free": 11800735744,
+    "minimum_tmp_free": 3199594496
+  },
+  "counts": {
+    "passed": 1265,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 187
+  },
+  "controls": [
+    {
+      "name": "focused-stack-correction",
+      "precommit_working_tree": true,
+      "recorded_head": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+      "recorded_dirty": true,
+      "working_tree_became": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "kernel_core"
+      ],
+      "exit": 0,
+      "seconds": 4.2154376299877185,
+      "counts": {
+        "passed": 19,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 1
+      },
+      "log_sha256": "a6ccc1d0f3534a857d056a5d0ce83b881869345972a82e0ab0d312c00a370d2e"
+    },
+    {
+      "name": "focused-final-state",
+      "precommit_working_tree": true,
+      "recorded_head": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+      "recorded_dirty": true,
+      "working_tree_became": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "function_goal",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 4.822999226977117,
+      "counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 2
+      },
+      "log_sha256": "e60fe3b28f45a197298683aea1097c22020d05370b7621d791e7fb3d5a56cf8e"
+    },
+    {
+      "name": "targeted-clippy",
+      "precommit_working_tree": true,
+      "recorded_head": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+      "recorded_dirty": true,
+      "working_tree_became": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_function_proof_diagnostics",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 0,
+      "seconds": 3.1669896979874466,
+      "counts": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0,
+        "groups": 0
+      },
+      "log_sha256": "7e9576fe1b0842ad27dca81dfd2ac67ad27c68c5ee5a1b2bed5bcbcbfa2b6431"
+    }
+  ],
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "gate_log_sha256": "08e45b3c46fa7b5404dd93a89a8e750b35530bf0a4135730cfaff812b8f9a43c",
+  "matrix_raw_sha256": "e6137819cd15463d5c333253abf7725f13c5f581a8bc2dda12f38d2adc698bce",
+  "census_raw_sha256": "ed768303185ceeb7a9573a6e195f098e975f3891db0148eec88debcfcadb8e2e",
+  "phase_probe_sha256": "1c66fbefd9b5770c9dbd3b46bfc6facbb82335326b76e1332859fee82430d4c8",
+  "review_source_sha256": "f6ff1ef4fb57a0c49e8a5444833f008137aa1e5ff58b22819b05668b660d98b1",
+  "review_matrix_sha256": "99af8db85d8c9496e8aefc1aa7391ea9cc4ac82d14e776a25a3e6052d79077f3",
+  "review_census_sha256": "da855a160f37d3d5d4b2db65a93c0bed42dbebf0588d8ab60154e988fc8e67fb",
+  "whitespace_review": {
+    "full_diff_exit": 2,
+    "full_diff_stdout": "tests/fixtures/cpu-function-proof-diagnostics/negative/alias.stderr:7: trailing whitespace.\n+5 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/context.stderr:7: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/equation.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/equation.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/imported.stderr:7: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/imported.stderr:9: trailing whitespace.\n+4 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/partial_false.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/scalar.stderr:5: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/scalar.stderr:7: trailing whitespace.\n+4 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/shadow.stderr:7: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/negative/template.stderr:7: trailing whitespace.\n+2 | \ntests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.bend:47: trailing whitespace.\n+#|35 | \ntests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.stderr:5: trailing whitespace.\n+35 | \ntests/fixtures/cpu-function-proof-diagnostics/proof/no_funext_000.stderr:7: trailing whitespace.\n+37 | \n",
+    "code_diff_exit": 0,
+    "reason": "Only unchanged upstream source and exact stderr source-window spaces may be reported; preserve those bytes."
+  },
+  "census_command": [
+    "python3",
+    "scripts/checking-census/run.py",
+    "--reference",
+    "<reference>",
+    "--binary",
+    "<port>",
+    "--phase-probe",
+    "<evidence>/phase-probe",
+    "--output",
+    "<evidence>/census",
+    "--build-receipt",
+    "<evidence>/census-build.json"
+  ],
+  "limits": "No guard, budget, cancellation, dependency, toolchain or reference changes. Existing cache links retained; no further cache reclamation required.",
+  "unrun": "Invalid-source execution, native IO in this family, supplementary all-target Clippy, external invoke audit, desktop/GPU and newer upstream remain unqualified. Pure run_main is normalization, not native IO. No mid-normalization cancellation claim.",
+  "independent_reviews": {
+    "review-source": {
+      "initial_review": {
+        "reviewer": "/root/review_imported_printer",
+        "base": "762ad51b5ccf3f801df172578b48f0cbfb8b3ade",
+        "read_only": true,
+        "findings": [],
+        "diff_sha256": "abc4134bc5ff12d69af331a1a632fe7c96df0d20f426f667e6aa8a8a5991196d",
+        "conclusion": "Pinned Lam/non-All rejection and original mismatch retained; metadata uses original ty/value/outer context, remaining-budget clone fallback. Three unchanged originals,11 public-error goldens,9 diagnostic gains and2 unchanged refusals verified; no funext, scope or runtime changes.",
+        "test_correction": "Synthetic fresh seeds verified3,3,130 above authored maxima2,2,129. Initial harness collided empty-engine fresh1 with alias1. Intermediate seed2 passed but did not fully satisfy invariant; final broad tests use corrected seeds.",
+        "api_caveat": "New sourced CLI failures use existing Ok(CliOutput) with exit_code1 instead of prior host Err; plain kernel message/Display/equality preserved; Debug can change; external invoke audit remains outstanding."
+      },
+      "stack_correction_review": {
+        "reviewer": "/root/review_sharing",
+        "read_only": true,
+        "base": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+        "findings": [],
+        "diff_sha256": "dfb1f2a75f0c0e980439d470023c74996aaae6a82c6cf903d0bfe389939fc773",
+        "conclusion": "Only Lam/non-All failure caller outlined; identical rejection and mismatch/diagnostic order, original identities, bounded clone/fallback. No step/enter/reset/fresh/alias changes; inline(never) retains intentional stack separation.",
+        "independent_prologue_measurement": {
+          "baseline_bytes": 11416,
+          "initial_candidate_bytes": 11848
+        },
+        "scope": "Source/disassembly review only; final tests require separate receipts."
+      },
+      "scope": "Initial diagnostic implementation and exact outlining correction independently reviewed. Corrected focused state3 and kernel_core19 tests pass without any host stack or Bend limit change. Full gate separately required."
+    },
+    "review-matrix": {
+      "reviewer": "/root/review_imported_printer",
+      "read_only": true,
+      "tested_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "findings": [],
+      "command_count": 320,
+      "repeated_pairs": 151,
+      "actual_executions": 24,
+      "normalization_observations": 12,
+      "exact_negative_observations": 198,
+      "negative_phase_probes": 44,
+      "artifact_byte_matches": 6,
+      "matrix_raw_sha256": "e6137819cd15463d5c333253abf7725f13c5f581a8bc2dda12f38d2adc698bce",
+      "public_results_sha256": "702e7298796bad539c191f3e48bc0b9a63557c92a2e05560570ca8bb0a42aad1",
+      "conclusion": "All320 observations, pairs, artifacts, source/binary/build/archive and redaction independently verified. Initial-to-final statuses, stderr, phases and artifact hashes unchanged. Six port-generation stdout records differ only in their output-path fields; all other stdout matches. No blanket raw-stream identity claim. Final CLI prologue11416 bytes verified from stored receipt. No gate/census attestation."
+    },
+    "review-census": {
+      "reviewer": "/root/review_sharing",
+      "read_only": true,
+      "tested_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "findings": [],
+      "fixture_count": 1302,
+      "historical_IO_exact_renewals": 385,
+      "counts": {
+        "both_accept": 366,
+        "exact_rejection": 382,
+        "acceptance_disagreement": 494,
+        "different_rejection": 54,
+        "oracle_or_infrastructure_failure": 6
+      },
+      "residual_total": 163,
+      "residual_acceptance_disagreements": 109,
+      "residual_different_rejections": 54,
+      "raw_observations_sha256": "ed768303185ceeb7a9573a6e195f098e975f3891db0148eec88debcfcadb8e2e",
+      "reconciliation_sha256": "38752b44fef396d1c01aecf5186b8c58ee8c4eb3f7fd8401e42f02d160963108",
+      "current_csv_sha256": "68992318c6b6b6e6bdfe61cba2d1c2b003468f16606e27e38fc8d86aaf42a560",
+      "conclusion": "All classifications, source/phase/CSV rows and artifact identities verified. Versus9d13 only no_funext portstderr changed. Versusinitiale0aceb only upstreamborrow_fork_hold reverted to stackfailure; portresults unchanged. All385historicalIOcases exact. Oracle variation is not port improvement; fullgate pending."
+    }
+  },
+  "earlier_attempts": [
+    {
+      "name": "focused-state",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "function_goal",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 4.870701943000313,
+      "counts": {
+        "passed": 1,
+        "failed": 1,
+        "ignored": 0
+      },
+      "note": "Invalid synthetic state: empty-engine fresh1 collided with manually inserted alias1. One test failed; production unchanged.",
+      "log_sha256": "b4f52e1db38ddd3ae6c68f7f836ef6b422af47c6f8d20d6faace48e9cf9f4a71",
+      "compact_failure": {
+        "reproducer": "Run the function_goal state fixture with its final fresh=3 assignment omitted; the empty engine fresh=1 collides with synthetic alias1.",
+        "actual": "non-inferrable term 'x => Type'",
+        "expected": "non-inferrable term 'x => x'",
+        "classification": "Invalid synthetic test state; not a production semantic change."
+      }
+    },
+    {
+      "name": "focused-state-corrected",
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "function_goal",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 4.923672075994546,
+      "counts": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      "note": "Intermediate seed2 run passed3 tests but still reused authored binder2; independent review required strict max+1 seeds3,3,130 before final validation.",
+      "log_sha256": "d110e81707c5b39a05b90b7309b96a96516c0084d60365258396f00958f3bbed"
+    }
+  ],
+  "initial_candidate_gate": {
+    "tested_source": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+    "exit": 1,
+    "seconds": 925.7682187719911,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "completed_groups": 139,
+    "completed_group_counts": {
+      "passed": 932,
+      "failed": 0,
+      "ignored": 48
+    },
+    "aborted_targets": 1,
+    "aborted_test": "kernel_core::nested_application_checking_preserves_types_and_quantity_checks",
+    "failure": "Host stack overflow / SIGABRT; kernel_core group produced no final count; subsequent test targets did not run.",
+    "log_sha256": "0a4579f465eed1b63b6e04f5b96709b2d8b01f0bfb66828dbe637db56e620c7e",
+    "direct_reproducer": {
+      "command": [
+        "timeout",
+        "30s",
+        "<initial-kernel-core-test-binary>",
+        "--exact",
+        "nested_application_checking_preserves_types_and_quantity_checks",
+        "--nocapture"
+      ],
+      "exit": -6,
+      "seconds": 0.0035874250170309097,
+      "stderr": "thread nested_application_checking_preserves_types_and_quantity_checks has overflowed its stack; fatal runtime error: stack overflow, aborting",
+      "log_sha256": "16f9a04c7105843c347543724046268432b0358c489703fe5ba164696487ea71"
+    }
+  },
+  "stack_frame_correction": {
+    "initial_source": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+    "reviewed_correction_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+    "host_profile": "Frozen Rust1.96 unoptimized debug/test profile with debug0 and incremental0",
+    "before": [
+      {
+        "label": "baseline",
+        "binary_sha256": "5247fbe78a948d85ca4cc6f9b8187799067ab1e4a0797324ad342522b52da18f",
+        "symbol": "_ZN10teamy_bend6kernel5check6Engine11check_inner17hbddb69723ec55c7aE",
+        "prologue": "\n<binary>:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000546050 <teamy_bend::kernel::check::Engine::check_inner>:\n  546050:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  546057:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  54605e:\t00 \n  54605f:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  546066:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  54606d:\t00 \n  54606e:\t48 81 ec 98 0c 00 00 \tsub    $0xc98,%rsp\n  546075:\t4c 89 8c 24 38 03 00 \tmov    %r9,0x338(%rsp)\n  54607c:\t00 \n  54607d:\t48 89 8c 24 50 03 00 \tmov    %rcx,0x350(%rsp)\n  546084:\t00 \n  546085:\t48 89 94 24 40 03 00 \tmov    %rdx,0x340(%rsp)\n  54608c:\t00 \n  54608d:\t48 89 b4 24 48 03 00 \tmov    %rsi,0x348(%rsp)\n  546094:\t00 \n  546095:\t48 89 f8             \tmov    %rdi,%rax\n  546098:\t48 8b bc 24 50 03 00 \tmov    0x350(%rsp),%rdi\n  54609f:\t00 \n  5460a0:\t48 89 84 24 58 03 00 \tmov    %rax,0x358(%rsp)\n  5460a7:\t00 \n  5460a8:\t44 88 c1             \tmov    %r8b,%cl\n  5460ab:\t88 8c 24 67 03 00 00 \tmov    %cl,0x367(%rsp)\n  5460b2:\t48                   \trex.W\n  5460b3:\t89                   \t.byte 0x89\n",
+        "prologue_stack_reservation": 11416
+      },
+      {
+        "label": "candidate",
+        "binary_sha256": "92fbc487efff47a40f1b4d017d1f87e077cba72f5fa75c49b04e9471e1088060",
+        "symbol": "_ZN10teamy_bend6kernel5check6Engine11check_inner17hbddb69723ec55c7aE",
+        "prologue": "\n<binary>:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000008abb00 <teamy_bend::kernel::check::Engine::check_inner>:\n  8abb00:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  8abb07:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  8abb0e:\t00 \n  8abb0f:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  8abb16:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  8abb1d:\t00 \n  8abb1e:\t48 81 ec 48 0e 00 00 \tsub    $0xe48,%rsp\n  8abb25:\t4c 89 8c 24 48 03 00 \tmov    %r9,0x348(%rsp)\n  8abb2c:\t00 \n  8abb2d:\t48 89 8c 24 60 03 00 \tmov    %rcx,0x360(%rsp)\n  8abb34:\t00 \n  8abb35:\t48 89 94 24 50 03 00 \tmov    %rdx,0x350(%rsp)\n  8abb3c:\t00 \n  8abb3d:\t48 89 b4 24 58 03 00 \tmov    %rsi,0x358(%rsp)\n  8abb44:\t00 \n  8abb45:\t48 89 f8             \tmov    %rdi,%rax\n  8abb48:\t48 8b bc 24 60 03 00 \tmov    0x360(%rsp),%rdi\n  8abb4f:\t00 \n  8abb50:\t48 89 84 24 68 03 00 \tmov    %rax,0x368(%rsp)\n  8abb57:\t00 \n  8abb58:\t44 88 c1             \tmov    %r8b,%cl\n  8abb5b:\t88 8c 24 77 03 00 00 \tmov    %cl,0x377(%rsp)\n  8abb62:\t48                   \trex.W\n  8abb63:\t89                   \t.byte 0x89\n",
+        "prologue_stack_reservation": 11848
+      },
+      {
+        "label": "failed_test",
+        "binary_sha256": "4876ef61bfd4968f3c27c2eaa6b77a33b516fae03ce5c6d9468e7673aae68455",
+        "symbol": "_ZN10teamy_bend6kernel5check6Engine11check_inner17hbddb69723ec55c7aE",
+        "prologue": "\n<binary>:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000001e9590 <teamy_bend::kernel::check::Engine::check_inner>:\n  1e9590:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  1e9597:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  1e959e:\t00 \n  1e959f:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  1e95a6:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  1e95ad:\t00 \n  1e95ae:\t48 81 ec 48 0e 00 00 \tsub    $0xe48,%rsp\n  1e95b5:\t4c 89 8c 24 48 03 00 \tmov    %r9,0x348(%rsp)\n  1e95bc:\t00 \n  1e95bd:\t48 89 8c 24 60 03 00 \tmov    %rcx,0x360(%rsp)\n  1e95c4:\t00 \n  1e95c5:\t48 89 94 24 50 03 00 \tmov    %rdx,0x350(%rsp)\n  1e95cc:\t00 \n  1e95cd:\t48 89 b4 24 58 03 00 \tmov    %rsi,0x358(%rsp)\n  1e95d4:\t00 \n  1e95d5:\t48 89 f8             \tmov    %rdi,%rax\n  1e95d8:\t48 8b bc 24 60 03 00 \tmov    0x360(%rsp),%rdi\n  1e95df:\t00 \n  1e95e0:\t48 89 84 24 68 03 00 \tmov    %rax,0x368(%rsp)\n  1e95e7:\t00 \n  1e95e8:\t44 88 c1             \tmov    %r8b,%cl\n  1e95eb:\t88 8c 24 77 03 00 00 \tmov    %cl,0x377(%rsp)\n  1e95f2:\t48                   \trex.W\n  1e95f3:\t89                   \t.byte 0x89\n",
+        "prologue_stack_reservation": 11848
+      }
+    ],
+    "after": {
+      "binary_sha256": "00909863d5bb06735b0c560b435417d58868dae89ce28c203114dd7d594ed9e2",
+      "symbol": "_ZN10teamy_bend6kernel5check6Engine11check_inner17hbddb69723ec55c7aE",
+      "prologue": "\n<binary>:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000001be4a0 <teamy_bend::kernel::check::Engine::check_inner>:\n  1be4a0:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  1be4a7:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  1be4ae:\t00 \n  1be4af:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  1be4b6:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  1be4bd:\t00 \n  1be4be:\t48 81 ec 98 0c 00 00 \tsub    $0xc98,%rsp\n  1be4c5:\t4c 89 8c 24 38 03 00 \tmov    %r9,0x338(%rsp)\n  1be4cc:\t00 \n  1be4cd:\t48 89 8c 24 50 03 00 \tmov    %rcx,0x350(%rsp)\n  1be4d4:\t00 \n  1be4d5:\t48 89 94 24 40 03 00 \tmov    %rdx,0x340(%rsp)\n  1be4dc:\t00 \n  1be4dd:\t48 89 b4 24 48 03 00 \tmov    %rsi,0x348(%rsp)\n  1be4e4:\t00 \n  1be4e5:\t48 89 f8             \tmov    %rdi,%rax\n  1be4e8:\t48 8b bc 24 50 03 00 \tmov    0x350(%rsp),%rdi\n  1be4ef:\t00 \n  1be4f0:\t48 89 84 24 58 03 00 \tmov    %rax,0x358(%rsp)\n  1be4f7:\t00 \n  1be4f8:\t44 88 c1             \tmov    %r8b,%cl\n  1be4fb:\t88 8c 24 67 03 00 00 \tmov    %cl,0x367(%rsp)\n  1be502:\t48                   \trex.W\n  1be503:\t89                   \t.byte 0x89\n",
+      "prologue_stack_reservation": 11416
+    },
+    "final_cli": {
+      "tested_source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+      "binary_sha256": "05f2155a4c3889943f3c3a2f417f861d152b0ef808edd15137f781347a8f6140",
+      "symbol": "_ZN10teamy_bend6kernel5check6Engine11check_inner17hbddb69723ec55c7aE",
+      "prologue": "\n<binary>:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000006ef690 <teamy_bend::kernel::check::Engine::check_inner>:\n  6ef690:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  6ef697:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  6ef69e:\t00 \n  6ef69f:\t48 81 ec 00 10 00 00 \tsub    $0x1000,%rsp\n  6ef6a6:\t48 c7 04 24 00 00 00 \tmovq   $0x0,(%rsp)\n  6ef6ad:\t00 \n  6ef6ae:\t48 81 ec 98 0c 00 00 \tsub    $0xc98,%rsp\n  6ef6b5:\t4c 89 8c 24 38 03 00 \tmov    %r9,0x338(%rsp)\n  6ef6bc:\t00 \n  6ef6bd:\t48 89 8c 24 50 03 00 \tmov    %rcx,0x350(%rsp)\n  6ef6c4:\t00 \n  6ef6c5:\t48 89 94 24 40 03 00 \tmov    %rdx,0x340(%rsp)\n  6ef6cc:\t00 \n  6ef6cd:\t48 89 b4 24 48 03 00 \tmov    %rsi,0x348(%rsp)\n  6ef6d4:\t00 \n  6ef6d5:\t48 89 f8             \tmov    %rdi,%rax\n  6ef6d8:\t48 8b bc 24 50 03 00 \tmov    0x350(%rsp),%rdi\n  6ef6df:\t00 \n  6ef6e0:\t48 89 84 24 58 03 00 \tmov    %rax,0x358(%rsp)\n  6ef6e7:\t00 \n  6ef6e8:\t44 88 c1             \tmov    %r8b,%cl\n  6ef6eb:\t88 8c 24 67 03 00 00 \tmov    %cl,0x367(%rsp)\n  6ef6f2:\t48                   \trex.W\n  6ef6f3:\t89                   \t.byte 0x89\n",
+      "prologue_stack_reservation": 11416
+    },
+    "conclusion": "Failure-only helper restores check_inner prologue allocation from11848 to baseline11416 bytes; no stack-size, Bend guard, work-budget or evaluation-order change."
+  },
+  "rejected_snapshot_attempt": {
+    "capture_accepted": false,
+    "reason": "Build target changed while first snapshot was compressed; identity assertion rejected capture before receipt creation.",
+    "working_sha256": "89bd19105d0e1ea560607ac2052aa5503ec824641450c9402be0493518235e9d",
+    "build_sha256_at_investigation": "05f2155a4c3889943f3c3a2f417f861d152b0ef808edd15137f781347a8f6140",
+    "archive_sha256": "a2c0b4315fd6970fad7e7f38ff7f0ee78d8a22e1d936a7111ba8d754e2def9e4",
+    "archive_matches_working": true
+  },
+  "initial_candidate_evidence": {
+    "source": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+    "matrix_raw_sha256": "c36fc7f1acf1210ba4536a1e826a97fb629ebbc39d690fdf50cf53ee5d40709c",
+    "census_raw_sha256": "0ea12de66fa669924490fc9a822d6ac217dde10244d4afcd8adacacfe7e30ca3",
+    "matrix_commands": 320,
+    "census_summary": {
+      "completed": true,
+      "full_parity": false,
+      "tested_source": "e0aceb2636fce3bf01bddfbad35b8254f20041e0",
+      "binary_sha256": "92fbc487efff47a40f1b4d017d1f87e077cba72f5fa75c49b04e9471e1088060",
+      "phase_probe_sha256": "77aff370dde8ad77ec796c7451f8a8f53e31aac02a90dff8c1b8e8d86936985b",
+      "build_receipt_sha256": "5b22fa540277ad3be6bd93fd7e386f0620fe3c4e2c8c711f2f1e70ef06013801",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "total": 1302,
+      "counts": {
+        "exact_rejection": 382,
+        "acceptance_disagreement": 495,
+        "both_accept": 366,
+        "oracle_or_infrastructure_failure": 5,
+        "different_rejection": 54
+      },
+      "missing_IO_candidates": 386,
+      "measured_differences": 549,
+      "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+    },
+    "note": "Initial matrix and census completed before the full-gate host-stack regression. Current receipts renew these at the corrected source; historical success does not qualify the rejected candidate.",
+    "oracle_variation": {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+      "initial_upstream": {
+        "phase": "accepted",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "presentation": "Machine-root paths replaced by placeholders; raw stream hashes preserve exact comparison identity."
+      },
+      "final_upstream": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "6f2b3274a4f9280b66ad0ba7f04f61de24ef910bb110588a1f7a006960fc2ba2",
+        "presentation": "Machine-root paths replaced by placeholders; raw stream hashes preserve exact comparison identity."
+      },
+      "initial_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/reg/borrow_fork_hold.bend:42:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c",
+        "presentation": "Machine-root paths replaced by placeholders; raw stream hashes preserve exact comparison identity."
+      },
+      "final_port": {
+        "phase": "load",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m<reference>/tests/reg/borrow_fork_hold.bend:42:41: Nat literals above 128 exceed the parser's resource limit\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c",
+        "presentation": "Machine-root paths replaced by placeholders; raw stream hashes preserve exact comparison identity."
+      },
+      "note": "Upstream accepted only in the intermediate run; port streams/status/phase stayed unchanged. Not a port improvement or waiver."
+    }
+  },
+  "coverage": {
+    "linked": 489,
+    "unlinked": 813,
+    "unlinked_categories": {
+      "checker_rejection": 279,
+      "interpretation_and_compiled_candidates": 520,
+      "checking_without_main": 1,
+      "interpretation_only": 13
+    }
+  }
+}
