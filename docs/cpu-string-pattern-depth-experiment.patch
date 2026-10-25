@@ -1,0 +1,304 @@
+diff --git a/src/syntax/surface.rs b/src/syntax/surface.rs
+index 67e8d5b..951764c 100644
+--- a/src/syntax/surface.rs
++++ b/src/syntax/surface.rs
+@@ -348,6 +348,7 @@ fn flatten_at(
+             display_fresh,
+             depth + 1,
+             origins,
++            None,
+         ),
+         Body::Local {
+             patterns,
+@@ -367,6 +368,7 @@ fn flatten_at(
+                     display_fresh,
+                     depth + 1,
+                     origins,
++                    None,
+                 );
+             }
+             let bindings = patterns
+@@ -427,6 +429,128 @@ fn flatten_at(
+     }
+ }
+ 
++// A completed proper field subtree can be retained as immutable output instead
++// of retaining its compiler rows while processing the next field. The marker is
++// identified only by Rc identity, never by its name or binder ID, and must be
++// removed before returning a parsed term. It consumes no fresh binder ID.
++struct FieldBoundary {
++    next_field: usize,
++    hole: TermRef,
++    next: Option<MatchState>,
++    deferred_error: Option<FlattenError>,
++}
++
++impl FieldBoundary {
++    fn new(next_field: usize) -> Self {
++        Self {
++            next_field,
++            hole: term(Term::Var { name: "_field_continuation".into(), id: usize::MAX }),
++            next: None,
++            deferred_error: None,
++        }
++    }
++}
++
++fn closed_pattern(pattern: &Pattern, depth: usize) -> bool {
++    if depth >= 64 { return false; }
++    match pattern {
++        Pattern::Variable(_) => false,
++        Pattern::Constructor(_, fields, _) => fields.iter().all(|field| closed_pattern(field, depth + 1)),
++    }
++}
++
++fn terminal_rows(rows: &[Row]) -> bool {
++    rows.iter().all(|row| {
++        matches!(row.body, Body::Reply(_))
++            && row.patterns.iter().all(|p| matches!(p, Pattern::Variable(_)))
++    })
++}
++
++fn fragment_eligible(rows: &[Row]) -> bool {
++    let mut selected = None;
++    for row in rows {
++        if row.patterns.iter().any(|p| matches!(p, Pattern::Constructor(..))) {
++            if selected.replace(row).is_some() { return false; }
++        } else if !matches!(row.body, Body::Reply(_)) {
++            return false;
++        }
++    }
++    selected.is_some_and(|row| {
++        matches!(row.patterns.first(), Some(Pattern::Constructor(_, fields, _)) if !fields.is_empty())
++            && closed_pattern(&row.patterns[0], 0)
++    })
++}
++
++#[expect(clippy::too_many_arguments, reason = "Fallbacks retain the match compiler's explicit traversal state")]
++fn flatten_fallback(
++    scrutinees: &[SurfaceTerm], rows: &[Row], vars: &[Variable],
++    fresh: &mut usize, display_fresh: &mut usize, depth: usize,
++    origins: Option<&TermOrigins>, boundary: Option<&mut FieldBoundary>,
++) -> Result<SurfaceTerm, FlattenError> {
++    let Some(boundary) = boundary else {
++        return flatten_match(scrutinees, rows, vars, fresh, display_fresh, depth, origins, None);
++    };
++    if !terminal_rows(rows) {
++        return Err("field fragment requires terminal fallback rows".into());
++    }
++    if boundary.deferred_error.is_some() {
++        return Ok(SurfaceTerm::new(term(Term::Efq), origins));
++    }
++    let before = (*fresh, *display_fresh);
++    let result = flatten_match(scrutinees, rows, vars, fresh, display_fresh, depth, origins, None);
++    debug_assert_eq!(before, (*fresh, *display_fresh));
++    match result {
++        Err(error) if boundary.next.is_some() => {
++            // The original traversal reports a successful arm's errors before
++            // its fallback's errors. Finish the suffix before returning this.
++            boundary.deferred_error = Some(error);
++            Ok(SurfaceTerm::new(term(Term::Efq), origins))
++        }
++        result => result,
++    }
++}
++
++fn graft_field(
++    prefix: SurfaceTerm, hole: &TermRef, mut suffix: SurfaceTerm,
++    origins: Option<&TermOrigins>,
++) -> Result<SurfaceTerm, FlattenError> {
++    // Only the successful-arm path contains the private marker. Other subtrees
++    // remain pointer-identical, including any shared macro references.
++    let mut path = Vec::new();
++    let mut cursor = &prefix.value;
++    while !Rc::ptr_eq(cursor, hole) {
++        path.push(Rc::clone(cursor));
++        cursor = match cursor.as_ref() {
++            Term::Mat { arm, .. } => arm,
++            Term::Lam { body, .. } => body,
++            _ => return Err("field fragment lost its continuation".into()),
++        };
++    }
++    for parent in path.into_iter().rev() {
++        match parent.as_ref() {
++            Term::Mat { constructor, fallback, .. } => {
++                let mut fallback_value = SurfaceTerm::new(Rc::clone(fallback), origins);
++                if let Some(origins) = origins {
++                    if let Some(source) = origins.child_source(&parent, 1, fallback) {
++                        fallback_value.origin = source;
++                    }
++                    fallback_value.explicit_source = origins.occurrence_source(&parent, 1);
++                }
++                suffix = SurfaceTerm::matched(
++                    constructor.clone(), suffix, fallback_value,
++                    origins.and_then(|o| o.match_site(&parent)),
++                    origins.and_then(|o| o.constructor_source(&parent)), origins,
++                );
++            }
++            Term::Lam { name, id, .. } => {
++                suffix = suffix.lambda(&Variable { name: name.clone(), id: *id }, origins);
++            }
++            _ => unreachable!("only matched-arm and binder parents were recorded"),
++        }
++    }
++    Ok(suffix)
++}
++
+ struct MatchState {
+     scrutinees: Vec<SurfaceTerm>,
+     rows: Vec<Row>,
+@@ -443,6 +567,7 @@ enum MatchStep {
+     },
+ }
+ 
++#[expect(clippy::too_many_arguments, reason = "The optional field boundary preserves the existing match compiler traversal")]
+ fn flatten_match(
+     scrutinees: &[SurfaceTerm],
+     rows: &[Row],
+@@ -451,12 +576,27 @@ fn flatten_match(
+     display_fresh: &mut usize,
+     depth: usize,
+     origins: Option<&TermOrigins>,
++    mut boundary: Option<&mut FieldBoundary>,
+ ) -> Result<SurfaceTerm, FlattenError> {
+     // A nullary constructor consumes a column without introducing field
+     // binders. Continue that arm iteratively: a fixed-width word has one Bool
+     // column per bit, which need not double its Rust recursion depth. Retain
+     // bounded pending work and compile fallbacks only after their arms, keeping
+     // the original term, fresh-name sequence and first-error ordering.
++    if let Some(stop) = boundary.as_deref_mut()
++        && matches!(scrutinees.first().map(|s| s.value.as_ref()), Some(Term::Var { id, .. }) if *id == stop.next_field)
++    {
++        if depth >= 64 {
++            return Err("pattern compilation exceeds the resource limit of 64 levels".into());
++        }
++        if stop.next.is_some() {
++            return Err("field fragment has more than one continuation".into());
++        }
++        stop.next = Some(MatchState {
++            scrutinees: scrutinees.to_vec(), rows: rows.to_vec(), vars: vars.to_vec(),
++        });
++        return Ok(SurfaceTerm::new(Rc::clone(&stop.hole), None));
++    }
+     let mut state: Option<MatchState> = None;
+     let mut pending: Vec<(String, usize, MatchState)> = Vec::new();
+     loop {
+@@ -470,11 +610,24 @@ fn flatten_match(
+                 s.vars.as_slice(),
+             )
+         });
+-        match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins)? {
++        if let Some(stop) = boundary.as_deref_mut()
++            && matches!(scrutinees.first().map(|s| s.value.as_ref()), Some(Term::Var { id, .. }) if *id == stop.next_field)
++        {
++            if stop.next.is_some() { return Err("field fragment has more than one continuation".into()); }
++            stop.next = Some(MatchState { scrutinees: scrutinees.to_vec(), rows: rows.to_vec(), vars: vars.to_vec() });
++        }
++        let step = if let Some(stop) = boundary.as_deref()
++            && stop.next.is_some()
++        {
++            MatchStep::Done(SurfaceTerm::new(Rc::clone(&stop.hole), None))
++        } else {
++            flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins, boundary.as_deref_mut())?
++        };
++        match step {
+             MatchStep::Done(mut value) => {
+                 for (constructor, constructor_origin, fallback) in pending.into_iter().rev() {
+                     let site = fallback.scrutinees[0].match_site;
+-                    let fallback = flatten_match(
++                    let fallback = flatten_fallback(
+                         &fallback.scrutinees,
+                         &fallback.rows,
+                         &fallback.vars,
+@@ -482,6 +635,7 @@ fn flatten_match(
+                         display_fresh,
+                         depth + 1,
+                         origins,
++                        boundary.as_deref_mut(),
+                     )?;
+                     value = SurfaceTerm::matched(
+                         constructor,
+@@ -509,6 +663,7 @@ fn flatten_match(
+ 
+ #[expect(
+     clippy::too_many_lines,
++    clippy::too_many_arguments,
+     reason = "Direct translation of upstream's first-row pattern compilation algorithm"
+ )]
+ fn flatten_match_step(
+@@ -519,6 +674,7 @@ fn flatten_match_step(
+     display_fresh: &mut usize,
+     depth: usize,
+     origins: Option<&TermOrigins>,
++    mut boundary: Option<&mut FieldBoundary>,
+ ) -> Result<MatchStep, FlattenError> {
+     if depth >= 64 {
+         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
+@@ -570,6 +726,7 @@ fn flatten_match_step(
+             display_fresh,
+             depth + 1,
+             origins,
++            boundary.as_deref_mut(),
+         )
+         .map(MatchStep::Done);
+     }
+@@ -668,16 +825,33 @@ fn flatten_match_step(
+                 },
+             });
+         }
+-        let arm = flatten_match(
+-            &next_scrutinees,
+-            &positive,
+-            &next_vars,
+-            fresh,
+-            display_fresh,
+-            depth + 1,
+-            origins,
+-        )?;
+-        let fallback = flatten_match(
++        let arm = if boundary.is_none() && fields.len() > 1 && fragment_eligible(&positive) {
++            let Term::Var { id: next_field, .. } = next_scrutinees[1].value.as_ref() else {
++                unreachable!("constructor fields are variables")
++            };
++            let mut field = FieldBoundary::new(*next_field);
++            let prefix = flatten_match(
++                &next_scrutinees, &positive, &next_vars, fresh, display_fresh,
++                depth + 1, origins, Some(&mut field),
++            )?;
++            let next = field.next.take().ok_or("field fragment did not reach its continuation")?;
++            // No prefix matcher frame or fallback row survives this call.
++            drop(positive);
++            drop(next_scrutinees);
++            drop(next_vars);
++            let suffix = flatten_match(
++                &next.scrutinees, &next.rows, &next.vars, fresh, display_fresh,
++                depth + 1, origins, boundary.as_deref_mut(),
++            )?;
++            if let Some(error) = field.deferred_error { return Err(error); }
++            graft_field(prefix, &field.hole, suffix, origins)?
++        } else {
++            flatten_match(
++                &next_scrutinees, &positive, &next_vars, fresh, display_fresh,
++                depth + 1, origins, boundary.as_deref_mut(),
++            )?
++        };
++        let fallback = flatten_fallback(
+             scrutinees,
+             &negative,
+             vars,
+@@ -685,6 +859,7 @@ fn flatten_match_step(
+             display_fresh,
+             depth + 1,
+             origins,
++            boundary.as_deref_mut(),
+         )?;
+         Ok(MatchStep::Done(SurfaceTerm::matched(
+             name.clone(),
+@@ -704,6 +879,7 @@ fn flatten_match_step(
+                 display_fresh,
+                 depth + 1,
+                 origins,
++                boundary.as_deref_mut(),
+             )?
+             .lambda(first, origins),
+         ))
