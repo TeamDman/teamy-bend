@@ -1,0 +1,4219 @@
+{
+  "tested_source": "d85cab01eae230d423f718220d945c4cd0a25d62",
+  "binary_sha256": "98df6d782a0d567f5746961740de93da6d11c12b2a8e8bdd71a87855bdf5240b",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "completed": true,
+  "full_parity": false,
+  "negative": {
+    "exact_stream_observations": 198,
+    "separate_phase_probes": 66,
+    "rows": [
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.32302510700537823,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.32609517700620927,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.30659996398026124,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.0404252229782287,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.014777394011616707,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.015471468010218814,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.04079155798535794,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.05472737998934463,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.02248143099131994,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.5323953999904916,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.5972015250008553,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.47302368498640135,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.5496140029863454,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 1.2898473980021663,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.9817440400074702,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 0.8995661149965599,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 1.3609636740002315,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n",
+        "timed_out": false,
+        "seconds": 1.042002339992905,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.482471645984333,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.5307710620108992,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.6819318289926741,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.9997828470077366,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.847965775988996,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.8461615279957186,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.8153089190018363,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 0.9837219800101593,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n",
+        "timed_out": false,
+        "seconds": 1.3908956149825826,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.3605738629994448,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.3581085510086268,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.46086321299662814,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.6692924780072644,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.6020059300062712,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.8315794960071798,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.565044235001551,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.5285421260050498,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.45810817801975645,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.4873817439947743,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.41933444401365705,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.44528993099811487,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.6337049470166676,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.6988130760146305,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.4848513250180986,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.4177955649793148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.773112963011954,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.8055925600056071,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.5719861050019972,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.5369672149827238,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.4979935440060217,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.3858482869982254,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.5967348940030206,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.780874591000611,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.6574736210168339,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.8788125530118123,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n",
+        "timed_out": false,
+        "seconds": 0.7486882969969884,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.3269408219784964,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.3488163029833231,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.5414215569908265,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.5241623429756146,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.566187076998176,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.41648696700576693,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 1.0149417109787464,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.48215240699937567,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.40609125900664367,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.43945797698688693,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.43234792101429775,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.3884168060030788,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.4880854770017322,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.3637009710073471,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.43859657901339233,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.3684456500050146,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.46673340699635446,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/macro.bend",
+        "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n",
+        "timed_out": false,
+        "seconds": 0.7356993940193206,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.44666487400536425,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.40623970702290535,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.41858860399224795,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.3233812699909322,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.32982069201534614,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.6070265920134261,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.8184537570050452,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.6339226999843959,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/pattern.bend",
+        "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n",
+        "timed_out": false,
+        "seconds": 0.733968550019199,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.3587466799945105,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.4842849860142451,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.5030769520089962,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.4963416079990566,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.301265673013404,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.6340414169826545,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.384410291997483,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.42983951698988676,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.49903564000851475,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.4923775059869513,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.491580048983451,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.5185536769859027,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.9729497120133601,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.8237733780115377,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.7277765120088588,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.8653178229869809,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.8159310539776925,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n",
+        "timed_out": false,
+        "seconds": 0.7805027200083714,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/assert_fill_scope.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_use.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_import_warn.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/axiom_whitelist.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/forward_reference_scope.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "compile/axiom_runtime.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/macro.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/pattern.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/shared-reference.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "94f483863a482e14de6f9cf7e29cb96fbe0a53518db3b34d3e1d6dab2c5418f1"
+  },
+  "positive": {
+    "observations": 128,
+    "lane_counts": {
+      "port-pure-normalization": 8,
+      "upstream-pure-normalization": 8,
+      "upstream-check": 10,
+      "strict-phase": 10,
+      "executable-phase": 10,
+      "strict-check": 10,
+      "upstream-generate-c": 5,
+      "upstream-build-O3": 5,
+      "upstream-generate-js": 5,
+      "port-generate-c": 5,
+      "port-build-O3": 5,
+      "port-generate-js": 5,
+      "upstream-C-O3": 10,
+      "upstream-JS": 10,
+      "port-C-O3": 10,
+      "port-JS": 10,
+      "native-runtime": 2
+    },
+    "rows": [
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.732237885997165,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.709066361974692,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "$RUN/positive-matrix/positive/filled/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.39840814398485236,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.528099052986363,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8919878010055982,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.2633503840188496,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5920047340041492,
+        "artifact_sha256": "b9384c0e4551d966a70774a3c5d132fd3d9033ce46a8cd2211862fe1e6c750bb"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/filled/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.43452886401792057,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.549027606000891,
+        "artifact_sha256": "4ae43ef68a09ee20a9838384ca114a97a4d1bee893314aa38e6a42343fe79fba"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/filled/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/filled/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 185708,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6970911120006349,
+        "artifact_sha256": "0a4e16c64cf122801a02e15d8e8859ca0f0cc400167565a3fc4657f4e2ae018a"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/filled/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/filled/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.2104773999890313,
+        "artifact_sha256": "439e6b952f54709816dc283d09ff09ca86bdf503e973b679f6da48667600784e"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/filled.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/filled/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/filled/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59760,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8743395060009789,
+        "artifact_sha256": "e5760a0bc63333efae099ec2a20c787519602f7ae845f387a40bca5272d8fcc2"
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/filled/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0021893309894949198,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/filled/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04644631300470792,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/filled/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.003785700013395399,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/filled.bend",
+        "source_sha256": "4a51e9dc7a8ff5ae0904a6bf7c2bc8fe681f685a2c1500684948171792851b04",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/filled/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.05101676200865768,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.7242343690013513,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6048863909963984,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "$RUN/positive-matrix/positive/dead-before-fill/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4716079449863173,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1661285310110543,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2854432429885492,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7257586939958856,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5058163880021311,
+        "artifact_sha256": "7ace79678e3a86fc9bab90a7e975ec673a40d767d9c0fb133f95ccde0085e2a8"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.43437947999336757,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.44241806500940584,
+        "artifact_sha256": "590e5b3555476349c79294c30178c0c383b0f9cbf669fa250fcc54e65bbd0566"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/dead-before-fill/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/dead-before-fill/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186038,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.0290675930154976,
+        "artifact_sha256": "cf35fd651c66699e508f84afe4fcd16171c231a8f45e22528de0d59d7cd98bea"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/dead-before-fill/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/dead-before-fill/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8801513790094759,
+        "artifact_sha256": "261040620e9fac7ccf29c76b7689701a71fe7c0082d9b57fe5fe9564e3a67392"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/dead-before-fill.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/dead-before-fill/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/dead-before-fill/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52482,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9521317330072634,
+        "artifact_sha256": "394a8052948014b939df2a4a83b825cda8bef6ff64565d320e9c4c17b826b724"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0013726150209549814,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/dead-before-fill/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04533530800836161,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/dead-before-fill/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0027946729969698936,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "source_sha256": "7dec5ae7c6b3dd4888cd8db08e91082649b02e640ba54a7efa4e88aadb9c55ac",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/dead-before-fill/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.03077428601682186,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6495527319784742,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.25314500398235396,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "$RUN/positive-matrix/positive/recursion/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3989190899883397,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34525959999882616,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5839247069961857,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7103144569846336,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/recursion/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5060260479804128,
+        "artifact_sha256": "ba16bb5ef4c539fa43a31d87c1ad9ff31f86dae84da12cd92b0d64cdec0a8f12"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/recursion/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/recursion/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.550293371983571,
+        "artifact_sha256": "4e48c6f0bd6ef579b1fce7e56d86a870383b433fe81a641fa34e542f81cbce33"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/recursion/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6056479800026864,
+        "artifact_sha256": "c451d4921deae0d7a391ecc7902d5cf05d8265fa53340c93a0b5f2029853f29b"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/recursion/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/recursion/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 187806,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.1437828270136379,
+        "artifact_sha256": "ca3a4624741167af7587633f7ff4ab4c1916126696954274cdb81fd3b5f44beb"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/recursion/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/recursion/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.051433676009765,
+        "artifact_sha256": "8c020f5835bb12b6570f29c78f1e77208d00e83980b68552d16a376287265bf8"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/recursion.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/recursion/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/recursion/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60539,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7460953499830794,
+        "artifact_sha256": "aec1135267af30ab3af633ad8b94a98497f12a1e7c0f00673896f059741e581d"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/recursion/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0035585119912866503,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/recursion/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06874683499336243,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/recursion/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.009278281999286264,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/recursion.bend",
+        "source_sha256": "b312439f5c1b8970f04b5db03040d745232a11c05b8e6fd5b4714a0842798d01",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/recursion/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.05865706398617476,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.63535865501035,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4152163889957592,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "$RUN/positive-matrix/positive/imported/main/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.34630094200838357,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3179191709787119,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3240413010062184,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 26\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.40455206102342345,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4254506490251515,
+        "artifact_sha256": "b9384c0e4551d966a70774a3c5d132fd3d9033ce46a8cd2211862fe1e6c750bb"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/imported/main/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4551606909953989,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4424648509884719,
+        "artifact_sha256": "0792cfffa090e7a363fa170d96f57c84086b007b3de59ae45bfaa54f5170fd96"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/imported/main/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 185708,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5780507150047924,
+        "artifact_sha256": "0a4e16c64cf122801a02e15d8e8859ca0f0cc400167565a3fc4657f4e2ae018a"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/imported/main/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/imported/main/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.0235540430003311,
+        "artifact_sha256": "439e6b952f54709816dc283d09ff09ca86bdf503e973b679f6da48667600784e"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/imported/main/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59760,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9063789070060011,
+        "artifact_sha256": "e5760a0bc63333efae099ec2a20c787519602f7ae845f387a40bca5272d8fcc2"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/imported/main/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0037781179999001324,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/imported/main/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06729630500194617,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/imported/main/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.00350704399170354,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "203b9e5be6281a210ef31ab98905ac4c50335a01070a86db43e0c1eb93c39295",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/imported/main/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0835271840041969,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "native-runtime",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7801809730008245,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "$RUN/positive-matrix/positive/native-contract/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.46928458599722944,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "check\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3064635529881343,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7716158179973718,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n2 | \n3>| def main() -> IO(Unit): IO.print(F32.show(F32.add(1.5, 1.5)))\n4 | \n",
+        "timed_out": false,
+        "seconds": 0.81064150200109,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/native-contract/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5402228250168264,
+        "artifact_sha256": "8bb97463f4932401af17cc3adb0a4edcee317e084a2041d5ebeb8122d79e9873"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/native-contract/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/native-contract/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4100897109892685,
+        "artifact_sha256": "1cf99068a3b34e370d00d091bbada5e2d6788fa1af7014e924bc983c65bcd1d5"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/native-contract/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4766523319995031,
+        "artifact_sha256": "46c9d1e2185374eb9646709bc9c168fc040bcbb99337db104d65cffa347babcb"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/native-contract/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/native-contract/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 188009,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5446375620085746,
+        "artifact_sha256": "8973f3db40c2749119c011e8fdf4bc5b9271b63d50c52e0c9d8908c313b27611"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/native-contract/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/native-contract/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 1.0874504890234675,
+        "artifact_sha256": "07f47ab8db5e36b383f29268a4f38550de8ea8788efaa30b9172ce9b7635c2da"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-unfilled-law/positive/native-contract.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/native-contract/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/native-contract/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52795,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8373892169911414,
+        "artifact_sha256": "b037e17a0de9f278d507f8ead345a31784fdc1b477893abf07de1f12715d4478"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/native-contract/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0010774949914775789,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/native-contract/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04292985500069335,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/native-contract/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0036202440096531063,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "source_sha256": "109f1091fc9cc4da5a6dd4e0eea33566838c6112ef7cf64b67cf09c4f141a46b",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/native-contract/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "3\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.07967453601304442,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "positive/filled.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/filled.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/dead-before-fill.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/recursion.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "check",
+        "exit": 1,
+        "stderr": ""
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "check",
+        "exit": 1,
+        "stderr": ""
+      },
+      {
+        "case": "positive/native-contract.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phases_already_in_observation_count": true,
+    "unresolved": [],
+    "raw_sha256": "ca53f1d706dc0110c55761b88000392a5ef9624109606d54a1317d2ffd541dd9"
+  },
+  "timeout_seconds": 30,
+  "negative_phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  },
+  "scope": [
+    "Negative programs reject before emission/execution; generation refusal is not executed runtime evidence",
+    "Four pure controls normalize; only native-contract executes native IO",
+    "C/JS emitted executables run in both implementations, upstream actual O3 and port strict-warning O3",
+    "IO strict checking exclusion is separate from accepted executable checking",
+    "No GPU, desktop, mid-normalization cancellation or external-consumer audit"
+  ]
+}

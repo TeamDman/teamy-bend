@@ -1,0 +1,263 @@
+{
+  "before_source": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+  "before_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+  "after_source": "d85cab01eae230d423f718220d945c4cd0a25d62",
+  "after_binary_sha256": "98df6d782a0d567f5746961740de93da6d11c12b2a8e8bdd71a87855bdf5240b",
+  "commands_each": 54,
+  "all_statuses_and_oracle_phases_unchanged": true,
+  "changed_diagnostics": [
+    {
+      "case": "check/assert_fill_scope.bend",
+      "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/check/assert_fill_scope.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: early: unfilled law twice cannot be used as live evidence",
+        "stderr_sha256": "98a5927a893f051ab41fca2156fcb0c8a03f847a22dd54be3386c0f0d734b1d7"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : twice\nContext:\n- x : Nz\nLocation: early\n17 | def early(x):\n18>|   twice(x)\n19 | \n"
+      }
+    },
+    {
+      "case": "check/axiom_use.bend",
+      "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_use.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: shift: unfilled law plus_comm cannot be used as live evidence",
+        "stderr_sha256": "000940eb12c50e234bbd2c52e476a05a1a5a92559c62e38bd9bbf42c71d8d0e2"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : plus_comm\nContext:\n- a : U32\n- b : U32\nLocation: shift\n17 | def shift(a, b):\n18>|   %h@plus_comm(a, b) : {U32.add(_, 0) == U32.add(U32.add(b, a), 0) : U32}; {==}\n19 | \n"
+      }
+    },
+    {
+      "case": "check/axiom_import_warn.bend",
+      "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_import_warn.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: use: unfilled law EVIL_ADD_HOM cannot be used as live evidence",
+        "stderr_sha256": "516ec98027cc33c65c254fd04b4f6c9d80bac7c624601d582ebfb6171a326474"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : EVIL_ADD_HOM\nLocation: use\n14 | def use():\n15>|   EVIL_ADD_HOM\n16 | \n"
+      }
+    },
+    {
+      "case": "check/axiom_whitelist.bend",
+      "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/check/axiom_whitelist.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: use: unfilled law U32.magic_hom cannot be used as live evidence",
+        "stderr_sha256": "723883b45bc60553a127bd0b81ebb9b48c41a978ccfa04f1d05666531631fb1c"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : U32.magic_hom\nLocation: use\n13 | def use():\n14>|   U32.magic_hom\n15 | \n"
+      }
+    },
+    {
+      "case": "check/forward_reference_scope.bend",
+      "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/check/forward_reference_scope.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: bar: unfilled law foo cannot be used as live evidence",
+        "stderr_sha256": "04e43b28029ae2354677857277dbbafb37bb1e0ee9912fa1aac9799b19f9624e"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : foo\nLocation: bar\n13 | def bar():\n14>|   foo(1)\n15 | \n"
+      }
+    },
+    {
+      "case": "compile/axiom_runtime.bend",
+      "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/compile/axiom_runtime.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: main: unfilled law magic cannot be used as live evidence",
+        "stderr_sha256": "94872537abda38d57085f537a3826ae08795470d8ea9603d9715c62cbc8d0172"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : magic\nLocation: main\n13 | def main():\n14>|   magic\n15 | \n"
+      }
+    },
+    {
+      "case": "controls/multiline.bend",
+      "source_sha256": "a47283b58b7908fcd6cca574428ceee193caca5d436b057813a013e9d7b2004a",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/controls/multiline.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: bad: unfilled law ghost cannot be used as live evidence",
+        "stderr_sha256": "62569727bb1b090a96247c7a968ec20620bd1e1b52252fe9ec0ce62efa9300df"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: bad\n5 |   U32.add(x,\n6>|     ghost)\n7 | def main() -> U32: 0\n"
+      }
+    },
+    {
+      "case": "controls/macro.bend",
+      "source_sha256": "c0deddb62a1902f488ae77f2c3d68e3f28a55e897987751ba619da9b1af725a5",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/controls/macro.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: choose~0: unfilled law ghost cannot be used as live evidence",
+        "stderr_sha256": "a39c398813f7866fdfdc187002d0769da3e62d9cfc77cf3dbe6cc0f79da4ca9e"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- x : U32\nLocation: choose~0\n2 | \n3>| def choose(~x: U32) -> U32: x\n4 | law ghost: U32\n"
+      }
+    },
+    {
+      "case": "controls/pattern.bend",
+      "source_sha256": "c01197d7c7676476a20ab28d5f6f9d58e957b655001257ec31430ad1a2382636",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/controls/pattern.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: bad: unfilled law ghost cannot be used as live evidence",
+        "stderr_sha256": "62569727bb1b090a96247c7a968ec20620bd1e1b52252fe9ec0ce62efa9300df"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- left  : U32\n- right : U32\nLocation: bad\n6 |   match pair:\n7>|     case P{left, right}: U32.add(left, ghost)\n8 | def main() -> U32: 0\n"
+      }
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "source_sha256": "3b28a8329f77656e1f29836a61a14629d16d61ad7d27df2d77af11678228772b",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/controls/imported/main.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: helper.bad: unfilled law helper.ghost cannot be used as live evidence",
+        "stderr_sha256": "f17152419a8da84585d39f854b8530658f89f67d618fa4234b3428603e9534de"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : helper.ghost\nContext:\n- x : U32\nLocation: helper.bad\n4 | def bad(x: U32) -> U32:\n5>|   U32.add(x, ghost)\n6 | \n"
+      }
+    },
+    {
+      "case": "controls/shared-reference.bend",
+      "source_sha256": "16020b2447626350ee21a0e67577542fc7e8290fc778b222bfbda343da0ce09e",
+      "command": [
+        "$BASELINE_BINARY/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unfilled-law/controls/shared-reference.bend"
+      ],
+      "before": {
+        "exit": 1,
+        "stdout": "",
+        "internal_message": "   0: both~0: unfilled law ghost cannot be used as live evidence",
+        "stderr_sha256": "e5bdbd3e986f48d85c9846de4834cbde3b554e4707a653ee9f0cfca9fda248a4"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a filled definition (an unfilled law is a dead claim: live code cannot use it)\n- observed : ghost\nContext:\n- held : U32\nLocation: both~0\n4 | def both(~held: U32) -> U32:\n5>|   U32.add(held, held)\n6 | def bad() -> U32: both(~ghost)\n"
+      }
+    }
+  ],
+  "unchanged_observations": 43,
+  "adjacent_unresolved": [
+    {
+      "case": "check/axiom_warn.bend",
+      "source_sha256": "85a60be9f090cb364b1a55883d84fe3b3d389b67116cbeefa6dd674fad40e618",
+      "port": {
+        "exit": 1,
+        "internal_message": "   0: unfilled laws: ghost",
+        "stderr_sha256": "0be7a30fcbc820adb7ce7552aaf566313cfe8b7dddb4b1b32998b177b28713a6"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      },
+      "classification": "both reject at checking; final inventory diagnostic remains different"
+    },
+    {
+      "case": "grade/open_claim.bend",
+      "source_sha256": "00a514cf3ab6554291f37e0f26499c596a345d693cb2b249f01ea1c89ae10602",
+      "port": {
+        "exit": 1,
+        "internal_message": "   0: unfilled laws: bogus",
+        "stderr_sha256": "fd7815cf7d13d7d0f3a8f4aa653121a74316ff9791de5377ca52fb008bb2c2b8"
+      },
+      "upstream": {
+        "exit": 1,
+        "stderr": "Error: 1 TODO found.\nThe code is incomplete, and not a valid proof yet.\n"
+      },
+      "classification": "both reject at checking; final inventory diagnostic remains different"
+    }
+  ],
+  "raw_before_sha256": "43ae9bb06b2dc691678c23533e418878e6a7d39334d7f42a9ed0a306f10a8544",
+  "raw_after_sha256": "54f5716ef918501be5a3b06163b24c24a427f6d3f977c29149fd882c9b7e175b"
+}

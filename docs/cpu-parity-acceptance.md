@@ -2401,3 +2401,37 @@ in assert_fill_scope, axiom_use and imported/forward-reference companions; renew
 before correcting metadata, preserve refusal. Frozen dependencies/toolchains/pin,
 budgets and cancellation boundaries remain. No installs, desktop/GPU, merge/release.
 Compact evidence is in Git; bulky unique raw evidence/binaries remain local.
+
+
+## Live unfilled-law diagnostics
+
+Clean tested source `d85cab01eae230d423f718220d945c4cd0a25d62` adds optional
+source/context diagnostics after the existing live-law refusal; error identity,
+acceptance, erased demand, term sharing and budgets stay unchanged. The six pinned
+originals and five authored controls now match exact checking stderr. Two unused
+open-law inventory diagnostics remain unresolved. Public invoke consumers must
+inspect status-bearing output; external consumers were not audited.
+[Report and commands](cpu-unfilled-law-diagnostics.md).
+
+Negative matrix: 198 exact streams plus 66 separate phase probes. Positive matrix:
+128 commands including 42 runtime executions and 16 pure-normalization observations;
+strict IO exclusions stay distinct. Gate **1,193 / 0 / 49**, targeted regressions and
+Clippy passed. Source and evidence reviews precede checkpoint publication.
+
+Full 1,302 checking census: 366 both accept, 325 exact reject, 111 different reject,
+496 acceptance disagreements, four oracle failures. All port statuses/phases are
+unchanged and exactly six port stderr streams improve. All 385 historical IO
+members renew exactly; outside that set 222 differences remain (111 acceptance /
+111 rejection). Upstream borrow_fork_hold shifts from historical stack failure to
+acceptance in this measurement, while supplemental probes remain unstable; it is
+not a port fix. The historical six-failure cohort and dead_param_fork instability
+remain separate. [Measured reconciliation](cpu-unfilled-law-census.json).
+
+Coverage links: 451 applicable pinned originals / 1,302; 851 unlinked (522 compiled
+candidates, 315 checker negatives, 13 interpreter-only, one checking-only). Linked
+receipts are not universal parity. Nat-first stays pending/unwaived, compact Nat/
+string lowering unadopted, and all earlier host/foreign/resource/F32.read/hole/API/
+supplementary-lint gaps remain. Next demonstrated independent diagnostic boundary:
+axiom_warn/open_claim final TODO counts, without weakening incomplete-proof refusal.
+Frozen dependencies/toolchains/pins/budgets/cancellation and disk floors remain.
+Compact evidence is in Git; bulky unique raw logs and binaries remain local.

@@ -1,0 +1,292 @@
+{
+  "source": "d85cab01eae230d423f718220d945c4cd0a25d62",
+  "baseline_source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 325,
+    "acceptance_disagreement": 496,
+    "both_accept": 366,
+    "different_rejection": 111,
+    "oracle_or_infrastructure_failure": 4
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 222,
+  "residual_classifications": {
+    "acceptance_disagreement": 111,
+    "different_rejection": 111
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 31,
+    "diagnostic_only_candidate": 80,
+    "new_or_unclassified": 2
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/assert_fill_scope.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/axiom_import_warn.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/axiom_use.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/axiom_whitelist.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/forward_reference_scope.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "compile/axiom_runtime.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/assert_fill_scope.bend",
+      "source_sha256": "9427b2080dd9a2c334611559bf4ec198c195daa8fa38db3f28196d74992e9198",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "98a5927a893f051ab41fca2156fcb0c8a03f847a22dd54be3386c0f0d734b1d7",
+      "after_stderr_sha256": "a3db8bbdeec3ed3c4ba8640d88425731ef65fefac5564d06c0ba363e13678354"
+    },
+    {
+      "fixture": "check/axiom_import_warn.bend",
+      "source_sha256": "1ccf9ccdb92d4e9d6523586c51baf9aa3fdd1179986de4bc99c9a5ff773deb4e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "516ec98027cc33c65c254fd04b4f6c9d80bac7c624601d582ebfb6171a326474",
+      "after_stderr_sha256": "bb45b57ab74e18471bb99cab2b0229f3c0ea5730d0c14a41eabc60bf9447d233"
+    },
+    {
+      "fixture": "check/axiom_use.bend",
+      "source_sha256": "5f00ea29e72ad8c6f44a3f78fcf4698f8670903901aab0b5740dad71a504f9f4",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "000940eb12c50e234bbd2c52e476a05a1a5a92559c62e38bd9bbf42c71d8d0e2",
+      "after_stderr_sha256": "8521d717de5043b78deb7e0e992fa63b3c545412e2659f5e3a13672905a6491f"
+    },
+    {
+      "fixture": "check/axiom_whitelist.bend",
+      "source_sha256": "191752310a5ccb42728aeb29734eecb8b0668518ab8fe07ba4bfb13e9684a71c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "723883b45bc60553a127bd0b81ebb9b48c41a978ccfa04f1d05666531631fb1c",
+      "after_stderr_sha256": "527a2fcf7ebb7b00d9e851d6b0e3a705a24a6440e2e696381be9a1f44cdd9d82"
+    },
+    {
+      "fixture": "check/forward_reference_scope.bend",
+      "source_sha256": "75213b2846c1a7dfa5c1d6dffd80e6656ac8163a518b21e2033585bae2c24840",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "04e43b28029ae2354677857277dbbafb37bb1e0ee9912fa1aac9799b19f9624e",
+      "after_stderr_sha256": "f49417fcf55a8e1fb4c7174ab420a736a9ff2d6a74f5f042ceba88858996bf6c"
+    },
+    {
+      "fixture": "compile/axiom_runtime.bend",
+      "source_sha256": "c5d0eb68a1c99f2bd36b8b2b3a18258195527d89d3ef935c5f146102eee04d8f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "94872537abda38d57085f537a3826ae08795470d8ea9603d9715c62cbc8d0172",
+      "after_stderr_sha256": "3bc7706792295fff9f01dc1f790de9ecc5cee887288efdbbac596951eba0933b"
+    },
+    {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "e1b1ff2f58baa71002529a82aa0ed1fcc9b4f2d170aaebb2050d08d3d0e5f2d8",
+      "after_stderr_sha256": "e1b1ff2f58baa71002529a82aa0ed1fcc9b4f2d170aaebb2050d08d3d0e5f2d8"
+    }
+  ],
+  "raw_observations_sha256": "5f431456a643e42746069394e6d266c97c118ff68b78a0065f92c2d34d54ab64",
+  "baseline_raw_sha256": "d379f6f8373d402237597d4fafefae44f676aec8bbce7f1284be180bd4c66407",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "supplemental_oracle_followups": {
+    "scope": "Supplemental checking-only adapter observations, no main execution. Do not replace full-census counts or resolve historical host-stack instability.",
+    "rows": [
+      {
+        "fixture": "reg/borrow_fork_hold.bend",
+        "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/borrow_fork_hold.bend",
+          "$EVIDENCE/oracle-borrow_fork_hold-1.phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "timed_out": false,
+        "seconds": 0.14834436899400316,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "phase": {
+          "phase": "check",
+          "outcome": "host_stack_failure"
+        }
+      },
+      {
+        "fixture": "reg/borrow_fork_hold.bend",
+        "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/borrow_fork_hold.bend",
+          "$EVIDENCE/oracle-borrow_fork_hold-2.phase.json"
+        ],
+        "rep": 2,
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.1338150319934357,
+        "stdout": "",
+        "stderr": "",
+        "phase": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "fixture": "reg/borrow_fork_hold.bend",
+        "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/borrow_fork_hold.bend",
+          "$EVIDENCE/oracle-borrow_fork_hold-3.phase.json"
+        ],
+        "rep": 3,
+        "exit": 1,
+        "timed_out": false,
+        "seconds": 0.12943940400145948,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "phase": {
+          "phase": "load",
+          "outcome": "host_stack_failure"
+        }
+      },
+      {
+        "fixture": "reg/dead_param_fork.bend",
+        "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/oracle-dead_param_fork-1.phase.json"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "timed_out": false,
+        "seconds": 0.12224049397627823,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "phase": {
+          "phase": "load",
+          "outcome": "host_stack_failure"
+        }
+      },
+      {
+        "fixture": "reg/dead_param_fork.bend",
+        "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/oracle-dead_param_fork-2.phase.json"
+        ],
+        "rep": 2,
+        "exit": 1,
+        "timed_out": false,
+        "seconds": 0.14641381800174713,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "phase": {
+          "phase": "check",
+          "outcome": "host_stack_failure"
+        }
+      },
+      {
+        "fixture": "reg/dead_param_fork.bend",
+        "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/oracle-dead_param_fork-3.phase.json"
+        ],
+        "rep": 3,
+        "exit": 1,
+        "timed_out": false,
+        "seconds": 0.11047987901838496,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "phase": {
+          "phase": "load",
+          "outcome": "host_stack_failure"
+        }
+      }
+    ]
+  }
+}
