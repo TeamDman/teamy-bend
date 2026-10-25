@@ -1,0 +1,1229 @@
+{
+  "before_source": "0aef62717e9587a21b7266c55e659ecdd6e65712",
+  "before_binary_sha256": "057c588af86cb9aeb3034537066d2e553045c2e67af05d4e9d5664e59c6ac051",
+  "after_source": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+  "after_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+  "original_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+  "baseline_command_count": 78,
+  "current_command_count": 81,
+  "changed_C_generation_refusals": 18,
+  "all_52_overlapping_non_C_observations_unchanged": true,
+  "rows": [
+    {
+      "case": "boxed.bend",
+      "source_sha256": "0d4112b2b2c8e953e474b9beda93ec2eb6dad903003b346a6d9afd65855ae5b2",
+      "before": {
+        "case": "boxed.bend",
+        "sha256": "0d4112b2b2c8e953e474b9beda93ec2eb6dad903003b346a6d9afd65855ae5b2",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/boxed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/boxed.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/boxed.c\",\n  \"target\": \"c\",\n  \"bytes\": 206324,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3967787900182884
+      },
+      "after": {
+        "case": "boxed.bend",
+        "sha256": "0d4112b2b2c8e953e474b9beda93ec2eb6dad903003b346a6d9afd65855ae5b2",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/boxed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/boxed.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/boxed.c\",\n  \"target\": \"c\",\n  \"bytes\": 206495,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4702482319844421
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "closure.bend",
+      "source_sha256": "4449f8af47636e76481a7cf7b27b9426afc0b056ff9684622a60a5405c916bca",
+      "before": {
+        "case": "closure.bend",
+        "sha256": "4449f8af47636e76481a7cf7b27b9426afc0b056ff9684622a60a5405c916bca",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/closure.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/closure.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3738608790154103
+      },
+      "after": {
+        "case": "closure.bend",
+        "sha256": "4449f8af47636e76481a7cf7b27b9426afc0b056ff9684622a60a5405c916bca",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/closure.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/closure.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/closure.c\",\n  \"target\": \"c\",\n  \"bytes\": 189771,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4604995900008362
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "erased.bend",
+      "source_sha256": "3c51ca50ec45d1ee15b7bfd13511573097cd734dd8e6f81a4e3f10e85224b994",
+      "before": {
+        "case": "erased.bend",
+        "sha256": "3c51ca50ec45d1ee15b7bfd13511573097cd734dd8e6f81a4e3f10e85224b994",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/erased.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.36844338101218455
+      },
+      "after": {
+        "case": "erased.bend",
+        "sha256": "3c51ca50ec45d1ee15b7bfd13511573097cd734dd8e6f81a4e3f10e85224b994",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/erased.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/erased.c\",\n  \"target\": \"c\",\n  \"bytes\": 185335,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4437295770039782
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "f32.bend",
+      "source_sha256": "70b3af8bd247d33dc44191068377337f6c3bd7861fc1e71764e77d88e961dbb6",
+      "before": {
+        "case": "f32.bend",
+        "sha256": "70b3af8bd247d33dc44191068377337f6c3bd7861fc1e71764e77d88e961dbb6",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/f32.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/f32.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3550306359829847
+      },
+      "after": {
+        "case": "f32.bend",
+        "sha256": "70b3af8bd247d33dc44191068377337f6c3bd7861fc1e71764e77d88e961dbb6",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/f32.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/f32.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/f32.c\",\n  \"target\": \"c\",\n  \"bytes\": 185361,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4288156690017786
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "before": {
+        "case": "false-proof.bend",
+        "sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/false-proof.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.2929076819855254
+      },
+      "after": {
+        "case": "false-proof.bend",
+        "sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/false-proof.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+        "timed_out": false,
+        "seconds": 0.3622044560033828
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "fork.bend",
+      "source_sha256": "597b853c5036667005b54d4aee9544d56cf9bf52e95a253e0d470c4d62bdea80",
+      "before": {
+        "case": "fork.bend",
+        "sha256": "597b853c5036667005b54d4aee9544d56cf9bf52e95a253e0d470c4d62bdea80",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/fork.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/fork.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3784454580163583
+      },
+      "after": {
+        "case": "fork.bend",
+        "sha256": "597b853c5036667005b54d4aee9544d56cf9bf52e95a253e0d470c4d62bdea80",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/fork.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/fork.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/fork.c\",\n  \"target\": \"c\",\n  \"bytes\": 192680,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38292987100430764
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "before": {
+        "case": "io/boxed.bend",
+        "sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/boxed.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/io/boxed.c\",\n  \"target\": \"c\",\n  \"bytes\": 210479,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37290964100975543
+      },
+      "after": {
+        "case": "io/boxed.bend",
+        "sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/boxed.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/boxed.c\",\n  \"target\": \"c\",\n  \"bytes\": 210681,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.40724749097716995
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "before": {
+        "case": "io/closure.bend",
+        "sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/closure.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.39199090999318287
+      },
+      "after": {
+        "case": "io/closure.bend",
+        "sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/closure.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/closure.c\",\n  \"target\": \"c\",\n  \"bytes\": 235664,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4433080019953195
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "before": {
+        "case": "io/erased.bend",
+        "sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/erased.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.4066953269939404
+      },
+      "after": {
+        "case": "io/erased.bend",
+        "sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/erased.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/erased.c\",\n  \"target\": \"c\",\n  \"bytes\": 232125,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3972835350141395
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "before": {
+        "case": "io/f32.bend",
+        "sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/f32.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.36004459799733013
+      },
+      "after": {
+        "case": "io/f32.bend",
+        "sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/f32.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/f32.c\",\n  \"target\": \"c\",\n  \"bytes\": 190494,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.363884849997703
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "before": {
+        "case": "io/fork.bend",
+        "sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/fork.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.409232605015859
+      },
+      "after": {
+        "case": "io/fork.bend",
+        "sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/fork.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/fork.c\",\n  \"target\": \"c\",\n  \"bytes\": 239508,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3925885999924503
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "before": {
+        "case": "io/nat-zero.bend",
+        "sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/nat-zero.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.38786035298835486
+      },
+      "after": {
+        "case": "io/nat-zero.bend",
+        "sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/nat-zero.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/nat-zero.c\",\n  \"target\": \"c\",\n  \"bytes\": 231607,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36793641999247484
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "before": {
+        "case": "io/one-use.bend",
+        "sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/one-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/io/one-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 230737,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3861019009782467
+      },
+      "after": {
+        "case": "io/one-use.bend",
+        "sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/one-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/one-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 231540,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.41839108100975864
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "before": {
+        "case": "io/original.bend",
+        "sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/original.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.4020135869795922
+      },
+      "after": {
+        "case": "io/original.bend",
+        "sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/original.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/original.c\",\n  \"target\": \"c\",\n  \"bytes\": 232125,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.39993302201037295
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "before": {
+        "case": "io/overflow.bend",
+        "sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/overflow.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/io/overflow.c\",\n  \"target\": \"c\",\n  \"bytes\": 231610,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37976859201444313
+      },
+      "after": {
+        "case": "io/overflow.bend",
+        "sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/overflow.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/overflow.c\",\n  \"target\": \"c\",\n  \"bytes\": 231939,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3806821620091796
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "before": {
+        "case": "io/partial-use.bend",
+        "sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/partial-use.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.4126624970231205
+      },
+      "after": {
+        "case": "io/partial-use.bend",
+        "sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/partial-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/partial-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 232871,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.39370805499493144
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "before": {
+        "case": "io/u32-boundary.bend",
+        "sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/u32-boundary.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.39469089699559845
+      },
+      "after": {
+        "case": "io/u32-boundary.bend",
+        "sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/u32-boundary.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/u32-boundary.c\",\n  \"target\": \"c\",\n  \"bytes\": 232134,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.41982538800220937
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "before": {
+        "case": "io/unselected.bend",
+        "sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/io/unselected.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.40093344301567413
+      },
+      "after": {
+        "case": "io/unselected.bend",
+        "sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/io/unselected.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/io/unselected.c\",\n  \"target\": \"c\",\n  \"bytes\": 234321,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.45415196698741056
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "before": {
+        "case": "linear-reuse.bend",
+        "sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/linear-reuse.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+        "timed_out": false,
+        "seconds": 0.28654951899079606
+      },
+      "after": {
+        "case": "linear-reuse.bend",
+        "sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/linear-reuse.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+        "timed_out": false,
+        "seconds": 0.29650514299282804
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "nat-zero.bend",
+      "source_sha256": "bb15cff524ef9662488424711b8cb1b7286d50bee9cff3abf1428504140deef4",
+      "before": {
+        "case": "nat-zero.bend",
+        "sha256": "bb15cff524ef9662488424711b8cb1b7286d50bee9cff3abf1428504140deef4",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/nat-zero.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/nat-zero.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.35648334401776083
+      },
+      "after": {
+        "case": "nat-zero.bend",
+        "sha256": "bb15cff524ef9662488424711b8cb1b7286d50bee9cff3abf1428504140deef4",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/nat-zero.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/nat-zero.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/nat-zero.c\",\n  \"target\": \"c\",\n  \"bytes\": 185286,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.35020466201240197
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "one-use.bend",
+      "source_sha256": "e94dac355cc06ff2c58b22dc6de18ff5651d02c069f31635594779198f8f3122",
+      "before": {
+        "case": "one-use.bend",
+        "sha256": "e94dac355cc06ff2c58b22dc6de18ff5651d02c069f31635594779198f8f3122",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/one-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/one-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/one-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 184719,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3562100660055876
+      },
+      "after": {
+        "case": "one-use.bend",
+        "sha256": "e94dac355cc06ff2c58b22dc6de18ff5651d02c069f31635594779198f8f3122",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/one-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/one-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/one-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 184750,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.35364555500564165
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "before": {
+        "case": "original.bend",
+        "sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/original.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.3804398519860115
+      },
+      "after": {
+        "case": "original.bend",
+        "sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/original.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/original.c\",\n  \"target\": \"c\",\n  \"bytes\": 185335,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3920821439824067
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "overflow.bend",
+      "source_sha256": "aef3bdb2b20dc1368a69f4c024030b3daa5d0053a6d1f29ba3a7339d265428f0",
+      "before": {
+        "case": "overflow.bend",
+        "sha256": "aef3bdb2b20dc1368a69f4c024030b3daa5d0053a6d1f29ba3a7339d265428f0",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/overflow.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/overflow.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/overflow.c\",\n  \"target\": \"c\",\n  \"bytes\": 185553,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36205470602726564
+      },
+      "after": {
+        "case": "overflow.bend",
+        "sha256": "aef3bdb2b20dc1368a69f4c024030b3daa5d0053a6d1f29ba3a7339d265428f0",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/overflow.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/overflow.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/overflow.c\",\n  \"target\": \"c\",\n  \"bytes\": 185618,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3573201140097808
+      },
+      "result": "acceptance_unchanged"
+    },
+    {
+      "case": "partial-use.bend",
+      "source_sha256": "1e929d94e4ac5a0709c99426a8fefac6071a8f2791f5094d2a1a68dc36232aea",
+      "before": {
+        "case": "partial-use.bend",
+        "sha256": "1e929d94e4ac5a0709c99426a8fefac6071a8f2791f5094d2a1a68dc36232aea",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/partial-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/partial-use.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.4095651009993162
+      },
+      "after": {
+        "case": "partial-use.bend",
+        "sha256": "1e929d94e4ac5a0709c99426a8fefac6071a8f2791f5094d2a1a68dc36232aea",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/partial-use.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/partial-use.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/partial-use.c\",\n  \"target\": \"c\",\n  \"bytes\": 186081,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3613988140132278
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "u32-boundary.bend",
+      "source_sha256": "9c609e7fe5d3f732c69180ff88d7938f4dfd01a89119209a03e7c3b3adcd801a",
+      "before": {
+        "case": "u32-boundary.bend",
+        "sha256": "9c609e7fe5d3f732c69180ff88d7938f4dfd01a89119209a03e7c3b3adcd801a",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/u32-boundary.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/u32-boundary.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.37608326200279407
+      },
+      "after": {
+        "case": "u32-boundary.bend",
+        "sha256": "9c609e7fe5d3f732c69180ff88d7938f4dfd01a89119209a03e7c3b3adcd801a",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/u32-boundary.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/u32-boundary.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/u32-boundary.c\",\n  \"target\": \"c\",\n  \"bytes\": 185344,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.375687712978106
+      },
+      "result": "owner_generation_refusal_corrected"
+    },
+    {
+      "case": "unselected.bend",
+      "source_sha256": "4b9e53b0fe364a99141376e1b62da58d5f865cd591a02b79825ad593dc174132",
+      "before": {
+        "case": "unselected.bend",
+        "sha256": "4b9e53b0fe364a99141376e1b62da58d5f865cd591a02b79825ad593dc174132",
+        "lane": "port-C",
+        "command": [
+          "$BASELINE_BINARY/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/unselected.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/unselected.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.37610459298593923
+      },
+      "after": {
+        "case": "unselected.bend",
+        "sha256": "4b9e53b0fe364a99141376e1b62da58d5f865cd591a02b79825ad593dc174132",
+        "lane": "port-C",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-retained-owner/unselected.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$CURRENT_ARTIFACTS/unselected.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$CURRENT_ARTIFACTS/unselected.c\",\n  \"target\": \"c\",\n  \"bytes\": 187525,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37590363499475643
+      },
+      "result": "owner_generation_refusal_corrected"
+    }
+  ],
+  "pure_mode_observations": [
+    {
+      "case": "f32.bend",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/f32.bend"
+      ],
+      "exit": 0,
+      "stdout_prefix": "F32.add(F32{WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}",
+      "stdout_bytes": 978,
+      "stdout_sha256": "ba01c223c6e2c57462620e9848f5e53a344fc26d1a1c044b8c19e63cdcfd487a",
+      "stderr": "",
+      "interpretation": "pure entry normalization; not runtime execution; unchanged from baseline"
+    },
+    {
+      "case": "boxed.bend",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/boxed.bend"
+      ],
+      "exit": 0,
+      "stdout_prefix": "SCon{Chr{111}, SCon{Chr{119}, SCon{Chr{110}, SCon{Chr{101}, SCon{Chr{114}, SCon{",
+      "stdout_bytes": 407,
+      "stdout_sha256": "fdfcdd1781953a7c2266ae1aa3e276516fe9eb1b07cfd1875e5412e69a5312a2",
+      "stderr": "",
+      "interpretation": "pure entry normalization; not runtime execution; unchanged from baseline"
+    },
+    {
+      "case": "overflow.bend",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/overflow.bend"
+      ],
+      "exit": 1,
+      "stdout_prefix": "",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: \u001b[91mkernel nesting limit exhausted; proof not accepted\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/run/run_cli.rs\u001b[0m:\u001b[35m54\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "interpretation": "pure entry normalization; not runtime execution; unchanged from baseline"
+    }
+  ],
+  "raw_before_sha256": "7b24e440cc3394e39a8979f827e4b1367c1bef5c36c5f154540e66b438c2f9cc",
+  "raw_after_sha256": "a746f9260bd67259b586c5639d3621ef36522674a51e97b58e5d711b825c991b"
+}

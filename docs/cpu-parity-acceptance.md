@@ -2362,3 +2362,42 @@ inputs, budgets and cancellation boundaries preserved. Independent source and
 measurement review completed. No installs, desktop/GPU, main merge or release.
 Compact evidence is committed; unique raw logs/graphs/binaries remain local and
 are not preserved by Git publication.
+
+
+## Retained legacy C owners
+
+Clean tested source `208832a8282a7e1688aa725341cdf9ea0b5447c0` repairs the retained
+owner invariant at the legacy-to-flat result boundary. Inline scalars now enter a
+persistent writable frame slot before partial reuse, captures or fork transfers;
+owner validation, use counts, evaluation order, cleanup and limits are unchanged.
+One existing compiler charge and frame slot is added per legacy boundary.
+Independent source and evidence reviews completed. [Report](cpu-retained-owner.md).
+
+The unchanged reusable-U32 original executes as 6 in port/upstream C and JS. Pure
+port `run` normalizes; separate IO companions exercise the native runtime. The
+374-command matrix records 126 successful and 20 intentionally failing executions,
+4 pure-normalization observations, 84 generations/builds, 112 checking/phase commands
+and 28 exact negative CLI observations. All repeats are deterministic. All 18
+before/after owner-generation refusals close; 52 overlapping non-C observations are
+unchanged. Pure F32/string residuals and pure-overflow depth refusal remain distinct
+from executable results. New successful C tests inspect allocation/frame cleanup;
+existing worker-failure/cancellation controls pass. Gate **1,190 / 0 / 49**; targeted
+59-test regression run and strict test Clippy pass.
+
+Renewed upstream-O3 demand remains 92 exact / 6 approved wildcard / 2 unresolved
+Nat-first observations, runner exit 1. Port-C demand builds retain their recorded
+strict/no-explicit-optimization profile. Nat-first remains pending and Nat/string
+compact-lowering research unadopted. Full census is not renewed: last A1 measured
+227 differences outside 385 historical IO members (110 acceptance / 117 rejection),
+plus 5 oracle failures. This is not literally an all-non-IO classification: one
+additional IO-symptom candidate remains in the residual, unwaived. Unstable
+upstream acceptance and historical failure receipts remain separate.
+
+Inventory linkage remains 445 / 1,302, with 857 unlinked entries by applicability;
+new authored controls do not manufacture upstream coverage. Prior host/foreign,
+F32.read, hole, resource, oracle, API and supplementary-lint gaps remain. Next concrete
+independent family: filled-definition diagnostics for live use of unfilled laws
+in assert_fill_scope, axiom_use and imported/forward-reference companions; renew
+before correcting metadata, preserve refusal. Frozen dependencies/toolchains/pin,
+budgets and cancellation boundaries remain. No installs, desktop/GPU, merge/release.
+Compact evidence is in Git; bulky unique raw evidence/binaries remain local.

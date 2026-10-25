@@ -1,0 +1,44 @@
+{
+  "scope": "Sum of registered frame capacities, not runtime live storage. Extra hold uses existing generator charge and one slot for each legacy boundary. Limits unchanged.",
+  "rows": [
+    {
+      "case": "one-use.bend",
+      "before": {
+        "registrations": 2,
+        "declared_slot_sum": 14,
+        "sha256": "6d30cb1752557f9934daabf0bb78597f8a6d63b919d7cef8b3a7ed5cf31914f5"
+      },
+      "after": {
+        "registrations": 2,
+        "declared_slot_sum": 15,
+        "sha256": "a3072dbdd3ff7279091a77151f05e91f7ef4b4267697b9cc69c1134551e75232"
+      }
+    },
+    {
+      "case": "boxed.bend",
+      "before": {
+        "registrations": 7,
+        "declared_slot_sum": 255,
+        "sha256": "020125a94cb430cfc380e0ccbcfb6d21ec8f46f493d71a5bb65ded6e7ec7a509"
+      },
+      "after": {
+        "registrations": 7,
+        "declared_slot_sum": 260,
+        "sha256": "c6d8acdd5befa01bb65cb885fd31c569a8fc911d533cfe2ddc415782fdebd6c8"
+      }
+    },
+    {
+      "case": "overflow.bend",
+      "before": {
+        "registrations": 2,
+        "declared_slot_sum": 28,
+        "sha256": "c1bebebb15b85ef21ba83e88aa35f52c880a5cfd33f243413d1ce82fec7ba185"
+      },
+      "after": {
+        "registrations": 2,
+        "declared_slot_sum": 30,
+        "sha256": "b23c637c52bea0eef370515051c536faa62b3fcb95497cefc03c4c148ab35d0e"
+      }
+    }
+  ]
+}

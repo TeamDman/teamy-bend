@@ -1,0 +1,2375 @@
+{
+  "tested_source": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+  "raw_sha256": "b887177e05a3056d4771b218cccb0e5c265177e3d69169bc409f674dbce94c13",
+  "lane_classifications": {
+    "pass": 46,
+    "accepted_upstream_c_wildcard_exception": 3,
+    "diagnostic_order_difference": 1
+  },
+  "repetitions": 2,
+  "rows": [
+    {
+      "fixture": "unused_argument.bend",
+      "source_sha256": "5b3d8a487e3c56e778b465e641ccdbe130582d54b63abe776bc6ca4772d2e65e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/unused_argument/main.bend",
+            "-o",
+            "$EVIDENCE/demand/unused_argument/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 169,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/unused_argument/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/unused_argument/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 259,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/unused_argument/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_argument/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 7,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/unused_argument/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/unused_argument/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 381,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/unused_argument/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 198588,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/unused_argument/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/unused_argument/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 109,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/unused_argument/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_argument/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/unused_argument/main.bend",
+            "-o",
+            "$EVIDENCE/demand/unused_argument/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 171,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/unused_argument/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_argument/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 21,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/unused_argument/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/unused_argument/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 404,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/unused_argument/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 55261,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/unused_argument/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_argument/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 21,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/unused_argument/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_argument/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 417,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        }
+      }
+    },
+    {
+      "fixture": "partial_add_overflow.bend",
+      "source_sha256": "cf652e56f978fc37bae59be4d1b8794da53cf31517221f6c18b2ca5e07bec7fa",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/partial_add_overflow/main.bend",
+            "-o",
+            "$EVIDENCE/demand/partial_add_overflow/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 202,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/partial_add_overflow/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/partial_add_overflow/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 269,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/partial_add_overflow/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_add_overflow/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/partial_add_overflow/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/partial_add_overflow/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 394,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/partial_add_overflow/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 206604,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/partial_add_overflow/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/partial_add_overflow/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 121,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/partial_add_overflow/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_add_overflow/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 2,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/partial_add_overflow/main.bend",
+            "-o",
+            "$EVIDENCE/demand/partial_add_overflow/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 181,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/partial_add_overflow/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_add_overflow/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 20,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/partial_add_overflow/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/partial_add_overflow/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 375,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/partial_add_overflow/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 56458,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/partial_add_overflow/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_add_overflow/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 20,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/partial_add_overflow/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_add_overflow/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 383,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        }
+      }
+    },
+    {
+      "fixture": "partial_double_overflow.bend",
+      "source_sha256": "bb3a4962228f59d9cdea492e51b905969db96610e58b1a5e700764767b60769e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/partial_double_overflow/main.bend",
+            "-o",
+            "$EVIDENCE/demand/partial_double_overflow/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 175,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/partial_double_overflow/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/partial_double_overflow/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 256,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/partial_double_overflow/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_double_overflow/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/partial_double_overflow/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/partial_double_overflow/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 399,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/partial_double_overflow/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 206528,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/partial_double_overflow/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/partial_double_overflow/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 113,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/partial_double_overflow/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_double_overflow/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/partial_double_overflow/main.bend",
+            "-o",
+            "$EVIDENCE/demand/partial_double_overflow/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 229,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/partial_double_overflow/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_double_overflow/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 17,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/partial_double_overflow/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/partial_double_overflow/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 375,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/partial_double_overflow/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 56384,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/partial_double_overflow/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_double_overflow/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 21,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/partial_double_overflow/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/partial_double_overflow/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 382,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        }
+      }
+    },
+    {
+      "fixture": "unused_rhs_error.bend",
+      "source_sha256": "c6e79a1d103e0de8041b4bdafbad6ad9c9fc7ae7071c6444783d217fe6e8c60f",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: runtime fail-stop\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/unused_rhs_error/main.bend",
+            "-o",
+            "$EVIDENCE/demand/unused_rhs_error/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 174,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/unused_rhs_error/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/unused_rhs_error/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 274,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/unused_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_rhs_error/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "stderr": ""
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/unused_rhs_error/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/unused_rhs_error/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 430,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/unused_rhs_error/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 216384,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/unused_rhs_error/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/unused_rhs_error/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 119,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/unused_rhs_error/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_rhs_error/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 2,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/unused_rhs_error/main.bend",
+            "-o",
+            "$EVIDENCE/demand/unused_rhs_error/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 178,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/unused_rhs_error/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_rhs_error/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 18,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/unused_rhs_error/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/unused_rhs_error/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 398,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/unused_rhs_error/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 57285,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/unused_rhs_error/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_rhs_error/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 21,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/unused_rhs_error/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/unused_rhs_error/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 401,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        }
+      }
+    },
+    {
+      "fixture": "ordinary_rhs_error.bend",
+      "source_sha256": "9e984e01470e4d8cca46c06c28051de53ceaf49aa71d196f2ac5bade7da4c105",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: runtime fail-stop\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/ordinary_rhs_error/main.bend",
+            "-o",
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 164,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 284,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/ordinary_rhs_error/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "positive\n",
+          "stderr": ""
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/ordinary_rhs_error/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/ordinary_rhs_error/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 446,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/ordinary_rhs_error/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 216699,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/ordinary_rhs_error/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/ordinary_rhs_error/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 138,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/ordinary_rhs_error/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/ordinary_rhs_error/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 4,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/ordinary_rhs_error/main.bend",
+            "-o",
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 301,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/ordinary_rhs_error/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/ordinary_rhs_error/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 40,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/ordinary_rhs_error/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/ordinary_rhs_error/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 783,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/ordinary_rhs_error/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 55573,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/ordinary_rhs_error/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/ordinary_rhs_error/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 88,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/ordinary_rhs_error/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/ordinary_rhs_error/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 583,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        }
+      }
+    },
+    {
+      "fixture": "forced_request_wildcard.bend",
+      "source_sha256": "7aa7f1dc993235028f78f96cb6ce7c3729061812ecf0844f96bf5f0ff620dc87",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: runtime fail-stop\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "accepted_upstream_c_wildcard_exception",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/forced_request_wildcard/main.bend",
+            "-o",
+            "$EVIDENCE/demand/forced_request_wildcard/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 425,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/forced_request_wildcard/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/forced_request_wildcard/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 539,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/forced_request_wildcard/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/forced_request_wildcard/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 7,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "accepted_upstream_c_wildcard_exception",
+          "phase": "execution",
+          "stdout": "0\n",
+          "stderr": ""
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/forced_request_wildcard/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/forced_request_wildcard/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 555,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/forced_request_wildcard/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 240454,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/forced_request_wildcard/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/forced_request_wildcard/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 259,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/forced_request_wildcard/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/forced_request_wildcard/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 28,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/forced_request_wildcard/main.bend",
+            "-o",
+            "$EVIDENCE/demand/forced_request_wildcard/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 328,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/forced_request_wildcard/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/forced_request_wildcard/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 71,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/forced_request_wildcard/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/forced_request_wildcard/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 639,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/forced_request_wildcard/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 63382,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/forced_request_wildcard/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/forced_request_wildcard/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 48,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/forced_request_wildcard/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/forced_request_wildcard/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 583,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        }
+      }
+    },
+    {
+      "fixture": "nat_first.bend",
+      "source_sha256": "d72c6f8c10a1ad4b5b15be113f6dabff9e565fb59e6b2f0c41f8f3f0c8a72766",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+        "exit": 1,
+        "stdout": "before"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "diagnostic_order_difference",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/nat_first/main.bend",
+            "-o",
+            "$EVIDENCE/demand/nat_first/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 410,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/nat_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/nat_first/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 690,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/nat_first/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/nat_first/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 1,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "diagnostic_order_difference",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/nat_first/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/nat_first/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 670,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/nat_first/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 237238,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/nat_first/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/nat_first/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 221,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/nat_first/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/nat_first/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 7,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/nat_first/main.bend",
+            "-o",
+            "$EVIDENCE/demand/nat_first/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 390,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/nat_first/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/nat_first/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 72,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/nat_first/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/nat_first/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 707,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/nat_first/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58566,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/nat_first/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/nat_first/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 22,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/nat_first/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/nat_first/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 499,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: a Nat past the largest immediate 2^48-1\n"
+        }
+      }
+    },
+    {
+      "fixture": "request_first.bend",
+      "source_sha256": "7ec611452bbccf0dbe9cccc3d285b94b540af79177a21cf4286f53f35529f80f",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: runtime fail-stop\n",
+        "exit": 1,
+        "stdout": "before"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/request_first/main.bend",
+            "-o",
+            "$EVIDENCE/demand/request_first/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 412,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/request_first/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/request_first/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 392,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/request_first/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/request_first/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 2,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/request_first/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/request_first/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 616,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/request_first/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 237238,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/request_first/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/request_first/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 350,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/request_first/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/request_first/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 2,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/request_first/main.bend",
+            "-o",
+            "$EVIDENCE/demand/request_first/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 435,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/request_first/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/request_first/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 63,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/request_first/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/request_first/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 472,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/request_first/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 58566,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/request_first/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/request_first/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 18,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/request_first/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/request_first/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 639,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "before",
+          "stderr": "bend: runtime fail-stop\n"
+        }
+      }
+    },
+    {
+      "fixture": "word_live_tail.bend",
+      "source_sha256": "da5b26d5334bfb9fb26a4acd59fa8aa69dd2817721ad1e4fe8b8d9e3fc839c9e",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "bend: runtime fail-stop\n",
+        "exit": 1,
+        "stdout": ""
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/word_live_tail/main.bend",
+            "-o",
+            "$EVIDENCE/demand/word_live_tail/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 400,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/word_live_tail/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/word_live_tail/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 635,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/word_live_tail/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/word_live_tail/upstream-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 7,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/word_live_tail/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/word_live_tail/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 727,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/word_live_tail/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 558378,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/word_live_tail/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/word_live_tail/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 509,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/word_live_tail/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/word_live_tail/port-c-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 33,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/word_live_tail/main.bend",
+            "-o",
+            "$EVIDENCE/demand/word_live_tail/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 314,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/word_live_tail/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/word_live_tail/upstream-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 25,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/word_live_tail/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/word_live_tail/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 596,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/word_live_tail/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 61019,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/word_live_tail/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/word_live_tail/port-js-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 69,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/word_live_tail/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/word_live_tail/native-1",
+          "exit": 1,
+          "timed_out": false,
+          "elapsed_ms": 587,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "",
+          "stderr": "bend: runtime fail-stop\n"
+        }
+      }
+    },
+    {
+      "fixture": "erased_and_unselected.bend",
+      "source_sha256": "08254fee3e2e66221694d395eacdd71c8d882651369edc2e152ba84f0bcad828",
+      "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "port_revision": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+      "port_dirty": false,
+      "port_binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+      "timeout_seconds": 60,
+      "repetitions": 2,
+      "c_arguments": [
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "upstream_c_optimization": "O3",
+      "upstream_c_link_flags": [
+        "-lpthread",
+        "-lm"
+      ],
+      "expected": {
+        "stderr": "",
+        "exit": 0,
+        "stdout": "erased\nerased\n7\nselected\nunused closures\n"
+      },
+      "fixture_origin": "authored_contract_control",
+      "lanes": {
+        "upstream-c": "pass",
+        "port-c": "pass",
+        "upstream-js": "pass",
+        "port-js": "pass",
+        "native": "pass"
+      },
+      "deterministic": true,
+      "steps": {
+        "upstream-generate-c": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/erased_and_unselected/main.bend",
+            "-o",
+            "$EVIDENCE/demand/erased_and_unselected/upstream.c"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 636,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$EVIDENCE/demand/erased_and_unselected/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$EVIDENCE/demand/erased_and_unselected/upstream"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 720,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-c-1": {
+          "command": [
+            "$EVIDENCE/demand/erased_and_unselected/upstream",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/erased_and_unselected/upstream-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 30,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+          "stderr": ""
+        },
+        "port-generate-c": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/erased_and_unselected/main.bend",
+            "--target",
+            "c",
+            "--output",
+            "$EVIDENCE/demand/erased_and_unselected/port.c"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 1004,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/erased_and_unselected/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 299901,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-compile": {
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$EVIDENCE/demand/erased_and_unselected/port.c",
+            "-pthread",
+            "-lm",
+            "-ldl",
+            "-o",
+            "$EVIDENCE/demand/erased_and_unselected/port"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 303,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "port-c-1": {
+          "command": [
+            "$EVIDENCE/demand/erased_and_unselected/port",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "cwd": "$EVIDENCE/demand/erased_and_unselected/port-c-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 9,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+          "stderr": ""
+        },
+        "upstream-generate-js": {
+          "command": [
+            "node",
+            "main.ts",
+            "$EVIDENCE/demand/erased_and_unselected/main.bend",
+            "-o",
+            "$EVIDENCE/demand/erased_and_unselected/upstream.js"
+          ],
+          "cwd": "$UPSTREAM/bend2",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 457,
+          "child_exited": true,
+          "stdout": "",
+          "stderr": ""
+        },
+        "upstream-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/erased_and_unselected/upstream.js"
+          ],
+          "cwd": "$EVIDENCE/demand/erased_and_unselected/upstream-js-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 35,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+          "stderr": ""
+        },
+        "port-generate-js": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "compile",
+            "--executable",
+            "$EVIDENCE/demand/erased_and_unselected/main.bend",
+            "--target",
+            "javascript",
+            "--output",
+            "$EVIDENCE/demand/erased_and_unselected/port.js"
+          ],
+          "cwd": "$REPO",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 654,
+          "child_exited": true,
+          "stdout": "{\n  \"output\": \"$EVIDENCE/demand/erased_and_unselected/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 70231,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": ""
+        },
+        "port-js-1": {
+          "command": [
+            "node",
+            "$EVIDENCE/demand/erased_and_unselected/port.js"
+          ],
+          "cwd": "$EVIDENCE/demand/erased_and_unselected/port-js-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 79,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+          "stderr": ""
+        },
+        "native-1": {
+          "command": [
+            "$EVIDENCE/demand/teamy-bend",
+            "run",
+            "$EVIDENCE/demand/erased_and_unselected/main.bend"
+          ],
+          "cwd": "$EVIDENCE/demand/erased_and_unselected/native-1",
+          "exit": 0,
+          "timed_out": false,
+          "elapsed_ms": 922,
+          "child_exited": true,
+          "remaining_files": [],
+          "outcome": "pass",
+          "phase": "execution",
+          "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+          "stderr": ""
+        }
+      }
+    }
+  ],
+  "required_runner_exit": 1,
+  "nat_first_pending": true,
+  "wildcard_scope_unchanged": true
+}

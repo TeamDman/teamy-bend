@@ -1,0 +1,5069 @@
+{
+  "tested_source": "208832a8282a7e1688aa725341cdf9ea0b5447c0",
+  "binary_sha256": "dd634d1cb379d7a37e6f77f9472609b0228ed96dbb1dcdf2e707a767ac5b8b5f",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "completed": true,
+  "full_parity": false,
+  "observations": 374,
+  "lane_counts": {
+    "port-pure-normalization": 2,
+    "upstream-pure-normalization": 2,
+    "upstream-check": 32,
+    "strict-phase": 28,
+    "executable-phase": 28,
+    "strict-check": 28,
+    "upstream-generate-c": 14,
+    "upstream-build-O3": 14,
+    "upstream-generate-js": 14,
+    "port-generate-c": 14,
+    "port-build-O3": 14,
+    "port-generate-js": 14,
+    "upstream-C-O3": 28,
+    "upstream-JS": 28,
+    "port-C-O3": 28,
+    "port-JS": 28,
+    "native-runtime": 26,
+    "upstream-C-O3-workers4": 4,
+    "port-C-O3-workers4": 4,
+    "check": 4,
+    "eval": 4,
+    "run": 4,
+    "c": 4,
+    "javascript": 4,
+    "native": 4
+  },
+  "executions": {
+    "success": 126,
+    "intentional_failure": 20,
+    "pure_normalization_observations": 4
+  },
+  "timeout_seconds": 30,
+  "rows": [
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-pure-normalization",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3757558850047644,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-pure-normalization",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14880212198477238,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "$RUN/matrix/original/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13473335400340147,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1273744399950374,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2140312499832362,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2594944199954625,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "-o",
+        "$RUN/matrix/original/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17528076100279577,
+      "artifact_sha256": "516444333d7a7a27556b82961fecb4c777303aa49668e68a11dd5b9b5c53f6f7"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/original/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/original/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1745369840064086,
+      "artifact_sha256": "8789b2eba87eeab5cad347d0ce456b1067d3c8a327258d3c38137435f9441249"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "-o",
+        "$RUN/matrix/original/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15027595398714766,
+      "artifact_sha256": "3d332b0b9068d9982bd3a504fa301ae53453236d9664d7cd0ebc5b7b9afc32a8"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/original/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/original/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 185335,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3578212480060756,
+      "artifact_sha256": "78d6ad8680653147d93d1c4469d21d35ddd2a4041597a881ec6d683f98ecc850"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/original/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/original/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4046144309977535,
+      "artifact_sha256": "4827a44ba31c5fb29af70ec089190454b131d44befa2aec53ed12a4f7a80cd95"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/original.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/original/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/original/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59675,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.35858176098554395,
+      "artifact_sha256": "ea33c1e093c90618d9588a3792fb0a689ab313ef83bb741603072158819bd074"
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/original/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0009921479795593768,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/original/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.017539286985993385,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/original/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0013732460211031139,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "original.bend",
+      "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/original/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.018966853007441387,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3580130629998166,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "$RUN/matrix/io/boxed/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15791163500398397,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12783501500962302,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.25026159998378716,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n 9 | \n10>| def main() -> IO(Unit): IO.print(value())\n11 | \n",
+      "timed_out": false,
+      "seconds": 0.2649870000022929,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "-o",
+        "$RUN/matrix/io/boxed/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.16316917500807904,
+      "artifact_sha256": "06255bd22b909e3f582f00487bda38b856e3ba6280a50c3dcacd4ed03c1cab2f"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/boxed/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/boxed/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.29525843998999335,
+      "artifact_sha256": "87045a38d81f737ef4ea5ceedf5d47042c8046adfe13cd29defeb1039966ccec"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "-o",
+        "$RUN/matrix/io/boxed/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15527102898340672,
+      "artifact_sha256": "f5850066ff2f9f2c66aa8896f2491e611d8827016679bc352196554e63e718d2"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/boxed/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/boxed/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 210681,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.38524608401348814,
+      "artifact_sha256": "c209abf81303c35890f290167d658c4a4ab796bdb5852daef1c7860de7ea415a"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/boxed/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/boxed/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5415352200216148,
+      "artifact_sha256": "5a6b775bc9dad2c7149bc297bf2240b5a6102519acaa4d0d8bbb257bc902c816"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/boxed.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/boxed/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/boxed/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53728,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3607212099886965,
+      "artifact_sha256": "4e51fbcb550cd269ba86454c6bba66a977862fbfa636bd0a5985972435f8c640"
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/boxed/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0009640560019761324,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-C-O3-workers4",
+      "command": [
+        "$RUN/matrix/io/boxed/upstream.bin",
+        "--threads",
+        "4",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0011273899872321635,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/boxed/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.017238441010704264,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/boxed/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001701810018857941,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-C-O3-workers4",
+      "command": [
+        "$RUN/matrix/io/boxed/port.bin",
+        "--threads",
+        "4",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001459264021832496,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/boxed.bend",
+      "source_sha256": "f8f2d1bced2197df2b449a5e86cb75bb2f7d6077a479dce2ed84711f08de4f88",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/boxed/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "ownerownerownerownerowner\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.019374171999515966,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.36698586301645264,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "$RUN/matrix/io/closure/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1256513140106108,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15263629399123602,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.20669046801049262,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n 8 | \n 9>| def main() -> IO(Unit): IO.print(U32.show(value()))\n10 | \n",
+      "timed_out": false,
+      "seconds": 0.2544240379938856,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "-o",
+        "$RUN/matrix/io/closure/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14523543798713945,
+      "artifact_sha256": "bcac881ba1230fa6bbf47457e7689dc94ada9c688592da5f7523b1bce20bab15"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/closure/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/closure/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.26384769700234756,
+      "artifact_sha256": "bd65acd6141c6f604647989ebec0bbe0d8a5a5dcca1786327f8e9f5649195dea"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "-o",
+        "$RUN/matrix/io/closure/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.16590853399247862,
+      "artifact_sha256": "6d852c585211f3e636a461731c35bc6c34fdad0ae7dc640b5caa0d6d9a5c6de7"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/closure/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/closure/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 235664,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4126115909893997,
+      "artifact_sha256": "751d991d1ea0a20d95ed74ccd7df3bff33bf5b65fbf35524db6c1a930c9b9dae"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/closure/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/closure/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5791336590191349,
+      "artifact_sha256": "d2bfa5b6ddb4c15b62d3af798abc1f077debc6415a4aabfa1da4bdd3243f8317"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/closure.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/closure/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/closure/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73702,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.35875834900070913,
+      "artifact_sha256": "7965611fa5e880c31b18919c5b7061ebd2fcb8ef8fa2e338156b54431a172764"
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/closure/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0011474700004328042,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/closure/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.017041596001945436,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/closure/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001969183998880908,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/closure.bend",
+      "source_sha256": "007a9b4693b4472b222764bbc4fc4e6566af8404c3a56ee029936580b2bd7552",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/closure/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.019971981004346162,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3603109219984617,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "$RUN/matrix/io/erased/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1400112459959928,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12405767099699005,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.20792079699458554,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n7 | \n8>| def main() -> IO(Unit): IO.print(U32.show(value()))\n9 | \n",
+      "timed_out": false,
+      "seconds": 0.24583979198359884,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "-o",
+        "$RUN/matrix/io/erased/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.16731354800867848,
+      "artifact_sha256": "dda9e7b3bddeed3f70baacf50f81ec10bc2a759bba0df2d8397c39685e2d334d"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/erased/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/erased/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2922471770143602,
+      "artifact_sha256": "9b71b99af7685a303dac978d6cd9a3f8bce79be986f03299a227719e7967d4f5"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "-o",
+        "$RUN/matrix/io/erased/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.19595541499438696,
+      "artifact_sha256": "37cbfbb9851794d18c494237b0fcc7ffc3d89bafc0b884e4f675fb0db51c26c9"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/erased/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/erased/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 232125,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.46633072901749983,
+      "artifact_sha256": "3938200258b7f5484d3eb86db1553cc9b3322a5ccdb3cc85bbb40e3c810f6854"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/erased/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/erased/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.6221641059964895,
+      "artifact_sha256": "1aad69ad3a5f75023a25547c1481bbb09439ec404571a1941efa3186c1d8424a"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/erased.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/erased/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/erased/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73429,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3605048660247121,
+      "artifact_sha256": "4eb70f4278034b141b21094872eb75638a17c3fed9e2973ec45a16674fa58024"
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/erased/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010362239845562726,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/erased/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.019027214002562687,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/erased/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0016863720084074885,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/erased.bend",
+      "source_sha256": "d45ef5853b223f90d321d8a6cbae3fc32b79ef9130d19fdc80fcc0eb9a92c0dc",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/erased/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.021117538010003045,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.34915993598406203,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "$RUN/matrix/io/f32/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12795795299462043,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1255915880028624,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.20660786298685707,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : F32.add\nContext:\n- n : F32\nLocation: value\n4 |   +n = {1.5 : F32}\n5>|   F32.add(n, n)\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.24548151201452129,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "-o",
+        "$RUN/matrix/io/f32/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14189483399968594,
+      "artifact_sha256": "75360284c952748a02a0245b1cabf83be4fc7904844cfe9b51de38d01d413c00"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/f32/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/f32/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2532193179940805,
+      "artifact_sha256": "1cf99068a3b34e370d00d091bbada5e2d6788fa1af7014e924bc983c65bcd1d5"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "-o",
+        "$RUN/matrix/io/f32/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15813032898586243,
+      "artifact_sha256": "fac6805d4cd67e5b91bf199ba084044f50f886f7e9021044687d4cc6886db902"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/f32/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/f32/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 190494,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3521786830096971,
+      "artifact_sha256": "bdcb87c5fb9c1432998fc4e2163387bf62b2375a196531eb84b3c97e80549564"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/f32/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/f32/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.49802794700372033,
+      "artifact_sha256": "c592f042e63490229d5a5b0f7e30a96660f5e62af763bebe5f6151e20784fd54"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/f32.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/f32/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/f32/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52890,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.35018590500112623,
+      "artifact_sha256": "4559886aa392ce29c66158db9cc6eadc95f0cb0705daf56f4f6f7cd2fdd10020"
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/f32/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0009803299908526242,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/f32/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.019308101997012272,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/f32/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0015694980102125555,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/f32.bend",
+      "source_sha256": "9db89992e5c202ada848b5617e44d2e9137534ca76b3464b353a604fc4ed7188",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/f32/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.017688319989247248,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.36169137302204035,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "$RUN/matrix/io/fork/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13595287199132144,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13052367500495166,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.21224366797832772,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n 9 | \n10>| def main() -> IO(Unit): IO.print(U32.show(value()))\n11 | \n",
+      "timed_out": false,
+      "seconds": 0.24902620099601336,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "-o",
+        "$RUN/matrix/io/fork/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15899822799838148,
+      "artifact_sha256": "d386ca98036167add2ead1c1a15428650051447fb4bdee762752fe13f5d5f0a8"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/fork/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/fork/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2844074110034853,
+      "artifact_sha256": "c084caa410ac3aba2974e02a7c6876c796a1ccb18378c4a01496c69d3b1e5de6"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "-o",
+        "$RUN/matrix/io/fork/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15310035200673155,
+      "artifact_sha256": "c50b2aff22846ce2721f6222d1c6add03f85d3c38c7f222725ec244d13bdccc9"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/fork/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/fork/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 239508,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3957061239925679,
+      "artifact_sha256": "63eeed665300ecc367619b550f7691726a452d930c13bd5679361f07f9a5f4b4"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/fork/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/fork/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.6123858760111034,
+      "artifact_sha256": "ee224d47b6fe8ade17d124816e15e4220900b72243746c743ac0beb4364277ba"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/fork.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/fork/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/fork/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73783,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.37985355997807346,
+      "artifact_sha256": "4d3f8e923912620a68efab5e521811171ad1d6df1911714573ffd8972ae7e3c8"
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/fork/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0009163650101982057,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-C-O3-workers4",
+      "command": [
+        "$RUN/matrix/io/fork/upstream.bin",
+        "--threads",
+        "4",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.002107459004037082,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/fork/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.017617712990613654,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/fork/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0016765579930506647,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-C-O3-workers4",
+      "command": [
+        "$RUN/matrix/io/fork/port.bin",
+        "--threads",
+        "4",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0015370900218840688,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/fork.bend",
+      "source_sha256": "0093e5cbb75613532e49583f53524b91ad6a53660fd9bf9466b517a4fd64303b",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/fork/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.02224576799198985,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.359561252000276,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "$RUN/matrix/io/nat-zero/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13592427701223642,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13322371401591226,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.21760870498837903,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit): IO.print(Nat.show(value()))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.26019425300182775,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "-o",
+        "$RUN/matrix/io/nat-zero/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.19244894699659199,
+      "artifact_sha256": "b172b539992e7bb8a0d3779eee4842cdaa4920b2c410c19974f86d80940a8964"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/nat-zero/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/nat-zero/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2902364339970518,
+      "artifact_sha256": "c3a76e0113d7857901fb290a6059c8533f49081ac2e563d5c73306476d7688d4"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "-o",
+        "$RUN/matrix/io/nat-zero/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24182040599407628,
+      "artifact_sha256": "ce286eee6b9c71aaeaa7d8e384d65d50411eb430e460b57f73a91d7394044527"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/nat-zero/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/nat-zero/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 231607,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3682253480073996,
+      "artifact_sha256": "8c298779163b595097b89057352baed9a8bcc2cc9ce794577b01db54e8f606bb"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/nat-zero/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/nat-zero/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5985906920104753,
+      "artifact_sha256": "0eaa45ba5490938afde23c6102a3837d49ffe311009c6ade537ae75499f261da"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/nat-zero.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/nat-zero/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/nat-zero/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 62476,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.35466188401915133,
+      "artifact_sha256": "30b70967d00db7d751a15aa65dcbf8be1223a0d180b06d07b1ec48e80b510038"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/nat-zero/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001028591999784112,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/nat-zero/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.01923251900007017,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/nat-zero/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001655205007409677,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "source_sha256": "7c423f84b3ff9a5bccfd4c4ccb6e8ab14c1784008def3b289317da7bc03cb80c",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/nat-zero/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "0\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.02012154398835264,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.35992283999803476,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "$RUN/matrix/io/one-use/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.16258133499650285,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13283730801776983,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.21191995599656366,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit): IO.print(U32.show(value()))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.2581378029717598,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "-o",
+        "$RUN/matrix/io/one-use/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15904262001276948,
+      "artifact_sha256": "860b35bd9617a3deb38d7d601ffe8ebcd3a6951425dbd73b8166289cba395e1a"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/one-use/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/one-use/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.25964602900785394,
+      "artifact_sha256": "28e32ac8e838cf79857249b08858fd100919cc81e6d7d207a52a30bc555f0e26"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "-o",
+        "$RUN/matrix/io/one-use/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.19223739599692635,
+      "artifact_sha256": "32d675c6de98449fd927f671818a6d484b4afba5a351e1c427429cb9742cbdcf"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/one-use/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/one-use/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 231540,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4051171019964386,
+      "artifact_sha256": "a4f57b7c01a21a540813fa8dc3da963e601f6584a402f82483696ea3c2dd1735"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/one-use/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/one-use/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5746157770045102,
+      "artifact_sha256": "65afe5c481fa49ed8e3f6d6bb2af3f0ed5188ddaaccbe4c928e9cd733813e462"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/one-use.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/one-use/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/one-use/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 66079,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.38537937100045383,
+      "artifact_sha256": "acd21d2f5b5f8969a46173c11608b767a003ff1cbca51e4cd9782ddd1b9f78cf"
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/one-use/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010036250168923289,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/one-use/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.018147041992051527,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/one-use/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0017020349914673716,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/one-use.bend",
+      "source_sha256": "ca01657c0de077cf73063a9ad33b24e172178df6fd579369e438163ff09c51f8",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/one-use/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.020955654996214435,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3743043080030475,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "$RUN/matrix/io/original/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17102048298693262,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12531793798552826,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.21357496798736975,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit): IO.print(U32.show(value()))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.26720625400776044,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "-o",
+        "$RUN/matrix/io/original/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2942401899781544,
+      "artifact_sha256": "dda9e7b3bddeed3f70baacf50f81ec10bc2a759bba0df2d8397c39685e2d334d"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/original/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/original/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3394299870124087,
+      "artifact_sha256": "9b71b99af7685a303dac978d6cd9a3f8bce79be986f03299a227719e7967d4f5"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "-o",
+        "$RUN/matrix/io/original/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3201602910121437,
+      "artifact_sha256": "37cbfbb9851794d18c494237b0fcc7ffc3d89bafc0b884e4f675fb0db51c26c9"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/original/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/original/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 232125,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.548799971002154,
+      "artifact_sha256": "3938200258b7f5484d3eb86db1553cc9b3322a5ccdb3cc85bbb40e3c810f6854"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/original/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/original/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 1.4233055610093288,
+      "artifact_sha256": "1aad69ad3a5f75023a25547c1481bbb09439ec404571a1941efa3186c1d8424a"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/original.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/original/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/original/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73411,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5159031850052997,
+      "artifact_sha256": "8ba7fefdfba8d2051ec33848bb61d70f11c33585a5220f2b2530cb9c488c0957"
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/original/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.00645320798503235,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/original/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06745015599881299,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/original/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.002609346993267536,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/original.bend",
+      "source_sha256": "6f6fb2dea76cd5f593fa75404823c1b78209c6b9b0d79462ee8773db490a4c9d",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/original/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "6\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07036626900662668,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "before\n",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.5512949399999343,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "$RUN/matrix/io/overflow-order/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2980013120104559,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.22959397098748013,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.42447740500210784,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit):\n8 |   do IO<Unit>:\n",
+      "timed_out": false,
+      "seconds": 0.33019549000891857,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "-o",
+        "$RUN/matrix/io/overflow-order/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.31638877297518775,
+      "artifact_sha256": "950ccdb190534de26f15e3f58c96e688027ae311a1233238ac608a799b3e3437"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/overflow-order/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/overflow-order/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.513063766004052,
+      "artifact_sha256": "8fd8a77b68f9b2996abe3109366113576169b20dca2ef1c8cea789a1de5f11b7"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "-o",
+        "$RUN/matrix/io/overflow-order/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4844891199900303,
+      "artifact_sha256": "1e38e6f30fe3bfc2dc4baa6e7d449cf908dcc5de5b081e7eaa2ffc7cb2c1a55b"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/overflow-order/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/overflow-order/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 253210,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5496535409765784,
+      "artifact_sha256": "ca442a1550f8fd1daba52d89c5dfd0ccdf8b55ec5338dfde01d01cad9963878c"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/overflow-order/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/overflow-order/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.8405889019777533,
+      "artifact_sha256": "d6b9dfa586613585bd39ed82f05f74b331804f0c4485c782cdd3f930a083908c"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow-order.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/overflow-order/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/overflow-order/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 65958,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5955306559917517,
+      "artifact_sha256": "64ed91b67e9e6e5e2eba1b217e14d0fc27c609187379b501ae7efa84dbb93832"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/overflow-order/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "before\n",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.0047672610089648515,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/overflow-order/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "before\n",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.02756130599300377,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/overflow-order/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "before\n",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.005891256005270407,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "source_sha256": "bc5084a3e7960eb5eadf763f1efddc9b319370178a7522ef0c32d03cecfab9fd",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/overflow-order/port.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "before\n",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.037316688016289845,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.4960579540056642,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "$RUN/matrix/io/overflow/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24778423699899577,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1705526109726634,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2659940939920489,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit): IO.print(Nat.show(value()))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.3130508110043593,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "-o",
+        "$RUN/matrix/io/overflow/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3876609430008102,
+      "artifact_sha256": "f4e07866602eaefe12b87908d8756476c1c4a98a005a1f1f4dd08eba16835329"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/overflow/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/overflow/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.6088891009858344,
+      "artifact_sha256": "6862905558467fe5eb84dbf51fed06fb1e1b604240d0fc350b34b5eda7fd3343"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "-o",
+        "$RUN/matrix/io/overflow/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4683743359928485,
+      "artifact_sha256": "bbc53998559402745bcb1bf13ae1781c7c916a329950d3359f46e5dfc01bb897"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/overflow/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/overflow/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 231939,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5400015840132255,
+      "artifact_sha256": "acc0ef4c76b9efd10faa43e6447e4ae91e7ca7a3c721e7dbb7fa2ec654f1d551"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/overflow/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/overflow/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.8537315650028177,
+      "artifact_sha256": "ef7ff4cba4515404b3666952e88ae70723854316035e1e6215c3e079eb4f45ee"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/overflow.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/overflow/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/overflow/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 64439,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.7852627440006472,
+      "artifact_sha256": "a28c8269f091bb7dc66104268229573f417760dca5af15039577c10ab3bb6eab"
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/overflow/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.005166827002540231,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/overflow/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.057770700979745016,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/overflow/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.004066368011990562,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/overflow.bend",
+      "source_sha256": "185bd51d721cb51bae2981260e30a1feff31344e848729bc7a6fba55b8003005",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/overflow/port.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "timed_out": false,
+      "seconds": 0.04551469298894517,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.8433335059962701,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "$RUN/matrix/io/partial-use/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.34366999499616213,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17115076800109819,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5060092629864812,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n7 | \n8>| def main() -> IO(Unit): IO.print(U32.show(value()))\n9 | \n",
+      "timed_out": false,
+      "seconds": 0.3105617529945448,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "-o",
+        "$RUN/matrix/io/partial-use/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4940289660007693,
+      "artifact_sha256": "4cfcb68ea899361b066ba2b6057854e7480e5ee046d2fcbe9db481e5e6dc0eb6"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/partial-use/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/partial-use/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.5064688769925851,
+      "artifact_sha256": "3ee4508605297225082a85d7bbebccc312f4d608d49c48d1a86801510ef639cf"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "-o",
+        "$RUN/matrix/io/partial-use/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.28341819799970835,
+      "artifact_sha256": "42cce341212c33b905aeb835661cbbe6d9f34b6078ae0e007fc8a00a2c437c75"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/partial-use/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/partial-use/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 232871,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.6273839130008128,
+      "artifact_sha256": "ff02259e70931c90cd6dcf488190ff0e5e32716f49acf00d22a841b6d1dc3e13"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/partial-use/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/partial-use/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.9731471940176561,
+      "artifact_sha256": "34b6aa607593f8b6900b9608b00008ec5ed1f00d190f9216019471795f2e70bb"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/partial-use.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/partial-use/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/partial-use/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73501,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.498330004978925,
+      "artifact_sha256": "c7383e131d7df54668a2bb6d7f36bde055c37d6b14c24fa3464d49fcdaabeb7f"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/partial-use/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0061366260051727295,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/partial-use/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.021708357002353296,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/partial-use/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0017295560101047158,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/partial-use.bend",
+      "source_sha256": "92a1abc6390c0b7910be16dd91d178871a7f030da673a0c1dbe7142845edbb7c",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/partial-use/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.03325639999820851,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4294967294\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4664490449940786,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "$RUN/matrix/io/u32-boundary/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.23736124200513586,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15837253400241025,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2743682260042988,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n6 | \n7>| def main() -> IO(Unit): IO.print(U32.show(value()))\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.3134338539966848,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "-o",
+        "$RUN/matrix/io/u32-boundary/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3660287660022732,
+      "artifact_sha256": "b44d0fc7fc9782cdccc4326f6e0f958ec6310b04927aea149fa1faddfe8e56b8"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/u32-boundary/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/u32-boundary/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3195971770037431,
+      "artifact_sha256": "3caef8f7554cfd2989962c26ae59e729165b0667ae3d13ca987a5faaf7578c2d"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "-o",
+        "$RUN/matrix/io/u32-boundary/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2784582699823659,
+      "artifact_sha256": "595c80548eab02e8c304dfd6e43534d9f51d88c903c52c4fb4a09af6eb5acf27"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/u32-boundary/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/u32-boundary/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 232134,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4833099490206223,
+      "artifact_sha256": "4e664914047ede724d7c09a67870de34a57e1dc67ac08bf9168f073e48301340"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/u32-boundary/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/u32-boundary/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.7785161109932233,
+      "artifact_sha256": "ce545f40101a0357d470326c886f837e11cb83cc0879146e45065d19c0fd23b7"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/u32-boundary.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/u32-boundary/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/u32-boundary/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 73420,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.43474297199281864,
+      "artifact_sha256": "64fd9fa2a0925b285c5b4bbc15a757e05aaf1a72e44dda665eba56a102bdbffe"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/u32-boundary/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4294967294\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010154129995498806,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/u32-boundary/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4294967294\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.019488892023218796,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/u32-boundary/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4294967294\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0029424029926303774,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "source_sha256": "37e0d437c84842b2805221f79e09147fdc4cb41c95165e2e2403d0ed4e4e14b8",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/u32-boundary/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4294967294\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0458001850056462,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "native-runtime",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.44384089499362744,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "$RUN/matrix/io/unselected/phase-1.json"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3159465870121494,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "check\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.16112078202422708,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "--executable"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "accepted\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24148729001171887,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "strict-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n10 | \n11>| def main() -> IO(Unit): IO.print(U32.show(value()))\n12 | \n",
+      "timed_out": false,
+      "seconds": 0.3043245450244285,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "-o",
+        "$RUN/matrix/io/unselected/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2580535020097159,
+      "artifact_sha256": "75eea650b170bd45202d0e2890bb5778bdc7c829d12375d9c1df4166788bb703"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "$RUN/matrix/io/unselected/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/unselected/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.3213937380060088,
+      "artifact_sha256": "b2cf049bb7914a2642a5fc0442766f50ef7867b31e080c175b3ce80d4ae154b4"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "-o",
+        "$RUN/matrix/io/unselected/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2903119419934228,
+      "artifact_sha256": "3d76fa793131cd88acf3724d8946d793ee7c1d13be41192242451606dc625133"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "port-generate-c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/io/unselected/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/unselected/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 234321,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.4976403519976884,
+      "artifact_sha256": "040ca94279735d5f412c306e58dc2f306a5dc8aa91ccefa0f4811ffccfbe6f56"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "port-build-O3",
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "$RUN/matrix/io/unselected/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "$RUN/matrix/io/unselected/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.7234724199806806,
+      "artifact_sha256": "8734a2250b2812b51e8d98e83e2dfebe87977c5ee4db3db3dee0177d9bb4b92f"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "port-generate-js",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/io/unselected.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/io/unselected/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"$RUN/matrix/io/unselected/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 77662,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.45903902399004437,
+      "artifact_sha256": "07b43bc4763198dc872510cdd76423744fe8436bc4646b4112618e7b8b67ec5e"
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-C-O3",
+      "command": [
+        "$RUN/matrix/io/unselected/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.005714131984859705,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/unselected/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.016256518982117996,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "port-C-O3",
+      "command": [
+        "$RUN/matrix/io/unselected/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.003648215002613142,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "io/unselected.bend",
+      "source_sha256": "55a6adf6101137bf4f5133649645f853e0cca8bf1f5987e9d03209dc1b67c89c",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "$RUN/matrix/io/unselected/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.02166031999513507,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+        "$RUN/matrix/false-proof/phase.json"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.2984361050184816,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.2984052179963328,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "eval",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.3024092089908663,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "run",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.404213111003628,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/false-proof/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.3818191019818187,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "javascript",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/false-proof/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.46826496699941345,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "false-proof.bend",
+      "source_sha256": "4d1a578195060d6e7545d1c0b8858f19f66037a3f54f31f150b3c0db8837a907",
+      "lane": "native",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/false-proof.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/matrix/false-proof/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def main() -> U32: 7\n",
+      "timed_out": false,
+      "seconds": 0.3903955279965885,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+        "$RUN/matrix/linear-reuse/phase.json"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.28046521899523214,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.3549346389772836,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "eval",
+      "command": [
+        "$RUN/teamy-bend",
+        "eval",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.30232290300773457,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "run",
+      "command": [
+        "$RUN/teamy-bend",
+        "run",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.3976950860233046,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "c",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$RUN/matrix/linear-reuse/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.35649662601645105,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "javascript",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "$RUN/matrix/linear-reuse/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.35901146300602704,
+      "equal_repetitions": 2
+    },
+    {
+      "case": "linear-reuse.bend",
+      "source_sha256": "fae5626c5886946a0b1adb041e68cf3c620bb2cf15403bcce19b1d0c8cc90ea7",
+      "lane": "native",
+      "command": [
+        "$RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-retained-owner/linear-reuse.bend",
+        "--executable",
+        "--target",
+        "native",
+        "--output",
+        "$RUN/matrix/linear-reuse/absent"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n",
+      "timed_out": false,
+      "seconds": 0.36414092700579204,
+      "equal_repetitions": 2
+    }
+  ],
+  "phase_observations": [
+    {
+      "case": "original.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "original.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "original.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "original.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "original.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "original.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/boxed.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/closure.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/erased.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/f32.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/fork.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/nat-zero.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/one-use.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/original.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow-order.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/overflow.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/partial-use.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/u32-boundary.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "strict",
+      "rep": 1,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "executable",
+      "rep": 1,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "upstream",
+      "rep": 2,
+      "phase": "accepted",
+      "outcome": "accepted"
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "strict",
+      "rep": 2,
+      "phase": "check",
+      "exit": 1,
+      "stderr": ""
+    },
+    {
+      "case": "io/unselected.bend",
+      "lane": "executable",
+      "rep": 2,
+      "phase": "accepted",
+      "exit": 0,
+      "stderr": ""
+    }
+  ],
+  "phase_observations_are_already_in_command_total": true,
+  "raw_sha256": "80f8562b74488e3b67448e99c9e58bae9f5072a10819fe0e4864728d7fb2b29a",
+  "unresolved_in_this_matrix": [],
+  "scope": [
+    "Exact original executes in port/upstream C and JS; pure native run uses normalization, not the IO interpreter",
+    "Eleven positive and two failing IO companions execute in five lanes; fork/boxed C additionally runs with four workers",
+    "Both negative checker fixtures reject without executable artifacts",
+    "Strict IO checking exclusions are not runtime failures",
+    "C O3 links pthread/math; port C additionally uses unchanged strict warning flags",
+    "No GPU/desktop or mid-normalization cancellation coverage"
+  ]
+}
