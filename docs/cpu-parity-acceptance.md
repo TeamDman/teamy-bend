@@ -2261,3 +2261,37 @@ The nat_first decision, compact-pattern guard gap and all prior oracle/host/reso
 F32.read/foreign/hole/API/supplementary-lint distinctions remain unwaived. No new
 semantic exception, dependency/toolchain/pin change, raised limit or cancellation
 claim. Disk floors and unique evidence preserved; bulk artifacts remain outside Git.
+
+
+### Numeric lambda-arm diagnostics and full checking renewal
+
+Clean tested source `59ac3fdbdd900be23e6516a3da84bafa31e7574a` fixes the two requested numeric-arm
+diagnostics and three adjacent originals. Optional metadata reports the pinned
+closing-brace expectation at the consumed colon; public errors/cursor, acceptance,
+terms, sharing, demand and guards are unchanged. Independent review completed.
+[Report](cpu-lambda-arm-diagnostics.md).
+
+Fourteen negatives pass 252 exact diagnostics and 84 load probes. Four positive
+controls pass 40 executable runs, eight interpreter/eval/check observations each,
+24 accepted probes and eight unchanged C/JS artifacts. Shared compile-reference
+control is parser preservation plus checking refusal, not an execution pass.
+Gate **1,181 / 0 / 49**; focused final checks 77 passed; targeted strict Clippy passed.
+
+The full **1,302** census is renewed: 366 both-accept, 318 exact rejections,
+494 acceptance disagreements, 118 differing rejections and six oracle failures.
+Every one of the historical 385 IO exclusions renewed exactly. **227 non-IO
+differences remain: 109 acceptance / 118 rejection**, with six oracle failures
+separate. All port statuses are unchanged. Seventy-three exact-diagnostic gains
+are cumulative since d224e79, not all this turn. Unary-prefix diagnostic remains
+unresolved. One upstream stack failure varied by phase; an initial supplementary
+accepted sidecar has no retained streams and is phase-only. Five fully recorded
+supplementary reruns all fail; none replaces the census outcome. Current
+[table and evidence](cpu-lambda-arm-census.json) retain historical identities.
+
+Coverage **443 linked / 859 unlinked**: 322 checker negatives, 523 compiled candidates,
+13 interpreter profiles, one checking-only module. Census matches and family links
+are not universal CPU parity. Nat-first order, compact-pattern guard and all prior
+host/resource/F32.read/foreign/hole/API/supplementary-lint differences remain unwaived.
+Frozen pins/dependencies/toolchains/limits, cancellation boundaries, disk floors and
+unique evidence retained. No installs, desktop/GPU, main merge or release. Raw logs
+and binary snapshots remain outside Git preservation.

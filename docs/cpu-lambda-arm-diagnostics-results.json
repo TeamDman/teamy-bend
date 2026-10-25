@@ -1,0 +1,3414 @@
+{
+  "tested_source": "59ac3fdbdd900be23e6516a3da84bafa31e7574a",
+  "binary_sha256": "1b635f253c1e6b42fb66a889f5308aa52a6abdebbfb992f31d5a0945d487f3ca",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "scope": "Current bounded subset only; all repeated rows deterministic. Raw receipts retain repetitions and times. No full census or blanket runtime parity claim.",
+  "negative_counts": {
+    "exact_diagnostics": 252,
+    "load_probes": 84,
+    "originals": 5,
+    "authored": 9
+  },
+  "negative": [
+    {
+      "case": "original/erased_match_numeric.bend",
+      "source_sha256": "09e5286555cace6a24dcb5e7492ef859c0deb55ddb59378f7f5925d04fd65c63",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.stderr.json",
+      "stderr_sha256": "13f758de77e38dc2fedb51ef6ebde64ce42652b51bba1cbf49ec338b73403323",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/erased_match_numeric.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "original/erased_match_numeric.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "original/erased_match_numeric.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "original/erased_match_numeric.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "original/undo_residual_lane.bend",
+      "source_sha256": "616643124f0dff52823eeb46f3f6cd0457612926f54d7b4f679d00f0a9ade9e5",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.stderr.json",
+      "stderr_sha256": "5b2adbb196a7fd40bb1da44f0d53685821751522a090aa2a6ceb3a5b7c13bc25",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/undo_residual_lane.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "original/undo_residual_lane.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "original/undo_residual_lane.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "original/undo_residual_lane.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "original/statement_beta.bend",
+      "source_sha256": "592386bdf50cc736f75edd3829af0beab565e737032a36fa54b30e7f2a75418a",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.stderr.json",
+      "stderr_sha256": "9d77c94e27459607a373daaf859fb8f469e89342c5900713a18cf90a2d6bc241",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_beta.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "original/statement_beta.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "original/statement_beta.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "original/statement_beta.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "original/statement_lam_absorb.bend",
+      "source_sha256": "5b28d52337d9869ba534167bc6f230320ca758fb4a69e02fb8dfe267b152c7df",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.stderr.json",
+      "stderr_sha256": "40c352b7cc44b29453505cb3888539caa29901717787bee0907b9bad4ee7c65e",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/statement_lam_absorb.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "original/statement_lam_absorb.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "original/statement_lam_absorb.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "original/statement_lam_absorb.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "original/binop_probe_split.bend",
+      "source_sha256": "5658ba43942b43aeccba699b3d4506f5d04c3999aa040f459aacc7bde4e4630c",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.stderr.json",
+      "stderr_sha256": "64e6ba39d4dc94a367ffc6282e99c88bc6cc76fce7f4d2d0d54efebb21c20f7f",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/original/binop_probe_split.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "original/binop_probe_split.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "original/binop_probe_split.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "original/binop_probe_split.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/multiline.bend",
+      "source_sha256": "57e63c97b296fb86f51ce8d9b7800212447ddb6bc458aa673c0ea36ed86d00fb",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.stderr.json",
+      "stderr_sha256": "956cf83cabf399f113aaef36926440189918c7ef5669325d4fa8b05a1b93c8dc",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/multiline.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/multiline.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/multiline.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/multiline.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/constructor.bend",
+      "source_sha256": "c26a079ef71aa53dd032c7f71e20e403ed8341af9475891a67ec17e75d87367a",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.stderr.json",
+      "stderr_sha256": "24e1a75dfb09ad4b6549d9e8c851acf6e46e6016030f9ce9e3992d88ed7bb847",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/constructor.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/constructor.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/constructor.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/constructor.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/function.bend",
+      "source_sha256": "25153418e0780d71ea5a42afe157be480df4a0f026a2ffc87f4592b000a3b874",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.stderr.json",
+      "stderr_sha256": "bf70d61eddb92884c2d6b1916603f3f0601d2ed928639e053598e89112709c9f",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/function.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/function.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/function.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/function.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/after-arm.bend",
+      "source_sha256": "e73d4dacac949f1aea476ca562eaa6373dbf3d174210ab79739cd1a1946c6116",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.stderr.json",
+      "stderr_sha256": "01f9766842ec7ba16f46c572da8392ff0658ac796f8a596f87f1e98114c65a8d",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/after-arm.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/after-arm.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/after-arm.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/after-arm.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "source_sha256": "73940b3c782ce0ac2fcd09edef7c9cef79d9b08540a91f479f6933125733c3b9",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.stderr.json",
+      "stderr_sha256": "5be0252489b4f0da2d6d9207c709abfda0d9eac2f9d704d742368761d4be3ec4",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/missing-close.bend",
+      "source_sha256": "2f2c67a616beb16c55f0e49d30721da559d9c3644030fe0ebfbf68dd416a9c88",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.stderr.json",
+      "stderr_sha256": "f962624bbacfe39302a6dd86c73279d845a820a2bfee63f0d8ab9bfc2a35d90b",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-close.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/missing-close.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/missing-close.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/missing-close.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/missing-body.bend",
+      "source_sha256": "5bb8359d6be82c8283675090452c260948cf67b81d75bc14af342f832e31f8db",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.stderr.json",
+      "stderr_sha256": "3e0c77d033b6d50f660282f8660767a8e90b451a45baaaaaa5a3156006ae2b62",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/missing-body.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/missing-body.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/missing-body.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/missing-body.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/application.bend",
+      "source_sha256": "feab148bb2b9e8f7b1ba83a10aebfe862476da4dfbda6030b93fa0651775d9d9",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.stderr.json",
+      "stderr_sha256": "16b3bc021f9cc809dadef67fe3b9258a2ae9b2ab25d688baffbd15740510ed73",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/application.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/application.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/application.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/application.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "case": "controls/annotation.bend",
+      "source_sha256": "b4b7015532e810a54f9d6311d230f536a58e2bb760073d1b1743687ac2534f36",
+      "repetitions": 2,
+      "expected_stderr": "../tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.stderr.json",
+      "stderr_sha256": "2d789cc77ad9aed6f13f6466e2b82cb3c0a1b32c2e3cd585b6bc57c44df7a57a",
+      "stdout": "",
+      "exit": 1,
+      "entries": [
+        {
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-c"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "<pinned-reference>/bend2/main.ts",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend",
+            "-o",
+            "<artifacts>/negative-matrix/upstream-js"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-check",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "check",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-eval",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "eval",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-run",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "run",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-c",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-javascript",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        },
+        {
+          "lane": "port-native",
+          "command": [
+            "<artifacts>/teamy-bend",
+            "compile",
+            "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/controls/annotation.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "<artifacts>/negative-matrix/unwritten"
+          ],
+          "timed_out": false
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "controls/annotation.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/annotation.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/annotation.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ]
+    }
+  ],
+  "positive_counts": {
+    "executable_runs": 40,
+    "interpreter_results": 8,
+    "strict_evaluations": 8,
+    "strict_checks": 8,
+    "generations": 16,
+    "builds": 8,
+    "accepted_phase_probes": 24
+  },
+  "positive_first_repetitions_and_builds": [
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-interpreter",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "native",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "strict-eval",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"7\"\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "daa5c99cab42d10cfd0297e03a11ee67ebe35dab6433cb0bfec1461930950b96",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "strict-check",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+        "-o",
+        "<artifacts>/positive/constructors/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "784f575b1e41639de12fe815ba690fe3b234486b8eedce49e01a6cfb40c2fe98",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "<artifacts>/positive/constructors/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/constructors/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "183535ad273113abc4cfc80f79f82566e3db40733915001ba29cef032e8f43e6",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+        "-o",
+        "<artifacts>/positive/constructors/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "ac6ab355b565884fe7239949cbaea80f3c9f83781958a13d8633077b778a0c81",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "port-generate-c",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<artifacts>/positive/constructors/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/constructors/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 192255,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "043fb38aac792f4fa5eecc81ea0bcdbb2175ba679d15a946416fcfdbcdbff801",
+      "stdout_raw_sha256": "8efbe5af4219f5a42d5fda0a8e3f51b760af1db0bd52261ef2e19d7e042554fc",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "port-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<artifacts>/positive/constructors/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/constructors/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "a6509531391d50e0baf03151acf17ba750f64312f16254f935f6d2a139bb10fc",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "port-generate-js",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<artifacts>/positive/constructors/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/constructors/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52896,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "cf6945c059727b1410388cfceee5cf2328a9d357af03ff8ac4fbdd843c243509",
+      "stdout_raw_sha256": "70877f4f20625ad26efdb86bdcc550d3d3f85bc226dfb395df5d6caf7c216681",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<artifacts>/positive/constructors/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/constructors/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "port-C-O3",
+      "command": [
+        "<artifacts>/positive/constructors/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "constructors.bend",
+      "source_sha256": "252ef00c95158e41e35430b4052e2cb925b07cd6d340cd84b6c56a6d9e93e075",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/constructors/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-interpreter",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "native",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "strict-eval",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"3\"\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "30ef890ddfb637739c1cc0a6dc9c68db4cab656135de9040d164c0ee64dca7de",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "strict-check",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+        "-o",
+        "<artifacts>/positive/fallback/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "e06893a5057841ebccccfe244061cc3d215755efdd223202bd4f19fb93b38b6f",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "<artifacts>/positive/fallback/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/fallback/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "1d7c2c3e04c7a0296028f94e6bedf59b9aa9516107befa6c951109dd98714533",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+        "-o",
+        "<artifacts>/positive/fallback/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "c3078cf622a407983e45da2f70f4dcc4825d6139dd2abcc6c791ca4e84076624",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "port-generate-c",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<artifacts>/positive/fallback/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/fallback/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 191035,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "69afc3fca1478485b5f9d54b113961b8996a58c171fde317555e440cbf191072",
+      "stdout_raw_sha256": "5d45b85ac0facedb97b6e6f333a43343b05ef70e786b7339a2beded3fbac53e2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "port-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<artifacts>/positive/fallback/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/fallback/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "fd9d1f65126ee8b3f2f7f3cce946ee6403b33da0f64d13561cf718fb620c03f6",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "port-generate-js",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<artifacts>/positive/fallback/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/fallback/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52693,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "ea14c5c784dbefffc2a5fa0e62eb6ce49d63032807fd60555206b9391f545ca0",
+      "stdout_raw_sha256": "7ac6fa997f77f36ae7709f9530ce8bab314fefc612b65ed5efa046e57673170b",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<artifacts>/positive/fallback/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/fallback/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "port-C-O3",
+      "command": [
+        "<artifacts>/positive/fallback/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "fallback.bend",
+      "source_sha256": "b4f0aa3cc5844bf1030035bccfd2fe4a48393eaab11be610d3956bc34469bb1f",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/fallback/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "3\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-interpreter",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "native",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "strict-eval",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"4\"\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "4f8a504d34b2ecdddca8e86f9916891c5c1a9c31ec24b2c076b2102ab825d542",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "strict-check",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+        "-o",
+        "<artifacts>/positive/function-tail/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "e6662ad731a5d923df584a4d5e1424d273e89e312477b5da8537e81d91fae14c",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "<artifacts>/positive/function-tail/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/function-tail/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "c3ef512f00df756659bce545083372f6d83430319ef5c05af92f3cf150d46f49",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+        "-o",
+        "<artifacts>/positive/function-tail/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "21eccce9b4cd112e7fdb8e4b9f9c559a8c7dd0708313bc1e516a40461789d1a9",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "port-generate-c",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<artifacts>/positive/function-tail/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/function-tail/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186358,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "6b4d3ea1a04b27ec6fbfb332137e01f0a8ab25ed78ca32dd35cc2ed50ff0be83",
+      "stdout_raw_sha256": "b3dd85dd1421c2a65698ee841113ff7c76da9bc968d45e8f6d7d22c0e7589ab8",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "port-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<artifacts>/positive/function-tail/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/function-tail/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "a97834ad18e4581ff583fd55bc1e217586a8dba594098fbfc658b838d378ee56",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "port-generate-js",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<artifacts>/positive/function-tail/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/function-tail/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52491,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "2375b793299554c38df1fb28db79c2f1f02f749d696de48db93728752410b3de",
+      "stdout_raw_sha256": "47ae229b45ff8cad68a403a2a6e5479545d461d2f650816a7142d689705f7bd0",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<artifacts>/positive/function-tail/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/function-tail/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "port-C-O3",
+      "command": [
+        "<artifacts>/positive/function-tail/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "function-tail.bend",
+      "source_sha256": "a98f2dd3c2cad70f72803121c42c68bdb9149467645efe7ac03affca09f97388",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/function-tail/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-interpreter",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "native",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "strict-eval",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"7\"\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "daa5c99cab42d10cfd0297e03a11ee67ebe35dab6433cb0bfec1461930950b96",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "strict-check",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "52736bd8762ad7d189b98a27dffa952d6dd0fb9b839cc40080a7815dc2acaebc",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+        "-o",
+        "<artifacts>/positive/numeric-tail/upstream.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "cc7930c8f8468f90f3353310582f093dc541ad4ae81c961e5f6c8f91ff98e581",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "<artifacts>/positive/numeric-tail/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/numeric-tail/upstream.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+        "-o",
+        "<artifacts>/positive/numeric-tail/upstream.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "ea8dc51163a389a05479b1068b8c04921111ad66bb535a56f4ca87bb6774ff41",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "port-generate-c",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<artifacts>/positive/numeric-tail/port.c"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/numeric-tail/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184719,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "5941104170b65ca6cf3185debf74fc6aafb42fb01441206a839ab7370fac6c6f",
+      "stdout_raw_sha256": "a6b8027179fdbd2fcd30cb4af28ca5ffeadd22abb5eb34d3c81ed4e9d8d07850",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "port-build-O3",
+      "command": [
+        "<clang-install>/usr/bin/clang-19",
+        "-std=c11",
+        "-O3",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "<artifacts>/positive/numeric-tail/port.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/positive/numeric-tail/port.bin"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "acea9dbb5020dfbeddafb354041ee9834634fe7bcb8e00a392cb91f9d608283c",
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "port-generate-js",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<artifacts>/positive/numeric-tail/port.js"
+      ],
+      "rep": 0,
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<artifacts>/positive/numeric-tail/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52320,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "artifact_sha256": "ad6142f9001780933e051e095bdaae6b484cdcc150586e2c41213ba99d331519",
+      "stdout_raw_sha256": "2706015b6a5d2272bf3a48f68270aa142dd0b66a3e4e08164d72c9db0a33d525",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-C-O3",
+      "command": [
+        "<artifacts>/positive/numeric-tail/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "upstream-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/numeric-tail/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "port-C-O3",
+      "command": [
+        "<artifacts>/positive/numeric-tail/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "numeric-tail.bend",
+      "source_sha256": "79b8db83ac0429544aab824575f7536718c9e4426a2ebc88bb2b412baa67ccfa",
+      "lane": "port-JS",
+      "command": [
+        "node",
+        "<artifacts>/positive/numeric-tail/port.js"
+      ],
+      "rep": 1,
+      "exit": 0,
+      "stdout": "7\n",
+      "stderr": "",
+      "timed_out": false,
+      "stdout_raw_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "positive_phase_first_repetitions": [
+    {
+      "case": "constructors.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "constructors.bend",
+      "lane": "strict",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "constructors.bend",
+      "lane": "executable",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "fallback.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "fallback.bend",
+      "lane": "strict",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "fallback.bend",
+      "lane": "executable",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "function-tail.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "function-tail.bend",
+      "lane": "strict",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "function-tail.bend",
+      "lane": "executable",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "numeric-tail.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "numeric-tail.bend",
+      "lane": "strict",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    },
+    {
+      "case": "numeric-tail.bend",
+      "lane": "executable",
+      "rep": 1,
+      "exit": 0,
+      "phase": "accepted",
+      "stderr": ""
+    }
+  ],
+  "artifact_equivalence": {
+    "base_source": "0c95ae2fd642807ab94fefe8757e6cce73c41c8e",
+    "baseline_binary_source": "27204f16e87e57f4285610dc4cb0dab23b622988",
+    "current_source": "59ac3fdbdd900be23e6516a3da84bafa31e7574a",
+    "rows": [
+      {
+        "case": "constructors.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/baseline-generated/constructors.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/constructors.c\",\n  \"target\": \"c\",\n  \"bytes\": 192255,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "043fb38aac792f4fa5eecc81ea0bcdbb2175ba679d15a946416fcfdbcdbff801",
+        "after_sha256": "043fb38aac792f4fa5eecc81ea0bcdbb2175ba679d15a946416fcfdbcdbff801",
+        "identical": true
+      },
+      {
+        "case": "constructors.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/constructors.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/baseline-generated/constructors.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/constructors.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52896,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "cf6945c059727b1410388cfceee5cf2328a9d357af03ff8ac4fbdd843c243509",
+        "after_sha256": "cf6945c059727b1410388cfceee5cf2328a9d357af03ff8ac4fbdd843c243509",
+        "identical": true
+      },
+      {
+        "case": "fallback.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/baseline-generated/fallback.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/fallback.c\",\n  \"target\": \"c\",\n  \"bytes\": 191035,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "69afc3fca1478485b5f9d54b113961b8996a58c171fde317555e440cbf191072",
+        "after_sha256": "69afc3fca1478485b5f9d54b113961b8996a58c171fde317555e440cbf191072",
+        "identical": true
+      },
+      {
+        "case": "fallback.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/fallback.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/baseline-generated/fallback.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/fallback.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52693,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "ea14c5c784dbefffc2a5fa0e62eb6ce49d63032807fd60555206b9391f545ca0",
+        "after_sha256": "ea14c5c784dbefffc2a5fa0e62eb6ce49d63032807fd60555206b9391f545ca0",
+        "identical": true
+      },
+      {
+        "case": "function-tail.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/baseline-generated/function-tail.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/function-tail.c\",\n  \"target\": \"c\",\n  \"bytes\": 186358,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "6b4d3ea1a04b27ec6fbfb332137e01f0a8ab25ed78ca32dd35cc2ed50ff0be83",
+        "after_sha256": "6b4d3ea1a04b27ec6fbfb332137e01f0a8ab25ed78ca32dd35cc2ed50ff0be83",
+        "identical": true
+      },
+      {
+        "case": "function-tail.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/function-tail.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/baseline-generated/function-tail.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/function-tail.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52491,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "2375b793299554c38df1fb28db79c2f1f02f749d696de48db93728752410b3de",
+        "after_sha256": "2375b793299554c38df1fb28db79c2f1f02f749d696de48db93728752410b3de",
+        "identical": true
+      },
+      {
+        "case": "numeric-tail.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "<artifacts>/baseline-generated/numeric-tail.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/numeric-tail.c\",\n  \"target\": \"c\",\n  \"bytes\": 184719,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "5941104170b65ca6cf3185debf74fc6aafb42fb01441206a839ab7370fac6c6f",
+        "after_sha256": "5941104170b65ca6cf3185debf74fc6aafb42fb01441206a839ab7370fac6c6f",
+        "identical": true
+      },
+      {
+        "case": "numeric-tail.bend",
+        "command": [
+          "<baseline-artifacts>/teamy-bend",
+          "compile",
+          "<checkout>/tests/fixtures/cpu-lambda-arm-diagnostics/positive/numeric-tail.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "<artifacts>/baseline-generated/numeric-tail.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"<artifacts>/baseline-generated/numeric-tail.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52320,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "before_sha256": "ad6142f9001780933e051e095bdaae6b484cdcc150586e2c41213ba99d331519",
+        "after_sha256": "ad6142f9001780933e051e095bdaae6b484cdcc150586e2c41213ba99d331519",
+        "identical": true
+      }
+    ]
+  },
+  "triage_selection": {
+    "historical_full_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+    "selected_originals": [
+      {
+        "fixture": "check/erased_match_numeric.bend",
+        "source_sha256": "09e5286555cace6a24dcb5e7492ef859c0deb55ddb59378f7f5925d04fd65c63",
+        "category": "other_rejection_difference",
+        "subcategory": "parser_rule_or_cursor_difference",
+        "evidence_basis": "Both reject during load, but lexical/parser rule or consumed-token boundary differs. Conservatively retain as other pending targeted grammar/source analysis.",
+        "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "upstream_exit": "1",
+        "port_exit": "1",
+        "current_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+        "current_result": "different_rejection",
+        "qualified_by_triage": "false",
+        "current_upstream_phase": "load",
+        "current_port_phase": "load",
+        "current_upstream_exit": "1",
+        "current_port_exit": "1",
+        "current_cause_note": ""
+      },
+      {
+        "fixture": "check/undo_residual_lane.bend",
+        "source_sha256": "616643124f0dff52823eeb46f3f6cd0457612926f54d7b4f679d00f0a9ade9e5",
+        "category": "other_rejection_difference",
+        "subcategory": "parser_rule_or_cursor_difference",
+        "evidence_basis": "Both reject during load, but lexical/parser rule or consumed-token boundary differs. Conservatively retain as other pending targeted grammar/source analysis.",
+        "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "upstream_exit": "1",
+        "port_exit": "1",
+        "current_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+        "current_result": "different_rejection",
+        "qualified_by_triage": "false",
+        "current_upstream_phase": "load",
+        "current_port_phase": "load",
+        "current_upstream_exit": "1",
+        "current_port_exit": "1",
+        "current_cause_note": ""
+      },
+      {
+        "fixture": "flatten/statement_beta.bend",
+        "source_sha256": "592386bdf50cc736f75edd3829af0beab565e737032a36fa54b30e7f2a75418a",
+        "category": "other_rejection_difference",
+        "subcategory": "parser_rule_or_cursor_difference",
+        "evidence_basis": "Both reject during load, but lexical/parser rule or consumed-token boundary differs. Conservatively retain as other pending targeted grammar/source analysis.",
+        "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "upstream_exit": "1",
+        "port_exit": "1",
+        "current_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+        "current_result": "different_rejection",
+        "qualified_by_triage": "false",
+        "current_upstream_phase": "load",
+        "current_port_phase": "load",
+        "current_upstream_exit": "1",
+        "current_port_exit": "1",
+        "current_cause_note": ""
+      },
+      {
+        "fixture": "flatten/statement_lam_absorb.bend",
+        "source_sha256": "5b28d52337d9869ba534167bc6f230320ca758fb4a69e02fb8dfe267b152c7df",
+        "category": "other_rejection_difference",
+        "subcategory": "parser_rule_or_cursor_difference",
+        "evidence_basis": "Both reject during load, but lexical/parser rule or consumed-token boundary differs. Conservatively retain as other pending targeted grammar/source analysis.",
+        "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "upstream_exit": "1",
+        "port_exit": "1",
+        "current_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+        "current_result": "different_rejection",
+        "qualified_by_triage": "false",
+        "current_upstream_phase": "load",
+        "current_port_phase": "load",
+        "current_upstream_exit": "1",
+        "current_port_exit": "1",
+        "current_cause_note": ""
+      },
+      {
+        "fixture": "run/binop_probe_split.bend",
+        "source_sha256": "5658ba43942b43aeccba699b3d4506f5d04c3999aa040f459aacc7bde4e4630c",
+        "category": "other_rejection_difference",
+        "subcategory": "parser_rule_or_cursor_difference",
+        "evidence_basis": "Both reject during load, but lexical/parser rule or consumed-token boundary differs. Conservatively retain as other pending targeted grammar/source analysis.",
+        "baseline_source": "ddd4f0a9bcc6d8b224b1c17d45fe63b91f6712ac",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "upstream_exit": "1",
+        "port_exit": "1",
+        "current_source": "d224e79d33b4a0ab26f701b57f448056b63b790a",
+        "current_result": "different_rejection",
+        "qualified_by_triage": "false",
+        "current_upstream_phase": "load",
+        "current_port_phase": "load",
+        "current_upstream_exit": "1",
+        "current_port_exit": "1",
+        "current_cause_note": ""
+      }
+    ],
+    "scope": "Five numeric lambda-arm source-load diagnostics; bounded checking and execution controls are separate from the full census renewal."
+  }
+}
