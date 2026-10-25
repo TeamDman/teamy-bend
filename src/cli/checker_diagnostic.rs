@@ -272,6 +272,9 @@ mod tests {
         for name in [
             "tests/fixtures/cpu-let-kind-locations/reusable-field.bend",
             "tests/fixtures/cpu-let-kind-locations/inference-first.bend",
+            "tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend",
+            "tests/fixtures/cpu-comptime-type/negative/imported.bend",
+            "tests/fixtures/cpu-comptime-type/negative/distinct_uses.bend",
             "tests/fixtures/cpu-match-guards/match_not_datatype.bend",
             "tests/fixtures/cpu-match-guards/error_window_match_repeated.bend",
             "tests/fixtures/cpu-match-guards/erased_match_ctor.bend",
@@ -450,6 +453,9 @@ mod tests {
             }
         }
         for name in [
+            "tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend",
+            "tests/fixtures/cpu-comptime-type/negative/imported.bend",
+            "tests/fixtures/cpu-comptime-type/negative/distinct_uses.bend",
             "tests/fixtures/cpu-match-guards/match_not_datatype.bend",
             "tests/fixtures/cpu-match-guards/error_window_match_repeated.bend",
             "tests/fixtures/cpu-match-guards/erased_match_ctor.bend",

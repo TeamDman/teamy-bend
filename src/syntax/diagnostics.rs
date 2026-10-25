@@ -127,6 +127,11 @@ impl DiagnosticOrigins {
         }
     }
 
+    pub(super) fn known_source(&self, value: &TermRef) -> Option<usize> {
+        let source = self.tracker.source(value);
+        self.nodes.contains_key(&source).then_some(source)
+    }
+
     pub(super) fn occurrence_parent(&mut self, value: &TermRef, source: usize) -> bool {
         let Some(origin) = self.nodes.get(&source) else {
             return false;
@@ -390,6 +395,24 @@ fn source_excerpt(source: &str, at: usize) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn known_sources_require_recorded_positions_and_keep_term_ownership() {
+        let mut origins = super::DiagnosticOrigins::default();
+        let value = crate::kernel::term(crate::kernel::Term::Qnt);
+        assert_eq!(origins.known_source(&value), None);
+        origins.source("<quantity>", "Quant");
+        origins.node(&value, "<quantity>", 1);
+        assert_eq!(
+            origins.known_source(&value),
+            Some(std::rc::Rc::as_ptr(&value) as usize)
+        );
+        let unsourced = crate::kernel::term(crate::kernel::Term::Qnt);
+        origins.tracker.track(&unsourced);
+        assert_eq!(origins.known_source(&unsourced), None);
+        assert_eq!(std::rc::Rc::strong_count(&value), 1);
+        assert_eq!(std::rc::Rc::strong_count(&unsourced), 1);
+    }
+
     #[test]
     fn unknown_template_metadata_preserves_public_errors_and_imported_sources() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

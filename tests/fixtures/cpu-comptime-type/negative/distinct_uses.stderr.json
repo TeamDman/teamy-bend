@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : Nat\nContext:\n- x : Nat\n- a : Nat\nLocation: bad\n4 |   a = Nat.add(x, 1n)\n5>|   b = Bool.not(x)\n6 |   a\n"

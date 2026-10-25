@@ -1,0 +1,37 @@
+[
+  {
+    "case": "positive/local.bend",
+    "expected": "4n",
+    "io": false
+  },
+  {
+    "case": "positive/imported.bend",
+    "expected": "8n",
+    "io": false
+  },
+  {
+    "case": "positive/shadow.bend",
+    "expected": "4n",
+    "io": false
+  },
+  {
+    "case": "positive/ordinary.bend",
+    "expected": "6n",
+    "io": false
+  },
+  {
+    "case": "comptime/dup_many.bend",
+    "expected": "6",
+    "io": true
+  },
+  {
+    "case": "comptime/shadow_arg.bend",
+    "expected": "12",
+    "io": true
+  },
+  {
+    "case": "positive/quantity.bend",
+    "expected": "9",
+    "io": false
+  }
+]

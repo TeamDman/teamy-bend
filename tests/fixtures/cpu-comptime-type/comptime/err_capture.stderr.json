@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : app\nContext:\n- x : Nat\nLocation: g\n12 | def g(x: Nat) -> Nat:\n13>|   app(~(y => Nat.add(y, x)), 1n)\n14 | \n"

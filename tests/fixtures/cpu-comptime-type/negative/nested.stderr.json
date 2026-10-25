@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n2 | \n3>| def app(~f: Nat -> Nat, x: Nat) -> Nat: f(x)\n4 | def wrap(~f: Nat -> Nat, x: Nat) -> Nat: app(~f, x)\n"

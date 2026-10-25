@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: ../imports/defs.app~0\n4 |   f(\n5>|     x\n6 |   )\n"

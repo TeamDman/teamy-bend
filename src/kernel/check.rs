@@ -3280,6 +3280,108 @@ mod reflexivity_diagnostic_tests {
     }
 
     #[test]
+    fn application_source_fallback_preserves_work_guards_and_explicit_occurrences() {
+        let mut engine = empty_engine(&Book {
+            declarations: vec![],
+        })
+        .unwrap();
+        let origins = super::super::origins::TermOrigins::default();
+        let argument = term(Term::Var {
+            name: "q".into(),
+            id: 7,
+        });
+        origins.track(&argument);
+        let source = origins.source(&argument);
+        let function = term(Term::Var {
+            name: "f".into(),
+            id: 2,
+        });
+        let application = term(Term::App(function, argument));
+        origins.track(&application);
+        let replacement = term(Term::Var {
+            name: "q".into(),
+            id: 99,
+        });
+        let value = super::super::origins::substitute_with_origins(
+            &application,
+            7,
+            &replacement,
+            Some(&origins),
+        );
+        let context = Context::from([
+            (
+                2,
+                Binder {
+                    quant: Quant::Lone,
+                    name: "f".into(),
+                    id: 2,
+                    ty: term(Term::All {
+                        quant: Quant::Lone,
+                        name: "_".into(),
+                        id: 3,
+                        domain: kind(Quant::Lone),
+                        body: kind(Quant::Lone),
+                    }),
+                },
+            ),
+            (
+                99,
+                Binder {
+                    quant: Quant::Lone,
+                    name: "q".into(),
+                    id: 99,
+                    ty: term(Term::Qnt),
+                },
+            ),
+        ]);
+        let mut plain = engine.clone();
+        engine.origins = Some(origins.clone());
+        let error = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+            .unwrap_err();
+        let baseline = plain
+            .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert_eq!(error, baseline);
+        assert_eq!(error.to_string(), baseline.to_string());
+        assert_eq!(
+            (engine.fuel, engine.depth, engine.fresh_id),
+            (plain.fuel, plain.depth, plain.fresh_id)
+        );
+        assert_eq!(error.checker_diagnostic().unwrap().term_identity, source);
+        let spent = 2_000_000 - engine.fuel;
+        engine.reset();
+        engine.fuel = spent;
+        let exhausted = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert_eq!(exhausted, error);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth), (0, 0));
+        for (fuel, depth, message) in [
+            (0, 0, "evaluation budget exhausted"),
+            (100, 128, "nesting limit exhausted"),
+        ] {
+            engine.reset();
+            engine.fuel = fuel;
+            engine.depth = depth;
+            let error = engine
+                .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+                .unwrap_err();
+            assert!(error.message.contains(message));
+            assert!(error.checker_diagnostic().is_none());
+            assert_eq!(engine.depth, depth);
+        }
+        engine.reset();
+        origins.track(&replacement);
+        origins.occurrence_children(&value, [None, Some(202)]);
+        let explicit = engine
+            .infer(&Lhs::default(), &value, Quant::Lone, &context, &[])
+            .unwrap_err();
+        assert_eq!(explicit.checker_diagnostic().unwrap().term_identity, 202);
+    }
+
+    #[test]
     fn occurrence_diagnostics_match_rejected_nodes_not_shared_source_roots() {
         let mut engine = empty_engine(&Book {
             declarations: vec![],
@@ -3537,6 +3639,23 @@ mod reflexivity_diagnostic_tests {
                 "cpu-declaration-targets/specialization/main.bend",
                 &["main"][..],
             ),
+            ("cpu-comptime-type/comptime/wrong_type.bend", &[][..]),
+            ("cpu-comptime-type/comptime/err_op_ns.bend", &[][..]),
+            ("cpu-comptime-type/comptime/dup_lone.bend", &[][..]),
+            ("cpu-comptime-type/comptime/err_capture.bend", &[][..]),
+            ("cpu-comptime-type/negative/ordinary.bend", &[][..]),
+            ("cpu-comptime-type/negative/function.bend", &[][..]),
+            ("cpu-comptime-type/negative/multiline.bend", &[][..]),
+            ("cpu-comptime-type/negative/imported.bend", &[][..]),
+            ("cpu-comptime-type/negative/nested.bend", &[][..]),
+            ("cpu-comptime-type/negative/distinct_uses.bend", &[][..]),
+            ("cpu-comptime-type/negative/quantity.bend", &[][..]),
+            ("cpu-comptime-type/negative/quantity_type.bend", &[][..]),
+            ("cpu-comptime-type/positive/quantity.bend", &["main"][..]),
+            ("cpu-comptime-type/positive/local.bend", &["main"][..]),
+            ("cpu-comptime-type/positive/imported.bend", &["main"][..]),
+            ("cpu-comptime-type/positive/shadow.bend", &["main"][..]),
+            ("cpu-comptime-type/positive/ordinary.bend", &["main"][..]),
             ("cpu-untyped-binder/positive/typed.bend", &["main"][..]),
             ("cpu-untyped-binder/positive/imported.bend", &["main"][..]),
             ("cpu-untyped-binder/positive/quantified.bend", &["main"][..]),

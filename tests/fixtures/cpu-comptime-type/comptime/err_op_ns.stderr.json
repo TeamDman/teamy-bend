@@ -1,0 +1,1 @@
+"Error:\n- expected : Nat\n- observed : U32\nContext:\n- f : @_:U32 -> U32\n- x : U32\nLocation: T~0\n6 | def T(~f: U32 -> U32, x: U32) -> U32:\n7>|   f(x)\n8 | \n"

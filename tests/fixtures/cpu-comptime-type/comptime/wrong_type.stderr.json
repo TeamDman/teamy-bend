@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n5 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   f(x)\n7 | \n"

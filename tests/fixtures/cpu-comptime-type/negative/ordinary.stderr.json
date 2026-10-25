@@ -1,0 +1,1 @@
+"Error:\n- expected : Bool\n- observed : Nat\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Bool: Bool.not(x)\n4 | def main() -> Bool: bad(3n)\n"

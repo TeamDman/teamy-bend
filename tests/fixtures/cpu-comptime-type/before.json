@@ -1,0 +1,717 @@
+{
+  "baseline": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+  "rows": [
+    {
+      "case": "positive/local.bend",
+      "source_sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/local.bend",
+        "$EVIDENCE/before-7b6a04e8e55b598d.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15211156499572098,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/local.bend",
+      "source_sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/local.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2417059570143465
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "2db77858fde47ebf39e639139a0395969ac51230b72b6c16641194961bf827f4",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/imported.bend",
+        "$EVIDENCE/before-6b3a948eda9ae4f0.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14009304001228884,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/imported.bend",
+      "source_sha256": "2db77858fde47ebf39e639139a0395969ac51230b72b6c16641194961bf827f4",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/imported.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24319917100365274
+    },
+    {
+      "case": "positive/shadow.bend",
+      "source_sha256": "5985120a1f6ef9a8f5c9802fd4609783d8a14a3e53d5b06d67466b91ac68e656",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/shadow.bend",
+        "$EVIDENCE/before-fdeb969864f3c180.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1381252799765207,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/shadow.bend",
+      "source_sha256": "5985120a1f6ef9a8f5c9802fd4609783d8a14a3e53d5b06d67466b91ac68e656",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/shadow.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24536237301072106
+    },
+    {
+      "case": "positive/ordinary.bend",
+      "source_sha256": "1b21f4251cbef8b070635d4ca9327f0bb5c3e97d0abbf46323171aae0caac47c",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/ordinary.bend",
+        "$EVIDENCE/before-5a64bea384bda85f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14483565700356849,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/ordinary.bend",
+      "source_sha256": "1b21f4251cbef8b070635d4ca9327f0bb5c3e97d0abbf46323171aae0caac47c",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.25511131799430586
+    },
+    {
+      "case": "comptime/dup_many.bend",
+      "source_sha256": "631f320cef25c1d41a5b531c2f2cd6bb5faf48fd48d5613fe381ce8e3096702d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/dup_many.bend",
+        "$EVIDENCE/before-595c743a6b81ca64.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12358292497810908,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "comptime/dup_many.bend",
+      "source_sha256": "631f320cef25c1d41a5b531c2f2cd6bb5faf48fd48d5613fe381ce8e3096702d",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/dup_many.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n7 | \n8>| def main() -> IO(Unit):\n9 |   IO.print(Nat.show(app(~(y => Nat.add(y, y)), 3n)))\n",
+      "timed_out": false,
+      "seconds": 0.24616881599649787
+    },
+    {
+      "case": "comptime/shadow_arg.bend",
+      "source_sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/shadow_arg.bend",
+        "$EVIDENCE/before-39f187068cf4f5b3.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12597652099793777,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "comptime/shadow_arg.bend",
+      "source_sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/shadow_arg.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n12 | \n13>| def main() -> IO(Unit):\n14 |   n = sum(List.map(~Nat, ~Nat, ~(h => Nat.mul(h, 2n)), [1n, 2n, 3n]))\n",
+      "timed_out": false,
+      "seconds": 0.24402514199027792
+    },
+    {
+      "case": "positive/quantity.bend",
+      "source_sha256": "802488581b8621101cb27c931708b7a60fdcad249840cde51e93aae048da9e58",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/quantity.bend",
+        "$EVIDENCE/before-8f018165e5bed79c.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12092594700516202,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "positive/quantity.bend",
+      "source_sha256": "802488581b8621101cb27c931708b7a60fdcad249840cde51e93aae048da9e58",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/positive/quantity.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24713009799597785
+    },
+    {
+      "case": "comptime/wrong_type.bend",
+      "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend",
+        "$EVIDENCE/before-abd213f841bbd5eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n5 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   f(x)\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.13031512501765974,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/wrong_type.bend",
+      "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2509901580051519
+    },
+    {
+      "case": "comptime/err_op_ns.bend",
+      "source_sha256": "12430ce639b6f7a26e8faae59b57cc286c1e1e2780ad1d86fc734ddd1b98d740",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/err_op_ns.bend",
+        "$EVIDENCE/before-7bab638ad14757d3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- f : @_:U32 -> U32\n- x : U32\nLocation: T~0\n6 | def T(~f: U32 -> U32, x: U32) -> U32:\n7>|   f(x)\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.16180825998890214,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_op_ns.bend",
+      "source_sha256": "12430ce639b6f7a26e8faae59b57cc286c1e1e2780ad1d86fc734ddd1b98d740",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/err_op_ns.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mT~0: type mismatch: expected Nat; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24008850700920448
+    },
+    {
+      "case": "comptime/dup_lone.bend",
+      "source_sha256": "5703accc6fc3f4b387643a2fed6dbb419c80e9a21d46b94120f68aebfd1a2b5d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/dup_lone.bend",
+        "$EVIDENCE/before-fbea48a69a6d4d97.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : x\n- observed : x (consumed more than once)\nContext:\n- f : @_:Nat -> Nat\nLocation: app~0\n5 | \n6>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n7 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.12329146199044771,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/dup_lone.bend",
+      "source_sha256": "5703accc6fc3f4b387643a2fed6dbb419c80e9a21d46b94120f68aebfd1a2b5d",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/dup_lone.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : x\n- observed : x (consumed more than once)\nContext:\n- f : @_:Nat -> Nat\nLocation: app~0\n5 | \n6>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n7 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.23982008697930723
+    },
+    {
+      "case": "comptime/err_capture.bend",
+      "source_sha256": "074629bcde02520c2ca6651528d466829d15f5e3aa381f2e0ceea6527582fb0e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/err_capture.bend",
+        "$EVIDENCE/before-657a17955ac82452.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : app\nContext:\n- x : Nat\nLocation: g\n12 | def g(x: Nat) -> Nat:\n13>|   app(~(y => Nat.add(y, x)), 1n)\n14 | \n",
+      "timed_out": false,
+      "seconds": 0.12712629901943728,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_capture.bend",
+      "source_sha256": "074629bcde02520c2ca6651528d466829d15f5e3aa381f2e0ceea6527582fb0e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/comptime/err_capture.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : app\nContext:\n- x : Nat\nLocation: g\n12 | def g(x: Nat) -> Nat:\n13>|   app(~(y => Nat.add(y, x)), 1n)\n14 | \n",
+      "timed_out": false,
+      "seconds": 0.2514214760158211
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "source_sha256": "a0ed26683d3bd128553fe20c0e01bf85614e30c11dbda2abe74beed110a83c10",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/ordinary.bend",
+        "$EVIDENCE/before-88314c853772ea39.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(x: Nat) -> Bool: Bool.not(x)\n4 | def main() -> Bool: bad(3n)\n",
+      "timed_out": false,
+      "seconds": 0.1268256269977428,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "source_sha256": "a0ed26683d3bd128553fe20c0e01bf85614e30c11dbda2abe74beed110a83c10",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/ordinary.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2552756519871764
+    },
+    {
+      "case": "negative/function.bend",
+      "source_sha256": "a2fac373d12cb906b3f1b01111a5b4be67e1a22f3dcc98398b2204bfa1f03325",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/function.bend",
+        "$EVIDENCE/before-499d5b6d770e52f7.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a function type\n- observed : Nat\nContext:\n- f : Nat\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(f: Nat, x: Nat) -> Nat: f(x)\n4 | def main() -> Nat: bad(1n, 3n)\n",
+      "timed_out": false,
+      "seconds": 0.11846931598847732,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/function.bend",
+      "source_sha256": "a2fac373d12cb906b3f1b01111a5b4be67e1a22f3dcc98398b2204bfa1f03325",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/function.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a function type\n- observed : Nat\nContext:\n- f : Nat\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(f: Nat, x: Nat) -> Nat: f(x)\n4 | def main() -> Nat: bad(1n, 3n)\n",
+      "timed_out": false,
+      "seconds": 0.2393424519977998
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "0a131183eaa2c70ad62979b212805993a383ca75f2a63466a27f285f356204a6",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/multiline.bend",
+        "$EVIDENCE/before-c4259654a002b02b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n4 |   f(\n5>|     x\n6 |   )\n",
+      "timed_out": false,
+      "seconds": 0.14943042802042328,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "0a131183eaa2c70ad62979b212805993a383ca75f2a63466a27f285f356204a6",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/multiline.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2756590729986783
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "0ed92361d2f3e05e57e2e3ceda390e46a0db8a21be4caaedf2bdcc95b5a2cf3e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/imported.bend",
+        "$EVIDENCE/before-d7077e5c2bdeb0eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: ../imports/defs.app~0\n4 |   f(\n5>|     x\n6 |   )\n",
+      "timed_out": false,
+      "seconds": 0.11957929897471331,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "0ed92361d2f3e05e57e2e3ceda390e46a0db8a21be4caaedf2bdcc95b5a2cf3e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m../imports/defs.app~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.23921840701950714
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "e78417af1da84ac2163a7f167497a3fbefe782c09b70eb1f566c580292fca90e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/nested.bend",
+        "$EVIDENCE/before-b4dba05cf9b0461e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n2 | \n3>| def app(~f: Nat -> Nat, x: Nat) -> Nat: f(x)\n4 | def wrap(~f: Nat -> Nat, x: Nat) -> Nat: app(~f, x)\n",
+      "timed_out": false,
+      "seconds": 0.14110658399295062,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "source_sha256": "e78417af1da84ac2163a7f167497a3fbefe782c09b70eb1f566c580292fca90e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2616004439769313
+    },
+    {
+      "case": "negative/distinct_uses.bend",
+      "source_sha256": "8478224e16b1cc4513829504b04ac6e7718235a73e1fb57fd87d99ef44e12b6e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/distinct_uses.bend",
+        "$EVIDENCE/before-a3a00993adbcefc4.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- x : Nat\n- a : Nat\nLocation: bad\n4 |   a = Nat.add(x, 1n)\n5>|   b = Bool.not(x)\n6 |   a\n",
+      "timed_out": false,
+      "seconds": 0.14263401299831457,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/distinct_uses.bend",
+      "source_sha256": "8478224e16b1cc4513829504b04ac6e7718235a73e1fb57fd87d99ef44e12b6e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/distinct_uses.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mbad: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.24501085601514205
+    },
+    {
+      "case": "negative/quantity.bend",
+      "source_sha256": "42ef96ff29127c24792afe7c9bb0a32b7608b4a9c0e828791cf062e43e8a0a2b",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/quantity.bend",
+        "$EVIDENCE/before-9b51108cce6190a1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : U32\n- observed : Quant\nContext:\n- f : @_:Quant -> U32\nLocation: app~0\n2 | \n3>| def app(~f: Quant -> U32) -> U32: f(&2)\n4 | def main() -> U32: app(~(x => U32.inc(x)))\n",
+      "timed_out": false,
+      "seconds": 0.12118201699922793,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/quantity.bend",
+      "source_sha256": "42ef96ff29127c24792afe7c9bb0a32b7608b4a9c0e828791cf062e43e8a0a2b",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/quantity.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected U32; observed Quant\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2511753889848478
+    },
+    {
+      "case": "negative/quantity_type.bend",
+      "source_sha256": "f5d2bcab9cc5a71dd73cd6438e2ec36eb46317b7b1058698c11b397e6e3d113e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/quantity_type.bend",
+        "$EVIDENCE/before-f4fa7bab55f8260b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : U32\n- observed : Type\nContext:\n- f : @_:Type -> U32\nLocation: app~0\n2 | \n3>| def app(~f: Type -> U32) -> U32: f(Quant)\n4 | def main() -> U32: app(~(x => U32.inc(x)))\n",
+      "timed_out": false,
+      "seconds": 0.14682081100181676,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/quantity_type.bend",
+      "source_sha256": "f5d2bcab9cc5a71dd73cd6438e2ec36eb46317b7b1058698c11b397e6e3d113e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-comptime-type/negative/quantity_type.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected U32; observed Type\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.2410809619759675
+    }
+  ],
+  "completed": true,
+  "actual_baseline_snapshot": {
+    "source_commit": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+    "source_tree": "428bb03240ab83048253334240ff5ff0dd6ee096",
+    "binary_sha256": "333916d7f261f5afd652ead30fdf9e498a3b784afd03d77fb4a904389292ae82",
+    "binary_size": 27468240,
+    "working_binary": "$BASELINE_RUN/teamy-bend",
+    "archive": "$BASELINE_EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "48fd159d8894f64ed6e21ec4dbad100aab15d0085773607c1ba9088bfeb1fbc1",
+    "archive_size": 7129689,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "333916d7f261f5afd652ead30fdf9e498a3b784afd03d77fb4a904389292ae82"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "identity_note": "Published9e1c7e2 is production-identical to captured source792aaf0; retain both identities.",
+  "diagnosis": {
+    "before": "CheckerDiagnostic already had expected Bool, observed Nat and context f:@_:Nat->Nat,x:Nat; diagnostic excerpt absent after lambda substitution.",
+    "after": "Capturing fallback sources on App edges restores lines5\u20137 with f(x) at6. Error message and structured expected/observed/context unchanged.",
+    "temporary_probe": "Local read-only diagnostic probe test removed before checkpoint; pointer-address-bearing raw output stays outside Git.",
+    "followup": "Macro substitution now propagates an existing argument source when no explicit occurrence source is present. Qua/Qnt atoms gain actual source positions; unmapped identities are never promoted. Earlier intermediate failure receipts retained separately."
+  }
+}

@@ -1,0 +1,1 @@
+"Error:\n- expected : U32\n- observed : Quant\nContext:\n- f : @_:Quant -> U32\nLocation: app~0\n2 | \n3>| def app(~f: Quant -> U32) -> U32: f(&2)\n4 | def main() -> U32: app(~(x => U32.inc(x)))\n"

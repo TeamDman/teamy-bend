@@ -1213,8 +1213,11 @@ impl Parser<'_> {
                 );
                 let root_replaced =
                     matches!(body.as_ref(), Term::Var { id: variable, .. } if variable == id);
-                if let (Some(origins), Some(source)) =
-                    (&self.templates.diagnostics, argument.source)
+                // Preserve an ordinary argument's existing source through
+                // later variable freshening, without inventing an origin.
+                if let Some(origins) = &self.templates.diagnostics
+                    && let Some(source) =
+                        argument.source.or_else(|| origins.known_source(&argument))
                 {
                     origins
                         .tracker
@@ -1519,6 +1522,8 @@ impl Parser<'_> {
         if matches!(
             value.as_ref(),
             Term::Typ(_)
+                | Term::Qnt
+                | Term::Qua(_)
                 | Term::All { .. }
                 | Term::Adt { .. }
                 | Term::Ctr { .. }

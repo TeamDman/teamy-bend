@@ -1,0 +1,14 @@
+[
+  "comptime/wrong_type.bend",
+  "comptime/err_op_ns.bend",
+  "comptime/dup_lone.bend",
+  "comptime/err_capture.bend",
+  "negative/ordinary.bend",
+  "negative/function.bend",
+  "negative/multiline.bend",
+  "negative/imported.bend",
+  "negative/nested.bend",
+  "negative/distinct_uses.bend",
+  "negative/quantity.bend",
+  "negative/quantity_type.bend"
+]

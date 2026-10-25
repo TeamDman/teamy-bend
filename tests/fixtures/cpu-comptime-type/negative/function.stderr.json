@@ -1,0 +1,1 @@
+"Error:\n- expected : a function type\n- observed : Nat\nContext:\n- f : Nat\n- x : Nat\nLocation: bad\n2 | \n3>| def bad(f: Nat, x: Nat) -> Nat: f(x)\n4 | def main() -> Nat: bad(1n, 3n)\n"

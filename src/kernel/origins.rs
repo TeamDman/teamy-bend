@@ -105,7 +105,7 @@ impl TermOrigins {
             } => Some([Some(evidence), Some(motive), Some(body)]),
             Term::Lam { body, .. } => Some([Some(body), None, None]),
             Term::All { domain, body, .. } => Some([Some(domain), Some(body), None]),
-            Term::Ann(value, ty) => Some([Some(value), Some(ty), None]),
+            Term::App(a, b) | Term::Ann(a, b) => Some([Some(a), Some(b), None]),
             _ => None,
         };
         let child_origins = children.map(|children| {
@@ -443,29 +443,31 @@ mod tests {
     }
 
     #[test]
-    fn type_children_keep_distinct_sources_without_owning_shared_replacements() {
-        for annotation in [false, true] {
+    fn application_and_type_children_keep_distinct_sources_without_owning_replacements() {
+        for parent_kind in 0..3 {
             let origins = TermOrigins::default();
             let first = variable(7);
             let second = variable(7);
             origins.track(&first);
             origins.track(&second);
-            let original = term(if annotation {
-                Term::Ann(Rc::clone(&first), Rc::clone(&second))
-            } else {
-                Term::All {
+            let original = term(match parent_kind {
+                0 => Term::Ann(Rc::clone(&first), Rc::clone(&second)),
+                1 => Term::App(Rc::clone(&first), Rc::clone(&second)),
+                _ => Term::All {
                     quant: super::super::Quant::None,
                     name: "y".into(),
                     id: 8,
                     domain: Rc::clone(&first),
                     body: Rc::clone(&second),
-                }
+                },
             });
             origins.track(&original);
             let replacement = variable(99);
             let result = substitute_with_origins(&original, 7, &replacement, Some(&origins));
             let (a, b) = match result.as_ref() {
-                Term::All { domain, body, .. } | Term::Ann(domain, body) => (domain, body),
+                Term::All { domain, body, .. }
+                | Term::Ann(domain, body)
+                | Term::App(domain, body) => (domain, body),
                 _ => panic!("type parent"),
             };
             assert!(Rc::ptr_eq(a, &replacement) && Rc::ptr_eq(b, &replacement));
