@@ -1,0 +1,249 @@
+{
+  "tested_source": "fff765af30bf3ee4bf4b5632a2c73962917586fa",
+  "binary_sha256": "ae1a4a0ca952ec88a02cace0e7c90e75cce87826c273b341d3d18792156ac601",
+  "fixture": "parse/string_pattern_sugar.bend",
+  "fixture_source": "# char and string literals as patterns.\n# ported from bend3: Base's String/Char, Bool result\nimport Base\n\nlaw is_hi:\n  for s: String\n  Bool\n\ndef is_hi(s):\n  match s:\n    case \"hi\":\n      True{}\n    case s:\n      False{}\n\nlaw main:\n  Bool\n\ndef main(): is_hi(\"hi\")\n\n#|True{}\n",
+  "fixture_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "unrun": [
+    "port generated C execution: load failure prevents artifact",
+    "port generated JS execution: load failure prevents artifact"
+  ],
+  "completed": true,
+  "upstream_phase": "accepted",
+  "raw_receipt_sha256": "8937f67a87cc72340b39fa17b712e5fdc5462940b21e5877f2db3f80a4630eac",
+  "license": "Unchanged Apache-2.0 upstream original; see NOTICE.",
+  "observations": [
+    {
+      "lane": "upstream-check",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.36037155700614676,
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "<artifacts>/next-gap/phase.json"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-check",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.1746828769973945,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c"
+    },
+    {
+      "lane": "port-eval",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.1954037219984457,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c"
+    },
+    {
+      "lane": "port-run",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.16399713800637983,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c"
+    },
+    {
+      "lane": "port-strict-phase",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.09244206099538133,
+      "command": [
+        "<evidence>/phase-probe",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend"
+      ],
+      "stdout": "load\n",
+      "raw_stdout_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-executable-phase",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.15659680700628087,
+      "command": [
+        "<evidence>/phase-probe",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "--executable"
+      ],
+      "stdout": "load\n",
+      "raw_stdout_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "upstream-direct",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.348634221998509,
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend"
+      ],
+      "stdout": "True{}\n",
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-generate-c",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.17535889899590984,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<artifacts>/next-gap/port.c"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c"
+    },
+    {
+      "lane": "upstream-generate-c",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.6537255349976476,
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "-o",
+        "<artifacts>/next-gap/upstream.c"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "upstream-C-build-O3",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.26886881500831805,
+      "command": [
+        "$TEAMY_BEND_CC",
+        "-std=c11",
+        "-O3",
+        "<artifacts>/next-gap/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "<artifacts>/next-gap/upstream.bin"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "upstream-c",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.0008259509922936559,
+      "command": [
+        "<artifacts>/next-gap/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "stdout": "True{}\n",
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-generate-javascript",
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.14000166597543284,
+      "command": [
+        "<artifacts>/teamy-bend",
+        "compile",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<artifacts>/next-gap/port.js"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: \n   0: <pinned-reference>/tests/parse/string_pattern_sugar.bend:16:1: pattern compilation exceeds the resource limit of 64 levels\n\nLocation:\n   src/cli/checker_diagnostic.rs:92\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "raw_stderr_sha256": "7336f8156604693a24f5dc4e67285bf47ece5014498119147d8f97a51812ab9c"
+    },
+    {
+      "lane": "upstream-generate-javascript",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.24315602699061856,
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<pinned-reference>/tests/parse/string_pattern_sugar.bend",
+        "-o",
+        "<artifacts>/next-gap/upstream.js"
+      ],
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "upstream-js",
+      "exit": 0,
+      "timed_out": false,
+      "seconds": 0.02198036201298237,
+      "command": [
+        "node",
+        "<artifacts>/next-gap/upstream.js"
+      ],
+      "stdout": "True{}\n",
+      "raw_stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

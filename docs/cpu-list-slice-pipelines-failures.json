@@ -1,0 +1,178 @@
+{
+  "tested_source": "fff765af30bf3ee4bf4b5632a2c73962917586fa",
+  "before_source": "b6b509b8216dd7f9620c66af7c80ad4c52e516b4",
+  "before": [
+    {
+      "case": "base/list_slice.bend",
+      "lane": "native",
+      "source_sha256": "c63048cd2144de87366c93988449a5bc8b0b14cb03f5a59830bc608dfd61a275",
+      "exit": 0,
+      "stdout": "3\n[1, 2, 3]\n[1, 2, 3]\n[3, 2, 1]\nTrue\nFalse\nSome(7)\nNone\n[8, 9]\nSome(9)\nNone\nSome(20)\nNone\n[10, 20, 5]\n[10, 20, 30]\n[1, 2]\n[1, 2]\n[3, 4]\n[]\n[1:4, 2:5]\n[0, 1, 2, 3]\n[7, 7, 7]\n",
+      "stderr": "",
+      "seconds": 0.504103369981749
+    },
+    {
+      "case": "base/list_slice.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "c63048cd2144de87366c93988449a5bc8b0b14cb03f5a59830bc608dfd61a275",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "seconds": 0.21649321299628355
+    },
+    {
+      "case": "base/list_ops.bend",
+      "lane": "native",
+      "source_sha256": "2a933419cb043b1e676e0d5aa6e120a31ffef774fad55666233f601d9eae26a7",
+      "exit": 0,
+      "stdout": "12\n",
+      "stderr": "",
+      "seconds": 0.4514229109918233
+    },
+    {
+      "case": "base/list_ops.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "2a933419cb043b1e676e0d5aa6e120a31ffef774fad55666233f601d9eae26a7",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "seconds": 0.19431148198782466
+    }
+  ],
+  "current_unique": [
+    {
+      "case": "original/list_ops.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "2a933419cb043b1e676e0d5aa6e120a31ffef774fad55666233f601d9eae26a7",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_ops.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "2a933419cb043b1e676e0d5aa6e120a31ffef774fad55666233f601d9eae26a7",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n319 | law main:\n320>|   IO(Unit)\n321 | \n",
+      "raw_stderr_sha256": "0ccd3ce547f80e3fd3ca4bdc16c73320d9b4a23ace23af219eb6525d15e7412c"
+    },
+    {
+      "case": "original/list_ops.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "2a933419cb043b1e676e0d5aa6e120a31ffef774fad55666233f601d9eae26a7",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n319 | law main:\n320>|   IO(Unit)\n321 | \n",
+      "raw_stderr_sha256": "0ccd3ce547f80e3fd3ca4bdc16c73320d9b4a23ace23af219eb6525d15e7412c"
+    },
+    {
+      "case": "original/list_slice.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "c63048cd2144de87366c93988449a5bc8b0b14cb03f5a59830bc608dfd61a275",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/list_slice.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "c63048cd2144de87366c93988449a5bc8b0b14cb03f5a59830bc608dfd61a275",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n21 | \n22>| def main() -> IO(Unit):\n23 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "3cc32f909049fa3a192529b5d39bf1a8777ed56562110f6732b08d41afe95bdb"
+    },
+    {
+      "case": "original/list_slice.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "c63048cd2144de87366c93988449a5bc8b0b14cb03f5a59830bc608dfd61a275",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n21 | \n22>| def main() -> IO(Unit):\n23 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "3cc32f909049fa3a192529b5d39bf1a8777ed56562110f6732b08d41afe95bdb"
+    },
+    {
+      "case": "positive/pipeline-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "f25c68a2f9b73b8a736c55297b8372550e21f29d871a3a9526690b0f658ea6ab",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/pipeline-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "f25c68a2f9b73b8a736c55297b8372550e21f29d871a3a9526690b0f658ea6ab",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_ops.main\n319 | law main:\n320>|   IO(Unit)\n321 | \n",
+      "raw_stderr_sha256": "6c125834f0ae23ca51ed2f638b1fb74005e3258370890881a6a5b9f389a9590d"
+    },
+    {
+      "case": "positive/pipeline-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "f25c68a2f9b73b8a736c55297b8372550e21f29d871a3a9526690b0f658ea6ab",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_ops.main\n319 | law main:\n320>|   IO(Unit)\n321 | \n",
+      "raw_stderr_sha256": "6c125834f0ae23ca51ed2f638b1fb74005e3258370890881a6a5b9f389a9590d"
+    },
+    {
+      "case": "positive/slice-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "6dd6183ab5954998ade2af8c9b88ade0087fe2551c51d44e76b2111523d4d8f2",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/slice-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "6dd6183ab5954998ade2af8c9b88ade0087fe2551c51d44e76b2111523d4d8f2",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_slice.main\n21 | \n22>| def main() -> IO(Unit):\n23 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "7a1d64bd0f8ab2b119297a871f4f37e3a0baec54881abe0babe3f14cb7d7732f"
+    },
+    {
+      "case": "positive/slice-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "6dd6183ab5954998ade2af8c9b88ade0087fe2551c51d44e76b2111523d4d8f2",
+      "exit": 1,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: ../original/list_slice.main\n21 | \n22>| def main() -> IO(Unit):\n23 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "7a1d64bd0f8ab2b119297a871f4f37e3a0baec54881abe0babe3f14cb7d7732f"
+    }
+  ],
+  "raw_baseline_sha256": "c751a9e963256fa9027350e3e6b65f90071aa87f3e615b089236d22b32e2b2cf",
+  "scope": "Before and current strict-IO and direct-Node host failures, separate from exact executable matches. No production defect found in list family."
+}

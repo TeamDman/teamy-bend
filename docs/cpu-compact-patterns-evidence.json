@@ -1,0 +1,290 @@
+{
+  "tested_source": "fff765af30bf3ee4bf4b5632a2c73962917586fa",
+  "source_sha256": "b4dccc207058820393cf06b959b00bd7639aef5525d4e314a9b1c2ad47089802",
+  "library_sha256": "fb7b47f25e0cb510d78cede1af005c184db33d1ab7720c2368bf35ddf31d5b59",
+  "binary_sha256": "c5f909bb0ab84683716068feb2748902273309ea7fe9826896affb86822cc905",
+  "fixture_hashes": {
+    "helpers.bend": "9bd0f58e2b695a8f5503669370e81ed57e271ee3f2ca5b30525173666890a59f",
+    "original-open.bend": "ab8eda4ed5b790efa4d2e6b2fcbc783560e4a9a644e62975edeeb763761cb41f"
+  },
+  "completed": true,
+  "production_adopted": false,
+  "results": {
+    "compact_depth": 72,
+    "compact_tree_nodes": 616,
+    "expanded_depth": 138,
+    "expanded_tree_nodes": 610,
+    "expanded_full_alpha_equal": true,
+    "expanded_canonical_sha256": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69",
+    "open_full_alpha_equal": true,
+    "explicit_call_open_mismatch": true,
+    "whole_function_normalization": "refused by unchanged128 kernel normalization guard",
+    "original_source_execution": "not implemented by this manual Book prototype",
+    "closed_inputs": 6,
+    "repetitions": 2,
+    "methods": [
+      "evaluate",
+      "evaluate_data"
+    ]
+  },
+  "raw_receipt_sha256": "82aeffe079bbf3a8d25b238cf748066a98c6836c5bc2e7d8381a5872e4ed4890",
+  "observations": [
+    {
+      "lane": "rustc",
+      "rep": 1,
+      "exit": 0,
+      "seconds": 0.5467452099837828,
+      "timed_out": false,
+      "command": [
+        "rustc",
+        "--edition=2024",
+        "-C",
+        "debuginfo=0",
+        "<checkout>/scripts/compact-patterns/prototype.rs",
+        "--extern",
+        "teamy_bend=<checkout>/target/debug/deps/libteamy_bend-74a120e44f279a46.rlib",
+        "-L",
+        "dependency=<checkout>/target/debug/deps",
+        "-o",
+        "<evidence>/qualified-probe/prototype"
+      ],
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "lane": "direct-cut",
+      "rep": 1,
+      "exit": 0,
+      "seconds": 0.1860991620051209,
+      "timed_out": false,
+      "command": [
+        "<evidence>/qualified-probe/prototype",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/helpers.bend"
+      ],
+      "raw_stdout_sha256": "ac4c9e8f8c2007140bde53e32ffcb457cb2d5b3c6e4ccb3c0ec80e4c1fed0b6f",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observations_without_canonical_trees": [
+        "cut_count=1",
+        "compact_metrics=(72, 616)",
+        "expanded_metrics=(138, 610)",
+        "check=accepted",
+        "normalize:main:ok:True{}",
+        "normalize:is_hi:error:kernel nesting limit exhausted; proof not accepted",
+        "normalize:open:ok:tail => is_hi(SCon{Chr{104}, tail})",
+        "evaluate:\"hi\":ok:True{}",
+        "data:\"hi\":ok:True{}",
+        "evaluate:\"ho\":ok:False{}",
+        "data:\"ho\":ok:False{}",
+        "evaluate:\"h\":ok:False{}",
+        "data:\"h\":ok:False{}",
+        "evaluate:\"\":ok:False{}",
+        "data:\"\":ok:False{}",
+        "evaluate:\"xi\":ok:False{}",
+        "data:\"xi\":ok:False{}",
+        "evaluate:\"hii\":ok:False{}",
+        "data:\"hii\":ok:False{}"
+      ],
+      "canonical_tree_sha256": {
+        "expanded": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69",
+        "main": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843",
+        "open": "30a6a11db30862d7f4ce769f388665a100eed357240c9aab0036364a97b7817f"
+      },
+      "stderr": ""
+    },
+    {
+      "lane": "explicit-call",
+      "rep": 1,
+      "exit": 0,
+      "seconds": 0.19073689100332558,
+      "timed_out": false,
+      "command": [
+        "<evidence>/qualified-probe/prototype",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/helpers.bend",
+        "--call"
+      ],
+      "raw_stdout_sha256": "92c88713abe95487b625d3cc31a60fe42e8becd52da2ead193be42d6c875cb79",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observations_without_canonical_trees": [
+        "cut_count=0",
+        "compact_metrics=(72, 619)",
+        "expanded_metrics=(140, 613)",
+        "check=accepted",
+        "normalize:main:ok:True{}",
+        "normalize:is_hi:error:kernel nesting limit exhausted; proof not accepted",
+        "normalize:open:ok:tail => \\{SCon: \\{Chr: \\{U32: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{True: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WNil: \\{SNil: True{}; (_5 => False{})}; (_71 => _5 => False{})}; (_70 => _71 => _5 => False{})}; (_69 => _5 => False{})}; (_68 => _69 => _5 => False{})}; (_67 => _5 => False{})}; (_66 => _67 => _5 => False{})}; (_65 => _5 => False{})}; (_64 => _65 => _5 => False{})}; (_63 => _5 => False{})}; (_62 => _63 => _5 => False{})}; (_61 => _5 => False{})}; (_60 => _61 => _5 => False{})}; (_59 => _5 => False{})}; (_58 => _59 => _5 => False{})}; (_57 => _5 => False{})}; (_56 => _57 => _5 => False{})}; (_55 => _5 => False{})}; (_54 => _55 => _5 => False{})}; (_53 => _5 => False{})}; (_52 => _53 => _5 => False{})}; (_51 => _5 => False{})}; (_50 => _51 => _5 => False{})}; (_49 => _5 => False{})}; (_48 => _49 => _5 => False{})}; (_47 => _5 => False{})}; (_46 => _47 => _5 => False{})}; (_45 => _5 => False{})}; (_44 => _45 => _5 => False{})}; (_43 => _5 => False{})}; (_42 => _43 => _5 => False{})}; (_41 => _5 => False{})}; (_40 => _41 => _5 => False{})}; (_39 => _5 => False{})}; (_38 => _39 => _5 => False{})}; (_37 => _5 => False{})}; (_36 => _37 => _5 => False{})}; (_35 => _5 => False{})}; (_34 => _35 => _5 => False{})}; (_33 => _5 => False{})}; (_32 => _33 => _5 => False{})}; (_31 => _5 => False{})}; (_30 => _31 => _5 => False{})}; (_29 => _5 => False{})}; (_28 => _29 => _5 => False{})}; (_27 => _5 => False{})}; (_26 => _27 => _5 => False{})}; (_25 => _5 => False{})}; (_24 => _25 => _5 => False{})}; (_23 => _5 => False{})}; (_22 => _23 => _5 => False{})}; (_21 => _5 => False{})}; (_20 => _21 => _5 => False{})}; (_19 => _5 => False{})}; (_18 => _19 => _5 => False{})}; (_17 => _5 => False{})}; (_16 => _17 => _5 => False{})}; (_15 => _5 => False{})}; (_14 => _15 => _5 => False{})}; (_13 => _5 => False{})}; (_12 => _13 => _5 => False{})}; (_11 => _5 => False{})}; (_10 => _11 => _5 => False{})}; (_9 => _5 => False{})}; (_8 => _9 => _5 => False{})}; (_7 => _5 => False{})}; (_6 => _5 => False{})}; (_4 => _5 => False{})}; (t => False{})}(tail)",
+        "evaluate:\"hi\":ok:True{}",
+        "data:\"hi\":ok:True{}",
+        "evaluate:\"ho\":ok:False{}",
+        "data:\"ho\":ok:False{}",
+        "evaluate:\"h\":ok:False{}",
+        "data:\"h\":ok:False{}",
+        "evaluate:\"\":ok:False{}",
+        "data:\"\":ok:False{}",
+        "evaluate:\"xi\":ok:False{}",
+        "data:\"xi\":ok:False{}",
+        "evaluate:\"hii\":ok:False{}",
+        "data:\"hii\":ok:False{}"
+      ],
+      "canonical_tree_sha256": {
+        "expanded": "f4f61b5443c7ac77614a04028125a0c409da5a85f5a0600011206d697fbfd80f",
+        "main": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843",
+        "open": "74223e55c78edfae1c7c2e4be868355225d2205ea6a031f32161169f57a230b3"
+      },
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-normalization",
+      "rep": 1,
+      "exit": 0,
+      "seconds": 0.2604687819839455,
+      "timed_out": false,
+      "command": [
+        "node",
+        "<checkout>/scripts/compact-patterns/upstream-normalized.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/original-open.bend"
+      ],
+      "raw_stdout_sha256": "5d197630074d20af4d8921ab0c78c412087582a9942728312c8cecbfd90e787b",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized_definitions": [
+        {
+          "name": "is_hi",
+          "max_depth": 138,
+          "nodes": 610,
+          "canonical_sha256": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69"
+        },
+        {
+          "name": "main",
+          "max_depth": 0,
+          "nodes": 1,
+          "canonical_sha256": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843"
+        },
+        {
+          "name": "open",
+          "max_depth": 37,
+          "nodes": 72,
+          "canonical_sha256": "30a6a11db30862d7f4ce769f388665a100eed357240c9aab0036364a97b7817f"
+        }
+      ],
+      "stderr": ""
+    },
+    {
+      "lane": "direct-cut",
+      "rep": 2,
+      "exit": 0,
+      "seconds": 0.2507002410129644,
+      "timed_out": false,
+      "command": [
+        "<evidence>/qualified-probe/prototype",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/helpers.bend"
+      ],
+      "raw_stdout_sha256": "ac4c9e8f8c2007140bde53e32ffcb457cb2d5b3c6e4ccb3c0ec80e4c1fed0b6f",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observations_without_canonical_trees": [
+        "cut_count=1",
+        "compact_metrics=(72, 616)",
+        "expanded_metrics=(138, 610)",
+        "check=accepted",
+        "normalize:main:ok:True{}",
+        "normalize:is_hi:error:kernel nesting limit exhausted; proof not accepted",
+        "normalize:open:ok:tail => is_hi(SCon{Chr{104}, tail})",
+        "evaluate:\"hi\":ok:True{}",
+        "data:\"hi\":ok:True{}",
+        "evaluate:\"ho\":ok:False{}",
+        "data:\"ho\":ok:False{}",
+        "evaluate:\"h\":ok:False{}",
+        "data:\"h\":ok:False{}",
+        "evaluate:\"\":ok:False{}",
+        "data:\"\":ok:False{}",
+        "evaluate:\"xi\":ok:False{}",
+        "data:\"xi\":ok:False{}",
+        "evaluate:\"hii\":ok:False{}",
+        "data:\"hii\":ok:False{}"
+      ],
+      "canonical_tree_sha256": {
+        "expanded": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69",
+        "main": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843",
+        "open": "30a6a11db30862d7f4ce769f388665a100eed357240c9aab0036364a97b7817f"
+      },
+      "stderr": ""
+    },
+    {
+      "lane": "explicit-call",
+      "rep": 2,
+      "exit": 0,
+      "seconds": 0.18572139999014325,
+      "timed_out": false,
+      "command": [
+        "<evidence>/qualified-probe/prototype",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/helpers.bend",
+        "--call"
+      ],
+      "raw_stdout_sha256": "92c88713abe95487b625d3cc31a60fe42e8becd52da2ead193be42d6c875cb79",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "observations_without_canonical_trees": [
+        "cut_count=0",
+        "compact_metrics=(72, 619)",
+        "expanded_metrics=(140, 613)",
+        "check=accepted",
+        "normalize:main:ok:True{}",
+        "normalize:is_hi:error:kernel nesting limit exhausted; proof not accepted",
+        "normalize:open:ok:tail => \\{SCon: \\{Chr: \\{U32: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{True: \\{WCon: \\{True: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WCon: \\{False: \\{WNil: \\{SNil: True{}; (_5 => False{})}; (_71 => _5 => False{})}; (_70 => _71 => _5 => False{})}; (_69 => _5 => False{})}; (_68 => _69 => _5 => False{})}; (_67 => _5 => False{})}; (_66 => _67 => _5 => False{})}; (_65 => _5 => False{})}; (_64 => _65 => _5 => False{})}; (_63 => _5 => False{})}; (_62 => _63 => _5 => False{})}; (_61 => _5 => False{})}; (_60 => _61 => _5 => False{})}; (_59 => _5 => False{})}; (_58 => _59 => _5 => False{})}; (_57 => _5 => False{})}; (_56 => _57 => _5 => False{})}; (_55 => _5 => False{})}; (_54 => _55 => _5 => False{})}; (_53 => _5 => False{})}; (_52 => _53 => _5 => False{})}; (_51 => _5 => False{})}; (_50 => _51 => _5 => False{})}; (_49 => _5 => False{})}; (_48 => _49 => _5 => False{})}; (_47 => _5 => False{})}; (_46 => _47 => _5 => False{})}; (_45 => _5 => False{})}; (_44 => _45 => _5 => False{})}; (_43 => _5 => False{})}; (_42 => _43 => _5 => False{})}; (_41 => _5 => False{})}; (_40 => _41 => _5 => False{})}; (_39 => _5 => False{})}; (_38 => _39 => _5 => False{})}; (_37 => _5 => False{})}; (_36 => _37 => _5 => False{})}; (_35 => _5 => False{})}; (_34 => _35 => _5 => False{})}; (_33 => _5 => False{})}; (_32 => _33 => _5 => False{})}; (_31 => _5 => False{})}; (_30 => _31 => _5 => False{})}; (_29 => _5 => False{})}; (_28 => _29 => _5 => False{})}; (_27 => _5 => False{})}; (_26 => _27 => _5 => False{})}; (_25 => _5 => False{})}; (_24 => _25 => _5 => False{})}; (_23 => _5 => False{})}; (_22 => _23 => _5 => False{})}; (_21 => _5 => False{})}; (_20 => _21 => _5 => False{})}; (_19 => _5 => False{})}; (_18 => _19 => _5 => False{})}; (_17 => _5 => False{})}; (_16 => _17 => _5 => False{})}; (_15 => _5 => False{})}; (_14 => _15 => _5 => False{})}; (_13 => _5 => False{})}; (_12 => _13 => _5 => False{})}; (_11 => _5 => False{})}; (_10 => _11 => _5 => False{})}; (_9 => _5 => False{})}; (_8 => _9 => _5 => False{})}; (_7 => _5 => False{})}; (_6 => _5 => False{})}; (_4 => _5 => False{})}; (t => False{})}(tail)",
+        "evaluate:\"hi\":ok:True{}",
+        "data:\"hi\":ok:True{}",
+        "evaluate:\"ho\":ok:False{}",
+        "data:\"ho\":ok:False{}",
+        "evaluate:\"h\":ok:False{}",
+        "data:\"h\":ok:False{}",
+        "evaluate:\"\":ok:False{}",
+        "data:\"\":ok:False{}",
+        "evaluate:\"xi\":ok:False{}",
+        "data:\"xi\":ok:False{}",
+        "evaluate:\"hii\":ok:False{}",
+        "data:\"hii\":ok:False{}"
+      ],
+      "canonical_tree_sha256": {
+        "expanded": "f4f61b5443c7ac77614a04028125a0c409da5a85f5a0600011206d697fbfd80f",
+        "main": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843",
+        "open": "74223e55c78edfae1c7c2e4be868355225d2205ea6a031f32161169f57a230b3"
+      },
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-normalization",
+      "rep": 2,
+      "exit": 0,
+      "seconds": 0.34524214098928496,
+      "timed_out": false,
+      "command": [
+        "node",
+        "<checkout>/scripts/compact-patterns/upstream-normalized.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-compact-patterns/original-open.bend"
+      ],
+      "raw_stdout_sha256": "5d197630074d20af4d8921ab0c78c412087582a9942728312c8cecbfd90e787b",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "normalized_definitions": [
+        {
+          "name": "is_hi",
+          "max_depth": 138,
+          "nodes": 610,
+          "canonical_sha256": "5d4ecab6cb8eeab4ad1c637303f25c6fab361d1002cb92eec1339d5b85023c69"
+        },
+        {
+          "name": "main",
+          "max_depth": 0,
+          "nodes": 1,
+          "canonical_sha256": "5554cfc2da3ede4f3e7c46f5ecae3513a48564a5c88971e6e2578ac7a6623843"
+        },
+        {
+          "name": "open",
+          "max_depth": 37,
+          "nodes": 72,
+          "canonical_sha256": "30a6a11db30862d7f4ce769f388665a100eed357240c9aab0036364a97b7817f"
+        }
+      ],
+      "stderr": ""
+    }
+  ]
+}

@@ -19,7 +19,8 @@ Let k = Ann(suffix_matcher, String -> Bool)
 
 This is schematic core syntax, not a new Bend language feature.
 
-Measured before production adoption:
+Tested clean source: `fff765af30bf3ee4bf4b5632a2c73962917586fa`. Production remains unchanged.
+Measured research results, **not approved for production adoption**:
 
 | Requirement | Direct continuation cut |
 | --- | --- |
@@ -80,13 +81,63 @@ python3 scripts/compact-patterns/run-prototype.py \
 ```
 
 The runner compiles the standalone research probe against the matching feature
-library, records source/library/binary hashes, repeats each observation twice,
+library, records source/library/binary hashes, repeats each prototype/oracle run twice,
 and bounds each child to 30 seconds. It checks complete alpha-trees against the
 pinned interpreter. A probe exit 0 means the diagnostic program completed; its
 recorded normalization refusal is not a successful parity outcome.
 The original plus one appended open-tail observation is clearly labelled as a
 derived fixture, and the unchanged original remains a separate runtime cell.
 
-Independent `base/list_slice` and `base/list_ops` qualification is recorded
-separately in the following checkpoint. No proof-mode exclusion or successful
-list control is evidence that the original string-pattern gap has closed.
+Independent [list qualification](cpu-list-slice-pipelines.md) passes separately.
+No proof-mode exclusion or successful control closes the string-pattern gap.
+
+## Renewed original, review and precise limits
+
+The unchanged original's SHA-256 is
+`44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed`.
+Its [14 bounded observations](cpu-compact-patterns-original-failure.json) retain:
+upstream checking accepts, upstream interpreter/C O3/JS return `True{}\n`,
+exit 0 and empty stderr; port strict/executable loading and check/eval/run/emission
+refuse with the 64-level pattern diagnostic. Port generated C/JS executions are
+**unrun because no artifact was emitted**. No candidate original CLI execution
+is claimed. These failures are separate from the manual Book prototype's successes.
+
+[Compact probe receipts](cpu-compact-patterns-evidence.json) preserve exact refusal
+text, open-call differences, complete-tree hashes and all process statuses. Seven
+processes complete without timeout: one standalone rustc build and two runs each
+of direct-cut, explicit-call and upstream normalization. Twelve closed observations
+per candidate run cover six inputs via two APIs; both candidates pass these, while
+only the direct cut preserves the observed open call. Process exit 0 does not turn
+the recorded normalization failure into a pass.
+
+Two independent read-only reviews found no blocker to publishing this research,
+and neither approved production adoption. The library used here was built by the
+clean-source full gate before capture; the receipt records its fingerprint and
+SHA-256. The research runner itself selects a matching-feature rlib by modification
+time and relies on the documented preceding build: it does not independently prove
+library-to-HEAD provenance. The comparator treats Ann as transparent. The observed
+trees have no annotations other than the intentionally introduced binding Ann;
+rejecting unexpected annotations is a prerequisite before generalizing this probe.
+No claim is made about arbitrary annotated programs, metadata or pointer sharing.
+
+The unchanged 64-level recursive/wide-pattern, 128-level structural and engine,
+source-hole, host-stack, named-call and aggregate work-accounting regressions remain
+in the standard gate. It passes **1,169 / 0 / 49** at the source above; this is not a
+claim that the candidate meets those general obligations. No new guard exception,
+early memo bypass, budget reset, cancellation behavior or demand policy was adopted.
+In particular, no mid-normalization cancellation support is implied.
+
+### Source basis
+
+- [Pinned string-pattern original](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/tests/parse/string_pattern_sugar.bend).
+- [Pinned match flattening and strong normalization](https://github.com/bendlang/bend/blob/e6676b080f25b1bc1bf5b5b7d7a17e22f8022599/bend2/bend.ts#L2679): nested constructor decisions and complete Mat arms/fallbacks remain observable core structure; term_snf begins at line 3033.
+- [Port flattening guard and inputs](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/syntax/surface.rs#L332): patterns and variables are available here, but no expected continuation type telescope.
+- [Input structural guard](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/kernel/term.rs#L361) is distinct from the [Engine nesting guard](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/kernel/check.rs#L610).
+- [Let reduction](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/kernel/reduce.rs#L111) substitutes bindings; [strong normalization](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/kernel/reduce.rs#L347) then traverses expanded arms and fallbacks. This explains why compact input alone does not solve full normalization.
+- [Let checking](https://github.com/TeamDman/teamy-bend/blob/fff765af30bf3ee4bf4b5632a2c73962917586fa/src/kernel/check.rs#L1485) infers bindings before checking the body. A general lowering must preserve error order and per-use provenance as well as matching results.
+
+The concrete decision requested from Teamy is prioritization of this coordinated
+typed-lowering/normalizer milestone, retaining the same observable normal forms
+and all guards. No safety-policy change is proposed. Independent CPU qualification
+can continue without that decision. [Validation and provenance](cpu-compact-patterns-validation.json)
+retain exact tested source, frozen inputs and historical receipt hashes.

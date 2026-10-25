@@ -2131,3 +2131,24 @@ are preserved separately from the successful renewed gate and completed matrix.
 Inactive rebuildable caches were reclaimed/relocated with byte verification;
 unique historical evidence was retained. No dependencies, toolchains, upstream
 pins, budgets, cancellation or demand policy changed.
+
+### Compact-pattern research and list slicing qualification
+
+Tested source `fff765af30bf3ee4bf4b5632a2c73962917586fa`: production unchanged. A typed local continuation
+reduces the experimental input to depth 72 and preserves expanded/open alpha-trees,
+but whole-function normalization still refuses at 128. The unchanged string-pattern
+original still refuses at load 64; port generated executions remain unrun.
+[Design, independent review and precise decision](cpu-compact-patterns.md). No guard
+exemption, changed budget, new semantic exception or production adoption.
+
+Independent base/list_slice and base/list_ops plus two companions pass 40 exact
+five-lane executions, twice per program; 88 observations and 24 phase probes.
+Standard gate **1,169 / 0 / 49**, targeted new-test Clippy passes.
+[Report](cpu-list-slice-pipelines.md). Direct-Node host and strict IO refusals remain
+separate. Coverage **422 linked / 880 unlinked**: 525 compiled candidates, 341 checker
+negatives, 13 interpreter profiles and one checking-only module. Links do not imply
+full parity. Full census remains historical at d224e79: 300 differences beyond 385
+historical IO exclusions plus six upstream stack failures. Earlier unwaived
+semantics/host/API/oracle/lint cells and unqualified 688-vector exploration remain.
+Next independent substantive candidate is base/read_bounds, source-inspected only.
+Frozen dependencies/toolchains/reference/budgets retained; no desktop/GPU or release.
