@@ -31,6 +31,8 @@ pub(super) enum PureOptimization {
     Add,
     Mul,
     Shl,
+    Shr,
+    And,
     Div,
     Mod,
 }
@@ -42,6 +44,8 @@ impl PureOptimization {
             Self::Add => "U32.add",
             Self::Mul => "U32.mul",
             Self::Shl => "U32.shl",
+            Self::Shr => "U32.shr",
+            Self::And => "U32.and",
             Self::Div => "U32.div",
             Self::Mod => "U32.mod",
         }
@@ -49,8 +53,8 @@ impl PureOptimization {
 
     pub(super) const fn arity(self) -> usize {
         match self {
-            Self::Add | Self::Mul | Self::Div | Self::Mod => 2,
-            Self::Inc | Self::Shl => 1,
+            Self::Add | Self::Mul | Self::And | Self::Div | Self::Mod => 2,
+            Self::Inc | Self::Shl | Self::Shr => 1,
         }
     }
 
@@ -68,6 +72,8 @@ impl PureOptimization {
             Self::Add => words[0].wrapping_add(words[1]),
             Self::Mul => words[0].wrapping_mul(words[1]),
             Self::Shl => words[0].wrapping_shl(1),
+            Self::Shr => words[0] >> 1,
+            Self::And => words[0] & words[1],
             Self::Div => words[0].checked_div(words[1]).unwrap_or(0),
             Self::Mod => words[0].checked_rem(words[1]).unwrap_or(words[0]),
         }
@@ -115,6 +121,8 @@ pub(super) fn checked_optimizations(
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Shr,
+        PureOptimization::And,
         PureOptimization::Div,
         PureOptimization::Mod,
     ] {

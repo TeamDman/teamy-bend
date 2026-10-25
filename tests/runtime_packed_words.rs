@@ -109,6 +109,20 @@ fn wrapping_multiplication_and_one_bit_shift_keep_partial_application_semantics(
         ("U32.show(apply(U32.mul(65537), 65537))", "131073"),
         ("U32.show(apply(U32.add(4294967295), 1))", "0"),
         ("U32.show(apply(U32.shl, 2147483649))", "2"),
+        ("U32.show(U32.shr(copied(4294967295)))", "2147483647"),
+        (
+            "U32.show(U32.and(copied(2147483649), 4294967295))",
+            "2147483649",
+        ),
+        (
+            "U32.show(U32.and(4294967295, copied(2147483649)))",
+            "2147483649",
+        ),
+        ("U32.show(apply(U32.shr, 2147483649))", "1073741824"),
+        ("U32.show(apply(U32.and(2863311530), 1431655765))", "0"),
+        ("U32.show(U32.shrn(4294967295, 31n))", "1"),
+        ("U32.show(U32.shrn(4294967295, 32n))", "0"),
+        ("U32.show(U32.shrn(4294967295, 33n))", "0"),
         ("U32.show(U32.shl(0))", "0"),
         ("U32.show(U32.shl(2147483648))", "0"),
         ("U32.show(U32.shl(4294967295))", "4294967294"),
@@ -257,6 +271,9 @@ fn live_word_arguments_force_computed_tails_within_fixed_work_limits() {
         "Bool.show(low(U32.add(lazy_word(), 0)))",
         "U32.show(U32.div(lazy_word(), 0))",
         "Bool.show(low(U32.mod(lazy_word(), 0)))",
+        "U32.show(U32.shr(lazy_word()))",
+        "U32.show(U32.and(0, lazy_word()))",
+        "U32.show(U32.and(lazy_word(), 0))",
         "U32.show(lazy_word())",
         "U32.show(U32.mul(0, expensive_whole(U32.to_nat(1000000))))",
         "U32.show(U32.div(expensive_whole(U32.to_nat(1000000)), 0))",
@@ -356,8 +373,8 @@ def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat(1000000), 0)))
 }
 
 #[test]
-fn unsigned_division_keeps_first_error_and_output_order() {
-    for operation in ["div", "mod"] {
+fn packed_binary_operations_keep_first_error_and_output_order() {
+    for operation in ["div", "mod", "and"] {
         let helper = format!(
             r#"{WORD_HELPERS}{LAZY_WORD}
 def reject(op: IO.OP<Unit>) -> U32:
@@ -504,4 +521,33 @@ fn long_numeric_chains_remain_cancellable_and_continuation_bounded() {
     assert!(error.contains("continuation depth exhausted"), "{error}");
     assert!(stdout.is_empty());
     assert!(stderr.is_empty());
+}
+
+#[test]
+fn packed_shift_and_mask_loops_keep_work_depth_and_cancellation_bounds() {
+    let tail = "def count(n: Nat, acc: U32) -> U32:\n  match n:\n    case 0n: acc\n    case 1n+p: count(p, U32.and(U32.shr(acc), 4294967295))\n";
+    let nested = "def count(n: Nat, acc: U32) -> U32:\n  match n:\n    case 0n: acc\n    case 1n+p: U32.shr(count(p, acc))\n";
+    for (body, count, expected) in [
+        (tail, 1_000_000, "step budget exhausted"),
+        (nested, 5_000, "continuation depth exhausted"),
+    ] {
+        let fixture = Fixture::new(&format!(
+            "import Base\n{body}def main() -> IO(Unit): IO.print(U32.show(count(U32.to_nat({count}), 7)))\n"
+        ));
+        let checked = fixture.checked();
+        for cancel in [false, true] {
+            let ticks = Cell::new(0);
+            let mut stdout = Vec::new();
+            let mut stderr = Vec::new();
+            let error = checked
+                .run_main(&mut stdout, &mut stderr, &|| {
+                    ticks.set(ticks.get() + 1);
+                    cancel && ticks.get() > 200
+                })
+                .unwrap_err();
+            let expected = if cancel { "cancelled" } else { expected };
+            assert!(error.to_string().contains(expected), "{error}");
+            assert!(stdout.is_empty() && stderr.is_empty());
+        }
+    }
 }

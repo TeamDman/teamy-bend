@@ -39,6 +39,8 @@ fn user_u32_name_and_signature_keep_the_ordinary_body_without_base_origin() {
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Shr,
+        PureOptimization::And,
         PureOptimization::Div,
         PureOptimization::Mod,
     ] {
@@ -69,10 +71,11 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_quantity_signature() {
     let program = checked_program(
         include_str!("../syntax/base.bend"),
         &[
-            "U32", "U32.inc", "U32.add", "U32.mul", "U32.shl", "U32.div", "U32.mod",
+            "U32", "U32.inc", "U32.add", "U32.mul", "U32.shl", "U32.shr", "U32.and", "U32.div",
+            "U32.mod",
         ],
     );
-    assert_eq!(program.optimizations.len(), 6);
+    assert_eq!(program.optimizations.len(), 8);
     assert!(program.numeric.is_empty());
     assert!(program.foreign.is_empty());
     let strict = Program::from_checked(&program.definitions, &program.datatypes);
@@ -82,6 +85,8 @@ fn optimization_requires_a_filled_ordinary_body_and_exact_quantity_signature() {
         PureOptimization::Add,
         PureOptimization::Mul,
         PureOptimization::Shl,
+        PureOptimization::Shr,
+        PureOptimization::And,
         PureOptimization::Div,
         PureOptimization::Mod,
     ] {
@@ -164,7 +169,7 @@ fn packed_program() -> Program {
         include_str!("../syntax/base.bend"),
         &[
             "U32", "F32", "Word", "Word.Nil", "Word.Con", "Nat", "Bool", "U32.inc", "U32.add",
-            "U32.mul", "U32.shl", "U32.div", "U32.mod",
+            "U32.mul", "U32.shl", "U32.shr", "U32.and", "U32.div", "U32.mod",
         ],
     )
 }
@@ -182,6 +187,14 @@ fn ordinary_word_optimizations_wrap_at_the_declared_width() {
         ("U32.mul", vec![65_535, 65_537], u32::MAX),
         ("U32.mul", vec![u32::MAX, u32::MAX], 1),
         ("U32.mul", vec![0x8000_0000, 2], 0),
+        ("U32.shr", vec![0], 0),
+        ("U32.shr", vec![1], 0),
+        ("U32.shr", vec![2], 1),
+        ("U32.shr", vec![0x8000_0000], 0x4000_0000),
+        ("U32.shr", vec![u32::MAX], 0x7fff_ffff),
+        ("U32.and", vec![0, u32::MAX], 0),
+        ("U32.and", vec![0xaaaa_aaaa, 0x5555_5555], 0),
+        ("U32.and", vec![u32::MAX, 0x8000_0001], 0x8000_0001),
         ("U32.shl", vec![0], 0),
         ("U32.shl", vec![1], 2),
         ("U32.shl", vec![0x7fff_ffff], 0xffff_fffe),
@@ -571,6 +584,7 @@ fn collection_preserves_original_arguments_when_ordinary_optimization_falls_back
     let program = packed_program();
     for (operation, left, right, expected) in [
         ("U32.add", "1", "2", "3"),
+        ("U32.and", "3", "2", "2"),
         // Zero divisors exercise fallback and retained arguments without the
         // bitwise division body's cost under collection at every safe point.
         ("U32.div", "17", "0", "0"),
@@ -702,4 +716,25 @@ fn available_word_inspection_bounds_cycles_and_environment_walks_and_observes_ca
             .to_string()
             .contains("step budget")
     );
+}
+
+#[test]
+fn shift_and_mask_fallback_keep_undemanded_word_bits_lazy() {
+    let program = packed_program();
+    // A constructor with a suspended failing low bit must not be decoded by the
+    // packed shortcut. Ordinary shr drops that bit, and ordinary and can ignore
+    // it when the first bit is False. Reversing operands must expose the failure.
+    let ordinary = parse_term("U32{WCon{missing_bit, Word.zero(31n)}}").unwrap();
+    let zero = parse_term("0").unwrap();
+    for (name, arguments) in [
+        ("U32.shr", vec![Rc::clone(&ordinary)]),
+        ("U32.and", vec![Rc::clone(&zero), Rc::clone(&ordinary)]),
+    ] {
+        assert_eq!(
+            program.evaluate(name, &arguments).unwrap().to_string(),
+            zero.to_string()
+        );
+    }
+    let error = program.evaluate("U32.and", &[ordinary, zero]).unwrap_err();
+    assert!(error.to_string().contains("missing_bit"), "{error}");
 }
