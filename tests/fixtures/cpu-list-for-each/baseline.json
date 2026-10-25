@@ -1,0 +1,45 @@
+{
+  "before_source": "ead74b8db6e720be3047a434685cbaf55dc69dac",
+  "before_checkpoint": "a0036c9ad5773652c224045d671c834d3c7df9cc",
+  "binary_sha256": "c8230fde9ec840145c7c397663848a3ca84bc89f4eeb20f8a6e7ef82276742aa",
+  "fixture_sha256": "99d0d1ee86621a581040e188ad1e7d7aea37a26a546e35b1fbf3e94f73d6dfa3",
+  "rows": [
+    {
+      "lane": "upstream-direct",
+      "command": [
+        "node",
+        "<upstream>/bend2/main.ts",
+        "<upstream>/tests/base/list_fold.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "stderr_original_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "lane": "port-check",
+      "command": [
+        "<port>",
+        "check",
+        "<upstream>/tests/base/list_fold.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<upstream>/tests/base/list_fold.bend:38:19: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stderr_original_sha256": "95220a5beec2a44a6e0398d99964e10ba77292e02619adc04adb4bef58fb45ed"
+    },
+    {
+      "lane": "port-run",
+      "command": [
+        "<port>",
+        "run",
+        "<upstream>/tests/base/list_fold.bend"
+      ],
+      "exit": 0,
+      "stdout": "[1, 3, 5]\n16\n[1, 2, 3, 9]\nTrue\nFalse\nTrue\nFalse\nSome(3)\nNone\nTrue\nFalse\n[1, 1, 3, 4, 5, 8, 9]\n[]\n[3, 2, 1]\n[apple, fig, pear]\n1\n2\n",
+      "stderr": "",
+      "stderr_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "normalization": "Only machine-specific command and fixture roots are represented by logical placeholders; raw stream hashes retained."
+}

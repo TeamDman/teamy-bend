@@ -1,0 +1,1 @@
+"Error:\n- expected : List<&2, String>\n- observed : ?items\nLocation: main\n2 | \n3>| def main() -> IO(Unit): List.for_each(~&2, ~String, ~IO.print, ?items)\n4 | \n"

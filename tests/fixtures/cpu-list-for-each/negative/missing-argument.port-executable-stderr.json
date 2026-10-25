@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : List.for_each\nContext:\n- a : Quant\n- A : Data\n- f : @_:String -> @-R:Type -> @k:(@_:Unit -> IO.OP<R>) -> IO.OP<R>\n- h : String\n- t : List<&2, String>\n- u : Unit\nLocation: List.for_each~0\n389 |     case h <> t:\n390>|       IO.bind(Unit, Unit, f(h), u => List.for_each(~a, ~A, ~f, t))\n391 | \n"

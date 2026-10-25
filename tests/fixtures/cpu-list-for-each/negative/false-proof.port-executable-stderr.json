@@ -1,0 +1,1 @@
+"Error:\n- expected : 0n\n- observed : 1n\nLocation: wrong\n2 | \n3>| def wrong() -> {0n == 1n : Nat}: {==}\n4 | def visit(n: Nat) -> IO(Unit): IO.pure(Unit, Unit{})\n"
