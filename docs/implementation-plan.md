@@ -6024,3 +6024,30 @@ The two earlier candidates' host-stack failures were corrected by extracting unc
 reference/parser rules; both failed gates remain historical evidence. No stack or budget
 was increased. All frozen inputs and API caveats remain. Reviewed publication preserves
 Git content; unique raw evidence and binary captures remain outside Git.
+
+### [x] 5.115 Preserve pattern binder diagnostic locations
+
+Tested source `3b144f16f1a6dd5344a668dc0bd31a488c602aeb` closes the three retained usage-diagnostic location gaps
+in `check/negative_data_field_000`, `check/negative_data_reuse` and
+`halt/contraction_growth`. Eleven exact negatives and two positive graph/value
+controls cover named, reusable and synthesized field binders, imported/multiline
+locations and selected/fallback-row priority. The adjacent reusable-function-field
+kind location remains explicitly unresolved. [Report](cpu-pattern-locations.md).
+
+The standard gate passes **1,138 / 0 / 49**. Focused default-stack, shared-reference
+and checker-accounting controls pass. The matrices contain 516 observations with
+zero timeouts and deterministic repeats; historical upstream generation/Node host
+failures remain separate from unrun execution. All 1,302 checking statuses are
+unchanged; only the three target stderr streams improve, each exactly upstream.
+The old 489-case subset remains 32 exact / 385 strict IO exclusions / 72 unresolved;
+nine of the ten separate old cells are exact, with `unsafe_many` still unresolved.
+No semantics, guards, budgets, dependencies, toolchains, cancellation boundary or
+public API changed. Independent review completed; full parity remains incomplete.
+
+Coverage is 410 linked / 892 unlinked: 341 checker negatives, one checking-only,
+13 interpreter-profile and 537 compiled candidates. Links include partial/blocked
+and historical evidence. Next is the reusable-let kind-source diagnostic; the
+substantive datatype-declaration/empty-datatype/empty-parameter batch remains
+unqualified. Compact unique original failure streams are now committed with the
+fixtures; bulk raw evidence and captured binaries remain outside Git. Disk floors
+and inactive-cache safeguards remain. Feature checkpoint only, no merge or release.
