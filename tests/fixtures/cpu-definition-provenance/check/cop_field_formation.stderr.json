@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nLocation: MkB\n7 | type BadT is Type:\n8>|   MkB{+f: Nat -> Nat}\n9 | \n"

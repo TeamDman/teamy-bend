@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing\nLocation: T\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| type T<-A: Missing> is Type: C{}\n3 | \n"

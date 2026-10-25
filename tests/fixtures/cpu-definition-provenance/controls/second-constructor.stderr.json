@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing\nLocation: Second\n4 |   First{x: N}\n5>|   Second{x: Missing}\n6 | \n"

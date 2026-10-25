@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nLocation: MkBad\n10 | type Bad is Data:\n11>|   MkBad{v: Box7<(U32 -> U32)>}\n12 | \n"

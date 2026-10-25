@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nLocation: MkBox\n15 | type Box is Type:\n16>|   MkBox{+f: Nat -> Nat}\n17 | \n"

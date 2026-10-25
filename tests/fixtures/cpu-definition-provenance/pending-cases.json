@@ -1,0 +1,7 @@
+[
+  "comptime/later_def.bend",
+  "controls/imported-later/main.bend",
+  "controls/later-direct.bend",
+  "controls/later-parenthesized.bend",
+  "controls/later-two-uses.bend"
+]

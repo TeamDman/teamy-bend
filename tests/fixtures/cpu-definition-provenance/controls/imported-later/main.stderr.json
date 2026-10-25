@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: ../../comptime/later_def.app~0\n 8 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n 9>|   f(x)\n10 | \n"

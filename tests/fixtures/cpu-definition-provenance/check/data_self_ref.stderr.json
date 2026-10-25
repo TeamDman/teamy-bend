@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nContext:\n- T : Type\nLocation: MkP6\n10 | type P6<-T: Type> is Type:\n11>|   MkP6{v: Box5<P6<T>>}\n12 |   End6{w: T}\n"

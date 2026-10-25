@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- f : @_:Nat -> Nat\nLocation: keep~0\n3 | def keep(~f: Nat -> Nat) -> Nat -> Nat:\n4>|   f\n5 | def main() -> Nat:\n"

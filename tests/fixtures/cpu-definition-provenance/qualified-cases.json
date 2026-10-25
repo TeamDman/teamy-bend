@@ -1,0 +1,20 @@
+[
+  "check/cop_field_formation.bend",
+  "check/data_self_ref.bend",
+  "check/field_type_bound.bend",
+  "check/nested_field_bound.bend",
+  "controls/dependent-fields.bend",
+  "controls/first-field.bend",
+  "controls/imported-constructor/main.bend",
+  "controls/imported-kind/main.bend",
+  "controls/qualified-call.bend",
+  "controls/second-constructor.bend",
+  "controls/signature-kind-parameter.bend",
+  "controls/signature-kind.bend",
+  "controls/signature-name.bend",
+  "grade/reject_fn_field.bend",
+  "grade/reject_negative.bend",
+  "grade/reject_plus_field.bend",
+  "controls/signature-kind-alias.bend",
+  "controls/imported-kind-alias/main.bend"
+]

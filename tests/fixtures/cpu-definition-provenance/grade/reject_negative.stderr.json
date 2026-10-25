@@ -1,0 +1,1 @@
+"Error:\n- expected : Data\n- observed : Type\nLocation: KRoll\n15 | type Knot is Data:\n16>|   KRoll{run: Knot -> Empty}\n17 | \n"

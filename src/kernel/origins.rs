@@ -198,9 +198,10 @@ impl TermOrigins {
     }
 
     /// Propagate along an actual substitution/qualification result. These
-    /// transformations preserve every non-variable node's structure. A replaced
-    /// variable keeps the replacement's own provenance; never search for a
-    /// structurally similar term or infer a source line from names or text.
+    /// transformations preserve non-variable structure, except the explicit
+    /// source-preserving Ref-to-Adt reduction, which copies only the root origin.
+    /// A replaced variable keeps the replacement's own provenance; never search
+    /// for a structurally similar term or infer a source line from names or text.
     pub(crate) fn transformed(&self, before: &TermRef, after: &TermRef) {
         let mut origins = self.0.borrow_mut();
         // Retire dead transformed allocations between operations. Source spans

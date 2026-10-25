@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : later\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n3 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n4>|   f(\n5 |     f(x)\n"

@@ -146,11 +146,15 @@ impl Engine {
                 Term::Ref(name) | Term::GpuRef(name) if self.adts.contains_key(name) => {
                     let declaration = &self.adts[name];
                     if declaration.parameters.is_empty() {
-                        return Ok(term(Term::Adt {
+                        let result = term(Term::Adt {
                             name: name.clone(),
                             args: vec![],
                             excluded: vec![],
-                        }));
+                        });
+                        if let Some(origins) = &self.origins {
+                            origins.transformed(&value, &result);
+                        }
+                        return Ok(result);
                     }
                     return Ok(value);
                 }

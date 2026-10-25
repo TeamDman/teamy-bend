@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : FirstMissing\nLocation: C\n2 | type T is Data:\n3>|   C{x: FirstMissing, y: SecondMissing}\n4 | \n"

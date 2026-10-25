@@ -1,0 +1,1 @@
+"Error:\n- expected : a defined name\n- observed : Missing9\nLocation: Mk9\n3 | type Bad9 is Data:\n4>|   Mk9{x: Missing9}\n5 | \n"

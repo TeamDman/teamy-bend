@@ -989,9 +989,26 @@ impl Engine {
         )?;
         let declared_kind = self.whnf(&declaration.kind)?;
         if !matches!(declared_kind.as_ref(), Term::Typ(_)) {
-            return Err(KernelError::new(
-                "datatype declaration must end in Kind(g), Type, or Data",
-            ));
+            let mut context = Context::new();
+            for binder in &declaration.parameters {
+                context.insert(binder.id, binder.clone());
+            }
+            let mut error =
+                KernelError::new("datatype declaration must end in Kind(g), Type, or Data");
+            error.diagnostic = self
+                .term_diagnostic(
+                    &lhs,
+                    &declared_kind,
+                    DiagnosticExpression::Text(format!(
+                        "a kind (type {}<..> is Kind(g))",
+                        declaration.name
+                    )),
+                    DiagnosticExpression::Term(&declared_kind),
+                    &context,
+                )
+                .ok()
+                .map(Box::new);
+            return Err(error);
         }
         for constructor in &declaration.constructors {
             let mut context = Context::new();
@@ -1006,7 +1023,17 @@ impl Engine {
                 } else {
                     kind(binder.quant)
                 };
-                self.check(&lhs, &binder.ty, Quant::None, &expected, &context)?;
+                self.check(&lhs, &binder.ty, Quant::None, &expected, &context)
+                    .map_err(|mut error| {
+                        // Upstream checks each constructor telescope under its
+                        // constructor label. Annotate only the rejected report:
+                        // Lhs also controls recursion/demand, and the public
+                        // internal cause keeps its datatype prefix.
+                        if let Some(report) = &mut error.diagnostic {
+                            constructor.name.clone_into(&mut report.definition);
+                        }
+                        error
+                    })?;
                 if context.insert(binder.id, binder.clone()).is_some() {
                     return Err(KernelError::new("duplicate binder identifier"));
                 }
@@ -2609,6 +2636,87 @@ mod reflexivity_diagnostic_tests {
             assert_eq!(rejected, index != 0);
         }
         std::fs::remove_file(temporary).unwrap();
+    }
+
+    #[test]
+    fn definition_origins_preserve_structure_and_checker_budgets() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-definition-provenance");
+        let cases: Vec<String> = facet_json::from_str(
+            &std::fs::read_to_string(root.join("negative-cases.json")).unwrap(),
+        )
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let (book, origins) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            let plain = crate::syntax::load(&path).unwrap();
+            let original = format!("{book:?}");
+            assert_eq!(original, format!("{plain:?}"));
+            let mut ordinary = empty_engine(&book).unwrap();
+            let mut tracked = ordinary.clone();
+            tracked.origins = Some(origins.tracker.clone());
+            let mut rejected = false;
+            for declaration in &book.declarations {
+                let results = [&mut ordinary, &mut tracked].map(|engine| {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                });
+                assert_eq!(results[0], results[1], "{case}");
+                assert_eq!(
+                    (ordinary.fuel, ordinary.depth, ordinary.fresh_id),
+                    (tracked.fuel, tracked.depth, tracked.fresh_id),
+                    "{case}"
+                );
+                if results[0].is_err() {
+                    rejected = true;
+                    break;
+                }
+            }
+            assert!(rejected, "{case}");
+            assert_eq!(format!("{book:?}"), original);
+            drop(tracked);
+            drop(ordinary);
+        }
+        let path = root.join("check/field_type_bound.bend");
+        let error = check_book(&crate::syntax::load(&path).unwrap()).unwrap_err();
+        assert_eq!(error.message, "Bad9: undefined name Missing9");
+        assert_eq!(error.checker_diagnostic().unwrap().definition, "Mk9");
+        let book = crate::syntax::load(&root.join("controls/signature-kind.bend")).unwrap();
+        let error = check_book(&book).unwrap_err();
+        assert_eq!(
+            error.message,
+            "T: datatype declaration must end in Kind(g), Type, or Data"
+        );
+        assert_eq!(error.checker_diagnostic().unwrap().definition, "T");
+        let mut engine = empty_engine(&book).unwrap();
+        let Declaration::Adt(first) = &book.declarations[0] else {
+            panic!("datatype")
+        };
+        engine.validate_adt(first).unwrap();
+        let Declaration::Adt(declaration) = &book.declarations[1] else {
+            panic!("datatype")
+        };
+        let mut measured = engine.clone();
+        measured.fuel = 512;
+        let original = measured.validate_adt(declaration).unwrap_err();
+        assert!(original.checker_diagnostic().is_some());
+        engine.fuel = 512 - measured.fuel;
+        let fresh = engine.fresh_id;
+        let exhausted = engine.validate_adt(declaration).unwrap_err();
+        assert_eq!(exhausted.message, original.message);
+        assert!(exhausted.checker_diagnostic().is_none());
+        assert_eq!((engine.fuel, engine.depth, engine.fresh_id), (0, 0, fresh));
+        let mut engine = empty_engine(&book).unwrap();
+        engine.fuel = 0;
+        let error = engine.validate_adt(first).unwrap_err();
+        assert_eq!(
+            error.message,
+            "kernel evaluation budget exhausted; proof not accepted"
+        );
+        assert!(error.checker_diagnostic().is_none());
     }
 
     #[test]

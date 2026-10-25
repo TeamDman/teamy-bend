@@ -1,0 +1,1 @@
+"Error:\n- expected : a kind (type T<..> is Kind(g))\n- observed : N\nLocation: T\n2 | type N is Data: Z{}\n3>| type T is N: C{}\n4 | \n"
