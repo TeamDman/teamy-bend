@@ -1,0 +1,979 @@
+{
+  "tested_source": "ead74b8db6e720be3047a434685cbaf55dc69dac",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "scope": "Unique observed failure lanes, deterministic repeat confirmed. Only fixture paths made repository-relative; raw original hashes retained. Rejections and oracle failures are not runtime matches.",
+  "rows": [
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: \"a\"++++\"b\"\n4>| \n",
+      "original_stderr_sha256": "6981a46843b4060b8c94dd2f551e5e8ca85185a75589e3a2acdf1742d028e9ac"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-check",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-eval",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-run",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: \"a\"++++\"b\"\n4>| \n",
+      "original_stderr_sha256": "6981a46843b4060b8c94dd2f551e5e8ca85185a75589e3a2acdf1742d028e9ac"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: \"a\"++++\"b\"\n4>| \n",
+      "original_stderr_sha256": "6981a46843b4060b8c94dd2f551e5e8ca85185a75589e3a2acdf1742d028e9ac"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/append-prefix.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "fe32ff1165a36627e887f1be8ea4403dfc346bcad3cfcfca6c17612b0d9ebd0b",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "65819be4f3bbd7ceaf4c626975c31339008c95c5a933266b6b2f7de0ab5f8928"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++Zero{}:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "1c010949d2bbdccf6dd7b6ca49d57a093ea3312844891da6a82282221d46f408"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-check",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-eval",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-run",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++Zero{}:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "1c010949d2bbdccf6dd7b6ca49d57a093ea3312844891da6a82282221d46f408"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++Zero{}:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "1c010949d2bbdccf6dd7b6ca49d57a093ea3312844891da6a82282221d46f408"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "19703e491147c57d089609284165bac7a4895bd900116224b7686b0a356585e3",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/ctor-name.bend:7:22: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "0d11938ce23c4cad92629a32dd9a66b63678e176853e3cf27004ca6a0ded15b1"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-check",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-eval",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-run",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "3f13bf97be8623fe02a8280cb698647e34190250bbbb03ed823f8c27ba9a7ef7",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "42c44c527d1ae12cae651dea0ca8f824a268b382b79c6c1c4cddbec8a694f2d7"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "ee294ff6d1da642643fe2a7dd02d692c03069f90948a8ef21b2b573b57a82b9b"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-check",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-eval",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-run",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "ee294ff6d1da642643fe2a7dd02d692c03069f90948a8ef21b2b573b57a82b9b"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "ee294ff6d1da642643fe2a7dd02d692c03069f90948a8ef21b2b573b57a82b9b"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "a65d36677445fb0880eb1a71c07d456bffd9631cf865d4da7dcf3b1b2461fca1",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/malformed.bend:7:16: expected a name, found \":\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9256e13aae46510a52e87f27ebca5ff7eaeae4050f570fcbb5ec28af731d16cd"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> Nat: ++++3n\n4>| \n",
+      "original_stderr_sha256": "ba50b312f087229a442b84e68d2c859af834a41c642a3277b914a994b509ba08"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-check",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-eval",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-run",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> Nat: ++++3n\n4>| \n",
+      "original_stderr_sha256": "ba50b312f087229a442b84e68d2c859af834a41c642a3277b914a994b509ba08"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> Nat: ++++3n\n4>| \n",
+      "original_stderr_sha256": "ba50b312f087229a442b84e68d2c859af834a41c642a3277b914a994b509ba08"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "eebd7c9093b25204347da06376ddf54be37747593a0a9a56708ed3cf16337cbe",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/number-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "9fdaa13e87a49144c37b1ac89cae4caae63329f0599c20ceb7da3eb07f4533b4"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-check",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-eval",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-run",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "d577cc43c53a2324a1bf4bd69be2f627662a162aa11faf2b6f45fbe60fee3609"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : '+'\nLocation:\n2 | \n3>| def bad(++n: Nat) -> Nat: n\n4 | def main() -> Nat: bad(3n)\n",
+      "original_stderr_sha256": "6ab280cb62b123d8c40d8d465252b0730f6332828a5be9db44b4d467c0a4b8c8"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-check",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-eval",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-run",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : '+'\nLocation:\n2 | \n3>| def bad(++n: Nat) -> Nat: n\n4 | def main() -> Nat: bad(3n)\n",
+      "original_stderr_sha256": "6ab280cb62b123d8c40d8d465252b0730f6332828a5be9db44b4d467c0a4b8c8"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : '+'\nLocation:\n2 | \n3>| def bad(++n: Nat) -> Nat: n\n4 | def main() -> Nat: bad(3n)\n",
+      "original_stderr_sha256": "6ab280cb62b123d8c40d8d465252b0730f6332828a5be9db44b4d467c0a4b8c8"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "3720b05ec13c7c2ed4ab54141f4e2ee9076f73ad9571be021ceacdf27de0d258",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/quantity-declaration.bend:3:9: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "fbe73a9f92d940e89fc7dc671966a6489bca8e2f523f9f3215f1715201d1ab52"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-check",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-eval",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-run",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "fbe1119878fb75457ef8d2c99a2de123f458acad726df9e66ddc397668353b3f",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++++k:\n8 |       Nat.add(k, k)\n",
+      "original_stderr_sha256": "85778baa87f510da66e22e5f199aa029ce287d099808f6b30adb72f0e5176d15"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: ++++\"x\"\n4>| \n",
+      "original_stderr_sha256": "f3d8b1bd8548617270cb18c3134c0979aae0cf9afe9013e272c21b2cdcf297a0"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-check",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-eval",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-run",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: ++++\"x\"\n4>| \n",
+      "original_stderr_sha256": "f3d8b1bd8548617270cb18c3134c0979aae0cf9afe9013e272c21b2cdcf297a0"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: ++++\"x\"\n4>| \n",
+      "original_stderr_sha256": "f3d8b1bd8548617270cb18c3134c0979aae0cf9afe9013e272c21b2cdcf297a0"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "b987935a65b5f3f271cf59b195bc4cf6f6bf0c8c963360fc84c3a0e5240e689d",
+      "exit": 1,
+      "classification": "unresolved_diagnostic_difference",
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/string-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "original_stderr_sha256": "649fc413788215e10758f9df6cef627464e6b64378d8966610284d358d700608"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "upstream-interpreter",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-check",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-eval",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-run",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "upstream-refuse-c",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "upstream-refuse-javascript",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-refuse-c",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-refuse-javascript",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "lane": "port-refuse-native",
+      "source_sha256": "425a58938296c01cb9836cae5742627d527ead11615004374695119b580d7e45",
+      "exit": 1,
+      "classification": "exact_rejection",
+      "stdout": "",
+      "stderr": "Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n",
+      "original_stderr_sha256": "e0602a4011774a4e707f4d6e015f4b0a8e1b0bb364b716724d9aa778485f98f0"
+    },
+    {
+      "case": "io.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "bbbe51b298110acf2bc8630492ddf3216ce3abe129c7354d432d624db6ea70fa",
+      "exit": 1,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "original_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "io.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "bbbe51b298110acf2bc8630492ddf3216ce3abe129c7354d432d624db6ea70fa",
+      "exit": 1,
+      "classification": "strict_IO_proof_refusal",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n 8 |       Nat.add(k, k)\n 9>| def main() -> IO(Unit): IO.print(Nat.show(twice_tail(3n)))\n10 | \n",
+      "original_stderr_sha256": "39f8e084b0e272148382f94115fb7bf92e6d0f4d36f53350fcc4a5b8ef74aeb0"
+    },
+    {
+      "case": "io.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "bbbe51b298110acf2bc8630492ddf3216ce3abe129c7354d432d624db6ea70fa",
+      "exit": 1,
+      "classification": "strict_IO_proof_refusal",
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n 8 |       Nat.add(k, k)\n 9>| def main() -> IO(Unit): IO.print(Nat.show(twice_tail(3n)))\n10 | \n",
+      "original_stderr_sha256": "39f8e084b0e272148382f94115fb7bf92e6d0f4d36f53350fcc4a5b8ef74aeb0"
+    }
+  ],
+  "unrun": [
+    {
+      "case": "negative/append-prefix.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/ctor-name.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/grouped.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/malformed.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/number-prefix.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/quantity-declaration.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/spaced-before.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/string-prefix.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    },
+    {
+      "case": "negative/unannotated-let.bend",
+      "reason": "checking/load refusal prevents generation and execution"
+    }
+  ]
+}

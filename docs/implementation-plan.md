@@ -6119,3 +6119,23 @@ Coverage is 411 linked / 891 unlinked (341 checker negatives, one checking-only,
 Frozen pins/dependencies/toolchains/budgets and all historical disagreements remain.
 Reviewed feature checkpoint only; no desktop/GPU, merge or release. Compact receipts
 are in Git; bulk unique evidence and snapshots remain local.
+
+### [x] 5.119 Parse repeated prefix markers contextually
+
+Tested source `ead74b8db6e720be3047a434685cbaf55dc69dac` closes generic repeated-prefix parsing, including
+`1n++++k`, through one context-aware character consumer. Template replay/error
+restoration, ordinary infix append and declaration quantity rules remain intact.
+Twelve complete value graphs and five executable lanes qualify applicable cases;
+IO proof exclusions, direct Node host failure, native String display and six
+negative diagnostic differences remain separate. [Report](cpu-prefix-markers.md).
+
+Standard gate **1,155 / 0 / 49**; 490 process observations and 92 phase probes,
+no timeouts. Independent source review completed. All 1,302 census phases/statuses and raw output streams match
+the prior checkpoint exactly: 300 differences outside 385 historical IO
+exclusions, plus six upstream stack failures. Current baseline-triage residuals
+remain 149 diagnostic / 109 acceptance / 42 other; no new waiver or runtime link.
+Coverage remains 411 linked / 891 unlinked with applicability categories unchanged.
+Frozen dependencies/toolchains/limits and all historical disagreements remain.
+Disk floors and inactive-cache controls preserved all source and unique evidence.
+Reviewed feature checkpoint only, no merge/release. Next substantive gap is the
+`base/list_fold` bundled `List.for_each(~...)` load refusal; not qualified here.
