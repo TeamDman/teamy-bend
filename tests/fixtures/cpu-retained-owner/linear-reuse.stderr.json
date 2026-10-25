@@ -1,0 +1,1 @@
+"Error:\n- expected : n\n- observed : n (consumed more than once)\nLocation: main\n3 | def main() -> U32:\n4>|   n = {3 : U32}\n5 |   U32.add(n, n)\n"

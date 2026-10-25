@@ -384,6 +384,10 @@ impl Generator<'_> {
             inner.insert(id, OwnedLocal::new(word, count));
         }
         let word = self.expression(expression, &mut inner, output, tail)?;
+        // Legacy scalar literals can be inline expressions. Flat scopes need
+        // an authoritative mutable owner slot before any partial take, capture
+        // or fork transfer can duplicate them across a resume boundary.
+        let word = self.hold(output, &word)?;
         drop_owned(&mut inner, output);
         Ok(Value {
             layout: boxed(),

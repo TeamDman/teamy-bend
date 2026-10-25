@@ -386,3 +386,61 @@ fn true_recursive_foreign_c_calls_keep_the_native_depth_limit() {
         "call depth budget exhausted",
     );
 }
+
+#[test]
+fn reusable_scalar_and_heap_owners_survive_legacy_and_fork_boundaries() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-retained-owner");
+    let original = fs::read_to_string(root.join("original.bend")).unwrap();
+    success(&Fixture::new().run(&original, "", &[]), "6\n");
+    for name in [
+        "one-use",
+        "partial-use",
+        "nat-zero",
+        "u32-boundary",
+        "f32",
+        "closure",
+        "fork",
+        "boxed",
+        "erased",
+        "unselected",
+    ] {
+        let source = fs::read_to_string(root.join("io").join(format!("{name}.bend"))).unwrap();
+        let expected = fs::read_to_string(root.join("io").join(format!("{name}.stdout"))).unwrap();
+        if matches!(name, "fork" | "boxed") {
+            let loaded = load_executable(root.join("io").join(format!("{name}.bend"))).unwrap();
+            let checked = check_executable(&loaded).unwrap();
+            let generated = compile_executable_c(&checked).unwrap();
+            assert!(generated.contains("tb_c_word_join_build(e,"));
+            assert!(generated.matches(" = FID_CLO_APPLY;").count() >= 2);
+        }
+        // Fixture::run also checks live allocations, frames and continuations.
+        success(&Fixture::new().run(&source, "", &[]), &expected);
+    }
+}
+
+#[test]
+fn retained_owner_boundaries_preserve_failures_and_step_limits() {
+    let source = include_str!("fixtures/cpu-retained-owner/io/overflow-order.bend");
+    let output = Fixture::new().run(source, "", &[]);
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(output.stdout, b"before\n");
+    assert_eq!(
+        output.stderr,
+        b"bend: a Nat past the largest immediate 2^48-1\n"
+    );
+    let original = include_str!("fixtures/cpu-retained-owner/original.bend");
+    failure(
+        &Fixture::new().run(original, "", &["BEND_MAX_STEPS=1"]),
+        "evaluation budget exhausted",
+    );
+    success(&Fixture::new().run(original, "", &[]), "6\n");
+}
+
+#[test]
+fn retained_owner_fix_does_not_accept_linear_reuse_or_false_proofs() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-retained-owner");
+    for name in ["linear-reuse", "false-proof"] {
+        let source = load_executable(root.join(format!("{name}.bend"))).unwrap();
+        check_executable(&source).unwrap_err();
+    }
+}
