@@ -1,0 +1,1 @@
+"Error:\n- expected : a name\n- observed : '5'\nLocation:\n3 | def main() -> U32:\n4>|   (-5)\n5 | \n"

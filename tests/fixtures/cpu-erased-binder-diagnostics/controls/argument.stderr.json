@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def id(x: U32) -> U32: x\n4>| def main() -> U32: id(-5)\n5 | \n"

@@ -558,6 +558,49 @@ mod tests {
     }
 
     #[test]
+    fn erased_binder_context_preserves_public_errors_and_successful_terms() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-erased-binder-diagnostics");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-erased-binder-diagnostics/cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string(), "{case}");
+            if matches!(
+                case.as_str(),
+                "controls/argument.bend" | "controls/missing-value.bend"
+            ) {
+                continue;
+            }
+            assert_eq!(plain.message, "expected a name, found \"-\"");
+            let diagnostic = tracked.diagnostic.unwrap();
+            assert!(matches!(diagnostic.content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                if expected == "a name"));
+            if case == "controls/multiline.bend" {
+                assert_eq!(plain.line, 4);
+                assert!(diagnostic.excerpt.contains("5>|     5"));
+            }
+        }
+        for case in ["erased", "plus", "subtraction", "template"] {
+            let path = root.join("positive").join(format!("{case}.bend"));
+            let plain = crate::syntax::load(&path).unwrap();
+            let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            assert_eq!(format!("{plain:?}"), format!("{tracked:?}"));
+        }
+        let path = root.join("controls/deep-body.bend");
+        let plain = crate::syntax::load(&path).unwrap_err();
+        let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+        assert_eq!(plain.to_string(), tracked.error.to_string());
+        assert!(plain.message.contains("expression nesting exceeds"));
+        assert!(tracked.diagnostic.is_none());
+    }
+
+    #[test]
     fn local_binding_metadata_preserves_the_public_parse_error() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-destructure/destructure_let_001.bend");

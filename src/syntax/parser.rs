@@ -2203,6 +2203,19 @@ impl Parser<'_> {
         }
         let start = self.at;
         let mut quant = self.quant();
+        // Pinned parse_body_stmt demands a name after an erased-let marker
+        // before deciding whether this is a binding. Preserve our parser's
+        // existing error/cursor; only its optional source diagnostic follows
+        // that earlier grammar boundary when expression parsing fails.
+        // expression() must enter below its guard; a resource refusal takes
+        // precedence over the diagnostic for the still-unparsed marker.
+        let erased_name = (self.depth < 64
+            && quant == Quant::None
+            && !self
+                .current()
+                .text
+                .starts_with(|c: char| c.is_ascii_alphabetic() || c == '_'))
+        .then(|| self.current().clone());
         let mut patterns = Vec::new();
         let mut values = Vec::new();
         if quant != Quant::Lone && self.tokens.get(self.at + 1).is_some_and(|t| t.text == "=") {
@@ -2212,7 +2225,13 @@ impl Parser<'_> {
         } else {
             self.at = start;
             quant = Quant::Lone;
-            patterns.push(self.expression(0)?);
+            patterns.push(self.expression(0).inspect_err(|_| {
+                if let Some(token) = &erased_name
+                    && let Some(origins) = &mut self.templates.diagnostics
+                {
+                    origins.expected_syntax(&self.label, token.line, "a name", &token.text);
+                }
+            })?);
             while self.at > 0
                 && self.tokens[self.at - 1].line == self.current().line
                 && (self.is("+")

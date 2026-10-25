@@ -1,0 +1,11 @@
+[
+  "prefix_operator_dead.bend",
+  "controls/nat.bend",
+  "controls/paren.bend",
+  "controls/multiline.bend",
+  "controls/nested-block.bend",
+  "controls/missing-value.bend",
+  "controls/eof.bend",
+  "controls/imported/main.bend",
+  "controls/argument.bend"
+]

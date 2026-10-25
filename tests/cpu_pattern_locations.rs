@@ -434,3 +434,83 @@ fn named_lambda_arms_and_fallbacks_keep_complete_normal_values() {
         assert_eq!(shape_in_book(&value, &book).unwrap(), expected_shape);
     }
 }
+
+#[test]
+fn erased_binder_boundaries_keep_exact_diagnostics_and_failure_status() {
+    let root =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-erased-binder-diagnostics");
+    let cases: Vec<String> = facet_json::from_str(include_str!(
+        "fixtures/cpu-erased-binder-diagnostics/cases.json"
+    ))
+    .unwrap();
+    let destination = std::env::temp_dir().join(format!(
+        "teamy-bend-erased-binder-refusal-unwritten-{}",
+        std::process::id()
+    ));
+    assert!(!destination.exists());
+    for case in cases {
+        let path = root.join(case);
+        let expected: String = facet_json::from_str(
+            &std::fs::read_to_string(path.with_extension("stderr.json")).unwrap(),
+        )
+        .unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&destination);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(
+                output.status.code(),
+                Some(1),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(output.stdout.is_empty(), "{}: {operation}", path.display());
+            assert_eq!(
+                output.stderr,
+                expected.as_bytes(),
+                "{}: {operation}",
+                path.display()
+            );
+            assert!(!destination.exists());
+        }
+    }
+}
+
+#[test]
+fn nat_pattern_boundaries_retain_guards_and_closed_values() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-nat-pattern-depth");
+    for (kind, expected) in [("bool", "False{}"), ("u32", "9")] {
+        let book = load(root.join(format!("controls/{kind}-59.bend"))).unwrap();
+        let checked = teamy_bend::kernel::check_book(&book).unwrap();
+        assert_eq!(
+            checked.normalize_definition("main").unwrap().to_string(),
+            expected
+        );
+        for n in [60, 61, 62, 122] {
+            let error = load(root.join(format!("controls/{kind}-{n}.bend"))).unwrap_err();
+            assert!(
+                error
+                    .message
+                    .contains("pattern compilation exceeds the resource limit of 64")
+            );
+        }
+        let error = load(root.join(format!("controls/{kind}-129.bend"))).unwrap_err();
+        assert!(error.message.contains("Nat literals above 128"));
+    }
+    for name in ["nat_chain", "nat_table"] {
+        let error = load(root.join(format!("{name}.bend"))).unwrap_err();
+        assert!(
+            error
+                .message
+                .contains("pattern compilation exceeds the resource limit of 64")
+        );
+    }
+}
