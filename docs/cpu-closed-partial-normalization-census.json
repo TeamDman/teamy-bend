@@ -1,0 +1,43 @@
+{
+  "source": "cd7cabbda37192a7d401d1b3b1a3b9caf37c9f7a",
+  "baseline_source": "d0176c3a104688fbe21bb79d9e05330bdc9ce08f",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 378,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 58
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 167,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 58
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 29
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [],
+  "changes": [],
+  "raw_observations_sha256": "92e61541f4bced1b8be461c0b25ada0a8a7648423249a4751113cb01625ab227",
+  "baseline_raw_sha256": "ce712cf2aaaed3610391d0128d28f56ce6a0f92f67f38541f69f4d2e50fa7a4d",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics."
+}
