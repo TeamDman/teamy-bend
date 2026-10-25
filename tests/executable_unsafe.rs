@@ -187,6 +187,64 @@ fn an_earlier_law_uses_its_annotated_implementation_signature_context() {
     fixture.expect_all("5\n", "5\n");
 }
 
+#[test]
+fn pinned_nested_reusable_law_executes_without_becoming_a_strict_proof() {
+    for (source, expected) in [
+        (
+            include_str!("fixtures/cpu-acceptance-priority/unsafe_many.bend"),
+            "7\n",
+        ),
+        (
+            include_str!("fixtures/cpu-acceptance-priority/live.bend"),
+            "5n\n",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        // The preceding law is intentionally outside strict proof formation;
+        // executable checking applies the later definition's annotation.
+        let error = check_book(&load(fixture.0.join("main.bend")).unwrap()).unwrap_err();
+        assert!(
+            error.to_string().contains("expected Data; observed Type"),
+            "{error}"
+        );
+        fixture.expect_all(expected, expected);
+    }
+}
+
+#[test]
+fn nested_reusable_law_does_not_relax_safe_signatures_holes_or_reflexivity() {
+    for (source, expected, definition) in [
+        (
+            include_str!("fixtures/cpu-acceptance-priority/safe.bend"),
+            "expected Data; observed Type",
+            "twice",
+        ),
+        (
+            include_str!("fixtures/cpu-acceptance-priority/later-safe.bend"),
+            "expected Data; observed Type",
+            "wrong",
+        ),
+        (
+            include_str!("fixtures/cpu-acceptance-priority/false-proof.bend"),
+            "reflexivity",
+            "wrong",
+        ),
+        (
+            include_str!("fixtures/cpu-acceptance-priority/source-hole.bend"),
+            "hole",
+            "wrong",
+        ),
+    ] {
+        let fixture = Fixture::new(source);
+        let error = fixture.rejection();
+        assert!(error.contains(expected), "{expected}: {error}");
+        assert!(error.starts_with(&format!("{definition}:")), "{error}");
+        let output = fixture.cli("run", &[]);
+        assert_eq!(output.status.code(), Some(1));
+        assert!(output.stdout.is_empty());
+    }
+}
+
 const UNSAFE_TEMPLATE: &str = r"import Base
 @unsafe
 def count(~step: Nat -> Nat, n: Nat) -> Nat:
