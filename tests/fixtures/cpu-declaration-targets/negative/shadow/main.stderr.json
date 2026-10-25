@@ -1,0 +1,1 @@
+"Error:\n- expected : a fresh name (duplicate declaration: defs.Nat.add)\n- observed : '('\nLocation:\n3 | def Nat.add() -> U32: 7\n4>| def Nat.add() -> U32: 8\n5 | \n"

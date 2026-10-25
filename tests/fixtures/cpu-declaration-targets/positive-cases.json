@@ -1,0 +1,42 @@
+[
+  {
+    "case": "../cpu-duplicate-declaration/exploratory/alias/main.bend",
+    "expected": "3",
+    "io": false
+  },
+  {
+    "case": "../cpu-duplicate-declaration/exploratory/shadow/main.bend",
+    "expected": "7",
+    "io": false
+  },
+  {
+    "case": "completed/main.bend",
+    "expected": "3",
+    "io": false
+  },
+  {
+    "case": "observe/main.bend",
+    "expected": "7",
+    "io": false
+  },
+  {
+    "case": "open/main.bend",
+    "expected": "6",
+    "io": false
+  },
+  {
+    "case": "specialization/main.bend",
+    "expected": "7",
+    "io": false
+  },
+  {
+    "case": "io/alias.bend",
+    "expected": "3",
+    "io": true
+  },
+  {
+    "case": "io/shadow.bend",
+    "expected": "7",
+    "io": true
+  }
+]

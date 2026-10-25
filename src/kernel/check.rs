@@ -3522,6 +3522,21 @@ mod reflexivity_diagnostic_tests {
                 "cpu-duplicate-declaration/positive/imported/main.bend",
                 &["main"][..],
             ),
+            (
+                "cpu-duplicate-declaration/exploratory/alias/main.bend",
+                &["main"][..],
+            ),
+            (
+                "cpu-duplicate-declaration/exploratory/shadow/main.bend",
+                &["main"][..],
+            ),
+            ("cpu-declaration-targets/completed/main.bend", &["main"][..]),
+            ("cpu-declaration-targets/observe/main.bend", &["main"][..]),
+            ("cpu-declaration-targets/open/main.bend", &["main"][..]),
+            (
+                "cpu-declaration-targets/specialization/main.bend",
+                &["main"][..],
+            ),
             ("cpu-forward-data/positive/earlier.bend", &["main"][..]),
             ("cpu-forward-data/positive/recursive.bend", &["main"][..]),
             ("cpu-family-head/check/family_head_bare.bend", &[][..]),

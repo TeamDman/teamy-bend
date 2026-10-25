@@ -1,0 +1,10 @@
+[
+  "negative/alias-duplicate.bend",
+  "negative/shadow/main.bend",
+  "negative/filled-completion.bend",
+  "negative/open-header.bend",
+  "negative/type-clash.bend",
+  "negative/wrong-body.bend",
+  "negative/template-clash.bend",
+  "negative/open-unfilled.bend"
+]

@@ -703,9 +703,8 @@ impl Parser<'_> {
         raw: &str,
         declaration_at: usize,
     ) -> ParseError {
-        // Upstream freshens the qualified declaration spelling, which can
-        // differ from our resolved prior (aliases/global shadowing). Retain
-        // those existing refusals without claiming a matching diagnostic.
+        // Freshness diagnoses the declaration spelling, not an imported
+        // expression target. Keep metadata tied to that qualified name.
         if name == self.qualify(raw) {
             self.record_duplicate_declaration(name, declaration_at);
         }
@@ -868,6 +867,7 @@ impl Parser<'_> {
     fn definition(&mut self, unsafe_: bool) -> Result<(), ParseError> {
         let declaration_at = self.at;
         let raw = self.name()?;
+        let qualified = self.qualify(&raw);
         let resolved = self.resolve(&raw);
         let prior = self.book.declarations.iter().rev().find_map(|d| match d {
             Declaration::Def(d) if d.name == resolved && self.instance_name.is_none() => {
@@ -875,12 +875,16 @@ impl Parser<'_> {
             }
             _ => None,
         });
+        // Only an unfilled law completes a different resolved declaration.
+        // Filter after finding the latest event: an older unfilled law must
+        // not become eligible again after its definition has been completed.
+        let prior = prior.filter(|d| (d.body.is_none() && !d.foreign) || d.name == qualified);
         let name = if let Some(instance) = &self.instance_name {
             instance.clone()
         } else if prior.is_some() {
             resolved
         } else {
-            self.qualify(&raw)
+            qualified
         };
         self.expect("(")?;
         let template = prior.is_none() && self.instance_name.is_none() && self.is("~");

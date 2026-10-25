@@ -1,0 +1,1 @@
+"Error:\n- expected : '->'\n- observed : ':'\nLocation:\n3 | \n4>| def D.value(): 4\n5 | \n"

@@ -494,10 +494,10 @@ mod tests {
     }
 
     #[test]
-    fn duplicate_declaration_metadata_does_not_disguise_distinct_targets_or_earlier_errors() {
+    fn duplicate_declaration_metadata_does_not_disguise_earlier_errors() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-duplicate-declaration/exploratory");
-        for case in ["alias/main.bend", "shadow/main.bend", "missing-paren.bend"] {
+        for case in ["missing-paren.bend"] {
             let path = root.join(case);
             let plain = crate::syntax::load(&path).unwrap_err();
             let executable = crate::syntax::load_executable(&path).unwrap_err();
@@ -509,14 +509,9 @@ mod tests {
                     .unwrap(),
             ] {
                 assert_eq!(plain.to_string(), tracked.error.to_string());
-                if case == "missing-paren.bend" {
-                    assert!(matches!(tracked.diagnostic.unwrap().content,
-                        super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
-                        if expected == "'('"));
-                } else {
-                    assert!(plain.message.starts_with("duplicate definition: "));
-                    assert!(tracked.diagnostic.is_none());
-                }
+                assert!(matches!(tracked.diagnostic.unwrap().content,
+                    super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                    if expected == "'('"));
             }
         }
     }
