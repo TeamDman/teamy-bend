@@ -2320,3 +2320,45 @@ compact-pattern research unadopted; host/foreign/F32.read/hole/resource/oracle
 and supplementary-lint limitations remain. No production/API/dependency/toolchain,
 guard, budget or cancellation changes. No desktop/GPU, installs, merge or release.
 Raw logs, generated artifacts and binary snapshots remain outside Git preservation.
+
+
+## Nat-pattern measurement and erased-binder checkpoint
+
+Final tested source `0aef62717e9587a21b7266c55e659ecdd6e65712`: standard gate
+**1,187 passed / 0 failed / 49 ignored**. Production matches source
+`a1f8f4d528f741d2db1859689321e83f2d42e3fe`, used for the Nat/diagnostic/census
+matrices. [Report and reproducible evidence](cpu-nat-pattern-depth.md).
+
+The two unchanged Nat originals remain load-blocked. Their upstream cores have
+loaded depths 164/160 and normalized depths 164/159; no graph-preserving counter
+repair can close the existing 128-depth boundary. No Nat fix, guard exemption or
+policy change was adopted. Compact lowering/normalization remains an architectural
+design task. Eight boundary controls have 16 complete matching graph comparisons;
+eight pattern 64 and two literal 128 load refusals are retained. Six near-boundary
+programs pass 60 five-lane runs; originals only have upstream C/JS success, with
+port generated execution unrun. Controls do not close originals.
+
+The independent erased-binder diagnostic is corrected with public errors, terms,
+cursor and guard semantics unchanged. Nine cases pass 162 exact diagnostics and
+54 load probes. A separate positive control exposes a pre-existing port-C emitter
+failure for `+n = {3 : U32}; (n + n : U32)`: retained-owner-slot refusal, no artifact.
+Other available lanes return 6. The positive matrix has 38 successful executions,
+one failed generation and two unrun C executions; required-lanes runner exits 1.
+This retained ownership case is the next bounded substantive CPU defect.
+
+Full 1,302 checking census at A1: 366 both-accept, 319 exact rejections, 495 acceptance
+disagreements, 117 differing rejections and 5 oracle failures. Every port status and
+all 385 historical IO observations are unchanged. Current non-IO residual 227 is
+**110 acceptance +117 rejection**. Prior 109 acceptance classifications remain;
+`dead_param_fork` newly accepts in the unstable upstream oracle (five followups:
+4 accept, 1 stack failure). The only port diagnostic delta is the now-exact unary
+prefix original. Do not infer reduced total residuals or stable oracle parity.
+
+Coverage **445 linked / 857 unlinked**: 522 compiled candidates, 321 checker negatives,
+13 interpreter profiles, 1 checking-only module. Links are not universal parity.
+Nat-first remains pending; compact-pattern research unadopted. All prior host,
+foreign, F32.read, hole, resource, API and supplementary-lint caveats remain. Frozen
+inputs, budgets and cancellation boundaries preserved. Independent source and
+measurement review completed. No installs, desktop/GPU, main merge or release.
+Compact evidence is committed; unique raw logs/graphs/binaries remain local and
+are not preserved by Git publication.

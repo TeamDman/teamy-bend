@@ -1,0 +1,200 @@
+{
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+    "binary_sha256": "a07c11447e629727069e3c636a13ade1e9e8780ae6f9b07f3a079bc81d50d7f5",
+    "phase_probe_sha256": "2e61ab889276d97c0f13c023ad8927660908c63af29bb6b3de624794bc0ee2aa",
+    "build_receipt_sha256": "36941a22faf031c7e3ad626fa3a2cb49d77ab6ed7074bd59c2c0b7fe8c8c344e",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 319,
+      "acceptance_disagreement": 495,
+      "both_accept": 366,
+      "different_rejection": 117,
+      "oracle_or_infrastructure_failure": 5
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 612,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  },
+  "reconciliation": {
+    "source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+    "baseline_source": "59ac3fdbdd900be23e6516a3da84bafa31e7574a",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 319,
+      "acceptance_disagreement": 495,
+      "both_accept": 366,
+      "different_rejection": 117,
+      "oracle_or_infrastructure_failure": 5
+    },
+    "historical_IO_members": 385,
+    "historical_IO_exactly_unchanged": 385,
+    "historical_IO_changed": [],
+    "differences_outside_historical_IO": 227,
+    "residual_classifications": {
+      "acceptance_disagreement": 110,
+      "different_rejection": 117
+    },
+    "baseline_triage_categories_among_current_residual": {
+      "acceptance_rejection_mismatch": 109,
+      "diagnostic_only_candidate": 86,
+      "other_rejection_difference": 31,
+      "new_or_unclassified": 1
+    },
+    "oracle_failures": [
+      "check/bystander_hypothesis_cost.bend",
+      "check/deep_hyp_rewrite.bend",
+      "page/deep_list_walk.bend",
+      "reg/borrow_fork_hold.bend",
+      "rfc/share_loop.bend"
+    ],
+    "port_and_upstream_status_changes": [
+      "reg/dead_param_fork.bend"
+    ],
+    "phase_changes": [
+      "reg/dead_param_fork.bend"
+    ],
+    "upstream_stream_or_phase_changes": [
+      "reg/dead_param_fork.bend"
+    ],
+    "port_stream_or_phase_changes": [
+      {
+        "fixture": "parse/prefix_operator_dead.bend",
+        "fields": [
+          "stderr_base64"
+        ]
+      }
+    ],
+    "changes": [
+      {
+        "fixture": "parse/prefix_operator_dead.bend",
+        "source_sha256": "7cfddc472c96c21f97db6f866e73e4cfc824ff9498814d390a301b630fbcf687",
+        "before_classification": "different_rejection",
+        "after_classification": "exact_rejection",
+        "port_changed_fields": [
+          "stderr_base64"
+        ],
+        "before_stderr_sha256": "3213eb97286558909823a4e3d85e7578f1456dd1f78a354a5617cccdb7d37b83",
+        "after_stderr_sha256": "f1674ea42a81e9c54361a8ee15a4445d5c5252be8e79bd8c6caacb747e8a9042"
+      },
+      {
+        "fixture": "reg/dead_param_fork.bend",
+        "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+        "before_classification": "oracle_or_infrastructure_failure",
+        "after_classification": "acceptance_disagreement",
+        "port_changed_fields": [],
+        "before_stderr_sha256": "a129d86b624a7ab6265a1c19f3f8256897e4cb39c3acda6aa63bc329fb82aa96",
+        "after_stderr_sha256": "a129d86b624a7ab6265a1c19f3f8256897e4cb39c3acda6aa63bc329fb82aa96"
+      }
+    ],
+    "raw_observations_sha256": "d379f6f8373d402237597d4fafefae44f676aec8bbce7f1284be180bd4c66407",
+    "baseline_raw_sha256": "fc1d8f58ee54f02430179b1fb03b4c363c3d125511f8014fea8761361811390d",
+    "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics."
+  },
+  "unstable_oracle_renewal": {
+    "fixture": "reg/dead_param_fork.bend",
+    "source_sha256": "42dbabc12c8c8ee1b11ae1fa7614a5b1bbfee0af9c8422456dddbd7c70ebbf0f",
+    "rows": [
+      {
+        "rep": 1,
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/dead-fork-0.phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.13562514499062672,
+        "sidecar": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "rep": 2,
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/dead-fork-1.phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.13027421399601735,
+        "sidecar": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "rep": 3,
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/dead-fork-2.phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.13283781401696615,
+        "sidecar": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "rep": 4,
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/dead-fork-3.phase.json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.12757337099174038,
+        "sidecar": {
+          "phase": "accepted",
+          "outcome": "accepted"
+        }
+      },
+      {
+        "rep": 5,
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$UPSTREAM/tests/reg/dead_param_fork.bend",
+          "$EVIDENCE/dead-fork-4.phase.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: the machine stack overflowed (a deep recursion, or a literal too large to expand)\n",
+        "timed_out": false,
+        "seconds": 0.09961539099458605,
+        "sidecar": {
+          "phase": "load",
+          "outcome": "host_stack_failure"
+        }
+      }
+    ]
+  },
+  "scope": "Full checking renewal at A1; same production src as final0aef. Not runtime qualification. Original109 acceptance classifications unwaived, plus one previously failing unstable oracle now accepted in census. No subtraction without exact old385-member renewal.",
+  "previous_classification": "cpu-acceptance-priority.csv"
+}

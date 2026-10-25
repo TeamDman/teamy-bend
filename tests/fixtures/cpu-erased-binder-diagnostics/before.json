@@ -1,0 +1,221 @@
+{
+  "source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+  "rows": [
+    {
+      "case": "prefix_operator_dead.bend",
+      "sha256": "7cfddc472c96c21f97db6f866e73e4cfc824ff9498814d390a301b630fbcf687",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '5'\nLocation:\n 9 | def main():\n10>|   -5\n11 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n 9 | def main():\n10>|   -5\n11 | \n"
+      }
+    },
+    {
+      "case": "controls/nat.bend",
+      "sha256": "2576e6b01bf021d82263fe2b391b8e3375b8b0876841f15b95ab431c37118e6c",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '0'\nLocation:\n3 | def main() -> U32:\n4>|   -0n\n5 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def main() -> U32:\n4>|   -0n\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/paren.bend",
+      "sha256": "af598b08dc01631ae802562d166a5a24287a338bfd418158372d67311d242d88",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '('\nLocation:\n3 | def main() -> U32:\n4>|   -(5)\n5 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def main() -> U32:\n4>|   -(5)\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/multiline.bend",
+      "sha256": "8a2be5dfda22509c8d8628b6c19728891127ed349f2496c026ef384205940ac1",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '5'\nLocation:\n4 |   -\n5>|     5\n6 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def main() -> U32:\n4>|   -\n5 |     5\n"
+      }
+    },
+    {
+      "case": "controls/nested-block.bend",
+      "sha256": "f2555c6f41b1936da243b058fbbb3f3f03f1c055d9308c0e6e1fd9cdaad11dec",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/term-position.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '5'\nLocation:\n3 | def main() -> U32:\n4>|   (-5)\n5 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/term-position.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def main() -> U32:\n4>|   (-5)\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/missing-value.bend",
+      "sha256": "2cf35961393f06342bcb090892b4f0da373385e1ae4cbb818c8382000faee139",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : end of input\nLocation:\n4 |   -x =\n5>| \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : end of input\nLocation:\n4 |   -x =\n5>| \n"
+      }
+    },
+    {
+      "case": "controls/eof.bend",
+      "sha256": "248a4e07a16efed0a00be0b8b5a50a84268689352c734a4f11f487db7036cd37",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : end of input\nLocation:\n3 | def main() -> U32:\n4>|   -\n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def main() -> U32:\n4>|   -\n"
+      }
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "sha256": "de8ed9e9241325c8a795d90ee2a905d2469b82c6d036de70710253820ed12fcf",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a name\n- observed : '0'\nLocation:\n3 | def bad() -> U32:\n4>|   -0n\n5 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def bad() -> U32:\n4>|   -0n\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/argument.bend",
+      "sha256": "8b9d60378796e156759d989d627eff25947c3f494f0f3185d833f972b3d4cea7",
+      "upstream": {
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def id(x: U32) -> U32: x\n4>| def main() -> U32: id(-5)\n5 | \n"
+      },
+      "port": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '-'\nLocation:\n3 | def id(x: U32) -> U32: x\n4>| def main() -> U32: id(-5)\n5 | \n"
+      }
+    }
+  ]
+}

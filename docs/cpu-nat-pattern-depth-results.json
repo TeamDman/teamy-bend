@@ -1,0 +1,5165 @@
+{
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "full_parity": false,
+  "originals": {
+    "tested_source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+    "binary_sha256": "a07c11447e629727069e3c636a13ade1e9e8780ae6f9b07f3a079bc81d50d7f5",
+    "completed": true,
+    "raw_sha256": "436f96d9fa86672ea3ceeafc04f0ade065b847d069c4c4949ca114b7b46fa0e3",
+    "observations": 54,
+    "lane_counts": {
+      "upstream-direct-cli": 4,
+      "upstream-checking": 4,
+      "port-check": 4,
+      "port-eval": 4,
+      "port-run": 4,
+      "port-c": 4,
+      "port-javascript": 4,
+      "port-native": 4,
+      "strict-phase": 4,
+      "executable-phase": 4,
+      "upstream-generate-c": 2,
+      "upstream-build-O3": 2,
+      "upstream-generate-js": 2,
+      "upstream-C-O3": 4,
+      "upstream-JS": 4
+    },
+    "rows": [
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "TypeError: require is not a function\n",
+        "timed_out": false,
+        "seconds": 0.22875013598240912,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-checking",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "$A1_RUN/originals-renewal/nat_chain/phase.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16230920102680102,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.13288267998723313,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.1362828990095295,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-run",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.14384335101931356,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_chain/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.1448932499915827,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-javascript",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_chain/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.1432075290067587,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "port-native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_chain/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend:32:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.14932903699809685,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "load\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.07296952902106568,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "load\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.08768301497912034,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_chain/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3902519539988134,
+        "artifact_sha256": "0dc380c66634ea8b5d5065ab7d1309a3cbcad73c90bb43b0ddbe81f4ad174458"
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/originals-renewal/nat_chain/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_chain/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2971428470045794,
+        "artifact_sha256": "4cea19240d858b51a51d429a7e7424016eee10c25ab859985a2bceef4d8a2911"
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_chain/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.26388662098906934,
+        "artifact_sha256": "4895adfd25cf449f75e3412d6a2fb819282fb1995ddfa0b067b3290cc0509e78"
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/originals-renewal/nat_chain/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "411210\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0009633049776311964,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_chain",
+        "source_sha256": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/originals-renewal/nat_chain/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "411210\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01893794900388457,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-direct-cli",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "TypeError: require is not a function\n",
+        "timed_out": false,
+        "seconds": 0.20411949799745344,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-checking",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "$A1_RUN/originals-renewal/nat_table/phase.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18561810901155695,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.13463639799738303,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.15886963799130172,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-run",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.14350847699097358,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_table/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.15137855900684372,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-javascript",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_table/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.16677405100199394,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "port-native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$A1_RUN/originals-renewal/nat_table/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend:20:1: pattern compilation exceeds the resource limit of 64 levels\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.1535654470208101,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "load\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0744064390019048,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "load\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.096891201013932,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_table/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2223868900036905,
+        "artifact_sha256": "231df8e174e297a73877da88056e865ea71e7c9d479420cf035cc4ffebf081cf"
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/originals-renewal/nat_table/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_table/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2782357010000851,
+        "artifact_sha256": "6c9af7fc256e74e8f17610759409db8050da0fb83c22d2f1dd12f5c71fb67bf9"
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+          "-o",
+          "$A1_RUN/originals-renewal/nat_table/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22522100099013187,
+        "artifact_sha256": "0c66957432efa3097a112f0d5b83889a78a08060d98ee38290ec6da9c51f15d2"
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/originals-renewal/nat_table/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "305\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0010231540072709322,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "nat_table",
+        "source_sha256": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/originals-renewal/nat_table/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "305\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01724580899463035,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [],
+    "unresolved": []
+  },
+  "near_boundary": {
+    "tested_source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+    "binary_sha256": "a07c11447e629727069e3c636a13ade1e9e8780ae6f9b07f3a079bc81d50d7f5",
+    "completed": true,
+    "raw_sha256": "38b55f4781051f7c05e9a7edc0c71fc58d36066167463310a71d149af147f7db",
+    "observations": 132,
+    "lane_counts": {
+      "upstream-interpreter": 12,
+      "native": 12,
+      "strict-eval": 12,
+      "strict-check": 12,
+      "upstream-generate-c": 6,
+      "upstream-build-O3": 6,
+      "upstream-generate-js": 6,
+      "port-generate-c": 6,
+      "port-build-O3": 6,
+      "port-generate-js": 6,
+      "upstream-C-O3": 12,
+      "upstream-JS": 12,
+      "port-C-O3": 12,
+      "port-JS": 12
+    },
+    "rows": [
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.20023221199517138,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38249784999061376,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"False{}\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.30085166098433547,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2679907389974687,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17244908498832956,
+        "artifact_sha256": "fd8e30f557eefaf14569eaa8788c427ac061ba778cadf3529c2b347c7d075605"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22725791300763376,
+        "artifact_sha256": "1d7400df71b94f76867da9e9addbb7f2c2f05e5e26c5bcf6d37caa3124928ee9"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18104258400853723,
+        "artifact_sha256": "fef8845aa4d1ffcb49da472fb2e411cbc9977d8efa6524bfad2ca241ca58df6a"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-above/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-above/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 224960,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38102685200283304,
+        "artifact_sha256": "2b3df53a7b2e349252a4610d274c0cf9432a40060a65046b41f49bfeae5cef55"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/bool-above/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-above/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4351503910147585,
+        "artifact_sha256": "843e0de4457a733c56e2eff8155e4ad9bdbcbb8b9750d871cc33707aff990a84"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-above/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-above/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 70564,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37074278498766944,
+        "artifact_sha256": "f1ab28144992c6aa110d5db432710402036708fd9b9216ed411287adde76e35c"
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0009344319987576455,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-above/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.017532094003399834,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-above/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0018322989926673472,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-above.bend",
+        "source_sha256": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-above/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.02947871500509791,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16007721700589173,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37765211099758744,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"False{}\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.25335714197717607,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.269087438005954,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1564778999891132,
+        "artifact_sha256": "58d3e00ce217b3372c25a199627cd63008150e602c3b64ba46e36141e9263d38"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2184612109849695,
+        "artifact_sha256": "1d7400df71b94f76867da9e9addbb7f2c2f05e5e26c5bcf6d37caa3124928ee9"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1580092709918972,
+        "artifact_sha256": "40e14c1c207d69abc624c2b1fb3b47b6b2806207b45cafacb81bd93c27222db9"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-below/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-below/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 224852,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.369069518026663,
+        "artifact_sha256": "6ca439aabdb67803673da92548ab4b48bf18d7708e3f0db85e3798470fef3764"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/bool-below/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-below/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4524985040188767,
+        "artifact_sha256": "40b7d8204535c6e4d94e19e602391eecec0ee84f15cc80cc1dde53f2ef70fd40"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-below/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-below/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 70486,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3629362320061773,
+        "artifact_sha256": "4287ca6b6fa8650681fb3296afddd3071ee79117e861013e11e297672dd9cda3"
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0010534889879636467,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-below/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.018244517006678507,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-below/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0018272520101163536,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-below.bend",
+        "source_sha256": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-below/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "False{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.02465162199223414,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16292248500394635,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.35721537400968373,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"True{}\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2470410340174567,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24819203800871037,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15907881199382246,
+        "artifact_sha256": "5374047967bd026a3c828c4f6b7c3408bbc47e976a3306572da900b2d3b97149"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.21877630200469866,
+        "artifact_sha256": "2ed89c3f93a2c0a309f8a8a33256f4cfc4641f1c53a0b5d17d6f243cd0b1b59d"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16610245499759912,
+        "artifact_sha256": "3efade4f7be5e5abea3bafcbab1518e2942dc99c2aefdd0f03977fa9770b5567"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-hit/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 224906,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37498319798032753,
+        "artifact_sha256": "d8a5dc198d6154295d339b7e13fb27c098a4eec5e991f0c789794eba3423a272"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.441019944002619,
+        "artifact_sha256": "423446e8cf67ad7c32e0b9469b70385bf2e76d1989bedeae6972d96a73738e99"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/bool-hit/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 70525,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3733221630100161,
+        "artifact_sha256": "d8184a38b56306b317122b48fe39cd294cf22b267d128168b03647ade077e430"
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0008898660016711801,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-hit/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.015803615999175236,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001526524021755904,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "bool-hit.bend",
+        "source_sha256": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/bool-hit/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "True{}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0224864810006693,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1688943009939976,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.410622125986265,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"9\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2996332850016188,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.29219838400604203,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1853478490083944,
+        "artifact_sha256": "3f244c6f4977cdca7703f2fb04eedd0a7351b15f9c17228ea54122b5e8763c07"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.19638157900772057,
+        "artifact_sha256": "cbf5d10d2a21506fc8b1d0ce4cb0105e9580e3cc4d16e36a12ad33bb9073bee3"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1605925009935163,
+        "artifact_sha256": "cc1e716239393cf731db5c9a301dfd3b3dfdb48cd54f114e1b3a87964d40604b"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-above/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-above/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 214411,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5536251410085242,
+        "artifact_sha256": "2ed1779a5c219fe7b6f828de3eba304d62bd15ddd13fef019fa3fe909e4d5dcc"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/u32-above/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-above/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.40764815200236626,
+        "artifact_sha256": "9c3d6646df2efe366c7ee80b6009c8bebda80e905461113d6c3eadfa657c13c8"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-above/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-above/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 68407,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.422463519993471,
+        "artifact_sha256": "0c2dde16a0847d5c7a0b3b957955e185f0c9c551d986c59ff4c0a008ddcd33ae"
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0009048979845829308,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-above/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.016286829981254414,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-above/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001305584009969607,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-above.bend",
+        "source_sha256": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-above/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.022836441989056766,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.14914438300183974,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4565719010133762,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"9\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37196102400776,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2917255259817466,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16313971902127378,
+        "artifact_sha256": "f8cb68212253c8f0408b16d01553abedd50b8c34d3c6c0921d73031eb476b551"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18496232700999826,
+        "artifact_sha256": "cbf5d10d2a21506fc8b1d0ce4cb0105e9580e3cc4d16e36a12ad33bb9073bee3"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17629216201021336,
+        "artifact_sha256": "9b942a522c87eed48d5f5fd56b77fdfe7f0b377e5267d7e0dc63aece1121aa34"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-below/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-below/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 214303,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.59246039899881,
+        "artifact_sha256": "2a084b0066f5f4547cdc5a6e6b86b6776bd6042ddce5e591042a81637021d331"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/u32-below/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-below/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.45661490998463705,
+        "artifact_sha256": "84ceef77be2b0fdbdd96a6a9e7c76eb5aac200269c95df59c17f2e03d16e8392"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-below/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-below/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 68329,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.47558629501145333,
+        "artifact_sha256": "bfb3712e032eccbbc655019959c9d9e248b76c126e0253996274772da34c4ed8"
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0010095640027429909,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-below/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.021335209981771186,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-below/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0016328829806298018,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-below.bend",
+        "source_sha256": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-below/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "9\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.02921663099550642,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2102629249857273,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "native",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4496648019994609,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "strict-eval",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"7\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.29705230399849825,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "strict-check",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.29654347500763834,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18453735500224866,
+        "artifact_sha256": "2576b5ba0288dbff16002efc52fe99649d3825f9f1a3b0c02c7b0a1fe13b2173"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.19482351702754386,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.19307869899785146,
+        "artifact_sha256": "ed771cb5ce0185f4e30e4d7ca79e1f9ccfadc582df5e57cf14b1cd5487f6ccf3"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "port-generate-c",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-hit/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 214357,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5793560460151639,
+        "artifact_sha256": "c96f9159fc9c46c85f586bb4b69b03becd809bf76002009246bfcb7d0c459c1f"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4163701749930624,
+        "artifact_sha256": "b1a629c67f29cdf2b8573e1c8bb921d1cfdc51df52e4fe259400418ba2cc21d5"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "port-generate-js",
+        "command": [
+          "$A1_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$A1_RUN/nat-positive-renewal/u32-hit/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 68368,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4304121819732245,
+        "artifact_sha256": "3ae9f5395466e086a7a87d90e1cb88a26f3b37d63b9a03b4f005f5f70f223d26"
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0008962750143837184,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-hit/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.017314522003289312,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "port-C-O3",
+        "command": [
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0013026510132476687,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "u32-hit.bend",
+        "source_sha256": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$A1_RUN/nat-positive-renewal/u32-hit/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.02357798401499167,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "bool-above.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-above.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-above.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-above.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-above.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-above.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-below.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "bool-hit.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-above.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-below.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "u32-hit.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      }
+    ],
+    "unresolved": []
+  },
+  "erased_binder_negatives": {
+    "tested_source": "a1f8f4d528f741d2db1859689321e83f2d42e3fe",
+    "binary_sha256": "a07c11447e629727069e3c636a13ade1e9e8780ae6f9b07f3a079bc81d50d7f5",
+    "observations": 162,
+    "phase_probes": [
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nat.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/paren.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/multiline.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/eof.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      },
+      {
+        "case": "controls/argument.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "load",
+        "stderr": ""
+      }
+    ],
+    "cases": [
+      {
+        "case": "controls/argument.bend",
+        "source_sha256": "8b9d60378796e156759d989d627eff25947c3f494f0f3185d833f972b3d4cea7",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.stderr.json",
+        "stderr_sha256": "40c5e1d24db42f45cd952b28faf03b99ad47c831d3a3f15dcb890c757d78c829",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/argument.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/eof.bend",
+        "source_sha256": "248a4e07a16efed0a00be0b8b5a50a84268689352c734a4f11f487db7036cd37",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.stderr.json",
+        "stderr_sha256": "ee7e42722fb78c003e89affbf97077df99be6602920eda10c06b76fe7a549189",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/eof.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "de8ed9e9241325c8a795d90ee2a905d2469b82c6d036de70710253820ed12fcf",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.stderr.json",
+        "stderr_sha256": "57919a879cee4d3e26bd28f751a04e8e4985e9300f4badf58245441d2b650ae3",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/imported/main.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/missing-value.bend",
+        "source_sha256": "2cf35961393f06342bcb090892b4f0da373385e1ae4cbb818c8382000faee139",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.stderr.json",
+        "stderr_sha256": "bec625815a19cf0b4b5e09f5a8c0b1c7d8983856e66fe11648c42528b6d5b681",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/missing-value.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/multiline.bend",
+        "source_sha256": "8a2be5dfda22509c8d8628b6c19728891127ed349f2496c026ef384205940ac1",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.stderr.json",
+        "stderr_sha256": "03c73f75a92c3f6fd7e0a2e3e9707eff86a7153b1082accb31c60c28397f1a24",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/multiline.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/nat.bend",
+        "source_sha256": "2576e6b01bf021d82263fe2b391b8e3375b8b0876841f15b95ab431c37118e6c",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.stderr.json",
+        "stderr_sha256": "025af972bc382ce0cd24e203f09515159a7281a749ab810d9a87eec8e273bfa5",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nat.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/nested-block.bend",
+        "source_sha256": "f2555c6f41b1936da243b058fbbb3f3f03f1c055d9308c0e6e1fd9cdaad11dec",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.stderr.json",
+        "stderr_sha256": "396538aaaeb6010ca05a70bd777e6a71c765b78c91a0e8c33eceeca0f0b44e18",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/nested-block.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "controls/paren.bend",
+        "source_sha256": "af598b08dc01631ae802562d166a5a24287a338bfd418158372d67311d242d88",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.stderr.json",
+        "stderr_sha256": "3ab6869c297bf5c548b4544a7696c2a38a0899f3b5aa4c857367ad6784bd6575",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/controls/paren.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      },
+      {
+        "case": "prefix_operator_dead.bend",
+        "source_sha256": "7cfddc472c96c21f97db6f866e73e4cfc824ff9498814d390a301b630fbcf687",
+        "golden": "tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.stderr.json",
+        "stderr_sha256": "f1674ea42a81e9c54361a8ee15a4445d5c5252be8e79bd8c6caacb747e8a9042",
+        "exact_observations": 18,
+        "commands": [
+          {
+            "lane": "upstream-check",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+            ]
+          },
+          {
+            "lane": "upstream-generate-c",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-c"
+            ]
+          },
+          {
+            "lane": "upstream-generate-js",
+            "command": [
+              "node",
+              "$UPSTREAM/bend2/main.ts",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend",
+              "-o",
+              "$A1_RUN/negative-matrix/upstream-js"
+            ]
+          },
+          {
+            "lane": "port-check",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "check",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+            ]
+          },
+          {
+            "lane": "port-eval",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "eval",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+            ]
+          },
+          {
+            "lane": "port-run",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "run",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend"
+            ]
+          },
+          {
+            "lane": "port-c",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend",
+              "--executable",
+              "--target",
+              "c",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-javascript",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend",
+              "--executable",
+              "--target",
+              "javascript",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          },
+          {
+            "lane": "port-native",
+            "command": [
+              "$A1_RUN/teamy-bend",
+              "compile",
+              "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/prefix_operator_dead.bend",
+              "--executable",
+              "--target",
+              "native",
+              "--output",
+              "$A1_RUN/negative-matrix/unwritten"
+            ]
+          }
+        ]
+      }
+    ],
+    "raw_sha256": "ceabeccdb69e317914b3c95aff0715d8e4279e6c3d3e085efd2f267cb1de661b"
+  },
+  "erased_binder_positives": {
+    "tested_source": "0aef62717e9587a21b7266c55e659ecdd6e65712",
+    "binary_sha256": "057c588af86cb9aeb3034537066d2e553045c2e67af05d4e9d5664e59c6ac051",
+    "completed": true,
+    "raw_sha256": "1681f6f801351f5d79f03a5b21009add3e27dc71ec75cdafe13763256c2d02d8",
+    "observations": 85,
+    "lane_counts": {
+      "upstream-interpreter": 8,
+      "native": 8,
+      "strict-eval": 8,
+      "strict-check": 8,
+      "upstream-generate-c": 4,
+      "upstream-build-O3": 4,
+      "upstream-generate-js": 4,
+      "port-generate-c": 4,
+      "port-build-O3": 3,
+      "port-generate-js": 4,
+      "upstream-C-O3": 8,
+      "upstream-JS": 8,
+      "port-C-O3": 6,
+      "port-JS": 8
+    },
+    "rows": [
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.14531181202619337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "native",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38751544000115246,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "strict-eval",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"7\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24617662298260257,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "strict-check",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2421617759973742,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/erased/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17139453999698162,
+        "artifact_sha256": "cc7930c8f8468f90f3353310582f093dc541ad4ae81c961e5f6c8f91ff98e581"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$FINAL_RUN/positive-complete/erased/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/erased/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18033728198497556,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/erased/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16692938699270599,
+        "artifact_sha256": "ea8dc51163a389a05479b1068b8c04921111ad66bb535a56f4ca87bb6774ff41"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "port-generate-c",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$FINAL_RUN/positive-complete/erased/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/erased/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184719,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3649073090055026,
+        "artifact_sha256": "5941104170b65ca6cf3185debf74fc6aafb42fb01441206a839ab7370fac6c6f"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$FINAL_RUN/positive-complete/erased/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/erased/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38430398399941623,
+        "artifact_sha256": "acea9dbb5020dfbeddafb354041ee9834634fe7bcb8e00a392cb91f9d608283c"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "port-generate-js",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/erased.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$FINAL_RUN/positive-complete/erased/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/erased/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52338,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.376083411014406,
+        "artifact_sha256": "a55ce2b92b001b73bc1e48f2aa310d297ba68d38267fd1cfb5ffca05e06e6053"
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/erased/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0009147629898507148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/erased/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.018638245994225144,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "port-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/erased/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001288400002522394,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "erased.bend",
+        "source_sha256": "b27d6cc5e55f8986e1c38b926e24f1f044455130daa1a6dc294a21681c5cc0dd",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/erased/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.018067826982587576,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "6\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.19160234098671935,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "native",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "6\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38856372400186956,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "strict-eval",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"6\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2669765790051315,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "strict-check",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.26922213402576745,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/plus/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16639552198466845,
+        "artifact_sha256": "516444333d7a7a27556b82961fecb4c777303aa49668e68a11dd5b9b5c53f6f7"
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$FINAL_RUN/positive-complete/plus/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/plus/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.183010805019876,
+        "artifact_sha256": "8789b2eba87eeab5cad347d0ce456b1067d3c8a327258d3c38137435f9441249"
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/plus/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17196947598131374,
+        "artifact_sha256": "3d332b0b9068d9982bd3a504fa301ae53453236d9664d7cd0ebc5b7b9afc32a8"
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "port-generate-c",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$FINAL_RUN/positive-complete/plus/port.c"
+        ],
+        "rep": 0,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "timed_out": false,
+        "seconds": 0.37363345199264586,
+        "classification": "unresolved_port_emission_defect"
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "port-generate-js",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$FINAL_RUN/positive-complete/plus/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/plus/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59675,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.36567196002579294,
+        "artifact_sha256": "ea33c1e093c90618d9588a3792fb0a689ab313ef83bb741603072158819bd074"
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/plus/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "6\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.001028482016408816,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/plus/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "6\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.016434213001048192,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "plus.bend",
+        "source_sha256": "3098e7c074c99c8a417218a3837c2473c45e0876fbdd4ac335619d407633b9d3",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/plus/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "6\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01855097699444741,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.15065928900730796,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "native",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3740782829991076,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "strict-eval",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"5\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2568179829977453,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "strict-check",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.2471701229806058,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/subtraction/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.17638484001508914,
+        "artifact_sha256": "d0fb22e80d1d27c145824bc0021c3e2f845b880d9cfae1448785dd71ae7351bd"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$FINAL_RUN/positive-complete/subtraction/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/subtraction/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.18151775700971484,
+        "artifact_sha256": "6175ff6a554ff15b96a9dcff32102ce24400685749595b9883d31b8c46141812"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/subtraction/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1777142719947733,
+        "artifact_sha256": "218d1e004937766096c7b391dbe992d5c5c7b714857b39315dbe5b1336c49b89"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "port-generate-c",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$FINAL_RUN/positive-complete/subtraction/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/subtraction/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 184856,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3722922339802608,
+        "artifact_sha256": "82f3c32cf5b868136e79f8230edeb885a648d244b205c0bf6991b7feb4c485c3"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$FINAL_RUN/positive-complete/subtraction/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/subtraction/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.40406821301439777,
+        "artifact_sha256": "afc14ceef55e134bd09c84218a23b1c0a664110fb1da4afe2527e6c65b243648"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "port-generate-js",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/subtraction.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$FINAL_RUN/positive-complete/subtraction/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/subtraction/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59633,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3757497259939555,
+        "artifact_sha256": "1bd16c4b44c218350cfa3ebc856102fed59084301571aefb15d1b49b65d7dd0e"
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/subtraction/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0009603410144336522,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/subtraction/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01780191098805517,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "port-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/subtraction/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0030376049980986863,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "subtraction.bend",
+        "source_sha256": "ea467c8714840e3f079478b152d2003e0999c1c8013c064d80f85568886ab2fd",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/subtraction/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "5\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.018392891011899337,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-interpreter",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16670956800226122,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "native",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3582313270017039,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "strict-eval",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"entry\": \"main\",\n  \"value\": \"7\"\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.26044320801156573,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "strict-check",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24375650801812299,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/template/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.16117221198510379,
+        "artifact_sha256": "f11bd5d4f297054420c2c3a9533aad1f7888ca0bc2fcbe435549938f60ac2525"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$FINAL_RUN/positive-complete/template/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/template/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1797736450098455,
+        "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend",
+          "-o",
+          "$FINAL_RUN/positive-complete/template/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.1960554409888573,
+        "artifact_sha256": "4f9286745f4217e05a3c5159b0a722e3b55e846d8c3bfd4d0c27e2c438a17749"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "port-generate-c",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$FINAL_RUN/positive-complete/template/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/template/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 185363,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.38336177699966356,
+        "artifact_sha256": "e20db6d4f2fa5826e87df7a9500cd7c26b804a343b13cc7f3b7971f9f52c5cdf"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$FINAL_RUN/positive-complete/template/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$FINAL_RUN/positive-complete/template/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.39784144298755564,
+        "artifact_sha256": "ce06a516917483a128ab5e8136893fb8d38a080b4fb25b952c44f82e3504eee6"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "port-generate-js",
+        "command": [
+          "$FINAL_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/template.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$FINAL_RUN/positive-complete/template/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$FINAL_RUN/positive-complete/template/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52401,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3585946839884855,
+        "artifact_sha256": "6ee183467d483bd734fe511ddc44c075c72fad1595728b207e7dc9243a06bb81"
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/template/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0010005809890571982,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/template/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.017886054993141443,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "port-C-O3",
+        "command": [
+          "$FINAL_RUN/positive-complete/template/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0014771300193388015,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "template.bend",
+        "source_sha256": "1b7d5a276abb0f06b689b58e519fd72813e77c8a1da6e56183e3d2e9afa803d7",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$FINAL_RUN/positive-complete/template/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.01779235599678941,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "erased.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "erased.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "erased.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "erased.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "erased.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "erased.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "plus.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "subtraction.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "strict",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "executable",
+        "rep": 1,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "strict",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      },
+      {
+        "case": "template.bend",
+        "lane": "executable",
+        "rep": 2,
+        "exit": 0,
+        "phase": "accepted",
+        "stderr": ""
+      }
+    ],
+    "unresolved": [
+      {
+        "case": "plus.bend",
+        "lane": "port-C",
+        "phase": "generation",
+        "execution": "unrun_no_artifact"
+      }
+    ]
+  },
+  "old_binary_C_failure": {
+    "binary_source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+    "command": [
+      "$BASELINE_RUN/teamy-bend",
+      "compile",
+      "$REPO/tests/fixtures/cpu-erased-binder-diagnostics/positive/plus.bend",
+      "--executable",
+      "--target",
+      "c",
+      "--output",
+      "$EVIDENCE/baseline-plus-unwritten.c"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "Error: \n   0: \u001b[91mresumable duplication requires a retained owner slot\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/compile/compile_diagnostic_cli.rs\u001b[0m:\u001b[35m23\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+    "artifact_emitted": false
+  },
+  "command_timeout_seconds": 30,
+  "build_profile": "upstream C O3; port C O3 plus unchanged strict warnings; host Rust debug=0 and no incremental are build-cache controls, not Bend execution policy",
+  "unrun": [
+    "Original port C/JS/native generated execution: load refused, no artifacts",
+    "plus.bend port-C build and two executions: generation failed, no artifact"
+  ],
+  "limitations": [
+    "Metadata-only diagnostic fix; no Nat lowering or guard change",
+    "Originals remain blocked under frozen64/128 guards",
+    "plus.bend C-emission defect also reproduced with baseline67b2035; all executed lanes agree",
+    "nat_first pending; compact-pattern research unadopted",
+    "No mid-normalization cancellation claim",
+    "Existing API/external-consumer, host/foreign/F32.read/hole/resource and supplementary-lint caveats retained"
+  ]
+}
