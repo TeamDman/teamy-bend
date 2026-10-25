@@ -1,0 +1,1 @@
+"Error:\n- expected : a name\n- observed : '~'\nLocation:\n12 | law wrap:\n13>|   for ~f: U32 -> U32\n14 |   for x: U32\n"

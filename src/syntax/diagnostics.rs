@@ -293,6 +293,16 @@ impl DiagnosticOrigins {
     }
 
     pub(super) fn expected_token(&mut self, label: &str, line: usize, expected: &str, found: &str) {
+        self.expected_syntax(label, line, &format!("'{expected}'"), found);
+    }
+
+    pub(super) fn expected_syntax(
+        &mut self,
+        label: &str,
+        line: usize,
+        expected: &str,
+        found: &str,
+    ) {
         self.load_failure = self.sources.get(label).and_then(|source| {
             // Loader parsing uses a newline-normalized buffer. The public
             // ParseError retains that position; the source display uses the
@@ -304,7 +314,7 @@ impl DiagnosticOrigins {
             };
             source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
                 content: LoadDiagnosticContent::ExpectedObserved {
-                    expected: format!("'{expected}'"),
+                    expected: expected.to_owned(),
                     observed: found
                         .chars()
                         .next()
@@ -434,6 +444,35 @@ mod tests {
         assert!(matches!(tracked.diagnostic.unwrap().content,
             super::LoadDiagnosticContent::ExpectedObserved { expected, observed }
             if expected == "':'" && observed == "'e'"));
+    }
+
+    #[test]
+    fn syntax_category_metadata_preserves_public_load_errors() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-token-expectations");
+        for (case, expected, observed) in [
+            ("controls/term-punctuation.bend", "a term", "'!'"),
+            ("controls/name-punctuation.bend", "a name", "'!'"),
+            ("controls/term-eof.bend", "a term", "end of input"),
+            ("controls/imported/main.bend", "a term", "':'"),
+        ] {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string(), "{case}");
+            assert!(plain.message.starts_with("expected a name, found"));
+            let report = tracked.diagnostic.unwrap();
+            assert!(
+                matches!(report.content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected: want, observed: found }
+                if want == expected && found == observed),
+                "{case}"
+            );
+            if case.contains("imported") {
+                assert!(report.excerpt.contains("def bad() -> U32: :"));
+                assert!(!report.excerpt.contains("H.bad()"));
+            }
+        }
     }
 
     #[test]

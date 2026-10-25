@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : ':'\nLocation:\n 8 | law take:\n 9>|   for a: [:U32 -> U32]\n10 |   U32\n"

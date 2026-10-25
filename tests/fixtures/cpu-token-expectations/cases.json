@@ -1,0 +1,11 @@
+[
+  "original/array_default_distinct.bend",
+  "original/array_element_data.bend",
+  "original/array_get_neutral.bend",
+  "original/axiom_runtime_capture.bend",
+  "original/comp_splice_tuple_goal.bend",
+  "controls/term-punctuation.bend",
+  "controls/name-punctuation.bend",
+  "controls/term-eof.bend",
+  "controls/imported/main.bend"
+]

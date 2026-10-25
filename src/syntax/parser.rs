@@ -356,10 +356,19 @@ impl Parser<'_> {
         }
     }
     fn name(&mut self) -> Result<String, ParseError> {
+        self.name_expected("a name")
+    }
+    fn name_expected(&mut self, expected: &str) -> Result<String, ParseError> {
         let s = &self.current().text;
-        if !s.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
-            || KEYWORDS.contains(&s.as_str())
-        {
+        let invalid_start = !s.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_');
+        if invalid_start || KEYWORDS.contains(&s.as_str()) {
+            // Keep the public parser error and cursor unchanged. Keyword
+            // failures have a separate pinned contract and are not generalized
+            // to this punctuation/EOF diagnostic.
+            let token = self.current().clone();
+            if invalid_start && let Some(origins) = &mut self.templates.diagnostics {
+                origins.expected_syntax(&self.label, token.line, expected, &token.text);
+            }
             return Err(self.error(format!("expected a name, found {:?}", self.current().text)));
         }
         Ok(self.bump())
@@ -1743,7 +1752,7 @@ impl Parser<'_> {
                 )
                 .into());
         }
-        let name = self.name()?;
+        let name = self.name_expected("a term")?;
         if self.at > 0 && self.tokens[self.at - 1].end == self.current().start && self.take("{") {
             let args = self.arguments("}")?;
             Ok(self.constructor(self.resolve(&name), args))
