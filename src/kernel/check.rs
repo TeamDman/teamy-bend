@@ -2612,7 +2612,7 @@ mod reflexivity_diagnostic_tests {
     }
 
     #[test]
-    fn synthesized_reference_origins_preserve_terms_sharing_and_checker_budgets() {
+    fn synthesized_reference_origins_preserve_structure_and_checker_budgets() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-synthesized-origins");
         let mut cases: Vec<String> = facet_json::from_str(
@@ -2654,6 +2654,8 @@ mod reflexivity_diagnostic_tests {
             }
             assert_eq!(rejected, !case.starts_with("positive/"), "{case}");
             assert_eq!(format!("{book:?}"), original);
+            drop(tracked);
+            drop(ordinary);
             if !rejected {
                 let checked =
                     check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap();
