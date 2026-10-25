@@ -1,0 +1,900 @@
+{
+  "baseline": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+  "rows": [
+    {
+      "case": "known.bend",
+      "source_sha256": "9dea9ef2b4be16c23f9275b8b2b749e96746aed6acb5c31e2da8445f8e46828d",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/known.bend",
+        "$EVIDENCE/before-18e6fd9d39fb2772.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14341209499980323,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "known.bend",
+      "source_sha256": "9dea9ef2b4be16c23f9275b8b2b749e96746aed6acb5c31e2da8445f8e46828d",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/known.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.256494766974356
+    },
+    {
+      "case": "replay.bend",
+      "source_sha256": "a678d6cdaa1dffdfe658d689c7eaf4ecd9974e21b4fd62e9ef984f0e880996c7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/replay.bend",
+        "$EVIDENCE/before-d1cb990ea3b3e44f.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1361984490067698,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "replay.bend",
+      "source_sha256": "a678d6cdaa1dffdfe658d689c7eaf4ecd9974e21b4fd62e9ef984f0e880996c7",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/replay.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2570642560021952
+    },
+    {
+      "case": "raw_fallback.bend",
+      "source_sha256": "4f2ace1c5c4070adbedcca198618b7e1c756a12a17894d23a19518b7b14f9170",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/raw_fallback.bend",
+        "$EVIDENCE/before-07bdefdff5e2f641.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.13018199600628577,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "raw_fallback.bend",
+      "source_sha256": "4f2ace1c5c4070adbedcca198618b7e1c756a12a17894d23a19518b7b14f9170",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/raw_fallback.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.257629789004568
+    },
+    {
+      "case": "known_precedence.bend",
+      "source_sha256": "a0289c6af38dee1be6f08fff741cb8562add9c0610f2628597c7e3ae3e33e7a7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/known_precedence.bend",
+        "$EVIDENCE/before-6d0cdca6b1f02e58.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14688333799131215,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "known_precedence.bend",
+      "source_sha256": "a0289c6af38dee1be6f08fff741cb8562add9c0610f2628597c7e3ae3e33e7a7",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/known_precedence.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 307,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24447902699466795
+    },
+    {
+      "case": "ordinary.bend",
+      "source_sha256": "b1991dee46b6760ee226ab2e23061bee85cf8a6b8ea45e76000d4b569be658d8",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/ordinary.bend",
+        "$EVIDENCE/before-79c4c949bb15d222.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.14068682500510477,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "ordinary.bend",
+      "source_sha256": "b1991dee46b6760ee226ab2e23061bee85cf8a6b8ea45e76000d4b569be658d8",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/ordinary.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.2457533740089275
+    },
+    {
+      "case": "nested.bend",
+      "source_sha256": "49c6cd90a77717192a1800cc57a8fc4d3df742d8fb441d45a2ae2a13ae1a6753",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/nested.bend",
+        "$EVIDENCE/before-f58cf52e7bb51934.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1301668630039785,
+      "phase": {
+        "phase": "accepted",
+        "outcome": "accepted"
+      }
+    },
+    {
+      "case": "nested.bend",
+      "source_sha256": "49c6cd90a77717192a1800cc57a8fc4d3df742d8fb441d45a2ae2a13ae1a6753",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/nested.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 308,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.24815557300462388
+    },
+    {
+      "case": "negative/bare.bend",
+      "source_sha256": "299eaa529a966f0565c8e355122e37a01d149e4234231db3d42df6b25415a622",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/bare.bend",
+        "$EVIDENCE/before-99c7e55c2dbd43d6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> U32: missing(~9)\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09671003997209482,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/bare.bend",
+      "source_sha256": "299eaa529a966f0565c8e355122e37a01d149e4234231db3d42df6b25415a622",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/bare.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/bare.bend:3:28: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12446283499593846
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "645f09f58ac38af38825a89848aa67981b0c6a9b9585118d643e697e235c0ac1",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/imported.bend",
+        "$EVIDENCE/before-d7077e5c2bdeb0eb.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | # Failure belongs to this imported source.\n4>| def broken() -> U32: missing(~9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.10683506799978204,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/imported.bend",
+      "source_sha256": "645f09f58ac38af38825a89848aa67981b0c6a9b9585118d643e697e235c0ac1",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/../imports/broken.bend:4:30: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1292072240030393
+    },
+    {
+      "case": "negative/late_marker.bend",
+      "source_sha256": "7384b75513d629cb249937ec525e1b19db1cd1caeec2e2c76576eb25a9efd70e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/late_marker.bend",
+        "$EVIDENCE/before-d06021cf82243e0f.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def main() -> U32: D.pick(~9, 3, ~2)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.090742393018445,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/late_marker.bend",
+      "source_sha256": "7384b75513d629cb249937ec525e1b19db1cd1caeec2e2c76576eb25a9efd70e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/late_marker.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/late_marker.bend:4:34: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12719385800301097
+    },
+    {
+      "case": "negative/missing_close.bend",
+      "source_sha256": "588f37f3d7aa4add54ac13f772231a83959168ef8a8ea41f62c80ef41403f8d7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/missing_close.bend",
+        "$EVIDENCE/before-e3604678fdcdf07f.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : end of input\nLocation:\n4 | def main() -> U32: D.pick(~9, 3\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.10606558300787583,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/missing_close.bend",
+      "source_sha256": "588f37f3d7aa4add54ac13f772231a83959168ef8a8ea41f62c80ef41403f8d7",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/missing_close.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : end of input\nLocation:\n4 | def main() -> U32: D.pick(~9, 3\n5>| \n",
+      "timed_out": false,
+      "seconds": 0.1241211669985205
+    },
+    {
+      "case": "negative/missing_member.bend",
+      "source_sha256": "3fe1e0d7414ad2087ec403ca4fea674c30682ccc1e9abecf399c1dea540bb7af",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/missing_member.bend",
+        "$EVIDENCE/before-7fcdf97d91d0d350.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : D.missing\nLocation: main\n3 | \n4>| def main() -> U32: D.missing(9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.13045159698231146,
+      "phase": {
+        "phase": "check",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/missing_member.bend",
+      "source_sha256": "3fe1e0d7414ad2087ec403ca4fea674c30682ccc1e9abecf399c1dea540bb7af",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/missing_member.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a defined name\n- observed : D.missing\nLocation: main\n3 | \n4>| def main() -> U32: D.missing(9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.242543263011612
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "2db9ce6f1d1375d724ab09a29298491dfc5797d2db6e5573abeabeb81ecd471f",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/multiline.bend",
+        "$EVIDENCE/before-c4259654a002b02b.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n6 |   D.missing(\n7>|     ~9)\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.10962125301011838,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/multiline.bend",
+      "source_sha256": "2db9ce6f1d1375d724ab09a29298491dfc5797d2db6e5573abeabeb81ecd471f",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/multiline.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/multiline.bend:7:5: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12406296000699513
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "source_sha256": "fa24c234e4e5d426cf5712df6af08daf23eba6eced92b40b1438d7cae2dbad7e",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/ordinary.bend",
+        "$EVIDENCE/before-88314c853772ea39.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def main() -> U32: D.ordinary(~9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09436883102171123,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/ordinary.bend",
+      "source_sha256": "fa24c234e4e5d426cf5712df6af08daf23eba6eced92b40b1438d7cae2dbad7e",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/ordinary.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/ordinary.bend:4:31: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13659293099772185
+    },
+    {
+      "case": "negative/standalone.bend",
+      "source_sha256": "3bf71398170a298d047fac21ceb0ca069eb48750c250cf6c69edc107847525cf",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/standalone.bend",
+        "$EVIDENCE/before-a166fcb41325236c.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> U32: ~9\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09804045100463554,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/standalone.bend",
+      "source_sha256": "3bf71398170a298d047fac21ceb0ca069eb48750c250cf6c69edc107847525cf",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/standalone.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/standalone.bend:3:20: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12512960901949555
+    },
+    {
+      "case": "negative/template_body.bend",
+      "source_sha256": "19deabd8f5cc978c4f4892bf9af2d3a16d9054953f1694ac8d652e0789494315",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/template_body.bend",
+        "$EVIDENCE/before-27f7a53e393df1dc.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def wrapper(~x: U32) -> U32: D.missing(~x)\n5 | def main() -> U32: wrapper(~9)\n",
+      "timed_out": false,
+      "seconds": 0.11317262498778291,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/template_body.bend",
+      "source_sha256": "19deabd8f5cc978c4f4892bf9af2d3a16d9054953f1694ac8d652e0789494315",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/template_body.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/template_body.bend:4:40: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1284411170054227
+    },
+    {
+      "case": "negative/template_missing.bend",
+      "source_sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/template_missing.bend",
+        "$EVIDENCE/before-e7d6d6750001c83e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n3 | \n4>| def main() -> U32: D.missing(~9)\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.10421347199007869,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/template_missing.bend",
+      "source_sha256": "61b6e9ab5e1eba018c75307b3b18cd8eec2cff4ea3fd09eca22847b7653b22e6",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/negative/template_missing.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/negative/template_missing.bend:4:30: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12239015198429115
+    },
+    {
+      "case": "comptime/err_head.bend",
+      "source_sha256": "de473f77092e9e37bd94cefb79d15c501a2f25c780f081d05e53a1f05eacd9df",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_head.bend",
+        "$EVIDENCE/before-dce4b950b43a156e.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n5 | def main() -> Nat:\n6>|   Nat.add(~1n, 2n)\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.1093024350120686,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_head.bend",
+      "source_sha256": "de473f77092e9e37bd94cefb79d15c501a2f25c780f081d05e53a1f05eacd9df",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_head.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/comptime/err_head.bend:6:11: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12485183498938568
+    },
+    {
+      "case": "comptime/err_later.bend",
+      "source_sha256": "e0e3158738da81de5711beea66b58498204c9da354f97cb73f8608093d23e3a7",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_later.bend",
+        "$EVIDENCE/before-64bc4a982041e66a.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n5 | def main() -> Nat:\n6>|   app(~Nat.add(1n), 3n)\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.12029282300500199,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_later.bend",
+      "source_sha256": "e0e3158738da81de5711beea66b58498204c9da354f97cb73f8608093d23e3a7",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_later.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/comptime/err_later.bend:6:7: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12463502201717347
+    },
+    {
+      "case": "comptime/err_runtime.bend",
+      "source_sha256": "f382d5426f7914778ac6229a360e212a46ea33536861d74afe30273025726f33",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_runtime.bend",
+        "$EVIDENCE/before-0e1c9105b65e9439.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n 8 | def main() -> Nat:\n 9>|   app(~Nat.add(1n), 3n, ~4n)\n10 | \n",
+      "timed_out": false,
+      "seconds": 0.10840475201257505,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "comptime/err_runtime.bend",
+      "source_sha256": "f382d5426f7914778ac6229a360e212a46ea33536861d74afe30273025726f33",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/comptime/err_runtime.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/comptime/err_runtime.bend:9:25: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12324212698149495
+    },
+    {
+      "case": "parse/comp_arrow_position.bend",
+      "source_sha256": "d89649615070aa7b4e2957050e821e7a9613f4e7099424d7e84a0205e66719d9",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$REFERENCE/bend2/bend.ts",
+        "$REPO/tests/fixtures/cpu-unknown-template/parse/comp_arrow_position.bend",
+        "$EVIDENCE/before-0ecd27ccddf86088.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n11 | def f(x):\n12>|   h = {y => y : U32 -~> U32}\n13 |   h(x)\n",
+      "timed_out": false,
+      "seconds": 0.09570664400234818,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "parse/comp_arrow_position.bend",
+      "source_sha256": "d89649615070aa7b4e2957050e821e7a9613f4e7099424d7e84a0205e66719d9",
+      "lane": "port-check",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "check",
+        "$REPO/tests/fixtures/cpu-unknown-template/parse/comp_arrow_position.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-unknown-template/parse/comp_arrow_position.bend:12:22: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1224965559958946
+    }
+  ],
+  "completed": true,
+  "actual_baseline_snapshot": {
+    "source_commit": "4b868cfd9e5b9d5d0ab1c2d66b5fa7647e6684ed",
+    "source_tree": "7c627d377beb358028c141eccf8505bd5af3d621",
+    "binary_sha256": "234c17ca4742d9c2757d670530f0333a7b558b728db5c0a77259f441a497ed88",
+    "binary_size": 27467912,
+    "working_binary": "$BASELINE_RUN/teamy-bend",
+    "archive": "$BASELINE_EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "cdd1eba246574dcbe285d9a9031899fa4f3e27b44a45956b054ea6a8b8981a7d",
+    "archive_size": 7109796,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "234c17ca4742d9c2757d670530f0333a7b558b728db5c0a77259f441a497ed88"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "identity_note": "Published5e3ce42 is production-identical to captured binary source4b868cf; retain both identities.",
+  "initial_invalid_controls": {
+    "sources": {
+      "imports/defs.bend": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef pick(~x: U32, y: U32) -> U32: x + y\ndef ordinary(x: U32) -> U32: x\n",
+      "replay.bend": "# SPDX-License-Identifier: MPL-2.0\nimport Base\nimport imports/defs.bend as D\ndef main() -> U32: D.pick(~9, 3) + D.pick(~9, 4) + D.pick(~1, 2)\n"
+    },
+    "rows": [
+      {
+        "case": "known.bend",
+        "source_sha256": "9dea9ef2b4be16c23f9275b8b2b749e96746aed6acb5c31e2da8445f8e46828d",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unknown-template/known.bend",
+          "$EVIDENCE/before-18e6fd9d39fb2772.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n3 | \n4>| def main() -> U32: D.pick(~9, 3)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.13241183900390752,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "known.bend",
+        "source_sha256": "9dea9ef2b4be16c23f9275b8b2b749e96746aed6acb5c31e2da8445f8e46828d",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unknown-template/known.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n3 | \n4>| def main() -> U32: D.pick(~9, 3)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.24119172399514355
+      },
+      {
+        "case": "replay.bend",
+        "source_sha256": "baa67c2ad0d4bb47ee8b818ab689647998d046afc0bc56cd6ced1fe0dc3d09be",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unknown-template/replay.bend",
+          "$EVIDENCE/before-d1cb990ea3b3e44f.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n3 | \n4>| def main() -> U32: D.pick(~9, 3) + D.pick(~9, 4) + D.pick(~1, 2)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.12710283999331295,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "replay.bend",
+        "source_sha256": "baa67c2ad0d4bb47ee8b818ab689647998d046afc0bc56cd6ced1fe0dc3d09be",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unknown-template/replay.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n3 | \n4>| def main() -> U32: D.pick(~9, 3) + D.pick(~9, 4) + D.pick(~1, 2)\n5 | \n",
+        "timed_out": false,
+        "seconds": 0.2500405670143664
+      },
+      {
+        "case": "known_precedence.bend",
+        "source_sha256": "a0289c6af38dee1be6f08fff741cb8562add9c0610f2628597c7e3ae3e33e7a7",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unknown-template/known_precedence.bend",
+          "$EVIDENCE/before-6d0cdca6b1f02e58.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n4 | def D.pick(~x: U32, y: U32) -> U32: 99\n5>| def main() -> U32: D.pick(~9, 3)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.14496496098581702,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "known_precedence.bend",
+        "source_sha256": "a0289c6af38dee1be6f08fff741cb8562add9c0610f2628597c7e3ae3e33e7a7",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unknown-template/known_precedence.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n4 | def D.pick(~x: U32, y: U32) -> U32: 99\n5>| def main() -> U32: D.pick(~9, 3)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.24514407201786526
+      },
+      {
+        "case": "nested.bend",
+        "source_sha256": "49c6cd90a77717192a1800cc57a8fc4d3df742d8fb441d45a2ae2a13ae1a6753",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-unknown-template/nested.bend",
+          "$EVIDENCE/before-f58cf52e7bb51934.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n4 | def wrap(~x: U32) -> U32: D.pick(~x, 3)\n5>| def main() -> U32: wrap(~9)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.1454488609742839,
+        "phase": {
+          "phase": "check",
+          "outcome": "language_rejection"
+        }
+      },
+      {
+        "case": "nested.bend",
+        "source_sha256": "49c6cd90a77717192a1800cc57a8fc4d3df742d8fb441d45a2ae2a13ae1a6753",
+        "lane": "port-check",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-unknown-template/nested.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- x : U32\n- y : U32\nLocation: imports/defs.pick~0\n4 | def wrap(~x: U32) -> U32: D.pick(~x, 3)\n5>| def main() -> U32: wrap(~9)\n6 | \n",
+        "timed_out": false,
+        "seconds": 0.24390655898605473
+      }
+    ],
+    "initial_complete_receipt_sha256": "0f363b91b3ba1561e0222d0a949a9244fd1e96833b6e3cb488f743040c76e5c5"
+  }
+}

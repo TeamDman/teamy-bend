@@ -1,0 +1,172 @@
+{
+  "failed_gate": {
+    "source_commit": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 11879821312,
+    "stop_reason": null,
+    "exit": 1,
+    "seconds": 658.5659442160104,
+    "minimum_free": 11847151616,
+    "minimum_tmp_free": 4445065216,
+    "completed_test_totals": {
+      "passed": 764,
+      "failed": 1,
+      "ignored": 48
+    },
+    "completed_groups": 98,
+    "log_sha256": "c1292ad5d6e5683bc99e3a60556a87ebdc596386c4fc44747060510bbdfe8d8e",
+    "remaining_targets": "unrun after first failing target"
+  },
+  "golden_renewal": {
+    "source": "eb65f84a7a194c1a6d8aae39563705a14fe41842",
+    "fixture": "tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+    "source_sha256": "a1b88681cfdda31718a7e3ff9d957ca2970dfc9afbeadb9e8efac8b09b28ee15",
+    "before": "Error: \n   0: \u001b[91mtests/fixtures/cpu-list-for-each/negative/missing-marker.bend:3:43: ~ arguments require a previously declared template head and leading argument position\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+    "after": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+    "rows": [
+      {
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$REFERENCE/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "$RENEWAL_RUN/phase.json"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.10314051201567054
+      },
+      {
+        "lane": "upstream-c",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "-o",
+          "$RENEWAL_RUN/unwritten.c"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.11009434002335183
+      },
+      {
+        "lane": "upstream-js",
+        "command": [
+          "node",
+          "$REFERENCE/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "-o",
+          "$RENEWAL_RUN/unwritten.js"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13461427399306558
+      },
+      {
+        "lane": "run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.14063712398638017
+      },
+      {
+        "lane": "c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.14125709800282493
+      },
+      {
+        "lane": "javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13749125800677575
+      },
+      {
+        "lane": "native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-list-for-each/negative/missing-marker.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RENEWAL_RUN/unwritten"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a term\n- observed : '~'\nLocation:\n2 | \n3>| def main() -> IO(Unit): List.for_each(&2, ~String, ~IO.print, [\"x\"])\n4 | \n",
+        "seconds": 0.13342718497733586
+      }
+    ],
+    "phase": {
+      "phase": "load",
+      "outcome": "language_rejection"
+    },
+    "interpretation": "The full gate found a stale current golden for an intentionally changed tilde diagnostic. Both pinned generators and checker agree exactly with new port rejection. Original and historical stderr receipts remain unchanged; current golden is renewed."
+  },
+  "independent_review": {
+    "reviewer": "review_sharing",
+    "approval": "Justified golden renewal, no weakened assertion",
+    "read_only": true,
+    "golden_sha256": "68115d0a8e1927c03782050438bd33c4a9d419d6201f3446400120a0dbc265e2",
+    "checks": [
+      "New current golden byte-identical to existing upstream golden; old current golden preserved in receipt.",
+      "All7recorded lanes:exit1,emptystdout,identicalstderr,noartifact.",
+      "Test assertions unchanged:complete stderr bytes,status1,emptystdout,nooutput.",
+      "Production unchanged; failedgate remains historical; renewedgate uses separate test/evidencecommit."
+    ]
+  }
+}
