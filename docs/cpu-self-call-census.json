@@ -1,0 +1,763 @@
+{
+  "source": "b8a07c233ab3726d9152f13d465130ef1672bb20",
+  "baseline_source": "ca333c470dd227291ad45ab1b846a633fef730eb",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 354,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "different_rejection": 82,
+    "oracle_or_infrastructure_failure": 6
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 191,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 82
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "diagnostic_only_candidate": 53,
+    "other_rejection_difference": 29
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "flatten/literal_rows_cubic.bend"
+  ],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/cop_circular_witness_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/descent_field_order.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/partial_self_call_stuck.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "flatten/nohalt_error.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/ann_transparency.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/before_type_check.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/distinct_material.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/duplicate_deferred.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/joint_group_spend.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/joint_group_sum.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/literal_reject.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/non_structural_field.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/nsi_material_gate.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/nsi_necessity.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/polymorphic_self_recursion.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/recursive_equality_proof.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/reject_fresh_mint.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/reject_remint_call.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/size_change_accept.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/size_change_reject_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/size_change_reject_001.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/strict_descent.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/swapped_induction.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/threaded_state_before.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/type_level_recursion.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/unguarded_decrement.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "halt/wrong_param_descent.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/cop_circular_witness_000.bend",
+      "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "4ad1563d6584c365438707bbf809b1532026e6f0af53724ec1327b38e4e6b388",
+      "after_stderr_sha256": "cf3072f27e8e3bc0c8ff157c30a665dc6ceb01d58f844895af463503c7d62f8a"
+    },
+    {
+      "fixture": "check/descent_field_order.bend",
+      "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d46a6bbba7a8cbdfb7ccce2ff7017509834594f027c0f3b34c1acf19025dfecc",
+      "after_stderr_sha256": "87594c648ff9d92bf61cb08a2b5d489ecb0a2baca225028e827ddcf26b3d5795"
+    },
+    {
+      "fixture": "check/partial_self_call_stuck.bend",
+      "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "ff8a984330414a3bcd5fafa1ee21e83e8c6f746ee56a3fe30cf21d7504e34131",
+      "after_stderr_sha256": "f62a08a009f27037bd462175dfffb40ee293a3b0ade9ac5fc2d689812c1d677b"
+    },
+    {
+      "fixture": "flatten/literal_rows_cubic.bend",
+      "source_sha256": "27cf900cc11aaf0a52c7906790d4bbf893a251bf8620ec4c5b272362c6f4cc26",
+      "before_classification": "oracle_or_infrastructure_failure",
+      "after_classification": "acceptance_disagreement",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03",
+      "after_stderr_sha256": "0f7e866c6aa6ca76a1829d228257af08f8a3984b4eda328944d0907a21b75e03"
+    },
+    {
+      "fixture": "flatten/nohalt_error.bend",
+      "source_sha256": "e580c651e3dc29c2ebe2cab7615c52d1be124a27809e42b6b01bed6aaaa30242",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "after_stderr_sha256": "7c132e54bfee69f12aa8c9b83de1e7cc354b0871dcbd2583747c61f9a287474b"
+    },
+    {
+      "fixture": "halt/ann_transparency.bend",
+      "source_sha256": "c7b0c579a603f6640029cae0e33efd5bfea143bfcfedbdd804ef63b12d74391a",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "45e5702dcc382c4e01921f46ed72c2242c960faf0fe70773cba9b8e27a70a05b",
+      "after_stderr_sha256": "7086a5316d23bc40b2d2f8c04e5858561839412cde4a4d254905e721542eae36"
+    },
+    {
+      "fixture": "halt/before_type_check.bend",
+      "source_sha256": "e33e7eb2f5cb31b771e3b735cd959217b69e2ab3314be096f6a4434c0e827b7b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "after_stderr_sha256": "ef8bbfed3c0eb4d7e096aae5759146b37bf5e2b3d598fdd9faa08d87c3959914"
+    },
+    {
+      "fixture": "halt/distinct_material.bend",
+      "source_sha256": "f732b97112d2c4a34e97e6a1063afce74d8e3b80c5dc51156d1f8e9bad881a5f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "fbe6d873702f5d2f4ebdb4f5f8cf822bde126861405271d53afcef0c18f717bc",
+      "after_stderr_sha256": "2c696acd0c7dfcf712114b1d638aebd1eb9a13fbac6d7be25aa40865728cfb99"
+    },
+    {
+      "fixture": "halt/duplicate_deferred.bend",
+      "source_sha256": "3393a600eb8c295daecb914e42bffa98b6408181934e6089283cc5e9a7914e9e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "be2fe45709e147f414224e537f51b9f3777e0fe42afb1c729e86afcfc8c4bd0f"
+    },
+    {
+      "fixture": "halt/joint_group_spend.bend",
+      "source_sha256": "276f1bdd3a2c8ebbd886dadeb199f15677104617cd74aaf1ff114dbee073414e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "158c43c6a5a17c019b8f4a61872547b43f6ea7afd4af79b83773f39199e8e96a"
+    },
+    {
+      "fixture": "halt/joint_group_sum.bend",
+      "source_sha256": "3a352de6c5bf876c44bccc13c1753b4ae03c5512c3dd7436fea06d0f1eea6ab8",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "01e605de7500dec88ceca8f07f0742d716ac1cb282b760311e88d7a62cb93372"
+    },
+    {
+      "fixture": "halt/literal_reject.bend",
+      "source_sha256": "7cd1b505c04a048dd7ab5ecde32838b05f81bfd636ee88ca1138950141d7009c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "after_stderr_sha256": "ac0ebe59e304c94b87680910e51795b026580da823ecc65a4579d9d27126b24f"
+    },
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "source_sha256": "94f3bea063702bb45afc86176e79cf49aec92cfb7191687bc96990cf5ee5007e",
+      "before_classification": "different_rejection",
+      "after_classification": "different_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "f51dce1b1ecf560744ab03ffd445c37cf710aa882881909026cb710ec242ef5d",
+      "after_stderr_sha256": "a068a5c6ec36e8a5cf249d0c4648c82447071a93bb0737f09cd3e36dd51d30a6"
+    },
+    {
+      "fixture": "halt/non_structural_field.bend",
+      "source_sha256": "1c85fb402ec82db70e64044cd6b4f4863527f14f70ee90499142c3e9ce381ffd",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "825589bb4d6bb71130f1f2def7086c11bd6c26540372b9fce5afb6112df32d06",
+      "after_stderr_sha256": "e24ddf8e510c10665b1e03118aeb36d21618577a9e29b56005df912efa5b382d"
+    },
+    {
+      "fixture": "halt/nsi_material_gate.bend",
+      "source_sha256": "904fb81f71ac440d79a403317c47bc483c147ce3d64df304e0a5be8b9a3a7fc2",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "a0d86a9e42ec258cf88566b5c5edd7c59424f2a9fa7669b17786fc3e2f323a82"
+    },
+    {
+      "fixture": "halt/nsi_necessity.bend",
+      "source_sha256": "d398168e8f0d12d08818699cdff4338fea4eceb78e5201a87381ec6b4e0e573f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "adfe61fe57d606f4de4a6dc5b38d26a6aa1127d445aab7a4e6c121fc0020bccc"
+    },
+    {
+      "fixture": "halt/polymorphic_self_recursion.bend",
+      "source_sha256": "5ce3bdf4936cda43a4396fcd34d17490f5215fd48866666f1514370bc30bd175",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "ecc08476202b5a50011b9d9a01edc06451b69a7df1d1143e344941bdcd7389e0"
+    },
+    {
+      "fixture": "halt/recursive_equality_proof.bend",
+      "source_sha256": "3f55bf31098edddc01897aefc3e1e3f8bd0ae87eb108067009a1a72249786b3d",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "after_stderr_sha256": "5695c23822ae84dfbca746b88294bde73567d00bf0e8146e5959c1ce19d96e1a"
+    },
+    {
+      "fixture": "halt/reject_fresh_mint.bend",
+      "source_sha256": "762200d4e66f52c567e9c3c40ff045c09e376799bf24612f8c6814c48f732d6c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "80274254e96bb1f5ededff79131c8c237197633e9194fc289ad7dc09bd6e4cf7"
+    },
+    {
+      "fixture": "halt/reject_remint_call.bend",
+      "source_sha256": "da55613cc6577edc703bf22115a589f27877533eade44426d543d7795342ea1e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "after_stderr_sha256": "09e58a329a48c8e6cd12dba729b6a0a63d465d0c73e36932327cdb5061c217a4"
+    },
+    {
+      "fixture": "halt/size_change_accept.bend",
+      "source_sha256": "f9f29be9654a51c90b8c950ab556b075b09cef27822f1f4fb688f67bbcf43a3a",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "0f7692d71d7dc26f056c744e5ac668ce72328cf696214caef582be90fb10e711",
+      "after_stderr_sha256": "0d41d08bfba88d00376528bc92beda3361d1d5fff415f8d1096997088f4e12a5"
+    },
+    {
+      "fixture": "halt/size_change_reject_000.bend",
+      "source_sha256": "055d45770733992778b3104618a32a707e4366891565466923e73b77dfe28493",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "e5df7db47a98f09a63cc037d0468d7b5cec2e45dea71dffe5111caa60fdaa9d4",
+      "after_stderr_sha256": "99cc9e067d2968cd86091595b9459dfaddb133cf91520e7cd6d91f3467844b73"
+    },
+    {
+      "fixture": "halt/size_change_reject_001.bend",
+      "source_sha256": "20750535a7743f02a18d47dbc3c0db1fe9187b6af0d298613eb9e3ebc127c38d",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "c776e0fcbb9b78c4164d94e40da9fdfd5d42b3b8a0cd9b2ab51a4bb862d7ddbe",
+      "after_stderr_sha256": "038e3ef94738efde53205a9d507df9291f6c75438177f4ab0870f65e3ce0eafa"
+    },
+    {
+      "fixture": "halt/strict_descent.bend",
+      "source_sha256": "07c8c64bb06a7e01be864fe71f5e3e05e0556dd585f371059da18b4b6ab3dcf1",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "fb6906237e7d551d26c35043c5686a710f43c21380a2d62425a422f16cfbcd44",
+      "after_stderr_sha256": "2942630afd1ad20e17e96baf29d0257901cc67bc233b415773dadaa5b2a217f0"
+    },
+    {
+      "fixture": "halt/swapped_induction.bend",
+      "source_sha256": "af7f1a0d2e85e6b45f7af95bcdf1335b4fee0826182939cc8ec07b988dc523ea",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "960b03d9a4dfb9d87e0f401d9f83ff398a9360ad3939f0bfdaa326df18965efd",
+      "after_stderr_sha256": "21fae2a8b6b0c4cbcc0e7c2c85fcffd447f8ea05e9412f8b4f745b1f78dcb976"
+    },
+    {
+      "fixture": "halt/threaded_state_before.bend",
+      "source_sha256": "bbc779e09295f3b147ba74ac4d9771408c44ac7387ff5440f28950eb8f22879b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "e5df7db47a98f09a63cc037d0468d7b5cec2e45dea71dffe5111caa60fdaa9d4",
+      "after_stderr_sha256": "988ae7b27aa09cbf34f625d0f6ac9f116945c0d302266b6665a5483891c91af4"
+    },
+    {
+      "fixture": "halt/type_level_recursion.bend",
+      "source_sha256": "2cbb1f973d8138cfa91b927f24854b886e39daa1d311cebbf6a8805a195cc02c",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "b2153cc9ee377ced06a4859ee3702f2df7ceb5712555bf83506f65762ef154d1",
+      "after_stderr_sha256": "4f12811d654b4570bf003d8c996220e11fc6dd390feafc034773f3f5afed9263"
+    },
+    {
+      "fixture": "halt/unguarded_decrement.bend",
+      "source_sha256": "be7bd6fd9e7a1c5a5739bac66aced4ce9f43f68df0caddc33b0829c04eebdf7f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "after_stderr_sha256": "cb9661a4e555584df5cd164a1b6977ba393ba861b4b2c27f4ac0adea1ebcedc2"
+    },
+    {
+      "fixture": "halt/wrong_param_descent.bend",
+      "source_sha256": "76f748aab209fe5d2179e0f7872a81402a76a5389b21ae244889cfd5276317ba",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "after_stderr_sha256": "a27e80787b985b9dda063a837af6d46e38155739a2bf205baa8f688bf3967851"
+    }
+  ],
+  "raw_observations_sha256": "8d7599f5ad88274391015ad73a9a3f33c144052c74d412f27a8078da71142e4b",
+  "baseline_raw_sha256": "40ed556e3bf6fd7ac9d5ff837641aca8559c2948cc54b69080fd81768171c935",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "self_call_diagnostic_changes": [
+    {
+      "fixture": "check/cop_circular_witness_000.bend",
+      "before_stderr_sha256": "4ad1563d6584c365438707bbf809b1532026e6f0af53724ec1327b38e4e6b388",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "check/descent_field_order.bend",
+      "before_stderr_sha256": "d46a6bbba7a8cbdfb7ccce2ff7017509834594f027c0f3b34c1acf19025dfecc",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "check/partial_self_call_stuck.bend",
+      "before_stderr_sha256": "ff8a984330414a3bcd5fafa1ee21e83e8c6f746ee56a3fe30cf21d7504e34131",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "flatten/nohalt_error.bend",
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n25 |     case Tx4{}:\n26>|       bad(flip(Tx4{}))\n27 |     case Fx4{}:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n25 |     case Tx4{}:\n26>|       bad(flip(Tx4{}))\n27 |     case Fx4{}:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/ann_transparency.bend",
+      "before_stderr_sha256": "45e5702dcc382c4e01921f46ed72c2242c960faf0fe70773cba9b8e27a70a05b",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : head9\nContext:\n- p : Nat\n- x : U32\nLocation: head9\n15 |     case Succ{p}:\n16>|       (1 + {{head9 : Nat -> U32 -> U32}({p : Nat}) : U32 -> U32}({x : U32}) : U32)\n17 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : head9\nContext:\n- p : Nat\n- x : U32\nLocation: head9\n15 |     case Succ{p}:\n16>|       (1 + {{head9 : Nat -> U32 -> U32}({p : Nat}) : U32 -> U32}({x : U32}) : U32)\n17 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/before_type_check.bend",
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n10 | \n11>| def bad(): bad(0n)\n12 | law main:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n10 | \n11>| def bad(): bad(0n)\n12 | law main:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/distinct_material.bend",
+      "before_stderr_sha256": "fbe6d873702f5d2f4ebdb4f5f8cf822bde126861405271d53afcef0c18f717bc",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wnf\nContext:\n- bod : @_:Term -> Term\n- a2  : Term\nLocation: wnf\n18 |     case Cal{Lam{bod}, a2}:\n19>|       wnf(bod(a2))\n20 |     case Cal{f, a2}:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wnf\nContext:\n- bod : @_:Term -> Term\n- a2  : Term\nLocation: wnf\n18 |     case Cal{Lam{bod}, a2}:\n19>|       wnf(bod(a2))\n20 |     case Cal{f, a2}:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/duplicate_deferred.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> @_:T -> T\n- x : T\nLocation: loop\n17 |     case C{f}:\n18>|       D{x => loop(f(x, x))}\n19 |     case t:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> @_:T -> T\n- x : T\nLocation: loop\n17 |     case C{f}:\n18>|       D{x => loop(f(x, x))}\n19 |     case t:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/joint_group_spend.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : @_:T9j -> T9j\n- b : T9j\nLocation: loop\n29 |     case P9{a, b}:\n30>|       loop(a(b))\n31 |     case w:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : @_:T9j -> T9j\n- b : T9j\nLocation: loop\n29 |     case P9{a, b}:\n30>|       loop(a(b))\n31 |     case w:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/joint_group_sum.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : T\n- x : T\n- b : T\nLocation: loop\n37 |     case More{x}:\n38>|       loop(x, grow(a, More{Z{}}, b), Z{})\n39 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : T\n- x : T\n- b : T\nLocation: loop\n37 |     case More{x}:\n38>|       loop(x, grow(a, More{Z{}}, b), Z{})\n39 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/literal_reject.bend",
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nLocation: f\n13 |     case 5n:\n14>|       f(7n)\n15 |     case p:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nLocation: f\n13 |     case 5n:\n14>|       f(7n)\n15 |     case p:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/non_structural_descent.bend",
+      "before_stderr_sha256": "f51dce1b1ecf560744ab03ffd445c37cf710aa882881909026cb710ec242ef5d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat - [Zero]\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : fold\nContext:\n- n : Nat<> - Zero{}\nLocation: fold\n31 |     case n:\n32>|       1n+ fold(ndiv(n, 2n))\n33 | \n",
+      "classification": "different_rejection"
+    },
+    {
+      "fixture": "halt/non_structural_field.bend",
+      "before_stderr_sha256": "825589bb4d6bb71130f1f2def7086c11bd6c26540372b9fce5afb6112df32d06",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : rec\nContext:\n- g : @_:Nat -> Ord\nLocation: rec\n17 |     case Sup{g}:\n18>|       rec(g(0n))\n19 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : rec\nContext:\n- g : @_:Nat -> Ord\nLocation: rec\n17 |     case Sup{g}:\n18>|       rec(g(0n))\n19 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/nsi_material_gate.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\n- y : T\nLocation: loop\n23 |     case C{f}:\n24>|       apply1(y => loop(f(y)), C{z => z})\n25 |     case t:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\n- y : T\nLocation: loop\n23 |     case C{f}:\n24>|       apply1(y => loop(f(y)), C{z => z})\n25 |     case t:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/nsi_necessity.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : @_:T -> T\n- b : T\nLocation: loop\n22 |     case P{a, b}:\n23>|       loop(a(b))\n24 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : @_:T -> T\n- b : T\nLocation: loop\n22 |     case P{a, b}:\n23>|       loop(a(b))\n24 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/polymorphic_self_recursion.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : Type\nLocation: loop\n 9 | \n10>| def loop(): a => loop(a)\n11 | law main:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- a : Type\nLocation: loop\n 9 | \n10>| def loop(): a => loop(a)\n11 | law main:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/recursive_equality_proof.bend",
+      "before_stderr_sha256": "3636baea7b8a64c682a41cb4331592b16b77a657b2c048e4083ed3976f51ac1f",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n12 | \n13>| def bad(): bad\n14 | law main:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad\nLocation: bad\n12 | \n13>| def bad(): bad\n14 | law main:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/reject_fresh_mint.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\nLocation: loop\n15 |     case C{f}:\n16>|       loop(f(C{y => y}))\n17 |     case t:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\nLocation: loop\n15 |     case C{f}:\n16>|       loop(f(C{y => y}))\n17 |     case t:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/reject_remint_call.bend",
+      "before_stderr_sha256": "d28e430dc616c1fcb1b2a7703f8b6cffd46708be48f5f4ac7bc8db84ee6b4a9d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\nLocation: loop\n22 |     case C{f}:\n23>|       loop(f(grow(N{})))\n24 |     case t:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- f : @_:T -> T\nLocation: loop\n22 |     case C{f}:\n23>|       loop(f(grow(N{})))\n24 |     case t:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/size_change_accept.bend",
+      "before_stderr_sha256": "0f7692d71d7dc26f056c744e5ac668ce72328cf696214caef582be90fb10e711",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : interleave\nContext:\n- h  : U32\n- t  : List<&2, U32>\n- ys : List<&2, U32>\nLocation: interleave\n15 |     case h <> t:\n16>|       h <> interleave(ys, t)\n17 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : interleave\nContext:\n- h  : U32\n- t  : List<&2, U32>\n- ys : List<&2, U32>\nLocation: interleave\n15 |     case h <> t:\n16>|       h <> interleave(ys, t)\n17 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/size_change_reject_000.bend",
+      "before_stderr_sha256": "e5df7db47a98f09a63cc037d0468d7b5cec2e45dea71dffe5111caa60fdaa9d4",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : go\nContext:\n- q : N\nLocation: go\n23 |         case S{q}:\n24>|           go(S{Z{}}, q)\n25 |     case S{p}:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : go\nContext:\n- q : N\nLocation: go\n23 |         case S{q}:\n24>|           go(S{Z{}}, q)\n25 |     case S{p}:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/size_change_reject_001.bend",
+      "before_stderr_sha256": "c776e0fcbb9b78c4164d94e40da9fdfd5d42b3b8a0cd9b2ab51a4bb862d7ddbe",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : sw\nContext:\n- p : N\n- b : N\nLocation: sw\n18 |     case S{p}:\n19>|       sw(b, S{p})\n20 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : sw\nContext:\n- p : N\n- b : N\nLocation: sw\n18 |     case S{p}:\n19>|       sw(b, S{p})\n20 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/strict_descent.bend",
+      "before_stderr_sha256": "fb6906237e7d551d26c35043c5686a710f43c21380a2d62425a422f16cfbcd44",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : mk\nContext:\n- f : @_:Ord -> Ord\n- x : Ord\nLocation: mk\n15 |     case Sup{f}:\n16>|       Sup{x => mk(x)}\n17 |     case u:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : mk\nContext:\n- f : @_:Ord -> Ord\n- x : Ord\nLocation: mk\n15 |     case Sup{f}:\n16>|       Sup{x => mk(x)}\n17 |     case u:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/swapped_induction.bend",
+      "before_stderr_sha256": "960b03d9a4dfb9d87e0f401d9f83ff398a9360ad3939f0bfdaa326df18965efd",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : swapped\nContext:\n- b : N\nLocation: swapped\n31 |     case Z{}:\n32>|       swapped(b, Z{})\n33 |     case S{p}:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : swapped\nContext:\n- b : N\nLocation: swapped\n31 |     case Z{}:\n32>|       swapped(b, Z{})\n33 |     case S{p}:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/threaded_state_before.bend",
+      "before_stderr_sha256": "e5df7db47a98f09a63cc037d0468d7b5cec2e45dea71dffe5111caa60fdaa9d4",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : go\nContext:\n- acc : U32\n- p   : Nat\nLocation: go\n16 |     case Succ{p}:\n17>|       go((acc + 1 : U32), p)\n18 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : go\nContext:\n- acc : U32\n- p   : Nat\nLocation: go\n16 |     case Succ{p}:\n17>|       go((acc + 1 : U32), p)\n18 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/type_level_recursion.bend",
+      "before_stderr_sha256": "b2153cc9ee377ced06a4859ee3702f2df7ceb5712555bf83506f65762ef154d1",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : a\nLocation: a\n 9 | \n10>| def a(): a\n11 | law main:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : a\nLocation: a\n 9 | \n10>| def a(): a\n11 | law main:\n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/unguarded_decrement.bend",
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nContext:\n- d : Nat\nLocation: f\n11 | def f(d):\n12>|   f(Nat.sub(d, 1n))\n13 | \n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nContext:\n- d : Nat\nLocation: f\n11 | def f(d):\n12>|   f(Nat.sub(d, 1n))\n13 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "halt/wrong_param_descent.bend",
+      "before_stderr_sha256": "8f2a9f22b8539d277666e5bbd0590a84db6dd7609079afd2ff0595796974cd6d",
+      "before_internal_message": "recursive self-call must decrease structurally, left to right",
+      "after_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nContext:\n- y : Nat\nLocation: f\n19 |     case 1n:\n20>|       f(1n, Nat.sub(y, 1n))\n21 |     case p:\n",
+      "upstream_stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : f\nContext:\n- y : Nat\nLocation: f\n19 |     case 1n:\n20>|       f(1n, Nat.sub(y, 1n))\n21 |     case p:\n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "unexpected_port_stream_changes": []
+}

@@ -1,0 +1,41 @@
+{
+  "tested_source": "b8a07c233ab3726d9152f13d465130ef1672bb20",
+  "rows": [
+    {
+      "fixture": "check/family_head_bare.bend",
+      "source_sha256": "62287adba3a427970fab1c9b8ea79664afff4445995fc111cad27c150cff2087",
+      "classification": "different_rejection",
+      "port_phase": "check",
+      "upstream_phase": "check",
+      "port_exit": 1,
+      "upstream_exit": 1,
+      "port_stderr": "Error: \n   0: \u001b[91mbare: a parameterized datatype needs <...> arguments\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m38\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "upstream_stderr": "Error:\n- expected : a family instance (write List<..>)\n- observed : List\nLocation: bare\n10 | def bare():\n11>|   List\n12 | \n",
+      "scope": "demonstrated diagnostic gap"
+    },
+    {
+      "fixture": "check/data_tuple_family.bend",
+      "source_sha256": "18b2d553b0832afe2afb130ae42dbddff0bac24a5b35bf6455ef86cc406bd23d",
+      "classification": "acceptance_disagreement",
+      "port_phase": "check",
+      "upstream_phase": "accepted",
+      "port_exit": 1,
+      "upstream_exit": 0,
+      "port_stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n30 | law main:\n31>|   IO(Unit)\n32 | \n",
+      "upstream_stderr": "",
+      "scope": "upstream accepts; strict port excludes IO; not a family-head diagnostic gap"
+    },
+    {
+      "fixture": "check/data_family_alias.bend",
+      "source_sha256": "6a8317feba627003e10da58189bd23a5a092def8dbbd5ff02226cdf72db78687",
+      "classification": "acceptance_disagreement",
+      "port_phase": "check",
+      "upstream_phase": "accepted",
+      "port_exit": 1,
+      "upstream_exit": 0,
+      "port_stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n79 | law main:\n80>|   IO(Unit)\n81 | \n",
+      "upstream_stderr": "",
+      "scope": "upstream accepts; strict port excludes IO; not a family-head diagnostic gap"
+    }
+  ]
+}

@@ -2472,3 +2472,12 @@ family: self-call refusal diagnostics for cop_circular_witness_000, descent_fiel
 and partial_self_call_stuck, preserving all descent guards. Inputs/toolchains/limits
 and disk floors remain frozen. Compact evidence is in Git; bulk raw logs/binaries
 remain local. No desktop/GPU, installation, main merge or release.
+
+
+## Self-call refusal diagnostic checkpoint
+
+Tested `b8a07c233ab3726d9152f13d465130ef1672bb20` attaches bounded source diagnostics only after the existing structural self-call refusal. Rejection, descent field/column ordering, sharing, demand, internal errors and limits are unchanged. Three unchanged negative originals plus four authored cases pass 126 exact streams + 42 phase probes; one unchanged positive and two authored controls pass 78 observations including 24 C-O3/JS executions. Native pure observations are normalization. [Report and exact commands](cpu-self-call-diagnostics.md).
+
+Full gate **1,201 / 0 / 49**, focused unit 1 pass and integration 5 pass, targeted Clippy pass. All port statuses/phases and all but 28 stderr streams remain unchanged in the 1,302-fixture census. Current counts: 366 both accept / 354 exact reject / 494 acceptance disagreements / 82 different rejections / 6 host-stack failures. Of 28 changed diagnostics, 27 are exact; halt/non_structural_descent context-type printing remains non-exact. Historical 385 IO members renew exactly; residual **191** outside that cohort (109 acceptance disagreements and 82 different rejections). Oracle transitions remain separate from port fixes; older instabilities stay unwaived. [Current reconciliation](cpu-self-call-census.json).
+
+Original linkage 457/1,302; 845 unlinked by applicability, not 845 missing runtime tests. Nat-first pending, compact lowering unadopted, external invoke audit outstanding; earlier hole/resource/host/foreign/F32.read/lint gaps remain. Next independent gap: excluded-constructor context printing, with bare family-head diagnostics as an independent alternative, preserving rejection. Frozen dependencies/toolchains/references/limits and disk floors unchanged. Compact evidence is in Git; raw streams/binaries remain local. No install, desktop/GPU, main merge or release.

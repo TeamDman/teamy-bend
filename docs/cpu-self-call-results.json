@@ -1,0 +1,2655 @@
+{
+  "tested_source": "b8a07c233ab3726d9152f13d465130ef1672bb20",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "47e15022f26ccad3eaaef50b32da0751155ffa1ba15709cfad9c4d06fd36aaf5",
+  "completed": true,
+  "full_parity": false,
+  "timeout_seconds": 30,
+  "negative": {
+    "exact_stream_observations": 126,
+    "separate_phase_probes": 42,
+    "rows": [
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.2163675619813148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.5236423999886028,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.5970348020200618,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.6735949650174007,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.42298476299038157,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.6070205370197073,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.379297860985389,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.38389241602271795,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "source_sha256": "d5a9f72c235a1f633d1b6f49b2cdb74c93bbbb594f8dea2f133059457bb52e15",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/cop_circular_witness_000.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n",
+        "timed_out": false,
+        "seconds": 0.5311460980155971,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.4056824620056432,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.48965445000794716,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.3265659830067307,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.622128639020957,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.4637798979820218,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.5877585739945062,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.5658461549901403,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.44094787500216626,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "source_sha256": "a3e5136595aa47bd9fc17e8568f5abaaa7d19051b8605f3579f1375caef49195",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/descent_field_order.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n",
+        "timed_out": false,
+        "seconds": 0.5135875300038606,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.3606192890147213,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.33003062699572183,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.31730149302165955,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.5109231990063563,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.32400135399075225,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.3791491439915262,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.4340000840020366,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.4854900539794471,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "source_sha256": "30792970bef165250e1c9fd25eedb14ccb70f25d4712bf09fbafa7285559d064",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call_stuck.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n",
+        "timed_out": false,
+        "seconds": 0.3779109500173945,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.22847364799235947,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.23296181502519175,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.20202594401780516,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.011218533996725455,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.03578476398251951,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.022705148992827162,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.02840035400004126,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.04045378099544905,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/bare.bend",
+        "source_sha256": "a21b6bc893d574f76ed7001dab4108c17438f58b9be7639e0916872d3500ef3a",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/bare.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n",
+        "timed_out": false,
+        "seconds": 0.016094639984657988,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.16894901401246898,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.21796921800705604,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.2055840360117145,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.01175540400436148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.01233850300195627,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.02732328898855485,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.01113997702486813,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.007479513005819172,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "source_sha256": "e6f71b80a66627d5804419154ca2084bdd98c58738633daa6728062fbd83e02d",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/unchanged.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   loop(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.015045906009618193,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.28684982197592035,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.21770684700459242,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.22971080598654225,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.035809727996820584,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.027114564989460632,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.025957881996873766,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.03656741700251587,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.015194547013379633,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "source_sha256": "2e5467d07a621b4494d20d15a8da68ad1b376e891c25fd6782d61c1bd3f1f92c",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/reconstructed.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n",
+        "timed_out": false,
+        "seconds": 0.018564846977824345,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.2633561179973185,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.c"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.2239831869956106,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend",
+          "-o",
+          "$RUN/negative-matrix/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.24060541699873284,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.013576636993093416,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-eval",
+        "command": [
+          "$RUN/teamy-bend",
+          "eval",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.030698687012773007,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-run",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.014306844997918233,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.01868785300757736,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-javascript",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.019363939005415887,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "source_sha256": "009306773b4789c4676fad15265bc9a564de9f582c4a218718631bc6c6b09f4b",
+        "lane": "port-native",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/controls/imported/main.bend",
+          "--executable",
+          "--target",
+          "native",
+          "--output",
+          "$RUN/negative-matrix/unwritten"
+        ],
+        "rep": 1,
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n",
+        "timed_out": false,
+        "seconds": 0.007330722000915557,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/cop_circular_witness_000.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/descent_field_order.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call_stuck.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/bare.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/unchanged.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/reconstructed.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 1,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "outcome": "language_rejection"
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-strict",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      },
+      {
+        "case": "controls/imported/main.bend",
+        "lane": "port-executable",
+        "rep": 2,
+        "exit": 1,
+        "phase": "check",
+        "stderr": ""
+      }
+    ],
+    "raw_sha256": "bc580b202bb87fbacce6b23d7c4610266197e993e1bc92308bbcead0d95cdb2e"
+  },
+  "positive": {
+    "observations": 78,
+    "lane_counts": {
+      "port-pure-normalization": 6,
+      "upstream-pure-normalization": 6,
+      "upstream-check": 6,
+      "strict-phase": 6,
+      "executable-phase": 6,
+      "strict-check": 6,
+      "upstream-generate-c": 3,
+      "upstream-build-O3": 3,
+      "upstream-generate-js": 3,
+      "port-generate-c": 3,
+      "port-build-O3": 3,
+      "port-generate-js": 3,
+      "upstream-C-O3": 6,
+      "upstream-JS": 6,
+      "port-C-O3": 6,
+      "port-JS": 6
+    },
+    "rows": [
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8218005929957144,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3089816639840137,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "$RUN/positive-matrix/check/partial_self_call/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4498324529849924,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24378912500105798,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3773616010148544,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 27\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.49852499799453653,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "-o",
+          "$RUN/positive-matrix/check/partial_self_call/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.35906776701449417,
+        "artifact_sha256": "2eb6f0067c9359a23d126166cea1658a9b1ec9040f7b32391e2e2c5270510b37"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/check/partial_self_call/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/check/partial_self_call/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.21602367202285677,
+        "artifact_sha256": "d36dda9b1754ad225bc71d34b36139dd4c294446169885e49dad5eaea01090ec"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "-o",
+          "$RUN/positive-matrix/check/partial_self_call/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.417052414995851,
+        "artifact_sha256": "9c2f885670ccbc80aa49ac2219e045fba31214134998f49496df458e1bd212fc"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/check/partial_self_call/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/check/partial_self_call/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 195148,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5830286440032069,
+        "artifact_sha256": "314855da985429dcd2513a067b896833e8de14cd9d543d710f428f2c648e49ed"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/check/partial_self_call/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/check/partial_self_call/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7298476340074558,
+        "artifact_sha256": "21628d3a6abd35a49a70625baa0d3116d129698dbc96a817419180e477462eb6"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/check/partial_self_call.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/check/partial_self_call/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/check/partial_self_call/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53210,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5873062959872186,
+        "artifact_sha256": "43fa1fb76715c6c1f9a64d0af6f0cce0ada4ef585dd8a1ffde064d2298a19f47"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/check/partial_self_call/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0030748010030947626,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/check/partial_self_call/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06760435699834488,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/check/partial_self_call/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0033115629921667278,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "source_sha256": "8b9d63566fee0263f628881dab4ced229b43912ac61459cd9050cc656b62c8a8",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/check/partial_self_call/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "1n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06730180201702751,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.8324825130112004,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3298597579996567,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "$RUN/positive-matrix/positive/alias/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37682068400317803,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22111832097289152,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.3140796010266058,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4538195060158614,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/alias/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.45270684600109234,
+        "artifact_sha256": "fb159cca916bceb9fbf2bd07d7d4c83d7f3f76e173f63968f2cf7065c045cb70"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/alias/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/alias/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.22027162200538442,
+        "artifact_sha256": "62cca78d3cff9499e857848e9d90532ef4bce179c1db088a6c456b8fe2dadca4"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/alias/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.44729379200725816,
+        "artifact_sha256": "f9abc60a14ac07a0aa2c9ca11c7f5c5d9081041ce6369551db6f1d89bb849b22"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/alias/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/alias/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186361,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5595730610075407,
+        "artifact_sha256": "13d8902609e42931bf6d6481b6d5c597713068ddc68599d68690f2f8e03f1e76"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/alias/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/alias/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6141239580174442,
+        "artifact_sha256": "bfe26bc8e4a231ec8a1ba791f08a381385703f8637e0320683adee64901331a1"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/positive/alias.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/alias/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/alias/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53408,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.7538347569934558,
+        "artifact_sha256": "8e210404db513c3b539cb3a7ac66d9500b573cce27cb9c7a6df7d42b0b6e9619"
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/alias/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0020811200083699077,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/alias/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.03971999400528148,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/alias/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.005691739992471412,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/alias.bend",
+        "source_sha256": "313c58bd57c66bad2324f234bed84977da1622f30943a4790c3802e68effcfaf",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/alias/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "7n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.06301307401736267,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-pure-normalization",
+        "command": [
+          "$RUN/teamy-bend",
+          "run",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.9894923200190533,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-pure-normalization",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4308639339869842,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-check",
+        "command": [
+          "node",
+          "$REPO/scripts/checking-census/upstream.mjs",
+          "$UPSTREAM/bend2/bend.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "$RUN/positive-matrix/positive/columns/phase-1.json"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.349111735005863,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "strict-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24308410700177774,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "executable-phase",
+        "command": [
+          "$EVIDENCE/phase-probe",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "--executable"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "accepted\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.521505328011699,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "strict-check",
+        "command": [
+          "$RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4865273809991777,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-generate-c",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/columns/upstream.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4488491659867577,
+        "artifact_sha256": "bc28a7d9594c328384f4e7d6b069aaa1d2eccfe44ca809fcff4e911c4a71c663"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "$RUN/positive-matrix/positive/columns/upstream.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/columns/upstream.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.24888977999216877,
+        "artifact_sha256": "12781e604a72dffa6354b7066863d5cf10474c24ee5b1e13907b861b157b8ab5"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-generate-js",
+        "command": [
+          "node",
+          "$UPSTREAM/bend2/main.ts",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "-o",
+          "$RUN/positive-matrix/positive/columns/upstream.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.37470288400072604,
+        "artifact_sha256": "115cee94dc5cce567799eaec6603fa1112564b1a664f9884a10cd817b25e89fa"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-generate-c",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$RUN/positive-matrix/positive/columns/port.c"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/columns/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186478,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.5546294729865622,
+        "artifact_sha256": "48aa754f7e6c8533786f463e613682ee557f79640d19d3375f4de755d8a91e5d"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-build-O3",
+        "command": [
+          "$TEAMY_BEND_CC",
+          "-std=c11",
+          "-O3",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "$RUN/positive-matrix/positive/columns/port.c",
+          "-lpthread",
+          "-lm",
+          "-o",
+          "$RUN/positive-matrix/positive/columns/port.bin"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.6338557630078867,
+        "artifact_sha256": "f9e02a9139fce85e109decc6f4cc657c418926d6346f1dab18571789aa5139dd"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-generate-js",
+        "command": [
+          "$RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-self-call/positive/columns.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$RUN/positive-matrix/positive/columns/port.js"
+        ],
+        "rep": 0,
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/columns/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 53211,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.4665539319976233,
+        "artifact_sha256": "327e32871ab15206e53046ca91d55a08ce49eade33098db8ac94b3bda0959753"
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/columns/upstream.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.0020198389829602093,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "upstream-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/columns/upstream.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.042580075009027496,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-C-O3",
+        "command": [
+          "$RUN/positive-matrix/positive/columns/port.bin",
+          "--threads",
+          "1",
+          "--gpu",
+          "off"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.005170824006199837,
+        "equal_repetitions": 2
+      },
+      {
+        "case": "positive/columns.bend",
+        "source_sha256": "5d5aa2a1555ecd42d5ea1021b21ab31639205279599017cae3b65496aaa4e84a",
+        "lane": "port-JS",
+        "command": [
+          "node",
+          "$RUN/positive-matrix/positive/columns/port.js"
+        ],
+        "rep": 1,
+        "exit": 0,
+        "stdout": "2n\n",
+        "stderr": "",
+        "timed_out": false,
+        "seconds": 0.04445296499761753,
+        "equal_repetitions": 2
+      }
+    ],
+    "phases": [
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "check/partial_self_call.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/alias.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "upstream",
+        "rep": 1,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "strict",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "executable",
+        "rep": 1,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "upstream",
+        "rep": 2,
+        "phase": "accepted",
+        "outcome": "accepted"
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "strict",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      },
+      {
+        "case": "positive/columns.bend",
+        "lane": "executable",
+        "rep": 2,
+        "phase": "accepted",
+        "exit": 0,
+        "stderr": ""
+      }
+    ],
+    "phases_already_in_command_count": true,
+    "raw_sha256": "179acf0872c4568996389b5dd190f1324040c54a7c0293a1164d0ffe15d757e1"
+  },
+  "scope": [
+    "seven exact check-phase refusals; negative artifacts/execution absent",
+    "three pure values: strict checking and normalization, not native IO",
+    "24 actual port/upstream C-O3/JS executions;18 build/generation commands;12 normalization and24 checking/phase commands",
+    "no mid-normalization cancellation or unsafe whole-book acceptance claim"
+  ],
+  "negative_phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  }
+}
