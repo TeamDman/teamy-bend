@@ -1,0 +1,1 @@
+{"Constructor":["Con",[{"Constructor":["Con",[{"Constructor":["Succ",[{"Constructor":["Zero",[]]}]]},{"Constructor":["Nil",[]]}]]},{"Constructor":["Con",[{"Constructor":["Con",[{"Constructor":["Succ",[{"Constructor":["Succ",[{"Constructor":["Zero",[]]}]]}]]},{"Constructor":["Nil",[]]}]]},{"Constructor":["Nil",[]]}]]}]]}

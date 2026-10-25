@@ -1,0 +1,80 @@
+{
+  "before_source": "b9fc3a7febb2a1a0a3ddef53395ee3ee69847196",
+  "before_checkpoint": "9ded0b5b79081a2314a1572f85925ca58d6fc70d",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "normalization": "Only fixture paths made repository-relative; exact original stderr hashes retained.",
+  "rows": [
+    {
+      "case": "io.bend",
+      "lane": "upstream",
+      "source_sha256": "bbbe51b298110acf2bc8630492ddf3216ce3abe129c7354d432d624db6ea70fa",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "TypeError: require is not a function\n",
+      "stderr_original_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "io.bend",
+      "lane": "port",
+      "source_sha256": "bbbe51b298110acf2bc8630492ddf3216ce3abe129c7354d432d624db6ea70fa",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/io.bend:7:14: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stderr_original_sha256": "cc20cb45e493e2fa7e91972d7e8aed1b8ff5eaab83d65f3530c6fe9b6150db38"
+    },
+    {
+      "case": "positive/nat-four.bend",
+      "lane": "upstream",
+      "source_sha256": "828000dd7bd582025172f9fdb85046b8764e753ff67406dea0e9e2f6ddcd3c20",
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "stderr_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/nat-four.bend",
+      "lane": "port",
+      "source_sha256": "828000dd7bd582025172f9fdb85046b8764e753ff67406dea0e9e2f6ddcd3c20",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/positive/nat-four.bend:7:14: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stderr_original_sha256": "9996c800bdceef64313bec034bbf57bf262b3c41a9de1ce970a0d4abbfd71f58"
+    },
+    {
+      "case": "positive/strings.bend",
+      "lane": "upstream",
+      "source_sha256": "2c950a3ca72202c62e20ffbd4a94d80cd890a8f7de7fbf68e8c20bbcd2ab48c9",
+      "exit": 0,
+      "stdout": "\"abcd\"\n",
+      "stderr": "",
+      "stderr_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/strings.bend",
+      "lane": "port",
+      "source_sha256": "2c950a3ca72202c62e20ffbd4a94d80cd890a8f7de7fbf68e8c20bbcd2ab48c9",
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "stderr_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/template.bend",
+      "lane": "upstream",
+      "source_sha256": "f3750bd1e9ca23ce044b5979c979bfe944e5dc3b19365647933ce2687e8a64bd",
+      "exit": 0,
+      "stdout": "[4n, 6n, 6n]\n",
+      "stderr": "",
+      "stderr_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/template.bend",
+      "lane": "port",
+      "source_sha256": "f3750bd1e9ca23ce044b5979c979bfe944e5dc3b19365647933ce2687e8a64bd",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/positive/template.bend:8:14: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "stderr_original_sha256": "33d69e534bea8047cafcc7016d291f434ac6672e430fbdea038e3c7eeaedcc33"
+    }
+  ]
+}

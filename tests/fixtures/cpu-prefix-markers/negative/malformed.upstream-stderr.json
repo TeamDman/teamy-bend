@@ -1,0 +1,1 @@
+"Error:\n- expected : a term\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++:\n8 |       Nat.add(k, k)\n"

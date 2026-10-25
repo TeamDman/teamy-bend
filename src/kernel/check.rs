@@ -2943,21 +2943,25 @@ mod reflexivity_diagnostic_tests {
     #[test]
     fn reusable_nat_sugar_keeps_exact_checker_work() {
         let source = "type Nat is Data:\n  Zero{}\n  Succ{pred: Nat}\ndef first(a: Nat, b: Nat) -> Nat: a\ndef twice(n: Nat) -> Nat:\n  match n:\n    case 0n: 0n\n    case 1n++k: first(k, k)\n";
-        let compact = crate::syntax::parse(source).unwrap();
-        let explicit = crate::syntax::parse(&source.replace("1n++k", "1n+ +k")).unwrap();
-        assert_eq!(format!("{compact:?}"), format!("{explicit:?}"));
-        let mut a = empty_engine(&compact).unwrap();
-        let mut b = empty_engine(&explicit).unwrap();
-        for (left, right) in compact.declarations.iter().zip(&explicit.declarations) {
-            for (engine, declaration) in [(&mut a, left), (&mut b, right)] {
-                engine.reset();
-                match declaration {
-                    Declaration::Def(d) => engine.validate_def(d),
-                    Declaration::Adt(d) => engine.validate_adt(d),
+        for count in [2, 3, 4, 5, 8] {
+            let text = format!("1n{}k", "+".repeat(count));
+            let spaced = format!("1n+{}k", "+ ".repeat(count - 1));
+            let compact = crate::syntax::parse(&source.replace("1n++k", &text)).unwrap();
+            let explicit = crate::syntax::parse(&source.replace("1n++k", &spaced)).unwrap();
+            assert_eq!(format!("{compact:?}"), format!("{explicit:?}"));
+            let mut a = empty_engine(&compact).unwrap();
+            let mut b = empty_engine(&explicit).unwrap();
+            for (left, right) in compact.declarations.iter().zip(&explicit.declarations) {
+                for (engine, declaration) in [(&mut a, left), (&mut b, right)] {
+                    engine.reset();
+                    match declaration {
+                        Declaration::Def(d) => engine.validate_def(d),
+                        Declaration::Adt(d) => engine.validate_adt(d),
+                    }
+                    .unwrap();
                 }
-                .unwrap();
+                assert_eq!((a.fuel, a.depth, a.fresh_id), (b.fuel, b.depth, b.fresh_id));
             }
-            assert_eq!((a.fuel, a.depth, a.fresh_id), (b.fuel, b.depth, b.fresh_id));
         }
     }
 

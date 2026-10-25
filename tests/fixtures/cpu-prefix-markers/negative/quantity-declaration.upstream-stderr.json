@@ -1,0 +1,1 @@
+"Error:\n- expected : a name\n- observed : '+'\nLocation:\n2 | \n3>| def bad(++n: Nat) -> Nat: n\n4 | def main() -> Nat: bad(3n)\n"

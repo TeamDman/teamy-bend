@@ -1,0 +1,1 @@
+"Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : ':'\nLocation:\n6 |       0n\n7>|     case 1n++++Zero{}:\n8 |       Nat.add(k, k)\n"

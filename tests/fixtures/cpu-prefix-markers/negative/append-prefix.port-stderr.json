@@ -1,0 +1,1 @@
+"Error: \n   0: \u001b[91mtests/fixtures/cpu-prefix-markers/negative/append-prefix.bend:4:1: + needs a quantified datatype\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"

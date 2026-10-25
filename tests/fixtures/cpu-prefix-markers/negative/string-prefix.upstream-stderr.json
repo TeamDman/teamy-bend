@@ -1,0 +1,1 @@
+"Error:\n- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)\n- observed : end of input\nLocation:\n3 | def main() -> String: ++++\"x\"\n4>| \n"

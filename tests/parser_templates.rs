@@ -316,16 +316,20 @@ def twice(~f: Nat -> Nat, n: Nat) -> Nat:
 def main() -> Nat: add(twice(~id, 3n), add(twice(~inc, 3n), twice(~id, 4n)))
 ",
     );
-    let book = parse(&program).unwrap();
-    assert_eq!(instances(&book, "twice"), 2);
-    let equivalent = parse(&program.replace("1n++k", "1n+ +k")).unwrap();
-    assert_eq!(format!("{book:?}"), format!("{equivalent:?}"));
-    assert_eq!(
-        check_book(&book)
-            .unwrap()
-            .evaluate_data("main", &[])
-            .unwrap()
-            .to_string(),
-        "16n"
-    );
+    for count in [2, 3, 4, 5, 8] {
+        let compact = format!("1n{}k", "+".repeat(count));
+        let spaced = format!("1n+{}k", "+ ".repeat(count - 1));
+        let book = parse(&program.replace("1n++k", &compact)).unwrap();
+        assert_eq!(instances(&book, "twice"), 2);
+        let equivalent = parse(&program.replace("1n++k", &spaced)).unwrap();
+        assert_eq!(format!("{book:?}"), format!("{equivalent:?}"));
+        assert_eq!(
+            check_book(&book)
+                .unwrap()
+                .evaluate_data("main", &[])
+                .unwrap()
+                .to_string(),
+            "16n"
+        );
+    }
 }

@@ -1,0 +1,1 @@
+"Error:\n- expected : an annotated term (cannot infer)\n- observed : 3n\nLocation: main\n3 | def main() -> Nat:\n4>|   ++++n = 3n\n5 |   Nat.add(n, n)\n"

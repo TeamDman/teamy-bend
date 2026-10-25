@@ -860,3 +860,42 @@ fn reusable_nat_tail_keeps_literal_and_nesting_bounds() {
             .contains("resource limit")
     );
 }
+
+#[test]
+fn repeated_prefix_markers_preserve_context_and_bounds() {
+    for count in [1, 2, 3, 4, 5, 8, 16, 32] {
+        let compact = "+".repeat(count);
+        let spaced = "+ ".repeat(count);
+        for (before, after) in [("", "x => x"), ("0n+", "k"), ("1n+", "k")] {
+            let a = parse_term(&format!("{before}{compact}{after}")).unwrap();
+            let b = parse_term(&format!("{before}{spaced}{after}")).unwrap();
+            assert_eq!(format!("{a:?}"), format!("{b:?}"));
+        }
+    }
+    // Run on the default test-thread stack. Compact lexing must not bypass
+    // the same expression-depth guard used by individually spaced prefixes.
+    for marker in ["+", "+ "] {
+        let error = parse_term(&format!("{}x => x", marker.repeat(200))).unwrap_err();
+        assert!(error.message.contains("resource limit"), "{error}");
+    }
+    for source in ["++++", "++++:", "1n++++", "1n++++:", "++++3n", "++++\"x\""] {
+        parse_term(source).expect_err("malformed/non-quantifiable prefixes must fail");
+    }
+    parse_term("128n++++k").unwrap();
+    assert!(
+        parse_term("129n++++k")
+            .unwrap_err()
+            .message
+            .contains("resource limit")
+    );
+    parse("def bad(++n: Type) -> Type: n")
+        .expect_err("declaration quantity is a different grammar position");
+    for source in ["a++b", "a ++ b", "1n ++b", "(1n)++b"] {
+        assert!(
+            parse_term(source)
+                .unwrap()
+                .to_string()
+                .starts_with("String.append(")
+        );
+    }
+}

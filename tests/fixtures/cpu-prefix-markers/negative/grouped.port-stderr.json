@@ -1,0 +1,1 @@
+"Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++++k:\n8 |       Nat.add(k, k)\n"

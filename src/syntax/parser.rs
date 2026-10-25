@@ -312,6 +312,30 @@ impl Parser<'_> {
         }
         s
     }
+    /// Consume a grammar prefix without losing maximal-munch tokens on replay.
+    /// Callers select prefix positions; infix operators keep their whole token.
+    fn after_prefix<T>(
+        &mut self,
+        prefix: char,
+        parse: impl FnOnce(&mut Self) -> Result<T, ParseError>,
+    ) -> Result<T, ParseError> {
+        debug_assert!(self.current().text.starts_with(prefix));
+        if self.current().text.len() == prefix.len_utf8() {
+            self.at += 1;
+            return parse(self);
+        }
+        let at = self.at;
+        let original = self.current().clone();
+        let remainder = &mut self.tokens[at];
+        remainder.text.remove(0);
+        remainder.start += prefix.len_utf8();
+        remainder.column += 1;
+        let result = parse(self);
+        // Nested cursor work is forward of this token. Retained template bodies
+        // must see its original spelling, including when the nested parse fails.
+        self.tokens[at] = original;
+        result
+    }
     fn error(&self, message: impl Into<String>) -> ParseError {
         ParseError {
             source: self.label.clone(),
@@ -1669,8 +1693,8 @@ impl Parser<'_> {
                     self.constructor("Con".into(), vec![head, tail])
                 }));
         }
-        if self.take("+") {
-            return self.quantified_atom();
+        if self.current().text.starts_with('+') {
+            return self.after_prefix('+', Self::quantified_atom);
         }
         if self
             .current()
@@ -1970,25 +1994,10 @@ impl Parser<'_> {
             // Literal sugar names the fixed constructors, like U32/F32 sugar.
             // Explicit constructor names still resolve in the local module.
             let glued = self.at > 0 && self.tokens[self.at - 1].end == self.current().start;
-            // Upstream consumes one adjacent '+' before parsing the Nat tail.
-            // In `1n++k`, leave the second '+' for the reusable binder grammar;
-            // maximal-munch string append still applies outside this context.
-            let split = (glued && self.is("++")).then(|| {
-                let original = (self.at, self.current().clone());
-                let remainder = &mut self.tokens[self.at];
-                remainder.text = "+".into();
-                remainder.start += 1;
-                remainder.column += 1;
-                original
-            });
-            let mut value = if glued && (split.is_some() || self.take("+")) {
-                let parsed = self.expression(0);
-                // Retained template bodies replay the original token stream.
-                // Restore after parsing even when the tail was rejected.
-                if let Some((at, original)) = split {
-                    self.tokens[at] = original;
-                }
-                parsed?
+            // Numeric sugar consumes one adjacent '+'; the tail may itself
+            // start with unary markers sharing a maximal-munch token.
+            let mut value = if glued && self.current().text.starts_with('+') {
+                self.after_prefix('+', |parser| parser.expression(0))?
             } else {
                 self.constructor("Zero".into(), Vec::new())
             };
@@ -3208,6 +3217,39 @@ pub fn load_executable_with_sources(
 #[cfg(test)]
 mod occurrence_tests {
     use super::*;
+
+    #[test]
+    fn nested_prefix_errors_restore_complete_tokens_for_replay() {
+        for source in ["++", "++++:", "1n++++", "1n++++:"] {
+            let mut book = Book::default();
+            let mut fresh = 0;
+            let mut templates = Templates::default();
+            let mut p = Parser {
+                tokens: lex(source, "<expression>").unwrap(),
+                at: 0,
+                label: "<expression>".into(),
+                namespace: String::new(),
+                aliases: BTreeMap::new(),
+                scope: Vec::new(),
+                fresh: &mut fresh,
+                display_fresh: 0,
+                book: &mut book,
+                depth: 0,
+                reusable: Vec::new(),
+                reusable_markers: BTreeSet::new(),
+                templates: &mut templates,
+                instance_name: None,
+                instance_arguments: VecDeque::new(),
+                compile_bindings: BTreeMap::new(),
+                foreign: None,
+                constructor_tags: None,
+                origin: SourceOrigin::Standalone,
+            };
+            let before = format!("{:?}", p.tokens);
+            p.expression(0).expect_err("malformed tail");
+            assert_eq!(format!("{:?}", p.tokens), before);
+        }
+    }
 
     fn root() -> PathBuf {
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-template-occurrences")
