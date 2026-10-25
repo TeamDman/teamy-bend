@@ -1,0 +1,329 @@
+{
+  "tested_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+  "scope": "Next independent duplicate-declaration load diagnostics; comparison only, no fix or runtime qualification. Phase probes do not execute main.",
+  "rows": [
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/check/data_table_checked_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+      "timed_out": false,
+      "seconds": 0.4037786249828059
+    },
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$UPSTREAM/tests/check/data_table_checked_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/data_table_checked_000.bend:11:14: duplicate declaration: String.eq\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.5344582139805425
+    },
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$UPSTREAM/tests/check/data_table_checked_000.bend",
+        "$RUN/next/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: String.eq)\n- observed : ':'\nLocation:\n10 | \n11>| law String.eq:\n12 |   for a: String\n",
+      "timed_out": false,
+      "seconds": 0.36699177100672387,
+      "phase_observation": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/check/data_table_checked_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.15957553600310348
+    },
+    {
+      "fixture": "check/data_table_checked_000.bend",
+      "source_sha256": "c614bef29f1e769923d6af08bcfa3f4fcf205f5f6fe08e5c39a0b57acb489dbc",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/check/data_table_checked_000.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12819449699600227
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/comptime/err_dup.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.264674064994324
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$UPSTREAM/tests/comptime/err_dup.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/comptime/err_dup.bend:7:9: duplicate declaration: app\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.16164576102164574
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$UPSTREAM/tests/comptime/err_dup.bend",
+        "$RUN/next/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: app)\n- observed : '('\nLocation:\n6 | \n7>| def app(~f: Nat -> Nat, x: Nat) -> Nat:\n8 |   f(x)\n",
+      "timed_out": false,
+      "seconds": 0.5107989880198147,
+      "phase_observation": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/comptime/err_dup.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17349514298257418
+    },
+    {
+      "fixture": "comptime/err_dup.bend",
+      "source_sha256": "da2d45bc180c2c04c2b81819276cd729515371fd4e41f8e1163fbd25c1edd2da",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/comptime/err_dup.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.12693860600120388
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/parse/duplicate_declaration.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+      "timed_out": false,
+      "seconds": 0.2805735619913321
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$UPSTREAM/tests/parse/duplicate_declaration.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/duplicate_declaration.bend:10:9: duplicate declaration: main\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.015837123995879665
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$UPSTREAM/tests/parse/duplicate_declaration.bend",
+        "$RUN/next/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: main)\n- observed : ':'\nLocation:\n 9 | def main(): Un{}\n10>| law main:\n11 |   Uu\n",
+      "timed_out": false,
+      "seconds": 0.24433668301207945,
+      "phase_observation": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/parse/duplicate_declaration.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0016573189932387322
+    },
+    {
+      "fixture": "parse/duplicate_declaration.bend",
+      "source_sha256": "ac98eed3c5be68c15ae05f057c99a931a48228736e87c4c785da972bc1eb86dc",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/parse/duplicate_declaration.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0015596330049447715
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$UPSTREAM/tests/parse/reserved_def_name_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "timed_out": false,
+      "seconds": 0.41595561199937947
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "lane": "port-check",
+      "command": [
+        "$RUN/teamy-bend",
+        "check",
+        "$UPSTREAM/tests/parse/reserved_def_name_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/reserved_def_name_000.bend:6:8: duplicate declaration: U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.5100749600096606
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "lane": "upstream-phase",
+      "command": [
+        "node",
+        "$REPO/scripts/checking-census/upstream.mjs",
+        "$UPSTREAM/bend2/bend.ts",
+        "$UPSTREAM/tests/parse/reserved_def_name_000.bend",
+        "$RUN/next/phase.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "timed_out": false,
+      "seconds": 0.3977642760146409,
+      "phase_observation": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "lane": "strict-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/parse/reserved_def_name_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.17771069300943054
+    },
+    {
+      "fixture": "parse/reserved_def_name_000.bend",
+      "source_sha256": "bfaab7c1e566131398c3bbdfa1526bacd9570ccf7b51824f6b237ad940312ff1",
+      "lane": "executable-phase",
+      "command": [
+        "$EVIDENCE/phase-probe",
+        "$UPSTREAM/tests/parse/reserved_def_name_000.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.1860555440071039
+    }
+  ],
+  "completed": true
+}

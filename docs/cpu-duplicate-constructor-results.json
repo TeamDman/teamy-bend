@@ -1,0 +1,3970 @@
+{
+  "tested_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+  "completed": true,
+  "full_parity": false,
+  "timeout_seconds": 30,
+  "matrices": {
+    "negative": {
+      "command_observations": 216,
+      "rows": [
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.2606077629898209,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.35172592400340363,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.37929734197678044,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.01959385900408961,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.023985631996765733,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.024116417014738545,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.055320632993243635,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.036143582983640954,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+          "timed_out": false,
+          "seconds": 0.04714629499358125,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.3439080360112712,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.45508096399134956,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.31970316800288856,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.4008018729800824,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.3941962330136448,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.38327398101682775,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.43676065100589767,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.4943409910192713,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+          "timed_out": false,
+          "seconds": 0.486838926008204,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4227804020047188,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.33224214002257213,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4731852159893606,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.39086602500174195,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4664194599899929,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.701279439002974,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.43441984898527153,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.3632866299885791,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4006247330107726,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4378978500026278,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.39482800199766643,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.49271538999164477,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.6114955060184002,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.45977512700483203,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.41510252602165565,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.4793777000159025,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.439590437017614,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+          "timed_out": false,
+          "seconds": 0.362030031014001,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.274561607016949,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.3098056409799028,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.34365756800980307,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.03426606298307888,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.006978006014833227,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.01558052099426277,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.015267134993337095,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.01928300698637031,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/same-type.bend",
+          "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n",
+          "timed_out": false,
+          "seconds": 0.03518337500281632,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.3112247159879189,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.31195717700757086,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.37888574399403296,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.020617494999896735,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.04907284601358697,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.011618418007856235,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.01806180799030699,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.05570220301160589,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/space.bend",
+          "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.014629935001721606,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.22095901699503884,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.25792890798766166,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.24288326100213453,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.015099133976036683,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.046866970020346344,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.018848749983590096,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.013973146997159347,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.016519879980478436,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/tab.bend",
+          "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.03473754899459891,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.32132360999821685,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.2725504799745977,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.3190215759968851,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.017191760998684913,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.021079112018924206,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.0577543789986521,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.022804592997999862,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.0430092420137953,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/comment.bend",
+          "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.02612899598898366,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.31413045499357395,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.4143503909872379,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.3303916689765174,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.037660014000721276,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.014602123002987355,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.025087054003961384,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.017910572001710534,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.04733918301644735,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/newline.bend",
+          "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n",
+          "timed_out": false,
+          "seconds": 0.028092671011108905,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.30167777300812304,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.3845908219809644,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.2998402059893124,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.01933241100050509,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.022818883997388184,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.018292271008249372,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.047489410993875936,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.019549774995539337,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/eof.bend",
+          "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n",
+          "timed_out": false,
+          "seconds": 0.021364746993640438,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.2573625539953355,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.2933210729970597,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.31752222700743005,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.029011480015469715,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.046723264997126535,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.01833803902263753,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.02225573599571362,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.0434245319920592,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/crlf.bend",
+          "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n",
+          "timed_out": false,
+          "seconds": 0.025800956995226443,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.1907264839974232,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.28528683399781585,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend",
+            "-o",
+            "$RUN/negative-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.29471318700234406,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.017955178976990283,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.024796881014481187,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.011731677019270137,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.04246700499788858,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.015178011992247775,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/negative-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n",
+          "timed_out": false,
+          "seconds": 0.013138634007191285,
+          "equal_repetitions": 2
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/book_prefix_arity.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "check/ctor_shared_tag.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_000.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "compile/ctor_tag_dispatch_001.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/same-type.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/space.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/tab.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/comment.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/newline.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/eof.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/crlf.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "controls/imported/main.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ],
+      "phase_count": 72,
+      "phases_already_in_command_count": false,
+      "raw_sha256": "b4cf36678f03dbb966e9c2c570a20ea0e7d00fd5bc34649048933968ba5d9fbd"
+    },
+    "adjacent": {
+      "command_observations": 18,
+      "rows": [
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.2594036850205157,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend",
+            "-o",
+            "$RUN/adjacent-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.37751320700044744,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend",
+            "-o",
+            "$RUN/adjacent-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.22533690399723127,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.012687720998656005,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.011597446980886161,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.03982714199810289,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/adjacent-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.017393371992511675,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/adjacent-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.019544936978491023,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/parse/duplicate_ctor_name.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/adjacent-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+          "timed_out": false,
+          "seconds": 0.013086114980978891,
+          "equal_repetitions": 2
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "parse/duplicate_ctor_name.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ],
+      "phase_count": 6,
+      "phases_already_in_command_count": false,
+      "raw_sha256": "cfd64708115a3af9253ac4bd6fc5d91598a1c5ac26954e69c4c768cdde0f4a24",
+      "baseline": {
+        "source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$UPSTREAM/tests/parse/duplicate_ctor_name.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/duplicate_ctor_name.bend:6:5: duplicate constructor: Kk\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b"
+      }
+    },
+    "adjacent_page": {
+      "command_observations": 18,
+      "rows": [
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.09007415999076329,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend",
+            "-o",
+            "$RUN/adjacent-page-matrix/upstream.c"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.1067166040011216,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend",
+            "-o",
+            "$RUN/adjacent-page-matrix/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.09142842798610218,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.0049542710185050964,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-eval",
+          "command": [
+            "$RUN/teamy-bend",
+            "eval",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.005345563986338675,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-run",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.004546113021206111,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/adjacent-page-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.0033357589854858816,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-javascript",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/adjacent-page-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.0048119089915417135,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+          "lane": "port-native",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$UPSTREAM/tests/page/ambiguous_ctor_error.bend",
+            "--executable",
+            "--target",
+            "native",
+            "--output",
+            "$RUN/adjacent-page-matrix/unwritten"
+          ],
+          "rep": 1,
+          "exit": 1,
+          "stdout": "",
+          "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+          "timed_out": false,
+          "seconds": 0.004848212003707886,
+          "equal_repetitions": 2
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "port-strict",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "port-executable",
+          "rep": 1,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "outcome": "language_rejection"
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "port-strict",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        },
+        {
+          "case": "page/ambiguous_ctor_error.bend",
+          "lane": "port-executable",
+          "rep": 2,
+          "exit": 1,
+          "phase": "load",
+          "stderr": ""
+        }
+      ],
+      "phase_count": 6,
+      "phases_already_in_command_count": false,
+      "raw_sha256": "fa61346a289478cce4805e850d0c5f050e3ffc30ddeed0e3e09a802fa06645d5",
+      "baseline": {
+        "source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$UPSTREAM/tests/page/ambiguous_ctor_error.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/page/ambiguous_ctor_error.bend:8:4: duplicate constructor: K\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+        "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30"
+      }
+    },
+    "positive": {
+      "command_observations": 52,
+      "rows": [
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-pure-normalization",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.3722032860096078,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-pure-normalization",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.5195409359876066,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$REPO/scripts/checking-census/upstream.mjs",
+            "$UPSTREAM/bend2/bend.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "$RUN/positive-matrix/positive/distinct/phase-1.json"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.6425893790146802,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "strict-phase",
+          "command": [
+            "$EVIDENCE/phase-probe",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "accepted\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.41608003299916163,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "executable-phase",
+          "command": [
+            "$EVIDENCE/phase-probe",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "--executable"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "accepted\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.8564168220036663,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "strict-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 22,\n  \"laws\": 25\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.8909776479995344,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "-o",
+            "$RUN/positive-matrix/positive/distinct/upstream.c"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.5509172349993605,
+          "artifact_sha256": "5223f50ee04173815252ccf7f3d33c0ed716649b02db7fd4b7fdc31e9b3004a1"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-build-O3",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$RUN/positive-matrix/positive/distinct/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$RUN/positive-matrix/positive/distinct/upstream.bin"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.5030326810083352,
+          "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "-o",
+            "$RUN/positive-matrix/positive/distinct/upstream.js"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.5401659089839086,
+          "artifact_sha256": "e58eb62e3bf9254ab82af3edd5b83341264b9c26c2f57dc8ffb861e12dc52ee4"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-generate-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/positive-matrix/positive/distinct/port.c"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/distinct/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186039,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.8730287039943505,
+          "artifact_sha256": "18cbeec8b8dc7bb13af13e7089df8d4aaa29adc6876aa1f6d3d5eeb07c66fded",
+          "before_artifact_sha256": "18cbeec8b8dc7bb13af13e7089df8d4aaa29adc6876aa1f6d3d5eeb07c66fded",
+          "byte_identical_to_baseline": true
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-build-O3",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$RUN/positive-matrix/positive/distinct/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$RUN/positive-matrix/positive/distinct/port.bin"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.1318788089847658,
+          "artifact_sha256": "e61c38e76368c2b3e8b81caba0bfc290d4543c70cbb9ab7d38b5338ff971492c"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-generate-js",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/positive-matrix/positive/distinct/port.js"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/distinct/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60420,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.0619163959927391,
+          "artifact_sha256": "ee3c3dfbb4fcb5f8994769484fdf352fa509fa38447dc6ba6deb57a24cedbd09",
+          "before_artifact_sha256": "ee3c3dfbb4fcb5f8994769484fdf352fa509fa38447dc6ba6deb57a24cedbd09",
+          "byte_identical_to_baseline": true
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-C-O3",
+          "command": [
+            "$RUN/positive-matrix/positive/distinct/upstream.bin",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.0043115930166095495,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "upstream-JS",
+          "command": [
+            "node",
+            "$RUN/positive-matrix/positive/distinct/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.035575658024754375,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-C-O3",
+          "command": [
+            "$RUN/positive-matrix/positive/distinct/port.bin",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.00389279899536632,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/distinct.bend",
+          "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+          "lane": "port-JS",
+          "command": [
+            "node",
+            "$RUN/positive-matrix/positive/distinct/port.js"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.07456193800317124,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-pure-normalization",
+          "command": [
+            "$RUN/teamy-bend",
+            "run",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.4786553609883413,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-pure-normalization",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.6939130749960896,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-check",
+          "command": [
+            "node",
+            "$REPO/scripts/checking-census/upstream.mjs",
+            "$UPSTREAM/bend2/bend.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "$RUN/positive-matrix/positive/imported/main/phase-1.json"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.4036685489991214,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "strict-phase",
+          "command": [
+            "$EVIDENCE/phase-probe",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "accepted\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.3308630969841033,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "executable-phase",
+          "command": [
+            "$EVIDENCE/phase-probe",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "--executable"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "accepted\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.6018949330027681,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "strict-check",
+          "command": [
+            "$RUN/teamy-bend",
+            "check",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 22,\n  \"laws\": 25\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.8910181600076612,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-generate-c",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "-o",
+            "$RUN/positive-matrix/positive/imported/main/upstream.c"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.47368167398963124,
+          "artifact_sha256": "7c2af5d2916ba7f9520de85eac2ea4cd53410541e88e633c921c67c7a74e73d0"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-build-O3",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "$RUN/positive-matrix/positive/imported/main/upstream.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$RUN/positive-matrix/positive/imported/main/upstream.bin"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.5294626629911363,
+          "artifact_sha256": "9c7b6e6f13c0b4961c5e4af1d029b1c837d2bc8a5059733a49969213461332c9"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-generate-js",
+          "command": [
+            "node",
+            "$UPSTREAM/bend2/main.ts",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "-o",
+            "$RUN/positive-matrix/positive/imported/main/upstream.js"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.6913329789822455,
+          "artifact_sha256": "ff69943477c0ef3fc083a374175f88fffbb063cdd59d65d178d449401eb30855"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-generate-c",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "--executable",
+            "--target",
+            "c",
+            "--output",
+            "$RUN/positive-matrix/positive/imported/main/port.c"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.c\",\n  \"target\": \"c\",\n  \"bytes\": 186052,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.1385307279997505,
+          "artifact_sha256": "4247ad06feda18e5bf6fd132874b877ac3483b074c2cf28380c32504fa29230b",
+          "before_artifact_sha256": "4247ad06feda18e5bf6fd132874b877ac3483b074c2cf28380c32504fa29230b",
+          "byte_identical_to_baseline": true
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-build-O3",
+          "command": [
+            "$TEAMY_BEND_CC",
+            "-std=c11",
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic",
+            "$RUN/positive-matrix/positive/imported/main/port.c",
+            "-lpthread",
+            "-lm",
+            "-o",
+            "$RUN/positive-matrix/positive/imported/main/port.bin"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.250309630006086,
+          "artifact_sha256": "e61c38e76368c2b3e8b81caba0bfc290d4543c70cbb9ab7d38b5338ff971492c"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-generate-js",
+          "command": [
+            "$RUN/teamy-bend",
+            "compile",
+            "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+            "--executable",
+            "--target",
+            "javascript",
+            "--output",
+            "$RUN/positive-matrix/positive/imported/main/port.js"
+          ],
+          "rep": 0,
+          "exit": 0,
+          "stdout": "{\n  \"output\": \"$RUN/positive-matrix/positive/imported/main/port.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60424,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 1.2321208030043636,
+          "artifact_sha256": "273b1e7c94df1d754d7912a1945a0d4ce1ee3b1c3550229381ea4161c7c22bd5",
+          "before_artifact_sha256": "273b1e7c94df1d754d7912a1945a0d4ce1ee3b1c3550229381ea4161c7c22bd5",
+          "byte_identical_to_baseline": true
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-C-O3",
+          "command": [
+            "$RUN/positive-matrix/positive/imported/main/upstream.bin",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.00214938199496828,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "upstream-JS",
+          "command": [
+            "node",
+            "$RUN/positive-matrix/positive/imported/main/upstream.js"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.07758153701433912,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-C-O3",
+          "command": [
+            "$RUN/positive-matrix/positive/imported/main/port.bin",
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.0029595190135296434,
+          "equal_repetitions": 2
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+          "lane": "port-JS",
+          "command": [
+            "node",
+            "$RUN/positive-matrix/positive/imported/main/port.js"
+          ],
+          "rep": 1,
+          "exit": 0,
+          "stdout": "7\n",
+          "stderr": "",
+          "timed_out": false,
+          "seconds": 0.07543824400636367,
+          "equal_repetitions": 2
+        }
+      ],
+      "phase_probes": [
+        {
+          "case": "positive/distinct.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "phase": "accepted",
+          "outcome": "accepted"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "lane": "strict",
+          "rep": 1,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/distinct.bend",
+          "lane": "executable",
+          "rep": 1,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/distinct.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "phase": "accepted",
+          "outcome": "accepted"
+        },
+        {
+          "case": "positive/distinct.bend",
+          "lane": "strict",
+          "rep": 2,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/distinct.bend",
+          "lane": "executable",
+          "rep": 2,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "upstream",
+          "rep": 1,
+          "phase": "accepted",
+          "outcome": "accepted"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "strict",
+          "rep": 1,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "executable",
+          "rep": 1,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "upstream",
+          "rep": 2,
+          "phase": "accepted",
+          "outcome": "accepted"
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "strict",
+          "rep": 2,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        },
+        {
+          "case": "positive/imported/main.bend",
+          "lane": "executable",
+          "rep": 2,
+          "phase": "accepted",
+          "exit": 0,
+          "stderr": ""
+        }
+      ],
+      "phase_count": 12,
+      "phases_already_in_command_count": true,
+      "raw_sha256": "e3a64af9fb9c41fdbd2b10dd9af0f3d161a2091e425e0b5587466809964ba781"
+    }
+  },
+  "baseline_artifacts": {
+    "binary_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+    "binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+    "scope": "baseline emission only; runtime qualified in final matrix",
+    "rows": [
+      {
+        "case": "positive/distinct.bend",
+        "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/distinct/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/distinct/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 186039,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/distinct/before.c",
+        "artifact_sha256": "18cbeec8b8dc7bb13af13e7089df8d4aaa29adc6876aa1f6d3d5eeb07c66fded"
+      },
+      {
+        "case": "positive/distinct.bend",
+        "source_sha256": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/distinct/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/distinct/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60420,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/distinct/before.js",
+        "artifact_sha256": "ee3c3dfbb4fcb5f8994769484fdf352fa509fa38447dc6ba6deb57a24cedbd09"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "c",
+          "--output",
+          "$BASELINE_ARTIFACTS/main/before.c"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/main/before.c\",\n  \"target\": \"c\",\n  \"bytes\": 186052,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/main/before.c",
+        "artifact_sha256": "4247ad06feda18e5bf6fd132874b877ac3483b074c2cf28380c32504fa29230b"
+      },
+      {
+        "case": "positive/imported/main.bend",
+        "source_sha256": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "compile",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend",
+          "--executable",
+          "--target",
+          "javascript",
+          "--output",
+          "$BASELINE_ARTIFACTS/main/before.js"
+        ],
+        "exit": 0,
+        "stdout": "{\n  \"output\": \"$BASELINE_ARTIFACTS/main/before.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60424,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+        "stderr": "",
+        "artifact": "$BASELINE_ARTIFACTS/main/before.js",
+        "artifact_sha256": "273b1e7c94df1d754d7912a1945a0d4ce1ee3b1c3550229381ea4161c7c22bd5"
+      }
+    ]
+  },
+  "final_total_commands": 388,
+  "scope": [
+    "12 fixture roots:216 exact diagnostic commands+72 separate load phase probes",
+    "two adjacent unchanged originals:36 exact commands+12 phase probes; two extra pre-fix commands",
+    "two positive roots:52commands;16 actual port/upstream C-O3/JS executions,12build/generation,8pure normalizations,16checking/phase",
+    "negative execution unrun, no artifact emitted",
+    "four positive generated port artifacts byte-identical to baseline",
+    "no mid-normalization cancellation claim"
+  ],
+  "phase_commands": {
+    "upstream": [
+      "node",
+      "$REPO/scripts/checking-census/upstream.mjs",
+      "$UPSTREAM/bend2/bend.ts",
+      "$FIXTURE",
+      "$PHASE_JSON"
+    ],
+    "port_strict": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE"
+    ],
+    "port_executable": [
+      "$EVIDENCE/phase-probe",
+      "$FIXTURE",
+      "--executable"
+    ]
+  }
+}

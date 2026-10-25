@@ -1,0 +1,730 @@
+{
+  "tested_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "snapshot": {
+    "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "source_tree": "8a94f436a772169ea467287c99d842e2e8e4d8fb",
+    "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+    "binary_size": 27472952,
+    "archive_sha256": "c80f3bca7e8584652a23d2070334e762e451ede8387c6be2fa79156aafcedba3",
+    "archive_size": 7129916,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118"
+      }
+    ]
+  },
+  "build": {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "-C",
+      "debuginfo=0",
+      "$REPO/scripts/checking-census/phase-probe.rs",
+      "--extern",
+      "teamy_bend=$REPO/target/debug/deps/libteamy_bend-74a120e44f279a46.rlib",
+      "-L",
+      "dependency=$REPO/target/debug/deps",
+      "-o",
+      "$EVIDENCE/phase-probe"
+    ],
+    "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "rlib_sha256": "25da1e8cc5ca1de2e271181e27252c4721c60c6c2382139f8e86229ad4a2a7de",
+    "cargo_fingerprint": {
+      "rustc": 16696009966390864400,
+      "features": "[\"default\", \"extended_observability\"]",
+      "declared_features": "[\"default\", \"extended_observability\", \"tracy\"]",
+      "target": 3711020382214544299,
+      "profile": 4000329519511807648,
+      "path": 10763286916239946207,
+      "deps": [
+        [
+          987910214981000494,
+          "arbitrary",
+          false,
+          5452526485928618512
+        ],
+        [
+          2636299918121164457,
+          "socket2",
+          false,
+          3462672464787218007
+        ],
+        [
+          2716495650848533533,
+          "directories_next",
+          false,
+          7597756631528583102
+        ],
+        [
+          4289391297033898176,
+          "facet_pretty",
+          false,
+          661608528918056960
+        ],
+        [
+          4371022286835655106,
+          "facet",
+          false,
+          7154018940403867566
+        ],
+        [
+          5380358770761950913,
+          "tracing_subscriber",
+          false,
+          13248555277594674122
+        ],
+        [
+          7098700569944897890,
+          "libc",
+          false,
+          18440068434989699453
+        ],
+        [
+          7455154039531220218,
+          "teamy_cancellation",
+          false,
+          7123446357136914165
+        ],
+        [
+          9206635739968092262,
+          "facet_json",
+          false,
+          2340901294373375864
+        ],
+        [
+          9394460649638301237,
+          "tokio",
+          false,
+          14105617600381377558
+        ],
+        [
+          10141565841938428598,
+          "build_script_build",
+          false,
+          18404946791705390405
+        ],
+        [
+          11572704223576832424,
+          "open",
+          false,
+          13207949908176173387
+        ],
+        [
+          13435147900633593047,
+          "facet_csv",
+          false,
+          2271760857650493397
+        ],
+        [
+          14757622794040968908,
+          "tracing",
+          false,
+          14311375975235900415
+        ],
+        [
+          16117757646811882223,
+          "chrono",
+          false,
+          2641341933216355841
+        ],
+        [
+          16142802950189143282,
+          "figue",
+          false,
+          4455076316585769612
+        ],
+        [
+          16661324460137237341,
+          "color_eyre",
+          false,
+          12986095737036479449
+        ],
+        [
+          17390555767770508988,
+          "eyre",
+          false,
+          1650844428397224202
+        ]
+      ],
+      "local": [
+        {
+          "CheckDepInfo": {
+            "dep_info": "debug/.fingerprint/teamy-bend-74a120e44f279a46/dep-lib-teamy_bend",
+            "checksum": false
+          }
+        }
+      ],
+      "rustflags": [],
+      "config": 8247474407144887393,
+      "compile_kind": 0
+    },
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+    "phase_probe_sha256": "e2695944ff9ae0a1c2bb08a1ea3eb25ebb9e3cd3a2970ab27533b0a3d9098cec"
+  },
+  "checks": {
+    "focused-final": {
+      "source_commit": "55aef700c7868c50a17952e98b7727d9c480282a",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "duplicate_constructor"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11950985216,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 5.923704237007769,
+      "minimum_free": 11950977024,
+      "minimum_tmp_free": 4771069952,
+      "log_sha256": "a1b7697f38957c0d66bce42c0127b853c973c30250de3c3ce0a0d3e3ebe07ab3"
+    },
+    "focused-controls": {
+      "source_commit": "55aef700c7868c50a17952e98b7727d9c480282a",
+      "dirty": true,
+      "command": [
+        "bash",
+        "-c",
+        "set -e\ncargo test --locked --features extended_observability --lib source_origins_preserve_checker_work_terms_and_successful_evaluation\ncargo test --locked --features extended_observability --lib pattern_load_boundary_preserves_cancellation_writer_errors_and_fallback\ncargo test --locked --features extended_observability --test cpu_duplicate_constructor\ncargo clippy --locked --features extended_observability --test cpu_duplicate_constructor -- -D warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11951034368,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 36.3726404820045,
+      "minimum_free": 11950985216,
+      "minimum_tmp_free": 4773888000,
+      "log_sha256": "8480bba169e955a9204a6690b8732bb7e1fe1b2ad1c0f13da7fb6e9e5bdc858e"
+    },
+    "full-gate-verified": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11950411776,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 888.4189066489926,
+      "minimum_free": 11925504000,
+      "minimum_tmp_free": 4742307840,
+      "log_sha256": "07dd5db77ca532be9c849ee5642883062f82eac17325db8d35addf4e0b61b842"
+    },
+    "baseline-final-run": {
+      "source_commit": "55aef700c7868c50a17952e98b7727d9c480282a",
+      "dirty": true,
+      "command": [
+        "python3",
+        "$EVIDENCE/baseline-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11951190016,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.98808635698515,
+      "minimum_free": 11951095808,
+      "minimum_tmp_free": 4788916224,
+      "log_sha256": "7a94424c5f5908f2f6d64f37b4155753adf2f0950d33b8c90cbf46ee79dbf739"
+    },
+    "artifacts-before-final-run": {
+      "source_commit": "55aef700c7868c50a17952e98b7727d9c480282a",
+      "dirty": true,
+      "command": [
+        "python3",
+        "$EVIDENCE/artifacts-before-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11951071232,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 1.5193475780251902,
+      "minimum_free": 11951054848,
+      "minimum_tmp_free": 4788416512,
+      "log_sha256": "bd2beaea0f662d32afb9ab0ccaaf2ef9dd0f9d922ff10d46a752d1d957d2b98f"
+    },
+    "negative-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/negative-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11933810688,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 52.009910309978295,
+      "minimum_free": 11932590080,
+      "minimum_tmp_free": 4744654848,
+      "log_sha256": "77fffaafbf799ffbfdc8e51d5b1a6c1e9d983621b0383a3c32a884ffe82de6b6"
+    },
+    "adjacent-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/adjacent-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11931398144,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 2.3354561339947395,
+      "minimum_free": 11931316224,
+      "minimum_tmp_free": 4744658944,
+      "log_sha256": "4db8ed51075ee060329952e0f9fb63a6af6105dc1e55fa4820362afd89444539"
+    },
+    "adjacent-page-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/adjacent-page-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11925614592,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.8359886679972988,
+      "minimum_free": 11925590016,
+      "minimum_tmp_free": 4744466432,
+      "log_sha256": "db5d223d72de50fd68f3883142b3943e7badd0bb3fff6eb91800401de570d1c1"
+    },
+    "positive-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/positive-matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11933810688,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 28.517715125984978,
+      "minimum_free": 11933196288,
+      "minimum_tmp_free": 4744630272,
+      "log_sha256": "229f1398a45f160056f8205b3953f649097a744335fbcc23f98c22a69c66c2c8"
+    },
+    "next-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/next.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11927613440,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 5.234531855996465,
+      "minimum_free": 11927506944,
+      "minimum_tmp_free": 4744634368,
+      "log_sha256": "4e4bd9d40ac591996ec7a7a2a9de912926d688551ae00c53b525919ff2394716"
+    },
+    "census-run": {
+      "source_commit": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$UPSTREAM",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11933802496,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 287.9928707490035,
+      "minimum_free": 11925925888,
+      "minimum_tmp_free": 4743139328,
+      "log_sha256": "9a59514c5313d426e3b37e9c16fa8e962f63740ae91f218af16234ab3521d179"
+    }
+  },
+  "full_gate_totals": {
+    "passed": 1216,
+    "failed": 0,
+    "ignored": 49,
+    "result_groups": 177
+  },
+  "focused_totals": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0,
+    "result_groups": 7
+  },
+  "interrupted_runs": [
+    {
+      "source_commit": "9188ab8faade7d0f7a7778affd1c34d858aa56eb",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11950678016,
+      "stop_reason": null,
+      "exit": 143,
+      "seconds": 26.382486357993912,
+      "minimum_free": 11949993984,
+      "minimum_tmp_free": 4754149376,
+      "log_sha256": "5b21b86f74b09c7449907af0bc0d6e0ac693b40c15babfff14ce7c65a68a3ae3",
+      "scope": "Interrupted task-owned run; not a successful gate",
+      "interruption_reason": "Task-owned run stopped before further testing because CRLF fixture Git normalization made recorded commit differ from tested bytes; preserve partial run, fix only fixture attributes, then clean restart."
+    },
+    {
+      "source_commit": "e46a6f3dd1eead0447cabc2f70b034e7d9725fc2",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11950100480,
+      "stop_reason": null,
+      "exit": 143,
+      "seconds": 17.788222437986406,
+      "minimum_free": 11950100480,
+      "minimum_tmp_free": 4750323712,
+      "log_sha256": "8382dba30dad5c9ba7635adf1f9daf3353f511355349cfdc0cf3a346df9231dc",
+      "scope": "Interrupted task-owned run; not a successful gate",
+      "interruption_reason": "Attribute added but Git cached the existing clean index; fixture bytes still differed from HEAD. Preflight assertion found this; shell lacked set -e and started gate anyway. Stopped task-owned gate immediately and require successful re-staging byte assertion before final run."
+    }
+  ],
+  "source_review": {
+    "reviewer": "review_sharing",
+    "independent": true,
+    "mode": "read-only source and fixture review; reviewer ran no builds/tests",
+    "base": "55aef700c7868c50a17952e98b7727d9c480282a",
+    "tracked_diff_sha256": "aa6d2d415fa861a721a329141c17d283de266610ea01b17b0683980a9c17677b",
+    "verdict": "No remaining blocker",
+    "finding": "Invalid after-name offset equal to a newline-terminated display line length could fabricate EOF; fixed before acceptance with A\\nB and A\\n invalid-position tests.",
+    "scope": [
+      "existing duplicate guard/tag order and public cursor retained",
+      "raw unqualified token column with original source trivia/CRLF/EOF",
+      "12 exact load cases and four unchanged originals",
+      "tracked/plain errors and successful namespace/work controls",
+      "CLI cancellation/write/flush/fallback"
+    ],
+    "compatibility": "Formatted invoke uses existing Ok with exit_code1. Plain loader Err unchanged. External invoke audit remains outstanding."
+  },
+  "baseline_review": {
+    "reviewer": "review_imported_printer",
+    "independent": true,
+    "mode": "Read-only baseline, fixture bytes and runner review; no builds or program executions",
+    "reviewed_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "verdict": "No blocker in baseline/scripts; final matrices and gates not yet attested",
+    "baseline_commands": 48,
+    "exact_fixture_goldens": 12,
+    "unchanged_originals": 4,
+    "baseline_sha256": "4729d5b6dee82ea514889e91eb20926ebf8aed4ee3a903d30f841ae1b015075e",
+    "baseline_artifact_receipt_sha256": "f34ea54341ad74f61391ff93f8a5e444f92ba6dbd9c9158aa00313403c47a035",
+    "crlf_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+    "interrupted_gates": "Two exit143 runs retained as incomplete. CRLF bytes now equal HEAD/index/worktree; current gate uses full-gate-verified.",
+    "api_caveat": "Public ParseError unchanged, existing formatted CLI Ok(exit1) extends to new cases; external invoke audit outstanding."
+  },
+  "matrix_review": {
+    "reviewer": "review_imported_printer",
+    "independent": true,
+    "reviewed_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "mode": "Read-only raw receipt/artifact audit; no reviewer builds or runtime executions",
+    "verdict": "No blocking evidence issue; final full gate and public artifacts not yet attested",
+    "binary_sha256": "01f286cef58ee878168229de2f9a702f2339d73abea79121f9eb9e3b3ea71118",
+    "observations": {
+      "exact_negative": 252,
+      "separate_load_phases": 84,
+      "positive_commands": 52,
+      "actual_C_JS_executions": 16,
+      "total": 388
+    },
+    "verified": [
+      "all repetitions equal in status/stdout/stderr",
+      "negative artifacts absent",
+      "four actual generated artifact pairs byte-identical",
+      "four original hashes and committed CRLF bytes preserved",
+      "all1302 census categories independently recalculated",
+      "six port stderr fixes;allport statuses/phases and1296otherstreams unchanged",
+      "385historicalIO renewed exactly",
+      "borrow_fork_hold oracle variation separate from six fixes"
+    ],
+    "raw_census_sha256": "4ed16d2808ba73d76268bd1af2025a8c6c196f1c25968a034503ad40097e9ca7",
+    "reconciliation_sha256": "ac433ff6840e0334352380097af0e5b69e7512be6f437edc48213d3db11cded5",
+    "residual": {
+      "acceptance": 109,
+      "rejection": 73,
+      "total": 182,
+      "oracle_failures_separate": 6
+    }
+  },
+  "source_identity": {
+    "source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+    "tree": "8a94f436a772169ea467287c99d842e2e8e4d8fb",
+    "changed_files_sha256": {
+      "src/cli/checker_diagnostic.rs": "c292f3004cfe224ce3b6ea7f7d340671a10ae63d6dff7cf41d245329514a6c9d",
+      "src/kernel/check.rs": "9e48dea2011206d6083b28e2f3c316b45c54c953cf0183b4fd9699d702d3e7bf",
+      "src/syntax/diagnostics.rs": "866f9eb4814aacacc0e3fab5465173a3f17b307523d3fb9f6e8fbcde1e5ee373",
+      "src/syntax/parser.rs": "596dc4384ad53cbe6c1e67ee72bfab3721d9518c675dceaac3278a29112ad903",
+      "tests/cpu_duplicate_constructor.rs": "7b6ec1e51b35c0a8a5b8dbe6ae4bd7f7568fd82cdce1d79ee898c7f37e271979",
+      "tests/fixtures/cpu-duplicate-constructor/NOTICE.md": "3510f06fcaf0fbc96704776b3c522f666ec3ddd5f60b2ba34407f712b678c9e1",
+      "tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+      "tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.stderr.json": "03307f98dd5dd51de120b3cf3e25ae56bf459abc06e67d985b6c29d300255bfd",
+      "tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+      "tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.stderr.json": "f950f9e9bb9903c5e1f75a50a6f4e2c181fa69635c9fcdd89391e6f0ca3b4615",
+      "tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+      "tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.stderr.json": "fac3847e6ed31b584bfa2beb45afc8709f0b4019df917a90c7e2e63c43486bad",
+      "tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+      "tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.stderr.json": "47b6b99f42dca7bcffc42e069b577782d56f7a1a81a9ce00d60d8cabba3605b3",
+      "tests/fixtures/cpu-duplicate-constructor/controls/.gitattributes": "6831f98de67322d3baf9ded49089c136c29841b81d5a930c1476f1ebba421318",
+      "tests/fixtures/cpu-duplicate-constructor/controls/comment.bend": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+      "tests/fixtures/cpu-duplicate-constructor/controls/comment.stderr.json": "d6752c8a6d4abfee8704c642e52f79af5936bf8538475523dc0f5f98f0e36654",
+      "tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+      "tests/fixtures/cpu-duplicate-constructor/controls/crlf.stderr.json": "01d9c07c256813a38d7b9dcb01a43cf0cfef17af9c98bb5c7614ca47d485209f",
+      "tests/fixtures/cpu-duplicate-constructor/controls/eof.bend": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+      "tests/fixtures/cpu-duplicate-constructor/controls/eof.stderr.json": "76683e9ffa749d9aed7748fd14f97e60ebae0843c6e1c82976d50a39b153ed94",
+      "tests/fixtures/cpu-duplicate-constructor/controls/imported/defs.bend": "a67f5bc8b43e104b0a75b25e8b21396c9ee383675fe98b752eb00d025017990a",
+      "tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+      "tests/fixtures/cpu-duplicate-constructor/controls/imported/main.stderr.json": "86345269a39d2fd80e1bb0c124719f2631415db5a90c7f00acd930bfa3b7c765",
+      "tests/fixtures/cpu-duplicate-constructor/controls/newline.bend": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+      "tests/fixtures/cpu-duplicate-constructor/controls/newline.stderr.json": "d548edcb1701588e0d1177cf78a79c82bfe760f49f891d6d53bc55ec6da774ad",
+      "tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+      "tests/fixtures/cpu-duplicate-constructor/controls/same-type.stderr.json": "cde45fb0a1723a6cdc485646ce811be929ff7a74a235039247dfb8d633437bd7",
+      "tests/fixtures/cpu-duplicate-constructor/controls/space.bend": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+      "tests/fixtures/cpu-duplicate-constructor/controls/space.stderr.json": "92bf691c0836d1b0e575ae79cac2ef374ed3c75dd119a32e5868090e06979a64",
+      "tests/fixtures/cpu-duplicate-constructor/controls/tab.bend": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+      "tests/fixtures/cpu-duplicate-constructor/controls/tab.stderr.json": "f3b669a44c91cd97452bc714583e85264824bb2600bb6e3bed6e66cc521724a2",
+      "tests/fixtures/cpu-duplicate-constructor/negative-cases.json": "546b9ec0231c6ab7c2615c765297c24796b425030fc5566bd3a64d8c227d9bcf",
+      "tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend": "b367855ab747def161951cbc74d99193b9f44a2bfe646d67c9d857792b577e73",
+      "tests/fixtures/cpu-duplicate-constructor/positive/imported/left.bend": "9cfd3de7e97f6a2baffa6e26635c9682675eb62fc341c8697ae37a07b7f5dd18",
+      "tests/fixtures/cpu-duplicate-constructor/positive/imported/main.bend": "38584a3d3caf37d40c23c0228ebafbf034d3718baa76874d0df22046072d755c",
+      "tests/fixtures/cpu-duplicate-constructor/positive/imported/right.bend": "74c3e81078366d82e6a91d2b6dd84506bbd182fd02d24588a69999f2521a2a01"
+    },
+    "all_changed_worktree_bytes_equal_committed_blobs": true,
+    "baseline_5013562_and_start_55aef700_production_identical": true
+  },
+  "whitespace_review": {
+    "rows": [
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "55aef700c7868c50a17952e98b7727d9c480282a",
+          "HEAD"
+        ],
+        "exit": 2,
+        "stdout": "tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:1: trailing whitespace.\n+# SPDX-License-Identifier: MPL-2.0\ntests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:2: trailing whitespace.\n+type A is Data:\ntests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:3: trailing whitespace.\n+  Dup{}\ntests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:4: trailing whitespace.\n+type B is Data:\ntests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:5: trailing whitespace.\n+  Dup\ntests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:6: trailing whitespace.\n+  {}\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol",
+          "diff",
+          "--check",
+          "55aef700c7868c50a17952e98b7727d9c480282a",
+          "HEAD"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "scope": "Default diff check reports the six deliberate carriage returns in the CRLF-only fixture. Second command explicitly recognizes CRLF while retaining ordinary blank-at-EOL/EOF and space-before-tab checks. Invocation-scoped Git display validation only; no global config, compiler flags, or tests changed."
+  },
+  "frozen_inputs": {
+    "cargo_lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "docs_commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+    "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599"
+  },
+  "api_contract": "Public ParseError source/line/column/message/Display and ordinary load/load_executable Err unchanged. Only crate-private load metadata is added. CLI stderr changes to pinned source diagnostics and newly formatted failures use existing Ok(CliOutput) with exit_code()1 instead of prior unstructured Err. Process status remains1; cancellation/writer/flush/missing-source failures remain Err. src/lib.rs consumes exit_code; external invoke audit remains outstanding. No public signature or runtime/guard changes."
+}

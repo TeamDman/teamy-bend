@@ -1,0 +1,207 @@
+{
+  "source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "baseline_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 363,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 73
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 182,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 73
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 44
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "upstream_stream_or_phase_changes": [
+    "reg/borrow_fork_hold.bend"
+  ],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/book_prefix_arity.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/ctor_shared_tag.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_000.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_001.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "page/ambiguous_ctor_error.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "parse/duplicate_ctor_name.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/book_prefix_arity.bend",
+      "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "079dc96cb4abbb34eec53e67f77e7325600f0c356562033da0cb9f1bc1346dfa",
+      "after_stderr_sha256": "a1f513bcf5c907b9c057fa17b14dab94338bce18c2f1f970135d6fb8a2ce5d84"
+    },
+    {
+      "fixture": "check/ctor_shared_tag.bend",
+      "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "655196cdfca0df135de161a72baed5f5fefd8437d113217bcbb91a200aece709",
+      "after_stderr_sha256": "ae79c47347472b4cc99402c51812486baabb8a27c99f19db9cf6ffb79ef4dc64"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_000.bend",
+      "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "93d74a49cb5b378158f4b1b6950b9c0f899ccfcfc476523aac09fb9231973f04",
+      "after_stderr_sha256": "9c4470ee6ef8d330ed8a5b6b16e17efd61da356c3576a81cffeaa15dc39ccad3"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_001.bend",
+      "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "8f2ad376c2368c745f9f7fc4de2f5e46acf5ea9f037d7a01ad83604ba8824900",
+      "after_stderr_sha256": "4e29b4d4d5a8d412c714ebd7f9041d6f341d3dc247c6661e5479bcbd2c947b82"
+    },
+    {
+      "fixture": "page/ambiguous_ctor_error.bend",
+      "source_sha256": "5ac015f18d852bd28b7d83b2492666a2c109bf1de92ce08f4b965494c3988e30",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "ee560b42c6a537affebb1eb20210d6f5c32cbac2d272c9ebd8db0f849d931a09",
+      "after_stderr_sha256": "8f8b3e27d062df57f9dcd196d45a433cbb2aa571db26695d84dbd9589c069821"
+    },
+    {
+      "fixture": "parse/duplicate_ctor_name.bend",
+      "source_sha256": "6eaf7f93e004a913ba29fbc249f8d94a7a971f267cff8def49e63a68a003b77b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "b40e33659b53c2d5d5c537970053c1a3b67bb6510048505d0c297122ef586414",
+      "after_stderr_sha256": "6967604126009ab676e216efd56b3d8b521a4805014206212aa4d306ff9510b4"
+    },
+    {
+      "fixture": "reg/borrow_fork_hold.bend",
+      "source_sha256": "729a440eb3276a7ca5d000bbd926e11c14f1acbe94432d13b08daea6ed817251",
+      "before_classification": "acceptance_disagreement",
+      "after_classification": "oracle_or_infrastructure_failure",
+      "port_changed_fields": [],
+      "before_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c",
+      "after_stderr_sha256": "a5c9abafcc0671f7cf1ba9d57fd4d50bc91804580f51b7fe4c33fad309463c4c"
+    }
+  ],
+  "raw_observations_sha256": "4ed16d2808ba73d76268bd1af2025a8c6c196f1c25968a034503ad40097e9ca7",
+  "baseline_raw_sha256": "d97c07d5680715164a3ad67363cc6fd846d5bdb68b8d9dcf20e01a7865cd2337",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "duplicate_constructor_diagnostic_changes": [
+    {
+      "fixture": "check/book_prefix_arity.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/book_prefix_arity.bend:12:5: duplicate constructor: K6\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "check/ctor_shared_tag.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/check/ctor_shared_tag.bend:10:5: duplicate constructor: K5\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_000.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/compile/ctor_tag_dispatch_000.bend:11:5: duplicate constructor: K7\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "compile/ctor_tag_dispatch_001.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/compile/ctor_tag_dispatch_001.bend:11:7: duplicate constructor: Mk8b\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "page/ambiguous_ctor_error.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/page/ambiguous_ctor_error.bend:8:4: duplicate constructor: K\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K)\n- observed : '{'\nLocation:\n7 | type B is Data:\n8>|   K{a: U32, b: U32}\n9 | \n",
+      "classification": "exact_rejection"
+    },
+    {
+      "fixture": "parse/duplicate_ctor_name.bend",
+      "before_stderr": "Error: \n   0: \u001b[91m$UPSTREAM/tests/parse/duplicate_ctor_name.bend:6:5: duplicate constructor: Kk\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "after_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+      "upstream_stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Kk)\n- observed : '{'\nLocation:\n5 |   Kk{}\n6>|   Kk{a: Aa}\n7 | \n",
+      "classification": "exact_rejection"
+    }
+  ],
+  "other_port_stream_changes": []
+}

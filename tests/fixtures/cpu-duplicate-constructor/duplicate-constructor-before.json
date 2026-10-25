@@ -1,0 +1,273 @@
+{
+  "starting_checkpoint": "55aef700c7868c50a17952e98b7727d9c480282a",
+  "baseline_snapshot_source": "5013562f98204d5e4694486d0a3f77f366345b7d",
+  "same_production_source": true,
+  "before_binary_sha256": "59fe0612e2410858ce93046944e5643c2f17390d27c21efd738d5290d4e7b073",
+  "after_source": "4d6459c0b1a81499fd106c352ae4ce8696db8281",
+  "raw_baseline_sha256": "4729d5b6dee82ea514889e91eb20926ebf8aed4ee3a903d30f841ae1b015075e",
+  "baseline_commands": 48,
+  "changes": [
+    {
+      "case": "check/book_prefix_arity.bend",
+      "source_sha256": "ccc942cacf6854c0674161bdc3df0ffb6bcab813278ae6e31e3b79ede6afb09f",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/check/book_prefix_arity.bend:12:5: duplicate constructor: K6\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K6)\n- observed : '{'\nLocation:\n11 | type B6 is Data:\n12>|   K6{a: Un6, b: Un6}\n13 | \n"
+      }
+    },
+    {
+      "case": "check/ctor_shared_tag.bend",
+      "source_sha256": "abc9d32e40062fe3556051017f05e86225d51eda119f2118430e89645565bd5b",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/check/ctor_shared_tag.bend:10:5: duplicate constructor: K5\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K5)\n- observed : '{'\nLocation:\n 9 | type B5 is Data:\n10>|   K5{a: A5}\n11 | \n"
+      }
+    },
+    {
+      "case": "compile/ctor_tag_dispatch_000.bend",
+      "source_sha256": "1d258654372e2ac92cb2b13141c39a26b316e8e8b9a0724dddd64a056a61fd14",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_000.bend:11:5: duplicate constructor: K7\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: K7)\n- observed : '{'\nLocation:\n10 | type B7b is Data:\n11>|   K7{a: U32, b: U32}\n12 | \n"
+      }
+    },
+    {
+      "case": "compile/ctor_tag_dispatch_001.bend",
+      "source_sha256": "10fc4dab14113df3a57ada79452a136050abc2421cceea080d0c74bb7ffff4b8",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/compile/ctor_tag_dispatch_001.bend:11:7: duplicate constructor: Mk8b\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Mk8b)\n- observed : '{'\nLocation:\n10 | type B8 is Data:\n11>|   Mk8b{v: U32, w: U32}\n12 | \n"
+      }
+    },
+    {
+      "case": "controls/same-type.bend",
+      "source_sha256": "ac33e7a670b57d4ef38ca31ce1c3220df537e527d32aecf2a6ff0a7aa7d43f64",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/same-type.bend:4:6: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '{'\nLocation:\n3 |   Dup{}\n4>|   Dup{}\n5 | \n"
+      }
+    },
+    {
+      "case": "controls/space.bend",
+      "source_sha256": "104d6a854a42e4a26d2caeff70705a95f3ed5d5d9b6ea7e1248d2b083c61f5c1",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/space.bend:5:7: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : ' '\nLocation:\n4 | type B is Data:\n5>|   Dup {}\n6 | \n"
+      }
+    },
+    {
+      "case": "controls/tab.bend",
+      "source_sha256": "8c0035d16efdb6eec11bbb056bad46357c86d4b911a11e5389ef95d544422000",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/tab.bend:5:7: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\t'\nLocation:\n4 | type B is Data:\n5>|   Dup\t{}\n6 | \n"
+      }
+    },
+    {
+      "case": "controls/comment.bend",
+      "source_sha256": "0fd3a4262164e2a6129ea21bdb2cb11163f52ca9a753ec65f241a16fab0e111b",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/comment.bend:6:3: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '#'\nLocation:\n4 | type B is Data:\n5>|   Dup# duplicate before a comment\n6 |   {}\n"
+      }
+    },
+    {
+      "case": "controls/newline.bend",
+      "source_sha256": "18e0ac2f8ab5def7f892e0304a556a84521f9cd0d9ef16b008e84644c015d420",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/newline.bend:6:3: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\n'\nLocation:\n4 | type B is Data:\n5>|   Dup\n6 |   {}\n"
+      }
+    },
+    {
+      "case": "controls/eof.bend",
+      "source_sha256": "c643fde0a6fd6709ee51c7055875defbb27d996b722b9632bdf25d135fcae556",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/eof.bend:6:1: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : end of input\nLocation:\n4 | type B is Data:\n5>|   Dup\n"
+      }
+    },
+    {
+      "case": "controls/crlf.bend",
+      "source_sha256": "559845cf5291309d7dc557efba2c478c1197a303e8107bc9e0ec72bfc54e8cc7",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/crlf.bend:6:3: duplicate constructor: Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: Dup)\n- observed : '\r'\nLocation:\n4 | type B is Data:\r\n5>|   Dup\r\n6 |   {}\r\n"
+      }
+    },
+    {
+      "case": "controls/imported/main.bend",
+      "source_sha256": "52c917eeeb66c75e5c1201e8ed782bca9c944c998bd231983ce74536087f67b3",
+      "before": {
+        "command": [
+          "$BASELINE_RUN/teamy-bend",
+          "check",
+          "$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/main.bend"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error: \n   0: \u001b[91m$REPO/tests/fixtures/cpu-duplicate-constructor/controls/imported/defs.bend:5:6: duplicate constructor: defs.Dup\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+      },
+      "after": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error:\n- expected : a fresh constructor name (duplicate declaration: defs.Dup)\n- observed : '{'\nLocation:\n4 | type B is Data:\n5>|   Dup{}\n6 | \n"
+      }
+    }
+  ],
+  "initial_failed_control": {
+    "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ntype A is Data:\n  One{value: U32}\ntype B is Data:\n  Two{value: U32}\ndef main() -> U32:\n  match One{3}, Two{4}:\n    case One{x}, Two{y}: (x + y : U32)\n",
+    "source_sha256": "0920680b9e66a91081eb16ba01d6583a99488d47f295afd01f3fcf532652f476",
+    "upstream": {
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n7 | def main() -> U32:\n8>|   match One{3}, Two{4}:\n9 |     case One{x}, Two{y}: (x + y : U32)\n"
+    },
+    "old_port": {
+      "case": "positive/distinct.bend",
+      "source_sha256": "0920680b9e66a91081eb16ba01d6583a99488d47f295afd01f3fcf532652f476",
+      "command": [
+        "$BASELINE_RUN/teamy-bend",
+        "compile",
+        "$REPO/tests/fixtures/cpu-duplicate-constructor/positive/distinct.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "$INITIAL_ARTIFACTS/distinct/before.c"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : an undestructed scrutinee (this value is already a constructor: bind its fields directly; if an outer match destructed it, fold the pattern into the outer case)\nLocation:\n7 | def main() -> U32:\n8>|   match One{3}, Two{4}:\n9 |     case One{x}, Two{y}: (x + y : U32)\n",
+      "artifact": "$INITIAL_ARTIFACTS/distinct/before.c",
+      "artifact_sha256": null
+    },
+    "scope": "Both implementations reject direct matching of already constructed values. Positive control corrected to match function parameters. No production acceptance change; initial emission run remains failed."
+  }
+}
