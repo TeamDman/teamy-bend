@@ -302,3 +302,30 @@ fn template_bodies_are_checked_when_instantiated_and_do_not_hide_unfilled_laws()
     .expect("ordinary law and erased template argument parse");
     check_book(&unfilled).expect_err("an ignored erased argument does not fill an ordinary law");
 }
+
+#[test]
+fn reusable_nat_tail_tokens_survive_template_replay_and_cache_hits() {
+    let program = source(
+        r"
+def id(n: Nat) -> Nat: n
+def inc(n: Nat) -> Nat: 1n+n
+def twice(~f: Nat -> Nat, n: Nat) -> Nat:
+  match n:
+    case 0n: 0n
+    case 1n++k: add(f(k), f(k))
+def main() -> Nat: add(twice(~id, 3n), add(twice(~inc, 3n), twice(~id, 4n)))
+",
+    );
+    let book = parse(&program).unwrap();
+    assert_eq!(instances(&book, "twice"), 2);
+    let equivalent = parse(&program.replace("1n++k", "1n+ +k")).unwrap();
+    assert_eq!(format!("{book:?}"), format!("{equivalent:?}"));
+    assert_eq!(
+        check_book(&book)
+            .unwrap()
+            .evaluate_data("main", &[])
+            .unwrap()
+            .to_string(),
+        "16n"
+    );
+}

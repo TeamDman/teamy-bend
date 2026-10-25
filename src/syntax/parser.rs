@@ -1970,8 +1970,25 @@ impl Parser<'_> {
             // Literal sugar names the fixed constructors, like U32/F32 sugar.
             // Explicit constructor names still resolve in the local module.
             let glued = self.at > 0 && self.tokens[self.at - 1].end == self.current().start;
-            let mut value = if glued && self.take("+") {
-                self.expression(0)?
+            // Upstream consumes one adjacent '+' before parsing the Nat tail.
+            // In `1n++k`, leave the second '+' for the reusable binder grammar;
+            // maximal-munch string append still applies outside this context.
+            let split = (glued && self.is("++")).then(|| {
+                let original = (self.at, self.current().clone());
+                let remainder = &mut self.tokens[self.at];
+                remainder.text = "+".into();
+                remainder.start += 1;
+                remainder.column += 1;
+                original
+            });
+            let mut value = if glued && (split.is_some() || self.take("+")) {
+                let parsed = self.expression(0);
+                // Retained template bodies replay the original token stream.
+                // Restore after parsing even when the tail was rejected.
+                if let Some((at, original)) = split {
+                    self.tokens[at] = original;
+                }
+                parsed?
             } else {
                 self.constructor("Zero".into(), Vec::new())
             };

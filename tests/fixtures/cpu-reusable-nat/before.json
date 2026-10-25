@@ -1,0 +1,313 @@
+{
+  "tested_source": "244b659c78caa56c4cc2d1df25daa9e693e591b8",
+  "rows": [
+    {
+      "case": "tight",
+      "lane": "upstream",
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/tight.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "tight",
+      "lane": "port",
+      "source_sha256": "29d8c60e446324511576ad22ae51fddfc2494d28e0f3211c09950551f1eed4e8",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/tight.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "tail-spaced",
+      "lane": "upstream",
+      "source_sha256": "47fcaee2cec039b8b6019ec4e7b815cb32e9b93a15b9eca99fe357c62ea69dab",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/tail-spaced.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "tail-spaced",
+      "lane": "port",
+      "source_sha256": "47fcaee2cec039b8b6019ec4e7b815cb32e9b93a15b9eca99fe357c62ea69dab",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/tail-spaced.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 306,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "binder-spaced",
+      "lane": "upstream",
+      "source_sha256": "f2b0720c1e7048d996b862020ef90b47da57f28f0983d2184d89f7e1e99fda82",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/binder-spaced.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "binder-spaced",
+      "lane": "port",
+      "source_sha256": "f2b0720c1e7048d996b862020ef90b47da57f28f0983d2184d89f7e1e99fda82",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/binder-spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n++ k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "before-spaced",
+      "lane": "upstream",
+      "source_sha256": "c1a774f85c4ac602eb9d1b02f7443cac36c0c75e90ec9aa0ffb03929dbb4c86c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/before-spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "before-spaced",
+      "lane": "port",
+      "source_sha256": "c1a774f85c4ac602eb9d1b02f7443cac36c0c75e90ec9aa0ffb03929dbb4c86c",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/before-spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n ++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "both-spaced",
+      "lane": "upstream",
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/both-spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : Nat.add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "both-spaced",
+      "lane": "port",
+      "source_sha256": "7937d60b7b3a38298a0b6509c273b72c30ffc52f12e4a4bd7310ec2187119d0c",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/both-spaced.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : .add(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n + +k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "ordinary",
+      "lane": "upstream",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/ordinary.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "ordinary",
+      "lane": "port",
+      "source_sha256": "c0387b209d07f250e1d5c33385c395e30ddd82650adfcd6adc2abf3f1d96098a",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/ordinary.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : k\n- observed : k (consumed more than once)\nLocation: twice_tail\n6 |       0n\n7>|     case 1n+k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "grouped",
+      "lane": "upstream",
+      "source_sha256": "7038044dcd385e97216129d565f206e82da01d861bbe4a64886a74bd0372e5e1",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/grouped.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "grouped",
+      "lane": "port",
+      "source_sha256": "7038044dcd385e97216129d565f206e82da01d861bbe4a64886a74bd0372e5e1",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/grouped.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case (1n)++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "u32",
+      "lane": "upstream",
+      "source_sha256": "3a54bd8e7d4e1f62f38650ffb8c546616172af94d011da9a743d8b8fae65ec62",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/u32.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1, k)\nLocation:\n6 |       0n\n7>|     case 1++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "u32",
+      "lane": "port",
+      "source_sha256": "3a54bd8e7d4e1f62f38650ffb8c546616172af94d011da9a743d8b8fae65ec62",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/u32.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1, k)\nLocation:\n6 |       0n\n7>|     case 1++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "float",
+      "lane": "upstream",
+      "source_sha256": "36e08024acaea84f5db775ee85b60d8652c8e98a59285863937121f7cf9731ab",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/float.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1.0, k)\nLocation:\n6 |       0n\n7>|     case 1.0++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "float",
+      "lane": "port",
+      "source_sha256": "36e08024acaea84f5db775ee85b60d8652c8e98a59285863937121f7cf9731ab",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/float.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(F32{WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{False{}, WCon{True{}, WCon{True{}, WCon{True{}, WCon{True{}, WCon{True{}, WCon{True{}, WCon{True{}, WCon{False{}, WCon{False{}, WNil{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}, k)\nLocation:\n6 |       0n\n7>|     case 1.0++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "nested",
+      "lane": "upstream",
+      "source_sha256": "38c11b42415573acd82d3574ae10c29c829cd1a00f12a89a035ca904180d32e1",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/nested.bend"
+      ],
+      "exit": 0,
+      "stdout": "2n\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "nested",
+      "lane": "port",
+      "source_sha256": "38c11b42415573acd82d3574ae10c29c829cd1a00f12a89a035ca904180d32e1",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n7 |     case 1n: 1n\n8>|     case 1n+1n++k:\n9 |       Nat.add(k, k)\n",
+      "timed_out": false
+    },
+    {
+      "case": "triple",
+      "lane": "upstream",
+      "source_sha256": "75483d4b98518d64b7da4f084d0237170c6b9d7ee5dc6da56d0308646fa8a3a0",
+      "command": [
+        "node",
+        "$UPSTREAM/bend2/main.ts",
+        "$EVIDENCE/before/triple.bend"
+      ],
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": "",
+      "timed_out": false
+    },
+    {
+      "case": "triple",
+      "lane": "port",
+      "source_sha256": "75483d4b98518d64b7da4f084d0237170c6b9d7ee5dc6da56d0308646fa8a3a0",
+      "command": [
+        "$BEND",
+        "check",
+        "$EVIDENCE/before/triple.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a pattern (a binder or a constructor)\n- observed : String.append(1n, k)\nLocation:\n6 |       0n\n7>|     case 1n+++k:\n8 |       Nat.add(k, k)\n",
+      "timed_out": false
+    }
+  ]
+}

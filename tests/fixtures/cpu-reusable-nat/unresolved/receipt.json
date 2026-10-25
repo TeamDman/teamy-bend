@@ -1,0 +1,24 @@
+{
+  "source": "# SPDX-License-Identifier: MPL-2.0\nimport Base\ndef twice_tail(n: Nat) -> Nat:\n  match n:\n    case 0n:\n      0n\n    case 1n++++k:\n      Nat.add(k, k)\ndef main() -> Nat: twice_tail(3n)\n",
+  "rows": [
+    {
+      "lane": "upstream",
+      "exit": 0,
+      "stdout": "4n\n",
+      "stderr": ""
+    },
+    {
+      "lane": "port",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m$EVIDENCE/quadruple.bend:7:14: expected a name, found \"++\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m92\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+    }
+  ],
+  "scope": "Separate generic repeated-unary-prefix lexer gap; not corrected by contextual first numeric-plus split.",
+  "raw_receipt_sha256": "fc70a7f15062dbea735cc67f019809a1b7c82e7a561bcd6075259b2447745c6c",
+  "source_sha256": "828000dd7bd582025172f9fdb85046b8764e753ff67406dea0e9e2f6ddcd3c20",
+  "source_stage": "pre-clean-commit candidate; same contextual parser implementation",
+  "path_replacements": {
+    "private evidence root": "$EVIDENCE"
+  }
+}

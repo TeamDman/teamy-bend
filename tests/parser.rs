@@ -788,3 +788,75 @@ fn explicit_local_lists_and_global_literal_lists_keep_their_identity() {
         check_executable(&load_executable(main).unwrap()).unwrap();
     }
 }
+
+#[test]
+fn adjacent_nat_tail_reuse_preserves_affine_checks_and_infix_tokens() {
+    let program = format!(
+        "{NAT}def first(a: Nat, b: Nat) -> Nat: a\n\
+         def twice(n: Nat) -> Nat:\n  match n:\n    case 0n: 0n\n    case 1n++k: first(k, k)\n"
+    );
+    for pattern in ["1n++k", "1n+ +k", "1n++ k", "1n+++k", "1n+\n      +k"] {
+        let book = parse(&program.replace("1n++k", pattern)).unwrap();
+        // Each unary marker allocates its own ID, even when nested markers
+        // ultimately designate the same reusable field.
+        let expanded = if pattern == "1n+++k" {
+            "1n+ + +k"
+        } else {
+            "1n+ +k"
+        };
+        let equivalent = parse(&program.replace("1n++k", expanded)).unwrap();
+        assert_eq!(format!("{book:?}"), format!("{equivalent:?}"), "{pattern}");
+        let checked = check_book(&book).unwrap();
+        for (input, expected) in [(0, "0n"), (1, "0n"), (3, "2n")] {
+            assert_eq!(
+                checked
+                    .evaluate_data("twice", &[parse_term(&format!("{input}n")).unwrap()])
+                    .unwrap()
+                    .to_string(),
+                expected,
+                "{pattern}"
+            );
+        }
+    }
+    let affine = parse(&program.replace("1n++k", "1n+k")).unwrap();
+    assert!(
+        check_book(&affine)
+            .unwrap_err()
+            .to_string()
+            .contains("Many")
+    );
+    let non_data = parse(&program.replace("is Data", "is Type")).unwrap();
+    check_book(&non_data).expect_err("a reusable pattern must still require duplicable data");
+    for pattern in ["1n ++k", "1n + +k", "(1n)++k", "1++k", "1.0++k"] {
+        parse(&program.replace("1n++k", pattern)).expect_err("infix terms are not patterns");
+    }
+    for expression in ["a++b", "a ++ b", "(1n)++b", "1n ++ b"] {
+        assert!(
+            parse_term(expression)
+                .unwrap()
+                .to_string()
+                .starts_with("String.append(")
+        );
+    }
+}
+
+#[test]
+fn reusable_nat_tail_keeps_literal_and_nesting_bounds() {
+    for count in [0, 1, 2, 128] {
+        parse_term(&format!("{count}n++k")).expect("bounded literal tail parses");
+    }
+    for suffix in ["", "+k", "++k"] {
+        let error = parse_term(&format!("129n{suffix}")).unwrap_err();
+        assert!(error.message.contains("resource limit"));
+    }
+    for tail in ["1n+", "1n++", "1n++:"] {
+        parse_term(tail).expect_err("malformed tail must fail");
+    }
+    let deep = format!("{}+k", "1n+".repeat(200));
+    assert!(
+        parse_term(&deep)
+            .unwrap_err()
+            .message
+            .contains("resource limit")
+    );
+}
