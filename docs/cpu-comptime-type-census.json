@@ -1,0 +1,248 @@
+{
+  "source": "54bc100bafda627fadd0443592be0e6200235838",
+  "baseline_source": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+  "total": 1302,
+  "counts": {
+    "exact_rejection": 377,
+    "acceptance_disagreement": 494,
+    "both_accept": 366,
+    "oracle_or_infrastructure_failure": 6,
+    "different_rejection": 59
+  },
+  "historical_IO_members": 385,
+  "historical_IO_exactly_unchanged": 385,
+  "historical_IO_changed": [],
+  "differences_outside_historical_IO": 168,
+  "residual_classifications": {
+    "acceptance_disagreement": 109,
+    "different_rejection": 59
+  },
+  "baseline_triage_categories_among_current_residual": {
+    "acceptance_rejection_mismatch": 109,
+    "other_rejection_difference": 29,
+    "diagnostic_only_candidate": 30
+  },
+  "oracle_failures": [
+    "check/bystander_hypothesis_cost.bend",
+    "check/deep_hyp_rewrite.bend",
+    "page/deep_list_walk.bend",
+    "reg/borrow_fork_hold.bend",
+    "reg/dead_param_fork.bend",
+    "rfc/share_loop.bend"
+  ],
+  "port_and_upstream_status_changes": [],
+  "port_only_status_changes": [],
+  "port_only_phase_changes": [],
+  "phase_changes": [],
+  "upstream_stream_or_phase_changes": [],
+  "port_stream_or_phase_changes": [
+    {
+      "fixture": "check/error_window_filled_param_use.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "check/error_window_param_use.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "comptime/err_op_ns.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    },
+    {
+      "fixture": "comptime/wrong_type.bend",
+      "fields": [
+        "stderr_base64"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "fixture": "check/error_window_filled_param_use.bend",
+      "source_sha256": "ede9972ab10fac40ed788be98678d8da6b443f7e2e11406f59bb3d47e6d05620",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "49f9f4c2bf810488dd215aac787a99d01b7e5741aa1c25fd6a1f2410fcde5ba4",
+      "after_stderr_sha256": "d97cc1c64730ecf00a9564918d15e4486098a43ca0a17c76ffe9365f38699564"
+    },
+    {
+      "fixture": "check/error_window_param_use.bend",
+      "source_sha256": "3482362b9628c8c94a2829aee4b01e6640b30579fadea5ce9bf3fd3c88718d6b",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "49f9f4c2bf810488dd215aac787a99d01b7e5741aa1c25fd6a1f2410fcde5ba4",
+      "after_stderr_sha256": "84bb8957f842b750c1b07cb85fecaaf2e0fa92b5cf0353ffcbde56f3157d2716"
+    },
+    {
+      "fixture": "comptime/err_op_ns.bend",
+      "source_sha256": "12430ce639b6f7a26e8faae59b57cc286c1e1e2780ad1d86fc734ddd1b98d740",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "02a98f6dbe807f00779f5c6ab58c32145a59eb6dcc8fb729b176f59b32310777",
+      "after_stderr_sha256": "7afdcb3137e246d69d599b57c7f4fa76404406fdc0eab7091fbdc9f02f4513b2"
+    },
+    {
+      "fixture": "comptime/wrong_type.bend",
+      "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+      "before_classification": "different_rejection",
+      "after_classification": "exact_rejection",
+      "port_changed_fields": [
+        "stderr_base64"
+      ],
+      "before_stderr_sha256": "96297d65d544782617f46faf4a47ff0fddf2e2169017551c8eab8038992f730a",
+      "after_stderr_sha256": "2619f380189617073aa0bd6cb886f2405cedd3ead3e50153178fa9763843486d"
+    }
+  ],
+  "raw_observations_sha256": "0de8bb98e4d2734cacc0c9704710cfb39af0938fb15b419de7290a7f5795d8d8",
+  "baseline_raw_sha256": "bc0ea38df485cf0498fccb0a6ac6e9cb5b70f9a0c6c019f3197c1162e6d4c71f",
+  "scope": "Complete checking census only. Both-accept is status agreement. Historical subset subtraction is permitted only after exact 385-member renewal, never by a new IO symptom. Old triage categories describe observations, not proof of diagnostic-only semantics.",
+  "compact_port_changes": {
+    "baseline_source": "792aaf0abbb5f3c20a046ab39ecc66967350c2b1",
+    "source": "54bc100bafda627fadd0443592be0e6200235838",
+    "changes": [
+      {
+        "fixture": "check/error_window_filled_param_use.bend",
+        "source_sha256": "ede9972ab10fac40ed788be98678d8da6b443f7e2e11406f59bb3d47e6d05620",
+        "before_classification": "different_rejection",
+        "after_classification": "exact_rejection",
+        "before_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error: \n   0: \u001b[91mh: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+        },
+        "after_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- p : Nat\nLocation: h\n 9 | def h(p):\n10>|   Bool.and(True{}, p)\n11 | \n"
+        },
+        "upstream": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- p : Nat\nLocation: h\n 9 | def h(p):\n10>|   Bool.and(True{}, p)\n11 | \n"
+        }
+      },
+      {
+        "fixture": "check/error_window_param_use.bend",
+        "source_sha256": "3482362b9628c8c94a2829aee4b01e6640b30579fadea5ce9bf3fd3c88718d6b",
+        "before_classification": "different_rejection",
+        "after_classification": "exact_rejection",
+        "before_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error: \n   0: \u001b[91mh: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+        },
+        "after_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- p : Nat\nLocation: h\n 8 | def h(p: Nat) -> Bool:\n 9>|   Bool.and(True{}, p)\n10 | \n"
+        },
+        "upstream": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- p : Nat\nLocation: h\n 8 | def h(p: Nat) -> Bool:\n 9>|   Bool.and(True{}, p)\n10 | \n"
+        }
+      },
+      {
+        "fixture": "comptime/err_op_ns.bend",
+        "source_sha256": "12430ce639b6f7a26e8faae59b57cc286c1e1e2780ad1d86fc734ddd1b98d740",
+        "before_classification": "different_rejection",
+        "after_classification": "exact_rejection",
+        "before_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error: \n   0: \u001b[91mT~0: type mismatch: expected Nat; observed U32\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+        },
+        "after_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- f : @_:U32 -> U32\n- x : U32\nLocation: T~0\n6 | def T(~f: U32 -> U32, x: U32) -> U32:\n7>|   f(x)\n8 | \n"
+        },
+        "upstream": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Nat\n- observed : U32\nContext:\n- f : @_:U32 -> U32\n- x : U32\nLocation: T~0\n6 | def T(~f: U32 -> U32, x: U32) -> U32:\n7>|   f(x)\n8 | \n"
+        }
+      },
+      {
+        "fixture": "comptime/wrong_type.bend",
+        "source_sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e",
+        "before_classification": "different_rejection",
+        "after_classification": "exact_rejection",
+        "before_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error: \n   0: \u001b[91mapp~0: type mismatch: expected Bool; observed Nat\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m44\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n"
+        },
+        "after_port": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n5 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   f(x)\n7 | \n"
+        },
+        "upstream": {
+          "phase": "check",
+          "exit": 1,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "Error:\n- expected : Bool\n- observed : Nat\nContext:\n- f : @_:Nat -> Nat\n- x : Nat\nLocation: app~0\n5 | def app(~f: Nat -> Nat, x: Nat) -> Nat:\n6>|   f(x)\n7 | \n"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "completed": true,
+    "full_parity": false,
+    "tested_source": "54bc100bafda627fadd0443592be0e6200235838",
+    "binary_sha256": "9c7635f045865c402c892bfa8c6243c7c6545222822da3e3ed06e10dec1459f1",
+    "phase_probe_sha256": "900ee648ec975841fedeb91454b3ff5ab70e9496a8aa38f489e2bf884053dfe0",
+    "build_receipt_sha256": "61c1d11ed7490a6bdc6052289b7f64eafbb54229e53bceab92b9ae9e4bed956f",
+    "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 377,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 6,
+      "different_rejection": 59
+    },
+    "missing_IO_candidates": 386,
+    "measured_differences": 553,
+    "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified."
+  },
+  "upstream_delta": []
+}

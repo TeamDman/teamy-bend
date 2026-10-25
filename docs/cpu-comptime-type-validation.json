@@ -1,0 +1,867 @@
+{
+  "tested_source": "54bc100bafda627fadd0443592be0e6200235838",
+  "snapshot": {
+    "source_commit": "54bc100bafda627fadd0443592be0e6200235838",
+    "source_tree": "41252b6948edacde10c484d39c536ec295e767a4",
+    "binary_sha256": "9c7635f045865c402c892bfa8c6243c7c6545222822da3e3ed06e10dec1459f1",
+    "binary_size": 27409144,
+    "working_binary": "$RUN/teamy-bend",
+    "archive": "$EVIDENCE/snapshot/teamy-bend.gz",
+    "archive_sha256": "85bd3254ab68ae13b2e625962c959376d0d58f9fbf8506385b0efc53f00e41aa",
+    "archive_size": 7115745,
+    "cargo_fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "artifact": "target/debug/deps/teamy_bend-c85207eab3bb1647",
+        "features": "[\"default\", \"extended_observability\"]",
+        "profile": 4000329519511807648,
+        "binary_sha256": "9c7635f045865c402c892bfa8c6243c7c6545222822da3e3ed06e10dec1459f1"
+      }
+    ],
+    "capture": "Clean source captured while full-gate tests run after build. Final validation must attest completed gate and unchanged build binary. Cargo feature identity verified against matching binary artifact SHA-256; lossless gzip verified against working and build binaries. No historical snapshot removed."
+  },
+  "standard_gate": {
+    "passed": 1240,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 183,
+    "exit": 0,
+    "seconds": 972.6109023810131,
+    "log_sha256": "b57c9a5cf8741c44c0e6d47ce32359abffa8a146d76b452a9198eabc7cb67fb1"
+  },
+  "commands": [
+    {
+      "source_commit": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "application_"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888582656,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 5.025383589992998,
+      "minimum_free": 11888574464,
+      "minimum_tmp_free": 3905679360,
+      "name": "focused-unit",
+      "log_sha256": "7c4fe8fa1918ff86caacf4344247243deb57255153194b53efac07e5e2527ceb",
+      "log_bytes": 1004,
+      "test_totals": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates",
+        "--test",
+        "cpu_list_for_each"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888562176,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 6.820071177004138,
+      "minimum_free": 11888553984,
+      "minimum_tmp_free": 3862028288,
+      "name": "focused",
+      "log_sha256": "38afb88ef881207129bf1cdf40d65b60876a0326229e20c43bff875157bedbc0",
+      "log_bytes": 2495,
+      "test_totals": {
+        "passed": 1,
+        "failed": 1,
+        "ignored": 0
+      },
+      "completed_groups": 1,
+      "disposition": "retained failed intermediate candidate; subsequent suites unrun; not final-source validation"
+    },
+    {
+      "source_commit": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates",
+        "--test",
+        "cpu_list_for_each"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888508928,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 28.32358581101289,
+      "minimum_free": 11888500736,
+      "minimum_tmp_free": 3888967680,
+      "name": "focused-candidate",
+      "log_sha256": "4da6930a94ad1a9c7fea34d87ab86e44aadb0708cc9fb67b9e47268de6ef5f1f",
+      "log_bytes": 2180,
+      "test_totals": {
+        "passed": 5,
+        "failed": 1,
+        "ignored": 0
+      },
+      "completed_groups": 2,
+      "disposition": "retained failed intermediate candidate; subsequent suites unrun; not final-source validation"
+    },
+    {
+      "source_commit": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_type",
+        "--test",
+        "cpu_template_occurrences",
+        "--test",
+        "parser_templates",
+        "--test",
+        "cpu_list_for_each"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888402432,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 43.28258690898656,
+      "minimum_free": 11888394240,
+      "minimum_tmp_free": 3888254976,
+      "name": "focused-final",
+      "log_sha256": "78408f0da01dcae8d8c6aecc89d152b6e55d2e6454cb8322dd384509286f4ab4",
+      "log_bytes": 2846,
+      "test_totals": {
+        "passed": 24,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 4,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "known_sources_require"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888386048,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 4.822757643996738,
+      "minimum_free": 11888377856,
+      "minimum_tmp_free": 3882790912,
+      "name": "known-source-unit",
+      "log_sha256": "6da549e51e02a39961b1f5f636e610aafbf7b63cc82ecbf6a834d1c059fbea88",
+      "log_bytes": 616,
+      "test_totals": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 2,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "54bc100bafda627fadd0443592be0e6200235838",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_comptime_type",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11862675456,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.2221818319812883,
+      "minimum_free": 11862667264,
+      "minimum_tmp_free": 3856424960,
+      "name": "focused-lint",
+      "log_sha256": "318f4fbd8c9aeead3686fb4cbabf8b2bb1f7e7cf7f978e21c6d01fb0432dc0d0",
+      "log_bytes": 115,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "54bc100bafda627fadd0443592be0e6200235838",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoLogo",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11888050176,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 972.6109023810131,
+      "minimum_free": 11862675456,
+      "minimum_tmp_free": 3854024704,
+      "name": "full-gate",
+      "log_sha256": "b57c9a5cf8741c44c0e6d47ce32359abffa8a146d76b452a9198eabc7cb67fb1",
+      "log_bytes": 23203,
+      "test_totals": {
+        "passed": 1240,
+        "failed": 0,
+        "ignored": 49
+      },
+      "completed_groups": 183,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "54bc100bafda627fadd0443592be0e6200235838",
+      "dirty": false,
+      "command": [
+        "python3",
+        "$EVIDENCE/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11871289344,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 187.72245955298422,
+      "minimum_free": 11865772032,
+      "minimum_tmp_free": 3853418496,
+      "name": "matrix-run",
+      "log_sha256": "b535d75860ec4b36c01767f5338efe667b18a578c5ffe1d68a26cc873ca313f9",
+      "log_bytes": 997,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    },
+    {
+      "source_commit": "54bc100bafda627fadd0443592be0e6200235838",
+      "dirty": false,
+      "command": [
+        "python3",
+        "scripts/checking-census/run.py",
+        "--reference",
+        "$REFERENCE",
+        "--binary",
+        "$RUN/teamy-bend",
+        "--phase-probe",
+        "$EVIDENCE/phase-probe",
+        "--output",
+        "$EVIDENCE/census",
+        "--build-receipt",
+        "$EVIDENCE/census-build.json"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 11871285248,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 289.50199609601987,
+      "minimum_free": 11863420928,
+      "minimum_tmp_free": 3853418496,
+      "name": "census-run",
+      "log_sha256": "074df82e4a1a23148f5d4dae786e7a4a09876bdd33d3c4c43e52bb6d5d124898",
+      "log_bytes": 1268,
+      "test_totals": {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      },
+      "completed_groups": 0,
+      "disposition": "pass"
+    }
+  ],
+  "source_identity": [
+    {
+      "file": "src/cli/checker_diagnostic.rs",
+      "sha256": "26dbbef0078df615c490d54bf2e7365962d14593758dcde28c92b70856792b50"
+    },
+    {
+      "file": "src/kernel/check.rs",
+      "sha256": "895a1be0cc226d92624c3a080a30252948b76aa8363d86a3b83cd31e3c8e27df"
+    },
+    {
+      "file": "src/kernel/origins.rs",
+      "sha256": "e1c52c6e3097a81bfc2a3a8b8c310ea7685cd21b283f8dec2ddda117dee2fc7e"
+    },
+    {
+      "file": "src/syntax/diagnostics.rs",
+      "sha256": "e9d0c811edd91b1be8dc86b29660e8d7b266ab1a79a8e278791b6aa60cf0efe2"
+    },
+    {
+      "file": "src/syntax/parser.rs",
+      "sha256": "afd43dd80ce09f259bf98e6e30ca5649e424d2bbe147cae4b080f0cd1a514388"
+    },
+    {
+      "file": "tests/cpu_comptime_type.rs",
+      "sha256": "d4fffaed1721eb4b4c2a3901caacf20d1b1b9e00792555b397a156b648d3d323"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/NOTICE.md",
+      "sha256": "788848a6f497f4927b86298052b8c3025a6b970d3a425b01c3326ac7849277f7"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/README.md",
+      "sha256": "60c6263650d76e253e01a80a88a5e5921737e295fc245288a8055dd679a74780"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/before.json",
+      "sha256": "725c31c8637f6e9b880c0a070b9bd1ba14d1dbc4e58e41ce080e78e8cb6f9cdf"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/dup_lone.bend",
+      "sha256": "5703accc6fc3f4b387643a2fed6dbb419c80e9a21d46b94120f68aebfd1a2b5d"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/dup_lone.stderr.json",
+      "sha256": "38536da0b3412848ceb0d217d7c9ab6e89b2b3f0b751e87210767c2d9a9f8777"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/dup_many.bend",
+      "sha256": "631f320cef25c1d41a5b531c2f2cd6bb5faf48fd48d5613fe381ce8e3096702d"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/err_capture.bend",
+      "sha256": "074629bcde02520c2ca6651528d466829d15f5e3aa381f2e0ceea6527582fb0e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/err_capture.stderr.json",
+      "sha256": "ee0f832cfba25b2b6035d67b5acf8e0ac1bea6f1035397710a0acea5f99a0d7b"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/err_op_ns.bend",
+      "sha256": "12430ce639b6f7a26e8faae59b57cc286c1e1e2780ad1d86fc734ddd1b98d740"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/err_op_ns.stderr.json",
+      "sha256": "aa6c47facf4c6b44af1c56d65eedf142bc9bc977369c6ce89321c820d09a7a66"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/shadow_arg.bend",
+      "sha256": "680edf589b77c436135c811578fa21fb144d8f8dc118a3bcf7a83c15aa18ab5e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend",
+      "sha256": "36e1c8b2f743396fbeda8f1ca1acdc9ae372683f04bf9cc76f14a31e6788f86e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/comptime/wrong_type.stderr.json",
+      "sha256": "e2e226cfdc31c3fa46c4a07f47e87b7d210ea8e52ed6e33780c04e8ce27d6e0b"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/imports/defs.bend",
+      "sha256": "3ffbce8374ed73061b8fda05a86827bafb48d6048afa97a84d1716981dc53ed9"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative-cases.json",
+      "sha256": "1cf622e26ccaf7eb19d547bb03cb3b35becff324a2c6a5a0f7d34936f689e5ea"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/distinct_uses.bend",
+      "sha256": "8478224e16b1cc4513829504b04ac6e7718235a73e1fb57fd87d99ef44e12b6e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/distinct_uses.stderr.json",
+      "sha256": "2e9acd137c4fc9fcdf752a9b274a874665f3ce3076c22c621b2b650c551607b6"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/function.bend",
+      "sha256": "a2fac373d12cb906b3f1b01111a5b4be67e1a22f3dcc98398b2204bfa1f03325"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/function.stderr.json",
+      "sha256": "9a9e511a610458e3c403712bce2297b65837a897ed4da4880f33b5a31c6e6fe1"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/imported.bend",
+      "sha256": "0ed92361d2f3e05e57e2e3ceda390e46a0db8a21be4caaedf2bdcc95b5a2cf3e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/imported.stderr.json",
+      "sha256": "3ce8bf339587ab997fa36b0a730d829b6c932f6089cf3995913a6ecfd8a74920"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/multiline.bend",
+      "sha256": "0a131183eaa2c70ad62979b212805993a383ca75f2a63466a27f285f356204a6"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/multiline.stderr.json",
+      "sha256": "e1c442c8130c821d1c43f225143b6dafb424ef6f0174c328cfe2c7477869cc61"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/nested.bend",
+      "sha256": "e78417af1da84ac2163a7f167497a3fbefe782c09b70eb1f566c580292fca90e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/nested.stderr.json",
+      "sha256": "88a935692246536d7d020137cc084f9d612f19b59a517a9d79f196fcfbbbac65"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/ordinary.bend",
+      "sha256": "a0ed26683d3bd128553fe20c0e01bf85614e30c11dbda2abe74beed110a83c10"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/ordinary.stderr.json",
+      "sha256": "7ccc778fe2cc89171b7733cabbf856a67f9a890e4293e23d676cccc8e66b051f"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/quantity.bend",
+      "sha256": "42ef96ff29127c24792afe7c9bb0a32b7608b4a9c0e828791cf062e43e8a0a2b"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/quantity.stderr.json",
+      "sha256": "390ca9391e9f821070d09c2c2df00f91c6f3762a9ee8cc846df2b6983217d70c"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/quantity_type.bend",
+      "sha256": "f5d2bcab9cc5a71dd73cd6438e2ec36eb46317b7b1058698c11b397e6e3d113e"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/negative/quantity_type.stderr.json",
+      "sha256": "172f0e2c2129695754d4df4006e3b10a02b8496ab06785662bf6c0ae5d2b1dfd"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive-cases.json",
+      "sha256": "813e19c0f72affab415e13b34a77228c5214ceb7c9400badf0dabe6e555ec775"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive/imported.bend",
+      "sha256": "2db77858fde47ebf39e639139a0395969ac51230b72b6c16641194961bf827f4"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive/local.bend",
+      "sha256": "b0aa3bb5e4764262e4e4931d1d4e246ab210afacab0ee4c75b15a61fed6b4c98"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive/ordinary.bend",
+      "sha256": "1b21f4251cbef8b070635d4ca9327f0bb5c3e97d0abbf46323171aae0caac47c"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive/quantity.bend",
+      "sha256": "802488581b8621101cb27c931708b7a60fdcad249840cde51e93aae048da9e58"
+    },
+    {
+      "file": "tests/fixtures/cpu-comptime-type/positive/shadow.bend",
+      "sha256": "5985120a1f6ef9a8f5c9802fd4609783d8a14a3e53d5b06d67466b91ac68e656"
+    },
+    {
+      "file": "tests/fixtures/cpu-list-for-each/negative/wrong-element.port-executable-current-stderr.json",
+      "sha256": "53addbfa263139d2d5b522f4d99ae25baee22fe5fe8d3b5703a0366b527b9d70"
+    }
+  ],
+  "reviews": [
+    {
+      "reviewer": "review_sharing",
+      "disposition": "no blocking finding",
+      "scope": "Final provenance source and tests; read-only, no reviewer builds or executions.",
+      "findings": [
+        "App fallback child sources preserve replacement sharing and independent-source priority.",
+        "known_source requires actual source metadata; explicit occurrence source remains first. Qua/Qnt atoms use actual token-start locations.",
+        "No semantic term copying, binder-ID, global variable-origin or work/depth changes. Ownership and explicit/independent-source, fuel/depth/render fallback controls cover invariants.",
+        "Seven list callback renewal commands verified; prior dirty-candidate receipt distinct from final quantity-source changes. Base390vs1017 stays unqualified."
+      ],
+      "tracked_diff_sha256": "4fe5a96c93762b0bf7d9ade79b6f857109bc5e79c8a6f340b4cfcdcaed4c0c79"
+    },
+    {
+      "reviewer": "review_sharing",
+      "disposition": "no blocking finding",
+      "scope": "Read-only review of committed source/tests; no reviewer builds or executions.",
+      "tested_source": "54bc100bafda627fadd0443592be0e6200235838",
+      "baseline": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "source_files": [
+        "src/cli/checker_diagnostic.rs",
+        "src/kernel/check.rs",
+        "src/kernel/origins.rs",
+        "src/syntax/diagnostics.rs",
+        "src/syntax/parser.rs"
+      ],
+      "source_diff_sha256": "e2241a2c349f4863c02e87500c006b2204098a85f27810bc0c6ca509888ac776",
+      "source_plus_golden_diff_sha256": "4fe5a96c93762b0bf7d9ade79b6f857109bc5e79c8a6f340b4cfcdcaed4c0c79",
+      "full_diff_sha256": "09fcb58724690f4c920b1109626503fa9263e50f2662bcc68429fd1fac6ab7bd",
+      "finding": "Historical hashes differ only by scope; no source drift. Three original trailing-space expectation comments retained."
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Read-only independent evidence verification; no reviewer builds or executions.",
+      "source": "54bc100bafda627fadd0443592be0e6200235838",
+      "commands": 442,
+      "matching": 434,
+      "strict_IO_observations": 8,
+      "unexpected": 0,
+      "timeouts": 0,
+      "exact_repeated_lane_pairs": 200,
+      "actual_executions": 60,
+      "pure_normalizations": 20,
+      "exact_negative_comparisons": 216,
+      "separate_port_phase_probes": 48,
+      "byte_identical_port_artifacts": 14,
+      "findings": [
+        "All fixture hashes, O3 commands, binary/archive identities verified.",
+        "Final7-command list comparison verified independently from historical dirty-candidate renewal; Base390vs1017remains unresolved.",
+        "Baseline snapshot792aaf0is production-identical to starting docs checkpoint9e1c7e2; intermediate failed focused runs retained."
+      ],
+      "matrix_sha256": "9cb29f234e2229d985d412dba4ac48bbe6214fd8d41a782cac4df8410dd23c12",
+      "final_list_sha256": "e4cb6f56de3b15887aabeb063cb38ef0eecda8371c1c64477d3b5f1633dff472"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Read-only independent classification of1302 checking rows and source hashes; no runtime qualification implied.",
+      "source": "54bc100bafda627fadd0443592be0e6200235838",
+      "counts": {
+        "both_accept": 366,
+        "exact_rejection": 377,
+        "acceptance_disagreement": 494,
+        "different_rejection": 59,
+        "oracle_or_infrastructure_failure": 6
+      },
+      "exactly_renewed_historical_IO": 385,
+      "residual": 168,
+      "residual_acceptance": 109,
+      "residual_rejection": 59,
+      "port_stderr_gains": [
+        "check/error_window_filled_param_use.bend",
+        "check/error_window_param_use.bend",
+        "comptime/err_op_ns.bend",
+        "comptime/wrong_type.bend"
+      ],
+      "findings": [
+        "No port or upstream status/phase changes; all upstream streams/outcomes unchanged.",
+        "Other1298port streams and six host-stack failures unchanged.",
+        "Two error-window gains are checking-only census observations.",
+        "Residual historical labels30diagnostic candidates+29other rejection differences do not waive observations."
+      ],
+      "raw_sha256": "0de8bb98e4d2734cacc0c9704710cfb39af0938fb15b419de7290a7f5795d8d8",
+      "reconciliation_sha256": "310a955bb351f698107e170d20ab976881472def64383412b43ea5f5b9840fc7",
+      "current_csv_sha256": "69fbea93c72129656f4467e12e1f974fbc43ef73b91b7e3ca2d50d047baa858e"
+    },
+    {
+      "reviewer": "review_imported_printer",
+      "disposition": "no blocking finding",
+      "scope": "Read-only prepared public receipt/report template review before final gate; no gate pass or final report attested.",
+      "results_sha256": "5126e86279b73261b1d4a2d6b6db890fe7d54bc39fe25569bc6a88f6d7f2f63e",
+      "census_sha256": "f11d2590d92ac5d8cd5e5879577c59e98e8348aa1f719d0c30b1eaaebb95e430",
+      "template_sha256": "951801dd1cf9b5b2ed2a1ce8c7d7341750af9b291e684edba42911a5b6958429",
+      "findings": [
+        "Receipts match retained evidence after path redaction; four-row delta reconstructs all1302current CSV rows.",
+        "Coverage481linked/821unlinked independently verified; error-window gains census-only.",
+        "Historical intermediate failures and dirty/clean list-renewal identities retained; Base coordinate mismatch unqualified.",
+        "No private paths, pointer addresses or credential patterns found.",
+        "API exit_code and cancellation caveats accurate; finalizer requires completed successful gate."
+      ],
+      "optional_suggestion": "Disclose that derived Debug can reflect changed private diagnostic metadata."
+    }
+  ],
+  "environment": {
+    "tools": [
+      {
+        "command": [
+          "rustc",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustc 1.96.0 (ac68faa20 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "cargo",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "cargo 1.96.0 (30a34c682 2026-05-25)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "rustup",
+          "run",
+          "nightly-2026-05-24",
+          "rustfmt",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "rustfmt 1.9.0-nightly (23a3312d92 2026-05-23)\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "node",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "v24.19.0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "$TOOLS/clang/usr/bin/clang-19",
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "Debian clang version 19.1.7 (3+b1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: $TOOLS/clang/usr/lib/llvm-19/bin\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "pwsh",
+          "-NoLogo",
+          "-NoProfile",
+          "-Command",
+          "$PSVersionTable.PSVersion.ToString()"
+        ],
+        "exit": 0,
+        "stdout": "7.5.4\n",
+        "stderr": ""
+      }
+    ],
+    "refs": [
+      {
+        "path": "$REFERENCE",
+        "commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "dirty": ""
+      },
+      {
+        "path": "$DOCS",
+        "commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "dirty": ""
+      }
+    ],
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "free": {
+      "/workspace": 11870220288,
+      "/tmp": 3860029440
+    }
+  },
+  "post_gate_inputs": {
+    "source": "54bc100bafda627fadd0443592be0e6200235838",
+    "refs": [
+      {
+        "path": "$REFERENCE",
+        "commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "dirty": ""
+      },
+      {
+        "path": "$DOCS",
+        "commit": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "dirty": ""
+      }
+    ],
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "code_diff": ""
+  },
+  "whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "HEAD"
+    ],
+    "exit": 2,
+    "stdout": "tests/fixtures/cpu-comptime-type/comptime/dup_lone.bend:18: trailing whitespace.\n+#|5 | \ntests/fixtures/cpu-comptime-type/comptime/err_op_ns.bend:21: trailing whitespace.\n+#|8 | \ntests/fixtures/cpu-comptime-type/comptime/wrong_type.bend:20: trailing whitespace.\n+#|7 | \n",
+    "stderr": ""
+  },
+  "authored_whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "HEAD",
+      "--",
+      ".",
+      ":(exclude)tests/fixtures/cpu-comptime-type/comptime/dup_lone.bend",
+      ":(exclude)tests/fixtures/cpu-comptime-type/comptime/err_op_ns.bend",
+      ":(exclude)tests/fixtures/cpu-comptime-type/comptime/wrong_type.bend"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "scope": "Three byte-identical upstream originals excluded; full whitespace refusal retained separately."
+  },
+  "retained_limitations": [
+    "App-only candidate fixed wrong_type but err_op_ns source pointed to caller; focused run1pass1fail, later suites unrun.",
+    "Second candidate corrected macro sources; nearby list callback current-port golden was stale. Focused run5pass1fail, later suites unrun. Existing historical/upstream golden untouched; exact Base coordinate difference retained.",
+    "Final list callback matches types/context/definition/text but Base coordinate390differs from upstream1017; no exact parity or execution claim.",
+    "Strict IO checking refusals distinct from native IO and generated C/JS execution. Direct upstream IO interpretation unrun.",
+    "External invoke consumers unaudited. Prior oracle/host/foreign/resource and supplementary all-target lint failures unqualified."
+  ],
+  "disk_policy": {
+    "build_preflight_GiB": 11,
+    "workspace_stop_GiB": 10,
+    "tmp_stop_GiB": 1,
+    "minimum_workspace_bytes": 11862667264,
+    "minimum_tmp_bytes": 3853418496,
+    "unique_evidence_deleted": false,
+    "cache_actions": [],
+    "inherited_cache_configuration": "Existing debug artifacts and registry source cache use verified temporary-storage relocations from prior checkpoint. No cache moved or deleted in this task."
+  },
+  "API": "Public parser/KernelError message, Display, equality, signatures/types unchanged. Optional structured diagnostic/source and derived Debug output can change; newly formatted invoke failures use existing Ok(CliOutput) exit_code1. External consumers remain unaudited."
+}
