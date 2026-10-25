@@ -18,7 +18,7 @@
   "measured_differences": 687,
   "scope": "Checking-only. Both-accept is status agreement, not output/normalization/runtime parity. Missing-IO annotations are symptom subcounts, not exclusions or additional categories. Phase probes are separate from raw CLI streams. Non-exact and oracle failures remain unqualified.",
   "raw_observations_sha256": "9699ab35a48bcd26e1c8a2bbdaa0993308cc311bd19185b7be4069628f4f496a",
-  "compact_csv_sha256": "b8f39121560c3ec3bc9839429257e7ec01824499b45a5bc5b8a2c3b7058a9a27",
+  "compact_csv_sha256": "aadcb48de3dcaf0558982f4dadeab02e2024004805e5589bbe592c1a7b790997",
   "historical_489_subset": {
     "counts": {
       "exact_rejection": 32,
