@@ -1,0 +1,7 @@
+Error:
+- expected : an import of a .bend file
+- observed : '/lib/wrong.js'
+Location:
+2 | import Base
+3>| 	import	/lib/wrong.js	as	Good
+4 | 

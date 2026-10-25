@@ -1,0 +1,135 @@
+[
+  {
+    "case": "reg/import_head.bend",
+    "line": 4,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "reg/import_head.bend"
+  },
+  {
+    "case": "import/c_suffix_module.bend",
+    "line": 7,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "import/c_suffix_module.bend"
+  },
+  {
+    "case": "import/parent_segments.bend",
+    "line": 6,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "import/parent_segments.bend"
+  },
+  {
+    "case": "import/suffix_refused.bend",
+    "line": 8,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "import/suffix_refused.bend"
+  },
+  {
+    "case": "negative/alias-and-suffix.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "negative/alias-and-suffix.bend"
+  },
+  {
+    "case": "negative/alias-only.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "negative/alias-only.bend"
+  },
+  {
+    "case": "negative/comment.bend",
+    "line": 3,
+    "column": 3,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "negative/comment.bend"
+  },
+  {
+    "case": "negative/tab-crlf.bend",
+    "line": 3,
+    "column": 2,
+    "message": "expected a .bend path and a simple alias",
+    "source": "negative/tab-crlf.bend"
+  },
+  {
+    "case": "negative/empty.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "negative/empty.bend"
+  },
+  {
+    "case": "negative/eof.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "negative/eof.bend"
+  },
+  {
+    "case": "negative/extra.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "negative/extra.bend"
+  },
+  {
+    "case": "negative/child.bend",
+    "line": 3,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "negative/child/invalid.bend"
+  },
+  {
+    "case": "negative/earlier.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "negative/earlier.bend"
+  },
+  {
+    "case": "controls/parser-after-import.bend",
+    "line": 4,
+    "column": 20,
+    "message": "expected a name, found \")\"",
+    "source": "controls/parser-after-import.bend"
+  },
+  {
+    "case": "controls/normalization-edge.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "controls/normalization-edge.bend"
+  },
+  {
+    "case": "controls/embedded-hash.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "controls/embedded-hash.bend"
+  },
+  {
+    "case": "controls/hash-path-start.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'",
+    "source": "controls/hash-path-start.bend"
+  },
+  {
+    "case": "controls/unicode-space.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "controls/unicode-space.bend"
+  },
+  {
+    "case": "controls/bom-space.bend",
+    "line": 2,
+    "column": 1,
+    "message": "expected a .bend path and a simple alias",
+    "source": "controls/bom-space.bend"
+  }
+]

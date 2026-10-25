@@ -362,6 +362,63 @@ impl DiagnosticOrigins {
         });
     }
 
+    #[inline(never)]
+    #[expect(
+        clippy::case_sensitive_file_extension_comparisons,
+        reason = "Pinned POSIX normalization uses an exact case-sensitive string suffix; host extension rules differ"
+    )]
+    pub(super) fn import_syntax(&mut self, source: &str, line: usize, path: Option<&str>) {
+        // Failed imports use the original file, including earlier imports.
+        // Do not register it: successful loading later records the source with
+        // consumed headers blanked, and that source index is first-write-wins.
+        // Keep formatting out of the recursive loader's stack frame.
+        let Some(authored) = source.split('\n').nth(line.saturating_sub(1)) else {
+            return;
+        };
+        if authored
+            .chars()
+            .any(|c| c == '\u{feff}' || c.is_whitespace() && !c.is_ascii_whitespace())
+            || authored
+                .split_whitespace()
+                .nth(1)
+                .is_some_and(|token| token.contains('#'))
+            || authored.find('#').is_some_and(|at| {
+                authored[..at]
+                    .chars()
+                    .next_back()
+                    .is_some_and(|c| !c.is_whitespace())
+            })
+        {
+            // Embedded '#' tokenization differs from the pinned loader's
+            // regex; retain the existing error rather than invent a match.
+            return;
+        }
+        let (expected, observed) = if let Some(path) = path {
+            if path.ends_with(".bend")
+                || path.contains('\\')
+                || path.split('/').any(|part| matches!(part, "." | ".."))
+            {
+                // POSIX path normalization and host Path::extension have
+                // separate edge cases. This presentation fix does not resolve
+                // their acceptance contract.
+                return;
+            }
+            ("an import of a .bend file", path)
+        } else {
+            (
+                "an import ('import Base', or 'import <path> as <Name>')",
+                authored.trim(),
+            )
+        };
+        self.load_failure = source_excerpt(source, line).map(|excerpt| LoadDiagnostic {
+            content: LoadDiagnosticContent::ExpectedObserved {
+                expected: expected.to_owned(),
+                observed: format!("'{observed}'"),
+            },
+            excerpt,
+        });
+    }
+
     pub(super) fn load_failure(&mut self, error: super::ParseError) -> DiagnosticLoadError {
         DiagnosticLoadError {
             error,
@@ -472,6 +529,101 @@ mod tests {
                     case.case
                 );
             }
+        }
+    }
+
+    #[test]
+    fn import_header_metadata_preserves_public_errors_and_original_sources() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-import-header-diagnostics");
+        let cases: Vec<ExpectedLoadError> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-import-header-diagnostics/public-errors.json"
+        ))
+        .unwrap();
+        assert_eq!(cases.len(), 19);
+        for case in cases {
+            let path = root.join(&case.case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            assert_eq!((plain.line, plain.column), (case.line, case.column));
+            assert_eq!(plain.message, case.message);
+            assert_eq!(std::path::Path::new(&plain.source), root.join(&case.source));
+            assert_eq!(
+                plain.to_string(),
+                crate::syntax::load_executable(&path)
+                    .unwrap_err()
+                    .to_string()
+            );
+            for tracked in [
+                crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+                crate::syntax::load_executable_with_diagnostics(&path)
+                    .err()
+                    .unwrap(),
+            ] {
+                assert_eq!(
+                    plain.to_string(),
+                    tracked.error.to_string(),
+                    "{}",
+                    case.case
+                );
+                if case.case.starts_with("controls/") {
+                    if case.case == "controls/parser-after-import.bend" {
+                        let report = tracked.diagnostic.unwrap();
+                        assert!(report.excerpt.starts_with("3 | \n4>| def main()"));
+                    } else {
+                        assert!(tracked.diagnostic.is_none(), "{}", case.case);
+                    }
+                    continue;
+                }
+                let report = tracked.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved { expected, observed } =
+                    report.content
+                else {
+                    panic!("expected an import diagnostic")
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(path.with_extension("stderr")).unwrap(),
+                    "{}",
+                    case.case
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn import_header_metadata_does_not_replace_earlier_filesystem_errors() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-import-header-diagnostics/controls/earlier-file.bend");
+        let plain = crate::syntax::load(&path).unwrap_err();
+        for tracked in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(plain.to_string(), tracked.error.to_string());
+            assert!(tracked.error.source.ends_with("absent.bend"));
+            assert!(tracked.diagnostic.is_none());
+        }
+    }
+
+    #[test]
+    fn import_header_tracking_preserves_successful_complete_books() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-import-header-diagnostics");
+        for case in [
+            "positive/simple.bend",
+            "positive/chain.bend",
+            "positive/base-crlf.bend",
+            "controls/checker-after-import.bend",
+        ] {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap();
+            let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            assert_eq!(format!("{plain:?}"), format!("{tracked:?}"), "{case}");
         }
     }
 

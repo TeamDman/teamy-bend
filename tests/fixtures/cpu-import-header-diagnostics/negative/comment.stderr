@@ -1,0 +1,7 @@
+Error:
+- expected : an import ('import Base', or 'import <path> as <Name>')
+- observed : 'import Wat # retained comment'
+Location:
+2 | import Base
+3>|   import Wat # retained comment
+4 | def main(): 0

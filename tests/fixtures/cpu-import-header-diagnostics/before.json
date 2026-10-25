@@ -1,0 +1,799 @@
+{
+  "source": "169934b2c9ceabfb27040d31442e6bbc838ebbd9",
+  "checkpoint": "2767537996d53ebf05534518f24d0b44fc27724c",
+  "rows": [
+    {
+      "case": "reg/import_head.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/reg/import_head.bend",
+        "<evidence>/before-complete/0.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import Wat'\nLocation:\n3 | # the i\n4>| import Wat\n5 | law main:\n",
+      "timed_out": false,
+      "seconds": 0.08996438101166859,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "reg/import_head.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/reg/import_head.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/reg/import_head.bend:4:1: expected 'import Base' or 'import path.bend as Name'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.004958665987942368
+    },
+    {
+      "case": "reg/import_head.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/reg/import_head.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.00112866100971587
+    },
+    {
+      "case": "reg/import_head.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/reg/import_head.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0007912389992270619
+    },
+    {
+      "case": "import/c_suffix_module.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/c_suffix_module.bend",
+        "<evidence>/before-complete/1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/lib/helper.c'\nLocation:\n6 | import Base\n7>| import /lib/helper.c as H\n8 | \n",
+      "timed_out": false,
+      "seconds": 0.09804250102024525,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/c_suffix_module.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/c_suffix_module.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/import/c_suffix_module.bend:7:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12996045299223624
+    },
+    {
+      "case": "import/c_suffix_module.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/c_suffix_module.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0635193090129178
+    },
+    {
+      "case": "import/c_suffix_module.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/c_suffix_module.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07337157399160787
+    },
+    {
+      "case": "import/parent_segments.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/parent_segments.bend",
+        "<evidence>/before-complete/2.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/up/up/native_mod.c'\nLocation:\n5 | import Base\n6>| import /up/up/native_mod.c as M\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.09828336897771806,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/parent_segments.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/parent_segments.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/import/parent_segments.bend:6:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13021838502027094
+    },
+    {
+      "case": "import/parent_segments.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/parent_segments.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06432751298416406
+    },
+    {
+      "case": "import/parent_segments.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/parent_segments.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07038792999810539
+    },
+    {
+      "case": "import/suffix_refused.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/suffix_refused.bend",
+        "<evidence>/before-complete/3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/lib/words.txt'\nLocation:\n7 | import Base\n8>| import /lib/words.txt as W\n9 | \n",
+      "timed_out": false,
+      "seconds": 0.08841730799758807,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/suffix_refused.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/suffix_refused.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/import/suffix_refused.bend:8:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.13439775997539982
+    },
+    {
+      "case": "import/suffix_refused.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/suffix_refused.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0642453110194765
+    },
+    {
+      "case": "import/suffix_refused.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/import/suffix_refused.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06984696400468238
+    },
+    {
+      "case": "negative/alias-and-suffix.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-and-suffix.bend",
+        "<evidence>/before-complete/4.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import /missing.txt as 9Bad'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /missing.txt as 9Bad\n3 | \n",
+      "timed_out": false,
+      "seconds": 0.0737013140169438,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/alias-and-suffix.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-and-suffix.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-and-suffix.bend:2:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.005060697993030772
+    },
+    {
+      "case": "negative/alias-and-suffix.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-and-suffix.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0011613600072450936
+    },
+    {
+      "case": "negative/alias-and-suffix.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-and-suffix.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0008491750049870461
+    },
+    {
+      "case": "negative/alias-only.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-only.bend",
+        "<evidence>/before-complete/5.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import /missing.bend as 9Bad'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /missing.bend as 9Bad\n3 | \n",
+      "timed_out": false,
+      "seconds": 0.07470265700249001,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/alias-only.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-only.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-only.bend:2:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.005116159998578951
+    },
+    {
+      "case": "negative/alias-only.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-only.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010680110135581344
+    },
+    {
+      "case": "negative/alias-only.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/alias-only.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0007808130176272243
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/comment.bend",
+        "<evidence>/before-complete/6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import Wat # retained comment'\nLocation:\n2 | import Base\n3>|   import Wat # retained comment\n4 | def main(): 0\n",
+      "timed_out": false,
+      "seconds": 0.09714094799710438,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/comment.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/comment.bend:3:3: expected 'import Base' or 'import path.bend as Name'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12634508998598903
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/comment.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06501208298141137
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/comment.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06922351999673992
+    },
+    {
+      "case": "negative/tab-crlf.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/tab-crlf.bend",
+        "<evidence>/before-complete/7.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/lib/wrong.js'\nLocation:\n2 | import Base\r\n3>| \timport\t/lib/wrong.js\tas\tGood\r\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09857649600598961,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/tab-crlf.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/tab-crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/tab-crlf.bend:3:2: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1257945350080263
+    },
+    {
+      "case": "negative/tab-crlf.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/tab-crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06419743000878952
+    },
+    {
+      "case": "negative/tab-crlf.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/tab-crlf.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06997238501207903
+    },
+    {
+      "case": "negative/empty.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/empty.bend",
+        "<evidence>/before-complete/8.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import\n3 | \n",
+      "timed_out": false,
+      "seconds": 0.0773852429992985,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/empty.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/empty.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/empty.bend:2:1: expected 'import Base' or 'import path.bend as Name'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.00503599998774007
+    },
+    {
+      "case": "negative/empty.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/empty.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001043614000082016
+    },
+    {
+      "case": "negative/empty.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/empty.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001201559993205592
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/eof.bend",
+        "<evidence>/before-complete/9.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import /missing.bend'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /missing.bend\n",
+      "timed_out": false,
+      "seconds": 0.07958077199873514,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/eof.bend:2:1: expected 'import Base' or 'import path.bend as Name'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.0045649289968423545
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.001023034012177959
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/eof.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0008797599875833839
+    },
+    {
+      "case": "negative/extra.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/extra.bend",
+        "<evidence>/before-complete/10.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import ('import Base', or 'import <path> as <Name>')\n- observed : 'import /missing.txt as Good extra # full line'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /missing.txt as Good extra # full line\n3 | \n",
+      "timed_out": false,
+      "seconds": 0.07221516701974906,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/extra.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/extra.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/extra.bend:2:1: expected 'import Base' or 'import path.bend as Name'\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.004902020998997614
+    },
+    {
+      "case": "negative/extra.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/extra.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0009551230177748948
+    },
+    {
+      "case": "negative/extra.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/extra.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0007534220058005303
+    },
+    {
+      "case": "negative/child.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/child.bend",
+        "<evidence>/before-complete/11.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/wrong.txt'\nLocation:\n2 | import Base\n3>| import /wrong.txt as D\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.09320406900951639,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/child.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/child.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/child/invalid.bend:3:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12890353598049842
+    },
+    {
+      "case": "negative/child.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/child.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06407189200399444
+    },
+    {
+      "case": "negative/child.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/child.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07110723102232441
+    },
+    {
+      "case": "negative/earlier.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<upstream>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/earlier.bend",
+        "<evidence>/before-complete/12.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an import of a .bend file\n- observed : '/wrong.c'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /wrong.c as D\n3 | import Wat\n",
+      "timed_out": false,
+      "seconds": 0.07495433097938076,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/earlier.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/earlier.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/earlier.bend:2:1: expected a .bend path and a simple alias\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.0051429300219751894
+    },
+    {
+      "case": "negative/earlier.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/earlier.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010307450138498098
+    },
+    {
+      "case": "negative/earlier.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-import-header-diagnostics/negative/earlier.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.000746331992559135
+    }
+  ]
+}

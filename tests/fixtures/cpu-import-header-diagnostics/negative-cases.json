@@ -1,0 +1,15 @@
+[
+  "reg/import_head.bend",
+  "import/c_suffix_module.bend",
+  "import/parent_segments.bend",
+  "import/suffix_refused.bend",
+  "negative/alias-and-suffix.bend",
+  "negative/alias-only.bend",
+  "negative/comment.bend",
+  "negative/tab-crlf.bend",
+  "negative/empty.bend",
+  "negative/eof.bend",
+  "negative/extra.bend",
+  "negative/child.bend",
+  "negative/earlier.bend"
+]

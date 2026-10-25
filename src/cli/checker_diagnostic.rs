@@ -128,6 +128,23 @@ fn write_diagnostic(diagnostic: &str, stderr: &mut impl Write) -> eyre::Result<C
 mod tests {
     use super::*;
     use crate::kernel::check_book_with_origins;
+
+    #[test]
+    fn successful_import_headers_stay_blanked_in_checker_diagnostics() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(
+            "tests/fixtures/cpu-import-header-diagnostics/controls/checker-after-import.bend",
+        );
+        let (book, origins) = crate::syntax::load_with_diagnostics(&path).unwrap();
+        let error = check_book_with_origins(&book, Some(origins.tracker.clone())).unwrap_err();
+        let mut stderr = Vec::new();
+        let output = emit(&error, &origins, &CancellationToken::new(), &mut stderr).unwrap();
+        assert_eq!(output.exit_code(), 1);
+        let text = String::from_utf8(stderr).unwrap();
+        assert!(
+            text.contains("\n3 | \n4>| def main() -> U32: \"wrong\"\n5 | \n"),
+            "{text}"
+        );
+    }
     use crate::syntax::load_with_diagnostics;
     use std::io;
 
@@ -339,6 +356,14 @@ mod tests {
             }
         }
         for (file, excerpt) in [
+            (
+                "cpu-import-header-diagnostics/import/suffix_refused.bend",
+                "8>| import /lib/words.txt as W",
+            ),
+            (
+                "cpu-import-header-diagnostics/negative/child.bend",
+                "3>| import /wrong.txt as D",
+            ),
             (
                 "cpu-comptime-rebind/comptime/err_rebind.bend",
                 "10>|   f = Nat.add(x)",

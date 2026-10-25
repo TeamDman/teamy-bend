@@ -1,0 +1,7 @@
+Error:
+- expected : an import ('import Base', or 'import <path> as <Name>')
+- observed : 'import'
+Location:
+1 | # SPDX-License-Identifier: MPL-2.0
+2>| import
+3 | 

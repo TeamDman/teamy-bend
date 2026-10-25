@@ -1,0 +1,7 @@
+Error:
+- expected : an import of a .bend file
+- observed : '/wrong.txt'
+Location:
+2 | import Base
+3>| import /wrong.txt as D
+4 | 

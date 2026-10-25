@@ -3078,13 +3078,21 @@ impl Loader {
                         self.embedded_base()?;
                     }
                 } else if let ["import", relative, "as", alias] = parts.as_slice() {
+                    let valid_alias = !alias.is_empty()
+                        && alias.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
+                        && alias.chars().all(|c| c.is_ascii_alphanumeric() || c == '_');
                     if Path::new(relative)
                         .extension()
                         .is_none_or(|extension| extension != "bend")
-                        || alias.is_empty()
-                        || !alias.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
-                        || !alias.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+                        || !valid_alias
                     {
+                        if let Some(origins) = &mut self.templates.diagnostics {
+                            origins.import_syntax(
+                                &source,
+                                line_number + 1,
+                                valid_alias.then_some(*relative),
+                            );
+                        }
                         return Err(import_failure(
                             "expected a .bend path and a simple alias".into(),
                         ));
@@ -3116,6 +3124,9 @@ impl Loader {
                     aliases.insert((*alias).into(), sub.clone());
                     self.file(&at, &sub)?;
                 } else {
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.import_syntax(&source, line_number + 1, None);
+                    }
                     return Err(import_failure(
                         "expected 'import Base' or 'import path.bend as Name'".into(),
                     ));
