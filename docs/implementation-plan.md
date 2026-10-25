@@ -5908,3 +5908,60 @@ are enforced; only completed inactive rebuildable caches are reclaimed. Unique
 raw receipts, binary snapshots and historical failures remain outside Git,
 explicitly separate from reviewed feature-branch preservation. No main merge
 or release.
+
+### [x] 5.112 Preserve source origins for synthesized references
+
+Tested source `8a14fa7d51554a4479fb9ea7fe8fb1af3060be83` adds weak source origins to
+synthesized `Exists`, `Empty` and resolved monadic `bind`/`pure` references.
+Four unchanged negative originals now match exact upstream checking diagnostics.
+Eight multiline/imported/adjacent controls preserve first-error location and
+status; two positive programs retain complete constructor results across native
+strict evaluation and pure C/JS. [Report and exact receipts](cpu-synthesized-origins.md).
+
+All four originals load, then reject during checking. No generated execution is
+claimed after rejection. An additional census-only match in
+`check/monad_do_destructure` moves the existing pattern diagnostic from the outer
+`do` to its bind statement; loading fails and checking/execution remain unrun.
+That supplementary observation does not add a completed fixture-family link.
+Core terms, name resolution, argument/binder order, evaluator policy, budgets,
+guards and cancellation remain unchanged. Independent review found and closed a
+test metadata-lifetime issue; the first gate was intentionally interrupted and
+preserved, then the corrected source received a complete new gate. No partial
+run counts as passing. External CLI consumers must still inspect `exit_code()`;
+previous emitter/DefDecl caveats remain.
+
+Final standard gate: **1,122 / 0 / 49**; focused strict Clippy passes. The new
+270-observation matrix and renewed 246-observation prior matrix total **516**,
+with zero timeouts and deterministic repeated groups. Existing aggregate/sharing,
+demand, cancellation and guard regressions pass. The old forged-IO upstream C
+generation failure and Node direct-IO host failure reproduce separately; failed
+C generation still has no execution credit. Strict IO proof exclusions remain
+distinct from executable success.
+
+A fresh census preserves all **1,302 statuses**, including all 439 negative
+rejections. Five stderr streams improve to exact upstream matches: four checker
+locations and one load location. Renewal of the prior 489 cases yields **30 exact
+diagnostics, 385 strict IO exclusions and 74 unresolved differences**; four old
+generated-reference gaps are closed. The remaining 74 include 64 acceptance
+differences and ten differing rejections (two source/label cases and eight
+IO/foreign preemptions). All upstream streams renew unchanged. The ten separately
+tracked old cells remain exact to their prior outcomes in 40 observations;
+14 positive and 18 unfinished-hole controls preserve their outcomes. Historical
+supplementary all-target lint failures remain unwaived and were not rerun.
+
+Detailed links cover **399 originals**; **903 remain unlinked**: 352 checker
+negatives, one checking-only module, 13 interpreter-profile cases and 537 compiled
+candidates. Only four checking links were added, with no fabricated runtime
+passes. Linked/partial/historical coverage is not full CPU parity. Existing
+printer/host/foreign/resource/API, F32.read, error-order and incomplete-grid
+requirements remain unwaived. Mid-normalization cancellation is not claimed.
+
+Next independent diagnostic work is constructor-definition labels, including
+`check/field_type_bound`, and the `comptime/later_def` substitution source site.
+The next substantive candidate remains the datatype-declaration/empty-datatype/
+empty-parameter-group batch, applicability first. No proposed work is counted as
+qualified. Frozen dependencies/toolchains/pin/limits remain; no installs, desktop
+or GPU work. Disk preflight and floors are enforced; only verified inactive
+rebuildable caches are reclaimed. Unique historical evidence is preserved.
+Raw captures and receipts remain outside Git; reviewed feature publication
+preserves source and compact evidence without main merge or release.
