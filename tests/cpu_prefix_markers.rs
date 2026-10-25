@@ -119,10 +119,16 @@ fn affine_and_infix_patterns_still_refuse_at_public_boundaries() {
             continue;
         }
         let name = path.file_stem().unwrap().to_str().unwrap();
-        let expected: String = facet_json::from_str(
-            &std::fs::read_to_string(path.with_extension("port-stderr.json")).unwrap(),
-        )
-        .unwrap();
+        // Keep historical receipts immutable; a renewed snapshot still compares
+        // every byte, including the host formatter's current implementation line.
+        let current = path.with_extension("port-current-stderr.json");
+        let expected_path = if current.exists() {
+            current
+        } else {
+            path.with_extension("port-stderr.json")
+        };
+        let expected: String =
+            facet_json::from_str(&std::fs::read_to_string(expected_path).unwrap()).unwrap();
         for op in ["check", "eval", "run", "c", "javascript", "native"] {
             let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
             if ["check", "eval", "run"].contains(&op) {

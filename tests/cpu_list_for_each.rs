@@ -132,10 +132,16 @@ fn invalid_callbacks_and_incomplete_proofs_refuse_executable_boundaries() {
             continue;
         }
         let name = path.file_stem().unwrap().to_str().unwrap();
-        let expected: String = facet_json::from_str(
-            &std::fs::read_to_string(path.with_extension("port-executable-stderr.json")).unwrap(),
-        )
-        .unwrap();
+        // Keep historical receipts immutable; a renewed snapshot still compares
+        // every byte, including the host formatter's current implementation line.
+        let current = path.with_extension("port-executable-current-stderr.json");
+        let expected_path = if current.exists() {
+            current
+        } else {
+            path.with_extension("port-executable-stderr.json")
+        };
+        let expected: String =
+            facet_json::from_str(&std::fs::read_to_string(expected_path).unwrap()).unwrap();
         for op in ["run", "c", "javascript", "native"] {
             let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
             if op == "run" {
