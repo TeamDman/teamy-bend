@@ -1,0 +1,22 @@
+[
+  {
+    "case": "positive/names.bend",
+    "expected": "7",
+    "io": false
+  },
+  {
+    "case": "positive/qualified.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "positive/imported.bend",
+    "expected": "12",
+    "io": false
+  },
+  {
+    "case": "positive/fields.bend",
+    "expected": "7",
+    "io": false
+  }
+]

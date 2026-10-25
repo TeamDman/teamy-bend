@@ -1,0 +1,7 @@
+Error:
+- expected : a fresh name (duplicate declaration: U32)
+- observed : ':'
+Location:
+5 | 
+6>| law U32:
+7 |   Type

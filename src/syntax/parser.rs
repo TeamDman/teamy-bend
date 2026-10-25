@@ -214,6 +214,13 @@ const KEYWORDS: &[&str] = &[
     "Type", "Data", "Kind", "Quant",
 ];
 
+#[derive(Clone, Copy)]
+enum NameContext {
+    Ordinary,
+    ConstructorRow,
+    Term,
+}
+
 const MAX_SPECIALIZATIONS: usize = 256;
 const MAX_SPECIALIZATION_DEPTH: usize = 16;
 const MAX_TEMPLATE_KEY_BYTES: usize = 2048;
@@ -356,18 +363,32 @@ impl Parser<'_> {
         }
     }
     fn name(&mut self) -> Result<String, ParseError> {
-        self.name_expected("a name")
+        self.name_expected(NameContext::Ordinary)
     }
-    fn name_expected(&mut self, expected: &str) -> Result<String, ParseError> {
+    fn name_expected(&mut self, context: NameContext) -> Result<String, ParseError> {
+        let expected = match context {
+            NameContext::Ordinary => "a name",
+            NameContext::ConstructorRow => "'def', 'type' or 'law'",
+            NameContext::Term => "a term",
+        };
         let s = &self.current().text;
         let invalid_start = !s.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_');
         if invalid_start || KEYWORDS.contains(&s.as_str()) {
-            // Keep the public parser error and cursor unchanged. Keyword
-            // failures have a separate pinned contract and are not generalized
-            // to this punctuation/EOF diagnostic.
+            // Keep the public parser error and cursor unchanged. Name-slot
+            // keywords use parse_name's raw post-name character; expression
+            // keywords have a separate upstream contract.
             let token = self.current().clone();
-            if invalid_start && let Some(origins) = &mut self.templates.diagnostics {
-                origins.expected_syntax(&self.label, token.line, expected, &token.text);
+            if let Some(origins) = &mut self.templates.diagnostics {
+                if invalid_start {
+                    origins.expected_syntax(&self.label, token.line, expected, &token.text);
+                } else if !matches!(context, NameContext::Term) {
+                    origins.expected_after_name(
+                        &self.label,
+                        token.line,
+                        token.column + token.text.chars().count() - 1,
+                        &format!("a name (got the keyword '{}')", token.text),
+                    );
+                }
             }
             return Err(self.error(format!("expected a name, found {:?}", self.current().text)));
         }
@@ -751,7 +772,7 @@ impl Parser<'_> {
             // A non-name token ends upstream's constructor rows and is then
             // rejected as a declaration. Preserve our cursor/public error;
             // only its optional source diagnostic uses that outer context.
-            let raw = self.name_expected("'def', 'type' or 'law'")?;
+            let raw = self.name_expected(NameContext::ConstructorRow)?;
             let constructor = self.qualify(&raw);
             if let Some(tags) = self.constructor_tags.as_deref_mut() {
                 tags.insert(constructor.clone(), raw);
@@ -1841,7 +1862,7 @@ impl Parser<'_> {
                 )
                 .into());
         }
-        let name = self.name_expected("a term")?;
+        let name = self.name_expected(NameContext::Term)?;
         if self.at > 0 && self.tokens[self.at - 1].end == self.current().start && self.take("{") {
             let args = self.arguments("}")?;
             Ok(self.constructor(self.resolve(&name), args))
@@ -3346,6 +3367,76 @@ pub fn load_executable_with_sources(
 #[cfg(test)]
 mod occurrence_tests {
     use super::*;
+
+    #[test]
+    fn reserved_name_diagnostics_preserve_cursor_fresh_state_and_term_context() {
+        for keyword in KEYWORDS {
+            for context in [
+                NameContext::Ordinary,
+                NameContext::ConstructorRow,
+                NameContext::Term,
+            ] {
+                let source = format!("{keyword} # raw following space");
+                let mut book = Book::default();
+                let mut fresh = 17;
+                let mut templates = Templates {
+                    diagnostics: Some(super::super::diagnostics::DiagnosticOrigins::default()),
+                    ..Templates::default()
+                };
+                templates
+                    .diagnostics
+                    .as_mut()
+                    .unwrap()
+                    .source("<name>", &source);
+                let mut parser = Parser {
+                    tokens: lex(&source, "<name>").unwrap(),
+                    at: 0,
+                    label: "<name>".into(),
+                    namespace: String::new(),
+                    aliases: BTreeMap::new(),
+                    scope: Vec::new(),
+                    fresh: &mut fresh,
+                    display_fresh: 11,
+                    book: &mut book,
+                    depth: 5,
+                    reusable: Vec::new(),
+                    reusable_markers: BTreeSet::new(),
+                    templates: &mut templates,
+                    instance_name: None,
+                    instance_arguments: VecDeque::new(),
+                    compile_bindings: BTreeMap::new(),
+                    foreign: None,
+                    constructor_tags: None,
+                    origin: SourceOrigin::Standalone,
+                };
+                let tokens = format!("{:?}", parser.tokens);
+                let error = parser.name_expected(context).unwrap_err();
+                assert_eq!(error.message, format!("expected a name, found {keyword:?}"));
+                assert_eq!((error.line, error.column), (1, 1));
+                assert_eq!(
+                    (parser.at, *parser.fresh, parser.display_fresh, parser.depth),
+                    (0, 17, 11, 5)
+                );
+                assert_eq!(format!("{:?}", parser.tokens), tokens);
+                assert!(parser.book.declarations.is_empty());
+                assert!(
+                    parser.scope.is_empty()
+                        && parser.aliases.is_empty()
+                        && parser.reusable.is_empty()
+                );
+                let tracked = parser
+                    .templates
+                    .diagnostics
+                    .as_mut()
+                    .unwrap()
+                    .load_failure(error);
+                assert_eq!(
+                    tracked.diagnostic.is_none(),
+                    matches!(context, NameContext::Term)
+                );
+            }
+        }
+    }
 
     #[test]
     fn nested_prefix_errors_restore_complete_tokens_for_replay() {

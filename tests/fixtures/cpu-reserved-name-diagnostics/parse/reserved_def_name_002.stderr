@@ -1,0 +1,7 @@
+Error:
+- expected : a name (got the keyword 'match')
+- observed : '('
+Location:
+3 | # ported from bend3
+4>| def match(): Unit{}
+5 | 

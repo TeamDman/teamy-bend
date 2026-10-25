@@ -1,0 +1,7 @@
+Error:
+- expected : a name (got the keyword 'Type')
+- observed : ' '
+Location:
+ 8 | def main():
+ 9>|   @Type -> x => Type
+10 | 

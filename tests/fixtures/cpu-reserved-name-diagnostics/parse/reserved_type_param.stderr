@@ -1,0 +1,7 @@
+Error:
+- expected : a name (got the keyword 'match')
+- observed : ':'
+Location:
+3 | # probe is `match`
+4>| type Bad<match: Type>:
+5 |   Bb10{}

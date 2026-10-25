@@ -1,0 +1,4 @@
+The parse/*.bend originals are unchanged copies from bendlang/bend,
+commit e6676b080f25b1bc1bf5b5b7d7a17e22f8022599, tests/parse/.
+Copyright 2026 HigherOrderCO; Apache-2.0. See licenses/Apache-2.0.txt.
+Authored controls and receipt tooling are MPL-2.0.

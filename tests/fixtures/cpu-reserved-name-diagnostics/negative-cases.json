@@ -1,0 +1,21 @@
+[
+  "parse/keyword_reserved.bend",
+  "parse/reserved_assert_name.bend",
+  "parse/reserved_ctor_field_000.bend",
+  "parse/reserved_ctor_field_001.bend",
+  "parse/reserved_def_name_001.bend",
+  "parse/reserved_def_name_002.bend",
+  "parse/reserved_pi_binder.bend",
+  "parse/reserved_type_name.bend",
+  "parse/reserved_type_param.bend",
+  "parse/reserved_def_name_000.bend",
+  "negative/eof.bend",
+  "negative/comment.bend",
+  "negative/newline.bend",
+  "negative/tab.bend",
+  "negative/crlf.bend",
+  "negative/quantified.bend",
+  "negative/constructor.bend",
+  "negative/template.bend",
+  "negative/imported.bend"
+]

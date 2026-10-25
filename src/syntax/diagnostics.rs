@@ -414,6 +414,86 @@ mod tests {
         assert_eq!(std::rc::Rc::strong_count(&unsourced), 1);
     }
 
+    #[derive(facet::Facet)]
+    struct ReservedNameError {
+        case: String,
+        line: usize,
+        column: usize,
+        message: String,
+        source: String,
+    }
+
+    #[test]
+    fn reserved_name_metadata_preserves_public_errors_and_original_sources() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-reserved-name-diagnostics");
+        let cases: Vec<ReservedNameError> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-reserved-name-diagnostics/public-errors.json"
+        ))
+        .unwrap();
+        assert_eq!(cases.len(), 22);
+        for case in cases {
+            let path = root.join(&case.case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            assert_eq!((plain.line, plain.column), (case.line, case.column));
+            assert_eq!(plain.message, case.message);
+            assert_eq!(std::path::Path::new(&plain.source), root.join(&case.source));
+            let executable = crate::syntax::load_executable(&path).unwrap_err();
+            assert_eq!(plain.to_string(), executable.to_string());
+            for tracked in [
+                crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+                crate::syntax::load_executable_with_diagnostics(&path)
+                    .err()
+                    .unwrap(),
+            ] {
+                assert_eq!(
+                    plain.to_string(),
+                    tracked.error.to_string(),
+                    "{}",
+                    case.case
+                );
+                if case.case == "parse/reserved_lambda_binder.bend"
+                    || case.case.starts_with("controls/")
+                {
+                    assert!(tracked.diagnostic.is_none(), "{}", case.case);
+                    continue;
+                }
+                let report = tracked.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::ExpectedObserved { expected, observed } =
+                    report.content
+                else {
+                    panic!("expected the pinned name diagnostic");
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(path.with_extension("stderr")).unwrap(),
+                    "{}",
+                    case.case
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn reserved_name_tracking_preserves_successful_complete_books() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-reserved-name-diagnostics/positive");
+        for case in [
+            "names.bend",
+            "qualified.bend",
+            "imported.bend",
+            "fields.bend",
+        ] {
+            let path = root.join(case);
+            let plain = crate::syntax::load(&path).unwrap();
+            let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+            assert_eq!(format!("{plain:?}"), format!("{tracked:?}"), "{case}");
+        }
+    }
+
     #[test]
     fn unknown_template_metadata_preserves_public_errors_and_imported_sources() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

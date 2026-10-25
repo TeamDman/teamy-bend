@@ -1,0 +1,156 @@
+[
+  {
+    "case": "parse/keyword_reserved.bend",
+    "line": 6,
+    "column": 5,
+    "message": "expected a name, found \"law\"",
+    "source": "parse/keyword_reserved.bend"
+  },
+  {
+    "case": "parse/reserved_assert_name.bend",
+    "line": 3,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_assert_name.bend"
+  },
+  {
+    "case": "parse/reserved_ctor_field_000.bend",
+    "line": 4,
+    "column": 7,
+    "message": "expected a name, found \"Type\"",
+    "source": "parse/reserved_ctor_field_000.bend"
+  },
+  {
+    "case": "parse/reserved_ctor_field_001.bend",
+    "line": 5,
+    "column": 7,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_ctor_field_001.bend"
+  },
+  {
+    "case": "parse/reserved_def_name_001.bend",
+    "line": 3,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_def_name_001.bend"
+  },
+  {
+    "case": "parse/reserved_def_name_002.bend",
+    "line": 4,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_def_name_002.bend"
+  },
+  {
+    "case": "parse/reserved_pi_binder.bend",
+    "line": 9,
+    "column": 4,
+    "message": "expected a name, found \"Type\"",
+    "source": "parse/reserved_pi_binder.bend"
+  },
+  {
+    "case": "parse/reserved_type_name.bend",
+    "line": 3,
+    "column": 6,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_type_name.bend"
+  },
+  {
+    "case": "parse/reserved_type_param.bend",
+    "line": 4,
+    "column": 10,
+    "message": "expected a name, found \"match\"",
+    "source": "parse/reserved_type_param.bend"
+  },
+  {
+    "case": "parse/reserved_def_name_000.bend",
+    "line": 6,
+    "column": 8,
+    "message": "duplicate declaration: U32",
+    "source": "parse/reserved_def_name_000.bend"
+  },
+  {
+    "case": "negative/eof.bend",
+    "line": 2,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/eof.bend"
+  },
+  {
+    "case": "negative/comment.bend",
+    "line": 2,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/comment.bend"
+  },
+  {
+    "case": "negative/newline.bend",
+    "line": 2,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/newline.bend"
+  },
+  {
+    "case": "negative/tab.bend",
+    "line": 2,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/tab.bend"
+  },
+  {
+    "case": "negative/crlf.bend",
+    "line": 2,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/crlf.bend"
+  },
+  {
+    "case": "negative/quantified.bend",
+    "line": 3,
+    "column": 10,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/quantified.bend"
+  },
+  {
+    "case": "negative/constructor.bend",
+    "line": 3,
+    "column": 3,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/constructor.bend"
+  },
+  {
+    "case": "negative/template.bend",
+    "line": 4,
+    "column": 4,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/template.bend"
+  },
+  {
+    "case": "negative/imported.bend",
+    "line": 3,
+    "column": 5,
+    "message": "expected a name, found \"match\"",
+    "source": "negative/imports/bad.bend"
+  },
+  {
+    "case": "parse/reserved_lambda_binder.bend",
+    "line": 6,
+    "column": 21,
+    "message": "a lambda binder must be one name",
+    "source": "parse/reserved_lambda_binder.bend"
+  },
+  {
+    "case": "controls/term-keyword.bend",
+    "line": 3,
+    "column": 20,
+    "message": "expected a name, found \"for\"",
+    "source": "controls/term-keyword.bend"
+  },
+  {
+    "case": "controls/earlier-depth.bend",
+    "line": 2,
+    "column": 43,
+    "message": "body nesting exceeds the parser resource limit of 64",
+    "source": "controls/earlier-depth.bend"
+  }
+]

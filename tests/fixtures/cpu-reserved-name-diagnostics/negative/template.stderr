@@ -1,0 +1,7 @@
+Error:
+- expected : a name (got the keyword 'match')
+- observed : ' '
+Location:
+3 | def staged(~n: U32) -> U32:
+4>|   +match = n
+5 |   0

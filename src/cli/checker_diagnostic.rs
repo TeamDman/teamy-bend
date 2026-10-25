@@ -348,6 +348,10 @@ mod tests {
                 "4>| def main() -> Nat: D.bad(~D.inc, 10n)(1n)",
             ),
             (
+                "cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend",
+                "3>| def match(x):",
+            ),
+            (
                 "cpu-comptime-rebind/negative/nested.bend",
                 "6>|   Wrap{f} = x",
             ),

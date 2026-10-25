@@ -1,0 +1,1535 @@
+{
+  "source": "286741ec7c8bce954ef25de6e6ed5420acff44de",
+  "rows": [
+    {
+      "case": "parse/keyword_reserved.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/keyword_reserved.bend",
+        "<baseline-artifacts>/0.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'law')\n- observed : ' '\nLocation:\n5 | # free: only book_load's import line reads it, never parse_name.\n6>| law law : Type\n7 | def law(): Type\n",
+      "timeout": false,
+      "seconds": 0.08864540301146917,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "b44f3921407bb8cc0d50f64e634616249701879e3be5db5bcf71ca1753d30282"
+    },
+    {
+      "case": "parse/keyword_reserved.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/keyword_reserved.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/keyword_reserved.bend:6:5: expected a name, found \"law\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.005149303993675858,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "609f15607bfce3d382018363075615c00bb839a448a111cd22bed3e1fa5491aa"
+    },
+    {
+      "case": "parse/keyword_reserved.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/keyword_reserved.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.00137632098631002,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/keyword_reserved.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/keyword_reserved.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008891049947123975,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_assert_name.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_assert_name.bend",
+        "<baseline-artifacts>/1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| law match:\n4 |   Unit\n",
+      "timeout": false,
+      "seconds": 0.07474013499449939,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ade6734c725f3d59cdf4f41153605536b47f628405c417d45b249c09702c557c"
+    },
+    {
+      "case": "parse/reserved_assert_name.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_assert_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_assert_name.bend:3:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004462851007701829,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "e9b1d162a7bec913c83e310853e109bea47312432ee174693c101c6aaf822cbb"
+    },
+    {
+      "case": "parse/reserved_assert_name.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_assert_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.001010626001516357,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_assert_name.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_assert_name.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008198109862860292,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_ctor_field_000.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.bend",
+        "<baseline-artifacts>/2.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ':'\nLocation:\n3 | type Kk8 is Data:\n4>|   Mk8{Type: Kk8}\n5 | \n",
+      "timeout": false,
+      "seconds": 0.08048211698769592,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7b40a7c7b9f8288552869624a61cef65a0055b55983ad50fd212242a61313a20"
+    },
+    {
+      "case": "parse/reserved_ctor_field_000.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.bend:4:7: expected a name, found \"Type\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.00468392000766471,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ced193ec1e2b44958c2c773bcfd4fcbf22ec2989542484b13714eb87c2c2e8bf"
+    },
+    {
+      "case": "parse/reserved_ctor_field_000.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.001198386016767472,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_ctor_field_000.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_000.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0009224250097759068,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_ctor_field_001.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.bend",
+        "<baseline-artifacts>/3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n4 | type Kk9 is Data:\n5>|   Mk9{match: Unit}\n6 | \n",
+      "timeout": false,
+      "seconds": 0.0757284089922905,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ac522ec8f02ec057e50c917738de00f3e0dff259094a4c3d4b829d55b0a99643"
+    },
+    {
+      "case": "parse/reserved_ctor_field_001.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.bend:5:7: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004617561993654817,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "89b7f6c0710f36a14e006732db5bae490a9517a088e92223cf28f042e4f68744"
+    },
+    {
+      "case": "parse/reserved_ctor_field_001.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0011689319799188524,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_ctor_field_001.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_ctor_field_001.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008673930133227259,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_001.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend",
+        "<baseline-artifacts>/4.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n2 | # ported from bend3\n3>| def match(x):\n4 |   x\n",
+      "timeout": false,
+      "seconds": 0.07318180298898369,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "8bd51b9f836638e6ebeed0e287545b2e80753938c92d44351ca32eac16e036cc"
+    },
+    {
+      "case": "parse/reserved_def_name_001.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend:3:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.005008198990253732,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "2818315d46b62a96c546c28b5712254fc65bafe9958ef00ffe253acc5f7fe2c5"
+    },
+    {
+      "case": "parse/reserved_def_name_001.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0011172450031153858,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_001.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_001.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008745930099394172,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_002.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.bend",
+        "<baseline-artifacts>/5.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n3 | # ported from bend3\n4>| def match(): Unit{}\n5 | \n",
+      "timeout": false,
+      "seconds": 0.07987050100928172,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5742552187312bb44f49ec8eb274901328c9eba7900d0b9b5ec489802d0853e4"
+    },
+    {
+      "case": "parse/reserved_def_name_002.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.bend:4:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004982524988008663,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ed82aac632c5abf0589e20700fe165b4ced8bb76fb030f58290d5fa69393c40e"
+    },
+    {
+      "case": "parse/reserved_def_name_002.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0013187550066504627,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_002.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_002.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0010972259915433824,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_pi_binder.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.bend",
+        "<baseline-artifacts>/6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'Type')\n- observed : ' '\nLocation:\n 8 | def main():\n 9>|   @Type -> x => Type\n10 | \n",
+      "timeout": false,
+      "seconds": 0.10679083300055936,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a43709f4ef37a9af291e32541d6e5869b08418c77f91a94190adcdd03d4f549b"
+    },
+    {
+      "case": "parse/reserved_pi_binder.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.bend:9:4: expected a name, found \"Type\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.12777814999572001,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9b2c67d69df95536614a83cd8e33ef5e3c762aae8eb9acc4b7bfd15776076f14"
+    },
+    {
+      "case": "parse/reserved_pi_binder.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06378033198416233,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_pi_binder.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_pi_binder.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06812024698592722,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_type_name.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_name.bend",
+        "<baseline-artifacts>/7.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | # ported from bend3\n3>| type match:\n4 |   Kk10{}\n",
+      "timeout": false,
+      "seconds": 0.07476554700406268,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "f8f1640f671b6e5fef6d533f22bc382a53452ac2dc26cf2a20d3008859476f81"
+    },
+    {
+      "case": "parse/reserved_type_name.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_name.bend:3:6: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004824597999686375,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "403601dac15e7435c53e4b912610a35b6b9b89316e69a1a2716f531e34dd7478"
+    },
+    {
+      "case": "parse/reserved_type_name.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_name.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0010464389924891293,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_type_name.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_name.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008053999918047339,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_type_param.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_param.bend",
+        "<baseline-artifacts>/8.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n3 | # probe is `match`\n4>| type Bad<match: Type>:\n5 |   Bb10{}\n",
+      "timeout": false,
+      "seconds": 0.07465366000542417,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7516bc9b06c535b023fdfa35e481b633522eeeff361d0a0262d9ef089fc438d9"
+    },
+    {
+      "case": "parse/reserved_type_param.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_param.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_param.bend:4:10: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.0046001220180187374,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "28c4cdc76b4fc421782b5a000e2568dcaa6113a9827648a1b8de3db7d48e1e87"
+    },
+    {
+      "case": "parse/reserved_type_param.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_param.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0010933679877780378,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_type_param.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_type_param.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008118289988487959,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_000.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend",
+        "<baseline-artifacts>/9.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "timeout": false,
+      "seconds": 0.09297637597774155,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5ef2efee703370aecf53d99b6e59959dac62afe9e425b566cbc31c6296f45fa8"
+    },
+    {
+      "case": "parse/reserved_def_name_000.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a fresh name (duplicate declaration: U32)\n- observed : ':'\nLocation:\n5 | \n6>| law U32:\n7 |   Type\n",
+      "timeout": false,
+      "seconds": 0.131624488014495,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5ef2efee703370aecf53d99b6e59959dac62afe9e425b566cbc31c6296f45fa8"
+    },
+    {
+      "case": "parse/reserved_def_name_000.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06734931899700314,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "parse/reserved_def_name_000.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/parse/reserved_def_name_000.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0684185619757045,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/eof.bend",
+        "<baseline-artifacts>/10.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : end of input\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| def match\n",
+      "timeout": false,
+      "seconds": 0.0725017549993936,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "7589fef891ec2cc875a70d618a367b7aa63abefd885cc75ebde50ca36a6bacb9"
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/eof.bend:2:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004443319019628689,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ac6dcdd9113f83bb46e189f717a3b1e413360c0975f9c67895820df56e72315f"
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0012043140013702214,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/eof.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0009292539907619357,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.bend",
+        "<baseline-artifacts>/11.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '#'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| def match# raw trivia remains visible\n3 | \n",
+      "timeout": false,
+      "seconds": 0.07234559199423529,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "6748b572608c5b51f5c52a052625c0bf7983bd04005e951555e0c059615aa7ba"
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.bend:2:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004651950002880767,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "2bcf78b1a748fc88f17548049402457f48a307d05bd8cc13acf11d5cc2cf0ebd"
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0010175159841310233,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/comment.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/comment.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.000889185001142323,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/newline.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.bend",
+        "<baseline-artifacts>/12.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '\n'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| def match\n3 | \n",
+      "timeout": false,
+      "seconds": 0.07418131598387845,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "a0284b839d3036b5bc6ced86675bff952bb55403b8d45aceb33fd5f9179cc293"
+    },
+    {
+      "case": "negative/newline.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.bend:2:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004693852999480441,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "019db0087b99b611b3b1b7b974484fbe60da0f3d1edf13f7476bfc6a177f319f"
+    },
+    {
+      "case": "negative/newline.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.001179396000225097,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/newline.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/newline.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008530310005880892,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/tab.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.bend",
+        "<baseline-artifacts>/13.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '\t'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| def match\t(): Type\n3 | \n",
+      "timeout": false,
+      "seconds": 0.07377900701249018,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "3a90211aa475d78f6d2fbbc29aede25d84751f391e785fce9b85ca19c01d2e37"
+    },
+    {
+      "case": "negative/tab.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.bend:2:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004599050007527694,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d7d3cf3ded316dc08f7ca03dea6ec652135f14097bc5ad2605bc6243f15d8d94"
+    },
+    {
+      "case": "negative/tab.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0011091719788964838,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/tab.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/tab.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008724800136405975,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend",
+        "<baseline-artifacts>/14.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '\r'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\r\n2>| def match\r\n3 | \n",
+      "timeout": false,
+      "seconds": 0.07540482902550139,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "9e4d76489e6d234b8e20ecd92f0cf5f9edd048e5b5ed8aaf60d33ac9193b6236"
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend:2:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.005027139006415382,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "3cda553330f4f3ad05ec5fa4edbe489071fadf9e94542ae650a04c2c375b691c"
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0011238139995839447,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/crlf.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0011226329952478409,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/quantified.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.bend",
+        "<baseline-artifacts>/15.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ':'\nLocation:\n2 | \n3>| def bad(+match: U32) -> U32: 0\n4 | \n",
+      "timeout": false,
+      "seconds": 0.09092832400347106,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "713d0b8dc8317885a5a18ea70e6e396363aa10d7705a970b4c7626a0659e3343"
+    },
+    {
+      "case": "negative/quantified.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.bend:3:10: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.12579838899546303,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "28f5b153865316f80a770633cfdec04a6a2dacf8de842da49e94f32d707ea823"
+    },
+    {
+      "case": "negative/quantified.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06326451399945654,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/quantified.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/quantified.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06902647798415273,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/constructor.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.bend",
+        "<baseline-artifacts>/16.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '{'\nLocation:\n2 | type Item is Data:\n3>|   match{}\n4 | \n",
+      "timeout": false,
+      "seconds": 0.07485784401069395,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "5bc296db0334535f155cf2ee4e3be2b752368ef41731785d2c1d07b36443f259"
+    },
+    {
+      "case": "negative/constructor.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.bend:3:3: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.004643286985810846,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "d3668f35fc3872a3b0e1e93195a40191e4dcb855b64965cf02be80bedb4a82a0"
+    },
+    {
+      "case": "negative/constructor.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0024361080140806735,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/constructor.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/constructor.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0008861400128807873,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/template.bend",
+        "<baseline-artifacts>/17.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : ' '\nLocation:\n3 | def staged(~n: U32) -> U32:\n4>|   +match = n\n5 |   0\n",
+      "timeout": false,
+      "seconds": 0.09930340098799206,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "fe71ef3e6e56b0cfa944c3baffbb93532fcdc40539f9326a03b3873cac8bcfd7"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/template.bend:4:4: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.13476778101176023,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "ec331b961d4a830cc20abbbce12ec958a160ae082e294be57b90853143379956"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/template.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06264285801444203,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/template.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/template.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0694231580127962,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/imported.bend",
+        "<baseline-artifacts>/18.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name (got the keyword 'match')\n- observed : '('\nLocation:\n2 | \n3>| def match() -> U32: 0\n4 | \n",
+      "timeout": false,
+      "seconds": 0.09353764000115916,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      },
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "517937beadf0ddd85b7fc77a5461f63e924775242fe4bdda46cf5ad76c41b23e"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/imports/bad.bend:3:5: expected a name, found \"match\"\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timeout": false,
+      "seconds": 0.12773978200857528,
+      "stdout_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_raw_sha256": "69866080d5aaac717b1abe50ba167367ad2a662f8b66159dab53c06330bd6ab2"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/imported.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.06815038301283494,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/imported.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/negative/imported.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.0716901260020677,
+      "stdout_raw_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/names.bend",
+      "lane": "port-emit-c",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/names.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<baseline-artifacts>/0.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/0.c\",\n  \"target\": \"c\",\n  \"bytes\": 186787,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.369849217007868,
+      "stdout_raw_sha256": "8f293e83b1175d3b8752fe84410d95a954a63db2fc96978b68aba549dbf8fca0",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/names.bend",
+      "lane": "port-emit-js",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/names.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<baseline-artifacts>/0.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/0.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59886,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.37660465098451823,
+      "stdout_raw_sha256": "e0ad5827be470f3cfde538687ffe1751b658fdb0ce613777bf7cbc22dd961e40",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/qualified.bend",
+      "lane": "port-emit-c",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/qualified.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<baseline-artifacts>/1.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/1.c\",\n  \"target\": \"c\",\n  \"bytes\": 185394,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.38581162798800506,
+      "stdout_raw_sha256": "d4cf835f87169d4e984defa7dc9a6822905a4b2e17d083a4ba7d4d1dec859f45",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/qualified.bend",
+      "lane": "port-emit-js",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/qualified.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<baseline-artifacts>/1.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/1.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 52401,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.35555058799218386,
+      "stdout_raw_sha256": "337db0dac278392b3c306a6d2108cc610672bc3330af19a236c120bf4380e132",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/imported.bend",
+      "lane": "port-emit-c",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/imported.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<baseline-artifacts>/2.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/2.c\",\n  \"target\": \"c\",\n  \"bytes\": 185708,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.415416723000817,
+      "stdout_raw_sha256": "357817446a20b86ad032cc9fe8da5f4ce876507e9e13fddaff8d7a54148cb9ef",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/imported.bend",
+      "lane": "port-emit-js",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/imported.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<baseline-artifacts>/2.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/2.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 59760,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.37780559598468244,
+      "stdout_raw_sha256": "1cb9a8bdc723896e46c1e5273f11fff3c505653faa294dafafd47358dece7395",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/fields.bend",
+      "lane": "port-emit-c",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/fields.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "<baseline-artifacts>/3.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/3.c\",\n  \"target\": \"c\",\n  \"bytes\": 186018,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.40856009599519894,
+      "stdout_raw_sha256": "4b9cda91dddfdb6d5369ae1377b1ab8bbc3e0e363e13731d256b2302ece2bf4e",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/fields.bend",
+      "lane": "port-emit-js",
+      "command": [
+        "<baseline-binary>/teamy-bend",
+        "compile",
+        "<repo>/tests/fixtures/cpu-reserved-name-diagnostics/positive/fields.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "<baseline-artifacts>/3.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"<baseline-artifacts>/3.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 60157,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "timeout": false,
+      "seconds": 0.35496468999190256,
+      "stdout_raw_sha256": "810fb9b8f4aa20d85ee5350a9067073a3d63b35d6261f2d02f3d1ad46d73abe3",
+      "stderr_raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "artifacts": [
+    {
+      "case": "positive/names.bend",
+      "target": "c",
+      "artifact": "<baseline-artifacts>/0.c",
+      "sha256": "983c0357f06189eb5b64bb3530b51735d9173ea8dbbfc83c550b31392f6de14b"
+    },
+    {
+      "case": "positive/names.bend",
+      "target": "javascript",
+      "artifact": "<baseline-artifacts>/0.js",
+      "sha256": "90e87a7c5f1c28520c7693ab615d330d52393f46d929eae4b3c2905fbded6c1c"
+    },
+    {
+      "case": "positive/qualified.bend",
+      "target": "c",
+      "artifact": "<baseline-artifacts>/1.c",
+      "sha256": "c183642a6efff45ecfc9c90aed50769e026677b5a6071a980dc4310d41ac7e3c"
+    },
+    {
+      "case": "positive/qualified.bend",
+      "target": "javascript",
+      "artifact": "<baseline-artifacts>/1.js",
+      "sha256": "839ccd1caf281f1d535c38364cfdcec554a1da0ccc6be179f9879479fdfb5d43"
+    },
+    {
+      "case": "positive/imported.bend",
+      "target": "c",
+      "artifact": "<baseline-artifacts>/2.c",
+      "sha256": "30eaaafb1630cd7a93b46663ddd2bd57c46d3eb1dc47cd57476ff2594725275f"
+    },
+    {
+      "case": "positive/imported.bend",
+      "target": "javascript",
+      "artifact": "<baseline-artifacts>/2.js",
+      "sha256": "7f982708ee1c8995720075c3fd7aa566c5a3110317b2fe582b7a3b31958d0223"
+    },
+    {
+      "case": "positive/fields.bend",
+      "target": "c",
+      "artifact": "<baseline-artifacts>/3.c",
+      "sha256": "9e6010470c1866ba64a04bab3c74ea5a0f54cea62169155bd2d95af764d2b519"
+    },
+    {
+      "case": "positive/fields.bend",
+      "target": "javascript",
+      "artifact": "<baseline-artifacts>/3.js",
+      "sha256": "4d89950d9206cd758ba33cbd254d1d3b0f195f9081dfb2592f908efa1fb310cb"
+    }
+  ],
+  "scope": "Baseline at published d1773a4 / tested286741ec. Nineteen load-negative cases; one duplicate-name control already matches. Artifacts are eight baseline port C/JS emissions, not executions. New matrix must execute each supported lane."
+}

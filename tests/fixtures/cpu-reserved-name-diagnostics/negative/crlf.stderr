@@ -1,0 +1,7 @@
+Error:
+- expected : a name (got the keyword 'match')
+- observed : ''
+Location:
+1 | # SPDX-License-Identifier: MPL-2.0
+2>| def match
+3 | 
