@@ -1,0 +1,16 @@
+[
+  "original/ctor_indexed_target.bend",
+  "original/ctor_result_annotation.bend",
+  "original/ctor_result_arrow.bend",
+  "original/gadt_result_annotation_000.bend",
+  "original/gadt_result_annotation_001.bend",
+  "original/legacy_brace_datatype.bend",
+  "original/legacy_data_annotation.bend",
+  "original/arrow_bind_error_000.bend",
+  "original/arrow_bind_error_001.bend",
+  "controls/top-level.bend",
+  "controls/after-ctor.bend",
+  "controls/imported/main.bend",
+  "controls/before-ctor.bend",
+  "controls/arrow.bend"
+]

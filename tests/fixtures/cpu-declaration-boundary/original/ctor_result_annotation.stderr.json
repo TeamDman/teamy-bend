@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : ':'\nLocation:\n4 | type Bad is Data:\n5>|   Mk{} : U32\n6 | \n"

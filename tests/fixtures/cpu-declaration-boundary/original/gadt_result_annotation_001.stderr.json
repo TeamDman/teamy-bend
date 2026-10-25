@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : ':'\nLocation:\n5 | type Ix2<n:Nat> is Data:\n6>|   I0x{}:Ix2(0n)\n7 | law main:\n"

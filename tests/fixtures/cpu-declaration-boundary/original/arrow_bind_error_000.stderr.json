@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : '<'\nLocation:\n13 | def go(k):\n14>|   Pp{a, b} <- k\n15 |   a\n"

@@ -657,6 +657,15 @@ impl Parser<'_> {
                 self.expect("def")?;
                 self.definition(true)?;
             } else {
+                let token = self.current().clone();
+                if let Some(origins) = &mut self.templates.diagnostics {
+                    origins.expected_syntax(
+                        &self.label,
+                        token.line,
+                        "'def', 'type' or 'law'",
+                        &token.text,
+                    );
+                }
                 return Err(self.error("expected type, law, or def"));
             }
         }
@@ -704,7 +713,10 @@ impl Parser<'_> {
         }));
         let mut constructors = Vec::new();
         while !self.is("") && !["type", "law", "def", "@"].contains(&self.current().text.as_str()) {
-            let raw = self.name()?;
+            // A non-name token ends upstream's constructor rows and is then
+            // rejected as a declaration. Preserve our cursor/public error;
+            // only its optional source diagnostic uses that outer context.
+            let raw = self.name_expected("'def', 'type' or 'law'")?;
             let constructor = self.qualify(&raw);
             if let Some(tags) = self.constructor_tags.as_deref_mut() {
                 tags.insert(constructor.clone(), raw);

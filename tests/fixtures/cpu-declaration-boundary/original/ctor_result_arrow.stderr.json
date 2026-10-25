@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : ':'\nLocation:\n4 | type Dd is Data:\n5>|   Cc{} : U32 -> Dd\n6 | \n"

@@ -476,6 +476,40 @@ mod tests {
     }
 
     #[test]
+    fn declaration_context_preserves_public_errors_and_successful_terms() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/cpu-declaration-boundary");
+        let cases: Vec<String> = facet_json::from_str(include_str!(
+            "../../tests/fixtures/cpu-declaration-boundary/cases.json"
+        ))
+        .unwrap();
+        for case in cases {
+            let path = root.join(&case);
+            let plain = crate::syntax::load(&path).unwrap_err();
+            let tracked = crate::syntax::load_with_diagnostics(&path).err().unwrap();
+            assert_eq!(plain.to_string(), tracked.error.to_string(), "{case}");
+            assert!(
+                plain.message.starts_with("expected a name, found")
+                    || plain.message == "expected type, law, or def"
+            );
+            let diagnostic = tracked.diagnostic.unwrap();
+            assert!(matches!(diagnostic.content,
+                super::LoadDiagnosticContent::ExpectedObserved { expected, .. }
+                if expected == "'def', 'type' or 'law'"));
+            if case.contains("imported") {
+                assert!(diagnostic.excerpt.contains("On{} : U32"));
+                assert!(!diagnostic.excerpt.contains("H.On{}"));
+            }
+        }
+        // Small, fully retained declaration trees include an empty datatype,
+        // ordinary rows and a decorator boundary. Do not normalize away changes.
+        let path = root.join("controls/unsafe-boundary.bend");
+        let plain = crate::syntax::load(&path).unwrap();
+        let (tracked, _) = crate::syntax::load_with_diagnostics(&path).unwrap();
+        assert_eq!(format!("{plain:?}"), format!("{tracked:?}"));
+    }
+
+    #[test]
     fn local_binding_metadata_preserves_the_public_parse_error() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-destructure/destructure_let_001.bend");

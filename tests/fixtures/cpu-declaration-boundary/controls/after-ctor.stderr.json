@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : ';'\nLocation:\n2 | type Flag is Data:\n3>|   On{} ;\n4 | \n"

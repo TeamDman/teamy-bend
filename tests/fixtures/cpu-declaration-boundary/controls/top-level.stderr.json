@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : '4'\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| 42\n3 | \n"

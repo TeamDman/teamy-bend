@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : '<'\nLocation:\n10 | def f(g):\n11>|   x <- g\n12 |   x\n"

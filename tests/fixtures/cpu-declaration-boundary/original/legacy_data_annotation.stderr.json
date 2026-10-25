@@ -1,0 +1,1 @@
+"Error:\n- expected : 'def', 'type' or 'law'\n- observed : 'N'\nLocation:\n3 | # ported from bend3\n4>| Nn7 : Data { Zz7{} }\n5 | \n"
