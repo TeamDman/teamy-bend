@@ -3,13 +3,17 @@
 from pathlib import Path
 import argparse, hashlib, json, os, shutil, signal, subprocess, time
 p=argparse.ArgumentParser()
-for name in ['reference','binary','phase-probe','output']:p.add_argument('--'+name,type=Path,required=True)
+for name in ['reference','binary','phase-probe','output','build-receipt']:p.add_argument('--'+name,type=Path,required=True)
 a=p.parse_args(); repo=Path(__file__).resolve().parents[2];root=a.output.resolve()
 assert not root.exists();assert shutil.disk_usage(repo).free>10*2**30
 assert subprocess.check_output(['git','-C',str(a.reference),'rev-parse','HEAD'],text=True).strip()=='e6676b080f25b1bc1bf5b5b7d7a17e22f8022599'
 assert not subprocess.check_output(['git','status','--porcelain'],cwd=repo)
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=a.reference)
 root.mkdir(parents=True);fixtures=repo/'tests/fixtures/cpu-string-pattern-depth'
 d=dict(tested_source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip(),binary_sha256=hashlib.sha256(a.binary.read_bytes()).hexdigest(),phase_probe_sha256=hashlib.sha256(a.phase_probe.read_bytes()).hexdigest(),rows=[],unrun=[],dispositions=[],completed=False,full_parity=False)
+build=json.loads(a.build_receipt.read_text())
+assert all(build[k]==d[k] for k in ['tested_source','binary_sha256','phase_probe_sha256']), 'Build receipt does not match clean source and artifacts'
+d['build_receipt_sha256']=hashlib.sha256(a.build_receipt.read_bytes()).hexdigest()
 def save(): (root/'receipt.json').write_text(json.dumps(d,indent=2)+'\n')
 def run(case,lane,cmd,rep=1):
  assert shutil.disk_usage(repo).free>10*2**30
