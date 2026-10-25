@@ -1,0 +1,9 @@
+[
+  "check/cop_circular_witness_000.bend",
+  "check/descent_field_order.bend",
+  "check/partial_self_call_stuck.bend",
+  "controls/bare.bend",
+  "controls/unchanged.bend",
+  "controls/reconstructed.bend",
+  "controls/imported/main.bend"
+]

@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : bad.bad\nContext:\n- n : bad.N\nLocation: bad.bad\n5 | def bad(n: N) -> N:\n6>|   bad(n)\n7 | \n"

@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : wob\nContext:\n- a2 : Nat\n- b  : Nat\nLocation: wob\n20 |     case MkP{Succ{a2}, b}:\n21>|       wob(MkP{a2, Succ{b}})\n22 | \n"

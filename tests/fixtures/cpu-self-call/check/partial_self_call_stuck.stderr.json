@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : part\nContext:\n- p : Nat\n- b : Nat\nLocation: part\n15 |     case 1n+p:\n16>|       g = part(a)\n17 |       g(p)\n"

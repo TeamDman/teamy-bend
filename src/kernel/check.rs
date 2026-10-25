@@ -1426,9 +1426,23 @@ impl Engine {
                     order = self.descend(*quant, arg, col)?;
                 }
                 if order != std::cmp::Ordering::Less {
-                    return Err(KernelError::new(
+                    let mut error = KernelError::new(
                         "recursive self-call must decrease structurally, left to right",
-                    ));
+                    );
+                    error.diagnostic = self
+                        .term_diagnostic(
+                            lhs,
+                            value,
+                            DiagnosticExpression::Text(
+                                "a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)"
+                                    .into(),
+                            ),
+                            DiagnosticExpression::Term(value),
+                            context,
+                        )
+                        .ok()
+                        .map(Box::new);
+                    return Err(error);
                 }
             }
             if name != &lhs.name
@@ -2619,7 +2633,97 @@ mod reflexivity_diagnostic_tests {
             error.message,
             "recursive self-call must decrease structurally, left to right"
         );
-        assert!(error.checker_diagnostic().is_none());
+        assert_eq!(
+            error.checker_diagnostic().unwrap().observed.as_deref(),
+            Some("ghost")
+        );
+    }
+
+    #[test]
+    fn self_call_diagnostics_preserve_guards_sharing_and_remaining_budget() {
+        let book = crate::syntax::parse("type N is Data:\n  Z{}\nlaw loop: N\n").unwrap();
+        let mut engine = empty_engine(&book).unwrap();
+        for declaration in &book.declarations {
+            match declaration {
+                Declaration::Adt(adt) => engine.validate_adt(adt).unwrap(),
+                Declaration::Def(def) => engine.validate_def(def).unwrap(),
+            }
+        }
+        let reference = term(Term::Ref("loop".into()));
+        let lhs = Lhs {
+            name: "loop".into(),
+            ..Lhs::default()
+        };
+        let owners = Rc::strong_count(&reference);
+        let fresh = engine.fresh_id;
+        let initial = engine.fuel;
+        let error = engine
+            .infer(&lhs, &reference, Quant::Lone, &Context::new(), &[])
+            .unwrap_err();
+        assert_eq!(
+            error.message,
+            "recursive self-call must decrease structurally, left to right"
+        );
+        let report = error.checker_diagnostic().unwrap();
+        assert_eq!(report.observed.as_deref(), Some("loop"));
+        assert_eq!(
+            report.expected,
+            "a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)"
+        );
+        assert_eq!(report.term_identity, Rc::as_ptr(&reference) as usize);
+        assert_eq!(Rc::strong_count(&reference), owners);
+        assert_eq!(engine.fresh_id, fresh);
+        assert_eq!(engine.depth, 0);
+        assert_eq!(initial - engine.fuel, 1);
+        assert_eq!(error, KernelError::new(error.message.clone()));
+        // Reporting may fail on the remaining allowance; the refusal cannot.
+        for (fuel, depth) in [(1, 0), (100, 127)] {
+            engine.fuel = fuel;
+            engine.depth = depth;
+            let exhausted = engine
+                .infer(&lhs, &reference, Quant::Lone, &Context::new(), &[])
+                .unwrap_err();
+            assert_eq!(exhausted, error);
+            assert!(exhausted.checker_diagnostic().is_none());
+            assert_eq!((engine.fuel, engine.depth), (fuel - 1, depth));
+        }
+        for (fuel, depth, message) in [
+            (
+                0,
+                0,
+                "kernel evaluation budget exhausted; proof not accepted",
+            ),
+            (
+                100,
+                128,
+                "kernel nesting limit exhausted; proof not accepted",
+            ),
+        ] {
+            engine.fuel = fuel;
+            engine.depth = depth;
+            let failure = engine
+                .infer(&lhs, &reference, Quant::Lone, &Context::new(), &[])
+                .unwrap_err();
+            assert_eq!(failure.message, message);
+            assert!(failure.checker_diagnostic().is_none());
+            assert_eq!(engine.depth, depth);
+        }
+        engine.reset();
+        engine
+            .infer(&lhs, &reference, Quant::None, &Context::new(), &[])
+            .unwrap();
+        engine
+            .infer(
+                &Lhs {
+                    unsafe_: true,
+                    ..lhs
+                },
+                &reference,
+                Quant::Lone,
+                &Context::new(),
+                &[],
+            )
+            .unwrap();
     }
 
     #[test]

@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : Forge\nContext:\n- T : Type\nLocation: Forge\n11 | def Forge(T):\n12>|   Forge(T)\n13 | \n"

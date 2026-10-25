@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- p : N\nLocation: loop\n7 |     case Z{}: Z{}\n8>|     case S{p}: loop(S{p})\n9 | \n"

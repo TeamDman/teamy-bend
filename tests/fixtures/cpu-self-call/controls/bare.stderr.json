@@ -1,0 +1,1 @@
+"Error:\n- expected : a decreasing self-call (arguments are read left to right: each passed unchanged until one shrinks)\n- observed : loop\nContext:\n- n : N\nLocation: loop\n5 | def loop(n: N) -> N:\n6>|   f = loop\n7 |   f(n)\n"
