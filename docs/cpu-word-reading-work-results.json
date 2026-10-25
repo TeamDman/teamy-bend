@@ -1,0 +1,1665 @@
+{
+  "tested_source": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+  "binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+  "current_unique_failures": [
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2905594869807828,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-native",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.4793078919756226,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.30329596099909395,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n5 |   U32.from_nat(Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216)))\n6>| def main() -> IO(Unit):\n7 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "ff4ba0e3eee84128cb62bc1563f92216a7d21f1e45f690b7a5fb6b76389119d2"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.32520567101892084,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n5 |   U32.from_nat(Nat.mul(U32.to_nat(16777216), U32.to_nat(16777216)))\n6>| def main() -> IO(Unit):\n7 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "ff4ba0e3eee84128cb62bc1563f92216a7d21f1e45f690b7a5fb6b76389119d2"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "upstream-C-O3",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<artifacts>/matrix/sub-nat-overflow/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.0020309050159994513,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "node",
+        "<artifacts>/matrix/sub-nat-overflow/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.03002696202020161,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-C-O3",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<artifacts>/matrix/sub-nat-overflow/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.005308988998876885,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-JS",
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "node",
+        "<artifacts>/matrix/sub-nat-overflow/port.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.059403571009170264,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+      "raw_stderr_sha256": "b0d6eee79acb21e8cf2eb570824f8dc41807dccd602adcefb29efcb4408f6941"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.29282535798847675,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-native",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "run",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.6112230110156815,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: runtime fail-stop\n",
+      "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.17131749101099558,
+      "classification": "strict_private_constructor_unavailable_at_load",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- message  : a declared constructor (unknown: Emit)\nLocation:\n5 |   match op:\n6>|     case Emit{value}: 0\n7 |     case Halt{code, message}: code\n",
+      "raw_stderr_sha256": "b1ca325281eb874896566719a5d70bbb12e3f7bd043de0f2d3409b9e86532f85"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.1722902700130362,
+      "classification": "strict_private_constructor_unavailable_at_load",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- message  : a declared constructor (unknown: Emit)\nLocation:\n5 |   match op:\n6>|     case Emit{value}: 0\n7 |     case Halt{code, message}: code\n",
+      "raw_stderr_sha256": "b1ca325281eb874896566719a5d70bbb12e3f7bd043de0f2d3409b9e86532f85"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "upstream-C-O3",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<artifacts>/matrix/sub-private-request/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.0009560839971527457,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: runtime fail-stop\n",
+      "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "node",
+        "<artifacts>/matrix/sub-private-request/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.060518466983921826,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: runtime fail-stop\n",
+      "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-C-O3",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<artifacts>/matrix/sub-private-request/port.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.004854401980992407,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: runtime fail-stop\n",
+      "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-JS",
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "node",
+        "<artifacts>/matrix/sub-private-request/port.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.03068628499750048,
+      "classification": "exact_failure_contract",
+      "stdout": "before\n",
+      "raw_stdout_sha256": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+      "stderr": "bend: runtime fail-stop\n",
+      "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.5303883019951172,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.45534655899973586,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "8d7ea1bcba7f81a2b761e5ab5b1b10c0fd6ef5fd837045c20d53f7d8fb2f866e"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.32485535100568086,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "8d7ea1bcba7f81a2b761e5ab5b1b10c0fd6ef5fd837045c20d53f7d8fb2f866e"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "node",
+        "<artifacts>/matrix/read_bounds/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.02099189200089313,
+      "classification": "unresolved_upstream_bun_ffi_host",
+      "stdout": "99999999999999\n100000000000000\n281474976710655\nNone\nNone\n4294967295\nNone\nNone\nNone\n4294967295\n",
+      "raw_stdout_sha256": "61f28a06fc2e3c36b5d2cd4827c084c46166ab3e31d2416ca38dd12092076630",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/read_bounds/upstream.js\n",
+      "raw_stderr_sha256": "dc935dc9b8a302444f1d407e8f82b4214f26135d009d9d07ac35047a303e9303"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.39837915200041607,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.5752824129885994,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n49 | law main:\n50>|   IO(Unit)\n51 | \n",
+      "raw_stderr_sha256": "d2c2691898212a0378678978e25d07a0dc6e6e4f7c1a89f748c19a9d997d47b9"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.32721960300114006,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n49 | law main:\n50>|   IO(Unit)\n51 | \n",
+      "raw_stderr_sha256": "d2c2691898212a0378678978e25d07a0dc6e6e4f7c1a89f748c19a9d997d47b9"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.46603689101175405,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.638079715979984,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.6030496239836793,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "upstream-JS",
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "node",
+        "<artifacts>/matrix/file-errors/upstream.js"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.036381860001711175,
+      "classification": "unresolved_upstream_bun_ffi_host",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error: Cannot find module 'bun:ffi'\nRequire stack:\n- <artifacts>/matrix/file-errors/upstream.js\n",
+      "raw_stderr_sha256": "7a81d89575389c70d1084fdfd93454d513b27394c7c8fc1d9c088d9affe16b73"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.48539776098914444,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.4068142300238833,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.3947461609786842,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.39659830898744985,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.3634118959889747,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.3953895040031057,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.20028335700044408,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2452422079804819,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n7 | def apply(f: U32 -> U32, a: U32) -> U32: f(a)\n8>| def main() -> IO(Unit):\n9 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "5529bf1984a48f9ceee12186927eddff7af8b1373a6a8efbefb00689b03457a7"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2481182139890734,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : IO\nLocation: main\n7 | def apply(f: U32 -> U32, a: U32) -> U32: f(a)\n8>| def main() -> IO(Unit):\n9 |   do IO<Unit>:\n",
+      "raw_stderr_sha256": "5529bf1984a48f9ceee12186927eddff7af8b1373a6a8efbefb00689b03457a7"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "upstream-direct-Node",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "node",
+        "<pinned-reference>/bend2/main.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2065608119883109,
+      "classification": "unresolved_Node_host_failure",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "TypeError: require is not a function\n",
+      "raw_stderr_sha256": "0057edf66c7f8d9c525eb4c0fda4bc23bcd9a10d383055415a7601fd5053a617"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-strict-check",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "check",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2678144209785387,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-strict-eval",
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "<artifacts>/teamy-bend",
+        "eval",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "rep": 1,
+      "exit": 1,
+      "timed_out": false,
+      "seconds": 0.2682911340089049,
+      "classification": "strict_IO_unavailable",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "Error:\n- expected : a defined name\n- observed : File\nLocation: ../original/read_bounds.rc\n23 | \n24>| def rc(r: Result<&1, &1, U32 & String, File>) -> IO(Unit):\n25 |   match r:\n",
+      "raw_stderr_sha256": "f976cbd9cac19138286c335cedcfea4ff4b347f3449cb9572c32fc04482da2bf"
+    }
+  ],
+  "phase_observations": [
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/sub-nat-overflow.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "b9e737a249232015511cc2caa72aced6befdf03c1aea0ccfb87cbd6cda68849f",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-nat-overflow.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend"
+      ],
+      "exit": 1,
+      "phase": "load",
+      "stdout": "load\n",
+      "raw_stdout_sha256": "e6f4365a525bbe336928203fbee2e36d3cb08168bec1477a83ebc39149d4bada",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "negative/sub-private-request.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "47fcc7b993aec9783821e126cd8b46fd048e26c6eec2dfe2da21f9aa23889d4f",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/negative/sub-private-request.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/read_bounds.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "2e7c2dbe13839e6e159e3ac2c5a5d374cb7e28a3262ee54114c681ced8a22cea",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/read_bounds.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "original/show_read.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "efd902d65c4ca21eaebaa257d85f43465ffd1876f8c9d453af1de4f6e552bad0",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/original/show_read.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/file-errors.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "3380f770234f35d9b69db20661f652e3025389b38a0da74d6f5ae4691432b7ad",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/file-errors.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/helper-edges.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "3d1a38ca7f051c8e1928f466c66606d370d7a0ab59aaaa227b7d8a9b71680465",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/helper-edges.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/nat-edges.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "ed6a5bbd592fcb902b1ea23dc36af81203a18d53c45897002169d22b03c949ef",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/nat-edges.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "positive/sub-edges.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "1db34ddfcad42dbb05da4faf037c0b81ccfd4cdd9f2905249b45219c3dea6df6",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/positive/sub-edges.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "upstream",
+      "rep": 1,
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "node",
+        "<checkout>/scripts/checking-census/upstream.mjs",
+        "<pinned-reference>/bend2/bend.ts",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend",
+        "<evidence>/phase-temp.json"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "outcome": "accepted",
+      "stdout": "",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-strict",
+      "rep": 1,
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend"
+      ],
+      "exit": 1,
+      "phase": "check",
+      "stdout": "check\n",
+      "raw_stdout_sha256": "b78232388282c6420137ababfeb08b77a605007fe7650cfce4e36bb6afa013fb",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "unresolved/word-edges.bend",
+      "lane": "port-executable",
+      "rep": 1,
+      "source_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+      "command": [
+        "<evidence>/phase-probe",
+        "<checkout>/tests/fixtures/cpu-read-bounds/unresolved/word-edges.bend",
+        "--executable"
+      ],
+      "exit": 0,
+      "phase": "accepted",
+      "stdout": "accepted\n",
+      "raw_stdout_sha256": "4825c38ba9e071bc3e19961e7c1bd0c1a2fcc575a5cff7e416d7f7c772597271",
+      "stderr": "",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "phase_repetitions": 2,
+  "isolation": {
+    "aggregate_sha256": "d344c4a66e6f3931c7c91933214f8dd114140dcc1dd158196610ba084ae335f5",
+    "raw_receipt_sha256": "176c0f1a5629f2226d0b5d5c98da30eec2f95d6df5dbca7b82c429734e113a80",
+    "rows": [
+      {
+        "case": "individual-01",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\")))"
+        ],
+        "source_sha256": "9a66e276cfb6f600ca26e0dea261f889cfff092ffc36542cdfa2c4a447cbbd4f",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-01.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 1.1703516389825381,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-02",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"0\")))"
+        ],
+        "source_sha256": "6a591eee2780628808b0e926f063d7abde4ef6a430c51ce65ced9532bcef3467",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-02.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.4881760900025256,
+        "stdout": "0\n",
+        "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-03",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))"
+        ],
+        "source_sha256": "db6c80907a61a2e05f58692633fe3a1723967a5a15e45732e86d943222a1d875",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-03.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.5416882380086463,
+        "stdout": "4294967295\n",
+        "raw_stdout_sha256": "e65633bae2c4b3af83a315c42cf4acd12e7510275a1b6370fcbf9f51de1b2045",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-04",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"4294967294\")))"
+        ],
+        "source_sha256": "68a30c0864b44d04fdff85f0c6d2c1062e9d61742a76557af62ca8c10c28aa69",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-04.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.4759242979926057,
+        "stdout": "4294967294\n",
+        "raw_stdout_sha256": "17946b925148aab08caaff97b5dcf95a6d2bbb1251a513ca2b42b113e812a66f",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-05",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"4294967296\")))"
+        ],
+        "source_sha256": "8b3d0ba8cb3e47c62a70576bd06313fbd4d4c6dc1a05afdd138241bb54f18485",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-05.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.48232832801295444,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-06",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"42949672950\")))"
+        ],
+        "source_sha256": "75474a646612b69fd6bba792ae8db9989d52c01dacc2d1b9b0f77dc7dd0442d9",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-06.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.48977510997792706,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-07",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"9999999999\")))"
+        ],
+        "source_sha256": "27defaf908ea45b6f2e814ff2da3114980f1987a22e511fb859be0da855b4254",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-07.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.4621915410098154,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-08",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"+1\")))"
+        ],
+        "source_sha256": "639dc7e2ed91d7b19f6e7adeff389529993a641e97b8fca62e7f47946b739978",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-08.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.44667357302387245,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-09",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"-1\")))"
+        ],
+        "source_sha256": "5e7984d8cfdaaa8e72461ea304b087e444c60bdf4b1d0e21ea97836e36e09ed8",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-09.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.448140466993209,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-10",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\" 1\")))"
+        ],
+        "source_sha256": "4d2f735a958e66cbf07895420fcb83ad31afea16ddf695b739186c3d69bd26de",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-10.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.443320266000228,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-11",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"1 \")))"
+        ],
+        "source_sha256": "4c3577e97d05f86e525ae900bd4354c52d3008963c4c405536bf3d7af3286d74",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-11.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.444034301006468,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-12",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"1:\")))"
+        ],
+        "source_sha256": "a6897d9425cc6be691d4535eec910f07c3b022d773da71304c245aed159caf70",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-12.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.447126618004404,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-13",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\u00e9\")))"
+        ],
+        "source_sha256": "a856488bb4f428e48f8724d4a3e74f4b2f47705bea921f1f334f5f8012fbd571",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-13.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.44687356101348996,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-14",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\u0661\")))"
+        ],
+        "source_sha256": "55909ba06ff5679efe3d516478bff9a3147c50ac8c091d3c7154e0fd18fc94b7",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-14.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.45281433101627044,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-15",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"1\\0\")))"
+        ],
+        "source_sha256": "e89e40c94b1e0353599796939585a2c97dd81b96325789e93b5b12a90ebb173d",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-15.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.44393252101144753,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "individual-16",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"0x10\")))"
+        ],
+        "source_sha256": "d516ae128c0e241ab8a485c3f4bad7d7eab4431228825c93531688d12496166d",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/individual-16.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.46420452801976353,
+        "stdout": "None\n",
+        "raw_stdout_sha256": "af5d8a21858f42808c9bcc17012b77bcc2fd6ab3b071dbd4a05f13f410470541",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "prefix-04",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\")))",
+          "IO.print(R.mu(U32.read(\"0\")))",
+          "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+          "IO.print(R.mu(U32.read(\"4294967294\")))"
+        ],
+        "source_sha256": "9607cc53bb37366e11496753687e4e73a44a3b98709ff66385972e0bf04ba8d1",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/prefix-04.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.5277466700063087,
+        "stdout": "None\n0\n4294967295\n4294967294\n",
+        "raw_stdout_sha256": "05dcbe09e9f3a9371497d086129cef0dc6d135685b2511ade6b0e85d2996a472",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "prefix-05",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\")))",
+          "IO.print(R.mu(U32.read(\"0\")))",
+          "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+          "IO.print(R.mu(U32.read(\"4294967294\")))",
+          "IO.print(R.mu(U32.read(\"4294967296\")))"
+        ],
+        "source_sha256": "cf949350ccba51599b35b1e4ba5e537cd53d36e1d99075efccd3ec9bc6c6b412",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/prefix-05.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.5488431279954966,
+        "stdout": "None\n0\n4294967295\n4294967294\nNone\n",
+        "raw_stdout_sha256": "9369fd776eb5d26af4712c9f12c284ec21d1cfe3937e26d41071a60039f20bcf",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "prefix-06",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\")))",
+          "IO.print(R.mu(U32.read(\"0\")))",
+          "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+          "IO.print(R.mu(U32.read(\"4294967294\")))",
+          "IO.print(R.mu(U32.read(\"4294967296\")))",
+          "IO.print(R.mu(U32.read(\"42949672950\")))"
+        ],
+        "source_sha256": "66ce6eb5e3a3de88bcd631277bd30cb3a755f08b93e83509feabd39c437bfbc8",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/prefix-06.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.585512825025944,
+        "stdout": "None\n0\n4294967295\n4294967294\nNone\nNone\n",
+        "raw_stdout_sha256": "a1c38fefdbf4585c9dfbe063674f771b404c8bfe74d55d8f2af9e3f8ce4fd57f",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "case": "prefix-16",
+        "rep": 1,
+        "expressions": [
+          "IO.print(R.mu(U32.read(\"\")))",
+          "IO.print(R.mu(U32.read(\"0\")))",
+          "IO.print(R.mu(U32.read(\"000000000000000000004294967295\")))",
+          "IO.print(R.mu(U32.read(\"4294967294\")))",
+          "IO.print(R.mu(U32.read(\"4294967296\")))",
+          "IO.print(R.mu(U32.read(\"42949672950\")))",
+          "IO.print(R.mu(U32.read(\"9999999999\")))",
+          "IO.print(R.mu(U32.read(\"+1\")))",
+          "IO.print(R.mu(U32.read(\"-1\")))",
+          "IO.print(R.mu(U32.read(\" 1\")))",
+          "IO.print(R.mu(U32.read(\"1 \")))",
+          "IO.print(R.mu(U32.read(\"1:\")))",
+          "IO.print(R.mu(U32.read(\"\u00e9\")))",
+          "IO.print(R.mu(U32.read(\"\u0661\")))",
+          "IO.print(R.mu(U32.read(\"1\\0\")))",
+          "IO.print(R.mu(U32.read(\"0x10\")))"
+        ],
+        "source_sha256": "f3a5eebd59b172322e27933e766fb987a5de209621af1c4d73882b0a54002db1",
+        "command": [
+          "<artifacts>/teamy-bend",
+          "run",
+          "<artifacts>/isolation/prefix-16.bend"
+        ],
+        "exit": 0,
+        "timed_out": false,
+        "seconds": 0.6219318890071008,
+        "stdout": "None\n0\n4294967295\n4294967294\nNone\nNone\nNone\nNone\nNone\nNone\nNone\nNone\nNone\nNone\nNone\nNone\n",
+        "raw_stdout_sha256": "fea492e095efceeb52084946b3ca0a28d3e8061dd09eb3607b10042123101dda",
+        "stderr": "",
+        "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "repetitions": 2,
+    "completed": true
+  },
+  "scope": "Current exact failures include intentional negative contracts and strict proof exclusions. Sanitized paths/ANSI are presentation only; raw stream hashes retained. No current native aggregate refusal. Earlier failures remain in cpu-read-bounds-failures/isolation and measurement receipts. Incomplete initial harness runs are not qualified."
+}

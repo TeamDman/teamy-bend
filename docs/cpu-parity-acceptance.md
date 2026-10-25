@@ -2176,3 +2176,35 @@ failures; new phase evidence does not redate or waive that set. Coverage
 blocked upstream JS. Compact-pattern research and older disagreements remain open.
 Frozen inputs/budgets/guards retained; unique failures preserved; no desktop/GPU
 or install, merge or release.
+
+
+### Packed subtraction and combined word-reader work
+
+Tested clean source `7bf8cec77c94866ff5ad467335526f19b7ccaa86`. The unchanged 16-result word aggregate
+now matches all five executable lanes, twice. The measured packed-only `U32.sub`
+correction avoids downstream structural arithmetic fallback: native completes in
+739,206 successful budget charges, versus refusal at 2,000,000 after five lines.
+The two-million budget, guards, charging sites, ordinary fallback, approved demand
+and cancellation semantics are unchanged. [Report and exact evidence](cpu-word-reading-work.md).
+
+Gate **1,173 / 0 / 49**; targeted strict Clippy passes. Matrix 198 observations:
+66 exact successful and 20 exact intentional-failure executions, with remaining
+host/proof cells explicit. All 40 native individual/prefix controls pass; 54 phase
+probes distinguish strict load/check refusal from executable acceptance. New
+ordinary/lazy, wraparound, private-request/Nat-overflow, GC, cancellation and genuine
+budget-exhaustion regressions pass. Independent review found no blocker.
+
+Renewed six-negative matrix retains 12 open observations; demand matrix retains two
+C diagnostic-order disagreements and six separately approved C wildcard exceptions.
+Their exit 1 results are retained, not recast as passing gates. Full checking census
+is still historical at d224e79: 300 differences outside 385 old IO exclusions and
+six upstream stack failures. Production runtime changed; no full-census renewal
+or whole-tree equivalence claim. Coverage stays **424 linked / 878 unlinked**
+(523 compiled candidates, 341 checker negatives, 13 interpreter profiles, one
+checking-only module). Links do not establish full CPU parity.
+
+Compact-pattern research remains unadopted; the original string-pattern 64-level
+load refusal is still substantive open work. All other prior semantic/host/resource,
+API and supplementary-lint gaps remain unwaived. Frozen inputs and disk floors
+preserved; small receipts and reproduction instrumentation in Git, bulky local
+evidence separately identified. No desktop/GPU, installs, merge or release.

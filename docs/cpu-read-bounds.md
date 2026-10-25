@@ -1,5 +1,8 @@
 # Decimal read bounds: originals, controls and retained failures
 
+Later checkpoint: [packed subtraction and fresh validation](cpu-word-reading-work.md)
+closes the native aggregate gap below. This report retains its historical results.
+
 Tested clean source: `7305b890a201ead43dd3029a6e8e40c9aba22409`. No production change was adopted. The unchanged
 `base/read_bounds` original matches native Rust, port C/JS and upstream C, while
 upstream JS fails in its unavailable file-error host. A new combined word-reader

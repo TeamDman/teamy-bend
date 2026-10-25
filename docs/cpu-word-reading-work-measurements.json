@@ -1,0 +1,1341 @@
+{
+  "baseline_source": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec",
+  "candidate_production_source": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+  "budget": 2000000,
+  "scope": "Temporary test-only observation on dirty instrumented sources, removed before clean validation. Each case repeated twice; all charge and operation counters identical, including every output boundary. Successful charges counted after the unchanged cancellation/decrement operations. This measures avoided work, not an accounting correction. The baseline exhausted its budget before completing; full-run totals are therefore not equal-work benchmark comparisons.",
+  "measurements": {
+    "before": {
+      "instrumented_source": {
+        "base": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec",
+        "files": {
+          "src/runtime/mod.rs": "74c02cb7167bb58fe0c7fb936717064f1442fd9d3d6c21dc91ac9e30fbde38a2",
+          "src/runtime/gc.rs": "7fea33b8197218e19ff60594e37691f0e9b5768792f1d18002b9146f7be53f4d",
+          "src/runtime/numeric.rs": "12ba1bd65ad61c8233b2cd97a8e2f1c1f6b753d0a574afd2653af6aacbf2fadf",
+          "src/runtime/numeric_available.rs": "9ddde2b591052ea192ce524ecf17cd8bc924e123a77fa34ecf42a4690504fdd1",
+          "src/runtime/work_probe.rs": "be1b93d85ac266978b5972b9fb1e5c36dfc12265271fb83e7a2d386edcf15f09"
+        },
+        "callsite_lines": {
+          "src/runtime/mod.rs": {
+            "387": "self.tick()?;",
+            "434": "self.tick()?;",
+            "555": "self.tick()?;",
+            "693": "self.tick()?;"
+          },
+          "src/runtime/gc.rs": {
+            "83": "self.charge()?;",
+            "96": "self.charge()?;",
+            "249": "marks.charge()?;",
+            "294": "self.tick()?;",
+            "302": "self.tick()?;"
+          },
+          "src/runtime/numeric.rs": {
+            "516": "self.tick()?;"
+          },
+          "src/runtime/numeric_available.rs": {
+            "28": "self.tick()?;",
+            "94": "self.tick()?;"
+          },
+          "src/runtime/work_probe.rs": {}
+        },
+        "scope": "Temporary test-only observation; successful charges counted after normal cancellation/decrement; numerical guards/charging calls unmodified. Public run_main runs the checked source. Removed before production validation."
+      },
+      "repetitions": 2,
+      "deterministic": true,
+      "cases": [
+        {
+          "case": "individual-01",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 3,
+            "charge:src/runtime/demand.rs:140": 3,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 47,
+            "charge:src/runtime/mod.rs:555": 54,
+            "charge:src/runtime/numeric_available.rs:94": 4
+          },
+          "total_charges": 119
+        },
+        {
+          "case": "individual-02",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 64,
+            "charge:src/runtime/demand.rs:140": 64,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 7414,
+            "charge:src/runtime/mod.rs:555": 6474,
+            "charge:src/runtime/numeric_available.rs:28": 3125,
+            "charge:src/runtime/numeric_available.rs:94": 16,
+            "charge:src/runtime/packed.rs:194": 357,
+            "charge:src/runtime/packed.rs:203": 6,
+            "charge:src/runtime/packed.rs:208": 192,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 17720
+        },
+        {
+          "case": "individual-03",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 6733,
+            "charge:src/runtime/demand.rs:140": 6733,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 257,
+            "charge:src/runtime/gc.rs:294": 122881,
+            "charge:src/runtime/gc.rs:302": 27828,
+            "charge:src/runtime/gc.rs:83": 311,
+            "charge:src/runtime/gc.rs:96": 66,
+            "charge:src/runtime/mod.rs:434": 333153,
+            "charge:src/runtime/mod.rs:555": 281798,
+            "charge:src/runtime/numeric_available.rs:28": 158474,
+            "charge:src/runtime/numeric_available.rs:94": 575,
+            "charge:src/runtime/packed.rs:194": 17518,
+            "charge:src/runtime/packed.rs:203": 123,
+            "charge:src/runtime/packed.rs:208": 3936,
+            "fallback:Add": 59,
+            "fallback:Shl": 116,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 960394
+        },
+        {
+          "case": "individual-04",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 2233,
+            "charge:src/runtime/demand.rs:140": 2233,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 117532,
+            "charge:src/runtime/mod.rs:555": 100201,
+            "charge:src/runtime/numeric_available.rs:28": 53234,
+            "charge:src/runtime/numeric_available.rs:94": 194,
+            "charge:src/runtime/packed.rs:194": 5816,
+            "charge:src/runtime/packed.rs:203": 43,
+            "charge:src/runtime/packed.rs:208": 1376,
+            "fallback:Add": 19,
+            "fallback:Shl": 36,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 282870
+        },
+        {
+          "case": "individual-05",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 1900,
+            "charge:src/runtime/demand.rs:140": 1900,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 100241,
+            "charge:src/runtime/mod.rs:555": 84462,
+            "charge:src/runtime/numeric_available.rs:28": 47852,
+            "charge:src/runtime/numeric_available.rs:94": 177,
+            "charge:src/runtime/packed.rs:194": 5200,
+            "charge:src/runtime/packed.rs:203": 43,
+            "charge:src/runtime/packed.rs:208": 1376,
+            "fallback:Add": 17,
+            "fallback:Shl": 32,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 243159
+        },
+        {
+          "case": "individual-06",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 2125,
+            "charge:src/runtime/demand.rs:140": 2125,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 111369,
+            "charge:src/runtime/mod.rs:555": 93834,
+            "charge:src/runtime/numeric_available.rs:28": 53108,
+            "charge:src/runtime/numeric_available.rs:94": 196,
+            "charge:src/runtime/packed.rs:194": 5785,
+            "charge:src/runtime/packed.rs:203": 47,
+            "charge:src/runtime/packed.rs:208": 1504,
+            "fallback:Add": 19,
+            "fallback:Shl": 36,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 270101
+        },
+        {
+          "case": "individual-07",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 1900,
+            "charge:src/runtime/demand.rs:140": 1900,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 99006,
+            "charge:src/runtime/mod.rs:555": 83474,
+            "charge:src/runtime/numeric_available.rs:28": 47227,
+            "charge:src/runtime/numeric_available.rs:94": 176,
+            "charge:src/runtime/packed.rs:194": 5135,
+            "charge:src/runtime/packed.rs:203": 42,
+            "charge:src/runtime/packed.rs:208": 1344,
+            "fallback:Add": 17,
+            "fallback:Shl": 32,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 240212
+        },
+        {
+          "case": "individual-08",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 36,
+            "charge:src/runtime/demand.rs:140": 36,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 4566,
+            "charge:src/runtime/mod.rs:555": 4086,
+            "charge:src/runtime/numeric_available.rs:28": 1966,
+            "charge:src/runtime/numeric_available.rs:94": 11,
+            "charge:src/runtime/packed.rs:194": 195,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160
+          },
+          "total_charges": 11069
+        },
+        {
+          "case": "individual-09",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 36,
+            "charge:src/runtime/demand.rs:140": 36,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 4566,
+            "charge:src/runtime/mod.rs:555": 4086,
+            "charge:src/runtime/numeric_available.rs:28": 1966,
+            "charge:src/runtime/numeric_available.rs:94": 11,
+            "charge:src/runtime/packed.rs:194": 195,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160
+          },
+          "total_charges": 11069
+        },
+        {
+          "case": "individual-10",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 36,
+            "charge:src/runtime/demand.rs:140": 36,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 4557,
+            "charge:src/runtime/mod.rs:555": 4074,
+            "charge:src/runtime/numeric_available.rs:28": 1966,
+            "charge:src/runtime/numeric_available.rs:94": 11,
+            "charge:src/runtime/packed.rs:194": 195,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160
+          },
+          "total_charges": 11048
+        },
+        {
+          "case": "individual-11",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 100,
+            "charge:src/runtime/demand.rs:140": 100,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 11022,
+            "charge:src/runtime/mod.rs:555": 9673,
+            "charge:src/runtime/numeric_available.rs:28": 4989,
+            "charge:src/runtime/numeric_available.rs:94": 24,
+            "charge:src/runtime/packed.rs:194": 455,
+            "charge:src/runtime/packed.rs:203": 10,
+            "charge:src/runtime/packed.rs:208": 320,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 26701
+        },
+        {
+          "case": "individual-12",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 100,
+            "charge:src/runtime/demand.rs:140": 100,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 11302,
+            "charge:src/runtime/mod.rs:555": 9790,
+            "charge:src/runtime/numeric_available.rs:28": 5082,
+            "charge:src/runtime/numeric_available.rs:94": 24,
+            "charge:src/runtime/packed.rs:194": 455,
+            "charge:src/runtime/packed.rs:203": 10,
+            "charge:src/runtime/packed.rs:208": 320,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 27191
+        },
+        {
+          "case": "individual-13",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 35,
+            "charge:src/runtime/demand.rs:140": 35,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 4785,
+            "charge:src/runtime/mod.rs:555": 4182,
+            "charge:src/runtime/numeric_available.rs:28": 2038,
+            "charge:src/runtime/numeric_available.rs:94": 10,
+            "charge:src/runtime/packed.rs:194": 195,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160
+          },
+          "total_charges": 11453
+        },
+        {
+          "case": "individual-14",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 35,
+            "charge:src/runtime/demand.rs:140": 35,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 4767,
+            "charge:src/runtime/mod.rs:555": 4176,
+            "charge:src/runtime/numeric_available.rs:28": 2029,
+            "charge:src/runtime/numeric_available.rs:94": 10,
+            "charge:src/runtime/packed.rs:194": 195,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160
+          },
+          "total_charges": 11420
+        },
+        {
+          "case": "individual-15",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 100,
+            "charge:src/runtime/demand.rs:140": 100,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 11018,
+            "charge:src/runtime/mod.rs:555": 9667,
+            "charge:src/runtime/numeric_available.rs:28": 4989,
+            "charge:src/runtime/numeric_available.rs:94": 24,
+            "charge:src/runtime/packed.rs:194": 455,
+            "charge:src/runtime/packed.rs:203": 10,
+            "charge:src/runtime/packed.rs:208": 320,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 26691
+        },
+        {
+          "case": "individual-16",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "charge:src/runtime/demand.rs:111": 102,
+            "charge:src/runtime/demand.rs:140": 102,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 11259,
+            "charge:src/runtime/mod.rs:555": 9772,
+            "charge:src/runtime/numeric_available.rs:28": 5064,
+            "charge:src/runtime/numeric_available.rs:94": 26,
+            "charge:src/runtime/packed.rs:194": 455,
+            "charge:src/runtime/packed.rs:203": 10,
+            "charge:src/runtime/packed.rs:208": 320,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          },
+          "total_charges": 27118
+        },
+        {
+          "case": "prefix-04",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 6,
+            "charge:src/runtime/demand.rs:111": 9033,
+            "charge:src/runtime/demand.rs:140": 9033,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 5,
+            "charge:src/runtime/executable.rs:588": 8,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 829,
+            "charge:src/runtime/gc.rs:294": 245760,
+            "charge:src/runtime/gc.rs:302": 55246,
+            "charge:src/runtime/gc.rs:83": 885,
+            "charge:src/runtime/gc.rs:96": 249,
+            "charge:src/runtime/mod.rs:434": 458230,
+            "charge:src/runtime/mod.rs:555": 388421,
+            "charge:src/runtime/numeric_available.rs:28": 214866,
+            "charge:src/runtime/numeric_available.rs:94": 785,
+            "charge:src/runtime/packed.rs:194": 23691,
+            "charge:src/runtime/packed.rs:203": 172,
+            "charge:src/runtime/packed.rs:208": 5504,
+            "fallback:Add": 79,
+            "fallback:Shl": 152,
+            "packed:Add": 3,
+            "packed:Shl": 6
+          },
+          "total_charges": 1412721
+        },
+        {
+          "case": "prefix-05",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 8,
+            "charge:src/runtime/demand.rs:111": 10930,
+            "charge:src/runtime/demand.rs:140": 10930,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 6,
+            "charge:src/runtime/executable.rs:588": 10,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 1420,
+            "charge:src/runtime/gc.rs:294": 368640,
+            "charge:src/runtime/gc.rs:302": 82869,
+            "charge:src/runtime/gc.rs:83": 1535,
+            "charge:src/runtime/gc.rs:96": 448,
+            "charge:src/runtime/mod.rs:434": 558488,
+            "charge:src/runtime/mod.rs:555": 472812,
+            "charge:src/runtime/numeric_available.rs:28": 262729,
+            "charge:src/runtime/numeric_available.rs:94": 958,
+            "charge:src/runtime/packed.rs:194": 28891,
+            "charge:src/runtime/packed.rs:203": 215,
+            "charge:src/runtime/packed.rs:208": 6880,
+            "fallback:Add": 96,
+            "fallback:Shl": 184,
+            "packed:Add": 4,
+            "packed:Shl": 8
+          },
+          "total_charges": 1807765
+        },
+        {
+          "case": "prefix-06",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 10,
+            "charge:src/runtime/demand.rs:111": 12507,
+            "charge:src/runtime/demand.rs:140": 12476,
+            "charge:src/runtime/executable.rs:158": 1,
+            "charge:src/runtime/executable.rs:253": 6,
+            "charge:src/runtime/executable.rs:588": 10,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 1430,
+            "charge:src/runtime/gc.rs:294": 368640,
+            "charge:src/runtime/gc.rs:302": 82869,
+            "charge:src/runtime/gc.rs:83": 1540,
+            "charge:src/runtime/gc.rs:96": 457,
+            "charge:src/runtime/mod.rs:434": 637620,
+            "charge:src/runtime/mod.rs:555": 539340,
+            "charge:src/runtime/numeric_available.rs:28": 300664,
+            "charge:src/runtime/numeric_available.rs:94": 1107,
+            "charge:src/runtime/packed.rs:194": 33115,
+            "charge:src/runtime/packed.rs:203": 249,
+            "charge:src/runtime/packed.rs:208": 7968,
+            "fallback:Add": 109,
+            "fallback:Shl": 212,
+            "packed:Add": 5,
+            "packed:Shl": 10
+          },
+          "total_charges": 2000000
+        },
+        {
+          "case": "prefix-16",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 10,
+            "charge:src/runtime/demand.rs:111": 12507,
+            "charge:src/runtime/demand.rs:140": 12476,
+            "charge:src/runtime/executable.rs:158": 1,
+            "charge:src/runtime/executable.rs:253": 6,
+            "charge:src/runtime/executable.rs:588": 10,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 1430,
+            "charge:src/runtime/gc.rs:294": 368640,
+            "charge:src/runtime/gc.rs:302": 82869,
+            "charge:src/runtime/gc.rs:83": 1540,
+            "charge:src/runtime/gc.rs:96": 457,
+            "charge:src/runtime/mod.rs:434": 637620,
+            "charge:src/runtime/mod.rs:555": 539341,
+            "charge:src/runtime/numeric_available.rs:28": 300664,
+            "charge:src/runtime/numeric_available.rs:94": 1107,
+            "charge:src/runtime/packed.rs:194": 33114,
+            "charge:src/runtime/packed.rs:203": 249,
+            "charge:src/runtime/packed.rs:208": 7968,
+            "fallback:Add": 109,
+            "fallback:Shl": 212,
+            "packed:Add": 5,
+            "packed:Shl": 10
+          },
+          "total_charges": 2000000
+        }
+      ],
+      "aggregate_output_boundaries": [
+        {
+          "boundary": "line1",
+          "total_charges": 162,
+          "operations": {}
+        },
+        {
+          "boundary": "line2",
+          "total_charges": 17935,
+          "operations": {
+            "available:Shl": 2,
+            "fallback:Add": 1,
+            "packed:Add": 1,
+            "packed:Shl": 2
+          }
+        },
+        {
+          "boundary": "line3",
+          "total_charges": 978543,
+          "operations": {
+            "available:Shl": 4,
+            "fallback:Add": 60,
+            "fallback:Shl": 116,
+            "packed:Add": 2,
+            "packed:Shl": 4
+          }
+        },
+        {
+          "boundary": "line4",
+          "total_charges": 1412766,
+          "operations": {
+            "available:Shl": 6,
+            "fallback:Add": 79,
+            "fallback:Shl": 152,
+            "packed:Add": 3,
+            "packed:Shl": 6
+          }
+        },
+        {
+          "boundary": "line5",
+          "total_charges": 1807831,
+          "operations": {
+            "available:Shl": 8,
+            "fallback:Add": 96,
+            "fallback:Shl": 184,
+            "packed:Add": 4,
+            "packed:Shl": 8
+          }
+        }
+      ]
+    },
+    "after": {
+      "instrumented_source": {
+        "base": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec",
+        "files": {
+          "src/runtime/mod.rs": "74c02cb7167bb58fe0c7fb936717064f1442fd9d3d6c21dc91ac9e30fbde38a2",
+          "src/runtime/gc.rs": "7fea33b8197218e19ff60594e37691f0e9b5768792f1d18002b9146f7be53f4d",
+          "src/runtime/numeric.rs": "68da754551ec4c207ae25677378cfb581d6f1ccd64a0e347f569f31c1a7df54e",
+          "src/runtime/numeric_available.rs": "9ddde2b591052ea192ce524ecf17cd8bc924e123a77fa34ecf42a4690504fdd1",
+          "src/runtime/work_probe.rs": "be1b93d85ac266978b5972b9fb1e5c36dfc12265271fb83e7a2d386edcf15f09"
+        },
+        "callsite_lines": {
+          "src/runtime/mod.rs": {
+            "387": "self.tick()?;",
+            "434": "self.tick()?;",
+            "555": "self.tick()?;",
+            "693": "self.tick()?;"
+          },
+          "src/runtime/gc.rs": {
+            "83": "self.charge()?;",
+            "96": "self.charge()?;",
+            "249": "marks.charge()?;",
+            "294": "self.tick()?;",
+            "302": "self.tick()?;"
+          },
+          "src/runtime/numeric.rs": {
+            "520": "self.tick()?;"
+          },
+          "src/runtime/numeric_available.rs": {
+            "28": "self.tick()?;",
+            "94": "self.tick()?;"
+          },
+          "src/runtime/work_probe.rs": {}
+        },
+        "scope": "Temporary test-only observation; successful charges counted after normal cancellation/decrement; numerical guards/charging calls unmodified. Public run_main runs the checked source. Removed before production validation.",
+        "candidate": "Only packed-only PureOptimization::Sub registration/result added; existing frames and fallback unchanged.",
+        "metadata_correction": "Numeric source line map was initially copied from baseline. Corrected516 to520 for instrumented candidate; no counts reference that site, so totals unchanged. Prior metadata retained separately."
+      },
+      "repetitions": 2,
+      "deterministic": true,
+      "cases": [
+        {
+          "case": "individual-01",
+          "boundary": "final",
+          "counts": {
+            "charge:src/runtime/demand.rs:111": 3,
+            "charge:src/runtime/demand.rs:140": 3,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 47,
+            "charge:src/runtime/mod.rs:555": 54,
+            "charge:src/runtime/numeric_available.rs:94": 4
+          },
+          "total_charges": 119
+        },
+        {
+          "case": "individual-02",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "available:Sub": 1,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 3535,
+            "charge:src/runtime/mod.rs:555": 3041,
+            "charge:src/runtime/numeric_available.rs:28": 1184,
+            "charge:src/runtime/numeric_available.rs:94": 18,
+            "charge:src/runtime/packed.rs:194": 227,
+            "charge:src/runtime/packed.rs:203": 5,
+            "charge:src/runtime/packed.rs:208": 160,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          },
+          "total_charges": 8178
+        },
+        {
+          "case": "individual-03",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 60,
+            "available:Sub": 30,
+            "charge:src/runtime/demand.rs:111": 173,
+            "charge:src/runtime/demand.rs:140": 173,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 90380,
+            "charge:src/runtime/mod.rs:555": 77354,
+            "charge:src/runtime/numeric_available.rs:28": 35313,
+            "charge:src/runtime/numeric_available.rs:94": 490,
+            "charge:src/runtime/packed.rs:194": 4193,
+            "charge:src/runtime/packed.rs:203": 123,
+            "charge:src/runtime/packed.rs:208": 3936,
+            "packed:Add": 60,
+            "packed:Shl": 60
+          },
+          "total_charges": 212143
+        },
+        {
+          "case": "individual-04",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 20,
+            "available:Sub": 10,
+            "charge:src/runtime/demand.rs:111": 153,
+            "charge:src/runtime/demand.rs:140": 153,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 38845,
+            "charge:src/runtime/mod.rs:555": 33921,
+            "charge:src/runtime/numeric_available.rs:28": 13673,
+            "charge:src/runtime/numeric_available.rs:94": 169,
+            "charge:src/runtime/packed.rs:194": 1591,
+            "charge:src/runtime/packed.rs:203": 43,
+            "charge:src/runtime/packed.rs:208": 1376,
+            "packed:Add": 20,
+            "packed:Shl": 20
+          },
+          "total_charges": 89932
+        },
+        {
+          "case": "individual-05",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 18,
+            "available:Sub": 10,
+            "charge:src/runtime/demand.rs:111": 12,
+            "charge:src/runtime/demand.rs:140": 12,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 27752,
+            "charge:src/runtime/mod.rs:555": 23312,
+            "charge:src/runtime/numeric_available.rs:28": 11499,
+            "charge:src/runtime/numeric_available.rs:94": 158,
+            "charge:src/runtime/packed.rs:194": 1365,
+            "charge:src/runtime/packed.rs:203": 42,
+            "charge:src/runtime/packed.rs:208": 1344,
+            "packed:Add": 18,
+            "packed:Shl": 18
+          },
+          "total_charges": 65504
+        },
+        {
+          "case": "individual-06",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 20,
+            "available:Sub": 11,
+            "charge:src/runtime/demand.rs:111": 13,
+            "charge:src/runtime/demand.rs:140": 13,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 30490,
+            "charge:src/runtime/mod.rs:555": 25652,
+            "charge:src/runtime/numeric_available.rs:28": 12575,
+            "charge:src/runtime/numeric_available.rs:94": 174,
+            "charge:src/runtime/packed.rs:194": 1495,
+            "charge:src/runtime/packed.rs:203": 46,
+            "charge:src/runtime/packed.rs:208": 1472,
+            "packed:Add": 20,
+            "packed:Shl": 20
+          },
+          "total_charges": 71938
+        },
+        {
+          "case": "individual-07",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 18,
+            "available:Sub": 10,
+            "charge:src/runtime/demand.rs:111": 12,
+            "charge:src/runtime/demand.rs:140": 12,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 26256,
+            "charge:src/runtime/mod.rs:555": 22150,
+            "charge:src/runtime/numeric_available.rs:28": 10874,
+            "charge:src/runtime/numeric_available.rs:94": 157,
+            "charge:src/runtime/packed.rs:194": 1300,
+            "charge:src/runtime/packed.rs:203": 40,
+            "charge:src/runtime/packed.rs:208": 1280,
+            "packed:Add": 18,
+            "packed:Shl": 18
+          },
+          "total_charges": 62089
+        },
+        {
+          "case": "individual-08",
+          "boundary": "final",
+          "counts": {
+            "available:Sub": 1,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 2459,
+            "charge:src/runtime/mod.rs:555": 2203,
+            "charge:src/runtime/numeric_available.rs:28": 994,
+            "charge:src/runtime/numeric_available.rs:94": 14,
+            "charge:src/runtime/packed.rs:194": 130,
+            "charge:src/runtime/packed.rs:203": 4,
+            "charge:src/runtime/packed.rs:208": 128
+          },
+          "total_charges": 5948
+        },
+        {
+          "case": "individual-09",
+          "boundary": "final",
+          "counts": {
+            "available:Sub": 1,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 2459,
+            "charge:src/runtime/mod.rs:555": 2203,
+            "charge:src/runtime/numeric_available.rs:28": 994,
+            "charge:src/runtime/numeric_available.rs:94": 14,
+            "charge:src/runtime/packed.rs:194": 130,
+            "charge:src/runtime/packed.rs:203": 4,
+            "charge:src/runtime/packed.rs:208": 128
+          },
+          "total_charges": 5948
+        },
+        {
+          "case": "individual-10",
+          "boundary": "final",
+          "counts": {
+            "available:Sub": 1,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 2459,
+            "charge:src/runtime/mod.rs:555": 2203,
+            "charge:src/runtime/numeric_available.rs:28": 994,
+            "charge:src/runtime/numeric_available.rs:94": 14,
+            "charge:src/runtime/packed.rs:194": 130,
+            "charge:src/runtime/packed.rs:203": 4,
+            "charge:src/runtime/packed.rs:208": 128
+          },
+          "total_charges": 5948
+        },
+        {
+          "case": "individual-11",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "available:Sub": 2,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 5032,
+            "charge:src/runtime/mod.rs:555": 4375,
+            "charge:src/runtime/numeric_available.rs:28": 2076,
+            "charge:src/runtime/numeric_available.rs:94": 29,
+            "charge:src/runtime/packed.rs:194": 260,
+            "charge:src/runtime/packed.rs:203": 8,
+            "charge:src/runtime/packed.rs:208": 256,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          },
+          "total_charges": 12052
+        },
+        {
+          "case": "individual-12",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "available:Sub": 2,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 5224,
+            "charge:src/runtime/mod.rs:555": 4441,
+            "charge:src/runtime/numeric_available.rs:28": 2169,
+            "charge:src/runtime/numeric_available.rs:94": 29,
+            "charge:src/runtime/packed.rs:194": 260,
+            "charge:src/runtime/packed.rs:203": 8,
+            "charge:src/runtime/packed.rs:208": 256,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          },
+          "total_charges": 12403
+        },
+        {
+          "case": "individual-13",
+          "boundary": "final",
+          "counts": {
+            "available:Sub": 1,
+            "charge:src/runtime/demand.rs:111": 3,
+            "charge:src/runtime/demand.rs:140": 3,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 2600,
+            "charge:src/runtime/mod.rs:555": 2247,
+            "charge:src/runtime/numeric_available.rs:28": 1066,
+            "charge:src/runtime/numeric_available.rs:94": 13,
+            "charge:src/runtime/packed.rs:194": 130,
+            "charge:src/runtime/packed.rs:203": 4,
+            "charge:src/runtime/packed.rs:208": 128
+          },
+          "total_charges": 6202
+        },
+        {
+          "case": "individual-14",
+          "boundary": "final",
+          "counts": {
+            "available:Sub": 1,
+            "charge:src/runtime/demand.rs:111": 3,
+            "charge:src/runtime/demand.rs:140": 3,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 2582,
+            "charge:src/runtime/mod.rs:555": 2241,
+            "charge:src/runtime/numeric_available.rs:28": 1057,
+            "charge:src/runtime/numeric_available.rs:94": 13,
+            "charge:src/runtime/packed.rs:194": 130,
+            "charge:src/runtime/packed.rs:203": 4,
+            "charge:src/runtime/packed.rs:208": 128
+          },
+          "total_charges": 6169
+        },
+        {
+          "case": "individual-15",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "available:Sub": 2,
+            "charge:src/runtime/demand.rs:111": 4,
+            "charge:src/runtime/demand.rs:140": 4,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 5032,
+            "charge:src/runtime/mod.rs:555": 4375,
+            "charge:src/runtime/numeric_available.rs:28": 2076,
+            "charge:src/runtime/numeric_available.rs:94": 29,
+            "charge:src/runtime/packed.rs:194": 260,
+            "charge:src/runtime/packed.rs:203": 8,
+            "charge:src/runtime/packed.rs:208": 256,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          },
+          "total_charges": 12052
+        },
+        {
+          "case": "individual-16",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 2,
+            "available:Sub": 2,
+            "charge:src/runtime/demand.rs:111": 6,
+            "charge:src/runtime/demand.rs:140": 6,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 2,
+            "charge:src/runtime/executable.rs:588": 2,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 5188,
+            "charge:src/runtime/mod.rs:555": 4431,
+            "charge:src/runtime/numeric_available.rs:28": 2151,
+            "charge:src/runtime/numeric_available.rs:94": 31,
+            "charge:src/runtime/packed.rs:194": 260,
+            "charge:src/runtime/packed.rs:203": 8,
+            "charge:src/runtime/packed.rs:208": 256,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          },
+          "total_charges": 12345
+        },
+        {
+          "case": "prefix-04",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 82,
+            "available:Sub": 41,
+            "charge:src/runtime/demand.rs:111": 329,
+            "charge:src/runtime/demand.rs:140": 329,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 5,
+            "charge:src/runtime/executable.rs:588": 8,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/mod.rs:434": 132884,
+            "charge:src/runtime/mod.rs:555": 114345,
+            "charge:src/runtime/numeric_available.rs:28": 50203,
+            "charge:src/runtime/numeric_available.rs:94": 677,
+            "charge:src/runtime/packed.rs:194": 6011,
+            "charge:src/runtime/packed.rs:203": 171,
+            "charge:src/runtime/packed.rs:208": 5472,
+            "packed:Add": 82,
+            "packed:Shl": 82
+          },
+          "total_charges": 310438
+        },
+        {
+          "case": "prefix-05",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 100,
+            "available:Sub": 51,
+            "charge:src/runtime/demand.rs:111": 338,
+            "charge:src/runtime/demand.rs:140": 338,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 6,
+            "charge:src/runtime/executable.rs:588": 10,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 493,
+            "charge:src/runtime/gc.rs:294": 122881,
+            "charge:src/runtime/gc.rs:302": 26115,
+            "charge:src/runtime/gc.rs:83": 460,
+            "charge:src/runtime/gc.rs:96": 205,
+            "charge:src/runtime/mod.rs:434": 160651,
+            "charge:src/runtime/mod.rs:555": 137641,
+            "charge:src/runtime/numeric_available.rs:28": 61713,
+            "charge:src/runtime/numeric_available.rs:94": 831,
+            "charge:src/runtime/packed.rs:194": 7376,
+            "charge:src/runtime/packed.rs:203": 213,
+            "charge:src/runtime/packed.rs:208": 6816,
+            "packed:Add": 100,
+            "packed:Shl": 100
+          },
+          "total_charges": 526091
+        },
+        {
+          "case": "prefix-06",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 120,
+            "available:Sub": 62,
+            "charge:src/runtime/demand.rs:111": 348,
+            "charge:src/runtime/demand.rs:140": 348,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 7,
+            "charge:src/runtime/executable.rs:588": 12,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 498,
+            "charge:src/runtime/gc.rs:294": 122881,
+            "charge:src/runtime/gc.rs:302": 26116,
+            "charge:src/runtime/gc.rs:83": 466,
+            "charge:src/runtime/gc.rs:96": 208,
+            "charge:src/runtime/mod.rs:434": 191158,
+            "charge:src/runtime/mod.rs:555": 163277,
+            "charge:src/runtime/numeric_available.rs:28": 74299,
+            "charge:src/runtime/numeric_available.rs:94": 1001,
+            "charge:src/runtime/packed.rs:194": 8871,
+            "charge:src/runtime/packed.rs:203": 259,
+            "charge:src/runtime/packed.rs:208": 8288,
+            "packed:Add": 120,
+            "packed:Shl": 120
+          },
+          "total_charges": 598041
+        },
+        {
+          "case": "prefix-16",
+          "boundary": "final",
+          "counts": {
+            "available:Shl": 146,
+            "available:Sub": 85,
+            "charge:src/runtime/demand.rs:111": 366,
+            "charge:src/runtime/demand.rs:140": 366,
+            "charge:src/runtime/executable.rs:158": 2,
+            "charge:src/runtime/executable.rs:253": 17,
+            "charge:src/runtime/executable.rs:588": 32,
+            "charge:src/runtime/executable.rs:602": 1,
+            "charge:src/runtime/executable.rs:86": 1,
+            "charge:src/runtime/gc.rs:249": 498,
+            "charge:src/runtime/gc.rs:294": 122881,
+            "charge:src/runtime/gc.rs:302": 26116,
+            "charge:src/runtime/gc.rs:83": 466,
+            "charge:src/runtime/gc.rs:96": 208,
+            "charge:src/runtime/mod.rs:434": 250617,
+            "charge:src/runtime/mod.rs:555": 214027,
+            "charge:src/runtime/numeric_available.rs:28": 98860,
+            "charge:src/runtime/numeric_available.rs:94": 1304,
+            "charge:src/runtime/packed.rs:194": 11861,
+            "charge:src/runtime/packed.rs:203": 351,
+            "charge:src/runtime/packed.rs:208": 11232,
+            "packed:Add": 146,
+            "packed:Shl": 146
+          },
+          "total_charges": 739206
+        }
+      ],
+      "aggregate_output_boundaries": [
+        {
+          "boundary": "line1",
+          "total_charges": 162,
+          "operations": {}
+        },
+        {
+          "boundary": "line2",
+          "total_charges": 8393,
+          "operations": {
+            "available:Shl": 2,
+            "available:Sub": 1,
+            "packed:Add": 2,
+            "packed:Shl": 2
+          }
+        },
+        {
+          "boundary": "line3",
+          "total_charges": 220565,
+          "operations": {
+            "available:Shl": 62,
+            "available:Sub": 31,
+            "packed:Add": 62,
+            "packed:Shl": 62
+          }
+        },
+        {
+          "boundary": "line4",
+          "total_charges": 310480,
+          "operations": {
+            "available:Shl": 82,
+            "available:Sub": 41,
+            "packed:Add": 82,
+            "packed:Shl": 82
+          }
+        },
+        {
+          "boundary": "line5",
+          "total_charges": 526148,
+          "operations": {
+            "available:Shl": 100,
+            "available:Sub": 51,
+            "packed:Add": 100,
+            "packed:Shl": 100
+          }
+        },
+        {
+          "boundary": "line6",
+          "total_charges": 598083,
+          "operations": {
+            "available:Shl": 120,
+            "available:Sub": 62,
+            "packed:Add": 120,
+            "packed:Shl": 120
+          }
+        },
+        {
+          "boundary": "line7",
+          "total_charges": 660171,
+          "operations": {
+            "available:Shl": 138,
+            "available:Sub": 72,
+            "packed:Add": 138,
+            "packed:Shl": 138
+          }
+        },
+        {
+          "boundary": "line8",
+          "total_charges": 666121,
+          "operations": {
+            "available:Shl": 138,
+            "available:Sub": 73,
+            "packed:Add": 138,
+            "packed:Shl": 138
+          }
+        },
+        {
+          "boundary": "line9",
+          "total_charges": 672072,
+          "operations": {
+            "available:Shl": 138,
+            "available:Sub": 74,
+            "packed:Add": 138,
+            "packed:Shl": 138
+          }
+        },
+        {
+          "boundary": "line10",
+          "total_charges": 678023,
+          "operations": {
+            "available:Shl": 138,
+            "available:Sub": 75,
+            "packed:Add": 138,
+            "packed:Shl": 138
+          }
+        },
+        {
+          "boundary": "line11",
+          "total_charges": 690074,
+          "operations": {
+            "available:Shl": 140,
+            "available:Sub": 77,
+            "packed:Add": 140,
+            "packed:Shl": 140
+          }
+        },
+        {
+          "boundary": "line12",
+          "total_charges": 702476,
+          "operations": {
+            "available:Shl": 142,
+            "available:Sub": 79,
+            "packed:Add": 142,
+            "packed:Shl": 142
+          }
+        },
+        {
+          "boundary": "line13",
+          "total_charges": 708681,
+          "operations": {
+            "available:Shl": 142,
+            "available:Sub": 80,
+            "packed:Add": 142,
+            "packed:Shl": 142
+          }
+        },
+        {
+          "boundary": "line14",
+          "total_charges": 714853,
+          "operations": {
+            "available:Shl": 142,
+            "available:Sub": 81,
+            "packed:Add": 142,
+            "packed:Shl": 142
+          }
+        },
+        {
+          "boundary": "line15",
+          "total_charges": 726904,
+          "operations": {
+            "available:Shl": 144,
+            "available:Sub": 83,
+            "packed:Add": 144,
+            "packed:Shl": 144
+          }
+        },
+        {
+          "boundary": "line16",
+          "total_charges": 739197,
+          "operations": {
+            "available:Shl": 146,
+            "available:Sub": 85,
+            "packed:Add": 146,
+            "packed:Shl": 146
+          }
+        }
+      ]
+    }
+  },
+  "raw_evidence": {
+    "counts-before.json": {
+      "sha256": "361f0930d96f07d187c4f5cf663422ba7f5cffe1d3d993fcd6f80efb2ebcfc01",
+      "bytes": 100017
+    },
+    "measurement-before.log": {
+      "sha256": "45396fc4b5e20e28ec889a48809a3e643aeb569b8f878107a3d8e76e905fa7e6",
+      "bytes": 120722
+    },
+    "measurement-before.json": {
+      "sha256": "a2b578ac0c0e3537555f46ef2cded34ea9a2159373579198cdc3c8ad26a45191",
+      "bytes": 1789
+    },
+    "measurement-before-source.json": {
+      "sha256": "4fe6ca051c0560d072fe35674a1860f507a12de0971b88a8cd4f57daac9a61bc",
+      "bytes": 1381
+    },
+    "measurement-before.patch": {
+      "sha256": "33ce5356b2833659e7a80b80462e0cb646c0507f298d7963955273252a0f39a3",
+      "bytes": 2727
+    },
+    "counts-after.json": {
+      "sha256": "8260fed492cca84f48664f66128e6de359c477df01c29d7e681f850359f88655",
+      "bytes": 120203
+    },
+    "measurement-after.log": {
+      "sha256": "3310289e0f2d0b5b083f23b4ee895d5d5f09ad3a4b118e10b69236433e53de7f",
+      "bytes": 143347
+    },
+    "measurement-after.json": {
+      "sha256": "b3ab705519f5c783798da72766b9b19ac589dadab670b435b33bd2775079eaea",
+      "bytes": 1581
+    },
+    "measurement-after-source.json": {
+      "sha256": "7aad2424dddfca796dcc303f55ecc619406ff1efacaf585b9e3596a7af3a2b71",
+      "bytes": 1728
+    },
+    "measurement-after.patch": {
+      "sha256": "4b62a39b6350d936f536f5d031c133dc4b495da44d287d0fda1a7c4d6c60cbd2",
+      "bytes": 4148
+    },
+    "work-probe.rs": {
+      "sha256": "be1b93d85ac266978b5972b9fb1e5c36dfc12265271fb83e7a2d386edcf15f09",
+      "bytes": 3637
+    },
+    "measurement-after-source-first.json": {
+      "sha256": "ddaea953da48857412fe3839c7aa3986f3c49bcfb484b75ed0352b6845d07e01",
+      "bytes": 1505
+    }
+  }
+}

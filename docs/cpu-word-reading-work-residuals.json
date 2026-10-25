@@ -1,0 +1,1027 @@
+{
+  "tested_source": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+  "suites": {
+    "negatives": {
+      "summary": {
+        "fixtures": 6,
+        "lane_counts": {
+          "pass": 22,
+          "safety_limit": 4,
+          "not_required_js_only_companion": 2,
+          "unsupported_foreign": 1,
+          "blocked_bun_ffi": 1
+        },
+        "repetitions": 2,
+        "exact_execution_observations": 44,
+        "runner_exit": 1,
+        "timeouts": 0,
+        "raw_receipt_sha256": "726adfa724fb8e4a6cda41e8c65f4aa4f823f9870da32454d889acdc22330844"
+      },
+      "cases": [
+        {
+          "fixture": "io/array_depth_bound.bend",
+          "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "bend: an array past the deepest block class 31\n",
+            "stdout": "",
+            "exit": 1
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "safety_limit",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "port-c-1": {
+              "command": [
+                "<evidence>/negatives/array_depth_bound/port",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/negatives/array_depth_bound/port-c-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 10,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend executable C: array budget exhausted\n",
+              "raw_stderr_sha256": "d68b425a0ebcaeabdc09cb8c806e57efb57a3cf81c6cb9c51ec0d3f2f300fdb0"
+            },
+            "port-c-2": {
+              "command": [
+                "<evidence>/negatives/array_depth_bound/port",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/negatives/array_depth_bound/port-c-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 11,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend executable C: array budget exhausted\n",
+              "raw_stderr_sha256": "d68b425a0ebcaeabdc09cb8c806e57efb57a3cf81c6cb9c51ec0d3f2f300fdb0"
+            }
+          }
+        },
+        {
+          "fixture": "io/marshal_char_scalar.bend",
+          "source_sha256": "b0f4a22dd84fc245b4954c71e2544377a1fa7f9070e8c78895ed08a5d83c0450",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "bend: 55296 is not a Unicode scalar value\n",
+            "stdout": "",
+            "exit": 1
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "not_required_js_only_companion",
+            "port-c": "not_required_js_only_companion",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "unsupported_foreign"
+          },
+          "deterministic": true,
+          "companion_sha256": "61a68f4e2164aebceec38b32402bcd1a2db4a181eb0c77ce07a1098e54b025f6",
+          "nonpass_observations": {
+            "native-1": {
+              "command": [
+                "<evidence>/negatives/teamy-bend",
+                "run",
+                "<evidence>/negatives/marshal_char_scalar/main.bend"
+              ],
+              "cwd": "<evidence>/negatives/marshal_char_scalar/native-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 475,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "unsupported_foreign",
+              "phase": "native_foreign_support_check",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "Error: \n   0: native execution does not support the foreign implementation of echo\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+              "raw_stderr_sha256": "1a3b547b0a568b092da3f5f26d1e3225fea072318c6d8bb596a4895daea204a7"
+            },
+            "native-2": {
+              "command": [
+                "<evidence>/negatives/teamy-bend",
+                "run",
+                "<evidence>/negatives/marshal_char_scalar/main.bend"
+              ],
+              "cwd": "<evidence>/negatives/marshal_char_scalar/native-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 710,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "unsupported_foreign",
+              "phase": "native_foreign_support_check",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "Error: \n   0: native execution does not support the foreign implementation of echo\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+              "raw_stderr_sha256": "1a3b547b0a568b092da3f5f26d1e3225fea072318c6d8bb596a4895daea204a7"
+            }
+          }
+        },
+        {
+          "fixture": "io/request_out_of_band.bend",
+          "source_sha256": "6bd9fa70be812911e71eab45b6a005cca4baa83b8764057fbfb79da1a333b115",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "bend: runtime fail-stop\n",
+            "stdout": "3\n",
+            "exit": 1
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "io/stack_fault_trap.bend",
+          "source_sha256": "04db469cad10b0bc0206df87dfe0bb3652b085c10124cc2e6bfdba253fd17381",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "bend: memory fault (machine stack overflow?)\n",
+            "stdout": "",
+            "exit": 1
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "safety_limit",
+            "upstream-js": "pass",
+            "port-js": "safety_limit",
+            "native": "safety_limit"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "port-c-1": {
+              "command": [
+                "<evidence>/negatives/stack_fault_trap/port",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/port-c-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 58,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend executable C: generated continuation budget exhausted\n",
+              "raw_stderr_sha256": "dc59fa3efa9738c65d0bdbb9c62c18234a895a469f1493d1d70f1e5996e8101f"
+            },
+            "port-c-2": {
+              "command": [
+                "<evidence>/negatives/stack_fault_trap/port",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/port-c-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 52,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend executable C: generated continuation budget exhausted\n",
+              "raw_stderr_sha256": "dc59fa3efa9738c65d0bdbb9c62c18234a895a469f1493d1d70f1e5996e8101f"
+            },
+            "port-js-1": {
+              "command": [
+                "node",
+                "<evidence>/negatives/stack_fault_trap/port.js"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/port-js-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 74,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend generated program: executable JavaScript call depth budget exhausted\n",
+              "raw_stderr_sha256": "d7380d16a4359292369ad29d2a201f5ddb24b4d48b72cde73031518b5b9883f7"
+            },
+            "port-js-2": {
+              "command": [
+                "node",
+                "<evidence>/negatives/stack_fault_trap/port.js"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/port-js-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 72,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "teamy-bend generated program: executable JavaScript call depth budget exhausted\n",
+              "raw_stderr_sha256": "d7380d16a4359292369ad29d2a201f5ddb24b4d48b72cde73031518b5b9883f7"
+            },
+            "native-1": {
+              "command": [
+                "<evidence>/negatives/teamy-bend",
+                "run",
+                "<evidence>/negatives/stack_fault_trap/main.bend"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/native-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 570,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "Error: \n   0: data runtime continuation depth exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+              "raw_stderr_sha256": "ea6e796b26fdebdc818f68651c036d1e57e36882e94475110a5e919aa95fabd8"
+            },
+            "native-2": {
+              "command": [
+                "<evidence>/negatives/teamy-bend",
+                "run",
+                "<evidence>/negatives/stack_fault_trap/main.bend"
+              ],
+              "cwd": "<evidence>/negatives/stack_fault_trap/native-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 502,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "safety_limit",
+              "phase": "execution",
+              "stdout": "",
+              "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr": "Error: \n   0: data runtime continuation depth exhausted\n\nLocation:\n   src/cli/run/run_cli.rs:54\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+              "raw_stderr_sha256": "ea6e796b26fdebdc818f68651c036d1e57e36882e94475110a5e919aa95fabd8"
+            }
+          }
+        },
+        {
+          "fixture": "io/stderr_failure.bend",
+          "source_sha256": "9de4197873c99e1600b1f4ec736e67e82a91258b209f6dc956ab9e91a4023350",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "to-stderr\nNo such file or directory\n",
+            "stdout": "to-stdout\n",
+            "exit": 2
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "blocked_bun_ffi",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "upstream-js-1": {
+              "command": [
+                "node",
+                "<evidence>/negatives/stderr_failure/upstream.js"
+              ],
+              "cwd": "<evidence>/negatives/stderr_failure/upstream-js-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 51,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "blocked_bun_ffi",
+              "phase": "execution",
+              "stdout": "to-stdout\n",
+              "raw_stdout_sha256": "51422300ef75760d159c490939ac4253724b4aeced0618238ed32b78d83ac81b",
+              "stderr": "to-stderr\nError: Cannot find module 'bun:ffi'\nRequire stack:\n- <evidence>/negatives/stderr_failure/upstream.js\n",
+              "raw_stderr_sha256": "8ec7a84caee07be5239350db7194d670e279f0148d471875e0bcded56ddd17fc"
+            },
+            "upstream-js-2": {
+              "command": [
+                "node",
+                "<evidence>/negatives/stderr_failure/upstream.js"
+              ],
+              "cwd": "<evidence>/negatives/stderr_failure/upstream-js-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 69,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "blocked_bun_ffi",
+              "phase": "execution",
+              "stdout": "to-stdout\n",
+              "raw_stdout_sha256": "51422300ef75760d159c490939ac4253724b4aeced0618238ed32b78d83ac81b",
+              "stderr": "to-stderr\nError: Cannot find module 'bun:ffi'\nRequire stack:\n- <evidence>/negatives/stderr_failure/upstream.js\n",
+              "raw_stderr_sha256": "8ec7a84caee07be5239350db7194d670e279f0148d471875e0bcded56ddd17fc"
+            }
+          }
+        },
+        {
+          "fixture": "run/nat_overflow.bend",
+          "source_sha256": "8004dc6d43642ec742482ac2f15df4bf90e35e43e50ea67442341e311b1e1afa",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+            "stdout": "",
+            "exit": 1
+          },
+          "fixture_origin": "pinned_upstream",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        }
+      ]
+    },
+    "demand": {
+      "summary": {
+        "fixtures": 10,
+        "lane_counts": {
+          "pass": 46,
+          "accepted_upstream_c_wildcard_exception": 3,
+          "diagnostic_order_difference": 1
+        },
+        "repetitions": 2,
+        "exact_execution_observations": 92,
+        "runner_exit": 1,
+        "timeouts": 0,
+        "raw_receipt_sha256": "4592265d7f84cdb607ee75fb3bd21bb51ad510b11262d384684b46fc5963961e"
+      },
+      "cases": [
+        {
+          "fixture": "unused_argument.bend",
+          "source_sha256": "5b3d8a487e3c56e778b465e641ccdbe130582d54b63abe776bc6ca4772d2e65e",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "partial_add_overflow.bend",
+          "source_sha256": "cf652e56f978fc37bae59be4d1b8794da53cf31517221f6c18b2ca5e07bec7fa",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "partial_double_overflow.bend",
+          "source_sha256": "bb3a4962228f59d9cdea492e51b905969db96610e58b1a5e700764767b60769e",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "unused_rhs_error.bend",
+          "source_sha256": "c6e79a1d103e0de8041b4bdafbad6ad9c9fc7ae7071c6444783d217fe6e8c60f",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: runtime fail-stop\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "accepted_upstream_c_wildcard_exception",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "upstream-c-1": {
+              "command": [
+                "<evidence>/demand/unused_rhs_error/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/unused_rhs_error/upstream-c-1",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 1,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "positive\n",
+              "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "upstream-c-2": {
+              "command": [
+                "<evidence>/demand/unused_rhs_error/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/unused_rhs_error/upstream-c-2",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 0,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "positive\n",
+              "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        {
+          "fixture": "ordinary_rhs_error.bend",
+          "source_sha256": "9e984e01470e4d8cca46c06c28051de53ceaf49aa71d196f2ac5bade7da4c105",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: runtime fail-stop\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "accepted_upstream_c_wildcard_exception",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "upstream-c-1": {
+              "command": [
+                "<evidence>/demand/ordinary_rhs_error/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/ordinary_rhs_error/upstream-c-1",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 3,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "positive\n",
+              "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "upstream-c-2": {
+              "command": [
+                "<evidence>/demand/ordinary_rhs_error/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/ordinary_rhs_error/upstream-c-2",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 2,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "positive\n",
+              "raw_stdout_sha256": "fd5ef3399cc11279d81440b7036b7ea34e8b38f2ed1b4c83a43e32e08179f2f5",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        {
+          "fixture": "forced_request_wildcard.bend",
+          "source_sha256": "7aa7f1dc993235028f78f96cb6ce7c3729061812ecf0844f96bf5f0ff620dc87",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: runtime fail-stop\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "accepted_upstream_c_wildcard_exception",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "upstream-c-1": {
+              "command": [
+                "<evidence>/demand/forced_request_wildcard/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/forced_request_wildcard/upstream-c-1",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 3,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "0\n",
+              "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "upstream-c-2": {
+              "command": [
+                "<evidence>/demand/forced_request_wildcard/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/forced_request_wildcard/upstream-c-2",
+              "exit": 0,
+              "timed_out": false,
+              "elapsed_ms": 6,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "accepted_upstream_c_wildcard_exception",
+              "phase": "execution",
+              "stdout": "0\n",
+              "raw_stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+              "stderr": "",
+              "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          }
+        },
+        {
+          "fixture": "nat_first.bend",
+          "source_sha256": "d72c6f8c10a1ad4b5b15be113f6dabff9e565fb59e6b2f0c41f8f3f0c8a72766",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "before",
+            "stderr": "bend: a Nat past the largest immediate 2^48-1\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "diagnostic_order_difference",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {
+            "upstream-c-1": {
+              "command": [
+                "<evidence>/demand/nat_first/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/nat_first/upstream-c-1",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 1,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "diagnostic_order_difference",
+              "phase": "execution",
+              "stdout": "before",
+              "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+              "stderr": "bend: runtime fail-stop\n",
+              "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+            },
+            "upstream-c-2": {
+              "command": [
+                "<evidence>/demand/nat_first/upstream",
+                "--threads",
+                "1",
+                "--gpu",
+                "off"
+              ],
+              "cwd": "<evidence>/demand/nat_first/upstream-c-2",
+              "exit": 1,
+              "timed_out": false,
+              "elapsed_ms": 2,
+              "child_exited": true,
+              "remaining_files": [],
+              "outcome": "diagnostic_order_difference",
+              "phase": "execution",
+              "stdout": "before",
+              "raw_stdout_sha256": "6db7d803e74f1ffa7d8f5adc0bf95b3e15bf4c8373fffadf546227cc6c6742cb",
+              "stderr": "bend: runtime fail-stop\n",
+              "raw_stderr_sha256": "2cbbd1308f68fc5f9e6e335928ae04cea79a550863032a303a9449e573adf083"
+            }
+          }
+        },
+        {
+          "fixture": "request_first.bend",
+          "source_sha256": "7ec611452bbccf0dbe9cccc3d285b94b540af79177a21cf4286f53f35529f80f",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "before",
+            "stderr": "bend: runtime fail-stop\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "word_live_tail.bend",
+          "source_sha256": "da5b26d5334bfb9fb26a4acd59fa8aa69dd2817721ad1e4fe8b8d9e3fc839c9e",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "",
+            "stderr": "bend: runtime fail-stop\n",
+            "exit": 1
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        },
+        {
+          "fixture": "erased_and_unselected.bend",
+          "source_sha256": "08254fee3e2e66221694d395eacdd71c8d882651369edc2e152ba84f0bcad828",
+          "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+          "port_revision": "7bf8cec77c94866ff5ad467335526f19b7ccaa86",
+          "port_dirty": false,
+          "port_binary_sha256": "d8f8e65c53d87da635314c583790771ca725f3801ffc1bcddebc1c06310fa90e",
+          "timeout_seconds": 60,
+          "repetitions": 2,
+          "c_arguments": [
+            "--threads",
+            "1",
+            "--gpu",
+            "off"
+          ],
+          "upstream_c_optimization": "O3",
+          "upstream_c_link_flags": [
+            "-lpthread",
+            "-lm"
+          ],
+          "expected": {
+            "stdout": "erased\nerased\n7\nselected\nunused closures\n",
+            "stderr": "",
+            "exit": 0
+          },
+          "fixture_origin": "authored_contract_control",
+          "lanes": {
+            "upstream-c": "pass",
+            "port-c": "pass",
+            "upstream-js": "pass",
+            "port-js": "pass",
+            "native": "pass"
+          },
+          "deterministic": true,
+          "nonpass_observations": {}
+        }
+      ]
+    }
+  },
+  "scope": "Nonpass lanes retained, not newly waived. Phase-only/refusal outcomes do not establish exact parity. C scalar companion is not applicable; execution there is unrun. Approved wildcard exception remains separate from unresolved competing-error order."
+}
