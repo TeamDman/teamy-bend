@@ -1,0 +1,624 @@
+{
+  "tested_source": "b46f9570a2174b6f475b4f58836d960534a967a8",
+  "baseline": "99b78be666af894710788963b0730d28dc770cc5",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "docs_pin": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "measurements": {
+    "measured_utc": "2026-10-26T13:51:26.164576+00:00",
+    "tested_source": "b46f9570a2174b6f475b4f58836d960534a967a8",
+    "gate": {
+      "passed": 1322,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 195,
+      "seconds": 941.0610449819651,
+      "log_sha256": "b8e2771ab005eadff53ec11ab822f0a966695205fefd91e997563e01d0bcac82",
+      "workspace_minimum": 13068210176,
+      "tmp_minimum": 2110578688
+    },
+    "matrix": {
+      "observations": 676,
+      "deterministic_pairs": 106,
+      "singletons": 464,
+      "raw_sha256": "31e2c14dde063d4719440a3a9b44bb116164485fd51060183812a1f669994c77",
+      "timeouts": 0,
+      "corresponding_executions": 36,
+      "runtime_successes": 28,
+      "runtime_refusals": 8
+    },
+    "baseline_observations": 148,
+    "authored_cases": 34,
+    "counts": {
+      "before_accepted": 14,
+      "after_exact": 19,
+      "before_different": 18,
+      "after_different": 15,
+      "before_exact": 2
+    },
+    "changes": [
+      {
+        "case": "original-plus",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "original-nine",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "lower-plus-prefix",
+        "before": "different",
+        "after": "exact"
+      },
+      {
+        "case": "lower-nine-prefix",
+        "before": "different",
+        "after": "exact"
+      },
+      {
+        "case": "lower-prefix-q",
+        "before": "different",
+        "after": "exact"
+      },
+      {
+        "case": "plus-string",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "nine-string",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "ten-string",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "plus-zero",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "nine-zero",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "plus-max-scalar",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "canonical-before",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "after-astral",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "argument",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "pattern",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "template",
+        "before": "accepted",
+        "after": "exact"
+      },
+      {
+        "case": "imported",
+        "before": "accepted",
+        "after": "exact"
+      }
+    ],
+    "residuals": [
+      "missing-brace",
+      "missing-close",
+      "empty",
+      "nonhex",
+      "overflow",
+      "nine-max",
+      "plus-surrogate",
+      "nine-surrogate",
+      "fullwidth",
+      "negative",
+      "only-plus",
+      "underscore",
+      "whitespace",
+      "char-second",
+      "earlier-grammar"
+    ],
+    "accepted_controls": 9,
+    "unchanged_artifacts": 18,
+    "native_unchanged": {
+      "pure_normalization": 8,
+      "actual_IO": 1
+    },
+    "upstream_pure_normalization_scope": "Successful exit only, no complete upstream graph/text comparison in this matrix",
+    "whole_census_rerun": false
+  },
+  "commands": {
+    "focused-literal": {
+      "source_commit": "99b78be666af894710788963b0730d28dc770cc5",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "literal_",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068763136,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 20.41928717799601,
+      "minimum_free": 13068763136,
+      "minimum_tmp_free": 2163965952,
+      "log_sha256": "6e438f500981630a2a2385ec1f5e6cbebb6203ec9adee77eaa3f1adfde5b0f8b"
+    },
+    "focused-integration": {
+      "source_commit": "99b78be666af894710788963b0730d28dc770cc5",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068746752,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 62.232049816986546,
+      "minimum_free": 13068746752,
+      "minimum_tmp_free": 2162946048,
+      "log_sha256": "83837b233c7be548e8245a518b1377ab6a232ad7b665eb1995e84f5b60cfc343"
+    },
+    "focused-clippy": {
+      "source_commit": "99b78be666af894710788963b0730d28dc770cc5",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068746752,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.484669313998893,
+      "minimum_free": 13068746752,
+      "minimum_tmp_free": 2163871744,
+      "log_sha256": "74bb09ba143852cc25035759ceace3a04dbad73983768705ffdb30d863d33843"
+    },
+    "clean-build": {
+      "source_commit": "b46f9570a2174b6f475b4f58836d960534a967a8",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--features",
+        "extended_observability"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068337152,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 4.116834012995241,
+      "minimum_free": 13068337152,
+      "minimum_tmp_free": 2163875840,
+      "log_sha256": "836efab144fde4be82b85c66b7ce804ccc2a6d9b575264604da3925e37a85d5a"
+    },
+    "matrix-command": {
+      "source_commit": "b46f9570a2174b6f475b4f58836d960534a967a8",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068337152,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 127.44514792700647,
+      "minimum_free": 13068337152,
+      "minimum_tmp_free": 2112753664,
+      "log_sha256": "61e7c9c0959a89e1a06dd26ec987a20ea7adcf8a0da0f42ee01e151c4616b1a2"
+    },
+    "full-gate": {
+      "source_commit": "b46f9570a2174b6f475b4f58836d960534a967a8",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068337152,
+      "stop_reason": null,
+      "exit": 143,
+      "seconds": 235.82414540997706,
+      "minimum_free": 13068337152,
+      "minimum_tmp_free": 2111229952,
+      "log_sha256": "e533ddbd9088a345f764cafdfc841859deefe4cb01c13bb72e67c36148961577",
+      "qualification": "Interrupted at user request, exit 143; incomplete, not a pass"
+    },
+    "full-gate-resume-20261026": {
+      "source_commit": "b46f9570a2174b6f475b4f58836d960534a967a8",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13068210176,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 941.0610449819651,
+      "minimum_free": 13068210176,
+      "minimum_tmp_free": 2110578688,
+      "log_sha256": "b8e2771ab005eadff53ec11ab822f0a966695205fefd91e997563e01d0bcac82"
+    }
+  },
+  "snapshot": {
+    "source_commit": "b46f9570a2174b6f475b4f58836d960534a967a8",
+    "binary_sha256": "94333b6e355c4581ce791ebd720fafb4664f905eff0de56f1aa6d0eec3d0fcf2",
+    "archive_sha256": "97b1da90317be6e6eb6d61465874fd4ec02de3cc628ea70ecfb78d0e0bcfd3d0",
+    "binary_bytes": 27541344,
+    "archive_bytes": 7230456,
+    "fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "fingerprint": {
+          "rustc": 16696009966390864400,
+          "features": "[\"default\", \"extended_observability\"]",
+          "declared_features": "[\"default\", \"extended_observability\", \"tracy\"]",
+          "target": 15259999317542362348,
+          "profile": 4000329519511807648,
+          "path": 4942398508502643691,
+          "deps": [
+            [
+              987910214981000494,
+              "arbitrary",
+              false,
+              5452526485928618512
+            ],
+            [
+              2636299918121164457,
+              "socket2",
+              false,
+              3462672464787218007
+            ],
+            [
+              2716495650848533533,
+              "directories_next",
+              false,
+              7597756631528583102
+            ],
+            [
+              4289391297033898176,
+              "facet_pretty",
+              false,
+              9315671338848947955
+            ],
+            [
+              4371022286835655106,
+              "facet",
+              false,
+              11120644715909443892
+            ],
+            [
+              5380358770761950913,
+              "tracing_subscriber",
+              false,
+              13248555277594674122
+            ],
+            [
+              7098700569944897890,
+              "libc",
+              false,
+              18440068434989699453
+            ],
+            [
+              7455154039531220218,
+              "teamy_cancellation",
+              false,
+              1314479810985918790
+            ],
+            [
+              9206635739968092262,
+              "facet_json",
+              false,
+              5555852876784875476
+            ],
+            [
+              9394460649638301237,
+              "tokio",
+              false,
+              14105617600381377558
+            ],
+            [
+              10141565841938428598,
+              "teamy_bend",
+              false,
+              7893603105302660451
+            ],
+            [
+              10141565841938428598,
+              "build_script_build",
+              false,
+              3498039492276065813
+            ],
+            [
+              11572704223576832424,
+              "open",
+              false,
+              13207949908176173387
+            ],
+            [
+              13435147900633593047,
+              "facet_csv",
+              false,
+              16462133729800874738
+            ],
+            [
+              14757622794040968908,
+              "tracing",
+              false,
+              14311375975235900415
+            ],
+            [
+              16117757646811882223,
+              "chrono",
+              false,
+              2641341933216355841
+            ],
+            [
+              16142802950189143282,
+              "figue",
+              false,
+              15953120168607652971
+            ],
+            [
+              16661324460137237341,
+              "color_eyre",
+              false,
+              12986095737036479449
+            ],
+            [
+              17390555767770508988,
+              "eyre",
+              false,
+              1650844428397224202
+            ]
+          ],
+          "local": [
+            {
+              "CheckDepInfo": {
+                "dep_info": "debug/.fingerprint/teamy-bend-c85207eab3bb1647/dep-bin-teamy-bend",
+                "checksum": false
+              }
+            }
+          ],
+          "rustflags": [],
+          "config": 8247474407144887393,
+          "compile_kind": 0
+        }
+      }
+    ],
+    "public_probe_sha256": "33c57d939bf894bf202a00bf95ad86e670f7fbc2990f0f5f1d7b28aa58d34cb2",
+    "public_probe_library_sha256": "84516565bcb3d52acd14f4be24b8e15d0f5e01fe5ed29fee3b39793a2b4f5f5e"
+  },
+  "gate_identity": {
+    "source": "b46f9570a2174b6f475b4f58836d960534a967a8",
+    "snapshot_sha256": "94333b6e355c4581ce791ebd720fafb4664f905eff0de56f1aa6d0eec3d0fcf2",
+    "final_binary_sha256": "94333b6e355c4581ce791ebd720fafb4664f905eff0de56f1aa6d0eec3d0fcf2",
+    "snapshot_bytes": 27541344,
+    "final_bytes": 27541344,
+    "byte_identical": true,
+    "additional_executions": 0,
+    "scope": "Exact byte comparison of clean tested snapshot and post-gate executable; no redundant behavioral rerun claimed"
+  },
+  "tools": {
+    "rust": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "fmt": "nightly-2026-05-24",
+    "node": "v24.19.0",
+    "clang": "19.1.7",
+    "powershell": "7.5.4"
+  },
+  "resumption_verification": {
+    "time_utc": "2026-10-26T13:35:38.246491+00:00",
+    "head": "b46f9570a2174b6f475b4f58836d960534a967a8",
+    "verified_members": 150,
+    "archive_sha256": "06a4d2748b3f4dd0463b163f26950881d830e6a2c41f3b24f5f8803a89d48227",
+    "bundle_verification": "The bundle contains this ref:\nb46f9570a2174b6f475b4f58836d960534a967a8 refs/heads/fix/cpu-lowercase-escape-grammar-20261026\nThe bundle requires this ref:\n99b78be666af894710788963b0730d28dc770cc5 \nThe bundle uses this hash algorithm: sha1\n${WORKSPACE}/.tools/cpu-storage-preservation-20261025/lowercase-b46f957-paused/source.bundle is okay\n",
+    "workspace_free": 13068210176,
+    "tmp_free": 2112344064,
+    "initial_audit_script_error": "KeyError members; no evidence changed; actual manifest uses entries"
+  },
+  "audit_note": "The initial read-only script queried members, but the actual manifest field is files. The preflight receipt wording entries was a note typo; all 150 files were verified.",
+  "preservation": {
+    "verified_utc": "2026-10-26T05:16:02.828065+00:00",
+    "cleanup_records": 21,
+    "prior_other_files": 5,
+    "additional_backup_hashes": {
+      "nonscalar-087a646": "d066ce7bc074a22663f88399cf6fb9c622a6cad7862cfa4796c879fec4845167",
+      "uppercase-escape-a28efb7": "9f5a269f13aaabb19139c0ccbcc955a8d687f1690d541a35c455390f3dc8db2b"
+    },
+    "library_retry": false,
+    "workspace_free": 13068337152,
+    "tmp_free": 2113216512
+  },
+  "compact_results_sha256": "ab1e3380bc02da908ef1b004c5afbcd9c471dde6e4fe67a50ae6337bbf75e2f3",
+  "historical_census": {
+    "source": "c5edea8",
+    "non_IO_differences": 140,
+    "acceptance_differences": 109,
+    "rejection_differences": 31,
+    "upstream_stack_failures": 6
+  },
+  "coverage_linkage": {
+    "linked_including_failed_receipts": 516,
+    "inventory": 1302,
+    "unlinked_by_applicability": {
+      "checking_rejection": 256,
+      "interpreter_compiled_candidates": 517,
+      "interpreter_only": 12,
+      "no_main": 1
+    }
+  },
+  "public_API_caveat": "Previously accepted spellings now reject; 13 legacy malformed errors retain public fields/Display; composed first-error and later-Char raw errors may change. invoke formatted refusals can return Ok(exit_code=1); external callers remain unaudited.",
+  "full_census_rerun": false,
+  "publication": "LOCAL ONLY; no push or remote verification in this resumption",
+  "unrun": [
+    "Whole census renewal",
+    "Supplementary all-target Clippy",
+    "Windows/desktop/GPU",
+    "Execution of refused malformed programs",
+    "Complete upstream pure normalized-graph comparison"
+  ],
+  "policy_changes": false,
+  "library_retry": false,
+  "lost_historical_log_recovered": false
+}

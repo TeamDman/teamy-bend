@@ -1,0 +1,52 @@
+{
+  "reviewed_at_utc": "2026-10-26T13:53:05.793605+00:00",
+  "reviewer": "review_lowercase_resume",
+  "approved": true,
+  "scope": "Independent final read-only review of local deliverables, clean source validation and retained evidence; no publication approval",
+  "tested_source": "b46f9570a2174b6f475b4f58836d960534a967a8",
+  "baseline": "99b78be666af894710788963b0730d28dc770cc5",
+  "artifact_sha256": {
+    "acceptance-append.md": "79fc2e8e2d3ea2d6928a14d2b2f75c759b2a1cf1d25cb6dbe1a85210e1857665",
+    "cpu-lowercase-escape-grammar-evidence.csv": "6f2e5f3b3907d1a7dad8122ddea146f0539edee0869f9f9c3d0a57b218e6d6a7",
+    "cpu-lowercase-escape-grammar-results.json.gz": "ab1e3380bc02da908ef1b004c5afbcd9c471dde6e4fe67a50ae6337bbf75e2f3",
+    "cpu-lowercase-escape-grammar-validation.json": "eaa8b6748820d22bac5d56491b3f69066beca20d997857d71ad69174684b3ab2",
+    "cpu-lowercase-escape-grammar.md": "3c0c16e8171e1c51d80e6d66278049ebf1cf02a3c1ec0df7b94613043aa71f07"
+  },
+  "supporting_sha256": {
+    "prepare-resume-deliverables.py": "901a947d9802ff1bd8d57dc61820d0d4f608a55b211dfe4209b969fc7537399b",
+    "independent-review-resume.json": "f3f4262d2bcfdd0ada26b913d386b7c33a1f59bedef3e73cd91de5a427d2d59a",
+    "matrix-results.json": "31e2c14dde063d4719440a3a9b44bb116164485fd51060183812a1f669994c77",
+    "full-gate-resume-20261026.json": "4b38a403a44bcf6fc682d654c5d92e14f0948a5138bf4771e63eca037ec952a1",
+    "full-gate-resume-20261026.log": "b8e2771ab005eadff53ec11ab822f0a966695205fefd91e997563e01d0bcac82",
+    "gate-identity-resume.json": "5d013e59af6e951b3fa549124578f023ff3339b9fb25e20d4a214de37be8a329"
+  },
+  "findings": [],
+  "verified": {
+    "full_gate": {
+      "passed": 1322,
+      "failed": 0,
+      "ignored": 49,
+      "result_groups": 195,
+      "seconds": 941.0610449819651,
+      "exit": 0,
+      "timeout_or_floor_stop": false,
+      "clean_tested_source": true
+    },
+    "post_gate_binary_identical": true,
+    "compact_matrix_matches_sanitized_raw": true,
+    "command_receipts_match_originals": true,
+    "decoded_base64_fields_reviewed": 1352,
+    "private_path_or_secret_pattern_findings": 0,
+    "csv_cases": 44,
+    "source_and_matrix_review_binding_assertions": true
+  },
+  "limits": [
+    "This approval is for a local checkpoint. No push, publication, merge or release is authorized this turn.",
+    "The linked review artifact is intentionally to be created from this completed approval and included with the local checkpoint.",
+    "Fifteen authored negative diagnostics remain different; three overlapping uppercase closures must not be counted twice.",
+    "Pure normalization is unchanged against baseline; upstream normalization exit success does not establish complete graph/text equality.",
+    "The historical whole census was not renewed; existing semantic, host, resource and oracle gaps remain unwaived.",
+    "External invoke consumers remain unaudited; prior result-shape compatibility caveats remain.",
+    "No additional tests, builds or runtime executions were performed by this review."
+  ]
+}

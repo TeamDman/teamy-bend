@@ -2819,3 +2819,26 @@ lowering, Base coordinates, external invoke audit, supplementary lints and older
 resource/oracle gaps remain unwaived. Public invoke result-shape changes in both
 directions are explicit. Prior cleanup records/backups remain intact, historical
 log loss unrecovered, no Library retry or desktop activity.
+
+## Lowercase Unicode escape grammar checkpoint
+
+Tested `b46f9570a2174b6f475b4f58836d960534a967a8` rejects leading-plus and excess-digit lowercase scalar escapes
+according to the pinned grammar, preserving canonical U32 codes and all safety
+limits. [Report](cpu-lowercase-escape-grammar.md). Fresh standard gate:
+**1322 passed / 0 failed / 49 ignored**. The earlier user-interrupted
+402/0/2 receipt remains incomplete and unchanged.
+
+The 34 authored negative controls now all reject: 19 exact / 15 differing
+diagnostics, closing 14 acceptance gaps and three diagnostic gaps. The three
+overlapping uppercase controls are the same closures, not additional gains.
+676 matrix observations contain 106 repeat pairs; nine valid controls have
+36 corresponding C/JS matches (28 successes/eight required scalar refusals),
+eight unchanged native pure outputs, one unchanged native IO output and 18
+unchanged artifacts. Pure baseline equality is not full upstream graph equality.
+
+No full census renewal: historical counts and 516/1302 coverage linkage remain
+historical, including failed receipts. All pending semantic/resource/oracle/API
+issues remain unwaived. First-error and invoke result-shape caveats are explicit.
+Source bundle and 150 evidence files verified on resumption; unique evidence and
+cleanup records remain intact. Work is local only, pending publication approval.
+Next independent candidate: existing lowercase malformed-escape diagnostics.
