@@ -1,0 +1,7 @@
+Error:
+- expected : a term
+- observed : '`'
+Location:
+2 | law child: U32
+3>| def child(): `a
+4 | 

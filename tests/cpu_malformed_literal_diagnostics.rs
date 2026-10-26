@@ -133,3 +133,39 @@ fn malformed_literals_keep_exact_load_diagnostics_and_refusals() {
         }
     }
 }
+
+#[test]
+fn contextual_lexical_refusals_match_across_cli_boundaries() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-contextual-lexical-diagnostics");
+    let cases: Vec<String> = facet_json::from_str(include_str!(
+        "fixtures/cpu-contextual-lexical-diagnostics/negative-cases.json"
+    ))
+    .unwrap();
+    let directory =
+        std::env::temp_dir().join(format!("bend-contextual-lexical-{}", std::process::id()));
+    std::fs::create_dir(&directory).unwrap();
+    for case in cases {
+        let path = root.join(&case);
+        let expected = std::fs::read(path.with_extension("stderr")).unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let artifact = directory.join("unwritten");
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&artifact);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(output.status.code(), Some(1), "{case}: {operation}");
+            assert!(output.stdout.is_empty());
+            assert_eq!(output.stderr, expected, "{case}: {operation}");
+            assert!(!artifact.exists());
+        }
+    }
+    std::fs::remove_dir(directory).unwrap();
+}

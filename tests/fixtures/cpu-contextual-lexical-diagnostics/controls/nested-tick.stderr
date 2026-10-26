@@ -1,0 +1,7 @@
+Error:
+- expected : a term
+- observed : '`'
+Location:
+3 | law main: U32
+4>| def main(): U32.add(1, `a)
+5 | 

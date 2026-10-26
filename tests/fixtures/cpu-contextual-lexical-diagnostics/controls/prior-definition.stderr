@@ -1,0 +1,7 @@
+Error:
+- expected : a term
+- observed : '`'
+Location:
+4 | law main: U32
+5>| def main(): `a
+6 | 

@@ -1,0 +1,7 @@
+Error:
+- expected : a numeric literal (NUMBER is U32, NUMBER n is Nat)
+- observed : 'x'
+Location:
+2 | law child: U32
+3>| def child(): 0x
+4 | 

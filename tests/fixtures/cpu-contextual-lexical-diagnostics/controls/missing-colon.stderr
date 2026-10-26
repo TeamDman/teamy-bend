@@ -1,0 +1,7 @@
+Error:
+- expected : ':'
+- observed : '0'
+Location:
+2 | law main: U32
+3>| def main() 0x
+4 | 

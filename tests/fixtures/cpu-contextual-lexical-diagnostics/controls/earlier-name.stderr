@@ -1,0 +1,7 @@
+Error:
+- expected : a name
+- observed : '('
+Location:
+2 | 
+3>| def (): 0
+4 | def later(): 0x

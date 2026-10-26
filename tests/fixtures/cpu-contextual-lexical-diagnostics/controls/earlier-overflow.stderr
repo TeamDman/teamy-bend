@@ -1,0 +1,8 @@
+Error:
+- expected : a u32 literal up to 4294967295 (got 4294967296)
+- observed : '
+'
+Location:
+3 | law main: U32
+4>| def main(): 4294967296
+5 | `a

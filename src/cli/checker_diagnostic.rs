@@ -357,6 +357,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-contextual-lexical-diagnostics/parse/hex_no_digits.bend",
+                "10>| def main(): 0x",
+            ),
+            (
+                "cpu-contextual-lexical-diagnostics/parse/unclosed_char_code.bend",
+                "10>|   `a",
+            ),
+            (
                 "cpu-malformed-literal-diagnostics/parse/invalid_string_escape.bend",
                 "9>| def x():",
             ),

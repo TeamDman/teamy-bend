@@ -1,0 +1,7 @@
+Error:
+- expected : a name
+- observed : '`'
+Location:
+1 | 
+2>| law main: for `a: U32 U32
+3 | 

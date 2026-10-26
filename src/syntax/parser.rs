@@ -64,11 +64,24 @@ struct Token {
     end: usize,
 }
 
+mod lexical_diagnostics;
+use lexical_diagnostics::LexicalDiagnostic;
+use lexical_diagnostics::LexicalFault;
+use lexical_diagnostics::LexicalPrefix;
+
+fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
+    lex_tokens(source, label, None)
+}
+
 #[expect(
     clippy::too_many_lines,
     reason = "Token alternatives mirror the upstream grammar in one scan"
 )]
-fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
+fn lex_tokens(
+    source: &str,
+    label: &str,
+    mut diagnostic_prefix: Option<&mut Option<LexicalPrefix>>,
+) -> Result<Vec<Token>, ParseError> {
     let mut tokens = Vec::new();
     let mut pos = 0;
     let mut line = 1;
@@ -165,6 +178,26 @@ fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
                 }
             }
             if source[pos..].starts_with(|c: char| c.is_ascii_alphabetic() || c == '_') {
+                if diagnostic_prefix.is_some()
+                    && LexicalPrefix::eligible(tokens.len(), pos + 1)
+                    && source[start..pos].bytes().all(|byte| byte.is_ascii_digit())
+                {
+                    LexicalPrefix::capture(
+                        &mut diagnostic_prefix,
+                        &tokens,
+                        source,
+                        Token {
+                            text: String::new(),
+                            line,
+                            column: start_column,
+                            start,
+                            end: pos + 1,
+                        },
+                        LexicalFault::DecimalSuffix {
+                            after: column + pos - start - 1,
+                        },
+                    );
+                }
                 return Err(ParseError {
                     source: label.into(),
                     line,
@@ -182,6 +215,21 @@ fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
             } else if "@&+\\%{}()[]?:,;=<>-*/|~!^".contains(ch) {
                 pos += ch.len_utf8();
             } else {
+                if diagnostic_prefix.is_some() && ch == '`' {
+                    LexicalPrefix::capture(
+                        &mut diagnostic_prefix,
+                        &tokens,
+                        source,
+                        Token {
+                            text: String::new(),
+                            line,
+                            column: start_column,
+                            start,
+                            end: pos + 1,
+                        },
+                        LexicalFault::Backtick,
+                    );
+                }
                 return Err(ParseError {
                     source: label.into(),
                     line,
@@ -243,6 +291,7 @@ struct Templates {
     instances: usize,
     active: usize,
     diagnostics: Option<super::diagnostics::DiagnosticOrigins>,
+    lexical_diagnostic: Option<LexicalDiagnostic>,
 }
 
 #[derive(Clone, Default)]
@@ -403,6 +452,9 @@ impl Parser<'_> {
         body: &Body,
         vars: &[Variable],
     ) -> Result<Occurrence, ParseError> {
+        if !vars.is_empty() || !matches!(body, Body::Reply(_)) {
+            self.require_semantic_prefix()?;
+        }
         flatten_occurrence(
             body,
             vars,
@@ -892,17 +944,33 @@ impl Parser<'_> {
         }));
         Ok(())
     }
+    fn prior_definition(&mut self, resolved: &str) -> Result<Option<DefDecl>, ParseError> {
+        let prior_index = self.book.declarations.iter().rposition(|d| {
+            matches!(d, Declaration::Def(d) if d.name == resolved && self.instance_name.is_none())
+        });
+        if prior_index.is_some_and(|index| {
+            self.templates
+                .lexical_diagnostic
+                .as_ref()
+                .is_some_and(|diagnostic| index < diagnostic.initial_declarations)
+        }) {
+            // Imported types are outside this source-prefix work fence. Do not
+            // clone/qualify a prior law's potentially large type for presentation.
+            self.require_semantic_prefix()?;
+        }
+        Ok(prior_index.map(|index| {
+            let Declaration::Def(definition) = &self.book.declarations[index] else {
+                unreachable!("definition index")
+            };
+            definition.clone()
+        }))
+    }
     fn definition(&mut self, unsafe_: bool) -> Result<(), ParseError> {
         let declaration_at = self.at;
         let raw = self.name()?;
         let qualified = self.qualify(&raw);
         let resolved = self.resolve(&raw);
-        let prior = self.book.declarations.iter().rev().find_map(|d| match d {
-            Declaration::Def(d) if d.name == resolved && self.instance_name.is_none() => {
-                Some(d.clone())
-            }
-            _ => None,
-        });
+        let prior = self.prior_definition(&resolved)?;
         // Only an unfilled law completes a different resolved declaration.
         // Filter after finding the latest event: an older unfilled law must
         // not become eligible again after its definition has been completed.
@@ -926,6 +994,7 @@ impl Parser<'_> {
         } else {
             self.require_fresh(&name, declaration_at)?;
             if template {
+                self.require_semantic_prefix()?;
                 self.templates.declarations.insert(
                     name.clone(),
                     Template {
@@ -1137,6 +1206,7 @@ impl Parser<'_> {
     }
 
     fn foreign_imports(&mut self) -> Result<Vec<ForeignImport>, ParseError> {
+        self.require_semantic_prefix()?;
         let mut imports = Vec::new();
         let mut seen = BTreeSet::new();
         let mut count = 0;
@@ -1224,6 +1294,7 @@ impl Parser<'_> {
             function = if let Term::Lam { id, body, .. } = function.as_ref()
                 && self.is_compile_binding(&function)
             {
+                self.require_semantic_prefix()?;
                 // Upstream Sub is resolved before live checking: duplicating a
                 // macro parameter duplicates caller syntax, not an affine Lam.
                 let result = crate::kernel::origins::substitute_with_origins(
@@ -1268,6 +1339,7 @@ impl Parser<'_> {
         name: &str,
         arguments: &[Occurrence],
     ) -> Result<Option<String>, ParseError> {
+        self.require_semantic_prefix()?;
         let values: Vec<_> = arguments
             .iter()
             .map(|argument| Rc::clone(&argument.value))
@@ -2119,6 +2191,7 @@ impl Parser<'_> {
         self.applications(head, arguments)
     }
     fn number(&mut self) -> Result<Occurrence, ParseError> {
+        self.require_valid_numeric_token()?;
         let raw = self.bump();
         if let Some(digits) = raw.strip_suffix('n') {
             let count = digits
@@ -3037,8 +3110,29 @@ fn parse_into(
     if let Some(origins) = &mut templates.diagnostics {
         origins.source(input.label, input.source);
     }
-    Parser {
-        tokens: lex(input.source, input.label)?,
+    let mut prefix = None;
+    let mut lexical_error = None;
+    let tokens = match lex_tokens(
+        input.source,
+        input.label,
+        templates.diagnostics.is_some().then_some(&mut prefix),
+    ) {
+        Ok(tokens) => tokens,
+        Err(error) => {
+            let Some(mut prefix) = prefix else {
+                return Err(error);
+            };
+            if let Some(origins) = &mut templates.diagnostics {
+                origins.clear_load_failure();
+            }
+            prefix.diagnostic.initial_declarations = book.declarations.len();
+            templates.lexical_diagnostic = Some(prefix.diagnostic);
+            lexical_error = Some(error);
+            prefix.tokens
+        }
+    };
+    let result = Parser {
+        tokens,
         at: 0,
         label: input.label.into(),
         namespace: input.namespace.into(),
@@ -3058,7 +3152,19 @@ fn parse_into(
         constructor_tags,
         origin: input.origin,
     }
-    .declarations()
+    .declarations();
+    if let Some(error) = lexical_error {
+        // The diagnostic prefix can never turn a lexical refusal into a book.
+        // Public error fields and the original lexical first error survive.
+        let diagnostic = templates.lexical_diagnostic.take().expect("lexical prefix");
+        if (result.is_ok() || diagnostic.unsupported())
+            && let Some(origins) = &mut templates.diagnostics
+        {
+            origins.clear_load_failure();
+        }
+        return Err(error);
+    }
+    result
 }
 
 #[derive(Default)]

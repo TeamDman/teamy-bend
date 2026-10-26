@@ -444,6 +444,10 @@ impl DiagnosticOrigins {
         }
     }
 
+    pub(super) fn clear_load_failure(&mut self) {
+        self.load_failure = None;
+    }
+
     pub(crate) fn excerpt(&self, identity: usize) -> Option<String> {
         let origin = self.nodes.get(&identity)?;
         source_excerpt(&origin.source, origin.line)

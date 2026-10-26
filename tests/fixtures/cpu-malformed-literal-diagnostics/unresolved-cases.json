@@ -1,12 +1,6 @@
 [
-  "parse/hex_no_digits.bend",
-  "parse/unclosed_char_code.bend",
-  "controls/suffix-name.bend",
-  "controls/tick-name.bend",
   "controls/uppercase-unicode.bend",
   "controls/astral-after.bend",
   "controls/astral-escape.bend",
-  "controls/unicode-invalid.bend",
-  "controls/earlier-name.bend",
-  "controls/earlier-tick.bend"
+  "controls/unicode-invalid.bend"
 ]

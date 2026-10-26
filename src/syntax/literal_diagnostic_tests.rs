@@ -48,12 +48,12 @@ fn literal_failures_keep_public_errors_and_exact_consumed_source() {
 }
 
 #[test]
-fn literal_diagnostics_do_not_guess_lexical_or_unicode_contracts() {
+fn literal_diagnostics_do_not_guess_unicode_contracts() {
     let cases: Vec<String> = facet_json::from_str(include_str!(
         "../../tests/fixtures/cpu-malformed-literal-diagnostics/unresolved-cases.json"
     ))
     .unwrap();
-    assert_eq!(cases.len(), 10);
+    assert_eq!(cases.len(), 4);
     for case in cases {
         let path = root().join(&case);
         let plain = crate::syntax::load(&path).unwrap_err();

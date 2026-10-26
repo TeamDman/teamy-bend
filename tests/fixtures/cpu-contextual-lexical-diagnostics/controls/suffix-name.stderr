@@ -1,0 +1,7 @@
+Error:
+- expected : a name
+- observed : '0'
+Location:
+2 | 
+3>| def 0x(): 0
+4 | 

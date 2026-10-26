@@ -1,0 +1,7 @@
+Error:
+- expected : a numeric literal (NUMBER is U32, NUMBER n is Nat)
+- observed : 'x'
+Location:
+3 | law main: U32
+4>| def main(): 0x
+5 | 
