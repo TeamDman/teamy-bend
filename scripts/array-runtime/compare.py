@@ -92,8 +92,17 @@ for index, case in enumerate(cases):
         row=by_lane[lane][0]
         assert row['exit']==1 and streams(row)[1]==b'' and b'a defined name' in streams(row)[2]
     assert len(rows)==19
-    for lane in ['upstream-generate-c','upstream-generate-js','port-generate-c','port-generate-js','upstream-compile-O3','port-compile-O3']:
+    for lane in ['upstream-generate-c','upstream-generate-js','upstream-compile-O3','port-compile-O3']:
         assert streams(by_lane[lane][0])==(0,b'',b''), (name,lane)
+    for ext, target in [('c','c'),('js','javascript')]:
+        row=by_lane['port-generate-'+ext][0]
+        assert row['exit']==0 and streams(row)[2]==b''
+        emitted=json.loads(streams(row)[1])
+        artifact=a.output / str(index) / ('port.'+ext)
+        assert emitted['target']==target and emitted['output']==str(artifact)
+        assert emitted['bytes']==artifact.stat().st_size and emitted['gpu_artifact'] is None
+        provider=emitted['socket_provider']
+        assert provider is None if ext=='c' else provider==str(artifact.parent/'teamy-bend-sys.node') and Path(provider).is_file()
     for lane in ['native','upstream-C-O3','upstream-JS','port-C-O3','port-JS']:
         if case['kind']=='positive':
             expected=(0,case['stdout'].encode(),b'')
