@@ -2883,3 +2883,20 @@ renewal. Six current residuals and all earlier semantic/API/host/oracle gaps rem
 unwaived. Dependency/toolchain/pin/budget/guard/cancellation policies unchanged.
 Next bounded diagnostic candidate: empty Char `''` contextual closing-quote reporting;
 first confirm upstream cursor behavior without changing lexer acceptance or raw errors.
+
+## Raw apostrophe compatibility checkpoint
+
+Tested `61cab3744713e4841f44efd8b8bd3853e1026206` repairs raw apostrophe tokenization while preserving
+template replay and existing guards. [Report](cpu-raw-apostrophe.md). Standard gate
+**1334 passed / 0 failed / 49 ignored**. Authored cohort: 12 accepted/17 refused;
+ten former load refusals now execute across corresponding C/JS backends. 513 observations,
+106 repeat pairs, 96 successful matching generated executions. Eleven complete raw/escaped
+value-graph pairs and one native IO pair pass; these are not full upstream graph proofs.
+
+Fifteen negative raw errors unchanged; two token/import error changes disclosed.
+Three exact upstream rejection diagnostics and 14 retained differences; strict IO
+proof exclusion remains. No whole-census renewal or original-linkage increment.
+All earlier semantic/API/host/oracle/resource/lint gaps remain unwaived. Main's previous
+restriction was explicitly resolved for the separate reviewed 878 checkpoint.
+This work uses reviewed feature preservation and the approved non-force main workflow.
+Next bounded gap: contextual empty-character and quote-count diagnostics.

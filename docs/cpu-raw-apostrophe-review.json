@@ -1,0 +1,110 @@
+{
+  "reviewed_at_utc": "2026-10-26T16:32:45.319027+00:00",
+  "reviewer": "review_lowercase_resume",
+  "approved": true,
+  "publication_suitability": "Reviewed source and these exact deliverables are suitable for the parent authorized publication workflow, subject to final checkpoint tree/remote checks. This review does not itself grant permission or perform publication.",
+  "source_commit": "61cab3744713e4841f44efd8b8bd3853e1026206",
+  "baseline_main": "878c0bb3860b8fd590c0949680a2ea263ff048d9",
+  "baseline_diagnosis": "b9ac3c20fc78782430c5083549680e9ad99988d7",
+  "complete_change_diff_sha256": "a688f56c8cde7b90c1773b6af20c6cf68b56af255bad793c2e7266dd683bc0b8",
+  "source_directory_diff_sha256": "af7827c70ed6f479ccc7790f27d7b17cf3a37b72cbee34ebf2be47adc3601827",
+  "parser_diff_sha256": "d9115549913f218bfd5824f044afcd110aec3dffb5c046638805ed8b3a32f0d5",
+  "artifact_sha256": {
+    "acceptance-append.md": "f09e08eb1a936071abf5bc7398a0bc212895a221d07d8898bc40349366dd7a49",
+    "cpu-raw-apostrophe-results.json.gz": "8cf625f1fcb7d75d05daa103ec78140b5894995ca2dba00399407904280b99a0",
+    "cpu-raw-apostrophe-validation.json": "ab5f0588dcdd97943513c0480841c1fa9b0a344e4489d2c486149a443c19895e",
+    "cpu-raw-apostrophe.md": "cefff8227977b1ce3c99236ae1410471551c99df4b3690ddb59406223d912e90"
+  },
+  "supporting_sha256": {
+    "source-review.json": "6ee492a2f904a6818342596d85924e86a412eeb60f14f9b25a84f638a0f2f9c0",
+    "matrix-review.json": "96595d2bef8387e9090703c2d582fc89a474b91cde2d2534444cc3e2fde5efbf",
+    "matrix.py": "b8f527765ec4ac6bbd6d0f8ef31670c1b8bc44949629322fdaea12df657bfbf2",
+    "matrix-results.json": "0e77d7f32b7efe17cb74ee08e7acd1c92b2d8f4bb9b64265c71cf4e9e78cbd59",
+    "baseline-results.json": "a5314cea9167ca44830cc09956168e9e75accab25f1f844e0bc034524213eb43",
+    "baseline-template-results.json": "0d84f1e8590f056afe219403ffe64fe014e0e41f95962ed67330cf4f79356cd9",
+    "snapshot.json": "08fa8228946a1fdc70eccb1ed2f06698db5c218069e71a73bf261690afdbf6c0",
+    "source-build.json": "29d79ef01d802e43c4e0ce85d9fd01620bb652c92efc3eef234390c52d96ee65",
+    "source-probe-build.json": "f6ead8d9e7fd804546678d416e60e76c990e43eb619217645665fb366aa587f2",
+    "probe-identity.json": "f7bcd44af2f6da5197af9c1785cd3faf65c3145c90325114a16449e319f6a674",
+    "original-identity.json": "50ec9e8ccf62e4228c052bd8755b974df0727d65d4f305cff1aa41b5c686ab7e",
+    "outcomes.json": "0d0f00c9890a896c094583346dd2e2e7b54b40adc6a8de55430b9804a2ab2f8f",
+    "full-gate.json": "fc2ffa6cc55c5983989f06c0e9bbf712598adcb803285c86d9f20b66e1133c58",
+    "full-gate.log": "ba069fc0c163c0168e2d107fa04b1964e5993bab0a54e780402731abbab7afe0",
+    "gate-identity.json": "4311b8531433eb6c2c145fb4529326f580f678f3d2e652df10800138ca0cbf7f",
+    "focused-expanded.json": "76fca921b7df72ca25ab095a150749dc84513761f071b5201e4bc43af7d6f734",
+    "focused-lexer-expanded.json": "cb84af54a5ecb698432db103aad0bccdbc617719f605bd4a6ccd53af56d28f3e",
+    "focused-clippy.json": "7436f1e0571e7ddc72dea36971b1c585d762d36a142221cab50dfa6dece3cd9e",
+    "focused-clippy.log": "3cb5bda61ad07074f4607fddde3d9ed6bcf8d1ee3454166d56923964c07c60f3",
+    "focused-clippy-corrected.json": "1c6662b775235b413cd2c3f0fdc2893b11741a045e3195d699735b21a2e35a6f",
+    "focused-clippy-corrected.log": "3a64f3b1477aee1feb1a2bca8505accb83e75802697eb8bbf0928a1da648dbbf",
+    "source-backup.json": "422de2033863be8fdf9a25c58bb98e57eff48db03d15e8036cc398d91e66e723",
+    "evidence-backup.json": "19b663fd1b6efdd1e9977f15629abcd6ec431bb4faa7539063de19184f9caaf6",
+    "prepare-deliverables.py": "de6edd0e380478af2e86e86179aba71998807fa08706c6bd31b1827ed9869a12",
+    "deliverable-scan.json": "7d14223bd35b4b96b73c39255bf49fe5d52e8974bd891fa169f8afaf276e2a83"
+  },
+  "blocking_findings": [],
+  "verified_counts": {
+    "full_gate": {
+      "passed": 1334,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 196,
+      "seconds": 1016.3639960910077
+    },
+    "matrix": {
+      "observations": 513,
+      "repeat_pairs": 106,
+      "singletons": 301,
+      "timeouts": 0
+    },
+    "positive_fixtures": 12,
+    "negative_fixtures": 17,
+    "loader_acceptance_repairs": 10,
+    "strict_check_acceptance_repairs": 9,
+    "strict_IO_exclusion": 1,
+    "generated_executions": 96,
+    "corresponding_backend_comparisons": 48,
+    "pure_raw_escaped_graph_pairs": 11,
+    "native_IO_pair": 1,
+    "negative_diagnostics_before": {
+      "exact": 3,
+      "different": 14
+    },
+    "negative_diagnostics_after": {
+      "exact": 3,
+      "different": 14
+    },
+    "diagnostic_closures": 0,
+    "raw_negative_errors_preserved": 15,
+    "raw_negative_errors_changed": 2,
+    "raw_negative_probe_outputs_unchanged": 30,
+    "raw_negative_probe_outputs_changed": 4,
+    "public_decoded_streams_scanned": 1258,
+    "archived_files_verified": 190,
+    "excluded_ELF_files_retained_hash_verified": 29
+  },
+  "verified": [
+    "Clean tested source matches all independently reviewed source/test/fixture hashes. Lock and upstream/docs pins remain unchanged and reference checkouts clean.",
+    "Full gate totals independently derived from196result groups; gate exit0, no timeout or disk-floor stop. Strict Clippy/build and actual TCP/UDP provider pass are present in the log. Standard gate is distinct from unrun supplementary all-target Clippy.",
+    "Final non-Tracy gate binary is byte-identical to the immutable matrix snapshot ab49e774e0aac831986a37b9b872e71170a1b492b4652624eb1a8d31eaa5d005. Clean-source rebuilt public probe also matches the matrix probe. No unproved feature-profile substitution.",
+    "Four prepared deliverables retain correct ten loader/nine strict-check repairs plus IO exclusion;96actual C/JS executions are48corresponding exact comparisons. No diagnostic closure or whole-census improvement is inferred.",
+    "All compact receipt components and embedded runners independently matched explicit root-substituted originals with raw stream/source hashes preserved. Validation commands, source identities, gate hash and focused exit statuses match retained receipts.",
+    "Independent final scan of all four drafts and1258decoded base64 fields found no private-root/credential-pattern hits. Prior deliverable-scan hashes were stale after final prose/preservation edits; this review binds and supersedes only that final-draft hash scope, without rewriting historical scan evidence.",
+    "Report now explicitly discloses two raw ParseError changes and existing invoke Ok(exit_code=1) versus Err behavior for newly exposed formatted failures, including repaired imports. External consumers remain unaudited.",
+    "Preservation archive e0187a726a5a46752834fc3e85a6effb8980fdbacd336cdc358db8f4ff8e96fb verified against its190member manifest; retained29ELF files verified individually. Source bundle hash verified. Final validation preservation summary and this review postdate the archive and require supplemental preservation.",
+    "Historical focused lint failure remains retained, corrected focused lint passes, and full clean-source gate renews tested implementation. Earlier then-pending review statements remain historical."
+  ],
+  "remaining_limits": [
+    "Fourteen negative diagnostic differences remain unwaived. Two raw-error changes are intentional observable compatibility boundaries, not universal preservation of prior failed programs.",
+    "Complete normalized graphs are compared between port raw and escaped forms; full upstream graph equivalence was not established by this matrix.",
+    "No whole-census renewal or inventory-linkage increase, no full CPU parity claim, no raised guards/budgets or new semantic exception.",
+    "Existing nat_first, compact lowering, Base coordinates, F32.read, host/foreign/Bun/oracle/resource/source-hole, supplementary lint, external invoke audit and blocked Library delivery gaps remain open.",
+    "Pattern scanning detects listed secret/private-root forms only; it cannot prove absence of every possible encoding.",
+    "Reviewer performed no tests/builds/runtime execution, network/publication or tracked edits."
+  ],
+  "delivery_preconditions": [
+    "Parent must verify the final docs/evidence checkpoint retains the identical tested production/test tree and contains only reviewed outgoing content.",
+    "Use existing authorization and fresh remote/protection/expected-SHA checks for any feature publication or non-force main fast-forward; reviewer has not performed those actions.",
+    "Supplement the verified archive with latest final drafts, this review and final checkpoint/publication records."
+  ]
+}
