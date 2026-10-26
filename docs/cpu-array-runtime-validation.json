@@ -1,0 +1,76 @@
+{
+  "source": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+  "baseline": "effae0d1a422590df2532345d71c3c496259db27",
+  "matrix": {
+    "observations": 198,
+    "cases": 12,
+    "repeat_pairs": 48,
+    "timeouts": 0,
+    "positive_executions": 80,
+    "checker_negative_observations": 27,
+    "runtime_guard_refusals": 10,
+    "unwaived_port_C_guard_differences": 2,
+    "whole_census_renewed": false,
+    "rejection_subset_renewed": false,
+    "production_changes": false,
+    "tested_source": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+    "exact_cross_profile_stream_observations": 180,
+    "identical_cross_profile_port_generated_artifacts": 18
+  },
+  "matrix_raw_sha256": "38d1525319470335e477312a20a93728d7ad143d4b24e89f8e7e24ec178ef660",
+  "all_features_matrix_raw_sha256": "e88404e0fd58dd1bddab72bc931dbff010a7a6e7fa52f1dc6431d9e2b91b2077",
+  "gate": {
+    "source_commit": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null,
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 13046169600,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1042.7913910320494,
+    "minimum_free": 13038813184,
+    "minimum_tmp_free": 1448009728,
+    "sample_count": 523
+  },
+  "totals": {
+    "passed": 1357,
+    "failed": 0,
+    "ignored": 49
+  },
+  "gate_log_sha256": "f15a0e19719f60e18eaa0cba47b01bc5163c05260688abe745472ab8fc3cce28",
+  "identity": {
+    "source": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+    "clean": true,
+    "binary_sha256": "6c2cb2106858de80549d37f1587ed3cbbf6abdb0c76387a9a006628a88ab1086",
+    "all_features_matrix_binary_sha256": "1ad776ce0fc45b5c20c7b1855df5a202fbe19debd370f2426a17c79077ca618c",
+    "profile_distinction": "Standard gate tests use extended_observability without tracy; preceding matrix uses all-features. Both bind to the same clean source; post-gate matrix separately qualifies the test-profile binary.",
+    "references": {
+      "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158"
+    },
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "production_tree_unchanged_from": "effae0d1a422590df2532345d71c3c496259db27"
+  },
+  "source_review_sha256": "74d009796232b62300ee721bab5c88655501a8967939b970c873b15c4bed98f8",
+  "matrix_review_sha256": "c4bb804890398542ca096a58b927c308a19e4c362ff846098ed460bf0674ca68"
+}

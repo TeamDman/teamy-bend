@@ -1,0 +1,24 @@
+{
+  "source": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+  "linkage": {
+    "prior_linked": 516,
+    "linked": 520,
+    "unlinked": 782,
+    "unlinked_categories": {
+      "checker_rejection": 256,
+      "interpretation_and_compiled_candidates": 513,
+      "checking_without_main": 1,
+      "interpretation_only": 12
+    },
+    "meaning": "Receipt linkage only; includes failed/blocked cells and is not completed runtime or whole CPU parity."
+  },
+  "whole_census_renewed": false,
+  "rejection_subset_renewed": false,
+  "historical_inventory": "cpu-incomplete-character-gap-inventory.json",
+  "remaining_argument_recovery_barrier": "Unchanged; no safe reuse design adopted.",
+  "next_family": [
+    "reg/array_borrow_generic.bend",
+    "reg/array_borrow_generic_sum.bend"
+  ],
+  "next_family_status": "Read-only source inspection; executable qualification still unrun."
+}

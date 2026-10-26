@@ -2958,3 +2958,19 @@ proof-mode preemptions, resource refusals, missing hosts and unqualified runtime
 Next substantive batch is typed array fill/fold and polymorphic elements, with
 fresh baseline native success but generated/runtime-neighbor qualification pending.
 All prior semantic, resource, oracle, cancellation and external API limits remain.
+
+
+## Typed array execution checkpoint (d1ba0e5)
+
+The unchanged array_fill_fold, array_poly_elem, array_keep_cow and array_copy_pair
+originals now match all five executable lanes. Four new boundary/ownership
+controls also match; three checker negatives reject exactly. The depth32 port-C
+resource diagnostic remains unwaived. Final matrix: 198 observations / 48 repeat
+pairs / 0 timeouts; standard gate: 1357 passed / 0 failed / 49 ignored. No production
+change, full census or rejection-subset renewal occurred. Historical 109 acceptance
+and 31 rejection disagreements retain their original source identities. Linked
+receipts: 520/1302, not completed parity. Argument recovery remains
+blocked by its existing lowering barrier. Next substantive original family is
+array_borrow_generic/array_borrow_generic_sum, unrun here. See
+[typed array runtime report](cpu-array-runtime.md) for exact profiles, commands,
+counts, limits and preservation.
