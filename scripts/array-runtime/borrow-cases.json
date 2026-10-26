@@ -1,0 +1,62 @@
+[
+  {
+    "case": "reg/array_borrow_generic.bend",
+    "path": "tests/fixtures/cpu-array-borrow/original/array_borrow_generic.bend",
+    "kind": "positive",
+    "stdout": "120\n",
+    "upstream_path": "tests/reg/array_borrow_generic.bend",
+    "source_sha256": "8795ab8145b79524cc5a9d72a76a44caf11758327e4394b1275da1918e945856"
+  },
+  {
+    "case": "reg/array_borrow_generic_sum.bend",
+    "path": "tests/fixtures/cpu-array-borrow/original/array_borrow_generic_sum.bend",
+    "kind": "positive",
+    "stdout": "2260\n",
+    "upstream_path": "tests/reg/array_borrow_generic_sum.bend",
+    "source_sha256": "6fef96cd65b390fb4f660a921b6a1d4d081c37eee2ad47dcffbb6c1324ca7c77"
+  },
+  {
+    "case": "generic-aliases",
+    "path": "tests/fixtures/cpu-array-borrow/controls/generic-aliases.bend",
+    "kind": "positive",
+    "stdout": "L:5:[10, 20]\nL:5:[10, 20]\nR:7:[40, 50]\nL:5:[10, 20]\nR:9:[3, 4]\nR:9:[3, 4]\nL:11:[6]\nR:9:[3, 4]\nL:old:[1, 2]\nL:old:[1, 2]\nR:new:[8]\nL:old:[1, 2]\nR:keep:[4, 5]\nR:keep:[4, 5]\nL:swap:[9, 10]\nR:keep:[4, 5]\n",
+    "source_sha256": "c497bec52908cf0b817db2d1835bd1e5280cd12b9d086d999a851ae4021362c6"
+  },
+  {
+    "case": "sum-second",
+    "path": "tests/fixtures/cpu-array-borrow/controls/sum-second.bend",
+    "kind": "positive",
+    "stdout": "1440\n",
+    "source_sha256": "1dd66ab052d9db526e4d1caf35ba94515106757f6d36b57943d0ce1c8940a21d"
+  },
+  {
+    "case": "reuse-read",
+    "path": "tests/fixtures/cpu-array-borrow/negative/reuse-read.bend",
+    "kind": "negative",
+    "stderr": "Error:\n- expected : read\n- observed : read (consumed more than once)\nContext:\n- A : Data\n- a : Array<Entry<A>>\nLocation: duplicate\n5 | def duplicate(-A: Data, r: Array<Entry<A>> & Entry<A>) -> Entry<A> & Entry<A>:\n6>|   (a, read) = r\n7 |   (read, read)\n",
+    "source_sha256": "29e1620fe5d138f42c9007de26b55155ded9d056303f9376f7f08f04c331439f"
+  },
+  {
+    "case": "affine-swap",
+    "path": "tests/fixtures/cpu-array-runtime/controls/affine-swap.bend",
+    "kind": "positive",
+    "stdout": "7\n9\n",
+    "source_sha256": "c84bfa127c054300fd82a23d671e45bd393d1d8354149f1cfabf1985d4ee85d3"
+  },
+  {
+    "case": "nondata-get",
+    "path": "tests/fixtures/cpu-array-runtime/negative/nondata-get.bend",
+    "kind": "negative",
+    "source_sha256": "2547625fe507ea40f60395360d257ad4a2315fc680956781005bb7f152f02710",
+    "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: main\n5 | def main() -> Array<Cell> & Cell:\n6>|   Array.get(Cell, ALeaf{Cell{u => 7}}, 0)\n7 | \n"
+  },
+  {
+    "case": "array-depth-guard",
+    "path": "tests/fixtures/cpu-runtime-negatives/array_depth_bound.bend",
+    "kind": "runtime-negative",
+    "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
+    "stderr": "bend: an array past the deepest block class 31\n",
+    "port_c_residual_stderr": "teamy-bend executable C: array budget exhausted\n",
+    "upstream_path": "tests/io/array_depth_bound.bend"
+  }
+]

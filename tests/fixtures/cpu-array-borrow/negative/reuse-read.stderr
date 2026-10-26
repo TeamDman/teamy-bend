@@ -1,0 +1,10 @@
+Error:
+- expected : read
+- observed : read (consumed more than once)
+Context:
+- A : Data
+- a : Array<Entry<A>>
+Location: duplicate
+5 | def duplicate(-A: Data, r: Array<Entry<A>> & Entry<A>) -> Entry<A> & Entry<A>:
+6>|   (a, read) = r
+7 |   (read, read)
