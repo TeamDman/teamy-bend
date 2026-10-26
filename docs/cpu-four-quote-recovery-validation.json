@@ -1,0 +1,92 @@
+{
+  "tested_source": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+  "baseline_checkpoint": "02680fd234b041a3935b385e862fa34d300c6fa8",
+  "baseline_binary_source": "b383255b9b584408cb61927e7cd4b34567d78f99",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "gate": {
+    "source_commit": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null,
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 13057667072,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1061.4649771190016,
+    "minimum_free": 13057634304,
+    "minimum_tmp_free": 1608790016,
+    "sample_count": 532
+  },
+  "totals": {
+    "passed": 1350,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 197
+  },
+  "gate_log_sha256": "234f4c6925b5a65a9addb5569d4fa9f2abcc2da0b959287900450569bb878819",
+  "matrix": {
+    "original_before": {
+      "exact": 21,
+      "different": 1
+    },
+    "original_after": {
+      "exact": 22,
+      "different": 0
+    },
+    "preceding_grammar_before": {
+      "exact": 12,
+      "different": 0
+    },
+    "preceding_grammar_after": {
+      "exact": 12,
+      "different": 0
+    },
+    "adjacent_before": {
+      "exact": 3,
+      "different": 5
+    },
+    "adjacent_after": {
+      "exact": 5,
+      "different": 3
+    },
+    "observations": 712,
+    "repeat_pairs": 114,
+    "timeouts": 0,
+    "raw_api_equal": 94,
+    "negative_raw_api_equal": 84,
+    "runtime_executions": 40,
+    "corresponding_comparisons": 20,
+    "baseline_identical_artifacts": 10
+  },
+  "identity": {
+    "source": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+    "clean": true,
+    "binary_matches_matrix": true,
+    "post_gate_binary_sha256": "9960c7338e05950ada77af88c8ce9e645e68a7263af3b4ad10f4cff96b4bb9fd",
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+  },
+  "source_review_sha256": "48832b0ce94e1a2f32bd0c25104cd4609eaaf50ce8771969e30b44293357b394",
+  "matrix_review_sha256": "cc7b028b938e90d8772dfe7681153e2d80273bc4ff0080976c91c93a5b23f9ec",
+  "whole_census_rerun": false,
+  "earlier_overlap_cohorts_renewed": false,
+  "publication": "Locally committed source; final evidence review precedes feature preservation and authorized non-force main update. Remote identities recorded separately."
+}

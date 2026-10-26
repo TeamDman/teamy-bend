@@ -1,0 +1,148 @@
+{
+  "raw_review_sha256": "9e87526b13c13ae94526ac3a0120ef5ab0daf9861048b7e75a93595f3b610274",
+  "review": {
+    "reviewer": "independent reviewer /root/review_lowercase_resume",
+    "timestamp_utc": "2026-10-26T18:38:35.297394+00:00",
+    "approved": true,
+    "scope": "Final independent source, completed validation, public artifacts and local preservation review. Suitable for a docs-only checkpoint and the standing authorized normal non-force publication workflow after parent verifies final tree and current remote state. No reviewer remote action or new authorization is implied.",
+    "tested_source": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+    "baseline_checkpoint": "02680fd234b041a3935b385e862fa34d300c6fa8",
+    "source_tree_clean": true,
+    "all26_source_review_file_hashes_unchanged": true,
+    "deliverables": {
+      "acceptance-append.md": {
+        "bytes": 766,
+        "sha256": "8517cebbf5f6848072024002ba7e761d6268e28730d01ae6e5e205f22065c59c"
+      },
+      "cpu-four-quote-recovery-results.json.gz": {
+        "bytes": 75538,
+        "sha256": "1b7a375f8179647c908d7779e56a18e887b1543c82192fa5493b99cfb9e40989"
+      },
+      "cpu-four-quote-recovery-validation.json": {
+        "bytes": 2812,
+        "sha256": "c6861a73040f5f1974a0d44113bd62eb65297ba710b2126d47e8e42e6ee5fc15"
+      },
+      "cpu-four-quote-recovery.md": {
+        "bytes": 7991,
+        "sha256": "9268e1cfcdf83b950fb2dd39e6507af4e8b9780385bf2bc8e087156abf275f70"
+      }
+    },
+    "receipt_sha256": {
+      "full-gate.json": "5c5a526c0479e9cfd6b92279571b2a47a0e634c05111fdfaedf117564b1e1c01",
+      "full-gate.log": "234f4c6925b5a65a9addb5569d4fa9f2abcc2da0b959287900450569bb878819",
+      "gate-identity.json": "1334b6432c40a6b1dc2a88604e3ae7eec98b65fe0d22051b923f2c15a366727f",
+      "matrix-results.json": "7a23b123dc40baef0d66cd37cbec3d7175a4f80656866dc1c674ed22a2309702",
+      "matrix-review.json": "cc7b028b938e90d8772dfe7681153e2d80273bc4ff0080976c91c93a5b23f9ec",
+      "source-review.json": "48832b0ce94e1a2f32bd0c25104cd4609eaaf50ce8771969e30b44293357b394",
+      "snapshot.json": "84bb0fee4ccf2d000c207cdad492c1f81ca8b690c07a9058213765bda67bcba6",
+      "prepare-deliverables.py": "372a6440e889a141cea1db579c26121cee69939bf6d4b7c915b2eb8207f7e6c6",
+      "outgoing-scan.json": "4ea3232cc9fe65e24e9a81b6bf18693742fd470b755cfb27707a8da111638ae1",
+      "evidence-backup.json": "739f56d2abbfdca3a8a56c351157f6364d3f7e3cf3a847a1a9487cf48d99d625",
+      "source-backup.json": "47cbd58fb0f3c1ff8614a94a32a8754b72aca646602d9479b92a6d91a594b553",
+      "toolchain-versions.json": "65fb1fe02e964cd037d809d1895f1f8da118f08e3b3fb0e95aafd32052fe5c3c"
+    },
+    "gate": {
+      "passed": 1350,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 197,
+      "seconds": 1061.4649771190016,
+      "exit": 0,
+      "stop_reason": null,
+      "format_standard_strict_clippy_build_provider_passed": true,
+      "actual_tcp_udp_provider_controls": "70 ordered registrations, truncation, raw BigInt handles, view offsets and bounds",
+      "minimum_workspace_bytes": 13057634304,
+      "minimum_temporary_bytes": 1608790016,
+      "frozen_floors_preserved": true,
+      "all_logged_test_groups_successful": true
+    },
+    "identity": {
+      "source": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+      "clean": true,
+      "binary_matches_matrix": true,
+      "post_gate_binary_sha256": "9960c7338e05950ada77af88c8ce9e645e68a7263af3b4ad10f4cff96b4bb9fd",
+      "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+    },
+    "matrix": {
+      "observations": 712,
+      "baseline_observations": 188,
+      "repeat_pairs": 114,
+      "singletons": 484,
+      "cases": 47,
+      "timeouts": 0,
+      "negative_cases": 42,
+      "original_baseline": [
+        21,
+        1
+      ],
+      "original_current": [
+        22,
+        0
+      ],
+      "preceding_grammar_baseline": [
+        12,
+        0
+      ],
+      "preceding_grammar_current": [
+        12,
+        0
+      ],
+      "adjacent_baseline": [
+        3,
+        5
+      ],
+      "adjacent_current": [
+        5,
+        3
+      ],
+      "diagnostic_closures": 3,
+      "unchanged_negative_raw_api_rows": 84,
+      "unchanged_accepted_raw_api_rows": 10,
+      "C_JS_executions": 40,
+      "corresponding_backend_comparisons": 20,
+      "baseline_identical_port_artifacts": 10,
+      "verified_artifact_hashes": 30,
+      "baseline_native_pure_matches": 4,
+      "baseline_native_IO_matches": 1,
+      "strict_IO_proof_exclusion_retained": true,
+      "upstream_pure_normalization_claim": "Successful exit only for4 rows; no full upstream value-graph comparison."
+    },
+    "public_content_review": {
+      "source_files": 26,
+      "deliverables": 4,
+      "compact_receipts": 19,
+      "compact_runners": 6,
+      "decoded_streams": 1912,
+      "raw_stream_hashes_verified": true,
+      "all_public_receipt_fields_match_raw_after_declared_root_substitution_only": true,
+      "independent_private_path_or_credential_pattern_findings": [],
+      "largest_deliverable_bytes": 75538,
+      "API_caveat": "Raw loader Err fields remain unchanged; newly formatted invoke failures use the existing Ok(exit_code=1) boundary. External consumers remain unaudited."
+    },
+    "preservation": {
+      "archive_relative_name": "four-quotes-02155ff/validated-evidence.tar.gz",
+      "archive_sha256": "e52f0ef8638b62a968a090d9e7719199796804321ce1310478be75e078027893",
+      "archive_bytes": 837988,
+      "verified_regular_members": 248,
+      "verified_logical_member_bytes": 3746246,
+      "all_members_match_manifest_and_retained_files": true,
+      "retained_binary_files": 12,
+      "retained_binary_hashes_verified": true,
+      "source_bundle_sha256": "f2ab74d5d85e3782a7727734ade5eb877e32524b6c94bc5c5c7a29e122964a35",
+      "source_bundle_bytes": 11191,
+      "source_bundle_verified": true,
+      "historical_failed_compilation_and_wrong_golden_path_receipts_preserved": true,
+      "not_in_this_pre_review_archive": "This newly created final review and subsequent docs/remote records require the planned supplemental preservation."
+    },
+    "findings": [],
+    "remaining_limits": [
+      "Argument/list incomplete-literal metadata and depth-refusal diagnostic cells remain different and unwaived.",
+      "Full CPU parity is not established; whole census and additional historical overlap cohorts were not renewed.",
+      "Previously recorded demand-order,compact-lowering,Base-coordinate,F32,host/oracle/foreign/Bun,source-hole/resource and supplementary lint limitations remain open.",
+      "Current-source tests do not establish a new cancellation capability.",
+      "Raw archive and binary snapshots remain local, while reviewed compact evidence is suitable for Git.",
+      "Remote destination/protection/expected-SHA verification and publication are parent-owned steps not performed by this reviewer."
+    ],
+    "reviewer_actions": "Read-only code,receipt,hash,archive and local Git verification; no tests,builds,program binaries or network/remote actions. Only this exclusive review receipt was written."
+  }
+}

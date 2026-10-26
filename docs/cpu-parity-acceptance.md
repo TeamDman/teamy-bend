@@ -2928,3 +2928,15 @@ The original cohort is 21 exact/1 different; twelve adjacent controls are exact.
 `four-quotes` remains unqualified pending safe isolated diagnostic recovery.
 Historical census/linkage and unwaived semantic, oracle, resource and external API
 gaps remain separate. No second parser pass, new exception or raised budget.
+
+## Bounded four-quote diagnostic recovery
+
+Tested `02155ff3c30c6bcab683abb1fd8d0e73422acb1d` closes the remaining original four-quotes diagnostic and two
+adjacent contexts through isolated, capped failure-only recovery. Raw errors,
+acceptance, runtime behavior and existing language guards remain unchanged.
+[Report](cpu-four-quote-recovery.md). Full gate **1350 passed / 0 failed / 49 ignored**;
+**712 matrix observations / 114 repeat pairs / 0 timeouts**, 40 C/JS executions
+and 84 unchanged negative raw API results. Original cohort 22/0, preceding
+grammar cohort 12/0; new context cohort 5/3. Argument/list incomplete-atom recovery
+and depth refusal remain different, unwaived. Whole census was not renewed; all
+previous semantic/oracle/API limits remain open.
