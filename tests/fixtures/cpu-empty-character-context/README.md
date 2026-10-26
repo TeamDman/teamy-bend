@@ -16,3 +16,7 @@ Eighteen rejection diagnostics match upstream; four remain different: earlier
 grammar, empty-followed-escape, four-quotes and raw-before-grammar. The baseline
 had two exact diagnostics, so this closes 16 differences without an acceptance
 change. Strict IO proof exclusion remains distinct from executable acceptance.
+
+The CRLF fixture and expected stream are marked `-text` locally so Git preserves
+those exact bytes on checkout. Trailing trivia in the negative fixtures and
+expected diagnostics is intentional comparison data.
