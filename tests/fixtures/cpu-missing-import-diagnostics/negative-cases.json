@@ -1,0 +1,12 @@
+[
+  "import/cross_file_io.bend",
+  "import/cross_file_proof.bend",
+  "import/cycle_terminates.bend",
+  "import/diamond_dedup.bend",
+  "import/path_canonical.bend",
+  "negative/first-sibling.bend",
+  "negative/before-base.bend",
+  "negative/crlf.bend",
+  "negative/eof.bend",
+  "negative/nested.bend"
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "case": "positive/simple.bend",
+    "expected": "9",
+    "io": false
+  },
+  {
+    "case": "positive/diamond.bend",
+    "expected": "18",
+    "io": false
+  }
+]

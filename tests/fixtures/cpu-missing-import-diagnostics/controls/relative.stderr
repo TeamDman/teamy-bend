@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: @FIXTURE_ROOT@/controls/absent.bend
+Location:
+1 | # SPDX-License-Identifier: MPL-2.0
+2>| import absent.bend as D
+3 | 

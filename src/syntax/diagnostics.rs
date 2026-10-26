@@ -6,6 +6,7 @@ use crate::kernel::TermRef;
 use crate::kernel::origins::MatchSite;
 use crate::kernel::origins::TermOrigins;
 use std::collections::BTreeMap;
+use std::path::Path;
 use std::rc::Rc;
 use std::rc::Weak;
 
@@ -38,6 +39,13 @@ pub(crate) struct LoadDiagnostic {
 pub(crate) enum LoadDiagnosticContent {
     Message(String),
     ExpectedObserved { expected: String, observed: String },
+}
+
+pub(super) struct ImportSite<'a> {
+    pub(super) source: &'a str,
+    pub(super) line: usize,
+    pub(super) from: &'a Path,
+    pub(super) relative: &'a str,
 }
 
 struct TermOrigin {
@@ -372,27 +380,9 @@ impl DiagnosticOrigins {
         // Do not register it: successful loading later records the source with
         // consumed headers blanked, and that source index is first-write-wins.
         // Keep formatting out of the recursive loader's stack frame.
-        let Some(authored) = source.split('\n').nth(line.saturating_sub(1)) else {
+        let Some(authored) = diagnostic_import_line(source, line) else {
             return;
         };
-        if authored
-            .chars()
-            .any(|c| c == '\u{feff}' || c.is_whitespace() && !c.is_ascii_whitespace())
-            || authored
-                .split_whitespace()
-                .nth(1)
-                .is_some_and(|token| token.contains('#'))
-            || authored.find('#').is_some_and(|at| {
-                authored[..at]
-                    .chars()
-                    .next_back()
-                    .is_some_and(|c| !c.is_whitespace())
-            })
-        {
-            // Embedded '#' tokenization differs from the pinned loader's
-            // regex; retain the existing error rather than invent a match.
-            return;
-        }
         let (expected, observed) = if let Some(path) = path {
             if path.ends_with(".bend")
                 || path.contains('\\')
@@ -419,6 +409,34 @@ impl DiagnosticOrigins {
         });
     }
 
+    #[inline(never)]
+    pub(super) fn missing_import(&mut self, site: &ImportSite<'_>) {
+        let Some(authored) = diagnostic_import_line(site.source, site.line) else {
+            return;
+        };
+        if authored.split_whitespace().nth(1) != Some(site.relative)
+            || !simple_import_path(site.relative)
+        {
+            return;
+        }
+        // Pinned book_load normalizes only the import token, then concatenates
+        // the authored parent's directory. These simple spellings are unchanged
+        // by that normalization. Ambiguous spellings keep the original error.
+        let target = if site.relative.starts_with('/') {
+            site.relative.to_owned()
+        } else {
+            let Some(from) = site.from.to_str().filter(|from| simple_import_path(from)) else {
+                return;
+            };
+            let prefix = from.rfind('/').map_or("", |at| &from[..=at]);
+            format!("{prefix}{}", site.relative)
+        };
+        self.load_failure = source_excerpt(site.source, site.line).map(|excerpt| LoadDiagnostic {
+            content: LoadDiagnosticContent::Message(format!("no such file: {target}")),
+            excerpt,
+        });
+    }
+
     pub(super) fn load_failure(&mut self, error: super::ParseError) -> DiagnosticLoadError {
         DiagnosticLoadError {
             error,
@@ -430,6 +448,39 @@ impl DiagnosticOrigins {
         let origin = self.nodes.get(&identity)?;
         source_excerpt(&origin.source, origin.line)
     }
+}
+
+fn diagnostic_import_line(source: &str, line: usize) -> Option<&str> {
+    let authored = source.split('\n').nth(line.checked_sub(1)?)?;
+    if authored
+        .chars()
+        .any(|c| c == '\u{feff}' || c.is_whitespace() && !c.is_ascii_whitespace())
+        || authored
+            .split_whitespace()
+            .nth(1)
+            .is_some_and(|token| token.contains('#'))
+        || authored.find('#').is_some_and(|at| {
+            authored[..at]
+                .chars()
+                .next_back()
+                .is_some_and(|c| !c.is_whitespace())
+        })
+    {
+        // These whitespace/comment tokens differ between Rust and the pinned
+        // loader's regex. Preserve the existing error rather than guess.
+        None
+    } else {
+        Some(authored)
+    }
+}
+
+fn simple_import_path(path: &str) -> bool {
+    !path.contains(['\\', ':'])
+        && path
+            .strip_prefix('/')
+            .unwrap_or(path)
+            .split('/')
+            .all(|part| !part.is_empty() && !matches!(part, "." | ".."))
 }
 
 fn source_excerpt(source: &str, at: usize) -> Option<String> {
@@ -594,7 +645,7 @@ mod tests {
     }
 
     #[test]
-    fn import_header_metadata_does_not_replace_earlier_filesystem_errors() {
+    fn import_header_metadata_preserves_earlier_filesystem_priority() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/cpu-import-header-diagnostics/controls/earlier-file.bend");
         let plain = crate::syntax::load(&path).unwrap_err();
@@ -606,7 +657,23 @@ mod tests {
         ] {
             assert_eq!(plain.to_string(), tracked.error.to_string());
             assert!(tracked.error.source.ends_with("absent.bend"));
-            assert!(tracked.diagnostic.is_none());
+            if super::simple_import_path(path.to_str().unwrap()) {
+                let report = tracked.diagnostic.unwrap();
+                let super::LoadDiagnosticContent::Message(message) = report.content else {
+                    panic!("expected missing-file provenance")
+                };
+                assert_eq!(
+                    message,
+                    format!(
+                        "no such file: {}",
+                        path.parent().unwrap().join("absent.bend").display()
+                    )
+                );
+                assert!(report.excerpt.contains("2>| import absent.bend as D"));
+                assert!(!report.excerpt.contains("3>| import Wat"));
+            } else {
+                assert!(tracked.diagnostic.is_none());
+            }
         }
     }
 
@@ -1294,3 +1361,7 @@ mod tests {
         assert!(tracked.diagnostic.unwrap().excerpt.contains("14>|   q = p"));
     }
 }
+
+#[cfg(test)]
+#[path = "missing_import_tests.rs"]
+mod missing_import_tests;

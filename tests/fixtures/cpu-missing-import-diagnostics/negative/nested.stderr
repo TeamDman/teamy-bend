@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: /__teamy_bend_missing_import__/nested.bend
+Location:
+3 | import Base
+4>| import /__teamy_bend_missing_import__/nested.bend as Missing
+5 | 

@@ -357,6 +357,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-missing-import-diagnostics/import/cross_file_io.bend",
+                "5>| import /shared/io_tree.bend as T",
+            ),
+            (
+                "cpu-missing-import-diagnostics/negative/nested.bend",
+                "4>| import /__teamy_bend_missing_import__/nested.bend as Missing",
+            ),
+            (
                 "cpu-import-header-diagnostics/import/suffix_refused.bend",
                 "8>| import /lib/words.txt as W",
             ),

@@ -1,0 +1,616 @@
+{
+  "source": "ec91a1634d410781623961607b9cf85aab2e5f87",
+  "checkpoint": "300aefe146862d3043cd260cdf20504b75c9e9c1",
+  "rows": [
+    {
+      "case": "import/cross_file_io.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_io.bend",
+        "<evidence>/before-complete/0.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /shared/io_tree.bend\nLocation:\n4 | import Base\n5>| import /shared/io_tree.bend as T\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.09094909700797871,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/cross_file_io.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_io.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/shared/io_tree.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1270563380094245
+    },
+    {
+      "case": "import/cross_file_io.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_io.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06769598598475568
+    },
+    {
+      "case": "import/cross_file_io.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_io.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07231581199448556
+    },
+    {
+      "case": "import/cross_file_proof.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_proof.bend",
+        "<evidence>/before-complete/1.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /shared/proof_chain.bend\nLocation:\n4 | import Base\n5>| import /shared/proof_chain.bend as P\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.08871504801209085,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/cross_file_proof.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_proof.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/shared/proof_chain.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1258090280171018
+    },
+    {
+      "case": "import/cross_file_proof.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_proof.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06631032601580955
+    },
+    {
+      "case": "import/cross_file_proof.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cross_file_proof.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07372995300102048
+    },
+    {
+      "case": "import/cycle_terminates.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cycle_terminates.bend",
+        "<evidence>/before-complete/2.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /cycle/other_half.bend\nLocation:\n5 | import Base\n6>| import /cycle/other_half.bend as C\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.09757119399728253,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/cycle_terminates.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cycle_terminates.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/cycle/other_half.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12464268098119646
+    },
+    {
+      "case": "import/cycle_terminates.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cycle_terminates.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06489284499548376
+    },
+    {
+      "case": "import/cycle_terminates.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/cycle_terminates.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07129244800307788
+    },
+    {
+      "case": "import/diamond_dedup.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/diamond_dedup.bend",
+        "<evidence>/before-complete/3.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /diamond/top.bend\nLocation:\n5 | import Base\n6>| import /diamond/top.bend as D\n7 | \n",
+      "timed_out": false,
+      "seconds": 0.1038710720022209,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/diamond_dedup.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/diamond_dedup.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/diamond/top.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.16716157598420978
+    },
+    {
+      "case": "import/diamond_dedup.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/diamond_dedup.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06568572699325159
+    },
+    {
+      "case": "import/diamond_dedup.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/diamond_dedup.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07178106499486603
+    },
+    {
+      "case": "import/path_canonical.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/path_canonical.bend",
+        "<evidence>/before-complete/4.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /mods/canonical.bend\nLocation:\n4 | import Base\n5>| import /mods/canonical.bend as C\n6 | \n",
+      "timed_out": false,
+      "seconds": 0.09454603199264966,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "import/path_canonical.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/path_canonical.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/mods/canonical.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12703946899273433
+    },
+    {
+      "case": "import/path_canonical.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/path_canonical.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06529403498279862
+    },
+    {
+      "case": "import/path_canonical.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/import/path_canonical.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0706889730063267
+    },
+    {
+      "case": "negative/first-sibling.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/first-sibling.bend",
+        "<evidence>/before-complete/5.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /__teamy_bend_missing_import__/first.bend\nLocation:\n2 | import Base\n3>| import /__teamy_bend_missing_import__/first.bend as A\n4 | import /__teamy_bend_missing_import__/second.bend as B\n",
+      "timed_out": false,
+      "seconds": 0.09510085900546983,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/first-sibling.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/first-sibling.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/__teamy_bend_missing_import__/first.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.1296710400201846
+    },
+    {
+      "case": "negative/first-sibling.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/first-sibling.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06555323099019006
+    },
+    {
+      "case": "negative/first-sibling.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/first-sibling.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07464950697612949
+    },
+    {
+      "case": "negative/before-base.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/before-base.bend",
+        "<evidence>/before-complete/6.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /__teamy_bend_missing_import__/before.bend\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /__teamy_bend_missing_import__/before.bend as A\n3 | import Base\n",
+      "timed_out": false,
+      "seconds": 0.08059790800325572,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/before-base.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/before-base.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/__teamy_bend_missing_import__/before.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.005181518994504586
+    },
+    {
+      "case": "negative/before-base.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/before-base.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0011569130001589656
+    },
+    {
+      "case": "negative/before-base.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/before-base.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.000817818014184013
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/crlf.bend",
+        "<evidence>/before-complete/7.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /__teamy_bend_missing_import__/crlf.bend\nLocation:\n2 | import Base\r\n3>| \timport /__teamy_bend_missing_import__/crlf.bend as A # comment\r\n4 | \n",
+      "timed_out": false,
+      "seconds": 0.1039258009986952,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/__teamy_bend_missing_import__/crlf.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.14031033401261084
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/crlf.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.06783537598676048
+    },
+    {
+      "case": "negative/crlf.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/crlf.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07140759698813781
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/eof.bend",
+        "<evidence>/before-complete/8.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /__teamy_bend_missing_import__/eof.bend\nLocation:\n1 | # SPDX-License-Identifier: MPL-2.0\n2>| import /__teamy_bend_missing_import__/eof.bend as A\n",
+      "timed_out": false,
+      "seconds": 0.07272854499751702,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/__teamy_bend_missing_import__/eof.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.004455689020687714
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/eof.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0010496239992789924
+    },
+    {
+      "case": "negative/eof.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/eof.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.0007586700085084885
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "<repo>/scripts/checking-census/upstream.mjs",
+        "<reference>/bend2/bend.ts",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/nested.bend",
+        "<evidence>/before-complete/9.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- message  : no such file: /__teamy_bend_missing_import__/nested.bend\nLocation:\n3 | import Base\n4>| import /__teamy_bend_missing_import__/nested.bend as Missing\n5 | \n",
+      "timed_out": false,
+      "seconds": 0.09760152900707908,
+      "phase": {
+        "phase": "load",
+        "outcome": "language_rejection"
+      }
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "port-check",
+      "command": [
+        "<baseline-evidence>/working/teamy-bend",
+        "check",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m/__teamy_bend_missing_import__/nested.bend:1:1: No such file or directory (os error 2)\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "timed_out": false,
+      "seconds": 0.12510058598127216
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "strict-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/nested.bend"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07891878701047972
+    },
+    {
+      "case": "negative/nested.bend",
+      "lane": "executable-phase",
+      "command": [
+        "<baseline-evidence>/phase-probe",
+        "<repo>/tests/fixtures/cpu-missing-import-diagnostics/negative/nested.bend",
+        "--executable"
+      ],
+      "exit": 1,
+      "stdout": "load\n",
+      "stderr": "",
+      "timed_out": false,
+      "seconds": 0.07172112498665228
+    }
+  ]
+}

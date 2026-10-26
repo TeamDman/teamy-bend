@@ -3025,14 +3025,27 @@ impl Loader {
         clippy::too_many_lines,
         reason = "Import validation and graph updates are one ordered transaction"
     )]
-    fn file(&mut self, path: &Path, namespace: &str) -> Result<(), ParseError> {
+    fn file(
+        &mut self,
+        path: &Path,
+        namespace: &str,
+        import_site: Option<&super::diagnostics::ImportSite<'_>>,
+    ) -> Result<(), ParseError> {
         let error = |message: String| ParseError {
             source: path.display().to_string(),
             line: 1,
             column: 1,
             message,
         };
-        let real = fs::canonicalize(path).map_err(|e| error(e.to_string()))?;
+        let real = fs::canonicalize(path).map_err(|cause| {
+            if cause.kind() == std::io::ErrorKind::NotFound
+                && let Some(site) = import_site
+                && let Some(origins) = &mut self.templates.diagnostics
+            {
+                origins.missing_import(site);
+            }
+            error(cause.to_string())
+        })?;
         if self.active.len() >= 64 {
             return Err(error(
                 "import nesting exceeds the loader resource limit of 64".into(),
@@ -3122,7 +3135,16 @@ impl Loader {
                         .expect("extension checked")
                         .to_owned();
                     aliases.insert((*alias).into(), sub.clone());
-                    self.file(&at, &sub)?;
+                    self.file(
+                        &at,
+                        &sub,
+                        Some(&super::diagnostics::ImportSite {
+                            source: &source,
+                            line: line_number + 1,
+                            from: path,
+                            relative,
+                        }),
+                    )?;
                 } else {
                     if let Some(origins) = &mut self.templates.diagnostics {
                         origins.import_syntax(&source, line_number + 1, None);
@@ -3278,7 +3300,7 @@ pub(crate) fn load_with_diagnostics(
         },
         ..Loader::default()
     };
-    if let Err(error) = loader.file(path.as_ref(), "") {
+    if let Err(error) = loader.file(path.as_ref(), "", None) {
         return Err(loader
             .templates
             .diagnostics
@@ -3300,7 +3322,7 @@ pub(crate) fn load_with_diagnostics(
 /// Returns the same file, import and parse errors as [`load`].
 pub fn load_with_sources(path: impl AsRef<Path>) -> Result<(Book, Vec<PathBuf>), ParseError> {
     let mut loader = Loader::default();
-    loader.file(path.as_ref(), "")?;
+    loader.file(path.as_ref(), "", None)?;
     Ok((loader.book, loader.seen.into_keys().collect()))
 }
 
@@ -3342,7 +3364,7 @@ pub(crate) fn load_executable_with_diagnostics_and_sources(
         },
         ..Loader::default()
     };
-    if let Err(error) = loader.file(path.as_ref(), "") {
+    if let Err(error) = loader.file(path.as_ref(), "", None) {
         return Err(loader
             .templates
             .diagnostics
@@ -3379,7 +3401,7 @@ pub fn load_executable_with_sources(
         executable: true,
         ..Loader::default()
     };
-    loader.file(path.as_ref(), "")?;
+    loader.file(path.as_ref(), "", None)?;
     let source = ExecutableSource {
         book: loader.book,
         foreign: loader.foreign,

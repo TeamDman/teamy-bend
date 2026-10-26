@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: @FIXTURE_ROOT@/controls/nested/absent.bend
+Location:
+2 | # immediate child
+3>| import absent.bend as Missing
+4 | 

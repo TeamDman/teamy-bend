@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: /cycle/other_half.bend
+Location:
+5 | import Base
+6>| import /cycle/other_half.bend as C
+7 | 

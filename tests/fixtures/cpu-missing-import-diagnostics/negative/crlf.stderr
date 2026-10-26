@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: /__teamy_bend_missing_import__/crlf.bend
+Location:
+2 | import Base
+3>| 	import /__teamy_bend_missing_import__/crlf.bend as A # comment
+4 | 

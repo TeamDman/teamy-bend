@@ -1,0 +1,6 @@
+Error:
+- message  : no such file: /__teamy_bend_missing_import__/first.bend
+Location:
+2 | import Base
+3>| import /__teamy_bend_missing_import__/first.bend as A
+4 | import /__teamy_bend_missing_import__/second.bend as B
