@@ -1,0 +1,38 @@
+{
+  "reviewer": "review_sharing",
+  "approved": true,
+  "read_only": true,
+  "reviewed_utc": "2026-10-26T03:39:10.449394+00:00",
+  "tested_source": "d36956122f5b2f27ae429c440ccef3028e13af23",
+  "matrix_source": "3d809d30e94e86e7a2b7eea772045c22dbb956d0",
+  "reviewed_sha256": {
+    "cpu-c-escape-printer.md": "596773d5efd5f90b7984e8f4d6d697a6fa94e6ee28f4b796b8cc46bb98c884e8",
+    "cpu-c-escape-printer-validation.json": "5a960cc23dd99a8d15eb5755dac72865b2cf03f987f911e1ea3d3e67f8dff8e8",
+    "cpu-c-escape-printer-results.json.gz": "27de7e0e06e0cae0c4f7c7b6ce1fc5088ee7496b86f765da8defc7db18866d73",
+    "cpu-c-escape-printer-evidence.csv": "0445a792e253582be46098612588c4b8181276801486bed2be22cedabf46fb7c",
+    "acceptance-append.txt": "0f036274c3f8b473a9a2b9ac65349c98f2e210a6279c5edc90397764a5d5ebb1"
+  },
+  "archive_sha256": "7edf86d5faf0be0791e0bd414db6533e43035512a7c7d1b902b064c5ee339850",
+  "gate": {
+    "passed": 1313,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 194
+  },
+  "final_renewals": {
+    "observations": 51,
+    "native_unchanged": 17,
+    "artifacts_identical": 32,
+    "exact_emission_refusals": 2
+  },
+  "archive": {
+    "verified_members": 116,
+    "logical_bytes": 770072
+  },
+  "content_review": {
+    "decoded_base64_fields": 1548,
+    "private_root_hits": 0,
+    "credential_pattern_hits": 0
+  },
+  "findings": "No blocking findings. Source/matrix identities, canonical readbacks, coverage linkage516/1302, residuals and historical census limitations verified. Approval covers reviewed feature checkpoint; not full CPU parity or Windows execution."
+}

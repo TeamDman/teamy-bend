@@ -2739,3 +2739,30 @@ including failures; 788 remain unlinked by their existing applicability category
 Next demonstrated independent gap: C escape printer round-trip spelling.
 Prior API, scalar, resource and oracle caveats, cleanup records and lost-log
 limitation remain explicit. No desktop activity or Library retry occurred.
+
+## Executable C escape-printer checkpoint
+
+Production `3d809d30e94e86e7a2b7eea772045c22dbb956d0` corrects braced hex spelling for controls, DEL and
+non-scalar constructor values, matching the pinned C printer. Final tested source
+`d36956122f5b2f27ae429c440ccef3028e13af23` adds only test-probe Windows stream setup; no desktop execution.
+[Report](cpu-c-escape-printer.md). Final gate **1313 passed / 0 failed / 49 ignored**.
+
+The 495-observation matrix has 167 deterministic pairs. All 64 corresponding
+port C/JS observations match: 56 successes and eight retained JS non-scalar
+refusals. Eleven scalar readbacks preserve full values; three earlier C scalar
+readback failures are fixed. Final-source follow-up renews 51 outcome/artifact
+observations, separately from the production-source matrix.
+
+Four non-scalar literal readbacks, the 95-character input-depth aggregate and
+all 15 native pure constructor-text differences remain unqualified. Strict IO
+checking exclusion remains distinct from actual raw-IO execution. No new exception.
+No census rerun: 140 non-IO residuals and six oracle failures remain historical.
+Linkage is 516 / 1302, including failures; 786 unlinked:
+256 checker rejection, 517 interpreter/compiled candidates, 12 interpreter-only
+and one no-main module. These categories are not all missing runtime tests.
+
+Source and compact receipts are in Git; raw evidence is locally backed up.
+Prior cleanup records, old log-loss limitation, blocked Library upload and all
+pending semantic/API/resource/oracle decisions remain explicit. Next substantive
+gap is non-scalar C-output literal readback; its scalar policy needs investigation
+against pinned Base/lexer contracts before adopting a new interpretation.
