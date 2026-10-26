@@ -192,7 +192,7 @@
     "case": "char-second",
     "path": "cpu-lowercase-escape-grammar/controls/char-second.bend",
     "kind": "later-char",
-    "exact": false,
+    "exact": true,
     "expected": "expected/27.stderr"
   },
   {

@@ -328,3 +328,61 @@ fn lowercase_escape_diagnostics_preserve_all_compiler_refusals() {
         }
     }
 }
+
+#[test]
+fn character_quote_diagnostics_preserve_all_compiler_refusals() {
+    #[derive(facet::Facet)]
+    struct FixtureExpectation {
+        case: String,
+        path: String,
+        kind: String,
+        exact: bool,
+        expected: String,
+    }
+    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
+        "fixtures/cpu-character-quote-diagnostics/cases.json"
+    ))
+    .unwrap();
+    let fixtures = root().parent().unwrap().to_path_buf();
+    let artifacts = Artifacts::new("character-quote-diagnostic");
+    for case in cases {
+        assert!(matches!(
+            case.kind.as_str(),
+            "retained-original"
+                | "adjacent"
+                | "context"
+                | "invalid-template-probe"
+                | "invalid-import-probe"
+        ));
+        let path = fixtures.join(&case.path);
+        load(&path).expect_err("all malformed controls remain load refusals");
+        let expected = std::fs::read(
+            fixtures
+                .join("cpu-character-quote-diagnostics")
+                .join(&case.expected),
+        )
+        .unwrap();
+        for operation in ["check", "eval", "run", "c", "javascript", "native"] {
+            let output_path = artifacts.0.join("unwritten");
+            let mut command = Command::new(env!("CARGO_BIN_EXE_teamy-bend"));
+            if matches!(operation, "check" | "eval" | "run") {
+                command.arg(operation).arg(&path);
+            } else {
+                command
+                    .arg("compile")
+                    .arg(&path)
+                    .args(["--executable", "--target", operation, "--output"])
+                    .arg(&output_path);
+            }
+            let output = executable_c_compiler::bounded(&mut command, Duration::from_secs(20));
+            assert_eq!(output.status.code(), Some(1), "{}: {operation}", case.case);
+            assert!(output.stdout.is_empty());
+            if case.exact {
+                assert_eq!(output.stderr, expected, "{}: {operation}", case.case);
+            } else {
+                assert!(!output.stderr.is_empty());
+            }
+            assert!(!output_path.exists());
+        }
+    }
+}

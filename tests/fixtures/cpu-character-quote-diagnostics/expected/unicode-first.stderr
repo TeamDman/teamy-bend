@@ -1,0 +1,7 @@
+Error:
+- expected : a closing '
+- observed : '\'
+Location:
+2 | 
+3>| def main() -> Char: '\u{41}\u{+41}'
+4 | 

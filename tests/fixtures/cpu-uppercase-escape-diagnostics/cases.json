@@ -206,21 +206,21 @@
     "case": "char-second-ascii",
     "path": "cpu-uppercase-escape-diagnostics/controls/char-second-ascii.bend",
     "kind": "unresolved",
-    "exact": false,
+    "exact": true,
     "expected": "expected/29.stderr"
   },
   {
     "case": "char-second-escaped",
     "path": "cpu-uppercase-escape-diagnostics/controls/char-second-escaped.bend",
     "kind": "unresolved",
-    "exact": false,
+    "exact": true,
     "expected": "expected/30.stderr"
   },
   {
     "case": "char-second-nonscalar",
     "path": "cpu-uppercase-escape-diagnostics/controls/char-second-nonscalar.bend",
     "kind": "unresolved",
-    "exact": false,
+    "exact": true,
     "expected": "expected/31.stderr"
   },
   {
@@ -262,7 +262,7 @@
     "case": "char-second-q",
     "path": "cpu-uppercase-escape-diagnostics/controls/char-second-q.bend",
     "kind": "unresolved",
-    "exact": false,
+    "exact": true,
     "expected": "expected/37.stderr"
   },
   {

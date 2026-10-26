@@ -1,0 +1,312 @@
+[
+  {
+    "case": "uppercase-escape-diagnostics-char-second-ascii",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-ascii.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-uppercase-escape-diagnostics/expected/29.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\U"
+  },
+  {
+    "case": "uppercase-escape-diagnostics-char-second-escaped",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-escaped.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-uppercase-escape-diagnostics/expected/30.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\U"
+  },
+  {
+    "case": "uppercase-escape-diagnostics-char-second-nonscalar",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-nonscalar.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-uppercase-escape-diagnostics/expected/31.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\U"
+  },
+  {
+    "case": "uppercase-escape-diagnostics-char-second-q",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-q.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-uppercase-escape-diagnostics/expected/37.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "lowercase-escape-grammar-char-second",
+    "path": "cpu-lowercase-escape-grammar/controls/char-second.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-lowercase-escape-grammar/expected/27.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\u"
+  },
+  {
+    "case": "lowercase-escape-diagnostics-char-second",
+    "path": "cpu-lowercase-escape-diagnostics/controls/char-second.bend",
+    "kind": "retained-original",
+    "exact": true,
+    "expected": "../cpu-lowercase-escape-diagnostics/expected/15.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "plain-second",
+    "path": "cpu-character-quote-diagnostics/controls/plain-second.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/plain-second.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "space-second",
+    "path": "cpu-character-quote-diagnostics/controls/space-second.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/space-second.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "hash-second",
+    "path": "cpu-character-quote-diagnostics/controls/hash-second.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/hash-second.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "bmp-first",
+    "path": "cpu-character-quote-diagnostics/controls/bmp-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/bmp-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "astral-first",
+    "path": "cpu-character-quote-diagnostics/controls/astral-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/astral-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "bmp-second",
+    "path": "cpu-character-quote-diagnostics/controls/bmp-second.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/bmp-second.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "astral-second",
+    "path": "cpu-character-quote-diagnostics/controls/astral-second.bend",
+    "kind": "adjacent",
+    "exact": false,
+    "expected": "expected/astral-second.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "escaped-quote",
+    "path": "cpu-character-quote-diagnostics/controls/escaped-quote.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/escaped-quote.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "escaped-slash",
+    "path": "cpu-character-quote-diagnostics/controls/escaped-slash.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/escaped-slash.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "unicode-first",
+    "path": "cpu-character-quote-diagnostics/controls/unicode-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/unicode-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\u"
+  },
+  {
+    "case": "max-first",
+    "path": "cpu-character-quote-diagnostics/controls/max-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/max-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "scalar-invalid-first",
+    "path": "cpu-character-quote-diagnostics/controls/scalar-invalid-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/scalar-invalid-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\u"
+  },
+  {
+    "case": "malformed-first",
+    "path": "cpu-character-quote-diagnostics/controls/malformed-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/malformed-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "unknown-first",
+    "path": "cpu-character-quote-diagnostics/controls/unknown-first.bend",
+    "kind": "adjacent",
+    "exact": true,
+    "expected": "expected/unknown-first.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "empty",
+    "path": "cpu-character-quote-diagnostics/controls/empty.bend",
+    "kind": "adjacent",
+    "exact": false,
+    "expected": "expected/empty.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character"
+  },
+  {
+    "case": "unterminated",
+    "path": "cpu-character-quote-diagnostics/controls/unterminated.bend",
+    "kind": "adjacent",
+    "exact": false,
+    "expected": "expected/unterminated.stderr",
+    "line": 3,
+    "column": 21,
+    "message": "a string or character literal cannot cross a line"
+  },
+  {
+    "case": "cross-line",
+    "path": "cpu-character-quote-diagnostics/controls/cross-line.bend",
+    "kind": "adjacent",
+    "exact": false,
+    "expected": "expected/cross-line.stderr",
+    "line": 3,
+    "column": 21,
+    "message": "a string or character literal cannot cross a line"
+  },
+  {
+    "case": "char-length-guard",
+    "path": "cpu-character-quote-diagnostics/controls/char-length-guard.bend",
+    "kind": "adjacent",
+    "exact": false,
+    "expected": "expected/char-length-guard.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "string literal exceeds the parser resource limit of 128 characters"
+  },
+  {
+    "case": "argument",
+    "path": "cpu-character-quote-diagnostics/controls/argument.bend",
+    "kind": "context",
+    "exact": true,
+    "expected": "expected/argument.stderr",
+    "line": 4,
+    "column": 31,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "earlier-grammar",
+    "path": "cpu-character-quote-diagnostics/controls/earlier-grammar.bend",
+    "kind": "context",
+    "exact": false,
+    "expected": "expected/earlier-grammar.stderr",
+    "line": 3,
+    "column": 11,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "pattern",
+    "path": "cpu-character-quote-diagnostics/controls/pattern.bend",
+    "kind": "context",
+    "exact": true,
+    "expected": "expected/pattern.stderr",
+    "line": 5,
+    "column": 15,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "template",
+    "path": "cpu-character-quote-diagnostics/controls/template.bend",
+    "kind": "invalid-template-probe",
+    "exact": false,
+    "expected": "expected/template.stderr",
+    "line": 3,
+    "column": 1,
+    "message": "expected type, law, or def"
+  },
+  {
+    "case": "typed-template",
+    "path": "cpu-character-quote-diagnostics/controls/typed-template.bend",
+    "kind": "context",
+    "exact": true,
+    "expected": "expected/typed-template.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  },
+  {
+    "case": "imported",
+    "path": "cpu-character-quote-diagnostics/controls/imported.bend",
+    "kind": "invalid-import-probe",
+    "exact": false,
+    "expected": "expected/imported.stderr",
+    "line": 2,
+    "column": 1,
+    "message": "expected 'import Base' or 'import path.bend as Name'"
+  },
+  {
+    "case": "qualified-import",
+    "path": "cpu-character-quote-diagnostics/controls/qualified-import.bend",
+    "kind": "context",
+    "exact": true,
+    "expected": "expected/qualified-import.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q"
+  }
+]

@@ -349,3 +349,80 @@ fn lowercase_literal_diagnostics_preserve_raw_errors_and_first_failure() {
         }
     }
 }
+
+#[test]
+fn character_closing_quote_diagnostics_preserve_raw_errors_and_first_failure() {
+    #[derive(facet::Facet)]
+    struct FixtureExpectation {
+        case: String,
+        path: String,
+        kind: String,
+        exact: bool,
+        expected: String,
+        line: usize,
+        column: usize,
+        message: String,
+    }
+    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
+        "../../tests/fixtures/cpu-character-quote-diagnostics/cases.json"
+    ))
+    .unwrap();
+    assert_eq!(cases.len(), 31);
+    let fixtures = root().parent().unwrap().to_path_buf();
+    for case in cases {
+        assert!(matches!(
+            case.kind.as_str(),
+            "retained-original"
+                | "adjacent"
+                | "context"
+                | "invalid-template-probe"
+                | "invalid-import-probe"
+        ));
+        let path = fixtures.join(&case.path);
+        let plain = crate::syntax::load(&path).unwrap_err();
+        assert_eq!((plain.line, plain.column), (case.line, case.column));
+        assert_eq!(plain.message, case.message, "{}", case.case);
+        assert_eq!(
+            plain.to_string(),
+            crate::syntax::load_executable(&path)
+                .unwrap_err()
+                .to_string()
+        );
+        for failure in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(plain.to_string(), failure.error.to_string());
+            if case.exact {
+                let report = failure
+                    .diagnostic
+                    .unwrap_or_else(|| panic!("{}", case.case));
+                let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content
+                else {
+                    panic!("expected syntax diagnostic: {}", case.case)
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(
+                        fixtures
+                            .join("cpu-character-quote-diagnostics")
+                            .join(&case.expected)
+                    )
+                    .unwrap(),
+                    "{}",
+                    case.case
+                );
+            } else if !matches!(
+                case.case.as_str(),
+                "earlier-grammar" | "template" | "imported"
+            ) {
+                assert!(failure.diagnostic.is_none(), "{}", case.case);
+            }
+        }
+    }
+}

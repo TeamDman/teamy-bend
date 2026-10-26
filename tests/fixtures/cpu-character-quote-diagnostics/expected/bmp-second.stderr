@@ -1,0 +1,7 @@
+Error:
+- expected : a closing '
+- observed : 'é'
+Location:
+2 | 
+3>| def main() -> Char: 'aé'
+4 | 

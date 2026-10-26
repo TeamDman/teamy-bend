@@ -1,0 +1,7 @@
+Error:
+- expected : 'def', 'type' or 'law'
+- observed : '~'
+Location:
+2 | 
+3>| ~mk():
+4 |   def main() -> Char: 'a\q'

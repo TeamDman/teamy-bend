@@ -1920,6 +1920,7 @@ impl Parser<'_> {
             }
             if raw.starts_with('\'') {
                 if chars.len() != 1 {
+                    self.character_closing_quote_diagnostic(&raw);
                     return Err(self.error("a character literal needs exactly one character"));
                 }
                 return Ok(term(Term::Ctr {
@@ -2249,6 +2250,25 @@ impl Parser<'_> {
         self.error(format!("U32 literal must be at most 4294967295: {error}"))
     }
     #[inline(never)]
+    fn character_closing_quote_diagnostic(&mut self, raw: &str) -> bool {
+        if self.templates.diagnostics.is_none() {
+            return false;
+        }
+        let Some(after) = character_closing_quote_offset(raw) else {
+            return false;
+        };
+        let token = &self.tokens[self.at - 1];
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.expected_after_token(
+                &self.label,
+                token.line,
+                token.column + raw[..after].chars().count() - 1,
+                "a closing '",
+            );
+        }
+        true
+    }
+    #[inline(never)]
     fn literal_decode_error(&mut self, raw: &str, error: LiteralError) -> ParseError {
         let (message, escape, after) = match error {
             LiteralError::Other(message) => return self.error(message),
@@ -2261,6 +2281,9 @@ impl Parser<'_> {
                 after,
             } => (message, escape, after),
         };
+        if self.character_closing_quote_diagnostic(raw) {
+            return self.error(message);
+        }
         // Pinned parse_char observes the next UTF-16 code unit after
         // consuming the escape. Do not claim exact scalar rendering
         // for a surrogate pair; retain the existing host diagnostic.
@@ -2670,63 +2693,89 @@ fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
     let mut chars = raw[1..raw.len() - 1].char_indices();
     let mut out = Vec::new();
     while let Some((_, c)) = chars.next() {
-        if c != '\\' {
-            out.push(u32::from(c));
-            continue;
-        }
-        let (at, escape) = chars.next().ok_or("unfinished escape")?;
-        let after = 1 + at + escape.len_utf8();
-        let pinned_unicode = supported_unicode_escape(chars.clone());
-        out.push(match escape {
-            'n' => u32::from('\n'),
-            't' => u32::from('\t'),
-            'r' => u32::from('\r'),
-            '0' => u32::from('\0'),
-            '\\' => u32::from('\\'),
-            '\'' => u32::from('\''),
-            '"' => u32::from('"'),
-            'u' | 'U' if escape == 'u' || pinned_unicode => {
-                // Keep the legacy public error while remembering where pinned
-                // parse_char rejects this spelling. Do not move the raw cursor.
-                let malformed = |message| LiteralError::MalformedUnicode {
-                    message,
-                    escape,
-                    after,
-                };
-                if chars.next().map(|(_, c)| c) != Some('{') {
-                    return Err(malformed("Unicode escape needs braces".into()));
-                }
-                let mut digits = String::new();
-                let mut closed = false;
-                for (_, d) in chars.by_ref() {
-                    if d == '}' {
-                        closed = true;
-                        break;
-                    }
-                    digits.push(d);
-                }
-                if !closed {
-                    return Err(malformed("unfinished Unicode escape".into()));
-                }
-                let value = u32::from_str_radix(&digits, 16)
-                    .map_err(|error| malformed(format!("invalid Unicode escape: {error}")))?;
-                // Preserve legacy lowercase scan/radix/non-scalar errors, but
-                // never accept the extra spellings allowed by from_str_radix.
-                // Canonical escapes carry any U32 code, not just host scalars.
-                if !pinned_unicode {
-                    if char::from_u32(value).is_none() {
-                        return Err(malformed("invalid Unicode code point".into()));
-                    }
-                    return Err(LiteralError::UnknownEscape { escape, after });
-                }
-                value
-            }
-            _ => {
-                return Err(LiteralError::UnknownEscape { escape, after });
-            }
-        });
+        out.push(decode_literal_code(c, &mut chars)?);
     }
     Ok(out)
+}
+
+fn decode_literal_code(
+    c: char,
+    chars: &mut std::str::CharIndices<'_>,
+) -> Result<u32, LiteralError> {
+    if c != '\\' {
+        return Ok(u32::from(c));
+    }
+    let (at, escape) = chars.next().ok_or("unfinished escape")?;
+    let after = 1 + at + escape.len_utf8();
+    let pinned_unicode = supported_unicode_escape(chars.clone());
+    Ok(match escape {
+        'n' => u32::from('\n'),
+        't' => u32::from('\t'),
+        'r' => u32::from('\r'),
+        '0' => u32::from('\0'),
+        '\\' => u32::from('\\'),
+        '\'' => u32::from('\''),
+        '"' => u32::from('"'),
+        'u' | 'U' if escape == 'u' || pinned_unicode => {
+            // Keep the legacy public error while remembering where pinned
+            // parse_char rejects this spelling. Do not move the raw cursor.
+            let malformed = |message| LiteralError::MalformedUnicode {
+                message,
+                escape,
+                after,
+            };
+            if chars.next().map(|(_, c)| c) != Some('{') {
+                return Err(malformed("Unicode escape needs braces".into()));
+            }
+            let mut digits = String::new();
+            let mut closed = false;
+            for (_, d) in chars.by_ref() {
+                if d == '}' {
+                    closed = true;
+                    break;
+                }
+                digits.push(d);
+            }
+            if !closed {
+                return Err(malformed("unfinished Unicode escape".into()));
+            }
+            let value = u32::from_str_radix(&digits, 16)
+                .map_err(|error| malformed(format!("invalid Unicode escape: {error}")))?;
+            // Preserve legacy lowercase scan/radix/non-scalar errors, but
+            // never accept the extra spellings allowed by from_str_radix.
+            // Canonical escapes carry any U32 code, not just host scalars.
+            if !pinned_unicode {
+                if char::from_u32(value).is_none() {
+                    return Err(malformed("invalid Unicode code point".into()));
+                }
+                return Err(LiteralError::UnknownEscape { escape, after });
+            }
+            value
+        }
+        _ => {
+            return Err(LiteralError::UnknownEscape { escape, after });
+        }
+    })
+}
+
+// Optional attribution only after an existing Char refusal. Decode at most one
+// canonical code with the same decoder; never scan a malformed Unicode tail.
+fn character_closing_quote_offset(raw: &str) -> Option<usize> {
+    let content = raw.strip_prefix('\'')?.strip_suffix('\'')?;
+    let mut chars = content.char_indices();
+    let (_, first) = chars.next()?;
+    if first == '\\' {
+        let mut lookahead = chars.clone();
+        if matches!(lookahead.next(), Some((_, 'u' | 'U'))) && !supported_unicode_escape(lookahead)
+        {
+            return None;
+        }
+    }
+    decode_literal_code(first, &mut chars).ok()?;
+    let (at, observed) = chars.next()?;
+    // Upstream parse_fail observes one UTF-16 unit. Do not substitute a
+    // complete astral scalar for a lone surrogate or guess multiline origins.
+    (observed.len_utf16() == 1 && !raw[..=at].contains('\n')).then_some(1 + at)
 }
 
 // Pinned parse_char matches case-insensitively within eleven UTF-16 units:
@@ -4099,6 +4148,32 @@ mod occurrence_tests {
 mod literal_decode_tests {
     use super::LiteralError;
     use super::decode_literal;
+
+    #[test]
+    fn character_quote_attribution_decodes_only_one_canonical_code() {
+        use super::character_closing_quote_offset as offset;
+        for (raw, expected) in [
+            ("'ab'", 2),
+            ("'a b'", 2),
+            ("'a\tb'", 2),
+            ("'a\rb'", 2),
+            ("'a#b'", 2),
+            ("'éx'", 3),
+            ("'😀x'", 5),
+            (r"'\nx'", 3),
+            (r"'\'x'", 3),
+            (r"'\\x'", 3),
+            (r"'\u{D800}x'", 9),
+            (r"'\U{FFFFFFFF}x'", 13),
+        ] {
+            assert_eq!(offset(raw), Some(expected), "{raw}");
+        }
+        for raw in ["''", "'a'", "'a😀'", r"'\qa'", r"'\u{g}a'", r"'\u{+41}a'"] {
+            assert_eq!(offset(raw), None, "{raw}");
+        }
+        let long = format!("'\\u{{{}}}x'", "0".repeat(4096));
+        assert_eq!(offset(&long), None);
+    }
 
     #[test]
     fn literal_decoder_preserves_escape_values_and_unicode_scalar_order() {

@@ -153,7 +153,7 @@
     "case": "char-second",
     "path": "cpu-lowercase-escape-diagnostics/controls/char-second.bend",
     "kind": "adjacent",
-    "exact": false,
+    "exact": true,
     "expected": "expected/15.stderr",
     "line": 4,
     "column": 1,
