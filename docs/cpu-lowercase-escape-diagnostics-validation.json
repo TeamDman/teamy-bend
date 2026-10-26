@@ -1,0 +1,503 @@
+{
+  "tested_source": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+  "baseline": "c99e74a1556539c187bef7803a252919e19d835e",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "docs_pin": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "measurements": {
+    "measured_utc": "2026-10-26T14:25:21.370850+00:00",
+    "tested_source": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "gate": {
+      "passed": 1324,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 195,
+      "seconds": 1010.2197533449507,
+      "log_sha256": "b04a71d15e342da794af9ba9395ce8ccafa5060be46796629ede67525c2a385a",
+      "workspace_minimum": 13066702848,
+      "tmp_minimum": 2043244544
+    },
+    "matrix": {
+      "observations": 620,
+      "deterministic_pairs": 98,
+      "singletons": 424,
+      "raw_sha256": "c8d744cd9872fa6574b18d0ac21b7e12b4548c953ae6a9754aed30eb75789b14",
+      "timeouts": 0,
+      "corresponding_executions": 36,
+      "runtime_successes": 28,
+      "runtime_refusals": 8
+    },
+    "counts": {
+      "before_different": 27,
+      "after_exact": 26,
+      "after_different": 4,
+      "before_exact": 3
+    },
+    "improvements": [
+      "missing-brace",
+      "missing-close",
+      "empty",
+      "nonhex",
+      "overflow",
+      "nine-max",
+      "plus-surrogate",
+      "nine-surrogate",
+      "fullwidth",
+      "negative",
+      "only-plus",
+      "underscore",
+      "whitespace",
+      "old-unicode-invalid",
+      "char-first",
+      "bmp-prefix",
+      "astral-prefix",
+      "canonical-before",
+      "malformed-before",
+      "argument",
+      "template",
+      "pattern",
+      "imported"
+    ],
+    "residuals": [
+      "char-second",
+      "cross-line",
+      "astral-observed",
+      "earlier-grammar"
+    ],
+    "raw_probe_outputs_unchanged": 60,
+    "unchanged_artifacts": 18,
+    "native_unchanged": {
+      "pure_normalization": 8,
+      "actual_IO": 1
+    },
+    "whole_census_rerun": false
+  },
+  "commands": {
+    "baseline-command": {
+      "source_commit": "c99e74a1556539c187bef7803a252919e19d835e",
+      "dirty": true,
+      "command": [
+        "python3",
+        "${EVIDENCE}/baseline.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13067747328,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 11.069760541024152,
+      "minimum_free": 13067677696,
+      "minimum_tmp_free": 2111852544,
+      "log_sha256": "b6c99d96de9f03d7ce0d288f236ed72d40af38d6b091801303d19ff48a105cdb"
+    },
+    "focused-literal": {
+      "source_commit": "c99e74a1556539c187bef7803a252919e19d835e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "literal_",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13067649024,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 20.5190534950234,
+      "minimum_free": 13067649024,
+      "minimum_tmp_free": 2111725568,
+      "log_sha256": "95a8fdfaf11fc348537956f2c85743ff0efe2ec55390ed13d6a48d0cf21c05c3"
+    },
+    "focused-integration": {
+      "source_commit": "c99e74a1556539c187bef7803a252919e19d835e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13067649024,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 75.84126237599412,
+      "minimum_free": 13067649024,
+      "minimum_tmp_free": 2111242240,
+      "log_sha256": "3e2c8bdedc44988fcb4c49dc70570d5cc0beb7e78520e6156e7936052d4a72ca"
+    },
+    "focused-clippy": {
+      "source_commit": "c99e74a1556539c187bef7803a252919e19d835e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13067644928,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.219282556034159,
+      "minimum_free": 13067644928,
+      "minimum_tmp_free": 2111606784,
+      "log_sha256": "e493b3591fb63d6226130141ae6f154e3d6f9f4212f3da7e49243ff03470cc7e"
+    },
+    "clean-build": {
+      "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--features",
+        "extended_observability"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13066711040,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.821652913989965,
+      "minimum_free": 13066711040,
+      "minimum_tmp_free": 2111553536,
+      "log_sha256": "8f3e75f59ee9027e08918e6aa5601aa0e6f3108391c10d1be2b71461df3380d4"
+    },
+    "tested-probe-build": {
+      "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+      "dirty": false,
+      "command": [
+        "rustc",
+        "--edition=2024",
+        "${EVIDENCE}/public-error-probe.rs",
+        "--extern",
+        "teamy_bend=target/debug/libteamy_bend.rlib",
+        "-L",
+        "dependency=target/debug/deps",
+        "-o",
+        "${EVIDENCE}/tested-public-probe"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13066711040,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.21762403997126967,
+      "minimum_free": 13066711040,
+      "minimum_tmp_free": 2068451328,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "matrix-command": {
+      "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13066711040,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 123.80765026499284,
+      "minimum_free": 13066711040,
+      "minimum_tmp_free": 2060226560,
+      "log_sha256": "ea8f793e88b7fe08e26fabc7afee1bc30359ab0eab38426e7c9fb9c82fe3a577"
+    },
+    "full-gate": {
+      "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13066711040,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 1010.2197533449507,
+      "minimum_free": 13066702848,
+      "minimum_tmp_free": 2043244544,
+      "log_sha256": "b04a71d15e342da794af9ba9395ce8ccafa5060be46796629ede67525c2a385a"
+    }
+  },
+  "snapshot": {
+    "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "binary_sha256": "b9034499766f3194d8eb42e7218e5b8d34da96f272fb240b47b1125f654f59cc",
+    "archive_sha256": "1b5a5312950bac8901881e1d1b354239daef4317c2d9302137ed21c6732b1fbb",
+    "binary_bytes": 27542456,
+    "archive_bytes": 7152479,
+    "public_probe_library_sha256": "84f0151d7ceb74fd0f8e900881d6c5774b43da60d616aa95e96a558d60787a86"
+  },
+  "probe_identity": {
+    "source": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "probe_sha256": "a75cc8a7f8838893f943107ff32e6f8c95d4f16a0b88c29fad80b3277359d338",
+    "baseline_probe_sha256": "33c57d939bf894bf202a00bf95ad86e670f7fbc2990f0f5f1d7b28aa58d34cb2",
+    "scope": "Probe reports raw ParseError; exit0 means observation completed, not source accepted"
+  },
+  "gate_identity": {
+    "source": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "snapshot_sha256": "b9034499766f3194d8eb42e7218e5b8d34da96f272fb240b47b1125f654f59cc",
+    "final_binary_sha256": "b9034499766f3194d8eb42e7218e5b8d34da96f272fb240b47b1125f654f59cc",
+    "snapshot_bytes": 27542456,
+    "final_bytes": 27542456,
+    "byte_identical": true,
+    "additional_executions": 0,
+    "scope": "Exact byte comparison of clean tested snapshot and post-gate executable; no redundant behavioral rerun claimed"
+  },
+  "source_review": {
+    "reviewed_at_utc": "2026-10-26T14:03:09.219213+00:00",
+    "reviewer": "review_lowercase_resume",
+    "approved": true,
+    "independent_review": true,
+    "baseline_commit": "c99e74a1556539c187bef7803a252919e19d835e",
+    "dirty_source": true,
+    "source_diff_sha256": "8eaff92d40ea024a14efd00465ac1ef3d7a6077a8ce47e2ddb340bdfff62585d",
+    "production_file": "src/syntax/parser.rs",
+    "production_diff_sha256": "26d90b5903a241a252f3c896e824c48d4a6ba17d562a6af10b14f0ed3f5dab94",
+    "cases_sha256": "ec44608ef65f5e19f2204d082c918fd20b1c126a7cc24e1dfc41fd89053a89e0",
+    "baseline_receipt_sha256": "d7cf0c6ce4174d0d31baa0f0880dbef899b9172956790d96596f27ff7fd6a93f",
+    "blocking_findings": [],
+    "verified": [
+      "Pinned parse_char reports any noncanonical u spelling immediately after consuming u. The new private variant records that cursor while retaining the exact legacy message.",
+      "The production diff changes only optional diagnostic provenance and rendering. It preserves branch selection, successful U32 values, first failure, raw self.error cursor and public ParseError shape.",
+      "LiteralError::Other remains separate. Both unknown and malformed Unicode reuse the same conservative eligibility; later Char, cross-line lexical and astral-observed cases remain unqualified.",
+      "Thirty original source hashes, all oracle golden bytes and public raw error fields agree with baseline receipts; baseline is 120 observations, 3 exact and 27 differing refusals, no accepted control.",
+      "The tests explicitly requalify the existing unicode-invalid control and retain astral exclusions. Thirty-case tests compare strict/executable/diagnostic loader errors and exact eligible reports.",
+      "Focused 16-test receipt includes successful default-stack literal/expression guard regressions; no guard, budget, sharing or cancellation logic changes."
+    ],
+    "pending": [
+      "Complete focused integration/Clippy, clean source commit and full gate plus current differential matrix before declaring the family qualified.",
+      "Update the old lowercase grammar README to identify its 19/15 result as historical and the new measured count separately; keep old receipts unchanged.",
+      "New fixture README/report should state 30-case scope and overlapping requalifications without double-counting.",
+      "Private LiteralError representation changes; public layout does not. Full gate must renew prior stack/shared-reference/work-accounting regressions.",
+      "External invoke callers remain unaudited; optional formatted failure output may use Ok(exit_code=1) instead of Err."
+    ],
+    "publication_authorized": false,
+    "review_commands": "Read-only source/evidence inspection only; no tests/builds/runtime executions by reviewer"
+  },
+  "matrix_review": {
+    "reviewed_at_utc": "2026-10-26T14:12:24.024821+00:00",
+    "reviewer": "review_lowercase_resume",
+    "approved": true,
+    "scope": "Independent read-only source identity and retained differential evidence review; no new runs or publication",
+    "source_commit": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "source_diff_sha256": "8eaff92d40ea024a14efd00465ac1ef3d7a6077a8ce47e2ddb340bdfff62585d",
+    "matrix_sha256": "c8d744cd9872fa6574b18d0ac21b7e12b4548c953ae6a9754aed30eb75789b14",
+    "matrix_script_sha256": "99706d9fe04ec1e60510c19a2d3f08668ee82aea3220a46b835f175e314f8c68",
+    "snapshot_sha256": "1209152a9f10efee7b978e883b15f93e68c413cab1ffc804c6e27d123f652f93",
+    "public_probe_sha256": "a75cc8a7f8838893f943107ff32e6f8c95d4f16a0b88c29fad80b3277359d338",
+    "observations": 620,
+    "deterministic_pairs": 98,
+    "singletons": 424,
+    "timeouts": 0,
+    "baseline_authored": {
+      "exact": 3,
+      "different": 27,
+      "accepted": 0
+    },
+    "current_authored": {
+      "exact": 26,
+      "different": 4,
+      "accepted": 0
+    },
+    "diagnostic_closures": 23,
+    "public_probe_outputs_equal": 60,
+    "corresponding_runtime_comparisons": {
+      "total": 36,
+      "successes": 28,
+      "required_JS_refusals": 8
+    },
+    "native_baseline_unchanged": {
+      "pure_normalization": 8,
+      "actual_IO": 1
+    },
+    "baseline_port_artifacts_equal": 18,
+    "all_artifact_hashes_verified": 54,
+    "all_fixture_hashes_verified": 620,
+    "pinned_originals_byte_identical": 2,
+    "blocking_evidence_findings": [],
+    "pending": [
+      "Full gate and final executable identity remain pending parent-owned checks.",
+      "Before the final documentation checkpoint, remove stale sentence in cpu-lowercase-escape-grammar/README.md saying the thirteen legacy diagnostic mismatches remain open; current32/2 and historical19/15 must agree throughout.",
+      "Upstream pure normalization checks exit success only; this matrix does not establish full normalized graph/text equality.",
+      "Later-Char, cross-line, astral-observed and earlier-grammar diagnostic residuals remain unqualified.",
+      "Raw public errors remain identical in all sixty probes; optional formatted invoke result-shape caveat and external-caller audit remain.",
+      "No whole-census result is inferred from authored control closures; overlap cohorts are not additional gains.",
+      "No tests, builds, source changes, network or publication performed by reviewer."
+    ]
+  },
+  "whitespace": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "excluded": "Exact upstream diagnostic .stderr goldens intentionally preserve trailing spaces on empty excerpt lines; unfiltered diff --check reported these only."
+  },
+  "compact_results_sha256": "82000961b50ff118e9b3e90e23124f5ef73796612286a7104a37cf61bcb2abf6",
+  "tools": {
+    "rust": "1.96.0",
+    "fmt": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7",
+    "powershell": "7.5.4"
+  },
+  "historical_census": {
+    "source": "c5edea8",
+    "non_IO_differences": 140,
+    "acceptance": 109,
+    "rejection": 31,
+    "upstream_stack_failures": 6
+  },
+  "coverage_linkage": {
+    "linked_including_failures": 516,
+    "total": 1302,
+    "unlinked_checking_rejections": 256,
+    "unlinked_interpreter_compiled": 517,
+    "unlinked_interpreter_only": 12,
+    "unlinked_no_main": 1
+  },
+  "unrun": [
+    "Whole checking census",
+    "Supplementary all-target Clippy",
+    "Desktop and GPU hardware",
+    "Execution of rejected sources",
+    "Complete upstream normalized-graph comparison"
+  ],
+  "public_API_caveat": "All sixty raw loader outputs unchanged; optional diagnostic can change invoke Err to Ok(exit_code=1). External callers unaudited.",
+  "library_retry": false,
+  "policy_changes": false
+}

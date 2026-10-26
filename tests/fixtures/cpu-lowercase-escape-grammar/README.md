@@ -19,8 +19,8 @@ so current tests require 32 exact / two differing diagnostics; the original
 19/15 receipt remains historical.
 Matching rejection is not exact diagnostic parity. Thirteen legacy malformed,
 overflow and noncanonical non-scalar cases preserve their raw public errors,
-recorded in `public-errors.json`. Their diagnostic mismatch remains open, along
-with the later-Char closing-quote and earlier grammar cases.
+recorded in `public-errors.json`. Those thirteen formatted diagnostics now match; their raw public errors remain
+unchanged. The later-Char closing-quote and earlier grammar cases remain open.
 
 Newly invalid lowercase prefixes must reject before later U/q escapes; this
 intentionally changes composed first-error results. Three earlier uppercase

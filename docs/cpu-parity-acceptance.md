@@ -2842,3 +2842,25 @@ issues remain unwaived. First-error and invoke result-shape caveats are explicit
 Source bundle and 150 evidence files verified on resumption; unique evidence and
 cleanup records remain intact. Work is local only, pending publication approval.
 Next independent candidate: existing lowercase malformed-escape diagnostics.
+
+## Lowercase malformed-escape diagnostic checkpoint
+
+Tested `d79486efef4cb6baf6d94515c9ee764b2fedeb77` adds private per-escape provenance while preserving all raw
+public errors, rejection and value semantics. [Report](cpu-lowercase-escape-diagnostics.md).
+Gate **1324 passed / 0 failed / 49 ignored**. The 30-case authored
+cohort improves from 3 exact/27 differing to 26 exact/4 differing: 23 diagnostic
+closures, no acceptance change. Thirteen overlapping older grammar cases now
+match; they are not extra closures. Historical measurements remain unchanged.
+
+620 observations/98 repeat pairs; all 60 raw loader observations unchanged;
+36 corresponding C/JS matches (28 successes/eight required JS refusals), eight
+unchanged native pure outputs, one native IO output and 18 identical artifacts.
+Pure baseline equality is not full upstream normalized-graph equality. Four
+diagnostic residuals, strict IO exclusion and all older parity/API/oracle gaps
+remain explicit. No whole-census renewal or safety/policy change.
+
+The previous reviewed c99e74a checkpoint was independently consolidated onto
+main in a separate verified fast-forward. This diagnostic work retains its
+own tested identity. No branch deletion, force push, dependency change or release.
+Next candidate: later-character closing-quote diagnostics with grammar/lexer
+precedence preserved. Library delivery remains blocked without retry.

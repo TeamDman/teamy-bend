@@ -1,0 +1,784 @@
+{
+  "ancestry-audit.json": {
+    "time_utc": "2026-10-26T14:05:51.544874+00:00",
+    "main": "969561f5214fa494507ba07bd5740eea18d6620e",
+    "target": "c99e74a1556539c187bef7803a252919e19d835e",
+    "main_is_ancestor": true,
+    "main_vs_target": "0\t347",
+    "counts": {
+      "divergent": 1,
+      "ancestor": 67,
+      "same": 1
+    },
+    "branches": [
+      {
+        "branch": "archive/cpu-runtime-negatives-pre-correction-20261023",
+        "sha": "3089177b24c4dce48ace830039dcd2214f12461f",
+        "relationship": "divergent",
+        "counts": "1\t334",
+        "merge_base": "d20c904d6e9ef563ca186c5ed1dcceec938e0bfc"
+      },
+      {
+        "branch": "fix/cpu-acceptance-priority-20261025",
+        "sha": "6964088128b2124b26e7913fd86a64b1d14fea03",
+        "relationship": "ancestor",
+        "counts": "0\t75",
+        "merge_base": "6964088128b2124b26e7913fd86a64b1d14fea03"
+      },
+      {
+        "branch": "fix/cpu-alias-member-fallback-20261025",
+        "sha": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+        "relationship": "ancestor",
+        "counts": "0\t44",
+        "merge_base": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4"
+      },
+      {
+        "branch": "fix/cpu-c-escape-printer-20261026",
+        "sha": "53e452d4c5d8641292aae3b66116071a8ec5ce02",
+        "relationship": "ancestor",
+        "counts": "0\t6",
+        "merge_base": "53e452d4c5d8641292aae3b66116071a8ec5ce02"
+      },
+      {
+        "branch": "fix/cpu-closed-partial-normalization-20261025",
+        "sha": "18961bc77aa141ed01dae8c64031771ea6e77582",
+        "relationship": "ancestor",
+        "counts": "0\t33",
+        "merge_base": "18961bc77aa141ed01dae8c64031771ea6e77582"
+      },
+      {
+        "branch": "fix/cpu-comptime-rebind-diagnostics-20261025",
+        "sha": "e9d5ba36bed063704bce19da28997805c49988db",
+        "relationship": "ancestor",
+        "counts": "0\t35",
+        "merge_base": "e9d5ba36bed063704bce19da28997805c49988db"
+      },
+      {
+        "branch": "fix/cpu-comptime-type-diagnostics-20261025",
+        "sha": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+        "relationship": "ancestor",
+        "counts": "0\t37",
+        "merge_base": "a26bcf947b31846bb1a985ad90cafa0a0c985de1"
+      },
+      {
+        "branch": "fix/cpu-contextual-lexical-diagnostics-20261026",
+        "sha": "44122522ff38bc98c1ac7d3a3bb4bf7fda704b30",
+        "relationship": "ancestor",
+        "counts": "0\t12",
+        "merge_base": "44122522ff38bc98c1ac7d3a3bb4bf7fda704b30"
+      },
+      {
+        "branch": "fix/cpu-contextual-proof-diagnostics-20261025",
+        "sha": "51c8bed233810139d0dec43b51569ffb8c2f8f53",
+        "relationship": "ancestor",
+        "counts": "0\t31",
+        "merge_base": "51c8bed233810139d0dec43b51569ffb8c2f8f53"
+      },
+      {
+        "branch": "fix/cpu-declaration-boundary-20261025",
+        "sha": "0c95ae2fd642807ab94fefe8757e6cce73c41c8e",
+        "relationship": "ancestor",
+        "counts": "0\t79",
+        "merge_base": "0c95ae2fd642807ab94fefe8757e6cce73c41c8e"
+      },
+      {
+        "branch": "fix/cpu-definition-provenance-20261025",
+        "sha": "f58c0206ba368d40820184f83b80c7c5a9d6db21",
+        "relationship": "ancestor",
+        "counts": "0\t118",
+        "merge_base": "f58c0206ba368d40820184f83b80c7c5a9d6db21"
+      },
+      {
+        "branch": "fix/cpu-duplicate-constructor-diagnostics-20261025",
+        "sha": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde",
+        "relationship": "ancestor",
+        "counts": "0\t51",
+        "merge_base": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde"
+      },
+      {
+        "branch": "fix/cpu-duplicate-declaration-diagnostics-20261025",
+        "sha": "9b1726c3d8b158b069c54de586818c53506526fe",
+        "relationship": "ancestor",
+        "counts": "0\t49",
+        "merge_base": "9b1726c3d8b158b069c54de586818c53506526fe"
+      },
+      {
+        "branch": "fix/cpu-family-head-diagnostics-20261025",
+        "sha": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+        "relationship": "ancestor",
+        "counts": "0\t57",
+        "merge_base": "b7c18b0de45fa292fab9d07f01a86c2c209ae557"
+      },
+      {
+        "branch": "fix/cpu-final-todo-diagnostics-20261025",
+        "sha": "73148a54e9e3dcad66dd1a1f46f20cf3f9d7818d",
+        "relationship": "ancestor",
+        "counts": "0\t63",
+        "merge_base": "73148a54e9e3dcad66dd1a1f46f20cf3f9d7818d"
+      },
+      {
+        "branch": "fix/cpu-forward-data-diagnostics-20261025",
+        "sha": "55aef700c7868c50a17952e98b7727d9c480282a",
+        "relationship": "ancestor",
+        "counts": "0\t55",
+        "merge_base": "55aef700c7868c50a17952e98b7727d9c480282a"
+      },
+      {
+        "branch": "fix/cpu-function-proof-diagnostics-20261025",
+        "sha": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+        "relationship": "ancestor",
+        "counts": "0\t26",
+        "merge_base": "d1773a46cbabb7ed740d2c85a036647cb1dcb740"
+      },
+      {
+        "branch": "fix/cpu-import-header-diagnostics-20261025",
+        "sha": "300aefe146862d3043cd260cdf20504b75c9e9c1",
+        "relationship": "ancestor",
+        "counts": "0\t18",
+        "merge_base": "300aefe146862d3043cd260cdf20504b75c9e9c1"
+      },
+      {
+        "branch": "fix/cpu-imported-declaration-targets-20261025",
+        "sha": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c",
+        "relationship": "ancestor",
+        "counts": "0\t46",
+        "merge_base": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c"
+      },
+      {
+        "branch": "fix/cpu-lambda-arm-diagnostics-20261025",
+        "sha": "b7649af34e59713c7a46d96ebf7fa5b0f61a6420",
+        "relationship": "ancestor",
+        "counts": "0\t77",
+        "merge_base": "b7649af34e59713c7a46d96ebf7fa5b0f61a6420"
+      },
+      {
+        "branch": "fix/cpu-lambda-binder-diagnostics-20261025",
+        "sha": "2767537996d53ebf05534518f24d0b44fc27724c",
+        "relationship": "ancestor",
+        "counts": "0\t20",
+        "merge_base": "2767537996d53ebf05534518f24d0b44fc27724c"
+      },
+      {
+        "branch": "fix/cpu-let-kind-locations-20261025",
+        "sha": "d3259a053be6164305028fbbf427b767105f1b4a",
+        "relationship": "ancestor",
+        "counts": "0\t109",
+        "merge_base": "d3259a053be6164305028fbbf427b767105f1b4a"
+      },
+      {
+        "branch": "fix/cpu-list-sort-map-20261025",
+        "sha": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03",
+        "relationship": "ancestor",
+        "counts": "0\t99",
+        "merge_base": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03"
+      },
+      {
+        "branch": "fix/cpu-lowercase-escape-grammar-20261026",
+        "sha": "c99e74a1556539c187bef7803a252919e19d835e",
+        "relationship": "same",
+        "counts": "0\t0",
+        "merge_base": "c99e74a1556539c187bef7803a252919e19d835e"
+      },
+      {
+        "branch": "fix/cpu-malformed-literal-diagnostics-20261026",
+        "sha": "71893b97a5a6e5d8727618c67ca2802dce7147d9",
+        "relationship": "ancestor",
+        "counts": "0\t14",
+        "merge_base": "71893b97a5a6e5d8727618c67ca2802dce7147d9"
+      },
+      {
+        "branch": "fix/cpu-meet-diagnostic-precedence-20261025",
+        "sha": "762ad51b5ccf3f801df172578b48f0cbfb8b3ade",
+        "relationship": "ancestor",
+        "counts": "0\t29",
+        "merge_base": "762ad51b5ccf3f801df172578b48f0cbfb8b3ade"
+      },
+      {
+        "branch": "fix/cpu-missing-import-diagnostics-20261025",
+        "sha": "39a9442dfbd5f85a01461f257a5ee61379206027",
+        "relationship": "ancestor",
+        "counts": "0\t16",
+        "merge_base": "39a9442dfbd5f85a01461f257a5ee61379206027"
+      },
+      {
+        "branch": "fix/cpu-nat-pattern-depth-20261025",
+        "sha": "4da922d203a76132cadb57ed0c6cf8f71e522675",
+        "relationship": "ancestor",
+        "counts": "0\t71",
+        "merge_base": "4da922d203a76132cadb57ed0c6cf8f71e522675"
+      },
+      {
+        "branch": "fix/cpu-nested-kind-locations-20261025",
+        "sha": "11a311cae11e5133403936b870d62fb0425a57e3",
+        "relationship": "ancestor",
+        "counts": "0\t107",
+        "merge_base": "11a311cae11e5133403936b870d62fb0425a57e3"
+      },
+      {
+        "branch": "fix/cpu-nonscalar-literal-readback-20261026",
+        "sha": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+        "relationship": "ancestor",
+        "counts": "0\t4",
+        "merge_base": "84a5652595fea158fa520a04530ff43ad4d72f6e"
+      },
+      {
+        "branch": "fix/cpu-pattern-locations-20261025",
+        "sha": "6d6a03ea88188523361858abdb5d383e6bd723fd",
+        "relationship": "ancestor",
+        "counts": "0\t112",
+        "merge_base": "6d6a03ea88188523361858abdb5d383e6bd723fd"
+      },
+      {
+        "branch": "fix/cpu-prefix-markers-20261025",
+        "sha": "a0036c9ad5773652c224045d671c834d3c7df9cc",
+        "relationship": "ancestor",
+        "counts": "0\t103",
+        "merge_base": "a0036c9ad5773652c224045d671c834d3c7df9cc"
+      },
+      {
+        "branch": "fix/cpu-refined-type-diagnostics-20261025",
+        "sha": "f3bca9a93d0c2385a55df5bee843b8443e0ef64f",
+        "relationship": "ancestor",
+        "counts": "0\t59",
+        "merge_base": "f3bca9a93d0c2385a55df5bee843b8443e0ef64f"
+      },
+      {
+        "branch": "fix/cpu-reserved-name-diagnostics-20261025",
+        "sha": "a54e49f48746cdba43a0a3cfbc8558c83d900c1a",
+        "relationship": "ancestor",
+        "counts": "0\t22",
+        "merge_base": "a54e49f48746cdba43a0a3cfbc8558c83d900c1a"
+      },
+      {
+        "branch": "fix/cpu-retained-owner-20261025",
+        "sha": "69fb601c8726157233b5d0f2d1ffbf9084a744e6",
+        "relationship": "ancestor",
+        "counts": "0\t69",
+        "merge_base": "69fb601c8726157233b5d0f2d1ffbf9084a744e6"
+      },
+      {
+        "branch": "fix/cpu-reusable-nat-pattern-20261025",
+        "sha": "9ded0b5b79081a2314a1572f85925ca58d6fc70d",
+        "relationship": "ancestor",
+        "counts": "0\t105",
+        "merge_base": "9ded0b5b79081a2314a1572f85925ca58d6fc70d"
+      },
+      {
+        "branch": "fix/cpu-self-call-diagnostics-20261025",
+        "sha": "9f218a786bacccfadab9f1a81e6f024524bf9e58",
+        "relationship": "ancestor",
+        "counts": "0\t61",
+        "merge_base": "9f218a786bacccfadab9f1a81e6f024524bf9e58"
+      },
+      {
+        "branch": "fix/cpu-string-pattern-depth-20261025",
+        "sha": "b6b509b8216dd7f9620c66af7c80ad4c52e516b4",
+        "relationship": "ancestor",
+        "counts": "0\t90",
+        "merge_base": "b6b509b8216dd7f9620c66af7c80ad4c52e516b4"
+      },
+      {
+        "branch": "fix/cpu-synthesized-origins-20261024",
+        "sha": "556e45cbbea4424665775fd1bf2f67a6d771697e",
+        "relationship": "ancestor",
+        "counts": "0\t120",
+        "merge_base": "556e45cbbea4424665775fd1bf2f67a6d771697e"
+      },
+      {
+        "branch": "fix/cpu-template-occurrences-20261025",
+        "sha": "647a3429480b91e78dd24eab734fd56d32f5b576",
+        "relationship": "ancestor",
+        "counts": "0\t114",
+        "merge_base": "647a3429480b91e78dd24eab734fd56d32f5b576"
+      },
+      {
+        "branch": "fix/cpu-unfilled-law-diagnostics-20261025",
+        "sha": "62ca1cef5fc71eca5bd139d0a92c07aa73ef23af",
+        "relationship": "ancestor",
+        "counts": "0\t66",
+        "merge_base": "62ca1cef5fc71eca5bd139d0a92c07aa73ef23af"
+      },
+      {
+        "branch": "fix/cpu-unknown-template-diagnostics-20261025",
+        "sha": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+        "relationship": "ancestor",
+        "counts": "0\t41",
+        "merge_base": "cd75675216d87e67175e2e344f2ed39dce3fe02d"
+      },
+      {
+        "branch": "fix/cpu-untyped-binder-diagnostics-20261025",
+        "sha": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+        "relationship": "ancestor",
+        "counts": "0\t39",
+        "merge_base": "9e1c7e21291a33732945f4c030a49d8be34cc056"
+      },
+      {
+        "branch": "fix/cpu-uppercase-escape-diagnostics-20261026",
+        "sha": "99b78be666af894710788963b0730d28dc770cc5",
+        "relationship": "ancestor",
+        "counts": "0\t2",
+        "merge_base": "99b78be666af894710788963b0730d28dc770cc5"
+      },
+      {
+        "branch": "fix/cpu-uppercase-unicode-20261026",
+        "sha": "a37fd81f37564b8d1bd11ea4b945c533f75e0c51",
+        "relationship": "ancestor",
+        "counts": "0\t10",
+        "merge_base": "a37fd81f37564b8d1bd11ea4b945c533f75e0c51"
+      },
+      {
+        "branch": "fix/cpu-word-reading-work-20261025",
+        "sha": "888861df8477723e8f6d714b780846fa0789da22",
+        "relationship": "ancestor",
+        "counts": "0\t84",
+        "merge_base": "888861df8477723e8f6d714b780846fa0789da22"
+      },
+      {
+        "branch": "fix/linux-cpu-portability-20261023",
+        "sha": "23747901bad817dbf43089dd5341b03c4a54c03d",
+        "relationship": "ancestor",
+        "counts": "0\t341",
+        "merge_base": "23747901bad817dbf43089dd5341b03c4a54c03d"
+      },
+      {
+        "branch": "investigate/cpu-failure-order-20261025",
+        "sha": "eddf46f010958f8c3b4f46e07e693763ecb4118c",
+        "relationship": "ancestor",
+        "counts": "0\t81",
+        "merge_base": "eddf46f010958f8c3b4f46e07e693763ecb4118c"
+      },
+      {
+        "branch": "main",
+        "sha": "969561f5214fa494507ba07bd5740eea18d6620e",
+        "relationship": "ancestor",
+        "counts": "0\t347",
+        "merge_base": "969561f5214fa494507ba07bd5740eea18d6620e"
+      },
+      {
+        "branch": "research/cpu-compact-patterns-20261025",
+        "sha": "456cff531dc579d02f7787d5be9ee46958db0edb",
+        "relationship": "ancestor",
+        "counts": "0\t88",
+        "merge_base": "456cff531dc579d02f7787d5be9ee46958db0edb"
+      },
+      {
+        "branch": "resume/cpu-cloud-20261023",
+        "sha": "09facb2d969efb16c4fc556f90dac2418b91d2d7",
+        "relationship": "ancestor",
+        "counts": "0\t343",
+        "merge_base": "09facb2d969efb16c4fc556f90dac2418b91d2d7"
+      },
+      {
+        "branch": "test/cpu-annotated-scrutinee-20261024",
+        "sha": "140f7cc95a0f984bdc4ed09d1428be789d7f045c",
+        "relationship": "ancestor",
+        "counts": "0\t150",
+        "merge_base": "140f7cc95a0f984bdc4ed09d1428be789d7f045c"
+      },
+      {
+        "branch": "test/cpu-base-identity-20261024",
+        "sha": "a4d162fb5a7b8bc389cc08861c0c2185f0d712f6",
+        "relationship": "ancestor",
+        "counts": "0\t123",
+        "merge_base": "a4d162fb5a7b8bc389cc08861c0c2185f0d712f6"
+      },
+      {
+        "branch": "test/cpu-data-grades-20261024",
+        "sha": "484d109451af00ce89fe508eca75868d1d95a12a",
+        "relationship": "ancestor",
+        "counts": "0\t127",
+        "merge_base": "484d109451af00ce89fe508eca75868d1d95a12a"
+      },
+      {
+        "branch": "test/cpu-dependent-proofs-20261024",
+        "sha": "91320f69523a86e9c2da3ee3227bce0c6e5cb0bb",
+        "relationship": "ancestor",
+        "counts": "0\t138",
+        "merge_base": "91320f69523a86e9c2da3ee3227bce0c6e5cb0bb"
+      },
+      {
+        "branch": "test/cpu-effects-differential-20261023",
+        "sha": "0ffb1415342df9573b3f0ff8d1c5e52285457ddc",
+        "relationship": "ancestor",
+        "counts": "0\t339",
+        "merge_base": "0ffb1415342df9573b3f0ff8d1c5e52285457ddc"
+      },
+      {
+        "branch": "test/cpu-framed-cell-20261024",
+        "sha": "6c8d4e281b7d49a45fb2b2ed5190fabf1b8e0a2e",
+        "relationship": "ancestor",
+        "counts": "0\t125",
+        "merge_base": "6c8d4e281b7d49a45fb2b2ed5190fabf1b8e0a2e"
+      },
+      {
+        "branch": "test/cpu-list-for-each-20261025",
+        "sha": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+        "relationship": "ancestor",
+        "counts": "0\t101",
+        "merge_base": "ffd1197dbdc0e320dadd85346299c962c3d360d2"
+      },
+      {
+        "branch": "test/cpu-map-set-lookups-20261025",
+        "sha": "bf31c9b645f3322492e6dc36b339881569e354c6",
+        "relationship": "ancestor",
+        "counts": "0\t97",
+        "merge_base": "bf31c9b645f3322492e6dc36b339881569e354c6"
+      },
+      {
+        "branch": "test/cpu-match-contracts-20261024",
+        "sha": "25b47aa5e3635b71089a85b9886f6fd9f3fc9768",
+        "relationship": "ancestor",
+        "counts": "0\t132",
+        "merge_base": "25b47aa5e3635b71089a85b9886f6fd9f3fc9768"
+      },
+      {
+        "branch": "test/cpu-proof-case-trees-20261024",
+        "sha": "21285874eaf53b557b60418097b7f3792f55994b",
+        "relationship": "ancestor",
+        "counts": "0\t140",
+        "merge_base": "21285874eaf53b557b60418097b7f3792f55994b"
+      },
+      {
+        "branch": "test/cpu-read-bounds-20261025",
+        "sha": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec",
+        "relationship": "ancestor",
+        "counts": "0\t86",
+        "merge_base": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec"
+      },
+      {
+        "branch": "test/cpu-statement-sequence-20261024",
+        "sha": "8ce23911f4b1ee859c6c838f09cbbc0cf0fe7d4c",
+        "relationship": "ancestor",
+        "counts": "0\t148",
+        "merge_base": "8ce23911f4b1ee859c6c838f09cbbc0cf0fe7d4c"
+      },
+      {
+        "branch": "test/cpu-string-kit-algorithms-20261025",
+        "sha": "34284dc4bf7aabcbf219dacd2b5c3e2a59748822",
+        "relationship": "ancestor",
+        "counts": "0\t95",
+        "merge_base": "34284dc4bf7aabcbf219dacd2b5c3e2a59748822"
+      },
+      {
+        "branch": "test/cpu-string-ops-roundtrip-20261025",
+        "sha": "6c2ba98c964247fc424a1d57ef2772dbfe2a16eb",
+        "relationship": "ancestor",
+        "counts": "0\t93",
+        "merge_base": "6c2ba98c964247fc424a1d57ef2772dbfe2a16eb"
+      },
+      {
+        "branch": "test/cpu-telescope-capture-20261024",
+        "sha": "d33f8cf08509314a5fd2baef54475867346c9d53",
+        "relationship": "ancestor",
+        "counts": "0\t135",
+        "merge_base": "d33f8cf08509314a5fd2baef54475867346c9d53"
+      },
+      {
+        "branch": "test/cpu-type-parameter-matches-20261024",
+        "sha": "e01e591c489f0314f8666a35502637c14a7147e7",
+        "relationship": "ancestor",
+        "counts": "0\t143",
+        "merge_base": "e01e591c489f0314f8666a35502637c14a7147e7"
+      },
+      {
+        "branch": "test/cpu-wildcard-values-20261024",
+        "sha": "45119c77919e33e74599a3ade1a86e58e68553d5",
+        "relationship": "ancestor",
+        "counts": "0\t175",
+        "merge_base": "45119c77919e33e74599a3ade1a86e58e68553d5"
+      },
+      {
+        "branch": "test/cpu-word-switches-20261024",
+        "sha": "e666ad802f42da96437e3850ff3ce69bdcb2b2e6",
+        "relationship": "ancestor",
+        "counts": "0\t146",
+        "merge_base": "e666ad802f42da96437e3850ff3ce69bdcb2b2e6"
+      }
+    ]
+  },
+  "repository-workflow.json": {
+    "main_sha": "969561f5214fa494507ba07bd5740eea18d6620e",
+    "main_protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "rulesets": [],
+    "open_pr_count": 0,
+    "source_urls": [
+      "https://api.github.com/repos/TeamDman/teamy-bend/branches/main",
+      "https://api.github.com/repos/TeamDman/teamy-bend/rulesets?includes_parents=true",
+      "https://api.github.com/repos/TeamDman/teamy-bend/pulls?state=open&per_page=100"
+    ],
+    "observed_date_utc": "2026-10-26",
+    "recorded_utc": "2026-10-26T14:09:13.594273+00:00"
+  },
+  "checkpoint-push.json": {
+    "time_utc": "2026-10-26T14:04:41.654627+00:00",
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "c99e74a1556539c187bef7803a252919e19d835e:refs/heads/fix/cpu-lowercase-escape-grammar-20261026"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "remote: \nremote: Create a pull request for 'fix/cpu-lowercase-escape-grammar-20261026' on GitHub by visiting:        \nremote:      https://github.com/TeamDman/teamy-bend/pull/new/fix/cpu-lowercase-escape-grammar-20261026        \nremote: \nTo https://github.com/TeamDman/teamy-bend.git\n * [new branch]      c99e74a1556539c187bef7803a252919e19d835e -> fix/cpu-lowercase-escape-grammar-20261026\n"
+  },
+  "main-publication.json": {
+    "operation": "github_update_ref",
+    "repository": "TeamDman/teamy-bend",
+    "branch": "main",
+    "expected_sha": "969561f5214fa494507ba07bd5740eea18d6620e",
+    "target_sha": "c99e74a1556539c187bef7803a252919e19d835e",
+    "force": false,
+    "response": {
+      "success": true
+    },
+    "verified_sha": "c99e74a1556539c187bef7803a252919e19d835e",
+    "verified": true,
+    "current_diagnostic_commit_excluded": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "branches_deleted": false
+  },
+  "remote-heads-after.json": {
+    "verified_utc": "2026-10-26T14:13:18.753238+00:00",
+    "heads": {
+      "archive/cpu-runtime-negatives-pre-correction-20261023": "3089177b24c4dce48ace830039dcd2214f12461f",
+      "fix/cpu-acceptance-priority-20261025": "6964088128b2124b26e7913fd86a64b1d14fea03",
+      "fix/cpu-alias-member-fallback-20261025": "5e3ce421aff0be3e2874ae7b8b6cb7fa24de5ca4",
+      "fix/cpu-c-escape-printer-20261026": "53e452d4c5d8641292aae3b66116071a8ec5ce02",
+      "fix/cpu-closed-partial-normalization-20261025": "18961bc77aa141ed01dae8c64031771ea6e77582",
+      "fix/cpu-comptime-rebind-diagnostics-20261025": "e9d5ba36bed063704bce19da28997805c49988db",
+      "fix/cpu-comptime-type-diagnostics-20261025": "a26bcf947b31846bb1a985ad90cafa0a0c985de1",
+      "fix/cpu-contextual-lexical-diagnostics-20261026": "44122522ff38bc98c1ac7d3a3bb4bf7fda704b30",
+      "fix/cpu-contextual-proof-diagnostics-20261025": "51c8bed233810139d0dec43b51569ffb8c2f8f53",
+      "fix/cpu-declaration-boundary-20261025": "0c95ae2fd642807ab94fefe8757e6cce73c41c8e",
+      "fix/cpu-definition-provenance-20261025": "f58c0206ba368d40820184f83b80c7c5a9d6db21",
+      "fix/cpu-duplicate-constructor-diagnostics-20261025": "2a7faf5678520a6c0a9be31ab81f0ac21264bfde",
+      "fix/cpu-duplicate-declaration-diagnostics-20261025": "9b1726c3d8b158b069c54de586818c53506526fe",
+      "fix/cpu-family-head-diagnostics-20261025": "b7c18b0de45fa292fab9d07f01a86c2c209ae557",
+      "fix/cpu-final-todo-diagnostics-20261025": "73148a54e9e3dcad66dd1a1f46f20cf3f9d7818d",
+      "fix/cpu-forward-data-diagnostics-20261025": "55aef700c7868c50a17952e98b7727d9c480282a",
+      "fix/cpu-function-proof-diagnostics-20261025": "d1773a46cbabb7ed740d2c85a036647cb1dcb740",
+      "fix/cpu-import-header-diagnostics-20261025": "300aefe146862d3043cd260cdf20504b75c9e9c1",
+      "fix/cpu-imported-declaration-targets-20261025": "9dfa4704ddc4c7f545f32e9f5a39aec97a1a812c",
+      "fix/cpu-lambda-arm-diagnostics-20261025": "b7649af34e59713c7a46d96ebf7fa5b0f61a6420",
+      "fix/cpu-lambda-binder-diagnostics-20261025": "2767537996d53ebf05534518f24d0b44fc27724c",
+      "fix/cpu-let-kind-locations-20261025": "d3259a053be6164305028fbbf427b767105f1b4a",
+      "fix/cpu-list-sort-map-20261025": "3faf6c4ced2e7092317c9de3d62c8fa2da248c03",
+      "fix/cpu-lowercase-escape-grammar-20261026": "c99e74a1556539c187bef7803a252919e19d835e",
+      "fix/cpu-malformed-literal-diagnostics-20261026": "71893b97a5a6e5d8727618c67ca2802dce7147d9",
+      "fix/cpu-meet-diagnostic-precedence-20261025": "762ad51b5ccf3f801df172578b48f0cbfb8b3ade",
+      "fix/cpu-missing-import-diagnostics-20261025": "39a9442dfbd5f85a01461f257a5ee61379206027",
+      "fix/cpu-nat-pattern-depth-20261025": "4da922d203a76132cadb57ed0c6cf8f71e522675",
+      "fix/cpu-nested-kind-locations-20261025": "11a311cae11e5133403936b870d62fb0425a57e3",
+      "fix/cpu-nonscalar-literal-readback-20261026": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "fix/cpu-pattern-locations-20261025": "6d6a03ea88188523361858abdb5d383e6bd723fd",
+      "fix/cpu-prefix-markers-20261025": "a0036c9ad5773652c224045d671c834d3c7df9cc",
+      "fix/cpu-refined-type-diagnostics-20261025": "f3bca9a93d0c2385a55df5bee843b8443e0ef64f",
+      "fix/cpu-reserved-name-diagnostics-20261025": "a54e49f48746cdba43a0a3cfbc8558c83d900c1a",
+      "fix/cpu-retained-owner-20261025": "69fb601c8726157233b5d0f2d1ffbf9084a744e6",
+      "fix/cpu-reusable-nat-pattern-20261025": "9ded0b5b79081a2314a1572f85925ca58d6fc70d",
+      "fix/cpu-self-call-diagnostics-20261025": "9f218a786bacccfadab9f1a81e6f024524bf9e58",
+      "fix/cpu-string-pattern-depth-20261025": "b6b509b8216dd7f9620c66af7c80ad4c52e516b4",
+      "fix/cpu-synthesized-origins-20261024": "556e45cbbea4424665775fd1bf2f67a6d771697e",
+      "fix/cpu-template-occurrences-20261025": "647a3429480b91e78dd24eab734fd56d32f5b576",
+      "fix/cpu-unfilled-law-diagnostics-20261025": "62ca1cef5fc71eca5bd139d0a92c07aa73ef23af",
+      "fix/cpu-unknown-template-diagnostics-20261025": "cd75675216d87e67175e2e344f2ed39dce3fe02d",
+      "fix/cpu-untyped-binder-diagnostics-20261025": "9e1c7e21291a33732945f4c030a49d8be34cc056",
+      "fix/cpu-uppercase-escape-diagnostics-20261026": "99b78be666af894710788963b0730d28dc770cc5",
+      "fix/cpu-uppercase-unicode-20261026": "a37fd81f37564b8d1bd11ea4b945c533f75e0c51",
+      "fix/cpu-word-reading-work-20261025": "888861df8477723e8f6d714b780846fa0789da22",
+      "fix/linux-cpu-portability-20261023": "23747901bad817dbf43089dd5341b03c4a54c03d",
+      "investigate/cpu-failure-order-20261025": "eddf46f010958f8c3b4f46e07e693763ecb4118c",
+      "main": "c99e74a1556539c187bef7803a252919e19d835e",
+      "research/cpu-compact-patterns-20261025": "456cff531dc579d02f7787d5be9ee46958db0edb",
+      "resume/cpu-cloud-20261023": "09facb2d969efb16c4fc556f90dac2418b91d2d7",
+      "test/cpu-annotated-scrutinee-20261024": "140f7cc95a0f984bdc4ed09d1428be789d7f045c",
+      "test/cpu-base-identity-20261024": "a4d162fb5a7b8bc389cc08861c0c2185f0d712f6",
+      "test/cpu-data-grades-20261024": "484d109451af00ce89fe508eca75868d1d95a12a",
+      "test/cpu-dependent-proofs-20261024": "91320f69523a86e9c2da3ee3227bce0c6e5cb0bb",
+      "test/cpu-effects-differential-20261023": "0ffb1415342df9573b3f0ff8d1c5e52285457ddc",
+      "test/cpu-framed-cell-20261024": "6c8d4e281b7d49a45fb2b2ed5190fabf1b8e0a2e",
+      "test/cpu-list-for-each-20261025": "ffd1197dbdc0e320dadd85346299c962c3d360d2",
+      "test/cpu-map-set-lookups-20261025": "bf31c9b645f3322492e6dc36b339881569e354c6",
+      "test/cpu-match-contracts-20261024": "25b47aa5e3635b71089a85b9886f6fd9f3fc9768",
+      "test/cpu-proof-case-trees-20261024": "21285874eaf53b557b60418097b7f3792f55994b",
+      "test/cpu-read-bounds-20261025": "e381cc7b96d3683d1a5e33cf5e630d707cc0b6ec",
+      "test/cpu-statement-sequence-20261024": "8ce23911f4b1ee859c6c838f09cbbc0cf0fe7d4c",
+      "test/cpu-string-kit-algorithms-20261025": "34284dc4bf7aabcbf219dacd2b5c3e2a59748822",
+      "test/cpu-string-ops-roundtrip-20261025": "6c2ba98c964247fc424a1d57ef2772dbfe2a16eb",
+      "test/cpu-telescope-capture-20261024": "d33f8cf08509314a5fd2baef54475867346c9d53",
+      "test/cpu-type-parameter-matches-20261024": "e01e591c489f0314f8666a35502637c14a7147e7",
+      "test/cpu-wildcard-values-20261024": "45119c77919e33e74599a3ade1a86e58e68553d5",
+      "test/cpu-word-switches-20261024": "e666ad802f42da96437e3850ff3ce69bdcb2b2e6"
+    },
+    "unchanged_non_main_heads": 68,
+    "main_fast_forward_verified": true
+  },
+  "independent-main-review.json": {
+    "reviewed_at_utc": "2026-10-26T14:10:19.751324+00:00",
+    "reviewer": "review_main_consolidation",
+    "approved": true,
+    "scope": "Independent read-only integration review: full ancestry census, cumulative diff inventory, risk-focused source/contract review and exact final-source test/evidence identity; not an exhaustive line-by-line re-review of all 347 historical commits.",
+    "main_before": "969561f5214fa494507ba07bd5740eea18d6620e",
+    "target": "c99e74a1556539c187bef7803a252919e19d835e",
+    "tested_source": "b46f9570a2174b6f475b4f58836d960534a967a8",
+    "integration": "Normal fast-forward only; no merge commit or combined tree different from the already tested candidate",
+    "ahead": 347,
+    "behind": 0,
+    "remote_branch_relationships": {
+      "divergent": 1,
+      "ancestor": 67,
+      "same": 1
+    },
+    "changed_paths": 4417,
+    "changed_paths_by_top_level": {
+      "README.md": 1,
+      "check-all.ps1": 1,
+      "docs": 446,
+      "examples": 1,
+      "native": 1,
+      "rust-toolchain.toml": 1,
+      "scripts": 25,
+      "src": 67,
+      "tests": 3874
+    },
+    "archive": {
+      "branch": "archive/cpu-runtime-negatives-pre-correction-20261023",
+      "sha": "3089177b24c4dce48ace830039dcd2214f12461f",
+      "unique_commits": 1,
+      "superseding_commit": "3b9739b3746bed0d505e62f7c31a6d1c1c6296ed",
+      "difference_from_superseding": "Only scripts/compare-cpu-negatives.ps1 differs: corrected version retains mixed_outcomes rather than allowing a later repetition to overwrite an earlier failed cell. All five documentation/evidence files are identical at the superseding commit.",
+      "recommendation": "Retain archived ref unchanged; do not merge or cherry-pick its obsolete runner version. Its unique historical object remains remotely preserved."
+    },
+    "verified": {
+      "code_build_test_inputs_equal_tested_source": true,
+      "docs_only_delta_paths": [
+        "docs/cpu-lowercase-escape-grammar-evidence.csv",
+        "docs/cpu-lowercase-escape-grammar-results.json.gz",
+        "docs/cpu-lowercase-escape-grammar-review.json",
+        "docs/cpu-lowercase-escape-grammar-validation.json",
+        "docs/cpu-lowercase-escape-grammar.md",
+        "docs/cpu-parity-acceptance.md"
+      ],
+      "cargo_toml_unchanged_from_main": true,
+      "cargo_lock_unchanged_from_main": true,
+      "cargo_lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+      "new_ci_workflows": false,
+      "runtime_steps": 2000000,
+      "runtime_arena_entries": 131072,
+      "runtime_continuation_frames": 4096,
+      "kernel_depth": 128,
+      "kernel_fuel": 2000000,
+      "parser_depth": 64,
+      "full_gate": {
+        "passed": 1322,
+        "failed": 0,
+        "ignored": 49,
+        "groups": 195,
+        "seconds": 941.0610449819651,
+        "exit": 0,
+        "clean_source": true,
+        "log_sha256": "b8e2771ab005eadff53ec11ab822f0a966695205fefd91e997563e01d0bcac82",
+        "command": [
+          "pwsh",
+          "-NoProfile",
+          "-File",
+          "./check-all.ps1",
+          "-FormatterToolchain",
+          "nightly-2026-05-24"
+        ]
+      },
+      "matrix_snapshot_binary_sha256": "94333b6e355c4581ce791ebd720fafb4664f905eff0de56f1aa6d0eec3d0fcf2",
+      "post_gate_binary_byte_identity": true,
+      "prior_independent_final_review_sha256": "1658fd1b4a0bc856b56406c03f5cbd150d85c0186adab8631a97ea627b83da67"
+    },
+    "risk_review": [
+      "CLI/checker diagnostic boundary retains nonzero process status; invoke Ok(exit_code=1) and Err both require handling. External consumers remain unaudited. KernelError/DefDecl/emitter compatibility caveats are already documented, not newly resolved by integration.",
+      "Demand-local normalization sharing preserves weak allocation identity, raw constructor fields, step/depth entry charges and per-normalize lifetime. Native demand/GC changes retain erasure, black-hole refusal, runtime bounds and cancellation boundaries with regression coverage. This is focused source review, not a soundness proof.",
+      "Linux pointer casts and host environment-key checks are scoped portability/host-contract corrections; dependency manifests are byte-identical to main. Existing Rust1.96 pin and formatter parameter are recorded resumption changes.",
+      "Approved strict live-argument/Nat/private-request choices remain narrow. nat_first competing-error difference stays pending, and compact Nat/string lowering remains unadopted research.",
+      "Preserved b7eac20 GPU continuation candidate is already in cumulative history and explicitly experimental. CPU gate and prior Windows CPU evidence do not qualify its CUDA hardware behavior. Main remains prominently incomplete WIP; integration is not GPU or release acceptance."
+    ],
+    "findings": [],
+    "pre_update_conditions": [
+      "Re-read remote main immediately before normal non-force push; stop/reconcile if it advanced from main_before.",
+      "Parent must honor actual repository protections. Observed connector metadata reports main unprotected, no required status checks, no rulesets and no open PRs; no bypass is authorized.",
+      "Push only exact target c99e74a; exclude separate current d79486e diagnostic work and preserve all feature/archive refs.",
+      "Verify remote main SHA after update and record exact operation."
+    ],
+    "limitations": [
+      "No new tests, builds, source edits, dependency changes, network policy changes or publication performed by this reviewer.",
+      "Full gate was already freshly run by parent on identical code/build/test input at b46; no redundant rerun is required solely for the six documentation files in c99.",
+      "Full CPU parity, unresolved oracle/resource/foreign/F32/source-hole differences, external invoke audit, supplementary all-target lints and GPU qualification remain incomplete."
+    ]
+  },
+  "final-main-review.json": {
+    "reviewed_at_utc": "2026-10-26T14:22:05.318776+00:00",
+    "reviewer": "review_main_consolidation",
+    "approved": true,
+    "scope": "Final read-only review of main consolidation report against preserved publication, branch census, workflow, local preservation, integration review and test identity records.",
+    "main_before": "969561f5214fa494507ba07bd5740eea18d6620e",
+    "main_after": "c99e74a1556539c187bef7803a252919e19d835e",
+    "excluded_current_work": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "report_sha256": "6e8ea682fe1abebd727d6a84d96227df4196ebab6f562daefc0e104fc633f91f",
+    "evidence_sha256": {
+      "report.md": "6e8ea682fe1abebd727d6a84d96227df4196ebab6f562daefc0e104fc633f91f",
+      "main-publication.json": "defb3bfe74836baa6004c3a83009af9c79f23de0056eb23e5138cc88c69560e1",
+      "remote-heads-before.json": "8ba0c932caa75acb998301754b347bef899fecdd969d71e5e3d7e6ff7762ab00",
+      "remote-heads-after.json": "4ef4259a86069e9a9f954ff66fb2f9b4c659259fb98e5456a43cfc25e55c4d10",
+      "repository-workflow.json": "1b015dfde33970b36ba2ac335375820ec20ac8ced99ef9cc05e9dc13d5bd344f",
+      "local-heads-audit.json": "c93ef82e5cc8e5ff0a5fcbf30871f19b9f3e3124b074aeac7eed785358c0621a",
+      "local-main-sync.json": "4395ebf848dd2c58e718b6bd55f0641faa231e32d97c781e77705629bf0cbf44",
+      "independent-main-review.json": "7bd743fa6390b85690fabd7f6431ef6ee37a25dbb3901483b1d68e8607e15ef0",
+      "independent-main-content-review.json": "c8d22fdd375d8474a34f836572f165deacd93b345cbf1c1030173f6db85170e5",
+      "combined-content-scan.json": "632f6eb14f91ce2e2134457e9aedde4ec3b06e5d0aa3694b8af4fdaa836e7593"
+    },
+    "findings": [],
+    "verified": {
+      "non_force_expected_sha_update": true,
+      "remote_git_and_github_result_recorded": true,
+      "other_remote_heads_unchanged": 68,
+      "remote_heads_total": 69,
+      "pre_update_local_heads": 150,
+      "local_main_created_without_overwriting_an_existing_branch": true,
+      "current_work_excluded": true,
+      "final_report_distinguishes_tested_code_identity_from_documentation_tree": true,
+      "metadata_timing_precise": true
+    },
+    "editorial_corrections": [
+      "Report now describes identical code/build/test inputs, not an entirely identical tested tree: six documentation files differ from b46.",
+      "Report says Before updating rather than claiming metadata was observed immediately before the ref operation."
+    ],
+    "limits": [
+      "No new remote reads, tests, builds, source mutations or publication performed by this reviewer.",
+      "Review confirms the documented integration, not full CPU/GPU parity or external API compatibility.",
+      "Historical approvals/receipts remain tied to their actual source commits; the current malformed-diagnostic work remains separate."
+    ]
+  },
+  "scope": "First backlog consolidation to c99; later diagnostic follow-on has separate source and validation identity.",
+  "local_audit_summary": {
+    "time_utc": "2026-10-26T14:12:02.177033+00:00",
+    "head": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+    "branch": "fix/cpu-lowercase-escape-diagnostics-20261026",
+    "status": "",
+    "stash_count": 0,
+    "counts": {
+      "divergent": 1,
+      "ancestor": 147,
+      "descendant": 1,
+      "same": 1
+    }
+  },
+  "local_main_sync": {
+    "recorded_utc": "2026-10-26T14:15:36.629656+00:00",
+    "initial_main_probe": "Local refs/heads/main did not exist; no local branch was overwritten",
+    "local_main": "c99e74a1556539c187bef7803a252919e19d835e",
+    "working_head": "d79486efef4cb6baf6d94515c9ee764b2fedeb77"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "reviewed_at_utc": "2026-10-26T14:27:16.801768+00:00",
+  "reviewer": "review_lowercase_resume",
+  "approved": true,
+  "scope": "Independent hash-bound final source-validation and artifact review; reviewer performs no publication",
+  "tested_source": "d79486efef4cb6baf6d94515c9ee764b2fedeb77",
+  "baseline": "c99e74a1556539c187bef7803a252919e19d835e",
+  "artifact_sha256": {
+    "acceptance-append.md": "30d85ffded20ece4811c106cbc52d7662fa5abbe88e5f075e674cd31737ee2bb",
+    "cpu-lowercase-escape-diagnostics-results.json.gz": "82000961b50ff118e9b3e90e23124f5ef73796612286a7104a37cf61bcb2abf6",
+    "cpu-lowercase-escape-diagnostics-validation.json": "576463e90c4596dbfe4492edc7e2c2f12920c206b81058c34e5b23d00668d5c8",
+    "cpu-lowercase-escape-diagnostics.md": "bd83765863730c64a84969b21ee2d18af799e573dffd898f392b3e72ad4d415a",
+    "grammar-readme.md": "8f6dfbfa1149e2ad188d2d1b51477a2eb990606153770db5f274fa709ee255bd"
+  },
+  "supporting_sha256": {
+    "prepare-deliverables.py": "1f6abac19ed2a4321e96a726a2e84816417cc5b343ede73551f8a8db84124c5b",
+    "source-review.json": "6a167ab6e9cbe4b9c8d943ca21866a434bd7fc687fc6da4d93d9a2a00a7a8e25",
+    "matrix-review.json": "bbd68600f0e8181c70772d6859ea52d4e9fe1e3d3d5711afbacb4b2576a37947",
+    "preparation-review.json": "5301368c41ee51e184f381004e5ddd9f251d52e25847433cfe77fc1825ac86d9",
+    "matrix-results.json": "c8d744cd9872fa6574b18d0ac21b7e12b4548c953ae6a9754aed30eb75789b14",
+    "full-gate.json": "080519283e240dad4ce6cfdd11fe080c5982f6f91acae42b8ebb63616cdbea09",
+    "full-gate.log": "b04a71d15e342da794af9ba9395ce8ccafa5060be46796629ede67525c2a385a",
+    "gate-identity.json": "ff7310f50fdcfe0f46c805a5ca55f42fc983c546d7273149a8e8f9d4ff810585"
+  },
+  "findings": [],
+  "verified": {
+    "full_gate": {
+      "passed": 1324,
+      "failed": 0,
+      "ignored": 49,
+      "result_groups": 195,
+      "seconds": 1010.2197533449507,
+      "exit": 0,
+      "timeout_or_floor_stop": false,
+      "clean_source": true
+    },
+    "post_gate_executable_sha256": "b9034499766f3194d8eb42e7218e5b8d34da96f272fb240b47b1125f654f59cc",
+    "post_gate_snapshot_identical": true,
+    "compact_matrix_matches_sanitized_raw": true,
+    "all_command_receipts_match_raw": true,
+    "decoded_base64_fields_checked": 1240,
+    "private_path_or_credential_pattern_findings": 0,
+    "upstream_docs_pins_clean": true,
+    "lock_hash_frozen": true,
+    "requested_binding_assertions_added": true
+  },
+  "historical_pending_reconciled": [
+    "Full gate now complete; earlier source/matrix/preparation reviews remain unchanged with their then-pending notes.",
+    "Final executable identity now verified byte-for-byte.",
+    "Corrected README now explicitly states thirteen legacy diagnostics match; historical19/15 and current32/2 remain separate.",
+    "Final sanitized artifacts and expanded streams reviewed; linked final-review artifact is to be created from this actual approval."
+  ],
+  "remaining_limits": [
+    "Four authored diagnostic residuals remain unqualified.",
+    "All60 raw public-error outputs unchanged; optional invoke result-shape caveat and external-caller audit remain.",
+    "Pure normalization equals baseline; upstream successful exit is not full normalized graph/text equality.",
+    "Historical whole census was not renewed; resource/oracle/semantic gaps remain unwaived.",
+    "No tests, builds, tracked edits, network or publication were performed by reviewer."
+  ],
+  "main_integration_assessment": "Suitable for a separate normal expected-c99 fast-forward after the final documentation/evidence checkpoint is verified to preserve the tested production tree. The authorized integrator must freshly verify exact remote main c99 and branch protection before updating; no force push, deletion, arbitrary overwrite or release. Earlier main integration is parent-reported and was not independently queried by this reviewer."
+}
