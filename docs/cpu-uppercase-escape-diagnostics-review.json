@@ -1,0 +1,31 @@
+{
+  "approved": true,
+  "review": "Independent read-only implementation, matrix, gate, preservation and final content review",
+  "tested_source": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+  "gate": {
+    "passed": 1319,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 195,
+    "seconds": 994.5510886200063
+  },
+  "matrix_observations": 605,
+  "deterministic_pairs": 104,
+  "identity_observations": 58,
+  "retained_failed_identity_observations": 43,
+  "authored_residual_diagnostics": 11,
+  "reviewed_hashes": {
+    "acceptance-append.md": "8feba7d2f548f367cb30a87a1127e0ee4789dbcc3cf5a32e9492ec0b4073b8c2",
+    "cpu-uppercase-escape-diagnostics-evidence.csv": "db842c681b090ba930bd27b347c51088acc433868af862ef50b4ffc56a34b8ea",
+    "cpu-uppercase-escape-diagnostics-results.json.gz": "c6a866a3c9044b559b83481699652c59c8641e93150b9cb807fa32e202529af9",
+    "cpu-uppercase-escape-diagnostics-validation.json": "61db153e7eca4f637a2d3f3f31c819321aded602a3311d67ff5992aa7b4cd973",
+    "cpu-uppercase-escape-diagnostics.md": "9770a2f73f318cc9ed870774b970cd98eed943b4bbde74c0935b061f1e5a9947"
+  },
+  "backup_sha256": "9f5a269f13aaabb19139c0ccbcc955a8d687f1690d541a35c455390f3dc8db2b",
+  "backup_members": 102,
+  "decoded_base64_fields_scanned": 1584,
+  "credential_or_private_path_findings": 0,
+  "api_caveat": "invoke callers must handle Err and Ok(exit_code=1); narrowed q cases can move from Ok to Err while new U formatting moves from Err to Ok. External callers remain unaudited.",
+  "publication_scope": "Normal feature-branch push; no main merge or release",
+  "readme_change": "runtime matrix -> differential matrix"
+}

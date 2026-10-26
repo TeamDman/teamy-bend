@@ -1,0 +1,674 @@
+{
+  "tested_source": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+  "baseline": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "docs_pin": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "measurements": {
+    "measured_utc": "2026-10-26T04:53:15.167653+00:00",
+    "tested_source": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+    "gate": {
+      "exit": 0,
+      "passed": 1319,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 195,
+      "seconds": 994.5510886200063,
+      "workspace_minimum": 13069541376,
+      "tmp_minimum": 2189004800,
+      "log_sha256": "7191ad9824cbb001d0a47010998d10d986415951de68a79e4f2abaeed65c4654"
+    },
+    "matrix": {
+      "observations": 605,
+      "deterministic_pairs": 104,
+      "singletons": 397,
+      "raw_sha256": "8db8bb72928e8f10e39e5ac919cfd735bc08bc1a2b1840d2710af2e2ac140bf6",
+      "unexpected": [],
+      "timeouts": 0,
+      "corresponding_executions": 24,
+      "runtime_successes": 16,
+      "runtime_refusals": 8
+    },
+    "baseline_observations": 78,
+    "authored_cases": 39,
+    "baseline_exact": 5,
+    "baseline_different": 34,
+    "current_exact": 28,
+    "current_different": 11,
+    "diagnostic_improvements": [
+      "cpu-nonscalar-literal-upper-empty",
+      "cpu-nonscalar-literal-upper-overflow",
+      "cpu-nonscalar-literal-upper-plus-nonscalar",
+      "cpu-nonscalar-literal-upper-nine-nonscalar",
+      "cpu-uppercase-unicode/controls-empty",
+      "cpu-uppercase-unicode/controls-plus",
+      "cpu-uppercase-unicode/controls-nonhex",
+      "cpu-uppercase-unicode/controls-nine-digits",
+      "cpu-uppercase-unicode/controls-overflow",
+      "cpu-uppercase-unicode/controls-missing-brace",
+      "cpu-uppercase-unicode/controls-missing-close",
+      "argument",
+      "let",
+      "pattern",
+      "annotation",
+      "bmp-prefix",
+      "astral-prefix",
+      "after-is-quote",
+      "after-is-bmp",
+      "first-upper",
+      "upper-valid-prefix",
+      "imported-correct",
+      "template-body"
+    ],
+    "exact_regressions": [],
+    "standalone_originals": 1,
+    "accepted_controls": 6,
+    "unchanged_artifacts": 12,
+    "native_unchanged": {
+      "pure_normalization": 5,
+      "actual_IO": 1
+    },
+    "identity": 58,
+    "whole_census_rerun": false
+  },
+  "commands": {
+    "focused-literal": {
+      "source_commit": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "literal_",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069987840,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 13.018783661013003,
+      "minimum_free": 13069987840,
+      "minimum_tmp_free": 2247270400,
+      "log_sha256": "f9fd74c39b136d5192300321b76b117b69099e48bf0674e85fb804a8dc925a07"
+    },
+    "focused-case": {
+      "source_commit": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "uppercase_literal_diagnostic_eligibility",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069987840,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 12.666958257992519,
+      "minimum_free": 13069987840,
+      "minimum_tmp_free": 2247262208,
+      "log_sha256": "a01a3528e73e67c7581002063f7c7663e9950b6bfa664cad125ddf069df881a9"
+    },
+    "focused-literal-renewed": {
+      "source_commit": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "literal_",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069987840,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 19.11949407099746,
+      "minimum_free": 13069987840,
+      "minimum_tmp_free": 2247254016,
+      "log_sha256": "3de0fd3a4002188d16e04349e3351a5dd02c08c49d5f5ed62aa75ca2485993de"
+    },
+    "focused-integration": {
+      "source_commit": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "--nocapture"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069987840,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 63.44748148898361,
+      "minimum_free": 13069971456,
+      "minimum_tmp_free": 2246283264,
+      "log_sha256": "ad76110b883459e489e0a02591aa357c5eda4417836bb04226cfb67a908a5a28"
+    },
+    "focused-clippy": {
+      "source_commit": "84a5652595fea158fa520a04530ff43ad4d72f6e",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069971456,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.3827031050168443,
+      "minimum_free": 13069971456,
+      "minimum_tmp_free": 2247127040,
+      "log_sha256": "c18177009c4c5aaf4d77501d5d84c76e03755c86b3e0219c76c123cd4b64d744"
+    },
+    "clean-build": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--features",
+        "extended_observability"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.7219731800141744,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2247135232,
+      "log_sha256": "ec9807db1f5faa84376c289ad1df1231533bbb37e0142d955cbc74fdcab738de"
+    },
+    "full-gate": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 994.5510886200063,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2189004800,
+      "log_sha256": "7191ad9824cbb001d0a47010998d10d986415951de68a79e4f2abaeed65c4654"
+    },
+    "matrix-command": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 118.75597404502332,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2189004800,
+      "log_sha256": "2364a4f68d73380e4522fc2625e561fee8fd6067b21cb0b1a3315f1122b816d5"
+    },
+    "next-gap-command": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/next-gap.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.544675480981823,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2210164736,
+      "log_sha256": "466f0fe2aabb1624dfdf179d8a3de0e9526c42d91e6053c49c4629cf1e9ba34d"
+    },
+    "gate-identity-command": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/gate-identity.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 8.115311892994214,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2204516352,
+      "log_sha256": "861da8bc103354050b9d983f4591eba20c474c695c87255557f64af49595e42d"
+    },
+    "gate-identity-renewed-command": {
+      "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/gate-identity-renewed.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13069541376,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 14.166594520997023,
+      "minimum_free": 13069541376,
+      "minimum_tmp_free": 2201497600,
+      "log_sha256": "4bd9baad32fc4854be15d45abd29ee99a213beb5d286025cffd58ce1576e8bf5"
+    }
+  },
+  "snapshot": {
+    "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+    "binary_sha256": "ea8527cc2233b818d6d9f68b1041ee1015c176f2191049868ea29fe0b800cff2",
+    "archive_sha256": "34e2d03769c2596d77d0df830c49ee0b362c19a1f0f93abc07e8ac23509fdddb",
+    "binary_bytes": 27541232,
+    "archive_bytes": 7231558,
+    "fingerprints": [
+      {
+        "file": "target/debug/.fingerprint/teamy-bend-c85207eab3bb1647/bin-teamy-bend.json",
+        "fingerprint": {
+          "rustc": 16696009966390864400,
+          "features": "[\"default\", \"extended_observability\"]",
+          "declared_features": "[\"default\", \"extended_observability\", \"tracy\"]",
+          "target": 15259999317542362348,
+          "profile": 4000329519511807648,
+          "path": 4942398508502643691,
+          "deps": [
+            [
+              987910214981000494,
+              "arbitrary",
+              false,
+              5452526485928618512
+            ],
+            [
+              2636299918121164457,
+              "socket2",
+              false,
+              3462672464787218007
+            ],
+            [
+              2716495650848533533,
+              "directories_next",
+              false,
+              7597756631528583102
+            ],
+            [
+              4289391297033898176,
+              "facet_pretty",
+              false,
+              9315671338848947955
+            ],
+            [
+              4371022286835655106,
+              "facet",
+              false,
+              11120644715909443892
+            ],
+            [
+              5380358770761950913,
+              "tracing_subscriber",
+              false,
+              13248555277594674122
+            ],
+            [
+              7098700569944897890,
+              "libc",
+              false,
+              18440068434989699453
+            ],
+            [
+              7455154039531220218,
+              "teamy_cancellation",
+              false,
+              1314479810985918790
+            ],
+            [
+              9206635739968092262,
+              "facet_json",
+              false,
+              5555852876784875476
+            ],
+            [
+              9394460649638301237,
+              "tokio",
+              false,
+              14105617600381377558
+            ],
+            [
+              10141565841938428598,
+              "teamy_bend",
+              false,
+              5243624287063658461
+            ],
+            [
+              10141565841938428598,
+              "build_script_build",
+              false,
+              14843790723360690827
+            ],
+            [
+              11572704223576832424,
+              "open",
+              false,
+              13207949908176173387
+            ],
+            [
+              13435147900633593047,
+              "facet_csv",
+              false,
+              16462133729800874738
+            ],
+            [
+              14757622794040968908,
+              "tracing",
+              false,
+              14311375975235900415
+            ],
+            [
+              16117757646811882223,
+              "chrono",
+              false,
+              2641341933216355841
+            ],
+            [
+              16142802950189143282,
+              "figue",
+              false,
+              15953120168607652971
+            ],
+            [
+              16661324460137237341,
+              "color_eyre",
+              false,
+              12986095737036479449
+            ],
+            [
+              17390555767770508988,
+              "eyre",
+              false,
+              1650844428397224202
+            ]
+          ],
+          "local": [
+            {
+              "CheckDepInfo": {
+                "dep_info": "debug/.fingerprint/teamy-bend-c85207eab3bb1647/dep-bin-teamy-bend",
+                "checksum": false
+              }
+            }
+          ],
+          "rustflags": [],
+          "config": 8247474407144887393,
+          "compile_kind": 0
+        }
+      }
+    ],
+    "free": {
+      "${WORKSPACE}": 13069541376,
+      "${TMP}": 2212360192
+    }
+  },
+  "gate_binary_delta": {
+    "source": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+    "base_archive": "${EVIDENCE}/tested-binary.gz",
+    "base_archive_sha256": "34e2d03769c2596d77d0df830c49ee0b362c19a1f0f93abc07e8ac23509fdddb",
+    "base_binary_sha256": "ea8527cc2233b818d6d9f68b1041ee1015c176f2191049868ea29fe0b800cff2",
+    "final_binary_sha256": "ea8527cc2233b818d6d9f68b1041ee1015c176f2191049868ea29fe0b800cff2",
+    "binary_bytes": 27541232,
+    "chunks": [],
+    "changed_bytes": 0,
+    "reconstruction_verified": true
+  },
+  "tools": {
+    "rust": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "fmt": "rustfmt 1.9.0-nightly (23a3312d92 2026-05-23)",
+    "node": "v24.19.0",
+    "clang": "Debian clang version 19.1.7 (3+b1)",
+    "powershell": "PowerShell 7.5.4"
+  },
+  "private_backup": {
+    "created_utc": "2026-10-26T04:53:15.196758+00:00",
+    "source_commit": "a28efb73ec5d78cf8f0125854799c19c51c9163a",
+    "originals_preserved": true,
+    "lost_prior_focused_log_recovered": false,
+    "logical_bytes": 769245,
+    "archive_bytes": 82926,
+    "archive_sha256": "9f5a269f13aaabb19139c0ccbcc955a8d687f1690d541a35c455390f3dc8db2b",
+    "verified_members": 102,
+    "workspace_available_after": 13069451264,
+    "tmp_available_after": 2201493504,
+    "backup_path": "${WORKSPACE}/.tools/cpu-storage-preservation-20261025/uppercase-escape-a28efb7",
+    "manifest_sha256": "dd7723a6005a947214477af9247997a3abd703b6c4db058780bbf5ef83f1e35c"
+  },
+  "preservation": {
+    "verified_utc": "2026-10-26T04:34:02.335245+00:00",
+    "previous_preservation_sha256": "8a0ec84a8b64838a3ff1b56873832748422475957d1006eeb0b37ba8707ad27e",
+    "cleanup_records": 21,
+    "prior_other_files": 5,
+    "nonscalar_backup_sha256": "d066ce7bc074a22663f88399cf6fb9c622a6cad7862cfa4796c879fec4845167",
+    "library_retry": false,
+    "workspace_free": 13069541376,
+    "tmp_free": 2211950592
+  },
+  "compact_results_sha256": "c6a866a3c9044b559b83481699652c59c8641e93150b9cb807fa32e202529af9",
+  "full_census_rerun": false,
+  "historical_census": {
+    "source": "c5edea8",
+    "non_IO_differences": 140,
+    "acceptance_differences": 109,
+    "rejection_differences": 31,
+    "upstream_stack_failures": 6
+  },
+  "coverage_linkage": {
+    "linked_including_failed_receipts": 516,
+    "inventory": 1302,
+    "unlinked_by_applicability": {
+      "checking_rejection": 256,
+      "interpreter_compiled_candidates": 517,
+      "interpreter_only": 12,
+      "no_main": 1
+    }
+  },
+  "public_API_caveat": "Raw ParseError/layout unchanged. Optional metadata grows for eligible U, narrows for two q controls. invoke Err/Ok(exit_code=1) transition is bidirectional; external callers not audited.",
+  "unrun": [
+    "Whole census renewal",
+    "Supplementary all-target Clippy",
+    "Windows/desktop/GPU",
+    "Execution of refused malformed programs",
+    "Lowercase next-gap C/JS execution"
+  ],
+  "policy_changes": false,
+  "library_retry": false,
+  "lost_historical_log_recovered": false
+}

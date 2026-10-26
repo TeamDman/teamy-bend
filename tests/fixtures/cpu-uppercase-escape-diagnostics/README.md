@@ -9,7 +9,7 @@ malformed child. No authored case is presented as an upstream original.
 `expected/*.stderr` contains exact pinned checking output for every case.
 `exact: true` denotes the 28 cases qualified for exact diagnostics; the other
 11 remain rejection differences. Matching status alone is not diagnostic parity.
-The separate runtime matrix renews an unchanged upstream unknown-escape original.
+The separate differential matrix renews an unchanged upstream unknown-escape original.
 
 The eligible failure follows a pinned-compatible literal prefix and is either
 inside a String or the first Char code. ASCII escapes followed by a BMP character

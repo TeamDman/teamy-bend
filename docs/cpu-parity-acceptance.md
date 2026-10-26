@@ -2795,3 +2795,27 @@ compact lowering, Base coordinates, external invoke audit, supplementary lints
 and other semantic/oracle limits remain explicit. Baseline executable retention
 and the older lost-log limitations are recorded. Prior backups remain intact;
 no desktop activity or Library retry occurred.
+
+## Malformed uppercase escape checkpoint
+
+Tested `a28efb73ec5d78cf8f0125854799c19c51c9163a` qualifies the existing escape-diagnostic boundary
+without changing decoding, acceptance, runtime or guards. [Report](cpu-uppercase-escape-diagnostics.md).
+Gate **1319 passed / 0 failed / 49 ignored**.
+
+The 39 authored negatives improve from five exact/34 differing diagnostics to
+28 exact/11 differing: 23 improvements, with no previously exact regression.
+A byte-identical pinned unknown-escape original also remains exact. The matrix
+records 605 observations/104 repeat pairs, not 605 parity passes. Six accepted
+controls have 24 exact corresponding C/JS runs (16 success/eight JS refusal),
+five unchanged native pure outputs, one unchanged native IO output and 12
+unchanged artifacts. Strict IO exclusion remains.
+
+Whole-census counts are historical and unchanged as measurements; linkage stays
+516/1302, including failures. Eleven authored diagnostic differences remain open.
+The next substantive gap is lowercase plus/nine-digit scalar escape acceptance:
+eight renewed checking/normalization observations confirm disagreement; no
+executable qualification or correction is claimed. Pending nat_first, compact
+lowering, Base coordinates, external invoke audit, supplementary lints and older
+resource/oracle gaps remain unwaived. Public invoke result-shape changes in both
+directions are explicit. Prior cleanup records/backups remain intact, historical
+log loss unrecovered, no Library retry or desktop activity.
