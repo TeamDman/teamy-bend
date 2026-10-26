@@ -1,0 +1,62 @@
+[
+  {
+    "case": "reg/array_nested.bend",
+    "path": "tests/fixtures/cpu-array-nested/original/array_nested.bend",
+    "kind": "positive",
+    "stdout": "135\n",
+    "upstream_path": "tests/reg/array_nested.bend",
+    "source_sha256": "b132ff51deed154f4f41fc36bd262ea38322f7d683b67aacba9ba4d601d51b61"
+  },
+  {
+    "case": "run/array_split_join.bend",
+    "path": "tests/fixtures/cpu-array-nested/original/array_split_join.bend",
+    "kind": "positive",
+    "stdout": "145896\n",
+    "upstream_path": "tests/run/array_split_join.bend",
+    "source_sha256": "c0b5288ba9530a3179d0c30a7b5fe0153653490afd8f96cb7719a89c55981081"
+  },
+  {
+    "case": "nested-transfer",
+    "path": "tests/fixtures/cpu-array-nested/controls/nested-transfer.bend",
+    "kind": "positive",
+    "stdout": "old:leaf\nmoved:[new]\nouter:{[set]}\nold:right\nmoved:[left][new]\nouter:{[set]}{[replacement]}\n",
+    "source_sha256": "5664fb622c1cb39e0403ed06eb33f74785abaf9b47463614291f2b8720b06ba9"
+  },
+  {
+    "case": "split-boundaries",
+    "path": "tests/fixtures/cpu-array-nested/controls/split-boundaries.bend",
+    "kind": "positive",
+    "stdout": "old:1,2\nseam:90,80\nrebuilt:[90][80]\nkept:[1][2]\nold:4,5\nseam:90,80\nrebuilt:[1][2][3][90][80][6][7][8]\nkept:[1][2][3][4][5][6][7][8]\n",
+    "source_sha256": "d1123d13b03d1f1c336256813c99516e76dab5e10e8396ceac1a0894478d4e91"
+  },
+  {
+    "case": "reuse-half",
+    "path": "tests/fixtures/cpu-array-nested/negative/reuse-half.bend",
+    "kind": "negative",
+    "stderr": "Error:\n- expected : left\n- observed : left (consumed more than once)\nLocation: bad\n6 |     case ALeaf{x}: ALeaf{x}\n7>|     case ANode{left, right}: ANode{left, left}\n8 | \n",
+    "source_sha256": "2b8f9538c3b08821ec785f9dbb36213ca014efb475514559ea3022b8c319671d"
+  },
+  {
+    "case": "nondata-outer-clone",
+    "path": "tests/fixtures/cpu-array-nested/negative/nondata-outer-clone.bend",
+    "kind": "negative",
+    "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: main\n4 | def main() -> Array<Array<String>> & Array<Array<String>>:\n5>|   Array.clone(Array<String>, ALeaf{ALeaf{\"nested\"}})\n6 | \n",
+    "source_sha256": "29387a2391b34d6ad790ca0aa76b666e348e21489aeea8a4ebfa483a37fca481"
+  },
+  {
+    "case": "affine-swap",
+    "path": "tests/fixtures/cpu-array-runtime/controls/affine-swap.bend",
+    "kind": "positive",
+    "stdout": "7\n9\n",
+    "source_sha256": "c84bfa127c054300fd82a23d671e45bd393d1d8354149f1cfabf1985d4ee85d3"
+  },
+  {
+    "case": "array-depth-guard",
+    "path": "tests/fixtures/cpu-runtime-negatives/array_depth_bound.bend",
+    "kind": "runtime-negative",
+    "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
+    "stderr": "bend: an array past the deepest block class 31\n",
+    "port_c_residual_stderr": "teamy-bend executable C: array budget exhausted\n",
+    "upstream_path": "tests/io/array_depth_bound.bend"
+  }
+]

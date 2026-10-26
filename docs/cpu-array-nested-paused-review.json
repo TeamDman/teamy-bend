@@ -1,0 +1,99 @@
+{
+  "raw_review_sha256": "30c4211fea2cddce6ea4d059f17083e3e9300efa91c07fa6b438671f54b01b03",
+  "review": {
+    "reviewer": "independent review_lowercase_resume",
+    "timestamp_utc": "2026-10-26T21:33:20.057022+00:00",
+    "review_type": "bounded read-only source inspection at user-requested pause",
+    "status": "source inspection complete; implementation validation incomplete",
+    "approved_for_full_gate_or_main": false,
+    "blocking_source_findings": [],
+    "base_commit": "e2599d3ef7f8e2f472d16f97ac18c4bc42b94f7c",
+    "reviewed_state": "New untracked tests/fixtures/manifest over base; no production or existing runner changes observed. This receipt binds file bytes, not an uncreated source commit.",
+    "source_files": {
+      "tests/cpu_array_nested.rs": {
+        "sha256": "65f872128c28fedbb1a257c598fab77a50f6888ab432a51ebe897f8299c3d6b7",
+        "bytes": 4918
+      },
+      "scripts/array-runtime/nested-cases.json": {
+        "sha256": "bc5d81a1ba196061c76a97bb1a7e3da141c55f00f8d992ba843bd8e26748861b",
+        "bytes": 2916
+      },
+      "tests/fixtures/cpu-array-nested/README.md": {
+        "sha256": "59c5dc5f753796e58f8621ec1d5ca3fe284daa4009c492a0953398a4ba03ea35",
+        "bytes": 1439
+      },
+      "tests/fixtures/cpu-array-nested/controls/nested-transfer.bend": {
+        "sha256": "5664fb622c1cb39e0403ed06eb33f74785abaf9b47463614291f2b8720b06ba9",
+        "bytes": 1339
+      },
+      "tests/fixtures/cpu-array-nested/controls/nested-transfer.stdout": {
+        "sha256": "61695cc8e783847b0c5c052de18fe684e29bf13031c1ed9b7d24a2056a217572",
+        "bytes": 92
+      },
+      "tests/fixtures/cpu-array-nested/controls/split-boundaries.bend": {
+        "sha256": "d1123d13b03d1f1c336256813c99516e76dab5e10e8396ceac1a0894478d4e91",
+        "bytes": 1885
+      },
+      "tests/fixtures/cpu-array-nested/controls/split-boundaries.stdout": {
+        "sha256": "d42b53ec931faa4f110059590794984b1031e32091931b93f4cd07a75e88f39f",
+        "bytes": 132
+      },
+      "tests/fixtures/cpu-array-nested/negative/nondata-outer-clone.bend": {
+        "sha256": "29387a2391b34d6ad790ca0aa76b666e348e21489aeea8a4ebfa483a37fca481",
+        "bytes": 160
+      },
+      "tests/fixtures/cpu-array-nested/negative/reuse-half.bend": {
+        "sha256": "2b8f9538c3b08821ec785f9dbb36213ca014efb475514559ea3022b8c319671d",
+        "bytes": 232
+      },
+      "tests/fixtures/cpu-array-nested/original/array_nested.bend": {
+        "sha256": "b132ff51deed154f4f41fc36bd262ea38322f7d683b67aacba9ba4d601d51b61",
+        "bytes": 1042
+      },
+      "tests/fixtures/cpu-array-nested/original/array_nested.stdout": {
+        "sha256": "35696336da00b304d91bb78c4be84c0e975baa9ee85d1b26d4a0168203c19288",
+        "bytes": 4
+      },
+      "tests/fixtures/cpu-array-nested/original/array_split_join.bend": {
+        "sha256": "c0b5288ba9530a3179d0c30a7b5fe0153653490afd8f96cb7719a89c55981081",
+        "bytes": 1766
+      },
+      "tests/fixtures/cpu-array-nested/original/array_split_join.stdout": {
+        "sha256": "c076cd4ce546d93232b9319d80ce8a93c955b0a598896e44ee724cb5e18f883e",
+        "bytes": 7
+      }
+    },
+    "findings": [
+      "Pinned originals are byte-identical: array_nested expected135 newline; array_split_join expected145896 newline. README retains upstream Apache attribution; authored files and harness carry MPL headers.",
+      "Nested control preserves affine outer arrays, transfers a whole inner array by swap, discards another through set, mutates the transferred String inner array, and prints all retained values. Outer leaf and two-element cases have distinct expected outcomes.",
+      "Split control uses widths2 and8, tests the packed leaf boundary, low-half U32MAX and high-half wrapping index, observes old values and reconstructed seam reads, and prints full rebuilt and untouched clone contents.",
+      "Negative controls load then reject at checking: reuse of affine split half; Data requirement violated by cloning an outer array whose element Array<String> has kind Type.",
+      "Generated-C accounting wrapper requires exactly one renamed entry and inspects live words/blocks/tasks/continuations/frames/depth after successful completion; it does not reset counters or alter budgets. This is selected normal-completion coverage, not general memory safety or destruction-timing proof.",
+      "Harness checks native execution twice from one checked book and exact C/JS status/stdout/stderr. Existing compiler helper has45second compilation and programs20second limits; native calls remain under existing Bend budgets plus the eventual outer gate bound.",
+      "Existing differential runner remains unchanged with60second child bounds, exact required runtime lanes, diagnostic phases, no negative emitted artifacts, fixed upstream O3 profile, explicit IO exclusions and unwaived port-C depth diagnostic.",
+      "Two initially invalid authored comma-list drafts remain under rejected-authored-drafts with load-phase receipts. Corrected split control is accepted; corrected reuse-half reaches intended checker rejection. No production defect inferred from draft failures."
+    ],
+    "preliminary_evidence": {
+      "baseline_receipt_sha256": "379ca6fae328f12043710c29af486c8ee4674656ef2e96d1ed4a5456c5fabfd5",
+      "baseline_results_sha256": "d813e37f199986f3a29b2fa30c482b6ccfc77d6dd90d32e7e13be3c80b910169",
+      "baseline_source": "dirty base e2599d3 with new fixture files",
+      "baseline_binary_sha256": "b4e35ddddd40dcffaf08264e2c6bd168e362a578b8add79b5af2d6d4190ca8f5",
+      "wrapper_exit": 0,
+      "seconds": 27.071160743013024,
+      "observations_reported": 132,
+      "repeat_pairs_reported": 32,
+      "claim_scope": "Completed baseline receipt and targeted original/hash/phase checks inspected; final independent source-bound matrix audit has not been performed."
+    },
+    "pending": [
+      "Compile and run the new Rust harness; it is uncompiled/unrun at this pause.",
+      "Run targeted lint and full standard gate for the eventual clean source commit.",
+      "Renew and independently review final source-bound differential evidence and preservation/publication metadata."
+    ],
+    "limits": [
+      "No approval for main integration or completed-parity claim. An explicitly unfinished isolated checkpoint may preserve this work under parent-owned publication authorization.",
+      "One existing port-C depth diagnostic difference remains unwaived; strict IO exclusions remain separate from execution.",
+      "No same physical ABI/shared-view/destruction-timing or full CPU parity claim.",
+      "No tests/builds/Bend execution/network/remote operations were performed by reviewer. Work stopped on explicit pause; no additional analysis or validation scheduled."
+    ]
+  }
+}

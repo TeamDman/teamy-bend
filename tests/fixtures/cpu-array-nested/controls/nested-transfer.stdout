@@ -1,0 +1,6 @@
+old:leaf
+moved:[new]
+outer:{[set]}
+old:right
+moved:[left][new]
+outer:{[set]}{[replacement]}

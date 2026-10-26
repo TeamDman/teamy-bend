@@ -1,0 +1,39 @@
+{
+  "paused": true,
+  "main": "e2599d3ef7f8e2f472d16f97ac18c4bc42b94f7c",
+  "baseline_binary_source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+  "baseline_binary_sha256": "b4e35ddddd40dcffaf08264e2c6bd168e362a578b8add79b5af2d6d4190ca8f5",
+  "baseline_checkout": "e2599d3ef7f8e2f472d16f97ac18c4bc42b94f7c",
+  "baseline_dirty": true,
+  "baseline_observations": 132,
+  "repeat_pairs": 32,
+  "timeouts": 0,
+  "successful_executions": 50,
+  "checker_negative_observations": 18,
+  "runtime_refusals": 10,
+  "residuals": [
+    {
+      "case": "array-depth-guard",
+      "lane": "port-C-O3",
+      "classification": "unwaived resource-refusal diagnostic difference"
+    }
+  ],
+  "production_changes": false,
+  "new_harness_compiled": false,
+  "focused_tests_run": false,
+  "full_gate_run_for_current_source": false,
+  "final_source_matrix_run": false,
+  "census_renewed": false,
+  "last_full_gate": {
+    "source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+    "passed": 1363,
+    "failed": 0,
+    "ignored": 49
+  },
+  "baseline_receipt_sha256": "d813e37f199986f3a29b2fa30c482b6ccfc77d6dd90d32e7e13be3c80b910169",
+  "compact_receipt_sha256": "a305323ea5814d54282f25468ab30b17d89b4c45efa0f97340158f2194a2d493",
+  "free_bytes": {
+    "workspace": 12955017216,
+    "temporary": 1434497024
+  }
+}
