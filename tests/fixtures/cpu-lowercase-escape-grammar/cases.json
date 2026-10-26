@@ -80,91 +80,91 @@
     "case": "missing-brace",
     "path": "cpu-lowercase-escape-grammar/controls/missing-brace.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/11.stderr"
   },
   {
     "case": "missing-close",
     "path": "cpu-lowercase-escape-grammar/controls/missing-close.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/12.stderr"
   },
   {
     "case": "empty",
     "path": "cpu-lowercase-escape-grammar/controls/empty.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/13.stderr"
   },
   {
     "case": "nonhex",
     "path": "cpu-lowercase-escape-grammar/controls/nonhex.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/14.stderr"
   },
   {
     "case": "overflow",
     "path": "cpu-lowercase-escape-grammar/controls/overflow.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/15.stderr"
   },
   {
     "case": "nine-max",
     "path": "cpu-lowercase-escape-grammar/controls/nine-max.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/16.stderr"
   },
   {
     "case": "plus-surrogate",
     "path": "cpu-lowercase-escape-grammar/controls/plus-surrogate.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/17.stderr"
   },
   {
     "case": "nine-surrogate",
     "path": "cpu-lowercase-escape-grammar/controls/nine-surrogate.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/18.stderr"
   },
   {
     "case": "fullwidth",
     "path": "cpu-lowercase-escape-grammar/controls/fullwidth.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/19.stderr"
   },
   {
     "case": "negative",
     "path": "cpu-lowercase-escape-grammar/controls/negative.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/20.stderr"
   },
   {
     "case": "only-plus",
     "path": "cpu-lowercase-escape-grammar/controls/only-plus.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/21.stderr"
   },
   {
     "case": "underscore",
     "path": "cpu-lowercase-escape-grammar/controls/underscore.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/22.stderr"
   },
   {
     "case": "whitespace",
     "path": "cpu-lowercase-escape-grammar/controls/whitespace.bend",
     "kind": "legacy-refusal",
-    "exact": false,
+    "exact": true,
     "expected": "expected/23.stderr"
   },
   {

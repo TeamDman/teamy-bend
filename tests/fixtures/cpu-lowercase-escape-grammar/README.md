@@ -13,7 +13,10 @@ programs that executed to 65. `before.json.gz` preserves all 148 baseline
 observations, including four actual generated executions. Root substitutions are
 explicit; original raw stream hashes remain.
 
-The corrected cohort expects 19 exact diagnostics and 15 remaining differences.
+At b46f957 the corrected cohort had 19 exact diagnostics and 15 remaining differences.
+The subsequent diagnostic-only correction qualifies the thirteen legacy cases,
+so current tests require 32 exact / two differing diagnostics; the original
+19/15 receipt remains historical.
 Matching rejection is not exact diagnostic parity. Thirteen legacy malformed,
 overflow and noncanonical non-scalar cases preserve their raw public errors,
 recorded in `public-errors.json`. Their diagnostic mismatch remains open, along

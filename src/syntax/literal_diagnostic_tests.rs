@@ -13,7 +13,7 @@ fn literal_failures_keep_public_errors_and_exact_consumed_source() {
         "../../tests/fixtures/cpu-malformed-literal-diagnostics/negative-cases.json"
     ))
     .unwrap();
-    assert_eq!(cases.len(), 13);
+    assert_eq!(cases.len(), 14);
     for case in cases {
         let path = root().join(&case);
         let plain = crate::syntax::load(&path).unwrap_err();
@@ -53,7 +53,7 @@ fn literal_diagnostics_do_not_guess_unicode_contracts() {
         "../../tests/fixtures/cpu-malformed-literal-diagnostics/unresolved-cases.json"
     ))
     .unwrap();
-    assert_eq!(cases.len(), 3);
+    assert_eq!(cases.len(), 2);
     for case in cases {
         let path = root().join(&case);
         let plain = crate::syntax::load(&path).unwrap_err();
@@ -279,6 +279,73 @@ fn lowercase_literal_refusals_preserve_existing_public_error_fields() {
                     case.message
                 )
             );
+        }
+    }
+}
+
+#[test]
+fn lowercase_literal_diagnostics_preserve_raw_errors_and_first_failure() {
+    #[derive(facet::Facet)]
+    struct FixtureExpectation {
+        case: String,
+        path: String,
+        kind: String,
+        exact: bool,
+        expected: String,
+        line: usize,
+        column: usize,
+        message: String,
+    }
+    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
+        "../../tests/fixtures/cpu-lowercase-escape-diagnostics/cases.json"
+    ))
+    .unwrap();
+    assert_eq!(cases.len(), 30);
+    let fixtures = root().parent().unwrap().to_path_buf();
+    for case in cases {
+        assert!(matches!(case.kind.as_str(), "legacy" | "adjacent"));
+        let path = fixtures.join(&case.path);
+        let plain = crate::syntax::load(&path).unwrap_err();
+        assert_eq!((plain.line, plain.column), (case.line, case.column));
+        assert_eq!(plain.message, case.message, "{}", case.case);
+        assert_eq!(
+            plain.to_string(),
+            crate::syntax::load_executable(&path)
+                .unwrap_err()
+                .to_string()
+        );
+        for failure in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(plain.to_string(), failure.error.to_string());
+            if case.exact {
+                let report = failure
+                    .diagnostic
+                    .unwrap_or_else(|| panic!("{}", case.case));
+                let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content
+                else {
+                    panic!("expected syntax diagnostic: {}", case.case)
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(
+                        fixtures
+                            .join("cpu-lowercase-escape-diagnostics")
+                            .join(&case.expected)
+                    )
+                    .unwrap(),
+                    "{}",
+                    case.case
+                );
+            } else if case.case != "earlier-grammar" {
+                assert!(failure.diagnostic.is_none(), "{}", case.case);
+            }
         }
     }
 }

@@ -11,5 +11,6 @@
   "negative/escape-template.bend",
   "negative/imported.bend",
   "negative/first-overflow.bend",
-  "negative/first-escape.bend"
+  "negative/first-escape.bend",
+  "controls/unicode-invalid.bend"
 ]

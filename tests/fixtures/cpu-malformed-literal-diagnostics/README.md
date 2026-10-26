@@ -1,5 +1,14 @@
 # Malformed-literal diagnostics
 
+Current manifests include 14 exact negatives and two unresolved UTF-16 controls.
+The lowercase `unicode-invalid` source is now qualified without changing its raw
+public error. The original batch notes below describe historical coverage; later
+contextual, uppercase and lowercase checkpoints qualify additional cases. See
+`cpu-contextual-lexical-diagnostics`, `cpu-uppercase-unicode` and
+`cpu-lowercase-escape-diagnostics` for their distinct receipts.
+
+## Original batch notes
+
 The four parse originals are unchanged from the pinned Apache-2.0 source named
 in NOTICE. `invalid_string_escape` and `word_overflow_literal` have exact load
 rejection goldens. Thirteen exact cases include EOF, CRLF, leading zeros, BMP

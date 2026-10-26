@@ -2250,35 +2250,41 @@ impl Parser<'_> {
     }
     #[inline(never)]
     fn literal_decode_error(&mut self, raw: &str, error: LiteralError) -> ParseError {
-        match error {
-            LiteralError::Other(message) => self.error(message),
+        let (message, escape, after) = match error {
+            LiteralError::Other(message) => return self.error(message),
             LiteralError::UnknownEscape { escape, after } => {
-                // Pinned parse_char observes the next UTF-16 code unit after
-                // consuming the escape. Do not claim exact scalar rendering
-                // for a surrogate pair; retain the existing host diagnostic.
-                // Every successfully decoded escape follows the pinned grammar.
-                // A Char must close after its first code; do not attribute that
-                // earlier upstream failure to a later escape.
-                if escape.is_ascii()
-                    && (raw.starts_with('"') || after == 3)
-                    && !raw[..after].contains('\n')
-                    && raw[after..]
-                        .chars()
-                        .next()
-                        .is_none_or(|c| c.len_utf16() == 1)
-                    && let Some(origins) = &mut self.templates.diagnostics
-                {
-                    let token = &self.tokens[self.at - 1];
-                    origins.expected_after_token(
-                        &self.label,
-                        token.line,
-                        token.column + raw[..after].chars().count() - 1,
-                        "an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})",
-                    );
-                }
-                self.error(format!("unknown escape: \\{escape}"))
+                (format!("unknown escape: \\{escape}"), escape, after)
             }
+            LiteralError::MalformedUnicode {
+                message,
+                escape,
+                after,
+            } => (message, escape, after),
+        };
+        // Pinned parse_char observes the next UTF-16 code unit after
+        // consuming the escape. Do not claim exact scalar rendering
+        // for a surrogate pair; retain the existing host diagnostic.
+        // Every successfully decoded escape follows the pinned grammar.
+        // A Char must close after its first code; do not attribute that
+        // earlier upstream failure to a later escape.
+        if escape.is_ascii()
+            && (raw.starts_with('"') || after == 3)
+            && !raw[..after].contains('\n')
+            && raw[after..]
+                .chars()
+                .next()
+                .is_none_or(|c| c.len_utf16() == 1)
+            && let Some(origins) = &mut self.templates.diagnostics
+        {
+            let token = &self.tokens[self.at - 1];
+            origins.expected_after_token(
+                &self.label,
+                token.line,
+                token.column + raw[..after].chars().count() - 1,
+                "an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})",
+            );
         }
+        self.error(message)
     }
     fn pattern(&mut self, value: &TermRef, source: Option<usize>) -> Result<Pattern, ParseError> {
         if self.is_compile_binding(value) {
@@ -2645,7 +2651,15 @@ fn nat_term(count: u32) -> TermRef {
 }
 enum LiteralError {
     Other(String),
-    UnknownEscape { escape: char, after: usize },
+    UnknownEscape {
+        escape: char,
+        after: usize,
+    },
+    MalformedUnicode {
+        message: String,
+        escape: char,
+        after: usize,
+    },
 }
 impl From<&str> for LiteralError {
     fn from(message: &str) -> Self {
@@ -2672,8 +2686,15 @@ fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
             '\'' => u32::from('\''),
             '"' => u32::from('"'),
             'u' | 'U' if escape == 'u' || pinned_unicode => {
+                // Keep the legacy public error while remembering where pinned
+                // parse_char rejects this spelling. Do not move the raw cursor.
+                let malformed = |message| LiteralError::MalformedUnicode {
+                    message,
+                    escape,
+                    after,
+                };
                 if chars.next().map(|(_, c)| c) != Some('{') {
-                    return Err("Unicode escape needs braces".into());
+                    return Err(malformed("Unicode escape needs braces".into()));
                 }
                 let mut digits = String::new();
                 let mut closed = false;
@@ -2685,17 +2706,16 @@ fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
                     digits.push(d);
                 }
                 if !closed {
-                    return Err("unfinished Unicode escape".into());
+                    return Err(malformed("unfinished Unicode escape".into()));
                 }
-                let value = u32::from_str_radix(&digits, 16).map_err(|error| {
-                    LiteralError::Other(format!("invalid Unicode escape: {error}"))
-                })?;
+                let value = u32::from_str_radix(&digits, 16)
+                    .map_err(|error| malformed(format!("invalid Unicode escape: {error}")))?;
                 // Preserve legacy lowercase scan/radix/non-scalar errors, but
                 // never accept the extra spellings allowed by from_str_radix.
                 // Canonical escapes carry any U32 code, not just host scalars.
                 if !pinned_unicode {
                     if char::from_u32(value).is_none() {
-                        return Err("invalid Unicode code point".into());
+                        return Err(malformed("invalid Unicode code point".into()));
                     }
                     return Err(LiteralError::UnknownEscape { escape, after });
                 }
@@ -4163,7 +4183,10 @@ mod literal_decode_tests {
             ));
         }
         for raw in [r#""\u{+D800}""#, r#""\u{00000D800}""#] {
-            assert!(matches!(decode_literal(raw), Err(LiteralError::Other(_))));
+            assert!(matches!(
+                decode_literal(raw),
+                Err(LiteralError::MalformedUnicode { .. })
+            ));
         }
     }
 

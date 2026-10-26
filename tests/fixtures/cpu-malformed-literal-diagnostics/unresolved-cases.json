@@ -1,5 +1,4 @@
 [
   "controls/astral-after.bend",
-  "controls/astral-escape.bend",
-  "controls/unicode-invalid.bend"
+  "controls/astral-escape.bend"
 ]
