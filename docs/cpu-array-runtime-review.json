@@ -221,5 +221,71 @@
       "This reviewer has not inspected or changed remote state; review approval is not itself publication.",
       "Raw archive/binary backups remain separate from Git preservation; final review and later records need the planned supplement."
     ]
+  },
+  "csv_publication_review": {
+    "raw_review_sha256": "5b8239beb4148cc7282bbd05bf4a772e546932eb48f3c3d1f1b83f43e9e0378e",
+    "review": {
+      "reviewer": "independent review_lowercase_resume",
+      "timestamp_utc": "2026-10-26T20:04:37.077057+00:00",
+      "approved": true,
+      "approval_scope": "Publication metadata verification for reviewed documentation checkpoint; CRLF-to-LF CSV derivation is suitable and does not change row content. No tests, source edits or remote actions performed.",
+      "documentation_commit": "3313175e599a122b861e98e9d0f7a3e72a110ba5",
+      "tested_source_commit": "d1ba0e59c60d6f569df3e6b26329077123c08a47",
+      "working_tree_clean": true,
+      "source_and_tests_unchanged_since_tested_source": true,
+      "csv": {
+        "path": "docs/cpu-array-runtime-evidence.csv",
+        "approved_draft_sha256": "03a163e7e815cb8bafdb2eb0c4c278e0ce4b7a05e9dc4ab79f9c4066053252d4",
+        "approved_draft_bytes": 3025,
+        "committed_blob_sha256": "2232554668e451c6789d6f610c1eec356dbf7bc3695dd2d9580ffbd91738bc19",
+        "committed_blob_bytes": 3012,
+        "transformation": "Replace13 CRLF record terminators with LF; no other byte changes.",
+        "exact_transformed_byte_equality": true,
+        "parsed_header_and_12_rows_identical": true,
+        "normalization_is_not_stream_or_runtime_evidence_normalization": true
+      },
+      "other_exact_draft_copies": {
+        "docs/cpu-array-runtime.md": {
+          "sha256": "0e1cdb04fc6e23f2df433cecff01858b7b6a7dda64dabdf6df4c8fcbe472ccd7",
+          "bytes": 9168,
+          "exact_approved_draft_copy": true
+        },
+        "docs/cpu-array-runtime-validation.json": {
+          "sha256": "f24b471eb4f1918bf9101ffb427c4d4d0a5b4dc6a6f5508d0ce4dc0ed31b4c71",
+          "bytes": 2948,
+          "exact_approved_draft_copy": true
+        },
+        "docs/cpu-array-runtime-coverage.json": {
+          "sha256": "953b26752bc512ad11ebdfabc318a4f67843f0816e25792aafa430860ee59704",
+          "bytes": 873,
+          "exact_approved_draft_copy": true
+        },
+        "docs/cpu-array-runtime-results.json.gz": {
+          "sha256": "3eb3f092484b415d3453cc010f6832e51daf870b6ff6960a93b64ec525d3bfa5",
+          "bytes": 69633,
+          "exact_approved_draft_copy": true
+        }
+      },
+      "acceptance_append": {
+        "path": "docs/cpu-parity-acceptance.md",
+        "committed_equals_previous_blob_plus_exact_approved_append": true,
+        "append_sha256": "8d902be75b8cb98c29332cd3ba66eb578720bb7df2b33f96bb39c3f0742bcce8",
+        "append_bytes": 940,
+        "complete_committed_blob_sha256": "353bdee4d5e15ed7431d695a4200ff9c28e01c2f91e6b1080315e541e8db64ae"
+      },
+      "prior_review": {
+        "committed_path": "docs/cpu-array-runtime-review.json",
+        "wrapper_payload_equals_original_review_JSON": true,
+        "wrapper_preserves_original_raw_review_sha256": true,
+        "original_review_sha256": "5f01d0ee95b2eec1244b8e916f67951ea3b1f1b84a33efe76876d75a3678ee3d",
+        "committed_wrapper_sha256": "60c4d49fa448ca792dbb362baa8191a5ea2399b41b0cc78672e09594cfd53e23"
+      },
+      "findings": [],
+      "limits": [
+        "Full-gate attribution remains solely d1ba0e5; documentation commit3313175 does not constitute a new test run.",
+        "Original draft CSV hash and committed LF blob hash must remain separately identified in the public derivation receipt.",
+        "Parent retains responsibility for final follow-up documentation-only diff, preservation and fresh authorized non-force publication checks."
+      ]
+    }
   }
 }
