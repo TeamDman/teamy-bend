@@ -129,7 +129,7 @@ fn uppercase_refusals_preserve_public_loader_errors_and_first_error_positions() 
                 .unwrap(),
         ] {
             assert_eq!(format!("{:?}", failure.error), format!("{plain:?}"));
-            assert_eq!(failure.diagnostic.is_some(), escape == 'q');
+            assert!(failure.diagnostic.is_some(), "{name}");
         }
     }
 }
@@ -168,5 +168,66 @@ fn literal_and_expression_guards_remain_on_the_default_stack() {
         "\"\\n\\t\\r\\0\\\\\\'\\\"\\u{1F600}\"",
     ] {
         crate::syntax::parse_term(source).unwrap();
+    }
+}
+
+#[test]
+fn uppercase_literal_diagnostic_eligibility_preserves_first_upstream_failure() {
+    #[derive(facet::Facet)]
+    struct FixtureExpectation {
+        case: String,
+        path: String,
+        kind: String,
+        exact: bool,
+        expected: String,
+    }
+    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
+        "../../tests/fixtures/cpu-uppercase-escape-diagnostics/cases.json"
+    ))
+    .unwrap();
+    assert_eq!(cases.len(), 39);
+    let fixtures = root().parent().unwrap().to_path_buf();
+    for case in cases {
+        let path = fixtures.join(&case.path);
+        let plain = crate::syntax::load(&path).unwrap_err();
+        assert_eq!(
+            format!("{plain:?}"),
+            format!("{:?}", crate::syntax::load_executable(&path).unwrap_err()),
+            "{}",
+            case.case
+        );
+        for failure in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(format!("{:?}", failure.error), format!("{plain:?}"));
+            if case.exact {
+                let report = failure
+                    .diagnostic
+                    .unwrap_or_else(|| panic!("missing diagnostic: {}", case.case));
+                let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content
+                else {
+                    panic!("expected syntax diagnostic: {}", case.case)
+                };
+                assert_eq!(
+                    format!(
+                        "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                        report.excerpt
+                    ),
+                    std::fs::read_to_string(
+                        fixtures
+                            .join("cpu-uppercase-escape-diagnostics")
+                            .join(case.expected.clone())
+                    )
+                    .unwrap(),
+                    "{}",
+                    case.case
+                );
+            } else if case.kind == "unresolved" {
+                assert!(failure.diagnostic.is_none(), "{}", case.case);
+            }
+        }
     }
 }

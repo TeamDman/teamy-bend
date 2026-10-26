@@ -1,0 +1,275 @@
+[
+  {
+    "case": "cpu-nonscalar-literal-upper-empty",
+    "path": "cpu-nonscalar-literal/upper-empty.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/00.stderr"
+  },
+  {
+    "case": "cpu-nonscalar-literal-upper-overflow",
+    "path": "cpu-nonscalar-literal/upper-overflow.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/01.stderr"
+  },
+  {
+    "case": "cpu-nonscalar-literal-upper-plus-nonscalar",
+    "path": "cpu-nonscalar-literal/upper-plus-nonscalar.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/02.stderr"
+  },
+  {
+    "case": "cpu-nonscalar-literal-upper-nine-nonscalar",
+    "path": "cpu-nonscalar-literal/upper-nine-nonscalar.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/03.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-empty",
+    "path": "cpu-uppercase-unicode/controls/empty.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/04.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-plus",
+    "path": "cpu-uppercase-unicode/controls/plus.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/05.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-nonhex",
+    "path": "cpu-uppercase-unicode/controls/nonhex.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/06.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-nine-digits",
+    "path": "cpu-uppercase-unicode/controls/nine-digits.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/07.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-overflow",
+    "path": "cpu-uppercase-unicode/controls/overflow.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/08.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-missing-brace",
+    "path": "cpu-uppercase-unicode/controls/missing-brace.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/09.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-missing-close",
+    "path": "cpu-uppercase-unicode/controls/missing-close.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/10.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-invalid-before-valid",
+    "path": "cpu-uppercase-unicode/controls/invalid-before-valid.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/11.stderr"
+  },
+  {
+    "case": "cpu-uppercase-unicode/controls-valid-before-invalid",
+    "path": "cpu-uppercase-unicode/controls/valid-before-invalid.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/12.stderr"
+  },
+  {
+    "case": "argument",
+    "path": "cpu-uppercase-escape-diagnostics/controls/argument.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/13.stderr"
+  },
+  {
+    "case": "let",
+    "path": "cpu-uppercase-escape-diagnostics/controls/let.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/14.stderr"
+  },
+  {
+    "case": "pattern",
+    "path": "cpu-uppercase-escape-diagnostics/controls/pattern.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/15.stderr"
+  },
+  {
+    "case": "annotation",
+    "path": "cpu-uppercase-escape-diagnostics/controls/annotation.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/16.stderr"
+  },
+  {
+    "case": "bmp-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/bmp-prefix.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/17.stderr"
+  },
+  {
+    "case": "astral-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/astral-prefix.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/18.stderr"
+  },
+  {
+    "case": "multiline-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/multiline-prefix.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/19.stderr"
+  },
+  {
+    "case": "after-is-newline",
+    "path": "cpu-uppercase-escape-diagnostics/controls/after-is-newline.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/20.stderr"
+  },
+  {
+    "case": "after-is-quote",
+    "path": "cpu-uppercase-escape-diagnostics/controls/after-is-quote.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/21.stderr"
+  },
+  {
+    "case": "after-is-bmp",
+    "path": "cpu-uppercase-escape-diagnostics/controls/after-is-bmp.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/22.stderr"
+  },
+  {
+    "case": "after-is-astral",
+    "path": "cpu-uppercase-escape-diagnostics/controls/after-is-astral.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/23.stderr"
+  },
+  {
+    "case": "first-upper",
+    "path": "cpu-uppercase-escape-diagnostics/controls/first-upper.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/24.stderr"
+  },
+  {
+    "case": "first-other",
+    "path": "cpu-uppercase-escape-diagnostics/controls/first-other.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/25.stderr"
+  },
+  {
+    "case": "first-grammar",
+    "path": "cpu-uppercase-escape-diagnostics/controls/first-grammar.bend",
+    "kind": "grammar-control",
+    "exact": false,
+    "expected": "expected/26.stderr"
+  },
+  {
+    "case": "first-hex",
+    "path": "cpu-uppercase-escape-diagnostics/controls/first-hex.bend",
+    "kind": "grammar-control",
+    "exact": true,
+    "expected": "expected/27.stderr"
+  },
+  {
+    "case": "imported",
+    "path": "cpu-uppercase-escape-diagnostics/controls/imported.bend",
+    "kind": "grammar-control",
+    "exact": true,
+    "expected": "expected/28.stderr"
+  },
+  {
+    "case": "char-second-ascii",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-ascii.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/29.stderr"
+  },
+  {
+    "case": "char-second-escaped",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-escaped.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/30.stderr"
+  },
+  {
+    "case": "char-second-nonscalar",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-nonscalar.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/31.stderr"
+  },
+  {
+    "case": "lower-plus-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-plus-prefix.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/32.stderr"
+  },
+  {
+    "case": "lower-nine-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-nine-prefix.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/33.stderr"
+  },
+  {
+    "case": "upper-valid-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/upper-valid-prefix.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/34.stderr"
+  },
+  {
+    "case": "imported-correct",
+    "path": "cpu-uppercase-escape-diagnostics/controls/imported-correct.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/35.stderr"
+  },
+  {
+    "case": "lower-prefix-q",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-prefix-q.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/36.stderr"
+  },
+  {
+    "case": "char-second-q",
+    "path": "cpu-uppercase-escape-diagnostics/controls/char-second-q.bend",
+    "kind": "unresolved",
+    "exact": false,
+    "expected": "expected/37.stderr"
+  },
+  {
+    "case": "template-body",
+    "path": "cpu-uppercase-escape-diagnostics/controls/template-body.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/38.stderr"
+  }
+]

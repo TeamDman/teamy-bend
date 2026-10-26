@@ -2252,15 +2252,25 @@ impl Parser<'_> {
     fn literal_decode_error(&mut self, raw: &str, error: LiteralError) -> ParseError {
         match error {
             LiteralError::Other(message) => self.error(message),
-            LiteralError::UnknownEscape { escape, after } => {
+            LiteralError::UnknownEscape {
+                escape,
+                after,
+                pinned_prefix,
+            } => {
                 // Pinned parse_char observes the next UTF-16 code unit after
                 // consuming the escape. Do not claim exact scalar rendering
                 // for a surrogate pair; retain the existing host diagnostic.
-                if escape.is_ascii()
-                    // Unsupported uppercase escapes retain their public error;
-                    // grammar refusals need separate diagnostic qualification.
-                    && escape != 'U'
-                    && raw[after..].chars().next().is_none_or(|c| c.len_utf16() == 1)
+                // A Char must close after its first code. Earlier noncanonical
+                // lowercase escapes and multiline cursors need separate diagnostics;
+                // do not attribute their first upstream failure to this escape.
+                if pinned_prefix
+                    && escape.is_ascii()
+                    && (raw.starts_with('"') || after == 3)
+                    && !raw[..after].contains('\n')
+                    && raw[after..]
+                        .chars()
+                        .next()
+                        .is_none_or(|c| c.len_utf16() == 1)
                     && let Some(origins) = &mut self.templates.diagnostics
                 {
                     let token = &self.tokens[self.at - 1];
@@ -2640,7 +2650,11 @@ fn nat_term(count: u32) -> TermRef {
 }
 enum LiteralError {
     Other(String),
-    UnknownEscape { escape: char, after: usize },
+    UnknownEscape {
+        escape: char,
+        after: usize,
+        pinned_prefix: bool,
+    },
 }
 impl From<&str> for LiteralError {
     fn from(message: &str) -> Self {
@@ -2650,6 +2664,7 @@ impl From<&str> for LiteralError {
 fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
     let mut chars = raw[1..raw.len() - 1].char_indices();
     let mut out = Vec::new();
+    let mut pinned_prefix = true;
     while let Some((_, c)) = chars.next() {
         if c != '\\' {
             out.push(u32::from(c));
@@ -2690,12 +2705,14 @@ fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
                 if !pinned_unicode && char::from_u32(value).is_none() {
                     return Err("invalid Unicode code point".into());
                 }
+                pinned_prefix &= pinned_unicode;
                 value
             }
             _ => {
                 return Err(LiteralError::UnknownEscape {
                     escape,
                     after: 1 + at + escape.len_utf8(),
+                    pinned_prefix,
                 });
             }
         });
@@ -4141,7 +4158,8 @@ mod literal_decode_tests {
                     decode_literal(&raw),
                     Err(LiteralError::UnknownEscape {
                         escape: 'U',
-                        after: 5
+                        after: 5,
+                        pinned_prefix: true
                     })
                 ),
                 "{raw}"
@@ -4164,7 +4182,7 @@ mod literal_decode_tests {
             (r#""\U{}\q""#, 'U', 3),
         ] {
             assert!(matches!(decode_literal(raw),
-                Err(LiteralError::UnknownEscape { escape: e, after: a })
+                Err(LiteralError::UnknownEscape { escape: e, after: a, pinned_prefix: true })
                     if e == escape && a == after));
         }
         for escape in [r"\U{41}", r"\U{1F600}", r"\U{d800}", r"\u{ffffffff}"] {
