@@ -1,0 +1,77 @@
+{
+  "source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+  "baseline": "bb19207678b08b92a659eb7b4a4eb990ba249375",
+  "matrix": {
+    "observations": 132,
+    "cases": 8,
+    "repeat_pairs": 32,
+    "timeouts": 0,
+    "positive_executions": 50,
+    "checker_negative_observations": 18,
+    "runtime_guard_refusals": 10,
+    "unwaived_port_C_guard_observations": 2,
+    "distinct_unwaived_case_backend_differences": 1,
+    "whole_census_renewed": false,
+    "rejection_subset_renewed": false,
+    "production_changes": false,
+    "tested_source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+    "baseline_stream_matches": 120,
+    "baseline_identical_port_artifacts": 12,
+    "baseline_binary_source": "a347a2d8f679d10ee21fdca3539deb398ec5e633"
+  },
+  "matrix_raw_sha256": "836b6bcc352121234758162fcd8664ee35c05f802da468a7ab2b335e656a54f7",
+  "gate": {
+    "source_commit": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null,
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 12981088256,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1060.4189964699908,
+    "minimum_free": 12981088256,
+    "minimum_tmp_free": 1464664064,
+    "sample_count": 531
+  },
+  "totals": {
+    "passed": 1363,
+    "failed": 0,
+    "ignored": 49
+  },
+  "gate_log_sha256": "3e5ff8fb595eab87cceddc9960322fb6f4d7e31d5a95f9b1651d2cc681e055c8",
+  "identity": {
+    "source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+    "clean": true,
+    "binary_sha256": "b4e35ddddd40dcffaf08264e2c6bd168e362a578b8add79b5af2d6d4190ca8f5",
+    "version": "<port>/target/debug/teamy-bend 0.1.0 (repo https://github.com/TeamDman/teamy-bend.git, branch test/cpu-array-boxed-20261026, rev 0c40157, worktree clean, built 2026-10-26 20:54:40 +00:00)",
+    "profile": "standard-gate extended_observability without tracy",
+    "references": {
+      "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+      "docs": "50e89d6897ce2a65167ef65b17c5fa83fe849158"
+    },
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "production_tree_unchanged_from": "bb19207678b08b92a659eb7b4a4eb990ba249375"
+  },
+  "source_review_sha256": "1f36c73e89cc5bb9588a6b04e887e412bb0aac8bad6f783b0e52d0c77fdf8ef4",
+  "matrix_review_sha256": "9891222f08959c95d23ab53b0ca35b7ca0fd4fdbaf1ae559da78a7c3d4c0873e"
+}

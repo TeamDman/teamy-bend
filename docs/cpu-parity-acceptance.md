@@ -2990,3 +2990,19 @@ and 31 rejection differences retain their measured identities. Linked receipts:
 existing lowering barrier. Next substantive originals are array_clone_boxed and
 array_heap_element, unrun here. See [borrowed-array report](cpu-array-borrow.md) for
 exact commands, identities, bounds, caveats and evidence.
+
+
+## Boxed-array ownership checkpoint (0c40157)
+
+The unchanged array_clone_boxed and array_heap_element originals now match all
+five executable lanes. Two new controls cover unread clone disposal, independent
+mutations, owning/nullary transitions, set-discard and swap-transfer behavior.
+Two checking negatives reject exactly. Depth32 retains one unwaived port-C
+diagnostic discrepancy across two repeats. Final matrix: 132 observations /
+32 repeat pairs / 0 timeouts; standard gate: 1363 passed / 0 failed / 49 ignored.
+No production change, full census or rejection-subset renewal occurred. Historical
+109 acceptance and 31 rejection differences retain their measured identities.
+Linked receipts: 524/1302, not completed parity. Argument recovery remains
+blocked by its existing lowering barrier. Next substantive originals are
+array_nested and array_split_join, unrun here. See [boxed-array report](cpu-array-boxed.md)
+for exact commands, identities, limits, cleanup recoverability and evidence.

@@ -1,0 +1,182 @@
+{
+  "reviewer": "independent review_lowercase_resume",
+  "review_type": "final source-bound deliverables and preservation review",
+  "timestamp_utc": "2026-10-26T21:17:09.040033+00:00",
+  "approved": true,
+  "approval_scope": "The exact reviewed source, completed gate/matrix and listed public documents are suitable for a documentation-only checkpoint and the separately authorized normal feature/main publication workflow. Add the actual sanitized review, then verify outgoing Git bytes, ancestry and fresh remote state. Reviewer performed no remote action.",
+  "tested_source": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+  "base_commit": "bb19207678b08b92a659eb7b4a4eb990ba249375",
+  "source_unchanged_since_full_gate": true,
+  "repository_state": "HEAD is the tested source; only six reviewed documentation paths differ. Linked review file intentionally awaits this actual approval.",
+  "public_files": {
+    "docs/cpu-array-boxed.md": {
+      "sha256": "8068c9eef34a232dba211bd58692e8b7312ce8d593bc906d23b6fafa7af4f09f",
+      "bytes": 9896
+    },
+    "docs/cpu-array-boxed-validation.json": {
+      "sha256": "cbb73a7e340069ae3628fbb24202e11e7c81548faa7c7a26c32bbc990c167721",
+      "bytes": 2879
+    },
+    "docs/cpu-array-boxed-coverage.json": {
+      "sha256": "d10035344fd031b1062faf103a8a1c437431793adf5a666c1da03d442c5da91b",
+      "bytes": 857
+    },
+    "docs/cpu-array-boxed-evidence.csv": {
+      "sha256": "8ede3dbe0c25b2968fba11af1ba493d0ea2d8cedb452faf78d046e2ff31312af",
+      "bytes": 2042
+    },
+    "docs/cpu-array-boxed-results.json.gz": {
+      "sha256": "3e2cea7122b64e23f0e6326507c0af47484f303ef9681b86dae0091a64d5dc21",
+      "bytes": 41484
+    },
+    "docs/cpu-parity-acceptance.md": {
+      "sha256": "926714e781db7bcdf635cf542cf5d72ac07657f1a1c22cccfca17ce2bba783ab",
+      "bytes": 219029
+    }
+  },
+  "draft_files": {
+    "cpu-array-boxed-coverage.json": {
+      "sha256": "d10035344fd031b1062faf103a8a1c437431793adf5a666c1da03d442c5da91b",
+      "bytes": 857
+    },
+    "cpu-array-boxed-evidence.csv": {
+      "sha256": "8ede3dbe0c25b2968fba11af1ba493d0ea2d8cedb452faf78d046e2ff31312af",
+      "bytes": 2042
+    },
+    "cpu-array-boxed-results.json.gz": {
+      "sha256": "3e2cea7122b64e23f0e6326507c0af47484f303ef9681b86dae0091a64d5dc21",
+      "bytes": 41484
+    },
+    "cpu-array-boxed-validation.json": {
+      "sha256": "cbb73a7e340069ae3628fbb24202e11e7c81548faa7c7a26c32bbc990c167721",
+      "bytes": 2879
+    },
+    "cpu-array-boxed.md": {
+      "sha256": "8068c9eef34a232dba211bd58692e8b7312ce8d593bc906d23b6fafa7af4f09f",
+      "bytes": 9896
+    },
+    "cpu-parity-acceptance-append.md": {
+      "sha256": "f4c368cfaeb6e5f939b4902d15dea374757d4ff28c4c1947c4c80e6c6a37384e",
+      "bytes": 999
+    }
+  },
+  "evidence_bindings": {
+    "source-review.json": "1f36c73e89cc5bb9588a6b04e887e412bb0aac8bad6f783b0e52d0c77fdf8ef4",
+    "preliminary-review.json": "ec02516a372d278a06ec1e1fe564281becb414f39ad6c7cc7562a26e88d66e61",
+    "matrix-review.json": "9891222f08959c95d23ab53b0ca35b7ca0fd4fdbaf1ae559da78a7c3d4c0873e",
+    "full-gate.json": "027ae60f319fe36299ae3c23daebf555ff748976c6c720222fc2a41058b24faa",
+    "full-gate.log": "3e5ff8fb595eab87cceddc9960322fb6f4d7e31d5a95f9b1651d2cc681e055c8",
+    "gate-identity.json": "11dc1ccbf50b0a1fe5e4e6c30b2b82d2b58cd8e24aaaa8a5e4b92347310d2e6f",
+    "final-matrix.json": "fc1fb013d7ea0d1e7fd2ed1c7b5bc986889fd2deebaa27cb1f1e67f8baad572a",
+    "final-matrix/results.json": "836b6bcc352121234758162fcd8664ee35c05f802da468a7ab2b335e656a54f7",
+    "baseline-complete/results.json": "cedb430640b38fe67fb6df3960e44fda94793453673a97a5843fb5678a36ece3",
+    "source-backup.json": "48edb8d40d4304760ffc0380a901573c1b434dfcb47f29ad97aca53a9a1adad2",
+    "evidence-backup.json": "dbb3289920940c371e10ce1ae053bf66f65dffd135e2a72d5a8ff21de1ae8412",
+    "cleanup-plan.json": "89a4d05e25504a5e94075324929b1cc15c321765d65c21d589856225f7a324ef",
+    "cleanup-receipt.json": "c6ddb6c519bfe23fdf3d0bd98c53a74a0028bf1e53a39e371fdffd6e363b60b8",
+    "docs-install.json": "41776e4ac17967049f24a7fd0cbdfdad89fd3c06da21b737a48a1c1ebdd75108",
+    "prepare-deliverables.py": "b950b23a9dcf304583edaa31926b78e5d0171e9dfcd7c4a868d2793a22534342"
+  },
+  "gate": {
+    "passed": 1363,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 200,
+    "exit": 0,
+    "seconds": 1060.4189964699908,
+    "timeout_seconds": 1200,
+    "stop_reason": null,
+    "profile": "Standard all-feature build and Clippy; non-Tracy extended_observability tests.",
+    "binary_sha256": "b4e35ddddd40dcffaf08264e2c6bd168e362a578b8add79b5af2d6d4190ca8f5"
+  },
+  "matrix": {
+    "observations": 132,
+    "repeat_pairs": 32,
+    "timeouts": 0,
+    "positive_executions": 50,
+    "exact_checker_negative_observations": 18,
+    "runtime_depth_refusals": 10,
+    "unwaived_port_c_repeat_observations": 2,
+    "distinct_unwaived_case_backend_differences": 1,
+    "strict_io_exclusions": 12,
+    "corresponding_generated_positive_comparisons": 20,
+    "generated_artifact_hashes_verified": 24,
+    "baseline_exact_stream_observations": 120,
+    "baseline_identical_port_artifacts": 12,
+    "final_binary_equals_gate": true
+  },
+  "coverage": {
+    "prior_linked": 522,
+    "linked": 524,
+    "inventory": 1302,
+    "unlinked": 778,
+    "unlinked_categories": {
+      "checker_rejection": 256,
+      "interpretation_and_compiled_candidates": 509,
+      "checking_without_main": 1,
+      "interpretation_only": 12
+    },
+    "newly_linked_originals": [
+      "reg/array_clone_boxed.bend",
+      "reg/array_heap_element.bend"
+    ],
+    "whole_census_renewed": false,
+    "rejection_subset_renewed": false,
+    "meaning": "Receipt linkage includes partial/failing evidence, not whole CPU parity."
+  },
+  "public_evidence_verification": {
+    "draft_files": 6,
+    "source_files": 15,
+    "public_receipts": 15,
+    "logs": 4,
+    "rejected_authored_sources": 3,
+    "rejected_authored_receipts": 6,
+    "decoded_streams": 690,
+    "pattern_findings": 0,
+    "largest_new_public_artifact_bytes": 41484,
+    "redaction": "Independently reproduced explicit current/prior evidence and workspace root replacement; original raw hashes and every sanitized receipt/log/source match. Decoded streams scanned as well as expanded gzip contents. No generated binaries in public artifacts.",
+    "rejected_input_caveat": "Initial computed-let drafts rejected during upstream loading; only corrected reuse-clone changes from that exploratory load failure to the intended checker refusal. Non-Data clone already reached checking. No production acceptance fix claimed."
+  },
+  "preservation": {
+    "source_bundle_sha256": "9aedbdb78333a55f084cf4a0a71e2817f6d5fc0bf280a73e61c54d72118397bd",
+    "source_bundle_head": "0c401575cb1c485c4dd8beabfa5b2efd4d9bcb26",
+    "source_bundle_prerequisite": "bb19207678b08b92a659eb7b4a4eb990ba249375",
+    "git_bundle_verify_succeeded": true,
+    "archive": "validated-evidence.tar.gz",
+    "archive_sha256": "549599982f76fa10781c132e30ba8799df108d8f6c45234d17bd21e0f8128cd9",
+    "archive_bytes": 10583151,
+    "verified_members": 194,
+    "all_member_hash_size_mode_and_current_bytes_verified": true,
+    "safe_member_paths_regular_files_only": true,
+    "manifest_sha256": "e022b14cf5e9e5fc8651e504460440d26825984c110005522d44974363c8e838",
+    "gate_binary_gzip_sha256": "c0d81d813f2e4846cb9fc44741253365e56e5e04e8a5e6bce9b00497123e778d",
+    "gate_binary_decompressed_sha256": "b4e35ddddd40dcffaf08264e2c6bd168e362a578b8add79b5af2d6d4190ca8f5",
+    "previous_cleanup_recovery_archives_still_hash_exact": true,
+    "limits": "Raw archive and binary are local, outside Git. This review and subsequent checkpoint/publication receipts postdate the archive and need supplemental preservation."
+  },
+  "cleanup": {
+    "removed_archived_elf_paths": 156,
+    "retained_raw_text_files_verified_in_preliminary_review": 385,
+    "allocated_bytes_recorded": 138977280,
+    "tmp_free_gain_bytes_recorded": 138907648,
+    "workspace_free_change_bytes": 0,
+    "recovery_requirement": "Removed paths are absent. Restore only the recorded prior archive/member with recorded file mode if needed; do not assume prior binaries remain at their former paths."
+  },
+  "verified_details": [
+    "Five directly installed documents equal draft bytes; the acceptance file is the tested-source blob plus the exact999-byte append.",
+    "Eight-row LF CSV uses correct fixture/source/receipt hashes and classifications; no line-ending normalization ambiguity in current working bytes.",
+    "No production/tests/runner changes since completed gate.",
+    "Baseline dirty bb19207 checkout and earlier a347-built binary remain distinct from clean0c40157 final qualification.",
+    "Clone versus local Arr.clone, set-discard versus swap-transfer, physical stride guard and C-only cleanup-accounting limits are accurately represented.",
+    "Historical census and subset measurements remain historical; no acceptance/diagnostic closure inferred.",
+    "Next nested-array and split/join originals were inspected only; no new execution claim."
+  ],
+  "remaining_limits": [
+    "Full CPU parity remains incomplete; generated port-C depth diagnostic remains unwaived.",
+    "No same-ABI/layout, exact destruction timing, general memory safety, performance or mid-normalization cancellation proof.",
+    "External invoke audit, Base coordinates, nat_first, unadopted compact lowering, F32.read, source-hole and oracle/host/foreign/resource gaps remain open.",
+    "Supplementary all-target Clippy failures were not cleared; hardware/profiler ignores remain unrun.",
+    "Final exact checkpoint/outgoing-byte/remote-state verification remains parent-owned before publication."
+  ],
+  "blocking_findings": []
+}
