@@ -1,0 +1,139 @@
+{
+  "tested_source": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+  "baseline_checkpoint": "f64eb0aeb63b36143e6fc2187aec8a0a45bcc7a6",
+  "baseline_binary_source": "02155ff3c30c6bcab683abb1fd8d0e73422acb1d",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "gate": {
+    "source_commit": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null,
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 13055791104,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1043.121312724019,
+    "minimum_free": 13055791104,
+    "minimum_tmp_free": 1557098496,
+    "sample_count": 523
+  },
+  "totals": {
+    "passed": 1354,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 197
+  },
+  "gate_log_sha256": "1cab3a1129106be0c74a936d4caac0c6c0eed94ca1f2fd862c53624ca53e974f",
+  "matrix": {
+    "original": {
+      "before": {
+        "exact": 22,
+        "different": 0
+      },
+      "after": {
+        "exact": 22,
+        "different": 0
+      }
+    },
+    "grammar": {
+      "before": {
+        "exact": 12,
+        "different": 0
+      },
+      "after": {
+        "exact": 12,
+        "different": 0
+      }
+    },
+    "fourquote": {
+      "before": {
+        "exact": 5,
+        "different": 3
+      },
+      "after": {
+        "exact": 6,
+        "different": 2
+      }
+    },
+    "new": {
+      "before": {
+        "exact": 1,
+        "different": 11
+      },
+      "after": {
+        "exact": 5,
+        "different": 7
+      }
+    },
+    "older": {
+      "before": {
+        "exact": 0,
+        "different": 2
+      },
+      "after": {
+        "exact": 2,
+        "different": 0
+      }
+    },
+    "observations": 908,
+    "repeat_pairs": 142,
+    "cases": 61,
+    "timeouts": 0,
+    "raw_api_equal": 122,
+    "negative_raw_api_equal": 112,
+    "runtime_executions": 40,
+    "corresponding_comparisons": 20,
+    "baseline_identical_artifacts": 10
+  },
+  "identity": {
+    "source": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+    "clean": true,
+    "binary_matches_matrix": true,
+    "post_gate_binary_sha256": "8f103c1f73e3490172116123ef08c0c77aaabd87d3c466b443e29724bfbfa48b",
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+    "references": {
+      "upstream": {
+        "sha": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+        "clean": true
+      },
+      "docs": {
+        "sha": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+        "clean": true
+      }
+    }
+  },
+  "source_review_sha256": "422d602a4081ef9ce45ae94b458807cd72189e63237ba8f1c60b049d2b20d333",
+  "matrix_review_sha256": "ec9fceb219e026122c2c52966cc01ad608a7fb667b822c8dd20133a2f1e68300",
+  "whole_census_rerun": false,
+  "rejection_subset": {
+    "completed": true,
+    "source": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+    "baseline_source": "c5edea8a75022c1654fbf568629422cf73bee1d0",
+    "total": 31,
+    "counts": {
+      "different_rejection": 31
+    },
+    "scope": "Only the31 historical different-rejection rows renewed. No full census, no executable qualification or new exclusions.",
+    "observations": 93
+  },
+  "publication": "Final review precedes authorized non-force feature/main update; remote identities recorded separately."
+}

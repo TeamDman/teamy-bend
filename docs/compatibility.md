@@ -314,11 +314,16 @@ in [native channels](native-channels.md). Descriptor readiness now has separate
 native and [JavaScript networking](executable-network.md) validation. Arbitrary
 native FFI remains unsupported.
 
-The latest pure-library comparison matches 19 complete programs against upstream.
-The unchanged `base/string_kit.bend` and `base/num_kit.bend` still hit the kernel
-nesting limit in their long IO chains. All 67 print expressions match in nine
-shorter chunks, which does not establish whole-program compatibility. The limits
-remain unchanged.
+A historical pure-library comparison matched 19 complete programs against upstream
+and observed nesting refusals in the long `base/string_kit.bend` and
+`base/num_kit.bend` IO chains. Its 67 expressions matched only in nine chunks;
+that receipt did not establish whole-program compatibility. Later
+[string-kit qualification](cpu-string-kit-algorithms.md) executed the unchanged
+string kit successfully in all five supported lanes. A fresh native selection
+probe at `f64eb0aeb63b36143e6fc2187aec8a0a45bcc7a6` also completes the unchanged
+number kit with 31 output lines; its generated C/JS lanes were not renewed in
+that probe. See the [current gap reconciliation](cpu-incomplete-character.md).
+Resource limits remain unchanged; historical failures are preserved separately.
 
 The template/collection slice added five positives over the 344-positive
 audit, and Array support added 11 more without losing any previous positives.

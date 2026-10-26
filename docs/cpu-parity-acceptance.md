@@ -2940,3 +2940,21 @@ and 84 unchanged negative raw API results. Original cohort 22/0, preceding
 grammar cohort 12/0; new context cohort 5/3. Argument/list incomplete-atom recovery
 and depth refusal remain different, unwaived. Whole census was not renewed; all
 previous semantic/oracle/API limits remain open.
+
+## Terminal incomplete-character metadata
+
+Tested `1a135e437d91c99072bbd880b9a6d43ceb984d2a` qualifies the unchanged list context through a terminal
+metadata-only refusal. The original argument remains blocked by prior-function
+lowering; the depth refusal is unwaived. [Report](cpu-incomplete-character.md).
+Gate **1354 passed / 0 failed / 49 ignored**; **908 observations / 142 repeat pairs**,
+40 generated C/JS executions and 112 unchanged negative raw API results. Seven
+diagnostic closures span one prior context, four new controls and two older
+cases; no acceptance change or whole-census gain is inferred.
+
+The 31 historical rejection differences were renewed and all remain different.
+The full 1,302-original census and 109-row acceptance classification remain
+historical. [Reconciled gaps](cpu-incomplete-character-gap-inventory.json) separate
+proof-mode preemptions, resource refusals, missing hosts and unqualified runtimes.
+Next substantive batch is typed array fill/fold and polymorphic elements, with
+fresh baseline native success but generated/runtime-neighbor qualification pending.
+All prior semantic, resource, oracle, cancellation and external API limits remain.

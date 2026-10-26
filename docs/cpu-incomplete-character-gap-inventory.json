@@ -1,0 +1,493 @@
+{
+  "source": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+  "whole_census_renewed": false,
+  "historical_full_census": {
+    "source": "c5edea8a75022c1654fbf568629422cf73bee1d0",
+    "total": 1302,
+    "counts": {
+      "exact_rejection": 405,
+      "acceptance_disagreement": 494,
+      "both_accept": 366,
+      "oracle_or_infrastructure_failure": 6,
+      "different_rejection": 31
+    },
+    "historical_IO_members": 385,
+    "outside_that_fixed_IO_cohort": 140,
+    "acceptance_differences": 109,
+    "rejection_differences": 31,
+    "oracle_failures": [
+      "check/bystander_hypothesis_cost.bend",
+      "check/deep_hyp_rewrite.bend",
+      "flatten/literal_rows_cubic.bend",
+      "page/deep_list_walk.bend",
+      "reg/dead_param_fork.bend",
+      "rfc/share_loop.bend"
+    ],
+    "scope": "Historical measured values only; this batch does not subtract authored diagnostic gains from them."
+  },
+  "historical_acceptance_classification": {
+    "source": "67b2035d525ea54b34c8d1ab4e1cf8a8f21e7b2f",
+    "rows": 109,
+    "by_cause": {
+      "execution_only_numeric_API": 38,
+      "execution_only_template": 3,
+      "execution_only_File_API": 8,
+      "retained_Nat_literal_128_guard": 10,
+      "retained_pattern_64_guard": 4,
+      "strict_unsafe_context_refusal": 3,
+      "missing_Window_Audio_implementation": 2,
+      "execution_only_Chan_API": 5,
+      "strict_foreign_refusal": 22,
+      "execution_only_network_API": 11,
+      "execution_only_private_request_constructor": 1,
+      "retained_telescope_128_guard": 1,
+      "execution_only_IO_API_newly_exposed": 1
+    },
+    "executable_accepted": 92,
+    "scope": "Historical109-row executable checking/phase classification, not a current renewal or92 runtime passes."
+  },
+  "renewed_rejection_subset": {
+    "rows": 31,
+    "observations": 93,
+    "counts": {
+      "different_rejection": 31
+    },
+    "phase_pairs": {
+      "check/load": 3,
+      "check/check": 11,
+      "load/load": 17
+    },
+    "triage": {
+      "strict_proof_context_preempts_upstream_error": 11,
+      "rejection_content_or_provenance_candidate_needs_individual_audit": 16,
+      "TODO_contract_unwaived": 1,
+      "resource_refusal_needs_accounting_or_policy_analysis": 3
+    },
+    "fixtures": [
+      {
+        "fixture": "check/cop_foreign_fill_000.bend",
+        "sha256": "a93268f60a4918c2e7ccfca5199396f9868bf7dbc535f1c9d9d0d557aa2226a4",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "check/float_builtin_arg.bend",
+        "sha256": "7a908ed7c1066175fea032c8e2734065dcfd2e9b4b86ed8141eb3db9feedb63e",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "check/float_no_mod.bend",
+        "sha256": "27504db79ebe14de0477de8cac60116a21c558345e81ebd9d6d2f8b0b5794069",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "check/hole_todo.bend",
+        "sha256": "781fb7395d55a08208338ec18b7b0d5c1b8f1d470c92883eec09fb07fee38e5b",
+        "triage": "TODO_contract_unwaived",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "check/switch_miss_guard.bend",
+        "sha256": "61bce32bd5115a948a349cf640222f0356b032c32980661085ae92077f1d2eb4",
+        "triage": "resource_refusal_needs_accounting_or_policy_analysis",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "comptime/err_grow.bend",
+        "sha256": "6c41bbe3b7a711f63edc611f78b976b3068182a62d63e8ec6ad71908a409f5d5",
+        "triage": "resource_refusal_needs_accounting_or_policy_analysis",
+        "upstream_phase": "check",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "comptime/err_grow_double.bend",
+        "sha256": "bce5e76c41e471c88e2a347dbb86a414eda072f12b65bf5e76a9aa17d91efa0a",
+        "triage": "resource_refusal_needs_accounting_or_policy_analysis",
+        "upstream_phase": "check",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "flatten/mark_computed_optout.bend",
+        "sha256": "82e0d4d38a947079cd9f73a45918b37fb7c40d1c0975bbdcd488f155aa9e9641",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "grade/reject_refill.bend",
+        "sha256": "cd82b06d9ab8a02ae4ddc18676b07737f9c033c2e628e84b232a61c831acb658",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/cbody_bare_path.bend",
+        "sha256": "a1f847c71fa34e89a776ba0fa4e05521693eb8a4918d3e289b88359f61d8caa6",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/cbody_dup_effect.bend",
+        "sha256": "cda038496dc17f607a1322d141ce8340a195f40d9f3dfc516d03be00d788757b",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/cbody_effect.bend",
+        "sha256": "b474fa1cd6a5c32ada08d41118329830df86214af081c13a03933f81a81e4bc5",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/cbody_needs_io.bend",
+        "sha256": "53aa4eda68dcd2b870d14882a2f60659a7cdc908cc1c62634b582d0b1a7857f4",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/channel_send_recv.bend",
+        "sha256": "42710d8fa77fd80f6a19fbec0d8b3ce1f65481b857169322c839f18477a6a4c7",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/gfx_opaque_term.bend",
+        "sha256": "41074982cc793099515006d55c42ecfba674275493752ceec481e3ba96fcfafc",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/http_fetch_fail.bend",
+        "sha256": "af2c44b621be732a6b62791d64fdeeb7f7805b2a4ca5f197be19cf394cbe46f2",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/http_router.bend",
+        "sha256": "be28701ff0494d838702527eab23e4275757c5ab5a05e96ae96691cd0e1ba834",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/reuse_across_effect.bend",
+        "sha256": "e205e103cbe5d8a8b0723e9bea61796d9e3e9e411aa4b23fb33a6f4448d2f05b",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "io/tls_connect_close.bend",
+        "sha256": "96c4af58ab8fb1dbab52404e4234b0dec64f41c224dead9b1fa72a6737e09dca",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/array_count_odd.bend",
+        "sha256": "3359fe22d3aa26494d74fb4284487a235f1ba78d8f7e709c8dcd804aa339e467",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/builtin_arity_mismatch_000.bend",
+        "sha256": "5a0c2f9a5cd2d45b562a88f6e9fc313e240a5568991db64afcd7c74c86343268",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/chain_old_spellings_001.bend",
+        "sha256": "de760ec8fddfeb8631cbab65db13171287b1417753146f41cc96e789aef8d4d9",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/computed_mark_nonname.bend",
+        "sha256": "f08aae49d75efbc1c94aaf4e5741941dd232e8f7d1a7eb08541af0714a2276a9",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/expected_float_literal.bend",
+        "sha256": "30a767b312c88c8ea75777ab334cb24b69aae89ee77a8602d106f169e57c6236",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/float_dotted_family_dead_000.bend",
+        "sha256": "63505dd400c957d97de80f2a48996a05daa13e4ba48db1a12b9bf01329bdf37d",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/foreign_refill.bend",
+        "sha256": "2eb57683c567a7db49862d2bac8ce4dfdf01b36fb333427b8bf73584fda82b1e",
+        "triage": "strict_proof_context_preempts_upstream_error",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/reserved_dollar_name.bend",
+        "sha256": "c41cbe19b0f973cf493f9d8aae486599272ed5e4ac04a23d2f31930f3d03e7ad",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/reserved_pattern_binder.bend",
+        "sha256": "bf5cf49f7e01f884a0601025aeefef868cf8cae70e1bcbbccb70daf2a4ec0342",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/unicode_forall_dead.bend",
+        "sha256": "3fa5f722a4c5ded9944702b320a41f8bec0117b9e34ea524300b01e38f054d07",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "parse/unicode_lambda_dead.bend",
+        "sha256": "4d27c287324beaebd338242ce1be27070508dbd546235317d9fe47647ccdb78f",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "load",
+        "port_phase": "load",
+        "classification": "different_rejection"
+      },
+      {
+        "fixture": "state/operator_goal.bend",
+        "sha256": "2c94e841f4359eddac9d07b684ecb593fb19e0ba3887cd118c2f476dc90e651c",
+        "triage": "rejection_content_or_provenance_candidate_needs_individual_audit",
+        "upstream_phase": "check",
+        "port_phase": "check",
+        "classification": "different_rejection"
+      }
+    ],
+    "scope": "Exact current checking observations. Triage explains symptoms only, does not waive any cell or qualify executable lanes."
+  },
+  "linkage": {
+    "inventory": 1302,
+    "linked": 516,
+    "unlinked": 786,
+    "unlinked_categories": {
+      "checker_rejection": 256,
+      "interpretation_and_compiled_candidates": 517,
+      "checking_without_main": 1,
+      "interpretation_only": 12
+    },
+    "sources": [
+      {
+        "file": "docs/cpu-binder-priority-evidence.csv",
+        "sha256": "46d1273a6a26f2f12bd0364a52b806380f90714194709e46d75f94fa6dd30fd3"
+      },
+      {
+        "file": "docs/cpu-c-escape-printer-evidence.csv",
+        "sha256": "0445a792e253582be46098612588c4b8181276801486bed2be22cedabf46fb7c"
+      },
+      {
+        "file": "docs/cpu-checking-evidence.csv",
+        "sha256": "0e045f277d82f872c590fc0260cc3a41e16c632b1b3272e2fe02bb9381bf9e84"
+      },
+      {
+        "file": "docs/cpu-comptime-rebind-evidence.csv",
+        "sha256": "2190f93eb1fa999657aef72ca882a72f6b26366c728715006422bebfd60e87dc"
+      },
+      {
+        "file": "docs/cpu-comptime-type-evidence.csv",
+        "sha256": "5cea8857b761b8fd686a503f899beacc144226688ec24fb874ff7943fdbac3d9"
+      },
+      {
+        "file": "docs/cpu-computed-reference-calls-evidence.csv",
+        "sha256": "0a2485df57f7bef2c237721cdb9ec66228038b739511ab079334f5ed02362aff"
+      },
+      {
+        "file": "docs/cpu-contextual-lexical-diagnostics-evidence.csv",
+        "sha256": "cbefc0e99cd8221b5234096b1af5c06991c5198e5cf932decbde1e1402992011"
+      },
+      {
+        "file": "docs/cpu-contextual-proof-diagnostics-evidence.csv",
+        "sha256": "d4aec618b62c67a696d785bff30909024392530fdb9db2e108cf19f526e2b785"
+      },
+      {
+        "file": "docs/cpu-duplicate-constructor-evidence.csv",
+        "sha256": "866538a7517b3186edf1bc59da30ba2e79c8553c9b94a1ef2f55d4e7e4719946"
+      },
+      {
+        "file": "docs/cpu-duplicate-declaration-evidence.csv",
+        "sha256": "2297128515f7d3fc013ead1298267fc03c96396342278484b9fda1cee5cc043b"
+      },
+      {
+        "file": "docs/cpu-family-head-evidence.csv",
+        "sha256": "cdb1991ea730753ac5234803a5d8b308ae2a12c49a40cfa33ddf3210db4a2cd6"
+      },
+      {
+        "file": "docs/cpu-forward-data-evidence.csv",
+        "sha256": "d29a3b3ba3d18288353c6e44b38090ef796afe0cce297cf6180507a5bafe54c6"
+      },
+      {
+        "file": "docs/cpu-function-proof-diagnostics-evidence.csv",
+        "sha256": "9a7bcc76eb4fb74b66af061895295ba275400a18e9106ffc2ca767ca392c95a2"
+      },
+      {
+        "file": "docs/cpu-import-header-diagnostics-evidence.csv",
+        "sha256": "5ca3e84fe4f082765ec2fefdca803ba7958a3631cda97a17dbc5a19b52190f75"
+      },
+      {
+        "file": "docs/cpu-interpretation-evidence.csv",
+        "sha256": "1a3de581e1cb706f45df8987db5f9b2e567362ef54854d96d27972cff2c67c1f"
+      },
+      {
+        "file": "docs/cpu-lambda-binder-diagnostics-evidence.csv",
+        "sha256": "3d0d98381730f67e161eacfc7ed369d5c90055bee4e25fc6eacff7ab7ef49a0f"
+      },
+      {
+        "file": "docs/cpu-list-constructors-evidence.csv",
+        "sha256": "103048d8ffa026afddc2624f2e67eb8fb5a394d696f6485a1a7dd36b85b8f250"
+      },
+      {
+        "file": "docs/cpu-malformed-literal-diagnostics-evidence.csv",
+        "sha256": "85cd9939990b71170d5258b2b13fa480012bed6fe05a792b527bc7796914b184"
+      },
+      {
+        "file": "docs/cpu-match-guards-next-evidence.csv",
+        "sha256": "6d3118944f2ad194d8057b70e2a29cacfd624fe0c083f042b905178334c09e5d"
+      },
+      {
+        "file": "docs/cpu-meet-diagnostic-precedence-evidence.csv",
+        "sha256": "90ada05c249e16a3e196402e244fc1ebf59c5298d140523f193c72e9dc13ab57"
+      },
+      {
+        "file": "docs/cpu-missing-import-diagnostics-evidence.csv",
+        "sha256": "46669c648740309d93e40581bba85e2545e7ebab83c232d94b092261c5a0a4d9"
+      },
+      {
+        "file": "docs/cpu-mixed-column-reuse-evidence.csv",
+        "sha256": "db1bcf6322a498e84bc43907d1efd05289944e50546511c0557979714a1cccc9"
+      },
+      {
+        "file": "docs/cpu-mixed-computed-columns-evidence.csv",
+        "sha256": "5641c42904f59805c384bc0cb02746331a61295787311275749003246af444b3"
+      },
+      {
+        "file": "docs/cpu-no-main-evidence.csv",
+        "sha256": "bdabaa3ffe0c1d6acb5f265d5a49b2542a6ceab0ca42839e61460da4c605069a"
+      },
+      {
+        "file": "docs/cpu-nonscalar-literal-evidence.csv",
+        "sha256": "d9f946d5ce524792b8157edda50c0209e0d0d65deefde5440791e39dcdbb215f"
+      },
+      {
+        "file": "docs/cpu-plus-binder-helper-evidence.csv",
+        "sha256": "543b172fdc37b91f931ccfc5f3823bca198fab29677c853f5d4be5a6fed9682c"
+      },
+      {
+        "file": "docs/cpu-ragged-rows-evidence.csv",
+        "sha256": "994c55c4c361dc3ef2bfc1e462e249961abc1178935cc3e5cacbaba327cd9c2f"
+      },
+      {
+        "file": "docs/cpu-refined-type-evidence.csv",
+        "sha256": "bce3840bb2d3916a0dd2f41930dd9e877678c124a61a4b00c6124a35112abaa0"
+      },
+      {
+        "file": "docs/cpu-reserved-name-diagnostics-evidence.csv",
+        "sha256": "007a56b9244569698012a3face77e5823486a0cdb65b381fb510bc8d4e6aaa62"
+      },
+      {
+        "file": "docs/cpu-runtime-evidence.csv",
+        "sha256": "2100a6d14d05b1b78f3a77fdba8fb5d3e7e0b5eb0740f7d90306567c8ee48335"
+      },
+      {
+        "file": "docs/cpu-self-call-evidence.csv",
+        "sha256": "82d458e3bbe3cd72612ad0046d4cf1d58bbe5e476d716ffab602fa70215960e9"
+      },
+      {
+        "file": "docs/cpu-stacked-computed-matches-evidence.csv",
+        "sha256": "180886837197e2d4ee7cee30b073a34aede92f0e66c206bf3f8b982e42fcd91f"
+      },
+      {
+        "file": "docs/cpu-unknown-template-evidence.csv",
+        "sha256": "73f17f22041065b63c4c9e68adc89828801a2fe434caf0910bb9acba181b2898"
+      },
+      {
+        "file": "docs/cpu-untyped-binder-evidence.csv",
+        "sha256": "bd7d549961abc073ada92c6c2d9372c50e060131a2a7500608ab64907e266fde"
+      },
+      {
+        "file": "docs/cpu-uppercase-unicode-evidence.csv",
+        "sha256": "8f476416c1db0f25e3716741ccfeb9bf9dba20bbf7fd2a22a5af1c17344a329f"
+      },
+      {
+        "file": "docs/cpu-wide-scrutinee-evidence.csv",
+        "sha256": "cbe06f437f5fe5bdbd8a296486313a8859463c4ef00861ecbaf17af64d00a3f4"
+      }
+    ],
+    "scope": "Union of existing evidence fixture keys intersected with inventory. Linked includes failures and limits; unlinked is not a CPU runtime failure count."
+  },
+  "next_priority": {
+    "family": [
+      "run/array_fill_fold.bend",
+      "run/array_poly_elem.bend"
+    ],
+    "reason": "Typed array get/set/swap, reusable ownership and F32/enum layouts have historical executable acceptance but no original fixture runtime evidence links. Fresh baseline native executions return140375 and102122; generated C/JS original comparisons and ownership/bounds neighbors still require qualification. No defect is invented from missing coverage.",
+    "additional_stale_note": "base/num_kit now completes native execution (31 output lines); the old whole-program kernel-depth claim in compatibility.md is historical, not current. Its generated lanes were not renewed here."
+  },
+  "unchanged_decisions": [
+    "nat_first remains pending and unwaived",
+    "compact Nat/string lowering remains unadopted",
+    "Base coordinates and F32.read disagreements remain open",
+    "external invoke consumers remain unaudited",
+    "Bun/foreign/host/oracle/hole/resource and supplementary all-target lint limitations remain open",
+    "no new mid-normalization cancellation claim"
+  ],
+  "original_argument_blocker": "Parameterized declaration preceding the malformed argument reaches the existing flatten_body_occurrence barrier. No safe checkpoint reuse is implemented; skipping/replaying lowering is not authorized by this metadata-only change."
+}

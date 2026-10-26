@@ -1,0 +1,198 @@
+{
+  "raw_review_sha256": "5502051c714372e2f07ee5ab5c063396523ecacb3f66d4d0ca378cad57eb4f12",
+  "review": {
+    "reviewer": "independent review_lowercase_resume",
+    "timestamp_utc": "2026-10-26T19:22:22.025889+00:00",
+    "approved": true,
+    "approval_scope": "Exact reviewed source and seven hash-bound deliverables are suitable for a documentation-only checkpoint and the parent-owned standing-authorized non-force publication workflow, subject to final staged-diff/remote precondition checks. This reviewer performed no builds, tests or remote operations and did not publish.",
+    "reviewed_source": "1a135e437d91c99072bbd880b9a6d43ceb984d2a",
+    "base_checkpoint": "f64eb0aeb63b36143e6fc2187aec8a0a45bcc7a6",
+    "working_tree_clean": true,
+    "reviewed_source_files_unchanged": 37,
+    "findings": [],
+    "resolved_draft_findings": [
+      "Report no longer attributes every f-first Unicode neighbor to the lowering barrier. It separates the original traced argument barrier from legacy lexical prefix loss and unsupported metadata observations.",
+      "Reuse of completed primary declarations is presented as an unproven design option, not an implemented or uniquely required solution."
+    ],
+    "gate": {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "passed": 1354,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 197,
+      "seconds": 1043.121312724019,
+      "exit": 0,
+      "stop_reason": null,
+      "source_clean": true,
+      "format_standard_strict_clippy_build_node_provider_passed": true,
+      "minimum_workspace_free_bytes": 13055791104,
+      "minimum_tmp_free_bytes": 1557098496,
+      "post_gate_and_matrix_binary_sha256": "8f103c1f73e3490172116123ef08c0c77aaabd87d3c466b443e29724bfbfa48b",
+      "actual_post_gate_binary_hash_verified": true,
+      "focused_receipts_scope": "105 syntax, 1 terminal-boundary, 15 runtime tests were dirty f64-based focused runs; clean-source complete gate is separately attributed to 1a135e4."
+    },
+    "differential": {
+      "observations": 908,
+      "repeat_pairs": 142,
+      "cases": 61,
+      "negative_cases": 56,
+      "positive_cases": 5,
+      "timeouts": 0,
+      "diagnostic_closures": 7,
+      "negative_exact_before": 40,
+      "negative_different_before": 16,
+      "negative_exact_after": 47,
+      "negative_different_after": 9,
+      "public_api_outputs_baseline_equal": 122,
+      "negative_public_api_outputs_baseline_equal": 112,
+      "generated_C_JS_executions": 40,
+      "corresponding_backend_comparisons": 20,
+      "baseline_identical_port_artifacts": 10,
+      "native_baseline_outputs": 5,
+      "original_requested_family": "list exact; original preceding-function argument unresolved; resource-depth neighbor separately unwaived"
+    },
+    "inventory_scope": {
+      "current_rejection_subset_rows": 31,
+      "current_rejection_subset_observations": 93,
+      "current_rejection_subset_different": 31,
+      "historical_whole_census_source": "c5edea8a75022c1654fbf568629422cf73bee1d0",
+      "whole_census_renewed": false,
+      "historical_109_acceptance_classification_renewed": false,
+      "linked_inventory_entries": 516,
+      "unlinked_inventory_entries": 786,
+      "linkage_is_not_parity": true
+    },
+    "public_artifact_verification": {
+      "deliverables": 7,
+      "compressed_receipts": 24,
+      "runner_sources": 10,
+      "preserved_failed_logs": 4,
+      "decoded_stream_fields_scanned": 2496,
+      "private_path_or_credential_pattern_findings": 0,
+      "all_compact_receipts_exact_sanitized_reconstruction_of_raw": true,
+      "all_original_stream_hashes_verified": true,
+      "sanitization": "Only enumerated machine roots/tool paths replaced; comparisons use raw original bytes. Source/gate/receipt identities retained.",
+      "compatibility_change": "Replaces stale current whole string/number-kit failure claim with historical attribution, later five-lane string-kit evidence and baseline native number-kit success; generated number-kit lanes remain unrenewed."
+    },
+    "preservation": {
+      "archive_basename": "validated-evidence.tar.gz",
+      "archive_sha256": "23336ca562943fed124fd0a5528b2bd316672efb679bb5f7fe78ee555835af31",
+      "archive_bytes": 1026009,
+      "archive_members_verified": 318,
+      "archive_members_reread_and_hash_checked": true,
+      "archive_members_equal_current_evidence_bytes": true,
+      "safe_relative_regular_file_members_only": true,
+      "retained_ELF_hashes_verified": 13,
+      "source_bundle_sha256": "500961eb415e8c94941aa787bb9a7228ec48844ffce6dc6622de110c821f63be",
+      "source_bundle_bytes": 9325,
+      "source_bundle_git_verify_passed": true,
+      "source_bundle_requires_base": "f64eb0aeb63b36143e6fc2187aec8a0a45bcc7a6",
+      "final_review_and_later_docs_remote_records_require_supplemental_preservation": true
+    },
+    "approved_deliverables": {
+      "acceptance-append.md": {
+        "sha256": "072333978e3ab0a02673aa6af809208bc58c199d6a1299019bad2a0909362b99",
+        "bytes": 1182
+      },
+      "compatibility-update.md": {
+        "sha256": "8c61eb5397af00e2f6ab6131a9a8787c767c3a75e7ed846ad86ddc6e4a02477e",
+        "bytes": 28639
+      },
+      "cpu-incomplete-character-gap-inventory.json": {
+        "sha256": "f33e7d2394486aa585dd711145fa916205eb741ca38c7ee25a9f55394d4f4d96",
+        "bytes": 20669
+      },
+      "cpu-incomplete-character-results.json.gz": {
+        "sha256": "7738246ef24071e009741da7b659d674ab05c9b69780cae4f81965ef1409b17e",
+        "bytes": 113430
+      },
+      "cpu-incomplete-character-validation.json": {
+        "sha256": "7a19e1c7c90a9f79faaef80245075944d70c9face9b9e0d2fce30cecdf285f4a",
+        "bytes": 3750
+      },
+      "cpu-incomplete-character.md": {
+        "sha256": "732e4effa6ec726de6b04a54cef15acb6f117b3bc1b2c0f4af519832a43b3752",
+        "bytes": 9850
+      },
+      "fixture-readme-update.md": {
+        "sha256": "2f1a55a4f1c20dcf9cca17471c48c4ef521662ff0b492f75aae5927bfee994f2",
+        "bytes": 1131
+      }
+    },
+    "receipts": {
+      "source-review.json": {
+        "sha256": "422d602a4081ef9ce45ae94b458807cd72189e63237ba8f1c60b049d2b20d333",
+        "bytes": 20022
+      },
+      "matrix-review.json": {
+        "sha256": "ec9fceb219e026122c2c52966cc01ad608a7fb667b822c8dd20133a2f1e68300",
+        "bytes": 10301
+      },
+      "matrix-results.json": {
+        "sha256": "c044fce28e86fa0b52ec735b89edba287abf1044847161994a59000b2cab9025",
+        "bytes": 612950
+      },
+      "snapshot.json": {
+        "sha256": "269a8ff80443ea2f196a475396341d2d009392bb9193b093af0904a38cbc4a68",
+        "bytes": 515
+      },
+      "full-gate.json": {
+        "sha256": "eef373c5a8f4e35d6e52c02e027e347f02dcfbb965eda5034085227b77badbf0",
+        "bytes": 55843
+      },
+      "full-gate.log": {
+        "sha256": "1cab3a1129106be0c74a936d4caac0c6c0eed94ca1f2fd862c53624ca53e974f",
+        "bytes": 24909
+      },
+      "gate-identity.json": {
+        "sha256": "a5f5e7651c175c61eb45d1aa77bc6107f3b594bc57a902bf999abdeb72ca1c37",
+        "bytes": 512
+      },
+      "prepare-deliverables.py": {
+        "sha256": "13bde06a99a38ed8325be7ca954be2671ef636f422d33629fbb6b3e98a12d4bb",
+        "bytes": 7759
+      },
+      "gap-reconciliation.json": {
+        "sha256": "a9ddbe3c39c1369942b0e1defe689f416bafeb863f8a2f1b0820a7c44d2cecd1",
+        "bytes": 20668
+      },
+      "residual-subset/summary.json": {
+        "sha256": "309eadd035feb9dd20c7587853c362192ca53049ed55b6ff969e423989bdac70",
+        "bytes": 363
+      },
+      "residual-subset/observations.jsonl": {
+        "sha256": "4966bd5a8a9c2c8f1579cbdb6c1ebe9a9bf2fc8a63fd894ec08971880349f45e",
+        "bytes": 58068
+      },
+      "source-backup.json": {
+        "sha256": "9d0ed3c157a822e4f385fbfe5ad0a8a0121f547129725e543db94a249db98f61",
+        "bytes": 285
+      },
+      "evidence-backup.json": {
+        "sha256": "3f0c170bde39b1a8f3c5dd936630a2d7926e8b5ed75d27b531598f96f3460fef",
+        "bytes": 2438
+      },
+      "report-body.md": {
+        "sha256": "87cb1bd0a2f430eeb78679a3d02e85e729a15d6e9d31dec17ec1f2d367468249",
+        "bytes": 8925
+      }
+    },
+    "remaining_limits": [
+      "Original argument and nine diagnostic residuals remain unqualified; no skipping/replaying declaration lowering or prefix-selection expansion is adopted.",
+      "Four upstream pure normalization observations establish successful exit only, not complete graph/text equality. Native pure outputs are earlier-port comparisons; generated comparisons are corresponding C/JS lanes.",
+      "Strict IO proof exclusion, raw ParseError behavior, guard/resource budgets, sharing and semantic barriers remain unchanged. Newly formatted CLI failures retain existing invoke Ok(exit_code=1) behavior; external invoke consumers are unaudited.",
+      "Historical census values, fixed IO cohort, 109 acceptance differences and six oracle failures are not renewed or silently reduced by authored diagnostic closures.",
+      "The next array family has only baseline native selection evidence; generated execution and adjacent ownership/bounds controls remain pending.",
+      "nat_first, compact lowering, Base coordinates, F32.read, hole/host/foreign/Bun/oracle/resource and supplementary all-target lint limitations remain open. No new mid-normalization cancellation claim.",
+      "Git compact artifacts do not preserve raw archives or ELF snapshots by themselves; local backups and retained binaries are separately identified.",
+      "No remote state was examined or changed by this reviewer. Parent must verify final documentation-only diff and current remote conditions before any authorized non-force update."
+    ]
+  }
+}
