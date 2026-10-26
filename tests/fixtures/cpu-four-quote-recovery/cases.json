@@ -1,0 +1,90 @@
+[
+  {
+    "case": "context-argument",
+    "path": "cpu-four-quote-recovery/negative/argument.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument.stderr",
+    "line": 4,
+    "column": 25,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-four-quote-recovery/negative/argument.bend"
+  },
+  {
+    "case": "context-completed-law",
+    "path": "cpu-four-quote-recovery/negative/completed-law.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/completed-law.stderr",
+    "line": 4,
+    "column": 15,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-four-quote-recovery/negative/completed-law.bend"
+  },
+  {
+    "case": "context-duplicate",
+    "path": "cpu-four-quote-recovery/negative/duplicate.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/duplicate.stderr",
+    "line": 4,
+    "column": 10,
+    "message": "duplicate definition: main",
+    "error_source": "cpu-four-quote-recovery/negative/duplicate.bend"
+  },
+  {
+    "case": "context-earlier-escape",
+    "path": "cpu-four-quote-recovery/negative/earlier-escape.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/earlier-escape.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q",
+    "error_source": "cpu-four-quote-recovery/negative/earlier-escape.bend"
+  },
+  {
+    "case": "context-earlier-grammar",
+    "path": "cpu-four-quote-recovery/negative/earlier-grammar.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/earlier-grammar.stderr",
+    "line": 3,
+    "column": 11,
+    "message": "expected a name, found \"->\"",
+    "error_source": "cpu-four-quote-recovery/negative/earlier-grammar.bend"
+  },
+  {
+    "case": "context-group",
+    "path": "cpu-four-quote-recovery/negative/group.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/group.stderr",
+    "line": 3,
+    "column": 24,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-four-quote-recovery/negative/group.bend"
+  },
+  {
+    "case": "context-guard",
+    "path": "cpu-four-quote-recovery/negative/guard.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/guard.stderr",
+    "line": 3,
+    "column": 147,
+    "message": "expression nesting exceeds the parser resource limit of 64",
+    "error_source": "cpu-four-quote-recovery/negative/guard.bend"
+  },
+  {
+    "case": "context-list",
+    "path": "cpu-four-quote-recovery/negative/list.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/list.stderr",
+    "line": 3,
+    "column": 30,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-four-quote-recovery/negative/list.bend"
+  }
+]

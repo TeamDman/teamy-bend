@@ -1,0 +1,7 @@
+Error:
+- expected : a fresh name (duplicate declaration: main)
+- observed : '('
+Location:
+3 | def main() -> Char: 'a'
+4>| def main() -> Char: ''''
+5 | 

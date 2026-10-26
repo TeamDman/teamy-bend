@@ -1,0 +1,7 @@
+Error:
+- expected : ')'
+- observed : '''
+Location:
+2 | 
+3>| def main() -> Char: ('''')
+4 | 

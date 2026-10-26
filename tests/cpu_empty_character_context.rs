@@ -21,10 +21,23 @@ struct FixtureExpectation {
 
 #[test]
 fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
-    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
-        "fixtures/cpu-empty-character-context/cases.json"
-    ))
-    .unwrap();
+    let cases = [
+        (
+            "cpu-empty-character-context",
+            include_str!("fixtures/cpu-empty-character-context/cases.json"),
+        ),
+        (
+            "cpu-four-quote-recovery",
+            include_str!("fixtures/cpu-four-quote-recovery/cases.json"),
+        ),
+    ]
+    .into_iter()
+    .flat_map(|(cohort, source)| {
+        facet_json::from_str::<Vec<FixtureExpectation>>(source)
+            .unwrap()
+            .into_iter()
+            .map(move |case| (cohort, case))
+    });
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let scratch = std::env::temp_dir().join(format!(
         "bend-empty-character-context-{}",
@@ -33,12 +46,8 @@ fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
     std::fs::create_dir(&scratch).unwrap();
     let mut exact = 0;
     let mut different = 0;
-    for case in cases.into_iter().filter(|c| c.kind == "negative") {
-        let expected = std::fs::read(
-            root.join("cpu-empty-character-context")
-                .join(case.expected.unwrap()),
-        )
-        .unwrap();
+    for (cohort, case) in cases.filter(|(_, c)| c.kind == "negative") {
+        let expected = std::fs::read(root.join(cohort).join(case.expected.unwrap())).unwrap();
         let mut prior = None;
         for operation in ["check", "eval", "run", "c", "javascript", "native"] {
             let output_path = scratch.join("unwritten");
@@ -76,7 +85,7 @@ fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
             different += 1;
         }
     }
-    assert_eq!((exact, different), (21, 1));
+    assert_eq!((exact, different), (27, 3));
     std::fs::remove_dir(scratch).unwrap();
 }
 

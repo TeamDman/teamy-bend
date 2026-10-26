@@ -68,14 +68,16 @@ mod lexical_diagnostics;
 use lexical_diagnostics::LexicalDiagnostic;
 use lexical_diagnostics::LexicalFault;
 use lexical_diagnostics::LexicalPrefix;
+mod quote_recovery;
+use quote_recovery::QuoteRecovery;
 
 fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
     lex_tokens(source, label, None)
 }
 
 // Try the pinned raw-apostrophe spelling without changing the established
-// malformed-input token stream. A fallback scans tokens only; parsing and
-// template specialization still happen exactly once.
+// malformed-input token stream. An optional bounded corrected prefix can later
+// recover presentation in isolated state, but never an accepted book.
 fn lex_tokens(
     source: &str,
     label: &str,
@@ -86,9 +88,14 @@ fn lex_tokens(
         if corrected.is_ok() {
             return corrected;
         }
-        if let Some(prefix) = diagnostic_prefix.as_deref_mut() {
-            *prefix = None;
+        let corrected_prefix = diagnostic_prefix.as_deref_mut().and_then(Option::take);
+        let legacy = lex_tokens_mode(source, label, diagnostic_prefix.as_deref_mut(), false);
+        if legacy.is_ok()
+            && let Some(target) = diagnostic_prefix
+        {
+            *target = corrected_prefix;
         }
+        return legacy;
     }
     lex_tokens_mode(source, label, diagnostic_prefix, false)
 }
@@ -3302,12 +3309,17 @@ fn parse_into(
     }
     let mut prefix = None;
     let mut lexical_error = None;
+    let mut recovery = None;
     let tokens = match lex_tokens(
         input.source,
         input.label,
         templates.diagnostics.is_some().then_some(&mut prefix),
     ) {
-        Ok(tokens) => tokens,
+        Ok(tokens) => {
+            recovery = prefix
+                .and_then(|prefix| QuoteRecovery::capture(prefix, &input, book, *fresh, templates));
+            tokens
+        }
         Err(error) => {
             let Some(mut prefix) = prefix else {
                 return Err(error);
@@ -3354,6 +3366,12 @@ fn parse_into(
             origins.clear_load_failure();
         }
         return Err(error);
+    }
+    if result.is_err()
+        && let Some(diagnostic) = recovery.and_then(QuoteRecovery::diagnostic)
+        && let Some(origins) = &mut templates.diagnostics
+    {
+        origins.replace_load_failure(diagnostic);
     }
     result.map_err(|error| {
         if raw_apostrophe && let Some(legacy) = legacy_lexical_error(input.source, input.label) {

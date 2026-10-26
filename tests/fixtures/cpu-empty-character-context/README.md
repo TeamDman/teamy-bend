@@ -12,10 +12,13 @@ different parse history, and pinned diagnostics observe one UTF-16 code unit.
 The existing cardinality rejection, raw ParseError and parser cursor survive.
 
 The manifest records 22 refused inputs and five accepted executable controls.
-Eighteen rejection diagnostics match upstream; four remain different: earlier
+At its original checkpoint, eighteen rejection diagnostics matched upstream; four remained different: earlier
 grammar, empty-followed-escape, four-quotes and raw-before-grammar. The baseline
 had two exact diagnostics, so this closes 16 differences without an acceptance
-change. Strict IO proof exclusion remains distinct from executable acceptance.
+change. Subsequent quote/grammar attribution and bounded isolated recovery now
+match all 22 diagnostics. The separate `cpu-four-quote-recovery` cohort has five
+exact diagnostics and three retained differences; it does not change this
+cohort's source bytes. Strict IO proof exclusion remains distinct from executable acceptance.
 
 The CRLF fixture and expected stream are marked `-text` locally so Git preserves
 those exact bytes on checkout. Trailing trivia in the negative fixtures and

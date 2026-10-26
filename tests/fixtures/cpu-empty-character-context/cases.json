@@ -179,7 +179,7 @@
     "case": "four-quotes",
     "path": "cpu-empty-character-context/negative/four-quotes.bend",
     "kind": "negative",
-    "exact": false,
+    "exact": true,
     "expected": "expected/four-quotes.stderr",
     "line": 3,
     "column": 23,

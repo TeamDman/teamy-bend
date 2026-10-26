@@ -64,13 +64,26 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
         message: Option<String>,
         error_source: Option<String>,
     }
-    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
-        "../../tests/fixtures/cpu-empty-character-context/cases.json"
-    ))
-    .unwrap();
+    let cases = [
+        (
+            "cpu-empty-character-context",
+            include_str!("../../tests/fixtures/cpu-empty-character-context/cases.json"),
+        ),
+        (
+            "cpu-four-quote-recovery",
+            include_str!("../../tests/fixtures/cpu-four-quote-recovery/cases.json"),
+        ),
+    ]
+    .into_iter()
+    .flat_map(|(cohort, source)| {
+        facet_json::from_str::<Vec<FixtureExpectation>>(source)
+            .unwrap()
+            .into_iter()
+            .map(move |case| (cohort, case))
+    });
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let mut refused = 0;
-    for case in cases.into_iter().filter(|c| c.kind == "negative") {
+    for (cohort, case) in cases.filter(|(_, c)| c.kind == "negative") {
         let path = root.join(&case.path);
         let plain = crate::syntax::load(&path).unwrap_err();
         assert_eq!(
@@ -110,8 +123,7 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
                 assert_eq!(
                     actual,
                     std::fs::read_to_string(
-                        root.join("cpu-empty-character-context")
-                            .join(case.expected.as_ref().unwrap())
+                        root.join(cohort).join(case.expected.as_ref().unwrap())
                     )
                     .unwrap(),
                     "{}",
@@ -121,7 +133,7 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
         }
         refused += 1;
     }
-    assert_eq!(refused, 22);
+    assert_eq!(refused, 30);
 }
 
 #[test]

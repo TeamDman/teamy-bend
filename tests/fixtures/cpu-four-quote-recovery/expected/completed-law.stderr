@@ -1,0 +1,7 @@
+Error:
+- expected : 'def', 'type' or 'law'
+- observed : '''
+Location:
+3 | law main: Char
+4>| def main(): ''''
+5 | 

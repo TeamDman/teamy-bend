@@ -473,6 +473,22 @@ impl DiagnosticOrigins {
         self.load_failure = None;
     }
 
+    // Quote recovery must not share the mutable origin tracker or scan a large
+    // original display source hidden behind the cleaned parser buffer.
+    pub(super) fn isolated_load_context(&self, label: &str) -> Option<Self> {
+        let source = self.sources.get(label)?;
+        if source.len() > 4096 {
+            return None;
+        }
+        let mut context = Self::default();
+        context.sources.insert(label.into(), Rc::clone(source));
+        Some(context)
+    }
+
+    pub(super) fn replace_load_failure(&mut self, diagnostic: LoadDiagnostic) {
+        self.load_failure = Some(diagnostic);
+    }
+
     pub(crate) fn excerpt(&self, identity: usize) -> Option<String> {
         let origin = self.nodes.get(&identity)?;
         source_excerpt(&origin.source, origin.line)

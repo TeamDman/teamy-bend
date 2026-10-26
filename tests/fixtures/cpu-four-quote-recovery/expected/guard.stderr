@@ -1,0 +1,7 @@
+Error:
+- expected : a quantified datatype after + (+D<..> sets D's leading quantities to &2)
+- observed : '''
+Location:
+2 | 
+3>| def main() -> Char: + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + ''''
+4 | 
