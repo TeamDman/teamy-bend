@@ -1,0 +1,7 @@
+Error:
+- expected : Data
+- observed : Type
+Location: main
+7 | def main() -> Array<Cell> & Array<Cell>:
+8>|   Array.clone(Cell, ALeaf{Cell{u => 7}})
+9 | 

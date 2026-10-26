@@ -1,0 +1,12 @@
+old:text:old
+cleared:empty
+read:text:old
+filled:[text:final]
+snapshot:[empty]
+original:[text:old]
+old:empty
+cleared:empty
+read:empty
+filled:[text:left][empty][text:right][text:final]
+snapshot:[text:left][empty][text:right][empty]
+original:[text:left][empty][text:right][empty]

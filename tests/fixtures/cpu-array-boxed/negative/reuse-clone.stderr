@@ -1,0 +1,7 @@
+Error:
+- expected : left
+- observed : left (consumed more than once)
+Location: bad
+4 | def bad(r: Array<String> & Array<String>) -> Array<String> & Array<String>:
+5>|   (left, right) = r
+6 |   (left, left)

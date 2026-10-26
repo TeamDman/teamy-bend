@@ -1,0 +1,62 @@
+[
+  {
+    "case": "reg/array_clone_boxed.bend",
+    "path": "tests/fixtures/cpu-array-boxed/original/array_clone_boxed.bend",
+    "kind": "positive",
+    "stdout": "ababababababababhelloworldabcdabzzdcleaf\n",
+    "upstream_path": "tests/reg/array_clone_boxed.bend",
+    "source_sha256": "54a4c9126e3de955580b6a6c3db967564446efc19bfb57b521a6ceba6445e9e3"
+  },
+  {
+    "case": "reg/array_heap_element.bend",
+    "path": "tests/fixtures/cpu-array-boxed/original/array_heap_element.bend",
+    "kind": "positive",
+    "stdout": "716\n",
+    "upstream_path": "tests/reg/array_heap_element.bend",
+    "source_sha256": "d01dffd60e7a30bd1b3bffb6fd0db9f3be0d6b067fc97337d184d157d41e9103"
+  },
+  {
+    "case": "boxed-drop",
+    "path": "tests/fixtures/cpu-array-boxed/controls/boxed-drop.bend",
+    "kind": "positive",
+    "stdout": "old:leaf\nread:leaf\nfirst:[set]\nsecond:[keep]\nold:box\nread:box\nfirst:[set][box][box][new]\nsecond:[box][box][box][keep]\n",
+    "source_sha256": "f43f87534d7d36b8c4ac831842ea9d7d0af13d099cc3b6ae97dfc77a8635fac8"
+  },
+  {
+    "case": "tag-transitions",
+    "path": "tests/fixtures/cpu-array-boxed/controls/tag-transitions.bend",
+    "kind": "positive",
+    "stdout": "old:text:old\ncleared:empty\nread:text:old\nfilled:[text:final]\nsnapshot:[empty]\noriginal:[text:old]\nold:empty\ncleared:empty\nread:empty\nfilled:[text:left][empty][text:right][text:final]\nsnapshot:[text:left][empty][text:right][empty]\noriginal:[text:left][empty][text:right][empty]\n",
+    "source_sha256": "97e01fd1660de18427589a6ae65fcbd84318d3c4e5dd0b8dcace48d695981db7"
+  },
+  {
+    "case": "reuse-clone",
+    "path": "tests/fixtures/cpu-array-boxed/negative/reuse-clone.bend",
+    "kind": "negative",
+    "stderr": "Error:\n- expected : left\n- observed : left (consumed more than once)\nLocation: bad\n4 | def bad(r: Array<String> & Array<String>) -> Array<String> & Array<String>:\n5>|   (left, right) = r\n6 |   (left, left)\n",
+    "source_sha256": "6e4f3eda85e1cd14a48af4c6d0ad6df4e961980326a874269807b1d8565ae85e"
+  },
+  {
+    "case": "nondata-clone",
+    "path": "tests/fixtures/cpu-array-boxed/negative/nondata-clone.bend",
+    "kind": "negative",
+    "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: main\n7 | def main() -> Array<Cell> & Array<Cell>:\n8>|   Array.clone(Cell, ALeaf{Cell{u => 7}})\n9 | \n",
+    "source_sha256": "f1ee9d2c6529f99a81ec43a3b8bb3e62872db001d63e2f63e5b045cc24979e96"
+  },
+  {
+    "case": "affine-swap",
+    "path": "tests/fixtures/cpu-array-runtime/controls/affine-swap.bend",
+    "kind": "positive",
+    "stdout": "7\n9\n",
+    "source_sha256": "c84bfa127c054300fd82a23d671e45bd393d1d8354149f1cfabf1985d4ee85d3"
+  },
+  {
+    "case": "array-depth-guard",
+    "path": "tests/fixtures/cpu-runtime-negatives/array_depth_bound.bend",
+    "kind": "runtime-negative",
+    "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
+    "stderr": "bend: an array past the deepest block class 31\n",
+    "port_c_residual_stderr": "teamy-bend executable C: array budget exhausted\n",
+    "upstream_path": "tests/io/array_depth_bound.bend"
+  }
+]
