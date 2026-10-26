@@ -2657,3 +2657,22 @@ User-authorized verified archival recovered 1,287,000,064 workspace bytes while
 preserving source and unique evidence; historical binary paths require explicit
 restoration. All resource floors remain unchanged. Raw archives and pending
 Library artifacts remain local.
+
+## Missing-import diagnostic checkpoint
+
+Tested `4d62ceac607c4050c1d53ded536feb837118bf89` corrects the five missing-import diagnostics, preserving public
+ParseError and rejection/guard/evaluation behavior. [Report](cpu-missing-import-diagnostics.md).
+Gate **1291 passed / 0 failed / 49 ignored**. The reviewed 452 observations retain 220 deterministic
+within-lane pairs, 16 generated C/JS positive executions and eight separate pure
+normalization observations. Four port artifacts match baseline bytes. Original
+missing-file fixtures remain execution-unrun. Nine adjacent fallback cases remain
+non-exact, including an upstream read-directory host failure.
+
+Renewed 1,302 census: 366 both accept, 401 exact reject, 494 acceptance differences,
+35 different rejections, six oracle failures. All 385 historical IO observations
+renewed exactly; 144 residuals = 109 acceptance + 35 rejection. Only five port
+stderr streams changed; no port status/phase changed. Upstream dead_param_fork
+host-failure phase varied, with no classification improvement. No new exception.
+Coverage 509 linked / 793 unlinked is linkage, not universal parity. All prior semantic,
+API, resource and oracle caveats remain. The 21 cleanup restoration records retain
+their hashes; no new cleanup or Library upload attempted.
