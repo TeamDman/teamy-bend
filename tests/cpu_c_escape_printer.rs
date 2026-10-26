@@ -174,7 +174,14 @@ fn c_escape_byte_accounting_and_existing_output_guards_remain_bounded() {
             "pure output budget exhausted",
         ),
     ] {
-        let program = format!("{source}\nint main(void) {{ (void)tb_program_main; {body} }}\n");
+        let program = format!(
+            "{source}\nint main(void) {{\n\
+             #ifdef _WIN32\n\
+             if (_setmode(_fileno(stdout), _O_BINARY) == -1) return 90;\n\
+             if (_setmode(_fileno(stderr), _O_BINARY) == -1) return 91;\n\
+             #endif\n\
+             (void)tb_program_main; {body} }}\n"
+        );
         let executable = executable_c_compiler::compile(&artifacts.0, &program, &["TB_NO_MAIN=1"]);
         let output =
             executable_c_compiler::bounded(&mut Command::new(executable), Duration::from_secs(20));
