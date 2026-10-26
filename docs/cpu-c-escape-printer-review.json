@@ -34,5 +34,12 @@
     "private_root_hits": 0,
     "credential_pattern_hits": 0
   },
-  "findings": "No blocking findings. Source/matrix identities, canonical readbacks, coverage linkage516/1302, residuals and historical census limitations verified. Approval covers reviewed feature checkpoint; not full CPU parity or Windows execution."
+  "findings": "No blocking findings. Source/matrix identities, canonical readbacks, coverage linkage516/1302, residuals and historical census limitations verified. Approval covers reviewed feature checkpoint; not full CPU parity or Windows execution.",
+  "git_csv_storage": {
+    "path": "docs/cpu-c-escape-printer-evidence.csv",
+    "reviewed_working_sha256": "0445a792e253582be46098612588c4b8181276801486bed2be22cedabf46fb7c",
+    "git_blob_sha256": "bb934ab0a3981e08fa82620ef859dab564ed7fc8746ef74dc4a25de1f595fc6c",
+    "only_crlf_to_lf": true,
+    "reason": "Existing Git text normalization; unchanged CSV rows. Reviewed hashes identify raw reviewed artifacts; this entry identifies the normalized Git blob."
+  }
 }
