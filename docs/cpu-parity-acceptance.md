@@ -2917,3 +2917,14 @@ linkage update. Four residual diagnostics and all prior semantic/API/oracle/reso
 gaps remain unwaived. CRLF attribution errors were corrected before the clean-source
 matrix/full gate; historical receipts remain explicit. The earlier denied main update was explicitly reapproved, completed and verified.
 This newer checkpoint follows independent review and the authorized non-force workflow.
+
+## Quote and grammar diagnostic checkpoint
+
+Tested `b383255b9b584408cb61927e7cd4b34567d78f99` closes three retained diagnostic gaps without changing acceptance,
+raw loader errors, evaluation or guards. [Report](cpu-quote-grammar-context.md).
+Standard gate **1342 passed / 0 failed / 49 ignored**; matrix **600 observations**,
+98 repeat pairs, 40 generated executions and 68 unchanged negative raw API outputs.
+The original cohort is 21 exact/1 different; twelve adjacent controls are exact.
+`four-quotes` remains unqualified pending safe isolated diagnostic recovery.
+Historical census/linkage and unwaived semantic, oracle, resource and external API
+gaps remain separate. No second parser pass, new exception or raised budget.
