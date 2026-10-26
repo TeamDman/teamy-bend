@@ -101,7 +101,7 @@ fn canonical_depth_refusal_and_public_legacy_error_are_separate() {
 }
 
 #[test]
-fn restored_lexical_error_clears_the_superseded_parser_diagnostic() {
+fn restored_lexical_error_retains_the_actual_parser_diagnostic() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-raw-apostrophe/negative");
     for fixture in ["earlier-grammar.bend", "later-grammar.bend"] {
@@ -109,6 +109,45 @@ fn restored_lexical_error_clears_the_superseded_parser_diagnostic() {
         let plain = super::load(&path).unwrap_err();
         let tracked = super::load_with_diagnostics(&path).err().unwrap();
         assert_eq!(tracked.error.to_string(), plain.to_string());
-        assert!(tracked.diagnostic.is_none());
+        assert!(tracked.diagnostic.is_some());
     }
+}
+
+#[test]
+fn restored_lexical_error_cannot_reuse_stale_metadata_after_a_guard_failure() {
+    let source = format!("law main: Char\ndef main(): {}'''", "+ ".repeat(64));
+    let mut book = super::Book::default();
+    let mut fresh = 0;
+    let mut origins = crate::syntax::diagnostics::DiagnosticOrigins::default();
+    origins.source("stale", "stale");
+    origins.expected_syntax("stale", 1, "stale", "stale");
+    let mut templates = super::Templates {
+        diagnostics: Some(origins),
+        ..super::Templates::default()
+    };
+    let error = super::parse_into(
+        super::ParseInput {
+            source: &source,
+            label: "<guard>",
+            namespace: "",
+            aliases: super::BTreeMap::new(),
+            origin: super::SourceOrigin::Standalone,
+        },
+        &mut book,
+        &mut fresh,
+        &mut templates,
+        None,
+        None,
+    )
+    .unwrap_err();
+    let legacy = lex_tokens_mode(&source, "<guard>", None, false).unwrap_err();
+    assert_eq!(error.to_string(), legacy.to_string());
+    assert!(
+        templates
+            .diagnostics
+            .unwrap()
+            .load_failure(error)
+            .diagnostic
+            .is_none()
+    );
 }

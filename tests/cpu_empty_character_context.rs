@@ -76,7 +76,7 @@ fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
             different += 1;
         }
     }
-    assert_eq!((exact, different), (18, 4));
+    assert_eq!((exact, different), (21, 1));
     std::fs::remove_dir(scratch).unwrap();
 }
 

@@ -1,0 +1,98 @@
+[
+  {
+    "case": "quantified-arrow",
+    "path": "cpu-quote-grammar-context/negative/quantified-arrow.bend",
+    "expected": "expected/quantified-arrow.stderr",
+    "line": 3,
+    "column": 8,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "quantified-plus",
+    "path": "cpu-quote-grammar-context/negative/quantified-plus.bend",
+    "expected": "expected/quantified-plus.stderr",
+    "line": 3,
+    "column": 7,
+    "message": "expected a name, found \"++\""
+  },
+  {
+    "case": "quantified-law",
+    "path": "cpu-quote-grammar-context/negative/quantified-law.bend",
+    "expected": "expected/quantified-law.stderr",
+    "line": 3,
+    "column": 12,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "quantified-term",
+    "path": "cpu-quote-grammar-context/negative/quantified-term.bend",
+    "expected": "expected/quantified-term.stderr",
+    "line": 3,
+    "column": 9,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "ordinary-name",
+    "path": "cpu-quote-grammar-context/negative/ordinary-name.bend",
+    "expected": "expected/ordinary-name.stderr",
+    "line": 3,
+    "column": 5,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "compile-time-name",
+    "path": "cpu-quote-grammar-context/negative/compile-time-name.bend",
+    "expected": "expected/compile-time-name.stderr",
+    "line": 3,
+    "column": 9,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "existential-name",
+    "path": "cpu-quote-grammar-context/negative/existential-name.bend",
+    "expected": "expected/existential-name.stderr",
+    "line": 3,
+    "column": 12,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "existential-term",
+    "path": "cpu-quote-grammar-context/negative/existential-term.bend",
+    "expected": "expected/existential-term.stderr",
+    "line": 3,
+    "column": 9,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "already-quantified",
+    "path": "cpu-quote-grammar-context/negative/already-quantified.bend",
+    "expected": "expected/already-quantified.stderr",
+    "line": 3,
+    "column": 9,
+    "message": "expected a name, found \"->\""
+  },
+  {
+    "case": "empty-before-unclosed",
+    "path": "cpu-quote-grammar-context/negative/empty-before-unclosed.bend",
+    "expected": "expected/empty-before-unclosed.stderr",
+    "line": 3,
+    "column": 25,
+    "message": "a string or character literal cannot cross a line"
+  },
+  {
+    "case": "grammar-before-unclosed",
+    "path": "cpu-quote-grammar-context/negative/grammar-before-unclosed.bend",
+    "expected": "expected/grammar-before-unclosed.stderr",
+    "line": 3,
+    "column": 16,
+    "message": "a string or character literal cannot cross a line"
+  },
+  {
+    "case": "quote-before-grammar",
+    "path": "cpu-quote-grammar-context/negative/quote-before-grammar.bend",
+    "expected": "expected/quote-before-grammar.stderr",
+    "line": 3,
+    "column": 25,
+    "message": "a string or character literal cannot cross a line"
+  }
+]

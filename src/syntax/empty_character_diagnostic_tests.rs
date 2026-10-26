@@ -123,3 +123,60 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
     }
     assert_eq!(refused, 22);
 }
+
+#[test]
+fn quote_grammar_context_keeps_raw_errors_and_quantifier_boundaries() {
+    #[derive(facet::Facet)]
+    struct Case {
+        case: String,
+        path: String,
+        expected: String,
+        line: usize,
+        column: usize,
+        message: String,
+    }
+    let cases: Vec<Case> = facet_json::from_str(include_str!(
+        "../../tests/fixtures/cpu-quote-grammar-context/cases.json"
+    ))
+    .unwrap();
+    assert_eq!(cases.len(), 12);
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    for case in cases {
+        let path = root.join(&case.path);
+        let plain = crate::syntax::load(&path).unwrap_err();
+        assert_eq!((plain.line, plain.column), (case.line, case.column));
+        assert_eq!(plain.message, case.message, "{}", case.case);
+        assert_eq!(plain.source, path.to_string_lossy());
+        assert_eq!(
+            plain.to_string(),
+            crate::syntax::load_executable(&path)
+                .unwrap_err()
+                .to_string()
+        );
+        for failure in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(failure.error.to_string(), plain.to_string());
+            let report = failure.diagnostic.expect(&case.case);
+            let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content
+            else {
+                panic!("syntax context")
+            };
+            assert_eq!(
+                format!(
+                    "Error:\n- expected : {expected}\n- observed : {observed}\nLocation:\n{}\n",
+                    report.excerpt
+                ),
+                std::fs::read_to_string(
+                    root.join("cpu-quote-grammar-context").join(&case.expected)
+                )
+                .unwrap(),
+                "{}",
+                case.case
+            );
+        }
+    }
+}

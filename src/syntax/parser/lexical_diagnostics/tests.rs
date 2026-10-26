@@ -96,6 +96,59 @@ fn lexical_context_keeps_public_errors_and_exact_sources() {
 }
 
 #[test]
+fn incomplete_literal_prefix_reports_only_an_earlier_grammar_refusal() {
+    for source in [
+        "law main: Char\ndef main(): ''\\q'\n",
+        "law main: Char\ndef main(): ''\\q'",
+        "law main: Char\ndef main(): ''\n\"unfinished",
+    ] {
+        let failure = diagnostic_with_seed(source, true);
+        let report = failure.diagnostic.expect("earlier empty character");
+        let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content else {
+            panic!("syntax context")
+        };
+        assert_eq!(expected, "a closing '");
+        assert_eq!(
+            observed,
+            if source.contains("\\q") {
+                "'\\'"
+            } else {
+                "'\n'"
+            }
+        );
+    }
+    for source in [
+        "law main: Char\ndef main(): 'unfinished\n",
+        "law main: Char\ndef main(): 'unfinished",
+        "law main: Char\ndef main(): \"unfinished\n",
+        "law main: Char\ndef main(): \"unfinished",
+    ] {
+        assert!(diagnostic_with_seed(source, true).diagnostic.is_none());
+    }
+}
+
+#[test]
+fn incomplete_literal_prefix_keeps_presentation_caps_and_semantic_barriers() {
+    let source = "law main: Char\ndef main(): ''\\q'";
+    let within = format!("#{}\n{source}", " ".repeat(4096 - source.len() - 2));
+    assert_eq!(within.len(), 4096);
+    assert!(diagnostic(&within).diagnostic.is_some());
+    assert!(diagnostic(&format!(" {within}")).diagnostic.is_none());
+    for source in [
+        format!("law main: Char\ndef main(): ''\\q'{}", "x".repeat(4096)),
+        format!("{}'unfinished", "a ".repeat(64)),
+        "def template(~x: Type) -> Type: x\n'unfinished".into(),
+        "law main: Char\ndef main(): import \"missing.c\"\n'unfinished".into(),
+        "law main: Char\ndef main(): 129n\n'unfinished".into(),
+    ] {
+        assert!(
+            diagnostic_with_seed(&source, true).diagnostic.is_none(),
+            "{source}"
+        );
+    }
+}
+
+#[test]
 fn lexical_context_stops_before_expansion_and_host_paths() {
     for source in [
         "def template(~x: Type) -> Type: x\n0x",
@@ -182,7 +235,10 @@ fn lexical_context_barriers_stop_before_mutating_shared_templates() {
         "type B is Data: T{}\nlaw f: for x: B B\ndef f(x):\n  match x:\n    case T{}: T{}\n0x",
         "law main: Type\ndef main(): prior(~Type)\n0x",
         "def imported(): Type\n0x",
-    ] {
+    ]
+    .into_iter()
+    .flat_map(|source| [source.to_owned(), source.replace("0x", "'unfinished")])
+    {
         let mut templates = Templates::default();
         let mut book = Book::default();
         let mut fresh = 0;
@@ -203,10 +259,10 @@ fn lexical_context_barriers_stop_before_mutating_shared_templates() {
         .unwrap();
         let shared = Rc::clone(&templates.declarations["prior"].tokens);
         let mut origins = DiagnosticOrigins::default();
-        origins.source("<prefix>", source);
+        origins.source("<prefix>", &source);
         templates.diagnostics = Some(origins);
         let mut prefix = None;
-        lex_tokens(source, "<prefix>", Some(&mut prefix)).unwrap_err();
+        lex_tokens(&source, "<prefix>", Some(&mut prefix)).unwrap_err();
         let mut prefix = prefix.expect("eligible prefix");
         prefix.diagnostic.initial_declarations = book.declarations.len();
         templates.lexical_diagnostic = Some(prefix.diagnostic);

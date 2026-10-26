@@ -148,12 +148,7 @@ fn lex_tokens_mode(
             while pos < source.len() {
                 let c = source[pos..].chars().next().expect("nonempty remainder");
                 if c == '\n' {
-                    return Err(ParseError {
-                        source: label.into(),
-                        line,
-                        column: start_column,
-                        message: "a string or character literal cannot cross a line".into(),
-                    });
+                    break;
                 }
                 pos += c.len_utf8();
                 if escaped {
@@ -166,11 +161,29 @@ fn lex_tokens_mode(
                 }
             }
             if !closed {
+                LexicalPrefix::capture(
+                    &mut diagnostic_prefix,
+                    &tokens,
+                    source,
+                    Token {
+                        text: String::new(),
+                        line,
+                        column: start_column,
+                        start,
+                        end: pos,
+                    },
+                    LexicalFault::IncompleteLiteral,
+                );
                 return Err(ParseError {
                     source: label.into(),
                     line,
                     column: start_column,
-                    message: "unterminated literal".into(),
+                    message: if source[pos..].starts_with('\n') {
+                        "a string or character literal cannot cross a line"
+                    } else {
+                        "unterminated literal"
+                    }
+                    .into(),
                 });
             }
         } else if ch.is_ascii_alphabetic() || ch == '_' {
@@ -711,6 +724,19 @@ impl Parser<'_> {
             Quant::Lone
         }
     }
+    fn quantified_name(&mut self, quant: Quant) -> Result<String, ParseError> {
+        self.name().inspect_err(|_| {
+            // parse_quant consumes one source character upstream. Our combined
+            // punctuation token stays intact for the public parser error.
+            if quant == Quant::Lone
+                && matches!(self.current().text.as_str(), "->" | "++")
+                && let Some(origins) = &mut self.templates.diagnostics
+            {
+                let token = &self.tokens[self.at];
+                origins.expected_after_token(&self.label, token.line, token.column, "a name");
+            }
+        })
+    }
     fn telescope(&mut self, close: &str) -> Result<Vec<Binder>, ParseError> {
         let mut binders = Vec::new();
         while !self.take(close) {
@@ -724,7 +750,11 @@ impl Parser<'_> {
             } else {
                 self.quant()
             };
-            let name = self.name()?;
+            let name = if compile_time {
+                self.name()?
+            } else {
+                self.quantified_name(quant)?
+            };
             let (quant, ty) = if self.take(":") {
                 (quant, self.expression(0)?)
             } else if quant == Quant::Lone {
@@ -923,7 +953,11 @@ impl Parser<'_> {
                 universal = false;
             }
             let quant = if all { self.quant() } else { Quant::Lone };
-            let name = self.name()?;
+            let name = if all {
+                self.quantified_name(quant)?
+            } else {
+                self.name()?
+            };
             self.expect(":")?;
             let mut ty = self.expression(0)?;
             let where_line = self.current().line;
@@ -1690,6 +1724,7 @@ impl Parser<'_> {
         reason = "Surface forms are kept in upstream grammar order for auditability"
     )]
     fn atom_inner(&mut self) -> Result<Occurrence, ParseError> {
+        self.require_complete_literal()?;
         if self.is("~") {
             let token = self.current().clone();
             if let Some(origins) = &mut self.templates.diagnostics {
@@ -1746,7 +1781,11 @@ impl Parser<'_> {
                 }
             }
             let quant = if exists { Quant::Lone } else { self.quant() };
-            let name = self.name()?;
+            let name = if exists {
+                self.name()?
+            } else {
+                self.quantified_name(quant)?
+            };
             self.expect(":")?;
             let domain = self.expression(1)?;
             self.expect("->")?;
@@ -3257,6 +3296,9 @@ fn parse_into(
 ) -> Result<(), ParseError> {
     if let Some(origins) = &mut templates.diagnostics {
         origins.source(input.label, input.source);
+        // This parse owns only its own failure metadata, including when a
+        // lexical refusal is outside the optional presentation work fence.
+        origins.clear_load_failure();
     }
     let mut prefix = None;
     let mut lexical_error = None;
@@ -3315,9 +3357,8 @@ fn parse_into(
     }
     result.map_err(|error| {
         if raw_apostrophe && let Some(legacy) = legacy_lexical_error(input.source, input.label) {
-            if let Some(origins) = &mut templates.diagnostics {
-                origins.clear_load_failure();
-            }
+            // Preserve the raw historical lexical error, but retain optional
+            // metadata from the actual corrected parser's first refusal.
             legacy
         } else {
             error

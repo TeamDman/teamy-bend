@@ -14,6 +14,7 @@ const MAX_PREFIX_BYTES: usize = 4096;
 pub(super) enum LexicalFault {
     DecimalSuffix { after: usize },
     Backtick,
+    IncompleteLiteral,
 }
 
 enum PrefixOutcome {
@@ -77,6 +78,21 @@ impl LexicalPrefix {
 }
 
 impl Parser<'_> {
+    pub(super) fn require_complete_literal(&mut self) -> Result<(), ParseError> {
+        if self
+            .templates
+            .lexical_diagnostic
+            .as_ref()
+            .is_some_and(|diagnostic| {
+                diagnostic.start == self.current().start
+                    && matches!(diagnostic.fault, LexicalFault::IncompleteLiteral)
+            })
+        {
+            return self.require_semantic_prefix();
+        }
+        Ok(())
+    }
+
     // Stop before expansion, nontrivial lowering or host-path inspection. The
     // failed Loader owns any temporary prefix declarations and binder IDs.
     pub(super) fn require_semantic_prefix(&mut self) -> Result<(), ParseError> {
