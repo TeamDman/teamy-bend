@@ -1,0 +1,459 @@
+{
+  "source_commit": "15568847ae21f8e917024edc0f39181fe21396dc",
+  "baseline_checkpoint": "79d4109f436510bf580310e35e1100c1427c0fe9",
+  "baseline_binary_source": "61cab3744713e4841f44efd8b8bd3853e1026206",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "full_gate": {
+    "source_commit": "15568847ae21f8e917024edc0f39181fe21396dc",
+    "dirty": false,
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-File",
+      "./check-all.ps1",
+      "-FormatterToolchain",
+      "nightly-2026-05-24"
+    ],
+    "timeout_seconds": 1200,
+    "profile_environment": {
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "BEND_GPU": "off",
+      "RUST_TEST_NOCAPTURE": null,
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "reserve_before_bytes": 11811160064,
+    "stop_below_bytes": 10737418240,
+    "tmp_stop_below_bytes": 1073741824,
+    "free_before": 13061812224,
+    "stop_reason": null,
+    "exit": 0,
+    "seconds": 1043.7388414409943,
+    "minimum_free": 13061795840,
+    "minimum_tmp_free": 1722093568,
+    "samples_count": 523
+  },
+  "full_gate_log_sha256": "3c367b4c0f0906e98a983a13e8cfa03cb241c35539428d274b052a5e6b0ca1ef",
+  "totals": {
+    "passed": 1338,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 197
+  },
+  "matrix": {
+    "observations": 432,
+    "deterministic_pairs": 74,
+    "runtime_executions": 40,
+    "exact_corresponding_comparisons": 20,
+    "negative_before": {
+      "exact": 2,
+      "different": 20
+    },
+    "negative_after": {
+      "exact": 18,
+      "different": 4
+    },
+    "raw_negative_outputs_unchanged": 44,
+    "baseline_identical_generated_artifacts": 10,
+    "strict_io_excluded": true
+  },
+  "overlap": {
+    "cpu-character-quote-diagnostics": {
+      "exact": [
+        "uppercase-escape-diagnostics-char-second-ascii",
+        "uppercase-escape-diagnostics-char-second-escaped",
+        "uppercase-escape-diagnostics-char-second-nonscalar",
+        "uppercase-escape-diagnostics-char-second-q",
+        "lowercase-escape-grammar-char-second",
+        "lowercase-escape-diagnostics-char-second",
+        "plain-second",
+        "space-second",
+        "hash-second",
+        "bmp-first",
+        "astral-first",
+        "bmp-second",
+        "escaped-quote",
+        "escaped-slash",
+        "unicode-first",
+        "max-first",
+        "scalar-invalid-first",
+        "malformed-first",
+        "unknown-first",
+        "empty",
+        "argument",
+        "pattern",
+        "template",
+        "typed-template",
+        "imported",
+        "qualified-import"
+      ],
+      "different": [
+        "astral-second",
+        "unterminated",
+        "cross-line",
+        "char-length-guard",
+        "earlier-grammar"
+      ]
+    },
+    "cpu-raw-apostrophe": {
+      "exact": [
+        "unused-template",
+        "quotes-2",
+        "empty-argument",
+        "empty-followed-escape",
+        "malformed-first",
+        "name-slot",
+        "lexical-before",
+        "used-empty-template"
+      ],
+      "different": [
+        "quotes-1",
+        "quotes-4",
+        "quotes-5",
+        "quotes-7",
+        "quotes-8",
+        "earlier-grammar",
+        "later-grammar",
+        "import-later-error",
+        "lexical-after"
+      ]
+    }
+  },
+  "identity": {
+    "source_commit": "15568847ae21f8e917024edc0f39181fe21396dc",
+    "clean": true,
+    "binary_sha256": "91344c155ce90ac2c6ad863f7a2e78c81559cad410fa1fc1c5b4e5c9034cd90e",
+    "matrix_binary_sha256": "91344c155ce90ac2c6ad863f7a2e78c81559cad410fa1fc1c5b4e5c9034cd90e",
+    "binary_matches_matrix": true,
+    "totals": [
+      1338,
+      0,
+      49
+    ],
+    "groups": 197,
+    "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4"
+  },
+  "focused": {
+    "focused-unit.json": {
+      "source_commit": "79d4109f436510bf580310e35e1100c1427c0fe9",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "empty_character"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13062189056,
+      "samples": [
+        {
+          "seconds": 0.00024978199508041143,
+          "free": 13062189056,
+          "tmp_free": 1842987008
+        },
+        {
+          "seconds": 2.000506674987264,
+          "free": 13062189056,
+          "tmp_free": 1842987008
+        },
+        {
+          "seconds": 4.0008504270226695,
+          "free": 13062189056,
+          "tmp_free": 1842987008
+        },
+        {
+          "seconds": 6.001206243992783,
+          "free": 13062189056,
+          "tmp_free": 1842868224
+        },
+        {
+          "seconds": 8.002044674009085,
+          "free": 13062189056,
+          "tmp_free": 1842868224
+        },
+        {
+          "seconds": 10.002383769024163,
+          "free": 13062189056,
+          "tmp_free": 1842868224
+        },
+        {
+          "seconds": 12.002740658994298,
+          "free": 13062189056,
+          "tmp_free": 1842868224
+        },
+        {
+          "seconds": 13.570376378018409,
+          "free": 13062189056,
+          "tmp_free": 1842868224
+        }
+      ],
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 13.57044603198301,
+      "minimum_free": 13062189056,
+      "minimum_tmp_free": 1842868224
+    },
+    "focused-literal.json": {
+      "source_commit": "79d4109f436510bf580310e35e1100c1427c0fe9",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "literal"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13062189056,
+      "samples": [
+        {
+          "seconds": 0.0002278890460729599,
+          "free": 13062189056,
+          "tmp_free": 1842864128
+        },
+        {
+          "seconds": 2.0004319000290707,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 4.000762537994888,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 6.001088904042263,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 8.001442103006411,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 10.00179431703873,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 12.002162210992537,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 14.002545969036873,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 16.002899851999246,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 18.003393149003386,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        },
+        {
+          "seconds": 19.720385021006223,
+          "free": 13062189056,
+          "tmp_free": 1842860032
+        }
+      ],
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 19.720443168014754,
+      "minimum_free": 13062189056,
+      "minimum_tmp_free": 1842860032
+    },
+    "focused-cli-complete.json": {
+      "source_commit": "79d4109f436510bf580310e35e1100c1427c0fe9",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_empty_character_context"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13062180864,
+      "samples": [
+        {
+          "seconds": 0.00023388798581436276,
+          "free": 13062180864,
+          "tmp_free": 1810980864
+        },
+        {
+          "seconds": 2.0004279550048523,
+          "free": 13062180864,
+          "tmp_free": 1803165696
+        },
+        {
+          "seconds": 4.00079302303493,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 6.001155039994046,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 8.001480648003053,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 10.001813039998524,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 12.002179338014685,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 14.002553619036917,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 16.002932674018666,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 18.003441038017627,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        },
+        {
+          "seconds": 19.11929759097984,
+          "free": 13062180864,
+          "tmp_free": 1803501568
+        }
+      ],
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 19.11936280800728,
+      "minimum_free": 13062180864,
+      "minimum_tmp_free": 1803165696
+    },
+    "focused-clippy-corrected.json": {
+      "source_commit": "79d4109f436510bf580310e35e1100c1427c0fe9",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--test",
+        "cpu_empty_character_context",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13062180864,
+      "samples": [
+        {
+          "seconds": 0.0002379249781370163,
+          "free": 13062180864,
+          "tmp_free": 1803497472
+        },
+        {
+          "seconds": 0.31438721698941663,
+          "free": 13062180864,
+          "tmp_free": 1803489280
+        }
+      ],
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.31444692600052804,
+      "minimum_free": 13062180864,
+      "minimum_tmp_free": 1803489280
+    }
+  },
+  "source_review_sha256": "f9891b64d5ca6e0e68c98c811eb0f5312b9b67051a7413ab6953253802cb3d03",
+  "matrix_review_sha256": "1a8003f1915a6acbd3bdad3dda55044756e52e11397d027740ab111dbc13507b",
+  "whole_census_rerun": false,
+  "publication": "Prior denied main update was retried once after explicit continuing user approval, succeeded and verified at79d4109. Current checkpoint requires final review before feature preservation and non-force expected-SHA main update.",
+  "preservation": {
+    "archive_sha256": "c50215624fd5f31e63efd01c98c6eb3f69561ed7a3cec2d3bfcb8145f0817551",
+    "archive_bytes": 1634168,
+    "verified_members": 313,
+    "binary_fingerprints": 25,
+    "binaries_retained_locally": true
+  }
+}

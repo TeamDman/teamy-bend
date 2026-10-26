@@ -2900,3 +2900,20 @@ All earlier semantic/API/host/oracle/resource/lint gaps remain unwaived. Main's 
 restriction was explicitly resolved for the separate reviewed 878 checkpoint.
 This work uses reviewed feature preservation and the approved non-force main workflow.
 Next bounded gap: contextual empty-character and quote-count diagnostics.
+
+
+## Contextual empty-character diagnostic checkpoint
+
+Tested `15568847ae21f8e917024edc0f39181fe21396dc` adds failure-only original-source attribution while
+preserving acceptance, raw parser errors, evaluation and guards. [Report](cpu-empty-character-context.md).
+Gate **1338 passed / 0 failed / 49 ignored**. The 22-negative cohort improves
+from 2 exact/20 different to 18 exact/4 different; five executable controls remain accepted.
+432 observations, 74 repeat pairs, 20 exact backend comparisons across 40 executions;
+44 raw errors unchanged and ten generated artifacts identical. Strict IO proof exclusion remains.
+
+Fresh overlapping cohorts measure 26/5 character-quote and 8/9 raw-apostrophe
+rejection diagnostics; overlaps are not additional fixes. No whole-census or original
+linkage update. Four residual diagnostics and all prior semantic/API/oracle/resource
+gaps remain unwaived. CRLF attribution errors were corrected before the clean-source
+matrix/full gate; historical receipts remain explicit. The earlier denied main update was explicitly reapproved, completed and verified.
+This newer checkpoint follows independent review and the authorized non-force workflow.
