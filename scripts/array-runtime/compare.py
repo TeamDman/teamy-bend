@@ -74,7 +74,7 @@ assert sha(a.binary) == result['binary_sha256']
 assert all(not row['timed_out'] for row in result['rows'])
 assert all(all(c['deterministic'].values()) for c in result['cases'])
 residuals=[]
-for case in cases:
+for index, case in enumerate(cases):
     name=case['case']; rows=[r for r in result['rows'] if r['case']==name]
     by_lane={lane:[r for r in rows if r['lane']==lane] for lane in {r['lane'] for r in rows}}
     up=by_lane['upstream-check'][0]
@@ -83,6 +83,8 @@ for case in cases:
         expected=(1,b'',case['stderr'].encode())
         assert all(streams(row)==expected for row in rows), name
         assert len(rows)==9 and not any('artifact_sha256' in row for row in rows)
+        assert all(not (a.output / str(index) / (side+'.'+ext)).exists()
+                   for side in ['upstream','port'] for ext in ['c','js']), name
         continue
     assert up['phase']=={'phase':'accepted','outcome':'accepted'} and streams(up)==(0,b'',b'')
     # Strict-proof refusal is a separately observed exclusion, not an execution.

@@ -3,9 +3,10 @@
 Run with the existing pinned tools, an explicitly selected port binary and a new
 output directory. The runner refuses an altered upstream checkout or source
 fixture, uses 60-second child limits, records exact streams/statuses and repeats
-each executable twice. Output paths must not already exist. It preserves the
-10 GiB workspace and 1 GiB temporary active-run floors; perform the separate
-11 GiB workspace preflight before builds.
+each executable twice. Output paths must not already exist. It checks the
+10 GiB workspace and 1 GiB temporary active-run floors before each child;
+the recorded outer runner also monitors those floors during execution.
+Perform the separate 11 GiB workspace preflight before builds.
 
 ```sh
 python3 scripts/array-runtime/compare.py \
