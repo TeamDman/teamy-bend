@@ -1,0 +1,140 @@
+[
+  {
+    "case": "char-d800-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{d800}'",
+    "constructor": "Chr{55296}"
+  },
+  {
+    "case": "char-d800-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{d800}'",
+    "constructor": "Chr{55296}"
+  },
+  {
+    "case": "string-d800-lower.bend",
+    "value_type": "String",
+    "expression": "\"\\u{d800}\"",
+    "constructor": "SCon{Chr{55296}, SNil{}}"
+  },
+  {
+    "case": "string-d800-upper.bend",
+    "value_type": "String",
+    "expression": "\"\\U{d800}\"",
+    "constructor": "SCon{Chr{55296}, SNil{}}"
+  },
+  {
+    "case": "char-dfff-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{dfff}'",
+    "constructor": "Chr{57343}"
+  },
+  {
+    "case": "char-dfff-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{dfff}'",
+    "constructor": "Chr{57343}"
+  },
+  {
+    "case": "string-dfff-lower.bend",
+    "value_type": "String",
+    "expression": "\"\\u{dfff}\"",
+    "constructor": "SCon{Chr{57343}, SNil{}}"
+  },
+  {
+    "case": "string-dfff-upper.bend",
+    "value_type": "String",
+    "expression": "\"\\U{dfff}\"",
+    "constructor": "SCon{Chr{57343}, SNil{}}"
+  },
+  {
+    "case": "char-110000-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{110000}'",
+    "constructor": "Chr{1114112}"
+  },
+  {
+    "case": "char-110000-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{110000}'",
+    "constructor": "Chr{1114112}"
+  },
+  {
+    "case": "string-110000-lower.bend",
+    "value_type": "String",
+    "expression": "\"\\u{110000}\"",
+    "constructor": "SCon{Chr{1114112}, SNil{}}"
+  },
+  {
+    "case": "string-110000-upper.bend",
+    "value_type": "String",
+    "expression": "\"\\U{110000}\"",
+    "constructor": "SCon{Chr{1114112}, SNil{}}"
+  },
+  {
+    "case": "char-ffffffff-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{ffffffff}'",
+    "constructor": "Chr{4294967295}"
+  },
+  {
+    "case": "char-ffffffff-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{ffffffff}'",
+    "constructor": "Chr{4294967295}"
+  },
+  {
+    "case": "string-ffffffff-lower.bend",
+    "value_type": "String",
+    "expression": "\"\\u{ffffffff}\"",
+    "constructor": "SCon{Chr{4294967295}, SNil{}}"
+  },
+  {
+    "case": "string-ffffffff-upper.bend",
+    "value_type": "String",
+    "expression": "\"\\U{ffffffff}\"",
+    "constructor": "SCon{Chr{4294967295}, SNil{}}"
+  },
+  {
+    "case": "scalar-d7ff-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{d7ff}'",
+    "constructor": "Chr{55295}"
+  },
+  {
+    "case": "scalar-d7ff-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{d7ff}'",
+    "constructor": "Chr{55295}"
+  },
+  {
+    "case": "scalar-e000-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{e000}'",
+    "constructor": "Chr{57344}"
+  },
+  {
+    "case": "scalar-e000-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{e000}'",
+    "constructor": "Chr{57344}"
+  },
+  {
+    "case": "scalar-10ffff-lower.bend",
+    "value_type": "Char",
+    "expression": "'\\u{10ffff}'",
+    "constructor": "Chr{1114111}"
+  },
+  {
+    "case": "scalar-10ffff-upper.bend",
+    "value_type": "Char",
+    "expression": "'\\U{10ffff}'",
+    "constructor": "Chr{1114111}"
+  },
+  {
+    "case": "surrogate-pair.bend",
+    "value_type": "String",
+    "expression": "\"\\u{d800}\\U{dfff}\"",
+    "constructor": "SCon{Chr{55296}, SCon{Chr{57343}, SNil{}}}"
+  }
+]

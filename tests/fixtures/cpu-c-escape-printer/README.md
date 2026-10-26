@@ -7,9 +7,10 @@ encoder and raw IO/file encoding are separate contracts and remain unchanged.
 `cases.json` records exact pinned printed bytes and existing native normal-form
 text separately. Scalar output is loaded, checked and compared as a complete
 normalized structure. Non-scalar constructor values print as braced hex in C;
-JavaScript still refuses them and the port literal decoder still refuses their
-readback. This is corresponding-C fidelity, not cross-runtime parity or a new
-scalar policy exception.
+JavaScript still refuses them. The subsequent U32-backed literal correction now
+allows canonical non-scalar readback and compares its complete graph as well.
+Historical pre-fix receipts retain the earlier parser refusal. This is
+corresponding-C fidelity, not cross-runtime parity or a new scalar policy exception.
 
 The unchanged 95-character ASCII control exceeds the existing kernel input-depth
 guard. It remains unqualified. Additional short ASCII controls cover the range

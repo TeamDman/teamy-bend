@@ -102,10 +102,6 @@ fn uppercase_refusals_preserve_public_loader_errors_and_first_error_positions() 
         "overflow",
         "missing-brace",
         "missing-close",
-        "surrogate-start",
-        "surrogate-end",
-        "above-scalar",
-        "u32-max",
         "invalid-before-valid",
         "valid-before-invalid",
     ] {

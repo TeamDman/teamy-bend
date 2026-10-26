@@ -1,0 +1,274 @@
+[
+  {
+    "case": "char-d800-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\u{d800}'",
+    "constructor": "Chr{55296}",
+    "code": 55296
+  },
+  {
+    "case": "char-d800-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\U{d800}'",
+    "constructor": "Chr{55296}",
+    "code": 55296
+  },
+  {
+    "case": "string-d800-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\u{d800}\"",
+    "constructor": "SCon{Chr{55296}, SNil{}}",
+    "code": 55296
+  },
+  {
+    "case": "string-d800-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\U{d800}\"",
+    "constructor": "SCon{Chr{55296}, SNil{}}",
+    "code": 55296
+  },
+  {
+    "case": "char-dfff-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\u{dfff}'",
+    "constructor": "Chr{57343}",
+    "code": 57343
+  },
+  {
+    "case": "char-dfff-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\U{dfff}'",
+    "constructor": "Chr{57343}",
+    "code": 57343
+  },
+  {
+    "case": "string-dfff-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\u{dfff}\"",
+    "constructor": "SCon{Chr{57343}, SNil{}}",
+    "code": 57343
+  },
+  {
+    "case": "string-dfff-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\U{dfff}\"",
+    "constructor": "SCon{Chr{57343}, SNil{}}",
+    "code": 57343
+  },
+  {
+    "case": "char-110000-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\u{110000}'",
+    "constructor": "Chr{1114112}",
+    "code": 1114112
+  },
+  {
+    "case": "char-110000-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\U{110000}'",
+    "constructor": "Chr{1114112}",
+    "code": 1114112
+  },
+  {
+    "case": "string-110000-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\u{110000}\"",
+    "constructor": "SCon{Chr{1114112}, SNil{}}",
+    "code": 1114112
+  },
+  {
+    "case": "string-110000-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\U{110000}\"",
+    "constructor": "SCon{Chr{1114112}, SNil{}}",
+    "code": 1114112
+  },
+  {
+    "case": "char-ffffffff-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\u{ffffffff}'",
+    "constructor": "Chr{4294967295}",
+    "code": 4294967295
+  },
+  {
+    "case": "char-ffffffff-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "Char",
+    "expression": "'\\U{ffffffff}'",
+    "constructor": "Chr{4294967295}",
+    "code": 4294967295
+  },
+  {
+    "case": "string-ffffffff-lower.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\u{ffffffff}\"",
+    "constructor": "SCon{Chr{4294967295}, SNil{}}",
+    "code": 4294967295
+  },
+  {
+    "case": "string-ffffffff-upper.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\U{ffffffff}\"",
+    "constructor": "SCon{Chr{4294967295}, SNil{}}",
+    "code": 4294967295
+  },
+  {
+    "case": "scalar-d7ff-lower.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\u{d7ff}'",
+    "constructor": "Chr{55295}",
+    "code": 55295
+  },
+  {
+    "case": "scalar-d7ff-upper.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\U{d7ff}'",
+    "constructor": "Chr{55295}",
+    "code": 55295
+  },
+  {
+    "case": "scalar-e000-lower.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\u{e000}'",
+    "constructor": "Chr{57344}",
+    "code": 57344
+  },
+  {
+    "case": "scalar-e000-upper.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\U{e000}'",
+    "constructor": "Chr{57344}",
+    "code": 57344
+  },
+  {
+    "case": "scalar-10ffff-lower.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\u{10ffff}'",
+    "constructor": "Chr{1114111}",
+    "code": 1114111
+  },
+  {
+    "case": "scalar-10ffff-upper.bend",
+    "kind": "scalar",
+    "value_type": "Char",
+    "expression": "'\\U{10ffff}'",
+    "constructor": "Chr{1114111}",
+    "code": 1114111
+  },
+  {
+    "case": "surrogate-pair.bend",
+    "kind": "non-scalar",
+    "value_type": "String",
+    "expression": "\"\\u{d800}\\U{dfff}\"",
+    "constructor": "SCon{Chr{55296}, SCon{Chr{57343}, SNil{}}}",
+    "code": 55296
+  },
+  {
+    "case": "lower-plus-nonscalar.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "lower-nine-nonscalar.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "upper-plus-nonscalar.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "upper-nine-nonscalar.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "lower-overflow.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "upper-overflow.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "bad-before-code.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "code-before-bad.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "lower-empty.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "upper-empty.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "multi-character.bend",
+    "kind": "negative"
+  },
+  {
+    "case": "literal-limit.bend",
+    "kind": "literal-limit"
+  },
+  {
+    "case": "input-depth.bend",
+    "kind": "input-depth"
+  },
+  {
+    "case": "io-literal.bend",
+    "kind": "io",
+    "code": 55296
+  },
+  {
+    "case": "io-constructor.bend",
+    "kind": "io",
+    "code": 55296
+  },
+  {
+    "case": "pattern-literal.bend",
+    "kind": "pattern"
+  },
+  {
+    "case": "pattern-constructor.bend",
+    "kind": "pattern"
+  },
+  {
+    "case": "pattern-selected-literal.bend",
+    "kind": "selected-pattern",
+    "code": 55296
+  },
+  {
+    "case": "pattern-selected-constructor.bend",
+    "kind": "selected-pattern",
+    "code": 55296
+  },
+  {
+    "case": "proof-true.bend",
+    "kind": "proof-true"
+  },
+  {
+    "case": "proof-false.bend",
+    "kind": "proof-false"
+  }
+]

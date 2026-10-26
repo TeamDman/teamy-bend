@@ -488,6 +488,8 @@ fn numeric_string_decoder_rejects_malformed_data_and_enforces_text_budget() {
         ("SCon{Chr{Unit{}}, SNil{}}", "invalid wrapper"),
         ("SCon{Chr{55296}, SNil{}}", "invalid Unicode scalar"),
         ("SCon{Chr{1114112}, SNil{}}", "invalid Unicode scalar"),
+        (r#""\u{d800}""#, "invalid Unicode scalar"),
+        (r#""\U{110000}""#, "invalid Unicode scalar"),
     ] {
         let mut machine = Machine::new(&program);
         let function = machine

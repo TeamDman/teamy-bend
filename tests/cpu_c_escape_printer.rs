@@ -43,7 +43,7 @@ impl Drop for Artifacts {
 }
 
 #[test]
-fn c_escape_spelling_and_scalar_readback_match_without_changing_other_lanes() {
+fn c_escape_spelling_and_literal_readback_match_without_changing_other_lanes() {
     let cases: Vec<FixtureExpectation> =
         facet_json::from_str(include_str!("fixtures/cpu-c-escape-printer/cases.json")).unwrap();
     assert_eq!(cases.len(), 17);
@@ -111,14 +111,6 @@ fn c_escape_spelling_and_scalar_readback_match_without_changing_other_lanes() {
                 format!("import Base\ndef main() -> {}: {printed}", case.value_type),
             )
             .unwrap();
-            if case.kind == "non-scalar" {
-                let error = load(&readback).unwrap_err();
-                assert!(
-                    error.message.contains("invalid Unicode code point"),
-                    "{error}"
-                );
-                continue;
-            }
             let read_book = load(&readback).unwrap();
             let read_normal = check_book(&read_book)
                 .unwrap()

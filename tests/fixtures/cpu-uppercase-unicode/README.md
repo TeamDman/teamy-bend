@@ -1,9 +1,9 @@
 # Uppercase Unicode escape qualification
 
 The pinned parser accepts `u` or `U` followed by braces and one to eight ASCII
-hex digits. This correction adds only valid Unicode scalars to the port's
-uppercase path. The original lowercase path, limits and invalid-uppercase
-public errors remain unchanged.
+hex digits. The initial correction added only valid Unicode scalars to the port's
+uppercase path. The later U32-backed literal correction also permits canonical
+non-scalar codes. Limits and malformed-uppercase public errors remain unchanged.
 
 `cases.json` records authored checking controls. `positive-cases.json` separates
 upstream text, existing port normal-form text and C/JavaScript output. Tests
@@ -17,8 +17,9 @@ There is no uppercase-escape original in the pinned test inventory. The earlier
 
 Unresolved observations, not approved policy exceptions:
 
-- Surrogates and values above U+10FFFF are accepted as U32 character codes by
-  upstream parsing; this port's literal decoder still requires Rust scalars.
+- Surrogates and values above U+10FFFF are now accepted as U32 character codes
+  under the pinned escape grammar; historical receipts retain the old refusal.
+  JavaScript runtime scalar refusal remains separate from literal acceptance.
 - Lowercase `u{+41}` and nine-digit leading-zero forms are accepted by the port
   but rejected upstream. This change does not broaden uppercase syntax to them.
 - Native String normal forms use constructor text. The historical C printer discrepancy in
