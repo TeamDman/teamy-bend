@@ -2864,3 +2864,22 @@ main in a separate verified fast-forward. This diagnostic work retains its
 own tested identity. No branch deletion, force push, dependency change or release.
 Next candidate: later-character closing-quote diagnostics with grammar/lexer
 precedence preserved. Library delivery remains blocked without retry.
+
+## Character closing-quote diagnostic checkpoint
+
+Tested `6c26f207626582deb04be75885325cfc9389197d` preserves raw parser errors and rejection while reporting the pinned
+first-code closing-quote failure before malformed later escapes.
+[Report](cpu-character-quote-diagnostics.md). Gate **1327 passed / 0 failed /
+49 ignored**. The 31-negative cohort measures 5 exact / 26 different before and 25 exact /
+six different after: 20 diagnostic closures, no acceptance change. Six closures overlap
+older cohorts and are not counted again. Two unchanged earlier-grammar probes match
+outside the 23 mandatory exact flags; the compact receipt explicitly corrects their
+conservative matrix labels while preserving every raw observation.
+
+751 observations / 122 repeat pairs;62 unchanged raw loader outputs;56 corresponding C/JS
+matches (48 successes/eight scalar refusals),13 unchanged pure native outputs, one native
+IO output,28 identical artifacts. No full upstream normalized-graph or whole-census
+renewal. Six current residuals and all earlier semantic/API/host/oracle gaps remain
+unwaived. Dependency/toolchain/pin/budget/guard/cancellation policies unchanged.
+Next bounded diagnostic candidate: empty Char `''` contextual closing-quote reporting;
+first confirm upstream cursor behavior without changing lexer acceptance or raw errors.

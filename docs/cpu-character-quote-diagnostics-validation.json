@@ -1,0 +1,704 @@
+{
+  "tested_source": "6c26f207626582deb04be75885325cfc9389197d",
+  "baseline": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "docs_pin": "50e89d6897ce2a65167ef65b17c5fa83fe849158",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "measurements": {
+    "measured_utc": "2026-10-26T15:08:36.902366+00:00",
+    "tested_source": "6c26f207626582deb04be75885325cfc9389197d",
+    "gate": {
+      "passed": 1327,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 195,
+      "seconds": 1019.3409394199844,
+      "log_sha256": "c95dc0b0c643879e463b7b4e82a8e5a2112076112b15d7104f7a832d0441d251",
+      "workspace_minimum": 13065523200,
+      "tmp_minimum": 1957392384
+    },
+    "matrix": {
+      "observations": 751,
+      "deterministic_pairs": 122,
+      "singletons": 507,
+      "raw_sha256": "d282a71210704ab91c3ff090088d4de7e1d26f20ab195a9f8d14a5d15653a2c9",
+      "timeouts": 0,
+      "corresponding_executions": 56,
+      "runtime_successes": 48,
+      "runtime_refusals": 8
+    },
+    "before_exact": 5,
+    "before_different": 26,
+    "after_exact": 25,
+    "after_different": 6,
+    "diagnostic_closures": 20,
+    "required_exact_flags": 23,
+    "unchanged_grammar_matches_outside_flags": 2,
+    "residuals": [
+      "astral-second",
+      "empty",
+      "unterminated",
+      "cross-line",
+      "char-length-guard",
+      "earlier-grammar"
+    ],
+    "raw_probe_outputs_unchanged": 62,
+    "unchanged_artifacts": 28,
+    "native_unchanged": {
+      "pure_normalization": 13,
+      "actual_IO": 1
+    },
+    "whole_census_rerun": false,
+    "profile_bridge": {
+      "observations": 73,
+      "negative_checks": 31,
+      "native_outputs": 14,
+      "artifacts": 28
+    }
+  },
+  "commands": {
+    "baseline": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "python3",
+        "${EVIDENCE}/baseline.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13066063872,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 10.616820155002642,
+      "minimum_free": 13065973760,
+      "minimum_tmp_free": 2059685888,
+      "log_sha256": "fe6aa2cf539455e23bbfd502ce371f4945458765cb23657dd231736a9f5197bc"
+    },
+    "baseline-complete": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "python3",
+        "${EVIDENCE}/baseline-complete.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065961472,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 10.722215824993327,
+      "minimum_free": 13065953280,
+      "minimum_tmp_free": 2059448320,
+      "log_sha256": "2f12fd748881ecc141ee506826e2bdcb93b52b13e8571f54e6ac9735a4562984"
+    },
+    "baseline-final": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "python3",
+        "${EVIDENCE}/baseline-final.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065936896,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 11.120164649968501,
+      "minimum_free": 13065932800,
+      "minimum_tmp_free": 2059202560,
+      "log_sha256": "b1dea5ef891556b0fb8f7c5c11a93162ff98d05a59e3b95a05e4c28db2084ce3"
+    },
+    "focused-unit": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--lib",
+        "literal"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065932800,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 19.620549176994245,
+      "minimum_free": 13065932800,
+      "minimum_tmp_free": 2038185984,
+      "log_sha256": "fcf35b543aab963fd51f10cffd0a4a8bc8e6695f059266cb0c55c8f7bdd96215"
+    },
+    "focused-unit-complete": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--lib",
+        "literal"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065932800,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 24.720181128999684,
+      "minimum_free": 13065932800,
+      "minimum_tmp_free": 2038177792,
+      "log_sha256": "2ec97e35c849650578ecf20019cf9259677a5944ccec4729d409f97f9810c659"
+    },
+    "focused-integration": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--test",
+        "cpu_malformed_literal_diagnostics"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065904128,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 70.1797779899789,
+      "minimum_free": 13065904128,
+      "minimum_tmp_free": 2022842368,
+      "log_sha256": "7e2ab85616f28952746e310b7911ab7149d14a7d6f84f78203b952e64dac2018"
+    },
+    "focused-clippy": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065904128,
+      "stop_reason": null,
+      "exit": 101,
+      "seconds": 3.4735773790162057,
+      "minimum_free": 13065904128,
+      "minimum_tmp_free": 2022825984,
+      "log_sha256": "f2fe1fec7d94654eac129405c65eef5e8cc3633ab27eb64150d149d873bf6084"
+    },
+    "focused-clippy-complete": {
+      "source_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+      "dirty": true,
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--offline",
+        "--features",
+        "extended_observability",
+        "--lib",
+        "--test",
+        "cpu_malformed_literal_diagnostics",
+        "--test",
+        "cpu_nonscalar_literal",
+        "--test",
+        "cpu_c_escape_printer",
+        "--test",
+        "cpu_uppercase_unicode",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065904128,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.2164136639912613,
+      "minimum_free": 13065904128,
+      "minimum_tmp_free": 2022842368,
+      "log_sha256": "67f24ac4bb666eb14f80ce23ff717496c1eced112daf37fb2ef25249eb6f5ccc"
+    },
+    "build-snapshot": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--all-features"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 3.978364200971555,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 2022813696,
+      "log_sha256": "31c583af4b072265ee6d186dfc1331e8b6f3873a5e0f12c1486f4b5954543b95"
+    },
+    "build-public-probe": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "rustc",
+        "--edition=2024",
+        "${EVIDENCE}/public-error-probe.rs",
+        "--extern",
+        "teamy_bend=target/debug/libteamy_bend.rlib",
+        "-L",
+        "dependency=target/debug/deps",
+        "-o",
+        "${EVIDENCE}/tested-public-probe"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.2648982530226931,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 2013958144,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "matrix": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/matrix.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 228.97360712499358,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 1957584896,
+      "log_sha256": "7e14773f6a792ba5cb95c2f6a453e251f6a2fd3da9464de224f947fb0ace18b2"
+    },
+    "full-gate": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "./check-all.ps1",
+        "-FormatterToolchain",
+        "nightly-2026-05-24"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 1019.3409394199844,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 1957392384,
+      "log_sha256": "c95dc0b0c643879e463b7b4e82a8e5a2112076112b15d7104f7a832d0441d251"
+    },
+    "profile-equivalence": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/profile-equivalence.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 1,
+      "seconds": 4.5655187770025805,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 1931153408,
+      "log_sha256": "70a418307edcababb3deb75eddf726ef04a65a6abb95b4763a4f5ff9cf665116"
+    },
+    "profile-qualified": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "python3",
+        "${EVIDENCE}/profile-qualified.py"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 19.319278930022847,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 1927622656,
+      "log_sha256": "625e06242aed7d336a18e5c51f883dc56b070fdeee2ae97425a7e27bb7458691"
+    },
+    "rebuild-matrix-profile": {
+      "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+      "dirty": false,
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--all-features"
+      ],
+      "timeout_seconds": 1200,
+      "profile_environment": {
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_PROFILE_TEST_DEBUG": "0",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "BEND_GPU": "off",
+        "RUST_TEST_NOCAPTURE": null,
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "reserve_before_bytes": 11811160064,
+      "stop_below_bytes": 10737418240,
+      "tmp_stop_below_bytes": 1073741824,
+      "free_before": 13065523200,
+      "stop_reason": null,
+      "exit": 0,
+      "seconds": 0.16396219399757683,
+      "minimum_free": 13065523200,
+      "minimum_tmp_free": 1927614464,
+      "log_sha256": "3fe980a0f9709b0a2d093ea2a65202e1e589d4893ac71be4272c165923b9e527"
+    }
+  },
+  "snapshot": {
+    "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+    "binary_sha256": "7a8fb54a3aa017360ab21fe8f06cf8bfb75e9cbe3796cbbaf69392a8aa3ea82a",
+    "library_sha256": "4b3497531e69fa10079dd86fe4c4eb68c0c28a03960119d03bc968579f704e72",
+    "probe_sha256": "49ffbddbb86b89583702a67717f626e4f1b848405df5de90090c3dbef5e85276"
+  },
+  "gate_identity": {
+    "source": "6c26f207626582deb04be75885325cfc9389197d",
+    "matrix_profile_rebuild_identical": true,
+    "snapshot_sha256": "7a8fb54a3aa017360ab21fe8f06cf8bfb75e9cbe3796cbbaf69392a8aa3ea82a",
+    "rebuilt_all_features_sha256": "7a8fb54a3aa017360ab21fe8f06cf8bfb75e9cbe3796cbbaf69392a8aa3ea82a",
+    "matrix_features": [
+      "default",
+      "extended_observability",
+      "tracy"
+    ],
+    "gate_test_binary_sha256": "b6cee7475ec2510955ff3e44966adabac35c7100ce8f90eb50361950a65981a3",
+    "gate_test_features": [
+      "default",
+      "extended_observability"
+    ],
+    "gate_test_binary_differs": true,
+    "profile_bridge_sha256": "822f8bfc00c389b1bd17c94387a05616dba1a947097184ffb95732b3dc6ec7e6",
+    "profile_bridge_observations": 73,
+    "notes": "Full gate all-features build and non-Tracy tests intentionally use different host executables; rebuilt matrix profile equals immutable snapshot. Preserved non-Tracy binary qualified by bounded bridge, not claimed byte-identical.",
+    "executions_added_by_identity_comparison": 0
+  },
+  "source_review": {
+    "reviewed_at_utc": "2026-10-26T14:49:07.496604+00:00",
+    "reviewer": "review_lowercase_resume",
+    "approved": true,
+    "scope": "Independent production/test/fixture review; final clean gate and differential matrix remain pending",
+    "baseline_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+    "dirty_source": true,
+    "source_diff_sha256": "43628ecfec8cdd43e59fcfbfbb6580f1a3281683b998bd642dedf87547688423",
+    "parser_diff_sha256": "a64a6bad55ec89a179e9bd7776daf2da9a3cdee543dcd10056e385f2df43f029",
+    "fixture_cases_sha256": "49439004417057b2d828080fc776d1c9c0ddbf528d1a55f16cc7729cc76e25c8",
+    "baseline_receipt_sha256": "48992c4c3fda7dd33d6e7a7f78a7e33c0b2769aa036c383c19b8e4ad2dfc04b5",
+    "blocking_findings": [],
+    "verified": [
+      "Shared decoder preserves original offset indices, branch order, U32 values and legacy raw messages. Inclusive-prefix Clippy correction is byte-range equivalent.",
+      "Closing-quote metadata is attempted only after existing decode/cardinality refusals, not the 128-character guard; absence of diagnostic collection returns before replay.",
+      "Canonical precheck caps Unicode diagnostic replay; malformed long first-code tails do not receive a second legacy scan. Helper offset tests include4096-digit malformed prefix.",
+      "Offsets cover BMP/astral first codes, quote/backslash/simple/Unicode escapes, immediate space/tab/CR/hash, and exclude empty or astral successor/first-malformed cases.",
+      "Thirty-one source hashes, corresponding upstream load-phase golden bytes and baseline raw strict/executable error fields verified. Baseline124 observations:5exact26different, all rejected.",
+      "Current tests require23exact8differing diagnostics. Six retained earlier authored sources remain unchanged; invalid exploratory template/import sources retain their earlier grammar failures and are separately labeled.",
+      "Corrected focused unit receipt20passed and integration7passed. Initial19pass1failure due missing fixture metadata remains retained; no guard assertion was weakened.",
+      "No dependency, evaluator, sharing, charging, guard or cancellation change. Default-stack guard control remains covered; a nonrecursive decoder helper call is not a zero-overhead guarantee."
+    ],
+    "pending": [
+      "Clean committed source/full gate and matrix before final family qualification.",
+      "Final lint renewal after range_plus_one fix; old failure remains historical.",
+      "Positive executable/pure-normalization lanes and source/artifact hashes remain pending current matrix.",
+      "Keep8diagnostic residuals, historical whole-census limits and external invoke result-shape caveat explicit.",
+      "Update overlapping fixture README current classifications separately from their historical receipts."
+    ],
+    "review_execution": "Read-only inspection only; no test/build/runtime/network/publication performed by reviewer"
+  },
+  "matrix_review": {
+    "reviewed_at_utc": "2026-10-26T14:57:47.113384+00:00",
+    "reviewer": "review_lowercase_resume",
+    "approved": true,
+    "scope": "Independent immutable matrix and explicit classification-correction review, no new runs",
+    "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+    "source_diff_sha256": "43628ecfec8cdd43e59fcfbfbb6580f1a3281683b998bd642dedf87547688423",
+    "matrix_sha256": "d282a71210704ab91c3ff090088d4de7e1d26f20ab195a9f8d14a5d15653a2c9",
+    "matrix_script_sha256": "0c6f340c14d5331561bbc1f3c6fdb18b20be496ae9ab2e2bdc0e62ef25e0ebcc",
+    "classification_correction_sha256": "8051271e81c0a52b2d8bec900b4fa7c2bea5310db022dc1978126510102878c7",
+    "classification_streams_sha256": "1fbb226d6e18f8dee10db1f5bc00bbcbe190f620cfb5417334439fb3cdbebd7c",
+    "report_template_sha256": "a6e3749ca65da431b598619f5f1d45eb83f2b03f4527902107a4a0a1e26249e7",
+    "observations": 751,
+    "deterministic_pairs": 122,
+    "singletons": 507,
+    "timeouts": 0,
+    "authored_baseline": {
+      "exact": 5,
+      "different": 26
+    },
+    "authored_current_measured": {
+      "exact": 25,
+      "different": 6
+    },
+    "enforced_exact_flags": 23,
+    "diagnostic_closures": 20,
+    "all_public_probe_outputs_equal": 62,
+    "corresponding_runtime": {
+      "total": 56,
+      "successes": 48,
+      "required_JS_refusals": 8
+    },
+    "native_baseline_equal": {
+      "pure_normalization": 13,
+      "actual_IO": 1
+    },
+    "port_baseline_artifacts_equal": 28,
+    "artifact_hashes_verified": 84,
+    "source_hashes_verified": 751,
+    "pinned_original_hashes": {
+      "parse/invalid_string_escape.bend": "728baf29fb51b482d3bd4ca37bec161c0c2c49e362dfb786a9427b46b6e8ab8b",
+      "parse/unclosed_char_code.bend": "20e464434fb1a37ee9ee09b20693366567341cfaf03e9f7977d06b3c0150cbdf",
+      "show/string_escape.bend": "2937060662f191789e9afe62e80809143e221fa8348de3e7bfa67011e4b3045f",
+      "show/char_unicode.bend": "9fa073f6ee9a5ce3d39aad32e924f3b1d6542ebf7fc34cab875b22ab37ba1142"
+    },
+    "blocking_findings": [],
+    "classification_finding_resolved": "Runner incorrectly inferred differing diagnostics from exact=false for the unchanged template/import grammar probes. Both already matched baseline and match all ten recorded non-probe lanes now. Immutable correction and stream-hash receipts supersede only those labels; raw matrix/script remain unchanged. Twenty closures and six measured residuals are correct;23 denotes enforced exact assertions, not all observed exact matches.",
+    "limits": [
+      "Full gate and final executable identity remain pending.",
+      "Report must retain classification correction explicitly rather than normalize or overwrite original labels.",
+      "Two extra measured grammar matches never reached Char parsing and are not successful template/import execution evidence.",
+      "No complete upstream normalized-graph comparison or whole-census renewal.",
+      "External invoke audit and existing semantic/resource/oracle decisions remain open.",
+      "Reviewer executed no builds/tests/programs or publication."
+    ]
+  },
+  "compact_results_sha256": "a1a2119b36e58787015889cfbd888143cda48e14f79c7fee1e2e49c061ff3ed4",
+  "tools": {
+    "rust": "1.96.0",
+    "fmt": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7",
+    "powershell": "7.5.4"
+  },
+  "historical_census": {
+    "source": "c5edea8",
+    "non_IO_differences": 140,
+    "acceptance": 109,
+    "rejection": 31,
+    "upstream_stack_failures": 6
+  },
+  "coverage_linkage": {
+    "linked_including_failures": 516,
+    "total": 1302,
+    "unlinked_checking_rejections": 256,
+    "unlinked_interpreter_compiled": 517,
+    "unlinked_interpreter_only": 12,
+    "unlinked_no_main": 1
+  },
+  "unrun": [
+    "Whole checking census",
+    "Supplementary all-target Clippy",
+    "Desktop and GPU hardware",
+    "Execution of rejected sources",
+    "Complete upstream normalized-graph comparison"
+  ],
+  "public_API_caveat": "All 62 raw loader outputs unchanged; optional diagnostic can change invoke Err to Ok(exit_code=1). Repository dispatch status handling retained; external callers unaudited.",
+  "library_retry": false,
+  "policy_changes": false
+}

@@ -1,0 +1,124 @@
+{
+  "reviewed_at_utc": "2026-10-26T15:15:10.722924+00:00",
+  "reviewer": "review_lowercase_resume",
+  "approved": true,
+  "scope": "Final independent read-only review of source-bound gate, differential receipts, dual-feature bridge and eight prepared deliverables; no publication performed or authorized by this review.",
+  "source_commit": "6c26f207626582deb04be75885325cfc9389197d",
+  "baseline_commit": "da1cb0e7a89641253bbfc969575fa9e29cab8229",
+  "source_diff_sha256": "43628ecfec8cdd43e59fcfbfbb6580f1a3281683b998bd642dedf87547688423",
+  "blocking_findings": [],
+  "artifact_sha256": {
+    "acceptance-append.md": "48bdb43775c84a92e9aa80a3073c0af78553a2abe876bcd83ad6304c7ec84933",
+    "cpu-character-quote-diagnostics-readme.md": "a8cc66500bbca7134de8a7bd0310513cacc57c7aed3112344ee8998b3a6675c4",
+    "cpu-character-quote-diagnostics-results.json.gz": "a1a2119b36e58787015889cfbd888143cda48e14f79c7fee1e2e49c061ff3ed4",
+    "cpu-character-quote-diagnostics-validation.json": "ab0b6a0ad72db73131ab6c558c86c842d917d8ea932a2d413f7cb7d2ae95e2bb",
+    "cpu-character-quote-diagnostics.md": "dc00f8ac7f0cb1ae8e0ab0bec1fbd29ce67b9d53953024157e594c9f24e1bacb",
+    "cpu-lowercase-escape-diagnostics-readme.md": "0ee14388e2e57a9897b9bc763937a65cf6eda4e974de0fa8d9d6e345ed044612",
+    "cpu-lowercase-escape-grammar-readme.md": "5929b92f98a3c235bc59edee5964b896a3afb8d66fda1ca91a0ffddedb2c5d17",
+    "cpu-uppercase-escape-diagnostics-readme.md": "a9da860e237e1a449dbcba50b83ab30bd08714bc24568773fd604eda02c42edf"
+  },
+  "supporting_sha256": {
+    "source-review.json": "2f6e5b1c033693420282a4b0d82598a5e0edfca6bfb5efd65ec44cdc20b0af05",
+    "matrix-review.json": "93b4032aee5a9f0129ce64b6bcedbba0ecb3d73a6fcbade65d4768c8151393f1",
+    "source-diff-identity.json": "e47d531ccbf0f799b359a34d045c9b5cbfe7537a732fa7a6c9f88c8d56737966",
+    "snapshot.json": "b747633644f5cc1476ec33c1d615ca4245273f838db45014eb079166d11bdc7f",
+    "matrix.py": "0c6f340c14d5331561bbc1f3c6fdb18b20be496ae9ab2e2bdc0e62ef25e0ebcc",
+    "matrix-results.json": "d282a71210704ab91c3ff090088d4de7e1d26f20ab195a9f8d14a5d15653a2c9",
+    "baseline-final-results.json": "48992c4c3fda7dd33d6e7a7f78a7e33c0b2769aa036c383c19b8e4ad2dfc04b5",
+    "classification-correction.json": "8051271e81c0a52b2d8bec900b4fa7c2bea5310db022dc1978126510102878c7",
+    "classification-streams.json": "1fbb226d6e18f8dee10db1f5bc00bbcbe190f620cfb5417334439fb3cdbebd7c",
+    "full-gate.json": "b124b5014e0b5c6473b71c32c21a933324d526ee9426dded36b41363c01fcc53",
+    "full-gate.log": "c95dc0b0c643879e463b7b4e82a8e5a2112076112b15d7104f7a832d0441d251",
+    "focused-unit.json": "285a403615764e1967baf50ce7d9ce732c076f433381032bbca7adef4384cfa8",
+    "focused-unit-complete.json": "90b9b5b1444464793ab0ff6f36f777e2124efe6dd944ab52cc8d35f0f9a34563",
+    "focused-integration.json": "21e27ebe88ae587f3ec6d49e40f6325713d742367aaa9aee9eebf8a6542088d6",
+    "focused-clippy.json": "8a3b5cf50794491e14ce2190045dcf386b0412bfcea24dbffc10eaa618b3b2ac",
+    "focused-clippy-complete.json": "07a7c7058c94f9c610a67ee16c4c935232857329a96bfa8854667056ad34a971",
+    "gate-test-identity.json": "b7983f1a4285368c4f9fcc4fc6698ea4db9e4e72f13c4a9e395d53f017b16c14",
+    "gate-identity.json": "309b83f2a2de291702304c38436c0741fc7d5875e7ea10ecf06acab7b0239e28",
+    "profile-equivalence.py": "51ea0b25a6c1d17ffebf344cffba6ae178b37f493d6f089d769ed22059fd2e26",
+    "profile-equivalence-results.json": "b9df2c248b04aee9e81556d8211c8ebf49433518b00e48b6b8f8a1f72f746e0d",
+    "profile-equivalence.json": "2d6ed3259ca693e0d586b9b43c556e3171d860c0c724947eaff1f692e09bee37",
+    "profile-equivalence.log": "70a418307edcababb3deb75eddf726ef04a65a6abb95b4763a4f5ff9cf665116",
+    "profile-qualified.py": "0140bd4d694c6507bd672453a6f881403a474ddb5a55099f347c2eba07ae44c2",
+    "profile-qualified-results.json": "822f8bfc00c389b1bd17c94387a05616dba1a947097184ffb95732b3dc6ec7e6",
+    "profile-qualified.json": "3a8fba3c3ac01cd9b7b47c24bba49b85329a46a1b1af2db41e8059d016147782",
+    "rebuild-matrix-profile.json": "60ffe082f02bfc83ded1523ee07fb2daad1f8d02b1e49a112e26b260f7102492",
+    "rebuild-matrix-profile.log": "3fe980a0f9709b0a2d093ea2a65202e1e589d4893ac71be4272c165923b9e527",
+    "prepare-deliverables.py": "51e2949e90371c92b6defcc0d728ed000ebc499a237bbc3439fd56426b7a1cbb",
+    "receipt-clean.py": "5cd4c93b4ebe9d834d45d61433df388428bf27ab5fcad5f205fbc997c2394194",
+    "report-template.md": "0343221719f66f2b00cc45adc545c9510ff74de6b794a2b805a5e5fcd2e4f7ef",
+    "deliverables-manifest.json": "7d66fe24ee79468a3631c27c594e6785a7351ec7e62bedf305bec12088c9abae",
+    "measurements.json": "8690a93d575ef31f183864ff229e559cc694bb674e6f1587cbd6e9f0bc0d35fd",
+    "preservation-verification.json": "1b93d0d29c6db471f66f06950c8d7ffae078d90d47be85201eb9e230a0d071b8",
+    "content-scan.json": "c05653fdaf102070279f05bc92eb69c7c27fa6289ac4dac553f52521029d0595"
+  },
+  "verified_counts": {
+    "gate": {
+      "passed": 1327,
+      "failed": 0,
+      "ignored": 49,
+      "groups": 195,
+      "seconds": 1019.3409394199844
+    },
+    "matrix": {
+      "observations": 751,
+      "deterministic_pairs": 122,
+      "singletons": 507,
+      "timeouts": 0
+    },
+    "negative_cohort": {
+      "cases": 31,
+      "before_exact": 5,
+      "before_different": 26,
+      "after_exact": 25,
+      "after_different": 6,
+      "diagnostic_closures": 20,
+      "required_exact_flags": 23,
+      "unchanged_grammar_matches": 2
+    },
+    "unchanged_raw_loader_outputs": 62,
+    "corresponding_C_JS": {
+      "total": 56,
+      "successes": 48,
+      "required_JS_scalar_refusals": 8
+    },
+    "native_baseline_equal": {
+      "pure": 13,
+      "IO": 1
+    },
+    "baseline_equal_artifacts": 28,
+    "profile_bridge": {
+      "total": 73,
+      "raw_status_stdout_stderr_matches": 45,
+      "emission_metadata_and_artifacts": 28
+    },
+    "public_decoded_base64_fields_scanned": 1896,
+    "preservation_members_verified": 240
+  },
+  "verified": [
+    "Clean tested source, unchanged upstream/docs pins and lock hash verified. Production diff matches prior independent review exactly; no new source changes occurred during final validation.",
+    "Full gate totals independently derived from 195 log result groups; exit zero, no timeout or disk-floor stop; log hash and profile environment match public receipts.",
+    "Current matrix repeat groups and before/after diagnostic results independently derived from exact raw statuses/streams. Explicit correction resolves only the two unchanged earlier-grammar labels; immutable original matrix remains untouched.",
+    "All 73 non-Tracy bridge outcomes independently compared with original matrix:45 raw output triples exact;28 emitters validate each output path against its own exact command, compare every other metadata field and match artifact bytes. No generic stream normalization.",
+    "Saved non-Tracy binary and lossless gzip hashes verified; matching Cargo fingerprint records default+extended_observability. All-features default+extended_observability+tracy executable is intentionally different and reproduced the immutable matrix snapshot exactly after the recorded clean-source build.",
+    "Initial33-observation bridge is incomplete solely because emitted JSON named a different destination; this is preserved as a failed comparator attempt, not a complete run or changed program behavior.",
+    "All eight deliverable hashes and compact sanitized component contents match raw evidence; embedded runners, command receipts and initial failure logs are hash-bound. Independently scanned1896 decoded fields and all prepared text for private-root/credential patterns without findings.",
+    "Original19pass1fail fixture-setup run and Clippy failure remain retained, with corrected20pass,7integrationpass and strict Clippy exit0 receipts. Historical source/matrix review pending statements remain historical and are superseded only by this final review.",
+    "Preservation archive hash verified and every240 file member compared byte-for-byte against local evidence, including all33 incomplete bridge observations. Source bundle hash and separately retained binary archive hashes verified."
+  ],
+  "limits": [
+    "Approval covers this bounded diagnostic correction, not full CPU parity or a new semantic exception. Six current residuals remain unwaived; whole checking census and complete upstream normalized graphs were not renewed.",
+    "Raw ParseError fields/Display/load refusal remain unchanged; optional formatted CLI failures may return invoke Ok(exit_code=1) instead of Err. Repository dispatch checks status; external callers remain unaudited.",
+    "Bounded profile agreement does not establish universal feature-profile equivalence; two binaries are explicitly not byte-identical.",
+    "Two unchanged invalid-template/import grammar probes do not reach Char parsing and are not successful template/import execution evidence.",
+    "Pending nat_first choice, compact lowering, Base coordinates, source-hole/resource/foreign/Bun/F32/oracle gaps, supplementary all-target lint failure and blocked Library delivery remain open.",
+    "Pattern scans detect known private-root/credential forms only; they are not a guarantee that every possible secret encoding is absent.",
+    "No tests, builds, runtime programs, network requests, repository edits or publication were performed by reviewer."
+  ],
+  "delivery_preconditions": [
+    "Parent must verify the final checkpoint contains only reviewed documentation/evidence after tested source and retains identical production/test trees.",
+    "Any publication or normal fast-forward main update requires the existing user authorization and fresh remote/protection/expected-SHA checks; this review does not itself authorize or perform publication.",
+    "Preserve final-review and subsequent checkpoint/publication records in the planned supplemental verified archive; current archive predates those records."
+  ]
+}

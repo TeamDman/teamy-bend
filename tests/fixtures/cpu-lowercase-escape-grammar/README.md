@@ -15,12 +15,12 @@ explicit; original raw stream hashes remain.
 
 At b46f957 the corrected cohort had 19 exact diagnostics and 15 remaining differences.
 The subsequent diagnostic-only correction qualifies the thirteen legacy cases,
-so current tests require 32 exact / two differing diagnostics; the original
+so current tests require 33 exact / one differing diagnostic; the original
 19/15 receipt remains historical.
 Matching rejection is not exact diagnostic parity. Thirteen legacy malformed,
 overflow and noncanonical non-scalar cases preserve their raw public errors,
 recorded in `public-errors.json`. Those thirteen formatted diagnostics now match; their raw public errors remain
-unchanged. The later-Char closing-quote and earlier grammar cases remain open.
+unchanged. The later-Char closing-quote now matches; the earlier grammar case remains open.
 
 Newly invalid lowercase prefixes must reject before later U/q escapes; this
 intentionally changes composed first-error results. Three earlier uppercase
@@ -32,3 +32,5 @@ runtime scalar refusals and resource guards remain unchanged.
 execution qualification, including one IO proof exclusion. Tests also preserve
 full constructor graphs, 64-expression/128-literal guards, kernel input limits,
 sharing, work accounting and the existing cancellation boundaries.
+
+Character quote checkpoint 6c26f207 closes the retained char-second observation. Current metadata:33 exact / one different of 34; historical receipts retain their original counts.
