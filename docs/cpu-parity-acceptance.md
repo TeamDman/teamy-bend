@@ -2974,3 +2974,19 @@ blocked by its existing lowering barrier. Next substantive original family is
 array_borrow_generic/array_borrow_generic_sum, unrun here. See
 [typed array runtime report](cpu-array-runtime.md) for exact profiles, commands,
 counts, limits and preservation.
+
+
+## Generic borrowed-array checkpoint (a347a2d)
+
+The unchanged array_borrow_generic and array_borrow_generic_sum originals now
+match all five executable lanes. Both entry arms and retained read/clone/swap
+behavior are covered by bounded controls, including U32 and computed String
+payloads. Two checker negatives reject exactly. Depth32 retains its unwaived
+port-C diagnostic difference. Final matrix: 132 observations / 32 repeat pairs /
+0 timeouts; standard gate: 1360 passed / 0 failed / 49 ignored. No production
+change, full census or rejection-subset renewal occurred. Historical 109 acceptance
+and 31 rejection differences retain their measured identities. Linked receipts:
+522/1302, not completed parity. Argument recovery remains blocked by its
+existing lowering barrier. Next substantive originals are array_clone_boxed and
+array_heap_element, unrun here. See [borrowed-array report](cpu-array-borrow.md) for
+exact commands, identities, bounds, caveats and evidence.

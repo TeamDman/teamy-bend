@@ -1,0 +1,175 @@
+{
+  "reviewer": "independent review_lowercase_resume",
+  "review_type": "final source-bound deliverables and preservation review",
+  "timestamp_utc": "2026-10-26T20:40:33.624165+00:00",
+  "approved": true,
+  "approval_scope": "The exact reviewed source, completed gate/matrix and listed public document bytes are suitable for a documentation-only checkpoint and the separately user-authorized normal feature/main publication workflow. No remote action was performed by reviewer. After adding a sanitized review copy and committing, verify exact outgoing Git bytes, checkpoint ancestry and remote state as planned.",
+  "tested_source": "a347a2d8f679d10ee21fdca3539deb398ec5e633",
+  "base_commit": "e0215e68eeea1721e1111918bf4fa58fcc5f8e5d",
+  "source_unchanged_since_full_gate": true,
+  "repository_state": "HEAD remains tested source; only the six reviewed docs paths differ. The linked review copy is intentionally pending this actual review.",
+  "public_files": {
+    "docs/cpu-array-borrow.md": {
+      "sha256": "918723d3dd9d69e4a0ed603a1178caf03396195a2f7f611e2885a0e40a73f419",
+      "bytes": 8830
+    },
+    "docs/cpu-array-borrow-validation.json": {
+      "sha256": "20ac3b824854888b413fa8c3087eef536e9cc3a12f0551991c13e734fc3bc611",
+      "bytes": 2879
+    },
+    "docs/cpu-array-borrow-coverage.json": {
+      "sha256": "6d747594f1eca8da709db32caa48a875051d09f018efdd3a1e7ab1c4c5b3917f",
+      "bytes": 864
+    },
+    "docs/cpu-array-borrow-evidence.csv": {
+      "sha256": "28f8815c6d21c5222cd5b944f31d1b473ebe17c35764e4f7ec8f026f7ee89525",
+      "bytes": 2048
+    },
+    "docs/cpu-array-borrow-results.json.gz": {
+      "sha256": "db0017ae298c55c6b739ecd4ff9653c0d089fcc48a20fcdaac113c171865441d",
+      "bytes": 33394
+    },
+    "docs/cpu-parity-acceptance.md": {
+      "sha256": "ad66b8cc30488300b1d1f0c7f61bfc1d23b0063296356dcc42486178f9b1b3e4",
+      "bytes": 218030
+    }
+  },
+  "draft_files": {
+    "cpu-array-borrow-coverage.json": {
+      "sha256": "6d747594f1eca8da709db32caa48a875051d09f018efdd3a1e7ab1c4c5b3917f",
+      "bytes": 864
+    },
+    "cpu-array-borrow-evidence.csv": {
+      "sha256": "28f8815c6d21c5222cd5b944f31d1b473ebe17c35764e4f7ec8f026f7ee89525",
+      "bytes": 2048
+    },
+    "cpu-array-borrow-results.json.gz": {
+      "sha256": "db0017ae298c55c6b739ecd4ff9653c0d089fcc48a20fcdaac113c171865441d",
+      "bytes": 33394
+    },
+    "cpu-array-borrow-validation.json": {
+      "sha256": "20ac3b824854888b413fa8c3087eef536e9cc3a12f0551991c13e734fc3bc611",
+      "bytes": 2879
+    },
+    "cpu-array-borrow.md": {
+      "sha256": "918723d3dd9d69e4a0ed603a1178caf03396195a2f7f611e2885a0e40a73f419",
+      "bytes": 8830
+    },
+    "cpu-parity-acceptance-append.md": {
+      "sha256": "cb5076eb1478d5f1d9577361b23aecb67fbb97d6b5fac5ebfde0013b8294e799",
+      "bytes": 978
+    }
+  },
+  "evidence_bindings": {
+    "source-review.json": "858f5e0713bcffeb76e7232f03989debca79736ea3ea22544ce48a453cbc349f",
+    "preliminary-review.json": "ace502872fbf843450edefffdb218f2916b6afa689facbe36e31f08569e0b146",
+    "matrix-review.json": "032b6a4ee98ab52aa51f570094ce9452d10ef7fda086494388ae7686906ecaa1",
+    "full-gate.json": "6a8f7f6074bffbadcbd6c6bb95c4058de20a4bb15a17f939d5f791444aa365bb",
+    "full-gate.log": "c2bcd548682f527694e33db72d790c5547395d1277f68a26c3418b6f44b55c9a",
+    "gate-identity.json": "88229f48bdc56bc7d93a683a9eb744a6af73fdd7196878ed61ad077fc5f245f0",
+    "final-matrix.json": "492ee17533e38999329cfb868e9e9db3c0f79a4b1cdd3b86d367e4116e6e19c1",
+    "final-matrix/results.json": "3a6bec718bdaa2994fd88381fac1ce8f38d3d71e8b096be50a289d8983cfc16f",
+    "baseline-complete/results.json": "d03b28b143424479d9fc08f27d6ecf222f2454f9f6691bd94d0900af38016c11",
+    "source-backup.json": "1465de7a0fefc2a98bf6d848832b3b61107a9e993dc79cc071d5e7901018fd65",
+    "evidence-backup.json": "2a5639e4c31cdb4697c0ee9263d1d475ce606d16ecb015f409380ce09ecca0a8",
+    "docs-install.json": "8519dd068d3b71ada7aedd70bb3b89621c9994312daef96f6cad1c38c768bf9b",
+    "prepare-deliverables.py": "6faeb576e59d58ba07474f1d83b4c01a06a1b65dfa13951748c0d4eb121993dd"
+  },
+  "gate": {
+    "passed": 1360,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 199,
+    "seconds": 1051.547275903984,
+    "exit": 0,
+    "timed_out": false,
+    "stop_reason": null,
+    "profile": "all-feature standard build and Clippy; non-Tracy extended_observability tests",
+    "binary_sha256": "da9ff3aef78c6eee11ba2847730d0dc8dd1cbf0aa00ac2a521c2dfc3b1daac99"
+  },
+  "matrix": {
+    "observations": 132,
+    "repeat_pairs": 32,
+    "timeouts": 0,
+    "positive_executions": 50,
+    "exact_checker_negative_observations": 18,
+    "depth_refusal_executions": 10,
+    "unwaived_port_c_repeat_observations": 2,
+    "distinct_unwaived_case_backend_differences": 1,
+    "strict_io_exclusions": 12,
+    "original_outputs": [
+      "120\n",
+      "2260\n"
+    ],
+    "corresponding_generated_positive_comparisons": 20,
+    "all_24_artifact_hashes_verified": true,
+    "baseline_exact_stream_observations": 120,
+    "baseline_identical_port_artifacts": 12,
+    "final_binary_equals_gate_binary": true
+  },
+  "coverage": {
+    "linked_before": 520,
+    "linked_after": 522,
+    "inventory": 1302,
+    "unlinked": 780,
+    "unlinked_categories": {
+      "checker_rejection": 256,
+      "interpretation_and_compiled_candidates": 511,
+      "checking_without_main": 1,
+      "interpretation_only": 12
+    },
+    "newly_linked_originals": [
+      "reg/array_borrow_generic.bend",
+      "reg/array_borrow_generic_sum.bend"
+    ],
+    "whole_census_renewed": false,
+    "rejection_subset_renewed": false,
+    "meaning": "Receipt linkage includes partial/blocked/failing evidence and is not universal parity."
+  },
+  "sanitization": {
+    "public_drafts": 6,
+    "source_files": 13,
+    "embedded_decoded_streams": 642,
+    "public_receipts": 13,
+    "public_logs": 4,
+    "pattern_findings": 0,
+    "largest_new_public_artifact_bytes": 33394,
+    "verification": "Independently reproduced explicit root replacement for every receipt and log; all original raw hashes verified; decoded streams scanned as well as compressed JSON contents. No credentials or private machine roots found. No generated binary is included in public artifacts."
+  },
+  "preservation": {
+    "source_bundle_sha256": "cd609137990fabb6cfa6de741d95666c7887cc533b1ee0b42795ba4ac9546749",
+    "source_bundle_head": "a347a2d8f679d10ee21fdca3539deb398ec5e633",
+    "source_bundle_prerequisite": "e0215e68eeea1721e1111918bf4fa58fcc5f8e5d",
+    "git_bundle_verify_succeeded": true,
+    "evidence_archive": "validated-evidence.tar.gz",
+    "archive_sha256": "e6b97df041adb446d40ba461b279fc5e0afe805ecea29ce9a147e53136714cac",
+    "archive_bytes": 10097526,
+    "verified_members": 169,
+    "every_member_hash_size_mode_verified": true,
+    "current_archived_members_unchanged": true,
+    "safe_member_paths_regular_files_only": true,
+    "manifest_sha256": "1a2cc8a5ffd507b80381676029f160f6040b4fdf5c62bf0969a283c899a8104e",
+    "gate_binary_gzip_sha256": "0bb8d0c853a5fee34026402e674a133d5b43d9efe5501f5f1e7270c1c9b4607a",
+    "gate_binary_decompressed_sha256": "da9ff3aef78c6eee11ba2847730d0dc8dd1cbf0aa00ac2a521c2dfc3b1daac99",
+    "limits": "Raw archive and binary remain local, outside Git. This final review and subsequent docs/publication receipts postdate the archive and need the planned supplemental preservation."
+  },
+  "verified_details": [
+    "All five directly installed document files equal their approved draft bytes; acceptance document is its tested-source blob plus the exact 978-byte append.",
+    "CSV has eight rows and LF line endings, source/receipt hashes and per-case counts match the final matrix; no CRLF normalization ambiguity remains in these draft bytes.",
+    "Production, test and runner bytes remain identical to the reviewed/full-gate source; only documentation is dirty.",
+    "Final report distinguishes dirty baseline checkout e021 from historical d1-built baseline binary and clean a347 final gate binary.",
+    "Borrow-root and erased-specialization wording is supported by pinned source; no same-ABI/physical-layout claim.",
+    "C cleanup accounting, invocation isolation and guarded negative checks retain their bounded scope.",
+    "Historical census and subset identities are retained without inferred progress. One distinct depth diagnostic discrepancy is explicitly unwaived.",
+    "Next clone-boxed and heap-element source exists and was read only; no new execution is claimed."
+  ],
+  "remaining_limits": [
+    "Full CPU parity remains incomplete.",
+    "Generated port-C depth refusal differs from corresponding upstream diagnostic.",
+    "No normalization, performance, physical COW/layout equivalence, general memory-safety or mid-normalization cancellation proof.",
+    "External invoke audit, Base coordinates, nat_first, compact lowering, F32.read, source-hole and other oracle/host/foreign/resource gaps remain explicitly outstanding.",
+    "Supplementary all-target lint failures were not rerun or cleared; hardware/profiler ignores remain unrun.",
+    "Publication requires the planned final exact Git checkpoint/metadata and remote verification by parent; reviewer performed no publication."
+  ],
+  "blocking_findings": []
+}
