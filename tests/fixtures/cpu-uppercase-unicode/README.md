@@ -21,10 +21,10 @@ Unresolved observations, not approved policy exceptions:
   upstream parsing; this port's literal decoder still requires Rust scalars.
 - Lowercase `u{+41}` and nine-digit leading-zero forms are accepted by the port
   but rejected upstream. This change does not broaden uppercase syntax to them.
-- Native String normal forms use constructor text. In `show/string_escape`, the
-  existing C printer uses unbraced control escapes and a raw DEL; JavaScript
-  matches pinned upstream. These outputs are retained separately, not exact
-  cross-runtime parity.
+- Native String normal forms use constructor text. The historical C printer discrepancy in
+  `show/string_escape` is corrected by the separate C escape-printer checkpoint;
+  its current C expectation now equals upstream. Historical receipts retain the
+  pre-fix output. Native constructor text remains distinct.
 
 No runtime budget, safety guard, cancellation boundary, dependency or toolchain
 is changed. The checking census is historical until explicitly rerun.

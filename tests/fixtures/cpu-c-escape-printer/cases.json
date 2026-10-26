@@ -1,0 +1,121 @@
+[
+  {
+    "case": "show/string_escape.bend",
+    "kind": "scalar",
+    "type": "Pair(String, Pair(String, Pair(Char, Pair(String, Pair(Char, String)))))",
+    "expected": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")",
+    "port_normalized": "(SCon{Chr{97}, SCon{Chr{1}, SCon{Chr{98}, SCon{Chr{127}, SCon{Chr{9}, SCon{Chr{34}, SCon{Chr{113}, SCon{Chr{34}, SNil{}}}}}}}}}, SNil{}, Chr{27}, SCon{Chr{128512}, SNil{}}, Chr{7}, SCon{Chr{105}, SCon{Chr{116}, SCon{Chr{39}, SCon{Chr{115}, SNil{}}}}})"
+  },
+  {
+    "case": "show/char_unicode.bend",
+    "kind": "scalar",
+    "type": "Char",
+    "expected": "'é'",
+    "port_normalized": "Chr{233}"
+  },
+  {
+    "case": "show/string_unicode.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"Olá 日本 🙂\"",
+    "port_normalized": "SCon{Chr{79}, SCon{Chr{108}, SCon{Chr{225}, SCon{Chr{32}, SCon{Chr{26085}, SCon{Chr{26412}, SCon{Chr{32}, SCon{Chr{128578}, SNil{}}}}}}}}}"
+  },
+  {
+    "case": "controls/ascii.bend",
+    "kind": "input-depth",
+    "type": "String",
+    "expected": "\" !\\\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\"",
+    "port_normalized": ""
+  },
+  {
+    "case": "controls/controls.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"\\0\\u{1}\\u{2}\\u{3}\\u{4}\\u{5}\\u{6}\\u{7}\\u{8}\\t\\n\\u{b}\\u{c}\\r\\u{e}\\u{f}\\u{10}\\u{11}\\u{12}\\u{13}\\u{14}\\u{15}\\u{16}\\u{17}\\u{18}\\u{19}\\u{1a}\\u{1b}\\u{1c}\\u{1d}\\u{1e}\\u{1f}\\u{7f}\"",
+    "port_normalized": "SCon{Chr{0}, SCon{Chr{1}, SCon{Chr{2}, SCon{Chr{3}, SCon{Chr{4}, SCon{Chr{5}, SCon{Chr{6}, SCon{Chr{7}, SCon{Chr{8}, SCon{Chr{9}, SCon{Chr{10}, SCon{Chr{11}, SCon{Chr{12}, SCon{Chr{13}, SCon{Chr{14}, SCon{Chr{15}, SCon{Chr{16}, SCon{Chr{17}, SCon{Chr{18}, SCon{Chr{19}, SCon{Chr{20}, SCon{Chr{21}, SCon{Chr{22}, SCon{Chr{23}, SCon{Chr{24}, SCon{Chr{25}, SCon{Chr{26}, SCon{Chr{27}, SCon{Chr{28}, SCon{Chr{29}, SCon{Chr{30}, SCon{Chr{31}, SCon{Chr{127}, SNil{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+  },
+  {
+    "case": "controls/characters.bend",
+    "kind": "scalar",
+    "type": "List<Char>",
+    "expected": "['\\0', '\\u{1}', '\\u{7}', '\\u{8}', '\\t', '\\n', '\\r', '\\u{1b}', '\\u{1f}', ' ', '\"', '\\'', '\\\\', '`', '~', '\\u{7f}', '']",
+    "port_normalized": "[Chr{0}, Chr{1}, Chr{7}, Chr{8}, Chr{9}, Chr{10}, Chr{13}, Chr{27}, Chr{31}, Chr{32}, Chr{34}, Chr{39}, Chr{92}, Chr{96}, Chr{126}, Chr{127}, Chr{128}]"
+  },
+  {
+    "case": "controls/unicode.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"߿ࠀ퟿�￿𐀀😀􏿿\"",
+    "port_normalized": "SCon{Chr{128}, SCon{Chr{2047}, SCon{Chr{2048}, SCon{Chr{55295}, SCon{Chr{57344}, SCon{Chr{65533}, SCon{Chr{65535}, SCon{Chr{65536}, SCon{Chr{128512}, SCon{Chr{1114111}, SNil{}}}}}}}}}}}"
+  },
+  {
+    "case": "controls/empty.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"\"",
+    "port_normalized": "SNil{}"
+  },
+  {
+    "case": "controls/surrogate-start.bend",
+    "kind": "non-scalar",
+    "type": "Char",
+    "expected": "'\\u{d800}'",
+    "port_normalized": "Chr{55296}"
+  },
+  {
+    "case": "controls/surrogate-end.bend",
+    "kind": "non-scalar",
+    "type": "Char",
+    "expected": "'\\u{dfff}'",
+    "port_normalized": "Chr{57343}"
+  },
+  {
+    "case": "controls/above-scalar.bend",
+    "kind": "non-scalar",
+    "type": "Char",
+    "expected": "'\\u{110000}'",
+    "port_normalized": "Chr{1114112}"
+  },
+  {
+    "case": "controls/word-max.bend",
+    "kind": "non-scalar",
+    "type": "Char",
+    "expected": "'\\u{ffffffff}'",
+    "port_normalized": "Chr{4294967295}"
+  },
+  {
+    "case": "controls/raw-io.bend",
+    "kind": "io",
+    "type": "IO(Unit)",
+    "expected": "A\u0000\u0001\t\n\r\"'\\é😀",
+    "port_normalized": "A\u0000\u0001\t\n\r\"'\\é😀"
+  },
+  {
+    "case": "controls/ascii-0.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\" !\\\"#$%&'()*+,-./0123456789:;<=>?\"",
+    "port_normalized": "SCon{Chr{32}, SCon{Chr{33}, SCon{Chr{34}, SCon{Chr{35}, SCon{Chr{36}, SCon{Chr{37}, SCon{Chr{38}, SCon{Chr{39}, SCon{Chr{40}, SCon{Chr{41}, SCon{Chr{42}, SCon{Chr{43}, SCon{Chr{44}, SCon{Chr{45}, SCon{Chr{46}, SCon{Chr{47}, SCon{Chr{48}, SCon{Chr{49}, SCon{Chr{50}, SCon{Chr{51}, SCon{Chr{52}, SCon{Chr{53}, SCon{Chr{54}, SCon{Chr{55}, SCon{Chr{56}, SCon{Chr{57}, SCon{Chr{58}, SCon{Chr{59}, SCon{Chr{60}, SCon{Chr{61}, SCon{Chr{62}, SCon{Chr{63}, SNil{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+  },
+  {
+    "case": "controls/ascii-1.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_\"",
+    "port_normalized": "SCon{Chr{64}, SCon{Chr{65}, SCon{Chr{66}, SCon{Chr{67}, SCon{Chr{68}, SCon{Chr{69}, SCon{Chr{70}, SCon{Chr{71}, SCon{Chr{72}, SCon{Chr{73}, SCon{Chr{74}, SCon{Chr{75}, SCon{Chr{76}, SCon{Chr{77}, SCon{Chr{78}, SCon{Chr{79}, SCon{Chr{80}, SCon{Chr{81}, SCon{Chr{82}, SCon{Chr{83}, SCon{Chr{84}, SCon{Chr{85}, SCon{Chr{86}, SCon{Chr{87}, SCon{Chr{88}, SCon{Chr{89}, SCon{Chr{90}, SCon{Chr{91}, SCon{Chr{92}, SCon{Chr{93}, SCon{Chr{94}, SCon{Chr{95}, SNil{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+  },
+  {
+    "case": "controls/ascii-2.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"`abcdefghijklmnopqrstuvwxyz{|}~\"",
+    "port_normalized": "SCon{Chr{96}, SCon{Chr{97}, SCon{Chr{98}, SCon{Chr{99}, SCon{Chr{100}, SCon{Chr{101}, SCon{Chr{102}, SCon{Chr{103}, SCon{Chr{104}, SCon{Chr{105}, SCon{Chr{106}, SCon{Chr{107}, SCon{Chr{108}, SCon{Chr{109}, SCon{Chr{110}, SCon{Chr{111}, SCon{Chr{112}, SCon{Chr{113}, SCon{Chr{114}, SCon{Chr{115}, SCon{Chr{116}, SCon{Chr{117}, SCon{Chr{118}, SCon{Chr{119}, SCon{Chr{120}, SCon{Chr{121}, SCon{Chr{122}, SCon{Chr{123}, SCon{Chr{124}, SCon{Chr{125}, SCon{Chr{126}, SNil{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+  },
+  {
+    "case": "controls/line-separators.bend",
+    "kind": "scalar",
+    "type": "String",
+    "expected": "\"  \"",
+    "port_normalized": "SCon{Chr{8232}, SCon{Chr{8233}, SNil{}}}"
+  }
+]

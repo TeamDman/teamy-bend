@@ -124,7 +124,7 @@
     "expected": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")",
     "io": false,
     "port_normalized": "(SCon{Chr{97}, SCon{Chr{1}, SCon{Chr{98}, SCon{Chr{127}, SCon{Chr{9}, SCon{Chr{34}, SCon{Chr{113}, SCon{Chr{34}, SNil{}}}}}}}}}, SNil{}, Chr{27}, SCon{Chr{128512}, SNil{}}, Chr{7}, SCon{Chr{105}, SCon{Chr{116}, SCon{Chr{39}, SCon{Chr{115}, SNil{}}}}})",
-    "compiled_c": "(\"a\\u0001b\\t\\\"q\\\"\", \"\", '\\u001b', \"😀\", '\\u0007', \"it's\")",
+    "compiled_c": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")",
     "compiled_js": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")"
   }
 ]

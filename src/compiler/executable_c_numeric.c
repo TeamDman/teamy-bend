@@ -65,15 +65,16 @@ TB_OPTIONAL INLINE void tb_show_step(unsigned depth) {
 }
 
 INLINE void tb_show_character(u64 code, char quote) {
-  char buffer[16];
+  /* A full u64 braced escape needs 20 bytes plus the terminator. */
+  char buffer[24];
   if (code == (u64)(unsigned char)quote || code == '\\') {
     buffer[0] = '\\'; buffer[1] = (char)code; tb_show_write(buffer, 2);
   } else if (code == 0) tb_show_text("\\0");
   else if (code == '\n') tb_show_text("\\n");
   else if (code == '\r') tb_show_text("\\r");
   else if (code == '\t') tb_show_text("\\t");
-  else if (code < 32) {
-    int length = snprintf(buffer, sizeof(buffer), "\\u%04x", (unsigned)code);
+  else if (code < 32 || code == 127 || (code >= 0xd800 && code <= 0xdfff) || code > 0x10ffff) {
+    int length = snprintf(buffer, sizeof(buffer), "\\u{%" PRIx64 "}", (uint64_t)code);
     tb_show_write(buffer, (size_t)length);
   } else { u64 length = io_utf8(buffer, code); tb_show_write(buffer, (size_t)length); }
 }
