@@ -1365,3 +1365,7 @@ mod tests {
 #[cfg(test)]
 #[path = "missing_import_tests.rs"]
 mod missing_import_tests;
+
+#[cfg(test)]
+#[path = "literal_diagnostic_tests.rs"]
+mod literal_diagnostic_tests;

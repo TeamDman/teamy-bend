@@ -1,0 +1,7 @@
+Error:
+- expected : an escape (\n \t \r \0 \\ \' \" \u{1F600})
+- observed : 'b'
+Location:
+ 8 | 
+ 9>| def x(): "a\qb"
+10 | 

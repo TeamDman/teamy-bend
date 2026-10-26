@@ -357,6 +357,14 @@ mod tests {
         }
         for (file, excerpt) in [
             (
+                "cpu-malformed-literal-diagnostics/parse/invalid_string_escape.bend",
+                "9>| def x():",
+            ),
+            (
+                "cpu-malformed-literal-diagnostics/parse/word_overflow_literal.bend",
+                "8>| def main(): 4294967296",
+            ),
+            (
                 "cpu-missing-import-diagnostics/import/cross_file_io.bend",
                 "5>| import /shared/io_tree.bend as T",
             ),

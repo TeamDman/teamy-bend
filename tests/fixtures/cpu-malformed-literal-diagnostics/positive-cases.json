@@ -1,0 +1,17 @@
+[
+  {
+    "case": "positive/word-max.bend",
+    "expected": "4294967295",
+    "io": false
+  },
+  {
+    "case": "positive/word-zero.bend",
+    "expected": "0",
+    "io": false
+  },
+  {
+    "case": "positive/escapes.bend",
+    "expected": "10",
+    "io": false
+  }
+]

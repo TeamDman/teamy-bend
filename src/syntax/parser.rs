@@ -1840,7 +1840,8 @@ impl Parser<'_> {
         }
         if self.current().text.starts_with(['"', '\'']) {
             let raw = self.bump();
-            let chars = decode_literal(&raw).map_err(|e| self.error(e))?;
+            let chars =
+                decode_literal(&raw).map_err(|error| self.literal_decode_error(&raw, error))?;
             if chars.len() > 128 {
                 return Err(self
                     .error("string literal exceeds the parser resource limit of 128 characters"));
@@ -2152,10 +2153,53 @@ impl Parser<'_> {
             })
             .into())
         } else {
-            Ok(u32_term(raw.parse::<u32>().map_err(|error| {
-                self.error(format!("U32 literal must be at most 4294967295: {error}"))
-            })?)
+            Ok(u32_term(
+                raw.parse::<u32>()
+                    .map_err(|error| self.word_literal_error(&raw, &error))?,
+            )
             .into())
+        }
+    }
+    // Format only after the existing grammar-owned refusal. Keep the public
+    // next-token error cursor; keep formatting outside the recursive expression frame.
+    #[inline(never)]
+    fn word_literal_error(&mut self, raw: &str, error: &std::num::ParseIntError) -> ParseError {
+        let token = &self.tokens[self.at - 1];
+        if let Some(origins) = &mut self.templates.diagnostics {
+            origins.expected_after_token(
+                &self.label,
+                token.line,
+                token.column + raw.chars().count() - 1,
+                &format!("a u32 literal up to 4294967295 (got {raw})"),
+            );
+        }
+        self.error(format!("U32 literal must be at most 4294967295: {error}"))
+    }
+    #[inline(never)]
+    fn literal_decode_error(&mut self, raw: &str, error: LiteralError) -> ParseError {
+        match error {
+            LiteralError::Other(message) => self.error(message),
+            LiteralError::UnknownEscape { escape, after } => {
+                // Pinned parse_char observes the next UTF-16 code unit after
+                // consuming the escape. Do not claim exact scalar rendering
+                // for a surrogate pair; retain the existing host diagnostic.
+                if escape.is_ascii()
+                    // The pinned Unicode-escape regex is case insensitive;
+                    // uppercase U is a separate acceptance gap, not this refusal.
+                    && escape != 'U'
+                    && raw[after..].chars().next().is_none_or(|c| c.len_utf16() == 1)
+                    && let Some(origins) = &mut self.templates.diagnostics
+                {
+                    let token = &self.tokens[self.at - 1];
+                    origins.expected_after_token(
+                        &self.label,
+                        token.line,
+                        token.column + raw[..after].chars().count() - 1,
+                        "an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})",
+                    );
+                }
+                self.error(format!("unknown escape: \\{escape}"))
+            }
         }
     }
     fn pattern(&mut self, value: &TermRef, source: Option<usize>) -> Result<Pattern, ParseError> {
@@ -2521,15 +2565,24 @@ fn nat_term(count: u32) -> TermRef {
         },
     )
 }
-fn decode_literal(raw: &str) -> Result<Vec<char>, String> {
-    let mut chars = raw[1..raw.len() - 1].chars();
+enum LiteralError {
+    Other(String),
+    UnknownEscape { escape: char, after: usize },
+}
+impl From<&str> for LiteralError {
+    fn from(message: &str) -> Self {
+        Self::Other(message.into())
+    }
+}
+fn decode_literal(raw: &str) -> Result<Vec<char>, LiteralError> {
+    let mut chars = raw[1..raw.len() - 1].char_indices();
     let mut out = Vec::new();
-    while let Some(c) = chars.next() {
+    while let Some((_, c)) = chars.next() {
         if c != '\\' {
             out.push(c);
             continue;
         }
-        let escape = chars.next().ok_or("unfinished escape")?;
+        let (at, escape) = chars.next().ok_or("unfinished escape")?;
         out.push(match escape {
             'n' => '\n',
             't' => '\t',
@@ -2539,12 +2592,12 @@ fn decode_literal(raw: &str) -> Result<Vec<char>, String> {
             '\'' => '\'',
             '"' => '"',
             'u' => {
-                if chars.next() != Some('{') {
+                if chars.next().map(|(_, c)| c) != Some('{') {
                     return Err("Unicode escape needs braces".into());
                 }
                 let mut digits = String::new();
                 let mut closed = false;
-                for d in chars.by_ref() {
+                for (_, d) in chars.by_ref() {
                     if d == '}' {
                         closed = true;
                         break;
@@ -2554,13 +2607,17 @@ fn decode_literal(raw: &str) -> Result<Vec<char>, String> {
                 if !closed {
                     return Err("unfinished Unicode escape".into());
                 }
-                char::from_u32(
-                    u32::from_str_radix(&digits, 16)
-                        .map_err(|error| format!("invalid Unicode escape: {error}"))?,
-                )
+                char::from_u32(u32::from_str_radix(&digits, 16).map_err(|error| {
+                    LiteralError::Other(format!("invalid Unicode escape: {error}"))
+                })?)
                 .ok_or("invalid Unicode code point")?
             }
-            _ => return Err(format!("unknown escape: \\{escape}")),
+            _ => {
+                return Err(LiteralError::UnknownEscape {
+                    escape,
+                    after: 1 + at + escape.len_utf8(),
+                });
+            }
         });
     }
     Ok(out)
@@ -3879,5 +3936,34 @@ mod occurrence_tests {
             .unwrap()
             .evaluate_data("main", &[])
             .unwrap();
+    }
+}
+
+#[cfg(test)]
+mod literal_decode_tests {
+    use super::decode_literal;
+
+    #[test]
+    fn literal_decoder_preserves_escape_values_and_unicode_scalar_order() {
+        let actual = decode_literal(r#""a\n\t\r\0\\\'\"\u{1F600}é\u{10FFFF}""#)
+            .unwrap_or_else(|_| panic!("valid pinned escapes"));
+        assert_eq!(
+            actual,
+            vec![
+                'a',
+                '\n',
+                '\t',
+                '\r',
+                '\0',
+                '\\',
+                '\'',
+                '"',
+                '😀',
+                'é',
+                '\u{10ffff}'
+            ]
+        );
+        let actual = decode_literal("'é'").unwrap_or_else(|_| panic!("valid character"));
+        assert_eq!(actual, vec!['é']);
     }
 }

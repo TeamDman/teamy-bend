@@ -1,0 +1,15 @@
+[
+  "parse/invalid_string_escape.bend",
+  "parse/word_overflow_literal.bend",
+  "negative/overflow-eof.bend",
+  "negative/overflow-crlf.bend",
+  "negative/overflow-leading-zero.bend",
+  "negative/escape-bmp.bend",
+  "negative/escape-char.bend",
+  "negative/escape-eof.bend",
+  "negative/overflow-template.bend",
+  "negative/escape-template.bend",
+  "negative/imported.bend",
+  "negative/first-overflow.bend",
+  "negative/first-escape.bend"
+]
