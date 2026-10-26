@@ -2697,3 +2697,25 @@ All 21 cleanup/restore records are unchanged. One historical successful focused 
 log was accidentally overwritten by a misrooted copied runner; published hash,
 subsequent focused/full gate and failure receipts survive. The loss and exclusive
 creation/basename protections are documented. No Library retry or new exception.
+
+## Contextual lexical diagnostic checkpoint
+
+Tested `c5edea8a75022c1654fbf568629422cf73bee1d0` closes the retained original diagnostics in `parse/hex_no_digits`
+and `parse/unclosed_char_code`. Public lexical errors and rejection remain unchanged;
+optional grammar context is bounded and stops before expansion/host work.
+[Report](cpu-contextual-lexical-diagnostics.md). Gate **1304 passed / 0 failed / 49 ignored**.
+
+Evidence: 734 observations / 358 deterministic pairs, 24 C/JS executions,
+12 pure normalizations, six unchanged artifacts, 104 public-error observations.
+Both originals were already linked; renewed exact qualification adds no inventory
+entries. Unsupported prefixes and four Unicode controls remain unqualified.
+
+Renewed census: 405 exact rejections / 366 both accepted / 494 acceptance
+disagreements / 31 different rejections / 6 oracle failures. Exact 385 historical
+IO renewal leaves 140 residuals = 109 + 31. Only two port stderr improvements;
+three upstream-only stack/acceptance variations account for the additional net
+count decrease. No semantic exception or resource-limit change was adopted.
+
+Source/receipts are pushed separately from local raw evidence. Prior cleanup and
+backup hashes remain intact; the old lost focused log remains unrecovered.
+Library connection gate and prior API/semantic decisions remain unchanged.
