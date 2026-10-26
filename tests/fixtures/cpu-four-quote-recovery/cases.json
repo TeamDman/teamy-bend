@@ -80,7 +80,7 @@
     "case": "context-list",
     "path": "cpu-four-quote-recovery/negative/list.bend",
     "kind": "negative",
-    "exact": false,
+    "exact": true,
     "expected": "expected/list.stderr",
     "line": 3,
     "column": 30,

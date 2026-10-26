@@ -7,4 +7,8 @@ The 31 negative controls distinguish first-code escape failure from the immediat
 
 Positive controls reuse existing scalar/non-scalar and IO fixtures and add four single-code Char controls. Generated C/JS execution, pure normalization and strict IO exclusion are separate observations. The pinned upstream originals remain byte-identical in their existing fixture directories, with their original attribution.
 
-Current measured result at 6c26f207:25 exact / six different across 31 cases. The 23 exact flags are mandatory assertions; the two additional matches are unchanged invalid-template/import grammar probes. The compact receipt corrects their conservative labels without changing observations.
+Historical measured result at 6c26f207:25 exact / six different across 31 cases. The 23 exact flags are mandatory assertions; the two additional matches are unchanged invalid-template/import grammar probes. The compact receipt corrects their conservative labels without changing observations.
+
+Terminal incomplete-character metadata now renews the unterminated and cross-line
+controls as exact, preserving their original raw errors. These are subset
+measurements, not a rerun of the complete historical31-case differential matrix.

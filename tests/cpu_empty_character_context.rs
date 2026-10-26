@@ -30,6 +30,10 @@ fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
             "cpu-four-quote-recovery",
             include_str!("fixtures/cpu-four-quote-recovery/cases.json"),
         ),
+        (
+            "cpu-incomplete-character",
+            include_str!("fixtures/cpu-incomplete-character/cases.json"),
+        ),
     ]
     .into_iter()
     .flat_map(|(cohort, source)| {
@@ -85,7 +89,7 @@ fn empty_character_diagnostics_keep_failure_status_and_refuse_every_emitter() {
             different += 1;
         }
     }
-    assert_eq!((exact, different), (27, 3));
+    assert_eq!((exact, different), (33, 9));
     std::fs::remove_dir(scratch).unwrap();
 }
 

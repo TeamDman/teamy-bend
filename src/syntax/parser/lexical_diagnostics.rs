@@ -19,6 +19,7 @@ pub(super) enum LexicalFault {
 
 enum PrefixOutcome {
     Active,
+    Terminal,
     Unsupported,
 }
 
@@ -88,6 +89,26 @@ impl Parser<'_> {
                     && matches!(diagnostic.fault, LexicalFault::IncompleteLiteral)
             })
         {
+            let token = self.current();
+            let (line, column) = (token.line, token.column);
+            let first = token
+                .text
+                .strip_prefix('\'')
+                .and_then(|text| text.chars().next());
+            if let Some(first) = first
+                && self.templates.diagnostics.as_mut().is_some_and(|origins| {
+                    origins.incomplete_character(&self.label, line, column, first)
+                })
+            {
+                // Attribution at the barrier, never decoding or accepting the
+                // incomplete atom. No parser step can follow this refusal.
+                self.templates
+                    .lexical_diagnostic
+                    .as_mut()
+                    .expect("prefix")
+                    .outcome = PrefixOutcome::Terminal;
+                return Err(self.error("unsupported lexical diagnostic prefix"));
+            }
             return self.require_semantic_prefix();
         }
         Ok(())

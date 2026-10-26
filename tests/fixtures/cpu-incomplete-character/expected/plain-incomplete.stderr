@@ -1,0 +1,7 @@
+Error:
+- expected : a closing '
+- observed : 'n'
+Location:
+2 | 
+3>| def main() -> Char: 'unfinished
+4 | 

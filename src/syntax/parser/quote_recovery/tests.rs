@@ -195,12 +195,65 @@ fn quote_recovery_preserves_imported_collisions_and_template_cache_identity() {
 }
 
 #[test]
-fn quote_recovery_does_not_cross_depth_or_incomplete_atom_guards() {
+fn quote_recovery_reports_terminal_atoms_without_crossing_prior_lowering() {
     for source in [
-        format!("def main() -> Char: {}''''\n", "+ ".repeat(64)),
-        "def main() -> List(Char): ['''']\n".into(),
-        "def main() -> Char: f('''')\n".into(),
+        "def main() -> List(Char): ['''']\n",
+        "def main() -> Char: identity('''')\n",
     ] {
+        let book = crate::kernel::Book::default();
+        let templates = origins(source);
+        let report = capture(source, &book, &templates)
+            .unwrap()
+            .diagnostic()
+            .unwrap();
+        assert!(matches!(report.content,
+            LoadDiagnosticContent::ExpectedObserved { expected, observed }
+                if expected == "a closing '" && observed == "'\n'"));
+        assert!(book.declarations.is_empty());
+        assert!(templates.declarations.is_empty());
+        assert_eq!((templates.instances, templates.active), (0, 0));
+        let raw = crate::syntax::parse(source).unwrap_err();
+        assert!(raw.message.contains("exactly one character"));
+    }
+    let source = "def identity(x: Char) -> Char: x\ndef main() -> Char: identity('''')\n";
+    assert!(
+        capture(source, &crate::kernel::Book::default(), &origins(source))
+            .unwrap()
+            .diagnostic()
+            .is_none()
+    );
+    // Direct lexical-prefix attribution also obeys its original-source cap.
+    let source = format!("def main() -> Char: 'a\n#{}", "x".repeat(4096));
+    let mut templates = origins(&source);
+    let error = parse_into(
+        ParseInput {
+            source: &source,
+            label: "<quote>",
+            namespace: "",
+            aliases: BTreeMap::new(),
+            origin: SourceOrigin::Standalone,
+        },
+        &mut crate::kernel::Book::default(),
+        &mut 0,
+        &mut templates,
+        None,
+        None,
+    )
+    .unwrap_err();
+    assert!(
+        templates
+            .diagnostics
+            .unwrap()
+            .load_failure(error)
+            .diagnostic
+            .is_none()
+    );
+}
+
+#[test]
+fn quote_recovery_does_not_cross_depth_guards() {
+    let source = format!("def main() -> Char: {}''''\n", "+ ".repeat(64));
+    {
         let templates = origins(&source);
         assert!(
             capture(&source, &crate::kernel::Book::default(), &templates)

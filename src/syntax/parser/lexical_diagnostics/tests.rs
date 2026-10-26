@@ -19,6 +19,93 @@ fn diagnostic(source: &str) -> DiagnosticLoadError {
     diagnostic_with_seed(source, false)
 }
 
+#[test]
+fn terminal_character_metadata_refuses_without_advancing_or_mutating_parser_state() {
+    use super::super::Parser;
+    use super::super::lex_tokens_mode;
+    use super::PrefixOutcome;
+    use std::collections::BTreeSet;
+    use std::collections::VecDeque;
+    use std::rc::Rc;
+
+    let source = "def main() -> Char: identity('''')\n";
+    let mut prefix = None;
+    lex_tokens_mode(source, "<terminal>", Some(&mut prefix), true).unwrap_err();
+    let prefix = prefix.unwrap();
+    let at = prefix.tokens.len() - 2;
+    let start = prefix.tokens[at].start;
+    let mut book = crate::syntax::parse("law retained: Type").unwrap();
+    let crate::kernel::Declaration::Def(definition) = &book.declarations[0] else {
+        panic!()
+    };
+    let ty = Rc::clone(&definition.ty);
+    let mut fresh = 97;
+    let mut origins = DiagnosticOrigins::default();
+    origins.source("<terminal>", source);
+    let mut templates = Templates {
+        diagnostics: Some(origins),
+        lexical_diagnostic: Some(prefix.diagnostic),
+        ..Templates::default()
+    };
+    let mut parser = Parser {
+        tokens: prefix.tokens,
+        at,
+        label: "<terminal>".into(),
+        namespace: String::new(),
+        aliases: BTreeMap::new(),
+        scope: Vec::new(),
+        fresh: &mut fresh,
+        display_fresh: 19,
+        book: &mut book,
+        depth: 7,
+        reusable: Vec::new(),
+        reusable_markers: BTreeSet::new(),
+        templates: &mut templates,
+        instance_name: None,
+        instance_arguments: VecDeque::new(),
+        compile_bindings: BTreeMap::new(),
+        foreign: None,
+        constructor_tags: None,
+        origin: SourceOrigin::Standalone,
+    };
+    let error = parser.require_complete_literal().unwrap_err();
+    assert_eq!(error.message, "unsupported lexical diagnostic prefix");
+    assert_eq!((parser.at, parser.current().start), (at, start));
+    assert_eq!(
+        (*parser.fresh, parser.display_fresh, parser.depth),
+        (97, 19, 7)
+    );
+    assert_eq!(parser.book.declarations.len(), 1);
+    let crate::kernel::Declaration::Def(definition) = &parser.book.declarations[0] else {
+        panic!()
+    };
+    assert!(Rc::ptr_eq(&ty, &definition.ty));
+    assert!(parser.templates.declarations.is_empty());
+    assert_eq!(
+        (parser.templates.active, parser.templates.instances),
+        (0, 0)
+    );
+    assert!(matches!(
+        parser
+            .templates
+            .lexical_diagnostic
+            .as_ref()
+            .unwrap()
+            .outcome,
+        PrefixOutcome::Terminal
+    ));
+    assert!(
+        parser
+            .templates
+            .diagnostics
+            .as_mut()
+            .unwrap()
+            .load_failure(error)
+            .diagnostic
+            .is_some()
+    );
+}
+
 fn diagnostic_with_seed(source: &str, seed: bool) -> DiagnosticLoadError {
     let mut templates = Templates {
         diagnostics: Some(DiagnosticOrigins::default()),
@@ -96,7 +183,7 @@ fn lexical_context_keeps_public_errors_and_exact_sources() {
 }
 
 #[test]
-fn incomplete_literal_prefix_reports_only_an_earlier_grammar_refusal() {
+fn incomplete_literal_prefix_reports_earlier_grammar_or_terminal_raw_code() {
     for source in [
         "law main: Char\ndef main(): ''\\q'\n",
         "law main: Char\ndef main(): ''\\q'",
@@ -120,6 +207,15 @@ fn incomplete_literal_prefix_reports_only_an_earlier_grammar_refusal() {
     for source in [
         "law main: Char\ndef main(): 'unfinished\n",
         "law main: Char\ndef main(): 'unfinished",
+    ] {
+        let report = diagnostic_with_seed(source, true).diagnostic.unwrap();
+        let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content else {
+            panic!("syntax context")
+        };
+        assert_eq!(expected, "a closing '");
+        assert_eq!(observed, "'n'");
+    }
+    for source in [
         "law main: Char\ndef main(): \"unfinished\n",
         "law main: Char\ndef main(): \"unfinished",
     ] {

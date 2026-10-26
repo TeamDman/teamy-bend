@@ -331,6 +331,42 @@ impl DiagnosticOrigins {
         eligible
     }
 
+    pub(super) fn incomplete_character(
+        &mut self,
+        label: &str,
+        line: usize,
+        column: usize,
+        first: char,
+    ) -> bool {
+        let eligible = self.sources.get(label).is_some_and(|source| {
+            // The direct lexical-prefix path also reaches this barrier. Bound
+            // the whole original display source before excerpt construction.
+            if source.len() > 4096 || matches!(first, '\\' | '\n' | '\r') {
+                return false;
+            }
+            let Some(line) = line
+                .checked_sub(1)
+                .and_then(|n| source.split_inclusive('\n').nth(n))
+            else {
+                return false;
+            };
+            let Some(start) = column.checked_sub(1) else {
+                return false;
+            };
+            let mut chars = line.chars().skip(start);
+            // Pinned parse_char consumes one raw code point; parse_take then
+            // requires a quote without skipping trivia. Inspect only that
+            // boundary, without decoding any escape or constructing a value.
+            chars.next() == Some('\'')
+                && chars.next() == Some(first)
+                && chars.next().is_none_or(|c| c != '\'' && c.len_utf16() == 1)
+        });
+        if eligible {
+            self.expected_after_token(label, line, column + 1, "a closing '");
+        }
+        eligible
+    }
+
     pub(super) fn expected_after_token(
         &mut self,
         label: &str,

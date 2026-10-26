@@ -1,0 +1,134 @@
+[
+  {
+    "case": "incomplete-argument-eof",
+    "path": "cpu-incomplete-character/negative/argument-eof.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-eof.stderr",
+    "line": 4,
+    "column": 25,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-eof.bend"
+  },
+  {
+    "case": "incomplete-list-crlf",
+    "path": "cpu-incomplete-character/negative/list-crlf.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/list-crlf.stderr",
+    "line": 3,
+    "column": 30,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/list-crlf.bend"
+  },
+  {
+    "case": "incomplete-argument-space",
+    "path": "cpu-incomplete-character/negative/argument-space.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-space.stderr",
+    "line": 4,
+    "column": 25,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-space.bend"
+  },
+  {
+    "case": "incomplete-argument-comment",
+    "path": "cpu-incomplete-character/negative/argument-comment.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-comment.stderr",
+    "line": 4,
+    "column": 25,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-comment.bend"
+  },
+  {
+    "case": "incomplete-argument-bmp",
+    "path": "cpu-incomplete-character/negative/argument-bmp.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-bmp.stderr",
+    "line": 4,
+    "column": 27,
+    "message": "unexpected character '\u00e9'",
+    "error_source": "cpu-incomplete-character/negative/argument-bmp.bend"
+  },
+  {
+    "case": "incomplete-argument-astral-code",
+    "path": "cpu-incomplete-character/negative/argument-astral-code.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-astral-code.stderr",
+    "line": 4,
+    "column": 27,
+    "message": "unexpected character '\ud83d\ude00'",
+    "error_source": "cpu-incomplete-character/negative/argument-astral-code.bend"
+  },
+  {
+    "case": "incomplete-argument-astral-observation",
+    "path": "cpu-incomplete-character/negative/argument-astral-observation.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-astral-observation.stderr",
+    "line": 4,
+    "column": 28,
+    "message": "unexpected character '\ud83d\ude00'",
+    "error_source": "cpu-incomplete-character/negative/argument-astral-observation.bend"
+  },
+  {
+    "case": "incomplete-argument-escape",
+    "path": "cpu-incomplete-character/negative/argument-escape.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/argument-escape.stderr",
+    "line": 4,
+    "column": 25,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-escape.bend"
+  },
+  {
+    "case": "incomplete-plain-incomplete",
+    "path": "cpu-incomplete-character/negative/plain-incomplete.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/plain-incomplete.stderr",
+    "line": 3,
+    "column": 21,
+    "message": "a string or character literal cannot cross a line",
+    "error_source": "cpu-incomplete-character/negative/plain-incomplete.bend"
+  },
+  {
+    "case": "incomplete-earlier-grammar",
+    "path": "cpu-incomplete-character/negative/earlier-grammar.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/earlier-grammar.stderr",
+    "line": 3,
+    "column": 7,
+    "message": "expected a name, found \"->\"",
+    "error_source": "cpu-incomplete-character/negative/earlier-grammar.bend"
+  },
+  {
+    "case": "incomplete-argument-direct",
+    "path": "cpu-incomplete-character/negative/argument-direct.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/argument-direct.stderr",
+    "line": 3,
+    "column": 32,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-direct.bend"
+  },
+  {
+    "case": "incomplete-argument-direct-crlf",
+    "path": "cpu-incomplete-character/negative/argument-direct-crlf.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/argument-direct-crlf.stderr",
+    "line": 3,
+    "column": 32,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-incomplete-character/negative/argument-direct-crlf.bend"
+  }
+]

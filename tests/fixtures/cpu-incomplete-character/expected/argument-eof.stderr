@@ -1,0 +1,6 @@
+Error:
+- expected : a closing '
+- observed : end of input
+Location:
+3 | def f(x: Char) -> Char: x
+4>| def main() -> Char: f('''')

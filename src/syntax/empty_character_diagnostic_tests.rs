@@ -3,6 +3,61 @@ use super::DiagnosticOrigins;
 use super::LoadDiagnosticContent;
 
 #[test]
+fn incomplete_character_metadata_is_a_bounded_raw_code_boundary() {
+    for (source, first, observed) in [
+        ("')", ')', "end of input"),
+        ("']\n", ']', "'\n'"),
+        ("']\r\n", ']', "'\r'"),
+        ("' )", ' ', "')'"),
+        ("'é)", 'é', "')'"),
+        ("'😀)", '😀', "')'"),
+        ("') # comment", ')', "' '"),
+    ] {
+        let mut origins = DiagnosticOrigins::default();
+        origins.source("fixture", source);
+        assert!(origins.incomplete_character("fixture", 1, 1, first));
+        let LoadDiagnosticContent::ExpectedObserved {
+            expected,
+            observed: actual,
+        } = origins.load_failure.unwrap().content
+        else {
+            panic!("syntax metadata")
+        };
+        assert_eq!(expected, "a closing '");
+        assert_eq!(actual, observed);
+    }
+    for (source, line, column, first) in [
+        ("'a'", 1, 1, 'a'),
+        ("'a😀", 1, 1, 'a'),
+        ("'\\q", 1, 1, '\\'),
+        ("'\n", 1, 1, '\n'),
+        ("'\r\n", 1, 1, '\r'),
+        ("'a)", 1, 1, 'b'),
+        ("'a)", 0, 1, 'a'),
+        ("'a)", 1, 0, 'a'),
+        ("'a)", 2, 1, 'a'),
+        ("'", 1, 1, 'a'),
+    ] {
+        let mut origins = DiagnosticOrigins::default();
+        origins.source("fixture", source);
+        assert!(!origins.incomplete_character("fixture", line, column, first));
+        assert!(origins.load_failure.is_none());
+    }
+}
+
+#[test]
+fn incomplete_character_metadata_caps_original_display_tail() {
+    for (bytes, expected) in [(4096, true), (4097, false)] {
+        let mut origins = DiagnosticOrigins::default();
+        origins.source("fixture", &format!("'a)\n{}", "x".repeat(bytes - 4)));
+        assert_eq!(origins.incomplete_character("fixture", 1, 1, 'a'), expected);
+        assert_eq!(origins.load_failure.is_some(), expected);
+    }
+    let mut origins = DiagnosticOrigins::default();
+    assert!(!origins.incomplete_character("missing", 1, 1, 'a'));
+}
+
+#[test]
 fn empty_character_metadata_requires_exact_source_and_bmp_or_eof_observation() {
     for (source, column, observed) in [
         ("''", 1, "end of input"),
@@ -73,6 +128,10 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
             "cpu-four-quote-recovery",
             include_str!("../../tests/fixtures/cpu-four-quote-recovery/cases.json"),
         ),
+        (
+            "cpu-incomplete-character",
+            include_str!("../../tests/fixtures/cpu-incomplete-character/cases.json"),
+        ),
     ]
     .into_iter()
     .flat_map(|(cohort, source)| {
@@ -111,7 +170,9 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
         ] {
             assert_eq!(plain.to_string(), failure.error.to_string());
             if case.exact.unwrap() {
-                let report = failure.diagnostic.unwrap();
+                let report = failure
+                    .diagnostic
+                    .unwrap_or_else(|| panic!("{}", case.case));
                 let LoadDiagnosticContent::ExpectedObserved { expected, observed } = report.content
                 else {
                     panic!("wrong diagnostic kind")
@@ -133,7 +194,7 @@ fn empty_character_contexts_preserve_raw_errors_and_pinned_optional_diagnostics(
         }
         refused += 1;
     }
-    assert_eq!(refused, 30);
+    assert_eq!(refused, 42);
 }
 
 #[test]

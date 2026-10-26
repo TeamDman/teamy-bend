@@ -1,0 +1,5 @@
+# Preserve byte-exact original-source and oracle CRLF observations.
+negative/list-crlf.bend -text
+expected/list-crlf.stderr -text
+negative/argument-direct-crlf.bend -text
+expected/argument-direct-crlf.stderr -text
