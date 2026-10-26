@@ -1,0 +1,96 @@
+[
+  {
+    "case": "run/array_fill_fold.bend",
+    "path": "tests/fixtures/cpu-array-runtime/original/array_fill_fold.bend",
+    "kind": "positive",
+    "stdout": "140375\n",
+    "upstream_sha256": "cf73c937f8ac131a3df32728073ab8fdb8e7cffdfbce371ccec42564b495ccb3",
+    "source_sha256": "cf73c937f8ac131a3df32728073ab8fdb8e7cffdfbce371ccec42564b495ccb3",
+    "upstream_path": "tests/run/array_fill_fold.bend"
+  },
+  {
+    "case": "run/array_poly_elem.bend",
+    "path": "tests/fixtures/cpu-array-runtime/original/array_poly_elem.bend",
+    "kind": "positive",
+    "stdout": "102122\n",
+    "upstream_sha256": "800c4c17363a2f4b278c48c636a88d0134bec9aa836296be85abd309ba7c531d",
+    "source_sha256": "800c4c17363a2f4b278c48c636a88d0134bec9aa836296be85abd309ba7c531d",
+    "upstream_path": "tests/run/array_poly_elem.bend"
+  },
+  {
+    "case": "reg/array_keep_cow.bend",
+    "path": "tests/fixtures/cpu-array-runtime/original/array_keep_cow.bend",
+    "kind": "positive",
+    "stdout": "70\n",
+    "upstream_sha256": "7feef9fb19eb19d0df5b109b400317e94f33c4132fc4c1162da0210bef62a0ee",
+    "source_sha256": "7feef9fb19eb19d0df5b109b400317e94f33c4132fc4c1162da0210bef62a0ee",
+    "upstream_path": "tests/reg/array_keep_cow.bend"
+  },
+  {
+    "case": "reg/array_copy_pair.bend",
+    "path": "tests/fixtures/cpu-array-runtime/original/array_copy_pair.bend",
+    "kind": "positive",
+    "stdout": "36\n",
+    "upstream_sha256": "9e02e893a13dcc1bc345816381514770459b91eb38765c83f747d74ca162e85a",
+    "source_sha256": "9e02e893a13dcc1bc345816381514770459b91eb38765c83f747d74ca162e85a",
+    "upstream_path": "tests/reg/array_copy_pair.bend"
+  },
+  {
+    "case": "float-bits",
+    "path": "tests/fixtures/cpu-array-runtime/controls/float-bits.bend",
+    "kind": "positive",
+    "stdout": "2147483648\n1069547520\n2147483648\n",
+    "source_sha256": "dd2885f81c386af9917bdc5620ac15afb9dabec1bdfab9af4dc809fffd394a27"
+  },
+  {
+    "case": "string-owners",
+    "path": "tests/fixtures/cpu-array-runtime/controls/string-owners.bend",
+    "kind": "positive",
+    "stdout": "root\nroot\nnew\nroot\n",
+    "source_sha256": "e7a11dee472bcecdf2bb6565990542c21401f439c52270002ad150066c4de464"
+  },
+  {
+    "case": "wrap-boundaries",
+    "path": "tests/fixtures/cpu-array-runtime/controls/wrap-boundaries.bend",
+    "kind": "positive",
+    "stdout": "10\n10\n40\n139\n7\n1\n",
+    "source_sha256": "17b419abae37eca6c6d9f02aee4329dbf41b7b1102cb221609c3aa4801847825"
+  },
+  {
+    "case": "affine-owner",
+    "path": "tests/fixtures/cpu-array-runtime/negative/affine-owner.bend",
+    "kind": "negative",
+    "source_sha256": "03b2a662984eaa607c4bc7b358308949183b2eee045fa579fe62bbd7e38243b6",
+    "stderr": "Error:\n- expected : a\n- observed : a (consumed more than once)\nLocation: duplicate\n2 | \n3>| def duplicate(a: Array<U32>) -> Array<U32> & Array<U32>:\n4 |   (a, a)\n"
+  },
+  {
+    "case": "element-type",
+    "path": "tests/fixtures/cpu-array-runtime/negative/element-type.bend",
+    "kind": "negative",
+    "source_sha256": "17ddebe61e71c2de18ed6dd5399709f0e02fe3dbc39e7e21c645ea4112dd671a",
+    "stderr": "Error:\n- expected : U32\n- observed : Bool\nLocation: main\n3 | def main() -> Array<U32>:\n4>|   Array.set(U32, ALeaf{7}, 0, True{})\n5 | \n"
+  },
+  {
+    "case": "affine-swap",
+    "path": "tests/fixtures/cpu-array-runtime/controls/affine-swap.bend",
+    "kind": "positive",
+    "stdout": "7\n9\n",
+    "source_sha256": "c84bfa127c054300fd82a23d671e45bd393d1d8354149f1cfabf1985d4ee85d3"
+  },
+  {
+    "case": "nondata-get",
+    "path": "tests/fixtures/cpu-array-runtime/negative/nondata-get.bend",
+    "kind": "negative",
+    "source_sha256": "2547625fe507ea40f60395360d257ad4a2315fc680956781005bb7f152f02710",
+    "stderr": "Error:\n- expected : Data\n- observed : Type\nLocation: main\n5 | def main() -> Array<Cell> & Cell:\n6>|   Array.get(Cell, ALeaf{Cell{u => 7}}, 0)\n7 | \n"
+  },
+  {
+    "case": "array-depth-guard",
+    "path": "tests/fixtures/cpu-runtime-negatives/array_depth_bound.bend",
+    "kind": "runtime-negative",
+    "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
+    "stderr": "bend: an array past the deepest block class 31\n",
+    "port_c_residual_stderr": "teamy-bend executable C: array budget exhausted\n",
+    "upstream_path": "tests/io/array_depth_bound.bend"
+  }
+]

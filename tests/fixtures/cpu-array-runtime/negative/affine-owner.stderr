@@ -1,0 +1,7 @@
+Error:
+- expected : a
+- observed : a (consumed more than once)
+Location: duplicate
+2 | 
+3>| def duplicate(a: Array<U32>) -> Array<U32> & Array<U32>:
+4 |   (a, a)

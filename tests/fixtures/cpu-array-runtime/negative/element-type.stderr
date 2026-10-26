@@ -1,0 +1,7 @@
+Error:
+- expected : U32
+- observed : Bool
+Location: main
+3 | def main() -> Array<U32>:
+4>|   Array.set(U32, ALeaf{7}, 0, True{})
+5 | 

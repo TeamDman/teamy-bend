@@ -1,0 +1,7 @@
+Error:
+- expected : Data
+- observed : Type
+Location: main
+5 | def main() -> Array<Cell> & Cell:
+6>|   Array.get(Cell, ALeaf{Cell{u => 7}}, 0)
+7 | 
