@@ -2766,3 +2766,32 @@ Prior cleanup records, old log-loss limitation, blocked Library upload and all
 pending semantic/API/resource/oracle decisions remain explicit. Next substantive
 gap is non-scalar C-output literal readback; its scalar policy needs investigation
 against pinned Base/lexer contracts before adopting a new interpretation.
+
+## U32-backed literal readback checkpoint
+
+Tested `087a646a33cac73307fd4adf3135fc3186553b53` fixes canonical non-scalar literal acceptance using U32 data,
+matching pinned Base/lexer contracts. Malformed syntax and all host/resource
+boundaries remain enforced; no new semantic decision or exception.
+[Report](cpu-nonscalar-literal.md). Gate **1317 passed / 0 failed / 49 ignored**.
+
+The 44-control matrix records 890 observations / 210 deterministic pairs, not
+890 parity passes. All 120 corresponding C/JS executions match: 78 successes,
+42 retained JS scalar refusals. All 23 canonical C-output readbacks accept and
+preserve full values. Forty comparable historical cases show 18 checking
+acceptance fixes and 19 native-status improvements (18 pure, one actual IO).
+Four later controls have no fabricated baseline.
+
+Current subset: 28 both accepted, two exact rejections, ten differing rejections,
+four acceptance differences (two strict-IO exclusions and two resource guards).
+Eight extra upstream guard executions do not qualify unrun port executions.
+Three upstream originals plus four authored controls separately renew seven
+native pure outputs and 14 identical artifacts; that receipt is emission evidence.
+
+No full census rerun; the historical 140 non-IO residuals and six oracle failures
+remain historical, not inferred current totals. Linkage stays 516/1302, including
+failures; 786 unlinked entries retain their applicability categories. Next
+independent gap: malformed uppercase-escape diagnostics. Pending nat_first,
+compact lowering, Base coordinates, external invoke audit, supplementary lints
+and other semantic/oracle limits remain explicit. Baseline executable retention
+and the older lost-log limitations are recorded. Prior backups remain intact;
+no desktop activity or Library retry occurred.

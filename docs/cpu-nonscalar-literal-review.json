@@ -1,0 +1,40 @@
+{
+  "reviewer": "review_sharing",
+  "approved": true,
+  "read_only": true,
+  "reviewed_utc": "2026-10-26T04:20:34.627913+00:00",
+  "tested_source": "087a646a33cac73307fd4adf3135fc3186553b53",
+  "reviewed_sha256": {
+    "cpu-nonscalar-literal.md": "936836140c021e309c355e0e60750db055d6bea6bf061967f8db628fd3193d81",
+    "cpu-nonscalar-literal-validation.json": "9ad2e01feefa7c1c108ba73317adf20527e742050f44bdbca7e8f888bc7ecc8a",
+    "cpu-nonscalar-literal-results.json.gz": "31dd1e4df8de64a0a73167cae8faaf4a9a4584ccebd8bbdafd38099b684c9b9d",
+    "cpu-nonscalar-literal-evidence.csv": "d9f946d5ce524792b8157edda50c0209e0d0d65deefde5440791e39dcdbb215f",
+    "acceptance-append.txt": "92523c902f5bda36b8487988ab1538c018ba09d2329289951006dc8865f7da82"
+  },
+  "archive_sha256": "d066ce7bc074a22663f88399cf6fb9c622a6cad7862cfa4796c879fec4845167",
+  "gate": {
+    "passed": 1317,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 195
+  },
+  "final_renewals": {
+    "native_unchanged": 6,
+    "artifacts_identical": 12
+  },
+  "gate_executable_reconstruction": {
+    "changed_bytes": 23,
+    "verified_byte_for_byte": true,
+    "final_sha256": "d123bd8741b3428348355f9065f5748c5bbd133e7ca263e2544acffbdc2d8dc9"
+  },
+  "archive": {
+    "verified_members": 139,
+    "logical_bytes": 855934
+  },
+  "content_review": {
+    "decoded_base64_fields": 2214,
+    "private_root_hits": 0,
+    "credential_pattern_hits": 0
+  },
+  "findings": "No blocking finding. Pinned U32-backed character contract establishes a decoder representation defect; no new semantic exception. Remaining diagnostic, host, resource and historical evidence limitations are explicit. Approval covers reviewed checkpoint publication, not full CPU parity or Windows execution."
+}
