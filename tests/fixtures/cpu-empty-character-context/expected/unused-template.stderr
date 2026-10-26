@@ -1,0 +1,8 @@
+Error:
+- expected : a closing '
+- observed : '
+'
+Location:
+2 | 
+3>| def quote(~n: Nat) -> Char: ''
+4 | def main() -> Char: 'a'

@@ -1,0 +1,7 @@
+Error:
+- expected : a closing '
+- observed : ':'
+Location:
+4 |   match c:
+5>|     case '': 0
+6 |     case _: 1

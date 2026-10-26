@@ -203,7 +203,7 @@
     "case": "empty",
     "path": "cpu-character-quote-diagnostics/controls/empty.bend",
     "kind": "adjacent",
-    "exact": false,
+    "exact": true,
     "expected": "expected/empty.stderr",
     "line": 4,
     "column": 1,

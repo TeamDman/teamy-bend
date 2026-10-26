@@ -1,0 +1,7 @@
+Error:
+- expected : a name
+- observed : '>'
+Location:
+3 | def nope() -> Char: '''
+4>| def main( -> Char: 'a'
+5 | 

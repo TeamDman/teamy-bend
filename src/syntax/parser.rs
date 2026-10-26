@@ -2287,6 +2287,12 @@ impl Parser<'_> {
         if self.templates.diagnostics.is_none() {
             return false;
         }
+        if raw == "''" {
+            let token = &self.tokens[self.at - 1];
+            return self.templates.diagnostics.as_mut().is_some_and(|origins| {
+                origins.empty_character(&self.label, token.line, token.column)
+            });
+        }
         let Some(after) = character_closing_quote_offset(raw) else {
             return false;
         };

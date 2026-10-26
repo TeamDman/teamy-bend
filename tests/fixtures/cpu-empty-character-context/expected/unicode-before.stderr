@@ -1,0 +1,7 @@
+Error:
+- expected : a closing '
+- observed : ')'
+Location:
+3 | def keep(s: String, c: Char) -> Char: c
+4>| def main() -> Char: keep("é😀", '')
+5 | 

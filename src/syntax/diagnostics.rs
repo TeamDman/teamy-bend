@@ -306,6 +306,31 @@ impl DiagnosticOrigins {
         });
     }
 
+    pub(super) fn empty_character(&mut self, label: &str, line: usize, column: usize) -> bool {
+        let eligible = self.sources.get(label).is_some_and(|source| {
+            let Some(line) = line
+                .checked_sub(1)
+                .and_then(|n| source.split_inclusive('\n').nth(n))
+            else {
+                return false;
+            };
+            let Some(start) = column.checked_sub(1) else {
+                return false;
+            };
+            let mut chars = line.chars().skip(start);
+            // The pinned Char parser consumes the second quote as code 39.
+            // A third quote closes it; an astral next code cannot be rendered
+            // as the single UTF-16 unit observed by pinned parse_fail.
+            chars.next() == Some('\'')
+                && chars.next() == Some('\'')
+                && chars.next().is_none_or(|c| c != '\'' && c.len_utf16() == 1)
+        });
+        if eligible {
+            self.expected_after_token(label, line, column + 1, "a closing '");
+        }
+        eligible
+    }
+
     pub(super) fn expected_after_token(
         &mut self,
         label: &str,
@@ -1373,3 +1398,7 @@ mod missing_import_tests;
 #[cfg(test)]
 #[path = "literal_diagnostic_tests.rs"]
 mod literal_diagnostic_tests;
+
+#[cfg(test)]
+#[path = "empty_character_diagnostic_tests.rs"]
+mod empty_character_diagnostic_tests;

@@ -1,0 +1,274 @@
+[
+  {
+    "case": "eof",
+    "path": "cpu-empty-character-context/negative/eof.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/eof.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/eof.bend"
+  },
+  {
+    "case": "space",
+    "path": "cpu-empty-character-context/negative/space.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/space.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/space.bend"
+  },
+  {
+    "case": "tab",
+    "path": "cpu-empty-character-context/negative/tab.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/tab.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/tab.bend"
+  },
+  {
+    "case": "comment",
+    "path": "cpu-empty-character-context/negative/comment.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/comment.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/comment.bend"
+  },
+  {
+    "case": "crlf",
+    "path": "cpu-empty-character-context/negative/crlf.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/crlf.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/crlf.bend"
+  },
+  {
+    "case": "argument",
+    "path": "cpu-empty-character-context/negative/argument.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/argument.stderr",
+    "line": 4,
+    "column": 28,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/argument.bend"
+  },
+  {
+    "case": "list",
+    "path": "cpu-empty-character-context/negative/list.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/list.stderr",
+    "line": 3,
+    "column": 30,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/list.bend"
+  },
+  {
+    "case": "pattern",
+    "path": "cpu-empty-character-context/negative/pattern.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/pattern.stderr",
+    "line": 5,
+    "column": 12,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/pattern.bend"
+  },
+  {
+    "case": "unicode-before",
+    "path": "cpu-empty-character-context/negative/unicode-before.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/unicode-before.stderr",
+    "line": 4,
+    "column": 34,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/unicode-before.bend"
+  },
+  {
+    "case": "used-template",
+    "path": "cpu-empty-character-context/negative/used-template.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/used-template.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/used-template.bend"
+  },
+  {
+    "case": "unused-template",
+    "path": "cpu-empty-character-context/negative/unused-template.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/unused-template.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/unused-template.bend"
+  },
+  {
+    "case": "imported",
+    "path": "cpu-empty-character-context/negative/imported.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/imported.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/../imports/Bad.bend"
+  },
+  {
+    "case": "earlier-grammar",
+    "path": "cpu-empty-character-context/negative/earlier-grammar.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/earlier-grammar.stderr",
+    "line": 3,
+    "column": 11,
+    "message": "expected a name, found \"->\"",
+    "error_source": "cpu-empty-character-context/negative/earlier-grammar.bend"
+  },
+  {
+    "case": "later-grammar",
+    "path": "cpu-empty-character-context/negative/later-grammar.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/later-grammar.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/later-grammar.bend"
+  },
+  {
+    "case": "first-malformed",
+    "path": "cpu-empty-character-context/negative/first-malformed.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/first-malformed.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "unknown escape: \\q",
+    "error_source": "cpu-empty-character-context/negative/first-malformed.bend"
+  },
+  {
+    "case": "empty-followed-escape",
+    "path": "cpu-empty-character-context/negative/empty-followed-escape.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/empty-followed-escape.stderr",
+    "line": 3,
+    "column": 25,
+    "message": "a string or character literal cannot cross a line",
+    "error_source": "cpu-empty-character-context/negative/empty-followed-escape.bend"
+  },
+  {
+    "case": "four-quotes",
+    "path": "cpu-empty-character-context/negative/four-quotes.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/four-quotes.stderr",
+    "line": 3,
+    "column": 23,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-empty-character-context/negative/four-quotes.bend"
+  },
+  {
+    "case": "six-quotes",
+    "path": "cpu-empty-character-context/negative/six-quotes.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/six-quotes.stderr",
+    "line": 3,
+    "column": 24,
+    "message": "expected type, law, or def",
+    "error_source": "cpu-empty-character-context/negative/six-quotes.bend"
+  },
+  {
+    "case": "raw-before-grammar",
+    "path": "cpu-empty-character-context/negative/raw-before-grammar.bend",
+    "kind": "negative",
+    "exact": false,
+    "expected": "expected/raw-before-grammar.stderr",
+    "line": 3,
+    "column": 23,
+    "message": "a string or character literal cannot cross a line",
+    "error_source": "cpu-empty-character-context/negative/raw-before-grammar.bend"
+  },
+  {
+    "case": "lexical-after",
+    "path": "cpu-empty-character-context/negative/lexical-after.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/lexical-after.stderr",
+    "line": 4,
+    "column": 20,
+    "message": "invalid numeric literal suffix",
+    "error_source": "cpu-empty-character-context/negative/lexical-after.bend"
+  },
+  {
+    "case": "original-empty",
+    "path": "cpu-character-quote-diagnostics/controls/empty.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/original-empty.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-character-quote-diagnostics/controls/empty.bend"
+  },
+  {
+    "case": "raw-quotes-2",
+    "path": "cpu-raw-apostrophe/negative/quotes-2.bend",
+    "kind": "negative",
+    "exact": true,
+    "expected": "expected/raw-quotes-2.stderr",
+    "line": 4,
+    "column": 1,
+    "message": "a character literal needs exactly one character",
+    "error_source": "cpu-raw-apostrophe/negative/quotes-2.bend"
+  },
+  {
+    "case": "positive-triple-quote",
+    "path": "cpu-raw-apostrophe/positive/triple-quote.bend",
+    "kind": "positive",
+    "io": false
+  },
+  {
+    "case": "positive-adjacent-pair",
+    "path": "cpu-raw-apostrophe/positive/adjacent-pair.bend",
+    "kind": "positive",
+    "io": false
+  },
+  {
+    "case": "positive-template-body",
+    "path": "cpu-raw-apostrophe/positive/template-body.bend",
+    "kind": "positive",
+    "io": false
+  },
+  {
+    "case": "positive-escaped-quote",
+    "path": "cpu-raw-apostrophe/positive/escaped-quote.bend",
+    "kind": "positive",
+    "io": false
+  },
+  {
+    "case": "positive-io",
+    "path": "cpu-raw-apostrophe/positive/io.bend",
+    "kind": "positive",
+    "io": true
+  }
+]
