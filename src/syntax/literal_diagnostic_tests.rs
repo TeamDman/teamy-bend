@@ -53,7 +53,7 @@ fn literal_diagnostics_do_not_guess_unicode_contracts() {
         "../../tests/fixtures/cpu-malformed-literal-diagnostics/unresolved-cases.json"
     ))
     .unwrap();
-    assert_eq!(cases.len(), 4);
+    assert_eq!(cases.len(), 3);
     for case in cases {
         let path = root().join(&case);
         let plain = crate::syntax::load(&path).unwrap_err();
@@ -86,6 +86,56 @@ fn literal_refusal_preserves_public_cursor_and_message() {
             .message,
         "invalid Unicode escape: invalid digit found in string"
     );
+}
+
+#[test]
+fn uppercase_refusals_preserve_public_loader_errors_and_first_error_positions() {
+    let directory = root()
+        .parent()
+        .unwrap()
+        .join("cpu-uppercase-unicode/controls");
+    for name in [
+        "empty",
+        "plus",
+        "nonhex",
+        "nine-digits",
+        "overflow",
+        "missing-brace",
+        "missing-close",
+        "surrogate-start",
+        "surrogate-end",
+        "above-scalar",
+        "u32-max",
+        "invalid-before-valid",
+        "valid-before-invalid",
+    ] {
+        let path = directory.join(format!("{name}.bend"));
+        let escape = if matches!(name, "invalid-before-valid" | "valid-before-invalid") {
+            'q'
+        } else {
+            'U'
+        };
+        let plain = crate::syntax::load(&path).unwrap_err();
+        assert_eq!((plain.line, plain.column), (4, 1), "{name}");
+        assert_eq!(plain.message, format!("unknown escape: \\{escape}"));
+        assert_eq!(
+            plain.to_string(),
+            format!("{}:4:1: unknown escape: \\{escape}", path.display())
+        );
+        assert_eq!(
+            format!("{plain:?}"),
+            format!("{:?}", crate::syntax::load_executable(&path).unwrap_err())
+        );
+        for failure in [
+            crate::syntax::load_with_diagnostics(&path).err().unwrap(),
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(format!("{:?}", failure.error), format!("{plain:?}"));
+            assert_eq!(failure.diagnostic.is_some(), escape == 'q');
+        }
+    }
 }
 
 #[test]

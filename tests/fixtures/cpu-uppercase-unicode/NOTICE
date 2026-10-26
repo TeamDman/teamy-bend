@@ -1,0 +1,1 @@
+The show/string_escape.bend and parse/invalid_string_escape.bend originals are unchanged from bendlang/bend e6676b080f25b1bc1bf5b5b7d7a17e22f8022599 (Apache-2.0), Copyright 2026 HigherOrderCO. Authored controls and tests use MPL-2.0. No pinned test uses uppercase Unicode escapes; uppercase cases are authored controls.

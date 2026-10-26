@@ -2257,8 +2257,8 @@ impl Parser<'_> {
                 // consuming the escape. Do not claim exact scalar rendering
                 // for a surrogate pair; retain the existing host diagnostic.
                 if escape.is_ascii()
-                    // The pinned Unicode-escape regex is case insensitive;
-                    // uppercase U is a separate acceptance gap, not this refusal.
+                    // Unsupported uppercase escapes retain their public error;
+                    // scalar/grammar refusals need separate diagnostic qualification.
                     && escape != 'U'
                     && raw[after..].chars().next().is_none_or(|c| c.len_utf16() == 1)
                     && let Some(origins) = &mut self.templates.diagnostics
@@ -2664,7 +2664,7 @@ fn decode_literal(raw: &str) -> Result<Vec<char>, LiteralError> {
             '\\' => '\\',
             '\'' => '\'',
             '"' => '"',
-            'u' => {
+            'u' | 'U' if escape == 'u' || supported_uppercase_unicode(chars.clone()) => {
                 if chars.next().map(|(_, c)| c) != Some('{') {
                     return Err("Unicode escape needs braces".into());
                 }
@@ -2694,6 +2694,26 @@ fn decode_literal(raw: &str) -> Result<Vec<char>, LiteralError> {
         });
     }
     Ok(out)
+}
+
+// Pinned parse_char matches case-insensitively within eleven UTF-16 units:
+// U{, one to eight ASCII hex digits, then }. Do not broaden lowercase parsing
+// or reinterpret its existing non-scalar refusals in this compatibility path.
+fn supported_uppercase_unicode(mut chars: std::str::CharIndices<'_>) -> bool {
+    if chars.next().map(|(_, c)| c) != Some('{') {
+        return false;
+    }
+    let mut value = 0;
+    for count in 0..=8 {
+        match chars.next().map(|(_, c)| c) {
+            Some('}') if count > 0 => return char::from_u32(value).is_some(),
+            Some(c) if count < 8 && c.is_ascii_hexdigit() => {
+                value = (value << 4) | c.to_digit(16).expect("ASCII hex digit");
+            }
+            _ => return false,
+        }
+    }
+    false
 }
 
 fn within_term_depth(value: &TermRef, limit: usize) -> bool {
@@ -4047,6 +4067,7 @@ mod occurrence_tests {
 
 #[cfg(test)]
 mod literal_decode_tests {
+    use super::LiteralError;
     use super::decode_literal;
 
     #[test]
@@ -4071,5 +4092,92 @@ mod literal_decode_tests {
         );
         let actual = decode_literal("'é'").unwrap_or_else(|_| panic!("valid character"));
         assert_eq!(actual, vec!['é']);
+    }
+
+    #[test]
+    fn uppercase_unicode_scalars_match_lowercase_values() {
+        for digits in [
+            "0", "1", "22", "27", "5c", "41", "00000041", "D7FF", "e000", "1f600", "0010fFfF",
+        ] {
+            for quote in ['\'', '"'] {
+                let upper = format!("{quote}\\U{{{digits}}}{quote}");
+                let lower = format!("{quote}\\u{{{digits}}}{quote}");
+                let actual = decode_literal(&upper).unwrap_or_else(|_| panic!("{upper}"));
+                let expected = decode_literal(&lower).unwrap_or_else(|_| panic!("{lower}"));
+                assert_eq!(actual, expected, "{upper}");
+            }
+        }
+        let actual = decode_literal(r#""a\U{41}\u{42}\U{1F600}z\\U{41}""#)
+            .unwrap_or_else(|_| panic!("adjacent escapes and suffix"));
+        assert_eq!(actual.iter().collect::<String>(), "aAB😀z\\U{41}");
+    }
+
+    #[test]
+    fn unsupported_uppercase_forms_keep_the_original_error_and_cursor() {
+        for suffix in [
+            "{}",
+            "{+41}",
+            "{g}",
+            "{000000041}",
+            "{100000000}",
+            "41",
+            "{41",
+            "{D800}",
+            "{dfff}",
+            "{110000}",
+            "{FFFFFFFF}",
+            "{４１}",
+        ] {
+            let raw = format!("\"é\\U{suffix}\"");
+            assert!(
+                matches!(
+                    decode_literal(&raw),
+                    Err(LiteralError::UnknownEscape {
+                        escape: 'U',
+                        after: 5
+                    })
+                ),
+                "{raw}"
+            );
+        }
+        // Existing lowercase differences are retained, not new policy exceptions.
+        for raw in [r#""\u{+41}""#, r#""\u{000000041}""#] {
+            assert_eq!(decode_literal(raw).ok(), Some(vec!['A']));
+        }
+        assert!(matches!(
+            decode_literal(r#""\u{D800}""#),
+            Err(LiteralError::Other(_))
+        ));
+    }
+
+    #[test]
+    fn uppercase_unicode_preserves_literal_and_expression_refusals() {
+        for (raw, escape, after) in [
+            (r#""\q\U{41}""#, 'q', 3),
+            (r#""\U{41}\q""#, 'q', 9),
+            (r#""\U{}\q""#, 'U', 3),
+        ] {
+            assert!(matches!(decode_literal(raw),
+                Err(LiteralError::UnknownEscape { escape: e, after: a })
+                    if e == escape && a == after));
+        }
+        for escape in [r"\U{41}", r"\U{1F600}"] {
+            crate::syntax::parse_term(&format!("\"{}\"", escape.repeat(128))).unwrap();
+            assert!(
+                crate::syntax::parse_term(&format!("\"{}\"", escape.repeat(129)))
+                    .unwrap_err()
+                    .message
+                    .contains("128 characters")
+            );
+        }
+        let error = crate::syntax::parse_term(r"'\U{41}B'").unwrap_err();
+        assert!(error.message.contains("one character"), "{error}");
+        let source = format!("{}\"\\U{{41}}\"", "+ ".repeat(64));
+        assert!(
+            crate::syntax::parse_term(&source)
+                .unwrap_err()
+                .message
+                .contains("resource limit of 64")
+        );
     }
 }

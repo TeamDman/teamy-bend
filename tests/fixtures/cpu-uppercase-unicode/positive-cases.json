@@ -1,0 +1,130 @@
+[
+  {
+    "case": "controls/nul.bend",
+    "expected": "0",
+    "io": false,
+    "port_normalized": "0",
+    "compiled_c": "0",
+    "compiled_js": "0"
+  },
+  {
+    "case": "controls/control.bend",
+    "expected": "1",
+    "io": false,
+    "port_normalized": "1",
+    "compiled_c": "1",
+    "compiled_js": "1"
+  },
+  {
+    "case": "controls/quote.bend",
+    "expected": "34",
+    "io": false,
+    "port_normalized": "34",
+    "compiled_c": "34",
+    "compiled_js": "34"
+  },
+  {
+    "case": "controls/slash.bend",
+    "expected": "92",
+    "io": false,
+    "port_normalized": "92",
+    "compiled_c": "92",
+    "compiled_js": "92"
+  },
+  {
+    "case": "controls/ascii.bend",
+    "expected": "65",
+    "io": false,
+    "port_normalized": "65",
+    "compiled_c": "65",
+    "compiled_js": "65"
+  },
+  {
+    "case": "controls/eight-digits.bend",
+    "expected": "65",
+    "io": false,
+    "port_normalized": "65",
+    "compiled_c": "65",
+    "compiled_js": "65"
+  },
+  {
+    "case": "controls/before-surrogates.bend",
+    "expected": "55295",
+    "io": false,
+    "port_normalized": "55295",
+    "compiled_c": "55295",
+    "compiled_js": "55295"
+  },
+  {
+    "case": "controls/after-surrogates.bend",
+    "expected": "57344",
+    "io": false,
+    "port_normalized": "57344",
+    "compiled_c": "57344",
+    "compiled_js": "57344"
+  },
+  {
+    "case": "controls/astral.bend",
+    "expected": "128512",
+    "io": false,
+    "port_normalized": "128512",
+    "compiled_c": "128512",
+    "compiled_js": "128512"
+  },
+  {
+    "case": "controls/max-scalar.bend",
+    "expected": "1114111",
+    "io": false,
+    "port_normalized": "1114111",
+    "compiled_c": "1114111",
+    "compiled_js": "1114111"
+  },
+  {
+    "case": "controls/string.bend",
+    "expected": "\"aA😀Bz\"",
+    "io": false,
+    "port_normalized": "SCon{Chr{97}, SCon{Chr{65}, SCon{Chr{128512}, SCon{Chr{66}, SCon{Chr{122}, SNil{}}}}}}",
+    "compiled_c": "\"aA😀Bz\"",
+    "compiled_js": "\"aA😀Bz\""
+  },
+  {
+    "case": "controls/escaped-slash.bend",
+    "expected": "\"\\\\U{41}\"",
+    "io": false,
+    "port_normalized": "SCon{Chr{92}, SCon{Chr{85}, SCon{Chr{123}, SCon{Chr{52}, SCon{Chr{49}, SCon{Chr{125}, SNil{}}}}}}}",
+    "compiled_c": "\"\\\\U{41}\"",
+    "compiled_js": "\"\\\\U{41}\""
+  },
+  {
+    "case": "controls/io.bend",
+    "expected": "\\U{41}=A😀",
+    "io": true,
+    "port_normalized": "",
+    "compiled_c": "\\U{41}=A😀",
+    "compiled_js": "\\U{41}=A😀"
+  },
+  {
+    "case": "controls/aggregate.bend",
+    "expected": "[0, 1, 34, 92, 65, 65, 55295, 57344, 128512, 1114111]",
+    "io": false,
+    "port_normalized": "[0, 1, 34, 92, 65, 65, 55295, 57344, 128512, 1114111]",
+    "compiled_c": "[0, 1, 34, 92, 65, 65, 55295, 57344, 128512, 1114111]",
+    "compiled_js": "[0, 1, 34, 92, 65, 65, 55295, 57344, 128512, 1114111]"
+  },
+  {
+    "case": "controls/uppercase-unicode.bend",
+    "expected": "\"A\"",
+    "io": false,
+    "port_normalized": "SCon{Chr{65}, SNil{}}",
+    "compiled_c": "\"A\"",
+    "compiled_js": "\"A\""
+  },
+  {
+    "case": "show/string_escape.bend",
+    "expected": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")",
+    "io": false,
+    "port_normalized": "(SCon{Chr{97}, SCon{Chr{1}, SCon{Chr{98}, SCon{Chr{127}, SCon{Chr{9}, SCon{Chr{34}, SCon{Chr{113}, SCon{Chr{34}, SNil{}}}}}}}}}, SNil{}, Chr{27}, SCon{Chr{128512}, SNil{}}, Chr{7}, SCon{Chr{105}, SCon{Chr{116}, SCon{Chr{39}, SCon{Chr{115}, SNil{}}}}})",
+    "compiled_c": "(\"a\\u0001b\\t\\\"q\\\"\", \"\", '\\u001b', \"😀\", '\\u0007', \"it's\")",
+    "compiled_js": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")"
+  }
+]

@@ -1,0 +1,1109 @@
+{
+  "binary_sha256": "8380dcb19e390155d70329904be080d306ee8b2566e74b2eb4edf0d31f7e1893",
+  "source": "c5edea8a75022c1654fbf568629422cf73bee1d0",
+  "rows": [
+    {
+      "case": "controls/nul.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nul.bend",
+        "${EVIDENCE}/before-phase-0.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.1600735099927988,
+      "source_sha256": "d28dbb1d95da4a39f3f860b0132af3d7d1f81f925d3af7debaa2c021d791d04d"
+    },
+    {
+      "case": "controls/nul.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nul.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nul.bend:3:39: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12818112899549305,
+      "source_sha256": "d28dbb1d95da4a39f3f860b0132af3d7d1f81f925d3af7debaa2c021d791d04d"
+    },
+    {
+      "case": "controls/control.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/control.bend",
+        "${EVIDENCE}/before-phase-1.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.14400339499115944,
+      "source_sha256": "c410959445778fd4a4173c4ff20fae77ab08636583af39e996337cc492b15667"
+    },
+    {
+      "case": "controls/control.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/control.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/control.bend:3:39: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1305212620063685,
+      "source_sha256": "c410959445778fd4a4173c4ff20fae77ab08636583af39e996337cc492b15667"
+    },
+    {
+      "case": "controls/quote.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/quote.bend",
+        "${EVIDENCE}/before-phase-2.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.13350485198316164,
+      "source_sha256": "b143e0c1690970934e7310839df8497d37f07405f46b64ecbf030e4b5fef1a29"
+    },
+    {
+      "case": "controls/quote.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/quote.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/quote.bend:3:40: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12755998098873533,
+      "source_sha256": "b143e0c1690970934e7310839df8497d37f07405f46b64ecbf030e4b5fef1a29"
+    },
+    {
+      "case": "controls/slash.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/slash.bend",
+        "${EVIDENCE}/before-phase-3.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.1330024329945445,
+      "source_sha256": "32cc4effcde9b2469b2e52a919ff0149d7cf5aaae53f098e72657a2b2aed8f61"
+    },
+    {
+      "case": "controls/slash.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/slash.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/slash.bend:3:40: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12597674198332243,
+      "source_sha256": "32cc4effcde9b2469b2e52a919ff0149d7cf5aaae53f098e72657a2b2aed8f61"
+    },
+    {
+      "case": "controls/ascii.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/ascii.bend",
+        "${EVIDENCE}/before-phase-4.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.11843846100964583,
+      "source_sha256": "2194e589a2d2198be5038cf6dceea64337b10eb18f71dbf4a8d797632bbc6d61"
+    },
+    {
+      "case": "controls/ascii.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/ascii.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/ascii.bend:3:40: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1286722479853779,
+      "source_sha256": "2194e589a2d2198be5038cf6dceea64337b10eb18f71dbf4a8d797632bbc6d61"
+    },
+    {
+      "case": "controls/eight-digits.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/eight-digits.bend",
+        "${EVIDENCE}/before-phase-5.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.11917073299991898,
+      "source_sha256": "2e2edfb001b0b53cd24b02651a005be1f506deeee846a46d06856a26a474eb1b"
+    },
+    {
+      "case": "controls/eight-digits.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/eight-digits.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/eight-digits.bend:3:46: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12762693999684416,
+      "source_sha256": "2e2edfb001b0b53cd24b02651a005be1f506deeee846a46d06856a26a474eb1b"
+    },
+    {
+      "case": "controls/before-surrogates.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/before-surrogates.bend",
+        "${EVIDENCE}/before-phase-6.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.13451944300322793,
+      "source_sha256": "6bd456b29e5414b35c2529c97a8baf1da7c373d247cbf1926d5be48d15a69b98"
+    },
+    {
+      "case": "controls/before-surrogates.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/before-surrogates.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/before-surrogates.bend:3:42: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12650878401473165,
+      "source_sha256": "6bd456b29e5414b35c2529c97a8baf1da7c373d247cbf1926d5be48d15a69b98"
+    },
+    {
+      "case": "controls/after-surrogates.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/after-surrogates.bend",
+        "${EVIDENCE}/before-phase-7.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.12320879800245166,
+      "source_sha256": "d60934fe349a2b0583400f73acaca282683515790556083c2aca53631ae680d2"
+    },
+    {
+      "case": "controls/after-surrogates.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/after-surrogates.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/after-surrogates.bend:3:42: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1258276599983219,
+      "source_sha256": "d60934fe349a2b0583400f73acaca282683515790556083c2aca53631ae680d2"
+    },
+    {
+      "case": "controls/astral.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/astral.bend",
+        "${EVIDENCE}/before-phase-8.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.11992613700567745,
+      "source_sha256": "fb09a5b700fcdab54edb6af8455717926f3a45057a397b611aa10cc7e42bf182"
+    },
+    {
+      "case": "controls/astral.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/astral.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/astral.bend:3:43: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12914712500059977,
+      "source_sha256": "fb09a5b700fcdab54edb6af8455717926f3a45057a397b611aa10cc7e42bf182"
+    },
+    {
+      "case": "controls/max-scalar.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/max-scalar.bend",
+        "${EVIDENCE}/before-phase-9.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.12194830999942496,
+      "source_sha256": "2b37a9356e139bc23d7a98a407070e354e5f67f6c0f4ef31dbe081a00dfafcd3"
+    },
+    {
+      "case": "controls/max-scalar.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/max-scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/max-scalar.bend:3:46: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12479068399989046,
+      "source_sha256": "2b37a9356e139bc23d7a98a407070e354e5f67f6c0f4ef31dbe081a00dfafcd3"
+    },
+    {
+      "case": "controls/string.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/string.bend",
+        "${EVIDENCE}/before-phase-10.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.12046954198740423,
+      "source_sha256": "052ae39705fe051250d47dd08b88117f0dd522953938e8bafa3e8249b407124d"
+    },
+    {
+      "case": "controls/string.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/string.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/string.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12962601898470894,
+      "source_sha256": "052ae39705fe051250d47dd08b88117f0dd522953938e8bafa3e8249b407124d"
+    },
+    {
+      "case": "controls/escaped-slash.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/escaped-slash.bend",
+        "${EVIDENCE}/before-phase-11.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.12915928399888799,
+      "source_sha256": "ee933b0bf11a613bc5a92d1972e0c0eab6740ebac620380a26693664fe398163"
+    },
+    {
+      "case": "controls/escaped-slash.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/escaped-slash.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "seconds": 0.24694194699986838,
+      "source_sha256": "ee933b0bf11a613bc5a92d1972e0c0eab6740ebac620380a26693664fe398163"
+    },
+    {
+      "case": "controls/io.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/io.bend",
+        "${EVIDENCE}/before-phase-12.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.1275640759849921,
+      "source_sha256": "cd141773baf495ad0290aff4aa8fecf11c826e306b55bd8e5db21d5cefab8047"
+    },
+    {
+      "case": "controls/io.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/io.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/io.bend:3:65: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12646358698839322,
+      "source_sha256": "cd141773baf495ad0290aff4aa8fecf11c826e306b55bd8e5db21d5cefab8047"
+    },
+    {
+      "case": "controls/empty.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/empty.bend",
+        "${EVIDENCE}/before-phase-13.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{}'\n4 | \n",
+      "seconds": 0.09465957400971092,
+      "source_sha256": "f28887ff43591aa45b37a87b763024fb7af618c0d82f0fa0a2beac6593f4de00"
+    },
+    {
+      "case": "controls/empty.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/empty.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/empty.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12578428999404423,
+      "source_sha256": "f28887ff43591aa45b37a87b763024fb7af618c0d82f0fa0a2beac6593f4de00"
+    },
+    {
+      "case": "controls/plus.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/plus.bend",
+        "${EVIDENCE}/before-phase-14.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{+41}'\n4 | \n",
+      "seconds": 0.09476090100361034,
+      "source_sha256": "3e42a3b057b272ee6b86cd37ab528302ba38cb8896fefb6c0e771e068f97a3df"
+    },
+    {
+      "case": "controls/plus.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/plus.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/plus.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13207997402059846,
+      "source_sha256": "3e42a3b057b272ee6b86cd37ab528302ba38cb8896fefb6c0e771e068f97a3df"
+    },
+    {
+      "case": "controls/nonhex.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nonhex.bend",
+        "${EVIDENCE}/before-phase-15.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{g}'\n4 | \n",
+      "seconds": 0.10519198697875254,
+      "source_sha256": "dd975d82ce964a48abaea82ffe30b30a19bf27b3a1e43cc684aaa3eface8c598"
+    },
+    {
+      "case": "controls/nonhex.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nonhex.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nonhex.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13060451499768533,
+      "source_sha256": "dd975d82ce964a48abaea82ffe30b30a19bf27b3a1e43cc684aaa3eface8c598"
+    },
+    {
+      "case": "controls/nine-digits.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nine-digits.bend",
+        "${EVIDENCE}/before-phase-16.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{000000041}'\n4 | \n",
+      "seconds": 0.10743872201419435,
+      "source_sha256": "b40794678c6cd52484a4b4d7a1d4c9d1ebf08cd23851e7c4bafc932aec883c5a"
+    },
+    {
+      "case": "controls/nine-digits.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nine-digits.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/nine-digits.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12960835098056123,
+      "source_sha256": "b40794678c6cd52484a4b4d7a1d4c9d1ebf08cd23851e7c4bafc932aec883c5a"
+    },
+    {
+      "case": "controls/overflow.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/overflow.bend",
+        "${EVIDENCE}/before-phase-17.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{100000000}'\n4 | \n",
+      "seconds": 0.10147403599694371,
+      "source_sha256": "98f98a86696a507af4a794c701715d3d324cb2ff961d0e2c1c997574f2575b09"
+    },
+    {
+      "case": "controls/overflow.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/overflow.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/overflow.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1276917700015474,
+      "source_sha256": "98f98a86696a507af4a794c701715d3d324cb2ff961d0e2c1c997574f2575b09"
+    },
+    {
+      "case": "controls/missing-brace.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-brace.bend",
+        "${EVIDENCE}/before-phase-18.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '4'\nLocation:\n2 | \n3>| def main() -> Char: '\\U41'\n4 | \n",
+      "seconds": 0.09449126300751232,
+      "source_sha256": "ef326958b026c4d4cefbbcb0a9822c103eadecdb21d131076f1ee363f17315c2"
+    },
+    {
+      "case": "controls/missing-brace.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-brace.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-brace.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13294991900329478,
+      "source_sha256": "ef326958b026c4d4cefbbcb0a9822c103eadecdb21d131076f1ee363f17315c2"
+    },
+    {
+      "case": "controls/missing-close.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-close.bend",
+        "${EVIDENCE}/before-phase-19.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{41'\n4 | \n",
+      "seconds": 0.09834070800570771,
+      "source_sha256": "fd3bcf60b66da84b1be2bae324b391e5efa53438a1f4afcc5caa4619acea4300"
+    },
+    {
+      "case": "controls/missing-close.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-close.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/missing-close.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13024682697141543,
+      "source_sha256": "fd3bcf60b66da84b1be2bae324b391e5efa53438a1f4afcc5caa4619acea4300"
+    },
+    {
+      "case": "controls/surrogate-start.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-start.bend",
+        "${EVIDENCE}/before-phase-20.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.13042220298666507,
+      "source_sha256": "4f8f09e9718dcdd7e865a08c6493252dfc2bb2212fddadea73fb8cdc35298b29"
+    },
+    {
+      "case": "controls/surrogate-start.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-start.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-start.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12510946299880743,
+      "source_sha256": "4f8f09e9718dcdd7e865a08c6493252dfc2bb2212fddadea73fb8cdc35298b29"
+    },
+    {
+      "case": "controls/surrogate-end.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-end.bend",
+        "${EVIDENCE}/before-phase-21.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.1268840020056814,
+      "source_sha256": "d2962edb16944e41ed216de205eb15dbd1ce17cebee39474de91b50389b9d0f8"
+    },
+    {
+      "case": "controls/surrogate-end.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-end.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/surrogate-end.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.13125898901489563,
+      "source_sha256": "d2962edb16944e41ed216de205eb15dbd1ce17cebee39474de91b50389b9d0f8"
+    },
+    {
+      "case": "controls/above-scalar.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/above-scalar.bend",
+        "${EVIDENCE}/before-phase-22.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.12628588001825847,
+      "source_sha256": "e680fee8abb6ad41a5542b26d1767cbde8e63b5af6edc243f9974338718d4d65"
+    },
+    {
+      "case": "controls/above-scalar.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/above-scalar.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/above-scalar.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12903495598584414,
+      "source_sha256": "e680fee8abb6ad41a5542b26d1767cbde8e63b5af6edc243f9974338718d4d65"
+    },
+    {
+      "case": "controls/u32-max.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/u32-max.bend",
+        "${EVIDENCE}/before-phase-23.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.1310033689951524,
+      "source_sha256": "821e12cc924934bfc2c992313fb85ed1ecc91ec002547961852f2ab13bdbbc6b"
+    },
+    {
+      "case": "controls/u32-max.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/u32-max.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/u32-max.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12802183697931468,
+      "source_sha256": "821e12cc924934bfc2c992313fb85ed1ecc91ec002547961852f2ab13bdbbc6b"
+    },
+    {
+      "case": "controls/multi-char.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/multi-char.bend",
+        "${EVIDENCE}/before-phase-24.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a closing '\n- observed : 'B'\nLocation:\n2 | \n3>| def main() -> Char: '\\U{41}B'\n4 | \n",
+      "seconds": 0.09430997300660238,
+      "source_sha256": "314f7b024205bc77828ef2ecdca143f16edafddf4a7b48edb57c5656ceeab07e"
+    },
+    {
+      "case": "controls/multi-char.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/multi-char.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/multi-char.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1267657150165178,
+      "source_sha256": "314f7b024205bc77828ef2ecdca143f16edafddf4a7b48edb57c5656ceeab07e"
+    },
+    {
+      "case": "controls/invalid-before-valid.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/invalid-before-valid.bend",
+        "${EVIDENCE}/before-phase-25.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '\\'\nLocation:\n2 | \n3>| def main() -> String: \"\\q\\U{41}\"\n4 | \n",
+      "seconds": 0.11250642201048322,
+      "source_sha256": "f6e7917f7f082d49216cbde8959acb2f2adb1294bc4e24ec8352d75c2a80ad6b"
+    },
+    {
+      "case": "controls/invalid-before-valid.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/invalid-before-valid.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '\\'\nLocation:\n2 | \n3>| def main() -> String: \"\\q\\U{41}\"\n4 | \n",
+      "seconds": 0.13123906997498125,
+      "source_sha256": "f6e7917f7f082d49216cbde8959acb2f2adb1294bc4e24ec8352d75c2a80ad6b"
+    },
+    {
+      "case": "controls/valid-before-invalid.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/valid-before-invalid.bend",
+        "${EVIDENCE}/before-phase-26.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '\"'\nLocation:\n2 | \n3>| def main() -> String: \"\\U{41}\\q\"\n4 | \n",
+      "seconds": 0.10751667901058681,
+      "source_sha256": "ad3a6fedd7979911f5aa68a7da225509a1130c339cbce8d1aaae613fc130f8ab"
+    },
+    {
+      "case": "controls/valid-before-invalid.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/valid-before-invalid.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/valid-before-invalid.bend:4:1: unknown escape: \\U\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1313542919815518,
+      "source_sha256": "ad3a6fedd7979911f5aa68a7da225509a1130c339cbce8d1aaae613fc130f8ab"
+    },
+    {
+      "case": "controls/bad-name.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/bad-name.bend",
+        "${EVIDENCE}/before-phase-27.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : '\"'\nLocation:\n2 | \n3>| def \"\\U{41}\"() -> Char: 'a'\n4 | \n",
+      "seconds": 0.09730653598671779,
+      "source_sha256": "d499235c628a57319578d0a926be06d5f25f97d82d5043e4ff6a87f68732b537"
+    },
+    {
+      "case": "controls/bad-name.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/bad-name.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a name\n- observed : '\"'\nLocation:\n2 | \n3>| def \"\\U{41}\"() -> Char: 'a'\n4 | \n",
+      "seconds": 0.12578413297887892,
+      "source_sha256": "d499235c628a57319578d0a926be06d5f25f97d82d5043e4ff6a87f68732b537"
+    },
+    {
+      "case": "controls/unclosed-token.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/unclosed-token.bend",
+        "${EVIDENCE}/before-phase-28.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : a closing \"\n- observed : end of input\nLocation:\n3 | def main() -> String: \"\\U{41}\n4>| \n",
+      "seconds": 0.09643052300089039,
+      "source_sha256": "a412e46936f10f9f6fdf16fd5412a1abbc6172733975c42e686d3d1b7d8d96f1"
+    },
+    {
+      "case": "controls/unclosed-token.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/unclosed-token.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/unclosed-token.bend:3:23: a string or character literal cannot cross a line\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.12579649101826362,
+      "source_sha256": "a412e46936f10f9f6fdf16fd5412a1abbc6172733975c42e686d3d1b7d8d96f1"
+    },
+    {
+      "case": "controls/lower-plus.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-plus.bend",
+        "${EVIDENCE}/before-phase-29.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> U32: Char.to_u32('\\u{+41}')\n4 | \n",
+      "seconds": 0.09582662300090306,
+      "source_sha256": "aef71f00764a8cff07a6a8c84597a362042ab56468801acba17e9ca822d76b2b"
+    },
+    {
+      "case": "controls/lower-plus.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-plus.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "seconds": 0.2725135200016666,
+      "source_sha256": "aef71f00764a8cff07a6a8c84597a362042ab56468801acba17e9ca822d76b2b"
+    },
+    {
+      "case": "controls/lower-nine.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-nine.bend",
+        "${EVIDENCE}/before-phase-30.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error:\n- expected : an escape (\\n \\t \\r \\0 \\\\ \\' \\\" \\u{1F600})\n- observed : '{'\nLocation:\n2 | \n3>| def main() -> U32: Char.to_u32('\\u{000000041}')\n4 | \n",
+      "seconds": 0.0947734439978376,
+      "source_sha256": "11becd4cf95241426634b07d44df6f2dcc144c6a809cdc43ef810f21af27cb27"
+    },
+    {
+      "case": "controls/lower-nine.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-nine.bend"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"checked\": true,\n  \"definitions\": 305,\n  \"datatypes\": 20,\n  \"laws\": 25\n}\n",
+      "stderr": "",
+      "seconds": 0.3096082440169994,
+      "source_sha256": "11becd4cf95241426634b07d44df6f2dcc144c6a809cdc43ef810f21af27cb27"
+    },
+    {
+      "case": "controls/lower-surrogate.bend",
+      "lane": "upstream-check",
+      "command": [
+        "node",
+        "${REPO}/scripts/checking-census/upstream.mjs",
+        "${UPSTREAM}/bend2/bend.ts",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-surrogate.bend",
+        "${EVIDENCE}/before-phase-31.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.11948241401114501,
+      "source_sha256": "229bcc247af14461c6682a2375b6687c57cc745f51c06e3f473473af891d5cc0"
+    },
+    {
+      "case": "controls/lower-surrogate.bend",
+      "lane": "baseline-check",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "check",
+        "${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-surrogate.bend"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Error: \n   0: \u001b[91m${REPO}/tests/fixtures/cpu-uppercase-unicode/controls/lower-surrogate.bend:3:42: invalid Unicode code point\u001b[0m\n\nLocation:\n   \u001b[35msrc/cli/checker_diagnostic.rs\u001b[0m:\u001b[35m102\u001b[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets.\n",
+      "seconds": 0.1264009320002515,
+      "source_sha256": "229bcc247af14461c6682a2375b6687c57cc745f51c06e3f473473af891d5cc0"
+    }
+  ],
+  "raw_sha256": "3447645d613593e90f58ac1662a97df7132487f5d9dad64847b32fd9e5d771ff",
+  "unmodified_original_printer_baseline": [
+    {
+      "lane": "upstream-generate-c",
+      "command": [
+        "node",
+        "${UPSTREAM}/bend2/main.ts",
+        "${UPSTREAM}/tests/show/string_escape.bend",
+        "-o",
+        "${EVIDENCE}/baseline-original/upstream.c"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "artifact_sha256": "6c743bdfa11ef0aeb9958ed2ee887207a470577f9e3ecb421c837812512de707"
+    },
+    {
+      "lane": "upstream-build",
+      "command": [
+        "${TEAMY_BEND_CC}",
+        "-std=c11",
+        "-O3",
+        "${EVIDENCE}/baseline-original/upstream.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "${EVIDENCE}/baseline-original/upstream.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-execute-c",
+      "command": [
+        "${EVIDENCE}/baseline-original/upstream.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")\n",
+      "stderr": ""
+    },
+    {
+      "lane": "upstream-generate-js",
+      "command": [
+        "node",
+        "${UPSTREAM}/bend2/main.ts",
+        "${UPSTREAM}/tests/show/string_escape.bend",
+        "-o",
+        "${EVIDENCE}/baseline-original/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "artifact_sha256": "205a4bc8f26c6c602fb971df7c1f84961508d213f7b4d51fb4fbc0420aeff4c3"
+    },
+    {
+      "lane": "upstream-execute-js",
+      "command": [
+        "node",
+        "${EVIDENCE}/baseline-original/upstream.js"
+      ],
+      "exit": 0,
+      "stdout": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")\n",
+      "stderr": ""
+    },
+    {
+      "lane": "baseline-generate-c",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "compile",
+        "${UPSTREAM}/tests/show/string_escape.bend",
+        "--executable",
+        "--target",
+        "c",
+        "--output",
+        "${EVIDENCE}/baseline-original/baseline.c"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"${EVIDENCE}/baseline-original/baseline.c\",\n  \"target\": \"c\",\n  \"bytes\": 217491,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "artifact_sha256": "1b3939937b39d3738093ea9f595408ddc2404ad86161af61f7e45dd9ec6a5570"
+    },
+    {
+      "lane": "baseline-build",
+      "command": [
+        "${TEAMY_BEND_CC}",
+        "-std=c11",
+        "-O3",
+        "${EVIDENCE}/baseline-original/baseline.c",
+        "-lpthread",
+        "-lm",
+        "-o",
+        "${EVIDENCE}/baseline-original/baseline.bin"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "lane": "baseline-execute-c",
+      "command": [
+        "${EVIDENCE}/baseline-original/baseline.bin",
+        "--threads",
+        "1",
+        "--gpu",
+        "off"
+      ],
+      "exit": 0,
+      "stdout": "(\"a\\u0001b\\t\\\"q\\\"\", \"\", '\\u001b', \"😀\", '\\u0007', \"it's\")\n",
+      "stderr": ""
+    },
+    {
+      "lane": "baseline-generate-js",
+      "command": [
+        "${BASELINE_EVIDENCE}/working/teamy-bend",
+        "compile",
+        "${UPSTREAM}/tests/show/string_escape.bend",
+        "--executable",
+        "--target",
+        "javascript",
+        "--output",
+        "${EVIDENCE}/baseline-original/baseline.js"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"output\": \"${EVIDENCE}/baseline-original/baseline.js\",\n  \"target\": \"javascript\",\n  \"bytes\": 54417,\n  \"socket_provider\": null,\n  \"gpu_artifact\": null\n}\n",
+      "stderr": "",
+      "artifact_sha256": "4b95aafd97448c7aca78c4c136872341f260fdc292f8cf36e16c43e409750c02"
+    },
+    {
+      "lane": "baseline-execute-js",
+      "command": [
+        "node",
+        "${EVIDENCE}/baseline-original/baseline.js"
+      ],
+      "exit": 0,
+      "stdout": "(\"a\\u{1}b\\u{7f}\\t\\\"q\\\"\", \"\", '\\u{1b}', \"😀\", '\\u{7}', \"it's\")\n",
+      "stderr": ""
+    }
+  ]
+}

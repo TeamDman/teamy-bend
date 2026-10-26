@@ -1,0 +1,153 @@
+[
+  {
+    "case": "controls/nul.bend",
+    "kind": "positive",
+    "expected": "0"
+  },
+  {
+    "case": "controls/control.bend",
+    "kind": "positive",
+    "expected": "1"
+  },
+  {
+    "case": "controls/quote.bend",
+    "kind": "positive",
+    "expected": "34"
+  },
+  {
+    "case": "controls/slash.bend",
+    "kind": "positive",
+    "expected": "92"
+  },
+  {
+    "case": "controls/ascii.bend",
+    "kind": "positive",
+    "expected": "65"
+  },
+  {
+    "case": "controls/eight-digits.bend",
+    "kind": "positive",
+    "expected": "65"
+  },
+  {
+    "case": "controls/before-surrogates.bend",
+    "kind": "positive",
+    "expected": "55295"
+  },
+  {
+    "case": "controls/after-surrogates.bend",
+    "kind": "positive",
+    "expected": "57344"
+  },
+  {
+    "case": "controls/astral.bend",
+    "kind": "positive",
+    "expected": "128512"
+  },
+  {
+    "case": "controls/max-scalar.bend",
+    "kind": "positive",
+    "expected": "1114111"
+  },
+  {
+    "case": "controls/string.bend",
+    "kind": "positive",
+    "expected": "\"aA\ud83d\ude00Bz\""
+  },
+  {
+    "case": "controls/escaped-slash.bend",
+    "kind": "unchanged-positive",
+    "expected": "\"\\\\U{41}\""
+  },
+  {
+    "case": "controls/io.bend",
+    "kind": "io-positive",
+    "expected": "\\U{41}=A\ud83d\ude00"
+  },
+  {
+    "case": "controls/empty.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/plus.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/nonhex.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/nine-digits.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/overflow.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/missing-brace.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/missing-close.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/surrogate-start.bend",
+    "kind": "scalar-gap"
+  },
+  {
+    "case": "controls/surrogate-end.bend",
+    "kind": "scalar-gap"
+  },
+  {
+    "case": "controls/above-scalar.bend",
+    "kind": "scalar-gap"
+  },
+  {
+    "case": "controls/u32-max.bend",
+    "kind": "scalar-gap"
+  },
+  {
+    "case": "controls/multi-char.bend",
+    "kind": "changed-negative"
+  },
+  {
+    "case": "controls/invalid-before-valid.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/valid-before-invalid.bend",
+    "kind": "changed-negative"
+  },
+  {
+    "case": "controls/bad-name.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/unclosed-token.bend",
+    "kind": "unchanged-negative"
+  },
+  {
+    "case": "controls/lower-plus.bend",
+    "kind": "existing-lowercase-gap"
+  },
+  {
+    "case": "controls/lower-nine.bend",
+    "kind": "existing-lowercase-gap"
+  },
+  {
+    "case": "controls/lower-surrogate.bend",
+    "kind": "existing-lowercase-gap"
+  },
+  {
+    "case": "controls/aggregate.bend",
+    "kind": "positive",
+    "expected": "[0, 1, 34, 92, 65, 65, 55295, 57344, 128512, 1114111]"
+  },
+  {
+    "case": "controls/uppercase-unicode.bend",
+    "kind": "positive",
+    "expected": "\"A\""
+  }
+]
