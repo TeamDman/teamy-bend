@@ -2719,3 +2719,23 @@ count decrease. No semantic exception or resource-limit change was adopted.
 Source/receipts are pushed separately from local raw evidence. Prior cleanup and
 backup hashes remain intact; the old lost focused log remains unrecovered.
 Library connection gate and prior API/semantic decisions remain unchanged.
+
+## Uppercase Unicode scalar checkpoint
+
+Tested `eedb452e718b10ce8b22a6e5fb42962706aa557b` adds pinned uppercase Unicode scalar escapes while preserving
+unsupported forms, lowercase behavior and all guards. [Report](cpu-uppercase-unicode.md).
+Gate **1310 passed / 0 failed / 49 ignored**.
+
+The bounded matrix has 514 observations / 235 deterministic pairs, not 514 parity
+passes. Thirteen pure controls newly check/normalize; the IO control now executes
+natively but remains proof-excluded. Of 16 port C/JS executions against 16 oracle
+executions, 14 match and two retain the existing C string-printer mismatch.
+Non-scalar/lowercase acceptance and malformed-escape diagnostic differences stay
+unqualified. No new semantic exception was adopted.
+
+No census rerun: the last measured 140 non-IO residuals and six oracle failures
+remain historical at c5edea8, not inferred current totals. Linkage is 514 / 1302,
+including failures; 788 remain unlinked by their existing applicability category.
+Next demonstrated independent gap: C escape printer round-trip spelling.
+Prior API, scalar, resource and oracle caveats, cleanup records and lost-log
+limitation remain explicit. No desktop activity or Library retry occurred.

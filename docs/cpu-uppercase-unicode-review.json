@@ -1,0 +1,21 @@
+{
+  "reviewer": "review_sharing",
+  "mode": "independent read-only review",
+  "approved": true,
+  "tested_source": "eedb452e718b10ce8b22a6e5fb42962706aa557b",
+  "verified_gate": {
+    "passed": 1310,
+    "failed": 0,
+    "ignored": 49,
+    "groups": 193,
+    "seconds": 957.4526950720174
+  },
+  "reviewed_sha256": {
+    "cpu-uppercase-unicode.md": "2841de88a799a9785afa0964228ed19d3b33286581cb179013d17e7655454afe",
+    "cpu-uppercase-unicode-validation.json": "5db2e4cfab7307a92dd0b4cd797b0000a4438bf4d36a1afcc042fd748d6aa41e",
+    "cpu-uppercase-unicode-results.json.gz": "fe3f9d5d75d46d70a32aacb256a970d9e1b2a8e1d473d61f26cf30afdd047a2e"
+  },
+  "verified_backup_members": 116,
+  "verification": "Corrected text counts, exact binary metadata-only differences, artifact identities, all archive members, retained originals, matrix classifications, coverage and public content. No remaining publication blocker. Known parity differences remain unresolved.",
+  "reviewer_actions": "No builds, source edits or publication."
+}
