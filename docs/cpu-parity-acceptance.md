@@ -2676,3 +2676,24 @@ host-failure phase varied, with no classification improvement. No new exception.
 Coverage 509 linked / 793 unlinked is linkage, not universal parity. All prior semantic,
 API, resource and oracle caveats remain. The 21 cleanup restoration records retain
 their hashes; no new cleanup or Library upload attempted.
+
+## Malformed-literal diagnostic checkpoint
+
+Tested `cfc326bcff94c1f7820e968c2abc6ca55270d643` corrects two original diagnostics: unknown escape and word
+overflow, preserving public errors/guards/semantics. Hex-suffix and backtick lexical
+originals remain non-exact; grammar context and first-error ordering require
+further integration. [Report](cpu-malformed-literal-diagnostics.md). Gate **1298 passed / 0 failed / 49 ignored**.
+Reviewed evidence: 598 observations / 290 within-lane pairs, 24 C/JS executions, 12 pure
+normalizations, six unchanged artifacts; 46 public-error probes cover 23 cases twice.
+Ten retained lexical/Unicode controls remain unqualified.
+
+Renewed census: 366 both accept / 403 exact reject / 495 acceptance differences / 33 different
+rejections / 5 oracle failures. Exact 385 historical IO renewal; 143 residuals = 110 + 33.
+Only two port stderr fixes; no port status/phase changes. Upstream dead_param_fork became
+accepted after a host-stack failure, adding one measured acceptance disagreement.
+Linkage 513 linked / 789 unlinked includes two retained differences; it is not parity.
+
+All 21 cleanup/restore records are unchanged. One historical successful focused raw
+log was accidentally overwritten by a misrooted copied runner; published hash,
+subsequent focused/full gate and failure receipts survive. The loss and exclusive
+creation/basename protections are documented. No Library retry or new exception.
