@@ -226,15 +226,15 @@
   {
     "case": "lower-plus-prefix",
     "path": "cpu-uppercase-escape-diagnostics/controls/lower-plus-prefix.bend",
-    "kind": "unresolved",
-    "exact": false,
+    "kind": "negative",
+    "exact": true,
     "expected": "expected/32.stderr"
   },
   {
     "case": "lower-nine-prefix",
     "path": "cpu-uppercase-escape-diagnostics/controls/lower-nine-prefix.bend",
-    "kind": "unresolved",
-    "exact": false,
+    "kind": "negative",
+    "exact": true,
     "expected": "expected/33.stderr"
   },
   {
@@ -254,8 +254,8 @@
   {
     "case": "lower-prefix-q",
     "path": "cpu-uppercase-escape-diagnostics/controls/lower-prefix-q.bend",
-    "kind": "unresolved",
-    "exact": false,
+    "kind": "negative",
+    "exact": true,
     "expected": "expected/36.stderr"
   },
   {

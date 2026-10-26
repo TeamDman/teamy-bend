@@ -1,0 +1,93 @@
+[
+  {
+    "case": "missing-brace",
+    "path": "cpu-lowercase-escape-grammar/controls/missing-brace.bend",
+    "line": 4,
+    "column": 1,
+    "message": "Unicode escape needs braces"
+  },
+  {
+    "case": "missing-close",
+    "path": "cpu-lowercase-escape-grammar/controls/missing-close.bend",
+    "line": 4,
+    "column": 1,
+    "message": "unfinished Unicode escape"
+  },
+  {
+    "case": "empty",
+    "path": "cpu-lowercase-escape-grammar/controls/empty.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: cannot parse integer from empty string"
+  },
+  {
+    "case": "nonhex",
+    "path": "cpu-lowercase-escape-grammar/controls/nonhex.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "overflow",
+    "path": "cpu-lowercase-escape-grammar/controls/overflow.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: number too large to fit in target type"
+  },
+  {
+    "case": "nine-max",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-max.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode code point"
+  },
+  {
+    "case": "plus-surrogate",
+    "path": "cpu-lowercase-escape-grammar/controls/plus-surrogate.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode code point"
+  },
+  {
+    "case": "nine-surrogate",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-surrogate.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode code point"
+  },
+  {
+    "case": "fullwidth",
+    "path": "cpu-lowercase-escape-grammar/controls/fullwidth.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "negative",
+    "path": "cpu-lowercase-escape-grammar/controls/negative.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "only-plus",
+    "path": "cpu-lowercase-escape-grammar/controls/only-plus.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "underscore",
+    "path": "cpu-lowercase-escape-grammar/controls/underscore.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  },
+  {
+    "case": "whitespace",
+    "path": "cpu-lowercase-escape-grammar/controls/whitespace.bend",
+    "line": 4,
+    "column": 1,
+    "message": "invalid Unicode escape: invalid digit found in string"
+  }
+]

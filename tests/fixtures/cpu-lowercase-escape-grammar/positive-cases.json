@@ -1,0 +1,47 @@
+[
+  {
+    "case": "scalar-d7ff-lower.bend",
+    "path": "cpu-nonscalar-literal/scalar-d7ff-lower.bend",
+    "kind": "scalar"
+  },
+  {
+    "case": "scalar-10ffff-lower.bend",
+    "path": "cpu-nonscalar-literal/scalar-10ffff-lower.bend",
+    "kind": "scalar"
+  },
+  {
+    "case": "char-d800-lower.bend",
+    "path": "cpu-nonscalar-literal/char-d800-lower.bend",
+    "kind": "non-scalar"
+  },
+  {
+    "case": "char-ffffffff-lower.bend",
+    "path": "cpu-nonscalar-literal/char-ffffffff-lower.bend",
+    "kind": "non-scalar"
+  },
+  {
+    "case": "surrogate-pair.bend",
+    "path": "cpu-nonscalar-literal/surrogate-pair.bend",
+    "kind": "non-scalar"
+  },
+  {
+    "case": "io-literal.bend",
+    "path": "cpu-nonscalar-literal/io-literal.bend",
+    "kind": "io"
+  },
+  {
+    "case": "eight-digits.bend",
+    "path": "cpu-lowercase-escape-grammar/controls/eight-digits.bend",
+    "kind": "scalar"
+  },
+  {
+    "case": "escaped-slash.bend",
+    "path": "cpu-lowercase-escape-grammar/controls/escaped-slash.bend",
+    "kind": "scalar"
+  },
+  {
+    "case": "pinned-string-escape.bend",
+    "path": "cpu-uppercase-unicode/show/string_escape.bend",
+    "kind": "pinned-original"
+  }
+]

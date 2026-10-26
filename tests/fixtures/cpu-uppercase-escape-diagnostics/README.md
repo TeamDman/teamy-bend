@@ -7,18 +7,22 @@ intentionally malformed import declaration and a separate valid import into a
 malformed child. No authored case is presented as an upstream original.
 
 `expected/*.stderr` contains exact pinned checking output for every case.
-`exact: true` denotes the 28 cases qualified for exact diagnostics; the other
-11 remain rejection differences. Matching status alone is not diagnostic parity.
+`exact: true` denotes the 31 cases qualified for exact diagnostics; the other
+8 remain rejection differences. Matching status alone is not diagnostic parity.
 The separate differential matrix renews an unchanged upstream unknown-escape original.
 
 The eligible failure follows a pinned-compatible literal prefix and is either
 inside a String or the first Char code. ASCII escapes followed by a BMP character
-can use the existing source diagnostic. Later Char codes, noncanonical lowercase
-prefixes, an astral observed character, cross-line literals and the earlier
-function-parameter grammar discrepancy remain unqualified. These controls preserve
-public loader errors, first-error distinctions and artifact refusal. Two earlier
-q cases now withhold misleading optional metadata; raw errors are unchanged.
+can use the existing source diagnostic. Later Char codes, an astral observed
+character, cross-line literals and the earlier function-parameter grammar
+discrepancy remain unqualified. Rejection and artifact refusal remain enforced.
+The later-Char q case withholds misleading optional metadata. Three formerly
+unqualified lowercase-prefix controls now report the first malformed u escape,
+changing the raw first error from a later U/q to u. Existing legacy per-escape
+refusal messages remain unchanged. The earlier uppercase checkpoint remains
+recorded as 28 exact/11 differing.
 
 `before.json.gz` retains 78 baseline observations with exact status and lossless
 streams. Root substitutions are explicit, and each raw stream hash remains.
-No accepted U32 code, runtime scalar boundary, resource budget or guard changes.
+Canonical U32 code values, runtime scalar boundaries, resource budgets and guards
+remain unchanged; the separate lowercase repair rejects noncanonical spellings.

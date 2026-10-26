@@ -1,0 +1,240 @@
+[
+  {
+    "case": "original-plus",
+    "path": "cpu-uppercase-unicode/controls/lower-plus.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/00.stderr"
+  },
+  {
+    "case": "original-nine",
+    "path": "cpu-uppercase-unicode/controls/lower-nine.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/01.stderr"
+  },
+  {
+    "case": "lower-plus-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-plus-prefix.bend",
+    "kind": "ordering",
+    "exact": true,
+    "expected": "expected/02.stderr"
+  },
+  {
+    "case": "lower-nine-prefix",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-nine-prefix.bend",
+    "kind": "ordering",
+    "exact": true,
+    "expected": "expected/03.stderr"
+  },
+  {
+    "case": "lower-prefix-q",
+    "path": "cpu-uppercase-escape-diagnostics/controls/lower-prefix-q.bend",
+    "kind": "ordering",
+    "exact": true,
+    "expected": "expected/04.stderr"
+  },
+  {
+    "case": "plus-string",
+    "path": "cpu-lowercase-escape-grammar/controls/plus-string.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/05.stderr"
+  },
+  {
+    "case": "nine-string",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-string.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/06.stderr"
+  },
+  {
+    "case": "ten-string",
+    "path": "cpu-lowercase-escape-grammar/controls/ten-string.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/07.stderr"
+  },
+  {
+    "case": "plus-zero",
+    "path": "cpu-lowercase-escape-grammar/controls/plus-zero.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/08.stderr"
+  },
+  {
+    "case": "nine-zero",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-zero.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/09.stderr"
+  },
+  {
+    "case": "plus-max-scalar",
+    "path": "cpu-lowercase-escape-grammar/controls/plus-max-scalar.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/10.stderr"
+  },
+  {
+    "case": "missing-brace",
+    "path": "cpu-lowercase-escape-grammar/controls/missing-brace.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/11.stderr"
+  },
+  {
+    "case": "missing-close",
+    "path": "cpu-lowercase-escape-grammar/controls/missing-close.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/12.stderr"
+  },
+  {
+    "case": "empty",
+    "path": "cpu-lowercase-escape-grammar/controls/empty.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/13.stderr"
+  },
+  {
+    "case": "nonhex",
+    "path": "cpu-lowercase-escape-grammar/controls/nonhex.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/14.stderr"
+  },
+  {
+    "case": "overflow",
+    "path": "cpu-lowercase-escape-grammar/controls/overflow.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/15.stderr"
+  },
+  {
+    "case": "nine-max",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-max.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/16.stderr"
+  },
+  {
+    "case": "plus-surrogate",
+    "path": "cpu-lowercase-escape-grammar/controls/plus-surrogate.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/17.stderr"
+  },
+  {
+    "case": "nine-surrogate",
+    "path": "cpu-lowercase-escape-grammar/controls/nine-surrogate.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/18.stderr"
+  },
+  {
+    "case": "fullwidth",
+    "path": "cpu-lowercase-escape-grammar/controls/fullwidth.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/19.stderr"
+  },
+  {
+    "case": "negative",
+    "path": "cpu-lowercase-escape-grammar/controls/negative.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/20.stderr"
+  },
+  {
+    "case": "only-plus",
+    "path": "cpu-lowercase-escape-grammar/controls/only-plus.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/21.stderr"
+  },
+  {
+    "case": "underscore",
+    "path": "cpu-lowercase-escape-grammar/controls/underscore.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/22.stderr"
+  },
+  {
+    "case": "whitespace",
+    "path": "cpu-lowercase-escape-grammar/controls/whitespace.bend",
+    "kind": "legacy-refusal",
+    "exact": false,
+    "expected": "expected/23.stderr"
+  },
+  {
+    "case": "first-other",
+    "path": "cpu-lowercase-escape-grammar/controls/first-other.bend",
+    "kind": "ordering",
+    "exact": true,
+    "expected": "expected/24.stderr"
+  },
+  {
+    "case": "canonical-before",
+    "path": "cpu-lowercase-escape-grammar/controls/canonical-before.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/25.stderr"
+  },
+  {
+    "case": "after-astral",
+    "path": "cpu-lowercase-escape-grammar/controls/after-astral.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/26.stderr"
+  },
+  {
+    "case": "char-second",
+    "path": "cpu-lowercase-escape-grammar/controls/char-second.bend",
+    "kind": "later-char",
+    "exact": false,
+    "expected": "expected/27.stderr"
+  },
+  {
+    "case": "argument",
+    "path": "cpu-lowercase-escape-grammar/controls/argument.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/28.stderr"
+  },
+  {
+    "case": "pattern",
+    "path": "cpu-lowercase-escape-grammar/controls/pattern.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/29.stderr"
+  },
+  {
+    "case": "template",
+    "path": "cpu-lowercase-escape-grammar/controls/template.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/30.stderr"
+  },
+  {
+    "case": "imported",
+    "path": "cpu-lowercase-escape-grammar/controls/imported.bend",
+    "kind": "acceptance",
+    "exact": true,
+    "expected": "expected/31.stderr"
+  },
+  {
+    "case": "earlier-grammar",
+    "path": "cpu-lowercase-escape-grammar/controls/earlier-grammar.bend",
+    "kind": "earlier-grammar",
+    "exact": false,
+    "expected": "expected/32.stderr"
+  },
+  {
+    "case": "earlier-hex",
+    "path": "cpu-lowercase-escape-grammar/controls/earlier-hex.bend",
+    "kind": "earlier-grammar",
+    "exact": true,
+    "expected": "expected/33.stderr"
+  }
+]

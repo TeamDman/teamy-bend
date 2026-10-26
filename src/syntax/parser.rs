@@ -2252,19 +2252,14 @@ impl Parser<'_> {
     fn literal_decode_error(&mut self, raw: &str, error: LiteralError) -> ParseError {
         match error {
             LiteralError::Other(message) => self.error(message),
-            LiteralError::UnknownEscape {
-                escape,
-                after,
-                pinned_prefix,
-            } => {
+            LiteralError::UnknownEscape { escape, after } => {
                 // Pinned parse_char observes the next UTF-16 code unit after
                 // consuming the escape. Do not claim exact scalar rendering
                 // for a surrogate pair; retain the existing host diagnostic.
-                // A Char must close after its first code. Earlier noncanonical
-                // lowercase escapes and multiline cursors need separate diagnostics;
-                // do not attribute their first upstream failure to this escape.
-                if pinned_prefix
-                    && escape.is_ascii()
+                // Every successfully decoded escape follows the pinned grammar.
+                // A Char must close after its first code; do not attribute that
+                // earlier upstream failure to a later escape.
+                if escape.is_ascii()
                     && (raw.starts_with('"') || after == 3)
                     && !raw[..after].contains('\n')
                     && raw[after..]
@@ -2650,11 +2645,7 @@ fn nat_term(count: u32) -> TermRef {
 }
 enum LiteralError {
     Other(String),
-    UnknownEscape {
-        escape: char,
-        after: usize,
-        pinned_prefix: bool,
-    },
+    UnknownEscape { escape: char, after: usize },
 }
 impl From<&str> for LiteralError {
     fn from(message: &str) -> Self {
@@ -2664,13 +2655,13 @@ impl From<&str> for LiteralError {
 fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
     let mut chars = raw[1..raw.len() - 1].char_indices();
     let mut out = Vec::new();
-    let mut pinned_prefix = true;
     while let Some((_, c)) = chars.next() {
         if c != '\\' {
             out.push(u32::from(c));
             continue;
         }
         let (at, escape) = chars.next().ok_or("unfinished escape")?;
+        let after = 1 + at + escape.len_utf8();
         let pinned_unicode = supported_unicode_escape(chars.clone());
         out.push(match escape {
             'n' => u32::from('\n'),
@@ -2699,21 +2690,19 @@ fn decode_literal(raw: &str) -> Result<Vec<u32>, LiteralError> {
                 let value = u32::from_str_radix(&digits, 16).map_err(|error| {
                     LiteralError::Other(format!("invalid Unicode escape: {error}"))
                 })?;
-                // Bend Char stores U32, not a host Unicode scalar. Only the
-                // pinned escape grammar gains non-scalar values; preserve the
-                // existing refusal of noncanonical lowercase non-scalars.
-                if !pinned_unicode && char::from_u32(value).is_none() {
-                    return Err("invalid Unicode code point".into());
+                // Preserve legacy lowercase scan/radix/non-scalar errors, but
+                // never accept the extra spellings allowed by from_str_radix.
+                // Canonical escapes carry any U32 code, not just host scalars.
+                if !pinned_unicode {
+                    if char::from_u32(value).is_none() {
+                        return Err("invalid Unicode code point".into());
+                    }
+                    return Err(LiteralError::UnknownEscape { escape, after });
                 }
-                pinned_prefix &= pinned_unicode;
                 value
             }
             _ => {
-                return Err(LiteralError::UnknownEscape {
-                    escape,
-                    after: 1 + at + escape.len_utf8(),
-                    pinned_prefix,
-                });
+                return Err(LiteralError::UnknownEscape { escape, after });
             }
         });
     }
@@ -4158,20 +4147,85 @@ mod literal_decode_tests {
                     decode_literal(&raw),
                     Err(LiteralError::UnknownEscape {
                         escape: 'U',
-                        after: 5,
-                        pinned_prefix: true
+                        after: 5
                     })
                 ),
                 "{raw}"
             );
         }
-        // Existing lowercase differences are retained, not new policy exceptions.
         for raw in [r#""\u{+41}""#, r#""\u{000000041}""#] {
-            assert_eq!(decode_literal(raw).ok(), Some(vec![u32::from('A')]));
+            assert!(matches!(
+                decode_literal(raw),
+                Err(LiteralError::UnknownEscape {
+                    escape: 'u',
+                    after: 3
+                })
+            ));
         }
         for raw in [r#""\u{+D800}""#, r#""\u{00000D800}""#] {
             assert!(matches!(decode_literal(raw), Err(LiteralError::Other(_))));
         }
+    }
+
+    #[test]
+    fn lowercase_literal_grammar_preserves_codes_and_first_refusal() {
+        for (digits, code) in [
+            ("0", 0),
+            ("00000000", 0),
+            ("00000041", 65),
+            ("aBcD", 0xabcd),
+            ("D800", 0xd800),
+            ("DFFF", 0xdfff),
+            ("110000", 0x110000),
+            ("fFfFfFfF", u32::MAX),
+        ] {
+            for quote in ['\'', '"'] {
+                let raw = format!("{quote}\\u{{{digits}}}{quote}");
+                assert_eq!(decode_literal(&raw).ok(), Some(vec![code]), "{raw}");
+            }
+        }
+        for raw in [
+            r#""\u{+0}""#,
+            r#""\u{000000000}""#,
+            r#""\u{0000000041}""#,
+            r#""\u{+41}\q""#,
+            r#""\u{000000041}\U{}""#,
+        ] {
+            assert!(
+                matches!(
+                    decode_literal(raw),
+                    Err(LiteralError::UnknownEscape {
+                        escape: 'u',
+                        after: 3
+                    })
+                ),
+                "{raw}"
+            );
+        }
+        assert!(matches!(
+            decode_literal(r#""\q\u{+41}""#),
+            Err(LiteralError::UnknownEscape {
+                escape: 'q',
+                after: 3
+            })
+        ));
+        assert_eq!(
+            decode_literal(r#""\\u{+41}""#).ok(),
+            Some(b"\\u{+41}".iter().copied().map(u32::from).collect())
+        );
+        crate::syntax::parse_term(&format!("\"{}\"", r"\u{41}".repeat(128))).unwrap();
+        assert!(
+            crate::syntax::parse_term(&format!("\"{}\"", r"\u{41}".repeat(129)))
+                .unwrap_err()
+                .message
+                .contains("128 characters")
+        );
+        assert!(
+            crate::syntax::parse_term(&format!("{}\"\\u{{41}}\"", "+ ".repeat(64)))
+                .unwrap_err()
+                .message
+                .contains("resource limit")
+        );
     }
 
     #[test]
@@ -4182,7 +4236,7 @@ mod literal_decode_tests {
             (r#""\U{}\q""#, 'U', 3),
         ] {
             assert!(matches!(decode_literal(raw),
-                Err(LiteralError::UnknownEscape { escape: e, after: a, pinned_prefix: true })
+                Err(LiteralError::UnknownEscape { escape: e, after: a })
                     if e == escape && a == after));
         }
         for escape in [r"\U{41}", r"\U{1F600}", r"\U{d800}", r"\u{ffffffff}"] {

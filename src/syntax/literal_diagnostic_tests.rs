@@ -231,3 +231,54 @@ fn uppercase_literal_diagnostic_eligibility_preserves_first_upstream_failure() {
         }
     }
 }
+
+#[test]
+fn lowercase_literal_refusals_preserve_existing_public_error_fields() {
+    #[derive(facet::Facet)]
+    struct FixtureExpectation {
+        case: String,
+        path: String,
+        line: usize,
+        column: usize,
+        message: String,
+    }
+    let cases: Vec<FixtureExpectation> = facet_json::from_str(include_str!(
+        "../../tests/fixtures/cpu-lowercase-escape-grammar/public-errors.json"
+    ))
+    .unwrap();
+    assert_eq!(cases.len(), 13);
+    let fixtures = root().parent().unwrap().to_path_buf();
+    for case in cases {
+        let path = fixtures.join(&case.path);
+        for error in [
+            crate::syntax::load(&path).unwrap_err(),
+            crate::syntax::load_executable(&path).unwrap_err(),
+            crate::syntax::load_with_diagnostics(&path)
+                .err()
+                .unwrap()
+                .error,
+            crate::syntax::load_executable_with_diagnostics(&path)
+                .err()
+                .unwrap()
+                .error,
+        ] {
+            assert_eq!(
+                (error.line, error.column),
+                (case.line, case.column),
+                "{}",
+                case.case
+            );
+            assert_eq!(error.message, case.message, "{}", case.case);
+            assert_eq!(
+                error.to_string(),
+                format!(
+                    "{}:{}:{}: {}",
+                    path.display(),
+                    case.line,
+                    case.column,
+                    case.message
+                )
+            );
+        }
+    }
+}
