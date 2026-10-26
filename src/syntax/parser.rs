@@ -73,14 +73,35 @@ fn lex(source: &str, label: &str) -> Result<Vec<Token>, ParseError> {
     lex_tokens(source, label, None)
 }
 
-#[expect(
-    clippy::too_many_lines,
-    reason = "Token alternatives mirror the upstream grammar in one scan"
-)]
+// Try the pinned raw-apostrophe spelling without changing the established
+// malformed-input token stream. A fallback scans tokens only; parsing and
+// template specialization still happen exactly once.
 fn lex_tokens(
     source: &str,
     label: &str,
     mut diagnostic_prefix: Option<&mut Option<LexicalPrefix>>,
+) -> Result<Vec<Token>, ParseError> {
+    if source.contains("'''") {
+        let corrected = lex_tokens_mode(source, label, diagnostic_prefix.as_deref_mut(), true);
+        if corrected.is_ok() {
+            return corrected;
+        }
+        if let Some(prefix) = diagnostic_prefix.as_deref_mut() {
+            *prefix = None;
+        }
+    }
+    lex_tokens_mode(source, label, diagnostic_prefix, false)
+}
+
+#[expect(
+    clippy::too_many_lines,
+    reason = "Token alternatives mirror the upstream grammar in one scan"
+)]
+fn lex_tokens_mode(
+    source: &str,
+    label: &str,
+    mut diagnostic_prefix: Option<&mut Option<LexicalPrefix>>,
+    raw_apostrophe: bool,
 ) -> Result<Vec<Token>, ParseError> {
     let mut tokens = Vec::new();
     let mut pos = 0;
@@ -108,7 +129,19 @@ fn lex_tokens(
         }
         let start = pos;
         let start_column = column;
-        if ch == '"' || ch == '\'' {
+        if raw_apostrophe && ch == '\'' && rest.starts_with("''") {
+            if !rest.starts_with("'''") {
+                // Private trial failure: the wrapper always restores legacy
+                // tokenization/errors for an incomplete apostrophe spelling.
+                return Err(ParseError {
+                    source: label.into(),
+                    line,
+                    column: start_column,
+                    message: "raw apostrophe needs a closing quote".into(),
+                });
+            }
+            pos += 3;
+        } else if ch == '"' || ch == '\'' {
             pos += 1;
             let mut escaped = false;
             let mut closed = false;
@@ -3170,8 +3203,10 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
     let mut book = Book::default();
     let mut fresh = 0;
     let mut templates = Templates::default();
+    let tokens = lex(source, "<expression>")?;
+    let raw_apostrophe = tokens.iter().any(|token| token.text == "'''");
     let mut p = Parser {
-        tokens: lex(source, "<expression>")?,
+        tokens,
         at: 0,
         label: "<expression>".into(),
         namespace: String::new(),
@@ -3191,11 +3226,19 @@ pub fn parse_term(source: &str) -> Result<TermRef, ParseError> {
         constructor_tags: None,
         origin: SourceOrigin::Standalone,
     };
-    let value = p.expression(0)?;
-    if !p.is("") {
-        return Err(p.error("unexpected trailing input"));
-    }
-    Ok(qualify_operators(&value, "Nat"))
+    let result = p.expression(0).and_then(|value| {
+        if !p.is("") {
+            return Err(p.error("unexpected trailing input"));
+        }
+        Ok(qualify_operators(&value, "Nat"))
+    });
+    result.map_err(|error| {
+        if raw_apostrophe {
+            legacy_lexical_error(source, "<expression>").unwrap_or(error)
+        } else {
+            error
+        }
+    })
 }
 
 fn parse_into(
@@ -3230,6 +3273,7 @@ fn parse_into(
             prefix.tokens
         }
     };
+    let raw_apostrophe = tokens.iter().any(|token| token.text == "'''");
     let result = Parser {
         tokens,
         at: 0,
@@ -3263,7 +3307,24 @@ fn parse_into(
         }
         return Err(error);
     }
-    result
+    result.map_err(|error| {
+        if raw_apostrophe && let Some(legacy) = legacy_lexical_error(input.source, input.label) {
+            if let Some(origins) = &mut templates.diagnostics {
+                origins.clear_load_failure();
+            }
+            legacy
+        } else {
+            error
+        }
+    })
+}
+
+// Once corrected tokenization reaches a parser failure, retain an old global
+// lexical refusal if one existed. This never replays parsing, evaluates a term,
+// or hides a successful parse. Newly accepted modules can expose later errors;
+// this is not a counterfactual replay of the old import graph.
+fn legacy_lexical_error(source: &str, label: &str) -> Option<ParseError> {
+    lex_tokens_mode(source, label, None, false).err()
 }
 
 #[derive(Default)]
@@ -4357,3 +4418,6 @@ mod literal_decode_tests {
         );
     }
 }
+
+#[cfg(test)]
+mod raw_apostrophe_tests;

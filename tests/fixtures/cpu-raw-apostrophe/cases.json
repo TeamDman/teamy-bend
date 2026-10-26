@@ -1,0 +1,290 @@
+[
+  {
+    "case": "triple-quote",
+    "path": "positive/triple-quote.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/triple-quote.bend"
+  },
+  {
+    "case": "triple-argument",
+    "path": "positive/triple-argument.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/triple-argument.bend"
+  },
+  {
+    "case": "escaped-quote",
+    "path": "positive/escaped-quote.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/escaped-quote.bend"
+  },
+  {
+    "case": "adjacent-pair",
+    "path": "positive/adjacent-pair.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/adjacent-pair.bend"
+  },
+  {
+    "case": "adjacent-triple",
+    "path": "positive/adjacent-triple.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/adjacent-triple.bend"
+  },
+  {
+    "case": "list",
+    "path": "positive/list.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/list.bend"
+  },
+  {
+    "case": "pattern",
+    "path": "positive/pattern.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/pattern.bend"
+  },
+  {
+    "case": "template",
+    "path": "positive/template.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/template.bend"
+  },
+  {
+    "case": "imported",
+    "path": "positive/imported.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/imported.bend"
+  },
+  {
+    "case": "io",
+    "path": "positive/io.bend",
+    "kind": "positive",
+    "io": true,
+    "escaped": "escaped/io.bend"
+  },
+  {
+    "case": "string-quotes",
+    "path": "positive/string-quotes.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/string-quotes.bend"
+  },
+  {
+    "case": "unused-template",
+    "path": "positive/unused-template.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 4,
+      "column": 1,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-1",
+    "path": "negative/quotes-1.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 21,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-2",
+    "path": "negative/quotes-2.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 4,
+      "column": 1,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-4",
+    "path": "negative/quotes-4.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 23,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-5",
+    "path": "negative/quotes-5.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 25,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-7",
+    "path": "negative/quotes-7.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 27,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "quotes-8",
+    "path": "negative/quotes-8.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 23,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "empty-argument",
+    "path": "negative/empty-argument.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 4,
+      "column": 28,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "empty-followed-escape",
+    "path": "negative/empty-followed-escape.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 23,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "malformed-first",
+    "path": "negative/malformed-first.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 4,
+      "column": 1,
+      "message": "unknown escape: \\q"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "earlier-grammar",
+    "path": "negative/earlier-grammar.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 22,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "later-grammar",
+    "path": "negative/later-grammar.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 24,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "name-slot",
+    "path": "negative/name-slot.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 5,
+      "message": "expected a name, found \"''\""
+    },
+    "raw_error_unchanged": false
+  },
+  {
+    "case": "import-later-error",
+    "path": "negative/import-later-error.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 24,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": false
+  },
+  {
+    "case": "lexical-before",
+    "path": "negative/lexical-before.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 21,
+      "message": "invalid numeric literal suffix"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "lexical-after",
+    "path": "negative/lexical-after.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 3,
+      "column": 24,
+      "message": "a string or character literal cannot cross a line"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "used-empty-template",
+    "path": "negative/used-empty-template.bend",
+    "kind": "negative",
+    "io": false,
+    "baseline_error": {
+      "line": 4,
+      "column": 1,
+      "message": "a character literal needs exactly one character"
+    },
+    "raw_error_unchanged": true
+  },
+  {
+    "case": "template-body",
+    "path": "positive/template-body.bend",
+    "kind": "positive",
+    "io": false,
+    "escaped": "escaped/template-body.bend"
+  }
+]
