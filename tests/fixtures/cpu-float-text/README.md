@@ -6,7 +6,7 @@ Copyright 2026 HigherOrderCO; Apache-2.0. See NOTICE and `licenses/Apache-2.0.tx
 Their comments and expected outputs remain verbatim; actual code and captured
 outputs determine the current formatting contract.
 
-The two remaining files are authored MPL-2.0 controls, not upstream inventory
+The remaining files are authored MPL-2.0 controls, not upstream inventory
 entries. `float-text-observations.bend` supplements the originals with paired
 operation bits/text, read bits, signed zero, invalid strings returning None and
 a finite text round-trip. Exact bytes are compared; no tolerance is applied.
@@ -18,4 +18,9 @@ Rust and port C match upstream C; port JS matches upstream JS. The probe retains
 exit 1 while the upstream split remains, even when each port matches its backend.
 It is excluded from the single-expectation positive suite and recorded explicitly
 in the parity checklist. This grants no exception or new input/rounding policy.
-NaN payload behavior and other host libraries are not qualified here.
+That boundary probe does not qualify NaN payloads or other host libraries.
+
+`nan-payload-overflow.bend` checks a separate Linux glibc x86-64 native/C
+contract for numeric payload overflow and an invalid trailing digit. Upstream
+and port JavaScript reject these payload spellings; that backend difference is
+not waived. Other host libraries are not qualified by this fixture.

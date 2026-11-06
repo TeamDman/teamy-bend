@@ -38,3 +38,22 @@ fn float_operation_text_and_shared_read_cases_preserve_exact_output() {
         assert!(output.stderr.is_empty(), "{name}");
     }
 }
+
+#[cfg(all(target_os = "linux", target_env = "gnu", target_arch = "x86_64"))]
+#[test]
+fn native_read_preserves_glibc_nan_payload_overflow_bits() {
+    let source = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/cpu-float-text/nan-payload-overflow.bend");
+    let output = Command::new(env!("CARGO_BIN_EXE_teamy-bend"))
+        .arg("run")
+        .arg(source)
+        .env("BEND_GPU", "off")
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(0), "{:?}", output.stderr);
+    assert_eq!(
+        output.stdout,
+        b"2147483647\n2147483647\n4294967295\n2143289344\n"
+    );
+    assert!(output.stderr.is_empty());
+}

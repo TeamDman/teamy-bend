@@ -455,6 +455,31 @@ fn native_float_nan_spelling_uses_the_documented_crt_payload_policy() {
     }
 }
 
+#[cfg(all(target_os = "linux", target_env = "gnu", target_arch = "x86_64"))]
+#[test]
+fn native_float_nan_payload_overflow_matches_glibc_without_accepting_invalid_digits() {
+    for (input, expected) in [
+        ("nan(18446744073709551614)", 0x7fff_fffe),
+        ("nan(18446744073709551615)", 0x7fff_ffff),
+        ("nan(18446744073709551616)", 0x7fff_ffff),
+        ("-nan(0x10000000000000000)", 0xffff_ffff),
+        ("nan(02000000000000000000000)", 0x7fff_ffff),
+        ("nan(18446744073709551616x)", 0x7fc0_0000),
+        ("nan(0xfffffffffffffffffG)", 0x7fc0_0000),
+        ("nan(02000000000000000000008)", 0x7fc0_0000),
+        (
+            "nan(0000000000000000000000000000000000000000000001)",
+            0x7fc0_0001,
+        ),
+    ] {
+        assert_eq!(text::read(input), Some(expected), "{input}");
+    }
+    assert_eq!(
+        text::read(&format!("nan({}x)", "9".repeat(8192))),
+        Some(0x7fc0_0000)
+    );
+}
+
 #[test]
 fn native_float_show_preserves_signed_zero_and_decimal_style_boundaries() {
     for (bits, expected) in [

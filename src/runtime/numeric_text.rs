@@ -148,7 +148,28 @@ fn nan_payload(text: &str) -> Option<u32> {
     } else {
         (10, payload)
     };
-    let bits = u64::from_str_radix(digits, radix).unwrap_or(0);
+    let bits = match u64::from_str_radix(digits, radix) {
+        Ok(bits) => bits,
+        // glibc's x86-64 strtof saturates an overflowing numeric NaN payload
+        // to u64::MAX. Validate the entire payload first: an overflow followed
+        // by a non-digit is a nonnumeric payload, not a saturated number.
+        Err(error)
+            if cfg!(all(
+                target_os = "linux",
+                target_env = "gnu",
+                target_arch = "x86_64"
+            )) && matches!(error.kind(), std::num::IntErrorKind::PosOverflow)
+                && digits.bytes().all(|byte| match radix {
+                    8 => (b'0'..=b'7').contains(&byte),
+                    10 => byte.is_ascii_digit(),
+                    16 => byte.is_ascii_hexdigit(),
+                    _ => false,
+                }) =>
+        {
+            u64::MAX
+        }
+        Err(_) => 0,
+    };
     Some(u32::try_from(bits & 0x003f_ffff).expect("masked binary32 payload fits u32"))
 }
 
