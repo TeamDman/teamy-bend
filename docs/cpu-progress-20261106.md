@@ -44,6 +44,14 @@ batches supplement the successful pre-test gate stages; they do not turn the
 interrupted single-command gate into a pass. Results, hashes, selection and
 limits are recorded in [the validation receipt](cpu-resumption-20261106-validation.json).
 
+The later NaN-payload change was separately validated at `c3a775c` with the
+complete test set in bounded batches: **1,371 passed / 0 failed / 49 ignored**.
+Its standard gate timed out at 1,200 seconds after 936 completed passes, zero
+failures and 48 ignores; the interrupted group and subsequent groups were not
+completed by that run. See [NaN validation](cpu-float-nan-overflow.md). The
+subsequent string-normalization investigation changed only research fixtures,
+a standalone probe and reports, not production code.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
@@ -113,7 +121,10 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    lowering needs typed continuation construction and canonical normalization,
    preserving open terms, demand, error order, resource accounting and existing
    guards. The [prototype](cpu-compact-patterns.md) is research, not support for
-   the original source. General large native Nat computation and cancellation
+   the original source. A [reduced normalization investigation](cpu-string-normalization-boundary.md)
+   separates the port's pattern limit, kernel normalization boundary and data
+   output limit; the original pattern is still refused and no repair is claimed.
+   General large native Nat computation and cancellation
    boundaries remain incomplete or unmeasured.
 3. **Runtime and library breadth.** Systematically measure the unlinked corpus
    in each applicable lane, and reproduce failures before repair. Exercise
