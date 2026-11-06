@@ -1,0 +1,166 @@
+{
+  "tested_source": "c3a775c65b5f1dea5fd3536e260a4e2b1706fbee",
+  "baseline_source": "ae3c802ebc4c7f2c05753e8692193150fcb4de69",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "binary_sha256": "23cab6fcc6946d7a01d51cccbf8c0e7b296969f53a9b968e88423844a67ff08f",
+  "fixture_sha256": "704d2b81d5c4692cfc4258a51297ac1a5ddd75a65c90a9bdced4f69d65c6bcf2",
+  "profile": "Linux x86-64 glibc 2.41",
+  "tools": {
+    "rust": "1.96.0",
+    "formatter": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7",
+    "powershell": "7.5.4"
+  },
+  "environment": {
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "BEND_GPU": "off",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "limits": {
+    "prebuild_free_workspace_bytes": 11811160064,
+    "active_free_workspace_bytes": 10737418240,
+    "active_free_temp_bytes": 1073741824,
+    "outer_seconds_per_command": 1200,
+    "comparison_child_seconds": 60
+  },
+  "standard_gate": {
+    "exit": 143,
+    "stop": "1200-second outer timeout",
+    "completed_test_groups": 131,
+    "completed_passed": 936,
+    "completed_failed": 0,
+    "completed_ignored": 48,
+    "another_group": "interrupted; not counted",
+    "pretest_stages": "format, strict clippy, all-feature build and Node TCP/UDP provider passed",
+    "log_sha256": "c74d3e55feb21fa34d079f1bf3c7bddff63d27d60763c169bcbf41faf1e88569"
+  },
+  "full_split_test_validation": {
+    "selection": "All 197 integration targets from cargo metadata sorted by name, first 100 and remaining 97; separate --lib --bins and --doc; all use --locked --offline --features extended_observability.",
+    "target_count": 197,
+    "target_names_sha256": "1f1ee053a23a0f37fda1604fce1dc334e971af62d1e7b1393dca63bb095525fc",
+    "runs": {
+      "nan-split-first": {
+        "groups": 100,
+        "passed": 492,
+        "failed": 0,
+        "ignored": 47,
+        "exit": 0,
+        "elapsed_seconds": 696.23,
+        "min_free_bytes": {
+          "workspace": 29207883776,
+          "tmp": 9430061056
+        },
+        "log_sha256": "91c3ae5f9222da64eba3502db7a34da6ecdb7ce07ac6524f821ab4dafd719221"
+      },
+      "nan-split-second": {
+        "groups": 97,
+        "passed": 506,
+        "failed": 0,
+        "ignored": 1,
+        "exit": 0,
+        "elapsed_seconds": 612.16,
+        "min_free_bytes": {
+          "workspace": 29207859200,
+          "tmp": 9430548480
+        },
+        "log_sha256": "c2f466189dc8a0bdfbb481edcf3afb6c634d017e22b55dc85f7b17f5e230ce55"
+      },
+      "nan-lib-bins": {
+        "groups": 3,
+        "passed": 367,
+        "failed": 0,
+        "ignored": 1,
+        "exit": 0,
+        "elapsed_seconds": 110.03,
+        "min_free_bytes": {
+          "workspace": 29207838720,
+          "tmp": 9431580672
+        },
+        "log_sha256": "d52f7a30bd70c3cb2218e54320c56ad53d4a30b5430f15ddced73892d516f3db"
+      },
+      "nan-doc-tests": {
+        "groups": 1,
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "exit": 0,
+        "elapsed_seconds": 2.0,
+        "min_free_bytes": {
+          "workspace": 29207838720,
+          "tmp": 9431601152
+        },
+        "log_sha256": "1a872af43aac28fed5ed8720b9df08a21b959ab0e558d3cae833dbe85d20e8b7"
+      }
+    },
+    "passed": 1371,
+    "failed": 0,
+    "ignored": 49
+  },
+  "targeted_clippy": {
+    "exit": 0,
+    "all_features": true,
+    "target": "cpu_float_text",
+    "log_sha256": "ba79f9c63c57396afd51ad5decffd3602ba6594be7889a46aa4a6b4ed5b7cd4d"
+  },
+  "cross_backend_witness": {
+    "baseline_receipt_sha256": "fbb75d4627308291593b023e3a9c9fdc4a1c86954dafc4cdfd2db21b54e8cef7",
+    "baseline_binary_sha256": "2dbc59439c08ada3c7cc3656cd01753e683949a8f8fde6f17dbf2ef616c6b50c",
+    "before_native_output_bits": [
+      2147483647,
+      2143289344,
+      4290772992,
+      2143289344
+    ],
+    "after_native_and_C_output_bits": [
+      2147483647,
+      2147483647,
+      4294967295,
+      2143289344
+    ],
+    "both_JS_outputs": [
+      "none",
+      "none",
+      "none",
+      "none"
+    ],
+    "baseline_generated_artifacts_equal": true,
+    "clean_postgate_receipt_sha256": "54c7962be4d4b933e7341b785506286a9f5da06d6c8c14fba9511e7be78681e9",
+    "observations": 16,
+    "executions": 10,
+    "timeouts": 0,
+    "cross_backend_split_unwaived": true
+  },
+  "direct_host_sweep": {
+    "cases": 828,
+    "cases_sha256": "4d3aa5dd9fbbafb0474d9e5faf70b987675a47579759909592157179cf1afb99",
+    "baseline_mismatches": 128,
+    "baseline_mismatches_by_radix": {
+      "octal": 24,
+      "decimal": 44,
+      "hexadecimal": 60
+    },
+    "candidate_mismatches": 0,
+    "baseline_expected_nonzero_exit": 1,
+    "candidate_exit": 0,
+    "baseline_log_sha256": "4ec354df09ca8539bddd6232589f022949a15bac7bd3eb46e7a2ed4aee2a2f54",
+    "candidate_log_sha256": "fa051970b2e21c71b1c06d93708187e472f78a5a3fbb9e28ee19652942ae84e4",
+    "sweep_script_sha256": "4b60bd848dbf811cd67ee3bccf650951989ff2ead132c5c296ad0f52307e2473",
+    "glibc_probe_source_sha256": "0d0b441bc2f115dcbafe97d2c6dfea51abb6938161b7275c74de5447634b6e63",
+    "scope": "Direct host parser probes, not Bend executions or universal libc coverage."
+  },
+  "string_pattern_recheck": {
+    "fixture_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+    "observations": 4,
+    "upstream_interpreter": "True{} twice",
+    "port_check": "64-level pattern refusal twice",
+    "port_generated_execution": "unrun",
+    "log_sha256": "7306b6206cf2ff9ee1769a023b98dc7715d1655d026c694153636f388b5ea70f"
+  },
+  "unrun_and_scope": "Single-command standard gate timed out; GPU/CUDA, other libc/architecture profiles, Windows/macOS, supplementary all-target lint, external consumer audit, Poche and whole CPU parity remain unqualified."
+}

@@ -105,8 +105,10 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    remaining array/resource boundaries. Resolve argument-recovery lowering,
    Base source locations, source holes/TODO behavior and diagnostic provenance. `nat_first`
    has a documented pinned C versus JS error-order conflict; a narrow exception
-   remains a decision, not an assumed approval. F32.read has three documented
-   backend-specific differences, so a uniform rule needs an explicit contract.
+   remains a decision, not an assumed approval. The Linux x86-64 glibc native
+   NaN-payload overflow mismatch was corrected; see [NaN payload validation](cpu-float-nan-overflow.md).
+   F32.read still has documented backend-specific differences, including those
+   payload spellings and the earlier three cases, so no uniform rule is inferred.
 2. **Representation and normalization.** Compact Nat and string-pattern
    lowering needs typed continuation construction and canonical normalization,
    preserving open terms, demand, error order, resource accounting and existing
