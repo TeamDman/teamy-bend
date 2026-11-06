@@ -226,7 +226,8 @@ struct TBHost {
   bool winsock;
 #endif
 };
-typedef enum { TB_FAILURE_INTERNAL, TB_FAILURE_REQUEST_OUT_OF_BAND, TB_FAILURE_NAT_OVERFLOW } TBFailureKind;
+typedef enum { TB_FAILURE_INTERNAL, TB_FAILURE_REQUEST_OUT_OF_BAND, TB_FAILURE_NAT_OVERFLOW,
+  TB_FAILURE_ARRAY_DEPTH } TBFailureKind;
 #define TB_NAT_OVERFLOW(message) tb_fail(TB_FAILURE_NAT_OVERFLOW, (message))
 static TB_THREAD_LOCAL TBFailureKind tb_failure_kind;
 static TB_THREAD_LOCAL TBHost *tb_host_current;
@@ -298,6 +299,8 @@ OUTLINE TB_NORETURN void tb_fail(TBFailureKind kind, const char *message) {
     (void)fputs("bend: runtime fail-stop\n", stderr);
   else if (kind == TB_FAILURE_NAT_OVERFLOW)
     (void)fputs("bend: a Nat past the largest immediate 2^48-1\n", stderr);
+  else if (kind == TB_FAILURE_ARRAY_DEPTH)
+    (void)fputs("bend: an array past the deepest block class 31\n", stderr);
   else (void)fprintf(stderr, "teamy-bend executable C: %s\n", message);
   if (tb_failure_guard != NULL) longjmp(*tb_failure_guard, 1);
   exit(1);
@@ -656,6 +659,14 @@ OUTLINE Term tb_apply(Env e, Term closure, Term argument);
 TB_OPTIONAL OUTLINE Term corpus_eval(Corpus memory, Term task);
 TB_OPTIONAL OUTLINE u32 corpus_eval_words(Corpus memory, Term task, Term *words, Term *owned, u32 capacity);
 
+/* Upstream checks the logical array class before attempting allocation. Keep
+ * our smaller allocation limit, but preserve that language failure for an
+ * already-invalid class. Device code has its own failure contract. */
+INLINE void tb_array_class_guard(Nat depth, u32 lgs) {
+  if (lgs <= 31u && depth > (Nat)(31u - lgs))
+    tb_fail(TB_FAILURE_ARRAY_DEPTH, "array class exceeds upstream limit");
+}
+#define TB_ARRAY_CLASS_GUARD(depth, lgs) tb_array_class_guard((depth), (lgs))
 /* TB_SHARED_ARRAYS */
 /* Implemented by executable_io.c after this core. */
 static void tb_io_initialize(void);

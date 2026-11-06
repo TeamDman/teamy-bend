@@ -90,7 +90,6 @@
     "kind": "runtime-negative",
     "source_sha256": "81498d0197431f09893f6c626a02f202aedfd0b8574007cc5e43a49a215ccfd7",
     "stderr": "bend: an array past the deepest block class 31\n",
-    "port_c_residual_stderr": "teamy-bend executable C: array budget exhausted\n",
     "upstream_path": "tests/io/array_depth_bound.bend"
   }
 ]

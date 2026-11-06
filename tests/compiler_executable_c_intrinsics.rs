@@ -177,6 +177,36 @@ fn direct_primitive_arguments_preserve_left_to_right_failure_order() {
 }
 
 #[test]
+fn array_class_failure_precedes_but_does_not_widen_the_allocation_limit() {
+    for (depth, diagnostic) in [
+        (18, "teamy-bend executable C: array budget exhausted\n"),
+        (31, "teamy-bend executable C: array budget exhausted\n"),
+        (32, "bend: an array past the deepest block class 31\n"),
+        (33, "bend: an array past the deepest block class 31\n"),
+    ] {
+        let source = format!(
+            "import Base\ndef discard(array: Array<U32>) -> U32: 0\ndef main() -> IO(Unit):\n  do IO<Unit>:\n    Unit <- IO.write(\"before\")\n    IO.print(U32.show(discard(Array.new(U32, {depth}n, 7))))\n"
+        );
+        let output = Fixture::new().run(&source, &[]);
+        assert_eq!(output.status.code(), Some(1), "depth {depth}");
+        assert_eq!(output.stdout, b"before", "depth {depth}");
+        assert_eq!(output.stderr, diagnostic.as_bytes(), "depth {depth}");
+    }
+}
+
+#[test]
+fn array_class_limit_includes_padded_element_layout_width() {
+    let source = include_str!("fixtures/cpu-array-depth/padded-class-limit.bend");
+    let output = Fixture::new().run(source, &[]);
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(output.stdout, b"before");
+    assert_eq!(
+        output.stderr,
+        b"bend: an array past the deepest block class 31\n"
+    );
+}
+
+#[test]
 fn direct_tail_primitives_return_values_with_their_original_layouts() {
     for (kind, expression, expected) in [
         ("U32", "U32.add(4294967295, 2)", "1\n"),

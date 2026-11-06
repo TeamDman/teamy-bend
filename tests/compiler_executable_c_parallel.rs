@@ -765,3 +765,37 @@ def main() -> IO(Unit):
         );
     }
 }
+
+#[test]
+fn array_class_failure_crosses_cpu_workers_and_cleans_up() {
+    let source = r#"import Base
+def discard(array: Array<U32>) -> U32: 0
+def make(depth: Nat) -> U32: discard(Array.new(U32, depth, 7))
+def identity(n: U32) -> U32: n
+def pair(depth: Nat) -> U32:
+  left right = make(depth) identity(0)
+  U32.add(left, right)
+def main() -> IO(Unit):
+  do IO<Unit>:
+    Unit <- IO.write("before")
+    IO.print(U32.show(pair(32n)))
+"#;
+    for workers in [1, 2, 4] {
+        let definitions: &[&str] = if workers == 1 {
+            &[]
+        } else {
+            &["BEND_TEST_REQUIRE_FAILURE_KIND=TB_FAILURE_ARRAY_DEPTH"]
+        };
+        let output = Fixture::new().run(source, "", workers, false, definitions);
+        assert_eq!(
+            output.status.code(),
+            Some(1),
+            "workers={workers}: {output:?}"
+        );
+        assert_eq!(output.stdout, b"before");
+        assert_eq!(
+            output.stderr,
+            b"bend: an array past the deepest block class 31\n"
+        );
+    }
+}

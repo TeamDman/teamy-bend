@@ -33,6 +33,9 @@ INLINE Term blk_keep(Env e, Loc at) {
 }
 INLINE Term tb_blk_new_masked(Env e, bool array, Nat depth, u32 lgs, u32 count, Term *values, const Term *box_mask) {
   Cls cls; Loc at; u32 stride;
+#ifdef TB_ARRAY_CLASS_GUARD
+  TB_ARRAY_CLASS_GUARD(depth, lgs);
+#endif
   if (depth > 17 || lgs > 17 || depth + lgs > 17 || count > (1u << lgs)) err_fail("array budget exhausted");
   cls = (Cls)depth + lgs; stride = 1u << lgs;
   at = heap_alloc(e, array ? cls : buf_wcls(cls));

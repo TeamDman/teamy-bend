@@ -20,8 +20,9 @@ generated C/JS values are exact byte comparisons, not textual normalization.
 Negative checker rows require the precise stored diagnostics and no artifacts.
 IO/F32 strict-proof refusals are not counted as runtime successes.
 
-The depth-32 witness deliberately retains the port-C resource diagnostic
-difference. The runner asserts the observed refusal, records it as unwaived, and
-never labels whole CPU parity complete. It does not execute enormous depth-31
+The runner can record a manifest's distinct port-C depth-32 diagnostic as
+unwaived. Current manifests require the same class-limit diagnostic from both C
+backends. Neither result
+establishes whole CPU parity. The runner does not execute enormous depth-31
 allocation experiments, change limits, or claim physical layout/heap inspection
 for uninstrumented runtime lanes.

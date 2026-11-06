@@ -107,10 +107,10 @@ for index, case in enumerate(cases):
         if case['kind']=='positive':
             expected=(0,case['stdout'].encode(),b'')
         else:
-            error=case['port_c_residual_stderr'] if lane=='port-C-O3' else case['stderr']
+            error=case.get('port_c_residual_stderr',case['stderr']) if lane=='port-C-O3' else case['stderr']
             expected=(1,b'',error.encode())
         assert all(streams(row)==expected for row in by_lane[lane]), (name,lane)
-    if case['kind']=='runtime-negative':
+    if case['kind']=='runtime-negative' and case.get('port_c_residual_stderr',case['stderr']) != case['stderr']:
         residuals.append({'case':name,'lane':'port-C-O3','classification':'unwaived resource-refusal diagnostic difference'})
 result.update(completed=True,observations=len(result['rows']),timeouts=0,unwaived_residuals=residuals,full_parity=False)
 save()
