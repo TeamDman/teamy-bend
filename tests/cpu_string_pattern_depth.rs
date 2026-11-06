@@ -18,7 +18,7 @@ impl Drop for Artifacts {
 }
 
 #[test]
-fn single_character_and_empty_literal_patterns_execute_hits_and_misses() {
+fn string_and_nested_field_patterns_execute_hits_and_misses() {
     let root =
         Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/cpu-string-pattern-depth");
     let artifact_path = std::env::temp_dir().join(format!(

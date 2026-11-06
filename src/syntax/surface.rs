@@ -441,9 +441,15 @@ enum MatchStep {
         next: MatchState,
         fallback: MatchState,
     },
+    Constructor {
+        constructor: String,
+        constructor_origin: usize,
+        next: MatchState,
+        fallback: MatchState,
+    },
 }
 
-// A suspended nullary fallback owns the arm already compiled. On an error or
+// A suspended fallback owns the arm already compiled. On an error or
 // unwind, release that partial term without recursively destroying its graph.
 struct SavedFallback<'a> {
     parent: Option<MatchCall<'a>>,
@@ -459,6 +465,19 @@ impl Drop for SavedFallback<'_> {
             crate::kernel::release_term_iteratively(arm.value);
         }
     }
+}
+
+struct SavedArm<'a> {
+    parent: MatchCall<'a>,
+    constructor: String,
+    constructor_origin: usize,
+    site: MatchSite,
+    fallback: MatchState,
+}
+
+enum SavedMatch<'a> {
+    Arm(SavedArm<'a>),
+    Fallback(SavedFallback<'a>),
 }
 
 struct MatchCall<'a> {
@@ -491,6 +510,7 @@ fn flatten_match(
 
 #[expect(
     clippy::too_many_arguments,
+    clippy::too_many_lines,
     reason = "The match frame carries the existing traversal inputs and bound."
 )]
 fn flatten_match_bounded(
@@ -509,7 +529,7 @@ fn flatten_match_bounded(
         pending: Vec::new(),
         depth,
     };
-    let mut saved: Vec<SavedFallback<'_>> = Vec::new();
+    let mut saved: Vec<SavedMatch<'_>> = Vec::new();
     'compile: loop {
         if current.depth + current.pending.len() >= limit {
             return Err("pattern compilation exceeds the resource limit of 64 levels".into());
@@ -542,27 +562,48 @@ fn flatten_match_bounded(
                         depth: current.depth + 1,
                     };
                     let parent = std::mem::replace(&mut current, next);
-                    saved.push(SavedFallback {
+                    saved.push(SavedMatch::Fallback(SavedFallback {
                         parent: Some(parent),
                         constructor,
                         constructor_origin,
                         site,
                         arm: Some(value),
-                    });
+                    }));
                     continue 'compile;
                 }
-                let Some(mut previous) = saved.pop() else {
+                let Some(previous) = saved.pop() else {
                     return Ok(value);
                 };
-                value = SurfaceTerm::matched(
-                    std::mem::take(&mut previous.constructor),
-                    previous.arm.take().expect("saved match arm"),
-                    value,
-                    Some(previous.site),
-                    Some(previous.constructor_origin),
-                    origins,
-                );
-                current = previous.parent.take().expect("saved parent call");
+                match previous {
+                    SavedMatch::Fallback(mut previous) => {
+                        value = SurfaceTerm::matched(
+                            std::mem::take(&mut previous.constructor),
+                            previous.arm.take().expect("saved match arm"),
+                            value,
+                            Some(previous.site),
+                            Some(previous.constructor_origin),
+                            origins,
+                        );
+                        current = previous.parent.take().expect("saved parent call");
+                    }
+                    SavedMatch::Arm(previous) => {
+                        let next = MatchCall {
+                            initial: None,
+                            state: Some(previous.fallback),
+                            pending: Vec::new(),
+                            depth: previous.parent.depth + 1,
+                        };
+                        saved.push(SavedMatch::Fallback(SavedFallback {
+                            parent: Some(previous.parent),
+                            constructor: previous.constructor,
+                            constructor_origin: previous.constructor_origin,
+                            site: previous.site,
+                            arm: Some(value),
+                        }));
+                        current = next;
+                        continue 'compile;
+                    }
+                }
             },
             MatchStep::Nullary {
                 constructor,
@@ -574,6 +615,28 @@ fn flatten_match_bounded(
                     .pending
                     .push((constructor, constructor_origin, fallback));
                 current.state = Some(next);
+            }
+            MatchStep::Constructor {
+                constructor,
+                constructor_origin,
+                next,
+                fallback,
+            } => {
+                let site = fallback.scrutinees[0].match_site;
+                let child = MatchCall {
+                    initial: None,
+                    state: Some(next),
+                    pending: Vec::new(),
+                    depth: current.depth + 1,
+                };
+                let parent = std::mem::replace(&mut current, child);
+                saved.push(SavedMatch::Arm(SavedArm {
+                    parent,
+                    constructor,
+                    constructor_origin,
+                    site,
+                    fallback,
+                }));
             }
         }
     }
@@ -740,32 +803,20 @@ fn flatten_match_step(
                 },
             });
         }
-        let arm = flatten_match(
-            &next_scrutinees,
-            &positive,
-            &next_vars,
-            fresh,
-            display_fresh,
-            depth + 1,
-            origins,
-        )?;
-        let fallback = flatten_match(
-            scrutinees,
-            &negative,
-            vars,
-            fresh,
-            display_fresh,
-            depth + 1,
-            origins,
-        )?;
-        Ok(MatchStep::Done(SurfaceTerm::matched(
-            name.clone(),
-            arm,
-            fallback,
-            Some(scrutinees[0].match_site),
-            Some(constructor_origin),
-            origins,
-        )))
+        Ok(MatchStep::Constructor {
+            constructor: name.clone(),
+            constructor_origin,
+            next: MatchState {
+                scrutinees: next_scrutinees,
+                rows: positive,
+                vars: next_vars,
+            },
+            fallback: MatchState {
+                scrutinees: scrutinees.to_vec(),
+                rows: negative,
+                vars: vars.to_vec(),
+            },
+        })
     } else {
         Ok(MatchStep::Done(
             flatten_match(
@@ -808,6 +859,133 @@ mod tests {
             })
             .collect();
         (scrutinees, rows, vec![variable])
+    }
+
+    #[test]
+    fn nested_field_patterns_compile_on_small_stack() {
+        on_small_stack(|| {
+            let x = Variable {
+                name: "x".into(),
+                id: 0,
+            };
+            let y = Variable {
+                name: "y".into(),
+                id: 1,
+            };
+            let mut pattern = Pattern::Variable(y);
+            for _ in 0..40 {
+                pattern = Pattern::Constructor("C".into(), vec![pattern], 0);
+            }
+            let scrutinees = vec![SurfaceTerm::new(x.term(), None)];
+            let vars = vec![x];
+            let rows = vec![Row {
+                patterns: vec![pattern],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            }];
+            let result = flatten_match(&scrutinees, &rows, &vars, &mut 2, &mut 0, 0, None)
+                .unwrap_or_else(|error| panic!("unexpected error: {}", error.message()));
+            let mut cursor = &result.value;
+            for _ in 0..40 {
+                let Term::Mat {
+                    constructor,
+                    arm,
+                    fallback,
+                } = cursor.as_ref()
+                else {
+                    panic!("missing field constructor")
+                };
+                assert_eq!(constructor, "C");
+                assert!(matches!(fallback.as_ref(), Term::Efq));
+                cursor = arm;
+            }
+            assert!(matches!(cursor.as_ref(), Term::Lam { .. }));
+            crate::kernel::release_term_iteratively(result.value);
+        });
+    }
+
+    #[test]
+    fn nested_field_patterns_keep_the_existing_depth_guard() {
+        for (count, should_pass) in [(61, true), (62, false)] {
+            let x = Variable {
+                name: "x".into(),
+                id: 0,
+            };
+            let mut pattern = Pattern::Variable(Variable {
+                name: "y".into(),
+                id: 1,
+            });
+            for _ in 0..count {
+                pattern = Pattern::Constructor("C".into(), vec![pattern], 0);
+            }
+            let scrutinees = vec![SurfaceTerm::new(x.term(), None)];
+            let vars = vec![x];
+            let rows = vec![Row {
+                patterns: vec![pattern],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            }];
+            let result = flatten_match(&scrutinees, &rows, &vars, &mut 2, &mut 0, 0, None);
+            match (result, should_pass) {
+                (Ok(value), true) => crate::kernel::release_term_iteratively(value.value),
+                (Err(error), false) => assert_eq!(
+                    error.message(),
+                    "pattern compilation exceeds the resource limit of 64 levels"
+                ),
+                _ => panic!("field-pattern depth boundary changed at {count}"),
+            }
+        }
+    }
+
+    #[test]
+    fn field_branch_errors_preserve_order_and_release_shared_arm() {
+        on_small_stack(|| {
+            let (scrutinees, mut rows, vars) = nullary_alternatives(2);
+            let shared = term(Term::Rfl);
+            rows[0].patterns[0] = Pattern::Constructor(
+                "C0".into(),
+                vec![Pattern::Variable(Variable {
+                    name: "y".into(),
+                    id: 1,
+                })],
+                0,
+            );
+            rows[0].body = Body::Reply(SurfaceTerm::new(Rc::clone(&shared), None));
+            rows.push(Row {
+                patterns: vec![Pattern::Constructor(
+                    "C1".into(),
+                    vec![Pattern::Variable(Variable {
+                        name: "z".into(),
+                        id: 2,
+                    })],
+                    0,
+                )],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            });
+            let before = Rc::strong_count(&shared);
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 3, &mut 0, 0, None)
+            else {
+                panic!("fallback constructor arity must fail");
+            };
+            assert_eq!(
+                error.message(),
+                "constructor C1 has the wrong number of fields"
+            );
+            assert_eq!(Rc::strong_count(&shared), before);
+
+            rows[0].body = Body::Local {
+                patterns: vec![
+                    Pattern::Variable(vars[0].clone()),
+                    Pattern::Constructor("Bad".into(), vec![], 0),
+                ],
+                quant: Quant::Lone,
+                values: vec![],
+                body: Box::new(Body::Reply(SurfaceTerm::new(term(Term::Rfl), None))),
+            };
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 3, &mut 0, 0, None)
+            else {
+                panic!("invalid positive arm must fail first");
+            };
+            assert_eq!(error.message(), "a parallel let can bind only names");
+        });
     }
 
     #[test]
@@ -898,13 +1076,13 @@ mod tests {
             }
             let weak = Rc::downgrade(&deep);
             let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                let _frame = SavedFallback {
+                let _frame = SavedMatch::Fallback(SavedFallback {
                     parent: None,
                     constructor: "C".into(),
                     constructor_origin: 0,
                     site: MatchSite::Expression(0),
                     arm: Some(SurfaceTerm::new(deep, None)),
-                };
+                });
                 panic!("exercise unwind cleanup");
             }));
             let _panic = outcome.expect_err("the injected panic must be caught");

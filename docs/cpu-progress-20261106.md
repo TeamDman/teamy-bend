@@ -71,6 +71,13 @@ the original `"hi"` source still fails at the 64-level pattern guard. Other
 compiler/kernel recursion and ordinary public term destruction remain open.
 See its report for final-source validation and precise limits.
 
+The subsequent [field-bearing branch change](cpu-field-stack.md) schedules
+positive and fallback compiler calls with explicit frames and cleans up suspended
+arms on covered failures. The original `"hi"` witness still refuses at the
+64-level compilation guard. Pattern/body cloning and destruction, other
+compiler recursion, public term ownership and kernel recursion remain blockers
+to safely retiring the guard; the kernel's 128-level boundary is separate.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
