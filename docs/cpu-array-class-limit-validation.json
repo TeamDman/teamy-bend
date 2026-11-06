@@ -1,0 +1,159 @@
+{
+  "tested_source": "858e5169b92f38da742174b254784c8c3e037d74",
+  "reference": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "lock_sha256": "d2ef7a9647a04bafdb30afa09f204403fff983abe2b70b3c0a21617f53302bc4",
+  "binary_sha256": "386c9146cb204ed03c1eda6a8046889b0b71213a9d212c033c3859bf3d4f03c6",
+  "toolchain": {
+    "rust": "1.96.0",
+    "formatter": "nightly-2026-05-24",
+    "node": "24.19.0",
+    "clang": "19.1.7",
+    "powershell": "7.5.4"
+  },
+  "environment": {
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "BEND_GPU": "off",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "limits": {
+    "prebuild_free_workspace_bytes": 11811160064,
+    "active_free_workspace_bytes": 10737418240,
+    "active_free_temp_bytes": 1073741824,
+    "outer_seconds_per_command": 1200,
+    "comparison_child_seconds": 60
+  },
+  "standard_gate": {
+    "exit": 143,
+    "stop": "1200-second outer timeout",
+    "completed_test_groups": 133,
+    "completed_passed": 941,
+    "completed_failed": 0,
+    "completed_ignored": 48,
+    "another_group": "interrupted; not counted",
+    "pretest_stages": "format, strict clippy, all-feature build, Node TCP/UDP provider passed",
+    "log_sha256": "ac8c0dc46a24c785ca4cbc531de43754fe44a346d438cd5670f645a2f04d6b28"
+  },
+  "full_split_test_validation": {
+    "selection": "All 197 integration targets from cargo metadata sorted by name, first 100 and remaining 97; separate --lib --bins and --doc; all use --locked --offline --features extended_observability.",
+    "target_count": 197,
+    "target_names_sha256": "1f1ee053a23a0f37fda1604fce1dc334e971af62d1e7b1393dca63bb095525fc",
+    "runs": {
+      "depth-split-first": {
+        "groups": 100,
+        "passed": 492,
+        "failed": 0,
+        "ignored": 47,
+        "exit": 0,
+        "elapsed_seconds": 690.23,
+        "min_free_bytes": {
+          "workspace": 29221588992,
+          "tmp": 9439072256
+        },
+        "log_sha256": "f26a72c9a1e67db28bfb46d73c1c8518dba9a4132bce78c440f309346912fd26"
+      },
+      "depth-split-second": {
+        "groups": 97,
+        "passed": 505,
+        "failed": 0,
+        "ignored": 1,
+        "exit": 0,
+        "elapsed_seconds": 614.18,
+        "min_free_bytes": {
+          "workspace": 29221564416,
+          "tmp": 9439358976
+        },
+        "log_sha256": "3721fe42eb441fc758ec6da3440d5d31c4c60c2ebe60e9978a37151ebaf322d5"
+      },
+      "depth-lib-bins": {
+        "groups": 3,
+        "passed": 366,
+        "failed": 0,
+        "ignored": 1,
+        "exit": 0,
+        "elapsed_seconds": 110.03,
+        "min_free_bytes": {
+          "workspace": 29221543936,
+          "tmp": 9440669696
+        },
+        "log_sha256": "06b907194a9d1988de8aabbb29ebe8678d1226eca8a0c8846794fd31eedceb0e"
+      },
+      "depth-doc-tests": {
+        "groups": 1,
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "exit": 0,
+        "elapsed_seconds": 2.0,
+        "min_free_bytes": {
+          "workspace": 29221543936,
+          "tmp": 9440747520
+        },
+        "log_sha256": "a2d72fa0faa9622646eebb7b138d195ded675451226bd620201666ca3ada5bb9"
+      }
+    },
+    "passed": 1369,
+    "failed": 0,
+    "ignored": 49
+  },
+  "targeted_clippy": {
+    "exit": 0,
+    "all_features": true,
+    "targets": [
+      "compiler_executable_c_intrinsics",
+      "compiler_executable_c_parallel"
+    ],
+    "log_sha256": "92d326927475d272d6d9ca7a15a32618a81b2473f7cd19949f5ca50a8cdb1ab1"
+  },
+  "array_matrices": {
+    "source_clean": true,
+    "total_observations": 594,
+    "matrices": {
+      "cases": {
+        "observations": 198,
+        "timeouts": 0,
+        "unwaived_residuals": 0,
+        "manifest_sha256": "fdb88744c38de8aee171c835fd8401e947d64de9360699e0be5df4cbdba26380",
+        "raw_results_sha256": "0304e7aa5ebd7550b2c1573e9d03632e71b2c1a2b3ff357f593cb3ca7e01796a"
+      },
+      "borrow-cases": {
+        "observations": 132,
+        "timeouts": 0,
+        "unwaived_residuals": 0,
+        "manifest_sha256": "a7f7c5ff7d4732fea4f234aeb10ea82661af89243413c5f58da199d797bc9871",
+        "raw_results_sha256": "f7d9caf8d5f5809fa5c72cf495371bde855189f98b61c974327d1f4da4975538"
+      },
+      "boxed-cases": {
+        "observations": 132,
+        "timeouts": 0,
+        "unwaived_residuals": 0,
+        "manifest_sha256": "056f06c1aff01bd5ec89240ea32b9b7a55dfc0abccc0645232611cbbfb556fa9",
+        "raw_results_sha256": "9d85bdff4ff458412dee5e79cf06e8cb8b3eb3c12b8b4deb1ed84caf6c285e92"
+      },
+      "nested-cases": {
+        "observations": 132,
+        "timeouts": 0,
+        "unwaived_residuals": 0,
+        "manifest_sha256": "01b4ced531754165f0356f4efbea0ae36cbc005ccd423b894a1ed4801f15eb3e",
+        "raw_results_sha256": "b3adecb1bc082d41188433edfb71c93f1ef73021e569962cb654ba0297d16df8"
+      }
+    },
+    "nested_baseline_comparison": {
+      "unchanged_path_independent_rows": 118,
+      "intended_stderr_differences": 2,
+      "path_dependent_generation_rows_checked_separately": 12
+    }
+  },
+  "padded_upstream_c": {
+    "source_clean": true,
+    "fixture_sha256": "00d6c3b80471d2a0fcad45ff427ca2b185bc58e313a6313670ee28da1cb6767a",
+    "receipt_sha256": "59fcbf420a9547b5bd6fe1068724fa0b88923a7277d403c90781d9f590e99827",
+    "upstream_and_port_execution": "two each; exit 1, stdout before, exact shared class-limit stderr",
+    "js_and_native": "unrun; depth-30 allocation could be enormous",
+    "initial_launcher": "failed before execution because output directory already existed; fresh-directory retry passed"
+  },
+  "unrun_and_scope": "Single-command standard gate timed out; GPU/CUDA, new Windows/macOS validation, supplementary all-target lint, external consumer audit, Poche and whole CPU parity remain unqualified."
+}

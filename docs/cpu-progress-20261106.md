@@ -24,7 +24,7 @@ fresh final-source matrix completed 132 observations, with zero timeouts. The
 statuses and both streams of 120 path-independent observations, plus all 24
 generated-artifact hashes, match the preserved baseline. Fifty successful
 executions, 18 checker-negative observations and ten runtime refusals remain
-distinct. The port-C array-depth diagnostic is
+distinct. At that checkpoint the port-C array-depth diagnostic was
 one unwaived discrepancy; matching refusals are not proof of compatibility.
 The two originals returned 135 and 145896, respectively, in all five executable
 lanes twice. These controls do not prove general memory safety, physical sharing
@@ -99,10 +99,11 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
 
 ## Remaining work, ordered by dependency
 
-1. **Correctness of known CPU differences.** Keep the depth-32 generated-C
-   resource diagnostic discrepancy unwaived; investigate it without changing
-   allocation limits. Resolve argument-recovery lowering, Base source locations,
-   source holes/TODO behavior and remaining diagnostic provenance. `nat_first`
+1. **Correctness of known CPU differences.** The depth-32 generated-C
+   diagnostic was subsequently corrected without widening allocation limits;
+   see [array class-limit validation](cpu-array-class-limit.md). Investigate
+   remaining array/resource boundaries. Resolve argument-recovery lowering,
+   Base source locations, source holes/TODO behavior and diagnostic provenance. `nat_first`
    has a documented pinned C versus JS error-order conflict; a narrow exception
    remains a decision, not an assumed approval. F32.read has three documented
    backend-specific differences, so a uniform rule needs an explicit contract.
@@ -117,8 +118,8 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    concurrency under multiple worker profiles, cancellation, ownership and
    resource exhaustion. Arbitrary native foreign callbacks remain unsupported;
    host/oracle limitations, window/audio effects, and whole-library behavior
-   need their own qualification. Base is mode-dependent. A lexical recount finds 367 top-level type/law/def
-   forms in strict Base and another 95 in its execution-only overlay, versus
+   need their own qualification. Base is mode-dependent. A lexical recount finds
+   367 top-level type/law/def forms in strict Base and another 95 in its execution-only overlay, versus
    467 in upstream Base. Names overlap and some forms have different contracts;
    these counts are not a missing-feature count or proof of equivalence.
    A top-level name comparison finds 15 upstream names absent from both
