@@ -1,0 +1,88 @@
+{
+  "base_commit": "366a39e85ceaded64e32ef15310dcbb041e57749",
+  "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "toolchain": "rustc 1.96.0",
+  "source_sha256": {
+    "src/kernel/term.rs": "dd62f543c0f39087559b376869786f783dda94e9a1162def3e3a02d95521387d",
+    "tests/kernel_automatic_term_drop.rs": "b1e95a52c2f182b5492eec1958088ad78e3ff6ac1b719249b55ebc388a230a4d",
+    "tests/kernel_term_drop_allocation.rs": "42743fce4f886b977d7ce9f665378580d161c153ad5405ba8b1412d3387b9264",
+    "scripts/stack-safety/owned-term-consumer.rs": "b60946a233b1567d882099735b55a51f9d5366bb2d5dcaec210b7b69dd302315"
+  },
+  "bounded_test_set": {
+    "passed": 1417,
+    "failed": 0,
+    "ignored": 49,
+    "integration_targets": 202,
+    "includes": "library, binary, documentation and integration tests",
+    "changed_test_rerun": "kernel_term_drop_allocation after raw-pointer lint adjustment"
+  },
+  "stages": {
+    "lib": {
+      "exit": 0,
+      "elapsed_seconds": 122.03,
+      "stopped": null
+    },
+    "doc": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "first": {
+      "exit": 0,
+      "elapsed_seconds": 734.27,
+      "stopped": null
+    },
+    "second": {
+      "exit": 0,
+      "elapsed_seconds": 662.21,
+      "stopped": null
+    },
+    "allfeatures-clippy": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "allfeatures-build": {
+      "exit": 0,
+      "elapsed_seconds": 8.0,
+      "stopped": null
+    },
+    "newtests-clippy-fixed": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "fault-final": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "provider": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "final-upstream": {
+      "exit": 0,
+      "elapsed_seconds": 18.01,
+      "stopped": null
+    }
+  },
+  "prior_new_test_lint": {
+    "status": "failed then corrected",
+    "reason": "raw pointer spelling"
+  },
+  "standard_gate": "not rerun; previous 1200-second gate timed out and was incomplete",
+  "limits": {
+    "batch_timeout_seconds": 1200,
+    "comparison_subprocess_seconds": 30,
+    "workspace_preflight_gib": 11,
+    "workspace_active_gib": 10,
+    "tmp_floor_gib": 1,
+    "extra_os_memory_cap": "none",
+    "fault_stack_requested_bytes": 65536,
+    "core_dumps": "disabled in fault subprocesses"
+  },
+  "upstream_witness": "upstream True{}; port check and run refused at compiler depth 64",
+  "gpu_and_other_hosts": "unrun"
+}

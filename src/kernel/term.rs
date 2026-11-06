@@ -176,50 +176,142 @@ pub fn term(value: Term) -> TermRef {
     Rc::new(value)
 }
 
-/// Release an owned term graph without recursively dropping uniquely owned
-/// children. Shared children remain alive until their other owners release them.
-///
-/// This is an explicit cleanup operation: ordinary `Rc<Term>` destruction is
-/// unchanged and can still recurse. Callers holding another deep root must also
-/// release that root iteratively. Temporary storage is proportional to pending
-/// graph edges, and no semantic validation or resource budget is bypassed.
-pub fn release_term_iteratively(root: TermRef) {
-    // A shared root cannot be destroyed by releasing this owner; avoid
-    // allocating a work list on that common path.
-    if Rc::strong_count(&root) > 1 {
-        return;
-    }
-    let mut pending = vec![root];
-    while let Some(value) = pending.pop() {
-        let Ok(value) = Rc::try_unwrap(value) else {
-            continue;
-        };
-        match value {
-            Term::Var { .. }
+// An owned Term implements Drop; callers extracting fields must borrow or clone
+// them instead of moving them directly out of the enum.
+fn is_leaf(value: &Term) -> bool {
+    matches!(
+        value,
+        Term::Var { .. }
             | Term::Ref(_)
             | Term::GpuRef(_)
             | Term::Qnt
             | Term::Qua(_)
             | Term::Efq
             | Term::Rfl
-            | Term::Hole(_) => {}
-            Term::Typ(value) | Term::Lam { body: value, .. } => pending.push(value),
-            Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => pending.extend([a, b]),
-            Term::All { domain, body, .. } => pending.extend([domain, body]),
-            Term::Adt { args, .. } | Term::Ctr { args, .. } => pending.extend(args),
-            Term::Mat { arm, fallback, .. } => pending.extend([arm, fallback]),
-            Term::Eql { left, right, ty } => pending.extend([left, right, ty]),
-            Term::Rwt {
-                evidence,
-                motive,
-                body,
-            } => pending.extend([evidence, motive, body]),
-            Term::Let { bindings, body } => {
-                pending.extend(bindings.into_iter().map(|binding| binding.value));
-                pending.push(body);
+            | Term::Hole(_)
+    )
+}
+
+fn has_nonleaf_child(value: &Term) -> bool {
+    let nonleaf = |child: &TermRef| !is_leaf(child);
+    match value {
+        Term::Var { .. }
+        | Term::Ref(_)
+        | Term::GpuRef(_)
+        | Term::Qnt
+        | Term::Qua(_)
+        | Term::Efq
+        | Term::Rfl
+        | Term::Hole(_) => false,
+        Term::Typ(child) | Term::Lam { body: child, .. } => nonleaf(child),
+        Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => nonleaf(a) || nonleaf(b),
+        Term::All { domain, body, .. } => nonleaf(domain) || nonleaf(body),
+        Term::Adt { args, .. } | Term::Ctr { args, .. } => args.iter().any(nonleaf),
+        Term::Mat { arm, fallback, .. } => nonleaf(arm) || nonleaf(fallback),
+        Term::Eql { left, right, ty } => nonleaf(left) || nonleaf(right) || nonleaf(ty),
+        Term::Rwt {
+            evidence,
+            motive,
+            body,
+        } => nonleaf(evidence) || nonleaf(motive) || nonleaf(body),
+        Term::Let { bindings, body } => bindings.iter().any(|b| nonleaf(&b.value)) || nonleaf(body),
+    }
+}
+
+fn take_edges(value: &mut Term, empty: &TermRef, pending: &mut Vec<TermRef>) {
+    // Reserve before detaching any edge. Cleanup cannot return an allocation
+    // error, and unwinding with a partially detached graph can itself overflow
+    // the host stack. Match Rust's ordinary allocation-failure behavior and
+    // terminate rather than continue with an unbounded recursive cleanup.
+    let edges = match &*value {
+        Term::Var { .. }
+        | Term::Ref(_)
+        | Term::GpuRef(_)
+        | Term::Qnt
+        | Term::Qua(_)
+        | Term::Efq
+        | Term::Rfl
+        | Term::Hole(_) => 0,
+        Term::Typ(_) | Term::Lam { .. } => 1,
+        Term::Min(..) | Term::App(..) | Term::Ann(..) | Term::All { .. } | Term::Mat { .. } => 2,
+        Term::Eql { .. } | Term::Rwt { .. } => 3,
+        Term::Adt { args, .. } | Term::Ctr { args, .. } => args.len(),
+        Term::Let { bindings, .. } => match bindings.len().checked_add(1) {
+            Some(edges) => edges,
+            None => std::process::abort(),
+        },
+    };
+    if pending.try_reserve(edges).is_err() {
+        std::process::abort();
+    }
+    let mut take = |edge: &mut TermRef| pending.push(std::mem::replace(edge, Rc::clone(empty)));
+    match value {
+        Term::Var { .. }
+        | Term::Ref(_)
+        | Term::GpuRef(_)
+        | Term::Qnt
+        | Term::Qua(_)
+        | Term::Efq
+        | Term::Rfl
+        | Term::Hole(_) => {}
+        Term::Typ(child) | Term::Lam { body: child, .. } => take(child),
+        Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => {
+            take(a);
+            take(b);
+        }
+        Term::All { domain, body, .. } => {
+            take(domain);
+            take(body);
+        }
+        Term::Adt { args, .. } | Term::Ctr { args, .. } => pending.append(args),
+        Term::Mat { arm, fallback, .. } => {
+            take(arm);
+            take(fallback);
+        }
+        Term::Eql { left, right, ty } => {
+            take(left);
+            take(right);
+            take(ty);
+        }
+        Term::Rwt {
+            evidence,
+            motive,
+            body,
+        } => {
+            take(evidence);
+            take(motive);
+            take(body);
+        }
+        Term::Let { bindings, body } => {
+            for binding in bindings {
+                take(&mut binding.value);
+            }
+            take(body);
+        }
+    }
+}
+
+impl Drop for Term {
+    fn drop(&mut self) {
+        // Leaf-only children can be dropped by Rust without recursive chains.
+        // This also makes destruction of already-drained nodes allocation-free.
+        if !has_nonleaf_child(self) {
+            return;
+        }
+        let empty = Rc::new(Term::Rfl);
+        let mut pending = Vec::new();
+        take_edges(self, &empty, &mut pending);
+        while let Some(value) = pending.pop() {
+            if let Ok(mut value) = Rc::try_unwrap(value) {
+                take_edges(&mut value, &empty, &mut pending);
             }
         }
     }
+}
+
+/// Release an owned graph. Ordinary last-owner drop is also iterative.
+pub fn release_term_iteratively(root: TermRef) {
+    drop(root);
 }
 
 // A single intermediate result needs the same unwind protection as a pending
@@ -248,9 +340,8 @@ impl Drop for PendingTerm {
     }
 }
 
-// Intermediate owned results must not recursively destroy a deep graph when a
-// later sibling fails or an operation unwinds. Successful callers take the
-// vector out, leaving the guard empty. This does not change `Rc<Term>` drop.
+// Intermediate owned results are kept together until a later sibling succeeds.
+// Successful callers take the vector out, leaving the guard empty.
 #[derive(Default)]
 pub(super) struct PendingTerms(Vec<TermRef>);
 

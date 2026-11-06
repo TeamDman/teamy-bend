@@ -5,8 +5,11 @@ use teamy_bend::kernel::TermRef;
 use teamy_bend::kernel::term;
 fn owned_child(value: TermRef) -> TermRef {
     match Rc::try_unwrap(value) {
-        Ok(Term::Typ(child)) => child,
-        _ => term(Term::Rfl),
+        Ok(value) => match &value {
+            Term::Typ(child) => Rc::clone(child),
+            _ => term(Term::Rfl),
+        },
+        Err(_) => term(Term::Rfl),
     }
 }
 fn main() {

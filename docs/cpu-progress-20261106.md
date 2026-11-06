@@ -82,7 +82,7 @@ The [stack-safety path map](cpu-stack-path-map.md) distinguishes the work
 needed to retire the compiler guard from the separate input/kernel boundary.
 A reduced automatic-destruction model handles deep shared cleanup, but adding
 `Drop` to the public `Term` enum breaks existing owned-field matches; no
-production ownership change or guard removal is claimed.
+production ownership change or guard removal was claimed at that point.
 
 The subsequent [private pattern-tree change](cpu-pattern-tree-stack.md)
 converts parser pattern traversal and cloning to explicit work and makes private
@@ -94,7 +94,19 @@ The subsequent [private body traversal and cleanup change](cpu-body-stack.md)
 makes body cloning, substitution and reusable-binding traversal iterative, and
 cleans private body-owned graphs automatically. The original `"hi"` witness
 still refuses at 64 levels; public `Rc<Term>` last-owner drop and other
-recursive compiler and kernel paths remain open.
+recursive compiler and kernel paths remained open at that point.
+
+The subsequent [automatic core-term cleanup](cpu-term-ownership.md) adds an
+iterative `Term` destructor, preserving `Rc`/`Weak` sharing while intentionally
+changing Rust owned-field destructuring. It handles ordinary last-owner,
+early-error and unwind cleanup in focused small-stack tests. Work-list
+allocation failure aborts the process rather than yielding a Bend resource
+error; dedicated isolated tests inject failure both normally and during unwind.
+The original `"hi"` source still fails at the 64-level pattern guard. Remaining
+compiler recursion and the separate input and kernel limits are still open. Its
+complete bounded test set passed 1,417 tests, with zero failures and 49
+ignored. The standard uninterrupted gate was not rerun; the prior timeout
+remains incomplete.
 
 ## Inventory by applicable mode
 
