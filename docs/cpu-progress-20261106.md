@@ -124,6 +124,9 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    the original source. A [reduced normalization investigation](cpu-string-normalization-boundary.md)
    separates the port's pattern limit, kernel normalization boundary and data
    output limit; the original pattern is still refused and no repair is claimed.
+   A [bounded shared-DAG prototype](cpu-string-dag-summary-attempt.md) adds
+   path-depth, occurrence-budget and first-error adversaries; it does not make
+   the expanded string matcher acceptable or implement production lowering.
    General large native Nat computation and cancellation
    boundaries remain incomplete or unmeasured.
 3. **Runtime and library breadth.** Systematically measure the unlinked corpus
