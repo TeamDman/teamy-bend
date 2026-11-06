@@ -78,6 +78,12 @@ arms on covered failures. The original `"hi"` witness still refuses at the
 compiler recursion, public term ownership and kernel recursion remain blockers
 to safely retiring the guard; the kernel's 128-level boundary is separate.
 
+The [stack-safety path map](cpu-stack-path-map.md) distinguishes the work
+needed to retire the compiler guard from the separate input/kernel boundary.
+A reduced automatic-destruction model handles deep shared cleanup, but adding
+`Drop` to the public `Term` enum breaks existing owned-field matches; no
+production ownership change or guard removal is claimed.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
