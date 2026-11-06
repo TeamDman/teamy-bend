@@ -20,7 +20,9 @@ side effects and does not alter the public `Term` enum or `Rc` representation.
 It is **explicit**: ordinary `Rc<Term>` destruction remains recursive, and an
 external owner of a deep shared graph must also release its last root safely.
 The test's unwind cleanup uses an explicit guard; ordinary kernel failure paths
-have not yet been converted to use one. The work list uses memory proportional
+were not converted in this earlier slice. A [subsequent cleanup slice](cpu-stack-auto-cleanup.md)
+guards selected substitution, child-mapping and memo paths automatically; it
+does not change ordinary public `Rc` destruction. The work list uses memory proportional
 to pending edges; no arbitrary depth threshold was added.
 
 ## Evidence and remaining boundaries

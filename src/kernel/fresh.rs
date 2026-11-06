@@ -8,6 +8,7 @@ use super::check::Engine;
 use super::check::KernelError;
 use super::substitute;
 use super::term;
+use super::term::try_map_terms;
 use std::rc::Rc;
 
 impl Engine {
@@ -102,10 +103,7 @@ impl Engine {
                 args,
                 excluded,
             } => {
-                let args = args
-                    .iter()
-                    .map(|x| self.freshen(x))
-                    .collect::<Result<_, _>>()?;
+                let args = try_map_terms(args, |x| self.freshen(x))?;
                 Ok(term(Term::Adt {
                     name: name.clone(),
                     args,
@@ -113,10 +111,7 @@ impl Engine {
                 }))
             }
             Term::Ctr { name, args } => {
-                let args = args
-                    .iter()
-                    .map(|x| self.freshen(x))
-                    .collect::<Result<_, _>>()?;
+                let args = try_map_terms(args, |x| self.freshen(x))?;
                 Ok(term(Term::Ctr {
                     name: name.clone(),
                     args,

@@ -33,10 +33,21 @@ impl NormalizationMemo {
 
     fn insert(&mut self, value: &TermRef, result: &TermRef) {
         if matches!(value.as_ref(), Term::App(..)) && matches!(result.as_ref(), Term::Ctr { .. }) {
-            self.heads.insert(
+            let old = self.heads.insert(
                 Rc::as_ptr(value) as usize,
                 (Rc::downgrade(value), Rc::clone(result)),
             );
+            if let Some((_, old)) = old {
+                super::term::release_term_iteratively(old);
+            }
+        }
+    }
+}
+
+impl Drop for NormalizationMemo {
+    fn drop(&mut self) {
+        for (_, (_, result)) in std::mem::take(&mut self.heads) {
+            super::term::release_term_iteratively(result);
         }
     }
 }
@@ -367,10 +378,6 @@ impl Engine {
         result
     }
 
-    #[expect(
-        clippy::too_many_lines,
-        reason = "An exhaustive AST traversal makes complete normalization coverage directly reviewable."
-    )]
     fn normalize_inner(&mut self, value: &TermRef) -> Result<TermRef, KernelError> {
         let v = self.whnf(value)?;
         match v.as_ref() {
@@ -441,10 +448,7 @@ impl Engine {
                 }))
             }
             Term::Ctr { name, args } => {
-                let args = args
-                    .iter()
-                    .map(|a| self.normalize(a))
-                    .collect::<Result<_, _>>()?;
+                let args = super::term::try_map_terms(args, |a| self.normalize(a))?;
                 Ok(term(Term::Ctr {
                     name: name.clone(),
                     args,
@@ -455,10 +459,7 @@ impl Engine {
                 args,
                 excluded,
             } => {
-                let args = args
-                    .iter()
-                    .map(|a| self.normalize(a))
-                    .collect::<Result<_, _>>()?;
+                let args = super::term::try_map_terms(args, |a| self.normalize(a))?;
                 Ok(term(Term::Adt {
                     name: name.clone(),
                     args,
@@ -644,5 +645,104 @@ impl Engine {
             }
         }
         Ok(true)
+    }
+}
+
+#[cfg(test)]
+mod memo_cleanup_tests {
+    use super::*;
+    use crate::kernel::release_term_iteratively;
+
+    fn key() -> TermRef {
+        term(Term::App(term(Term::Ref("f".into())), term(Term::Rfl)))
+    }
+
+    fn deep_result() -> TermRef {
+        let mut value = term(Term::Rfl);
+        for _ in 0..20_000 {
+            value = term(Term::Typ(value));
+        }
+        term(Term::Ctr {
+            name: "Result".into(),
+            args: vec![value],
+        })
+    }
+
+    struct Cleanup(Option<TermRef>);
+
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            if let Some(value) = self.0.take() {
+                release_term_iteratively(value);
+            }
+        }
+    }
+
+    fn run_small_stack(test: impl FnOnce() + Send + 'static) {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(test)
+            .unwrap()
+            .join()
+            .unwrap();
+    }
+
+    #[test]
+    fn memo_drop_and_replacement_release_deep_results() {
+        run_small_stack(|| {
+            let key = key();
+            let mut memo = NormalizationMemo::default();
+            let mut old = Cleanup(Some(deep_result()));
+            let weak = Rc::downgrade(old.0.as_ref().unwrap());
+            memo.insert(&key, old.0.as_ref().unwrap());
+            assert_eq!(Rc::strong_count(&key), 1, "memo keeps a weak key");
+            assert_eq!(Rc::strong_count(old.0.as_ref().unwrap()), 2);
+            release_term_iteratively(old.0.take().unwrap());
+            assert!(weak.upgrade().is_some());
+            let replacement = term(Term::Ctr {
+                name: "Replacement".into(),
+                args: vec![],
+            });
+            memo.insert(&key, &replacement);
+            assert!(weak.upgrade().is_none(), "replaced result must be released");
+
+            let mut latest = Cleanup(Some(deep_result()));
+            let latest_weak = Rc::downgrade(latest.0.as_ref().unwrap());
+            memo.insert(&key, latest.0.as_ref().unwrap());
+            let other_key = term(Term::App(term(Term::Ref("g".into())), term(Term::Rfl)));
+            memo.insert(&other_key, latest.0.as_ref().unwrap());
+            assert_eq!(Rc::strong_count(latest.0.as_ref().unwrap()), 3);
+            release_term_iteratively(latest.0.take().unwrap());
+            drop(memo);
+            assert!(
+                latest_weak.upgrade().is_none(),
+                "memo drop must release result"
+            );
+        });
+    }
+
+    #[test]
+    fn memo_unwind_releases_deep_results_and_preserves_other_owners() {
+        run_small_stack(|| {
+            let key = key();
+            for shared in [false, true] {
+                let mut value = Cleanup(Some(deep_result()));
+                let weak = Rc::downgrade(value.0.as_ref().unwrap());
+                let retained = shared.then(|| Cleanup(Some(Rc::clone(value.0.as_ref().unwrap()))));
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    let mut memo = NormalizationMemo::default();
+                    memo.insert(&key, value.0.as_ref().unwrap());
+                    release_term_iteratively(value.0.take().unwrap());
+                    panic!("deliberate memo unwind");
+                }));
+                drop(result.expect_err("deliberate memo panic"));
+                assert_eq!(weak.upgrade().is_some(), shared);
+                drop(retained);
+                assert!(
+                    weak.upgrade().is_none(),
+                    "last owner can release iteratively"
+                );
+            }
+        });
     }
 }

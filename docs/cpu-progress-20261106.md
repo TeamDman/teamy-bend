@@ -148,6 +148,15 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    [Iterative substitution and explicit release](cpu-stack-safe-substitution.md)
    provide initial stack-safe paths; they do not yet remove any end-to-end
    depth guard or make ordinary `Rc<Term>` destruction stack-safe.
+   [Automatic partial-result and memo cleanup](cpu-stack-auto-cleanup.md)
+   extends stack-safe cleanup to selected kernel failure and unwind paths;
+   other term owners and the recursive compiler/kernel paths remain open.
+   Its complete final-source offline test set passed in bounded batches:
+   **1,389 passed / 0 failed / 49 ignored**, covering 200 integration targets
+   plus library, binary and documentation tests. This is not a standard-gate pass.
+   Its final-source standard gate timed out at 1,200 seconds after 959 passed,
+   zero failed and 48 ignored in completed groups; the active group was
+   interrupted and later groups were unrun.
 3. **Runtime and library breadth.** Systematically measure the unlinked corpus
    in each applicable lane, and reproduce failures before repair. Exercise
    concurrency under multiple worker profiles, cancellation, ownership and

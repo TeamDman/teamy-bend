@@ -1,0 +1,298 @@
+{
+  "base": "084046b0a6d6c809350d6e1865a7862463ee137e",
+  "upstream": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "binary_sha256": "266ef08470b3155f73e895c94b60cb4d0bcb9f407ad6bc863613cdb1a99b936c",
+  "library_sha256": "623853058b3e9c97fda39417bf8e64a1f47239e85c0ac013ce663fca867ae74e",
+  "production_sha256": {
+    "src/kernel/term.rs": "c30a50080bbcd4d6dce3710a7645fe72759795638c3f5f0483f645bb3f8f82ed",
+    "src/kernel/fresh.rs": "b69dfd12c989b6e690dbff00001851ff4bc444505d574ad1d895f7036328200f",
+    "src/kernel/reduce.rs": "a7c901ee2c7351ce0cf6237143a2ffebd8b40cf837315f042735c1818e0d1ca2"
+  },
+  "fixtures_sha256": {
+    "ascii-hit.bend": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+    "ascii-miss.bend": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+    "empty-hit.bend": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+    "empty-miss.bend": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+    "prefix-miss.bend": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+    "unicode-hit.bend": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+    "unicode-miss.bend": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1"
+  },
+  "original_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+  "rows": [
+    {
+      "label": "ascii-hit:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-hit:port:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-hit:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-hit:port:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-miss:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-miss:port:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-miss:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "ascii-miss:port:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-hit:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-hit:port:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-hit:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-hit:port:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-miss:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-miss:port:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-miss:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "empty-miss:port:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "prefix-miss:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "prefix-miss:port:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "prefix-miss:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "prefix-miss:port:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-hit:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-hit:port:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-hit:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-hit:port:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-miss:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-miss:port:1",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-miss:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "unicode-miss:port:2",
+      "exit": 0,
+      "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original:port-check:1",
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    },
+    {
+      "label": "compact:port:1",
+      "exit": 0,
+      "stdout_sha256": "9c90f70d04f4ca9783ee89d4627cabab9ea6acb9f7d3d30654ca2b24fc2d4717",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compact:upstream:1",
+      "exit": 0,
+      "stdout_sha256": "5d197630074d20af4d8921ab0c78c412087582a9942728312c8cecbfd90e787b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original:port-check:2",
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    },
+    {
+      "label": "compact:port:2",
+      "exit": 0,
+      "stdout_sha256": "9c90f70d04f4ca9783ee89d4627cabab9ea6acb9f7d3d30654ca2b24fc2d4717",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "compact:upstream:2",
+      "exit": 0,
+      "stdout_sha256": "5d197630074d20af4d8921ab0c78c412087582a9942728312c8cecbfd90e787b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "timeout_seconds": 30,
+  "scope": "Original expected refusal is not a pass; compact construction is not source lowering; each of six inputs was tested via two APIs twice.",
+  "support_sha256": {
+    "src/kernel/composition_work_tests.rs": "05fe81dc13ba9fbeac505baf3e74c030ae9030626664f43069bfd5c3e70b4e4a",
+    "scripts/compact-patterns/prototype.rs": "b4dccc207058820393cf06b959b00bd7639aef5525d4e314a9b1c2ad47089802",
+    "scripts/compact-patterns/upstream-normalized.mjs": "b38f1cac5d22d90c3a396b4f04b9c78746a39d4bb6b9ac353841eb766b36e281",
+    "tests/fixtures/cpu-compact-patterns/helpers.bend": "9bd0f58e2b695a8f5503669370e81ed57e271ee3f2ca5b30525173666890a59f",
+    "tests/fixtures/cpu-compact-patterns/original-open.bend": "ab8eda4ed5b790efa4d2e6b2fcbc783560e4a9a644e62975edeeb763761cb41f"
+  },
+  "state": "uncommitted production candidate on recorded base, identified by source hashes",
+  "validation": {
+    "focused_cleanup_filter": {
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "includes_existing": 1
+    },
+    "exact_fuel_test": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "bounded_full_set": {
+      "passed": 1389,
+      "failed": 0,
+      "ignored": 49,
+      "integration_targets": 200,
+      "library_binary_documentation_included": true,
+      "separate_from_standard_gate": true
+    },
+    "production_clippy": "passed with all features and warnings denied",
+    "supplementary_all_target_clippy": "failed on unchanged kernel_dead_residue test lint on an earlier candidate; not a pass",
+    "standard_gate": {
+      "format": "passed",
+      "production_clippy": "passed",
+      "all_feature_build": "passed",
+      "real_node_tcp_udp_provider": "passed",
+      "exit": 143,
+      "elapsed_seconds": 1200.44,
+      "stop": "1200-second deadline",
+      "completed_groups": 136,
+      "passed": 959,
+      "failed": 0,
+      "ignored": 48,
+      "remaining": "active group interrupted, later groups unrun",
+      "minimum_free_bytes": {
+        "workspace": 28950233088,
+        "temporary": 9418444800
+      }
+    },
+    "limits": {
+      "per_comparison_seconds": 30,
+      "outer_seconds": 1200,
+      "workspace_free_preflight_gib": 11,
+      "workspace_free_active_gib": 10,
+      "temporary_free_gib": 1,
+      "additional_os_memory_limit": "none"
+    }
+  }
+}

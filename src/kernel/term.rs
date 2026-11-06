@@ -184,6 +184,11 @@ pub fn term(value: Term) -> TermRef {
 /// release that root iteratively. Temporary storage is proportional to pending
 /// graph edges, and no semantic validation or resource budget is bypassed.
 pub fn release_term_iteratively(root: TermRef) {
+    // A shared root cannot be destroyed by releasing this owner; avoid
+    // allocating a work list on that common path.
+    if Rc::strong_count(&root) > 1 {
+        return;
+    }
     let mut pending = vec![root];
     while let Some(value) = pending.pop() {
         let Ok(value) = Rc::try_unwrap(value) else {
@@ -215,6 +220,55 @@ pub fn release_term_iteratively(root: TermRef) {
             }
         }
     }
+}
+
+// Intermediate owned results must not recursively destroy a deep graph when a
+// later sibling fails or an operation unwinds. Successful callers take the
+// vector out, leaving the guard empty. This does not change `Rc<Term>` drop.
+#[derive(Default)]
+pub(super) struct PendingTerms(Vec<TermRef>);
+
+impl std::ops::Deref for PendingTerms {
+    type Target = Vec<TermRef>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl std::ops::DerefMut for PendingTerms {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
+impl Drop for PendingTerms {
+    fn drop(&mut self) {
+        while let Some(value) = self.0.pop() {
+            release_term_iteratively(value);
+        }
+    }
+}
+
+pub(super) fn try_map_terms<E>(
+    values: &[TermRef],
+    mut transform: impl FnMut(&TermRef) -> Result<TermRef, E>,
+) -> Result<Vec<TermRef>, E> {
+    let mut pending = PendingTerms::default();
+    for value in values {
+        pending.push(transform(value)?);
+    }
+    Ok(std::mem::take(&mut pending.0))
+}
+
+#[cfg(test)]
+thread_local! {
+    static SUBSTITUTION_TEST_FAULT: std::cell::Cell<*const Term> = const {
+        std::cell::Cell::new(std::ptr::null())
+    };
+    static SUBSTITUTION_TEST_RESULT: std::cell::RefCell<Option<std::rc::Weak<Term>>> = const {
+        std::cell::RefCell::new(None)
+    };
 }
 /// Form the dependent function telescope over a list of binders.
 #[must_use]
@@ -283,8 +337,21 @@ pub fn substitute(root: &TermRef, target: usize, replacement: &TermRef) -> TermR
         Build(&'a TermRef),
     }
     let mut tasks = vec![Task::Visit(root)];
-    let mut results: Vec<TermRef> = Vec::new();
+    let mut results = PendingTerms::default();
+    #[cfg(test)]
+    let inject_fault = SUBSTITUTION_TEST_FAULT.with(|fault| !fault.get().is_null());
     while let Some(task) = tasks.pop() {
+        #[cfg(test)]
+        if inject_fault
+            && let Task::Visit(node) = &task
+            && SUBSTITUTION_TEST_FAULT.with(|fault| Rc::as_ptr(node) == fault.get())
+        {
+            SUBSTITUTION_TEST_RESULT.with(|result| {
+                *result.borrow_mut() = Some(Rc::downgrade(results.last().unwrap()));
+            });
+            SUBSTITUTION_TEST_FAULT.with(|fault| fault.set(std::ptr::null()));
+            panic!("deliberate substitution unwind");
+        }
         match task {
             Task::Visit(node) => {
                 match node.as_ref() {
@@ -421,7 +488,8 @@ pub fn substitute(root: &TermRef, target: usize, replacement: &TermRef) -> TermR
                         args,
                         excluded,
                     } => {
-                        let out = results.split_off(results.len() - args.len());
+                        let start = results.len() - args.len();
+                        let out = results.split_off(start);
                         term(Term::Adt {
                             name: name.clone(),
                             args: out,
@@ -429,7 +497,8 @@ pub fn substitute(root: &TermRef, target: usize, replacement: &TermRef) -> TermR
                         })
                     }
                     Term::Ctr { name, args } => {
-                        let out = results.split_off(results.len() - args.len());
+                        let start = results.len() - args.len();
+                        let out = results.split_off(start);
                         if args.iter().zip(&out).all(|(a, b)| Rc::ptr_eq(a, b)) {
                             Rc::clone(node)
                         } else {
@@ -475,7 +544,8 @@ pub fn substitute(root: &TermRef, target: usize, replacement: &TermRef) -> TermR
                         } else {
                             pop()
                         };
-                        let mapped = results.split_off(results.len() - bindings.len());
+                        let start = results.len() - bindings.len();
+                        let mapped = results.split_off(start);
                         let bindings = bindings
                             .iter()
                             .zip(mapped)
@@ -1336,6 +1406,152 @@ mod inspection_tests {
                 .to_string()
                 .contains("input size limit")
         );
+    }
+}
+
+#[cfg(test)]
+mod automatic_cleanup_tests {
+    use super::*;
+
+    fn deep(depth: usize) -> TermRef {
+        let mut value = term(Term::Rfl);
+        for _ in 0..depth {
+            value = term(Term::Typ(value));
+        }
+        value
+    }
+
+    struct Cleanup(Option<TermRef>);
+
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            if let Some(value) = self.0.take() {
+                release_term_iteratively(value);
+            }
+        }
+    }
+
+    #[test]
+    fn substitution_partial_result_releases_automatically_on_unwind() {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(|| {
+                let trigger = term(Term::Hole("fault marker".into()));
+                let source = Cleanup(Some(term(Term::Ctr {
+                    name: "Pair".into(),
+                    args: vec![deep(20_000), Rc::clone(&trigger)],
+                })));
+                let replacement = term(Term::Rfl);
+                SUBSTITUTION_TEST_FAULT.with(|fault| fault.set(Rc::as_ptr(&trigger)));
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    substitute(source.0.as_ref().unwrap(), 999, &replacement)
+                }));
+                if let Ok(value) = result {
+                    release_term_iteratively(value);
+                    panic!("fault must occur after the first child");
+                }
+                let output = SUBSTITUTION_TEST_RESULT.with(|value| value.borrow_mut().take());
+                assert!(
+                    output.unwrap().upgrade().is_none(),
+                    "partially built output must be released"
+                );
+            })
+            .unwrap()
+            .join()
+            .unwrap();
+    }
+
+    #[test]
+    fn mapped_partial_results_release_on_error_and_unwind() {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(|| {
+                let inputs = [term(Term::Rfl), term(Term::Rfl), term(Term::Rfl)];
+                for panics in [false, true] {
+                    let mut value = Cleanup(Some(deep(20_000)));
+                    let weak = Rc::downgrade(value.0.as_ref().unwrap());
+                    let mut calls = 0;
+                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        try_map_terms(&inputs, |_| {
+                            calls += 1;
+                            if calls == 1 {
+                                return Ok(value.0.take().unwrap());
+                            }
+                            assert!(!panics, "deliberate mapping failure");
+                            Err("second child fails")
+                        })
+                    }));
+                    if panics {
+                        match result {
+                            Err(_) => {}
+                            Ok(Err(error)) => panic!("expected panic, got error: {error}"),
+                            Ok(Ok(output)) => {
+                                for term in output {
+                                    release_term_iteratively(term);
+                                }
+                                panic!("expected panic");
+                            }
+                        }
+                    } else {
+                        match result.unwrap() {
+                            Err(error) => assert_eq!(error, "second child fails"),
+                            Ok(output) => {
+                                for term in output {
+                                    release_term_iteratively(term);
+                                }
+                                panic!("expected second-child failure");
+                            }
+                        }
+                    }
+                    assert_eq!(calls, 2, "the later child must not run");
+                    assert!(weak.upgrade().is_none(), "partial output must be released");
+                }
+            })
+            .unwrap()
+            .join()
+            .unwrap();
+    }
+
+    #[test]
+    fn mapped_success_keeps_order_and_reference_identity() {
+        let first = term(Term::Ref("first".into()));
+        let second = term(Term::Ref("second".into()));
+        let inputs = [Rc::clone(&first), Rc::clone(&second)];
+        let output = try_map_terms(&inputs, |value| Ok::<_, ()>(Rc::clone(value))).unwrap();
+        assert!(Rc::ptr_eq(&output[0], &first));
+        assert!(Rc::ptr_eq(&output[1], &second));
+        assert_eq!(Rc::strong_count(&first), 3);
+        assert_eq!(Rc::strong_count(&second), 3);
+    }
+
+    #[test]
+    fn mapped_failure_preserves_other_shared_owners() {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(|| {
+                let original = Cleanup(Some(deep(20_000)));
+                let retained = Cleanup(Some(Rc::clone(original.0.as_ref().unwrap())));
+                let weak = Rc::downgrade(original.0.as_ref().unwrap());
+                let inputs = [term(Term::Rfl), term(Term::Rfl)];
+                let mut calls = 0;
+                let result = try_map_terms(&inputs, |_| {
+                    calls += 1;
+                    if calls == 1 {
+                        Ok(Rc::clone(original.0.as_ref().unwrap()))
+                    } else {
+                        Err("second child fails")
+                    }
+                });
+                assert!(matches!(result, Err("second child fails")));
+                assert_eq!(Rc::strong_count(original.0.as_ref().unwrap()), 2);
+                drop(retained);
+                assert!(weak.upgrade().is_some());
+                drop(original);
+                assert!(weak.upgrade().is_none());
+            })
+            .unwrap()
+            .join()
+            .unwrap();
     }
 }
 

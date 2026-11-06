@@ -252,6 +252,57 @@ fn shared_observations_still_exhaust_an_insufficient_total_work_budget() {
 }
 
 #[test]
+fn child_mapping_keeps_exact_fuel_and_unwinds_on_later_failure() {
+    for adt in [false, true] {
+        let first = term(Term::Rfl);
+        let second = term(Term::Rfl);
+        let values = vec![Rc::clone(&first), Rc::clone(&second)];
+        let parent = if adt {
+            term(Term::Adt {
+                name: "Pair".into(),
+                args: values,
+                excluded: vec![],
+            })
+        } else {
+            term(Term::Ctr {
+                name: "Pair".into(),
+                args: values,
+            })
+        };
+        for (freshening, required) in [(true, 3), (false, 6)] {
+            for fuel in 0..=required {
+                let mut engine = empty();
+                engine.fuel = fuel;
+                let before = engine.fresh_id;
+                let result = if freshening {
+                    engine.freshen(&parent)
+                } else {
+                    engine.normalize(&parent)
+                };
+                if fuel == required {
+                    result.as_ref().expect("sufficient fuel must succeed");
+                } else {
+                    assert!(
+                        result
+                            .as_ref()
+                            .unwrap_err()
+                            .message
+                            .contains("evaluation budget exhausted")
+                    );
+                }
+                assert_eq!(engine.fuel, 0);
+                assert_eq!(engine.depth, 0);
+                assert_eq!(engine.fresh_id, before);
+                assert!(engine.normalization_memo.is_none());
+                drop(result);
+                assert_eq!(Rc::strong_count(&first), 2);
+                assert_eq!(Rc::strong_count(&second), 2);
+            }
+        }
+    }
+}
+
+#[test]
 fn composition_individual_prefix_and_aggregate_fit_the_original_budget() {
     let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/cpu-open-closures/wrappers/open_closure_pipe.bend");
