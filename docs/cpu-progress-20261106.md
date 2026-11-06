@@ -90,6 +90,12 @@ pattern destruction automatic and iterative. The unchanged `"hi"` witness
 still refuses at 64 levels; public term destruction and other recursive surface
 and kernel paths remain open.
 
+The subsequent [private body traversal and cleanup change](cpu-body-stack.md)
+makes body cloning, substitution and reusable-binding traversal iterative, and
+cleans private body-owned graphs automatically. The original `"hi"` witness
+still refuses at 64 levels; public `Rc<Term>` last-owner drop and other
+recursive compiler and kernel paths remain open.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source

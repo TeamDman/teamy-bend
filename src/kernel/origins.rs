@@ -423,17 +423,52 @@ pub(crate) fn substitute_with_origins(
     replacement: &TermRef,
     origins: Option<&TermOrigins>,
 ) -> TermRef {
-    let result = super::substitute(value, target, replacement);
+    let result = super::term::PendingTerm::new(super::substitute(value, target, replacement));
     if let Some(origins) = origins {
-        origins.transformed(value, &result);
+        origins.transformed(value, result.get());
     }
-    result
+    result.take()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::kernel::term;
+
+    #[test]
+    fn provenance_unwind_releases_deep_substitution_result() {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(|| {
+                struct InputRoot(Option<TermRef>);
+                impl Drop for InputRoot {
+                    fn drop(&mut self) {
+                        if let Some(root) = self.0.take() {
+                            super::super::term::release_term_iteratively(root);
+                        }
+                    }
+                }
+                let source = (0..20_000).fold(variable(7), |value, _| term(Term::Typ(value)));
+                let source = InputRoot(Some(source));
+                let replacement = term(Term::Rfl);
+                let origins = TermOrigins::default();
+                let lock = origins.0.borrow_mut();
+                let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    let _ = substitute_with_origins(
+                        source.0.as_ref().unwrap(),
+                        7,
+                        &replacement,
+                        Some(&origins),
+                    );
+                }));
+                let _panic = outcome.expect_err("conflicting provenance borrow must unwind");
+                assert_eq!(Rc::strong_count(&replacement), 1);
+                drop(lock);
+            })
+            .expect("spawn small-stack test")
+            .join()
+            .expect("small-stack test completed");
+    }
 
     fn variable(id: usize) -> TermRef {
         term(Term::Var {

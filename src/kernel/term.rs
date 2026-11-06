@@ -222,6 +222,32 @@ pub fn release_term_iteratively(root: TermRef) {
     }
 }
 
+// A single intermediate result needs the same unwind protection as a pending
+// vector, without allocating a vector for every provenance-aware substitution.
+pub(super) struct PendingTerm(Option<TermRef>);
+
+impl PendingTerm {
+    pub(super) fn new(value: TermRef) -> Self {
+        Self(Some(value))
+    }
+
+    pub(super) fn get(&self) -> &TermRef {
+        self.0.as_ref().expect("pending term exists")
+    }
+
+    pub(super) fn take(mut self) -> TermRef {
+        self.0.take().expect("pending term exists")
+    }
+}
+
+impl Drop for PendingTerm {
+    fn drop(&mut self) {
+        if let Some(value) = self.0.take() {
+            release_term_iteratively(value);
+        }
+    }
+}
+
 // Intermediate owned results must not recursively destroy a deep graph when a
 // later sibling fails or an operation unwinds. Successful callers take the
 // vector out, leaving the guard empty. This does not change `Rc<Term>` drop.

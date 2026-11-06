@@ -239,8 +239,10 @@ impl SurfaceTerm {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub(super) enum Body {
+    // Internal placeholder while moving owned subtrees between work frames.
+    Empty,
     Reply(SurfaceTerm),
     Local {
         patterns: Vec<Pattern>,
@@ -254,72 +256,233 @@ pub(super) enum Body {
     },
 }
 
+// Partially transformed values can own unique deep terms if a later child
+// unwinds. Successful construction takes the vector out of this guard.
+#[derive(Default)]
+struct PendingSurface(Vec<SurfaceTerm>);
+
+impl PendingSurface {
+    fn take(&mut self) -> Vec<SurfaceTerm> {
+        std::mem::take(&mut self.0)
+    }
+}
+
+impl Drop for PendingSurface {
+    fn drop(&mut self) {
+        for value in std::mem::take(&mut self.0) {
+            crate::kernel::release_term_iteratively(value.value);
+        }
+    }
+}
+
+impl Clone for Body {
+    fn clone(&self) -> Self {
+        self.map_terms(Clone::clone)
+    }
+}
+
+impl Drop for Body {
+    fn drop(&mut self) {
+        fn drain(body: &mut Body, pending: &mut Vec<Body>) {
+            match body {
+                Body::Empty => {}
+                Body::Reply(value) => {
+                    // A shared root cannot be destroyed by this field's drop.
+                    // For the last owner, replace it before iterative release.
+                    let leaf = matches!(
+                        value.value.as_ref(),
+                        Term::Var { .. }
+                            | Term::Ref(_)
+                            | Term::GpuRef(_)
+                            | Term::Qnt
+                            | Term::Qua(_)
+                            | Term::Efq
+                            | Term::Rfl
+                            | Term::Hole(_)
+                    );
+                    if !leaf && Rc::strong_count(&value.value) == 1 {
+                        let root = std::mem::replace(&mut value.value, term(Term::Rfl));
+                        crate::kernel::release_term_iteratively(root);
+                    }
+                }
+                Body::Local { values, body, .. } => {
+                    for value in std::mem::take(values) {
+                        crate::kernel::release_term_iteratively(value.value);
+                    }
+                    if !matches!(body.as_ref(), Body::Empty) {
+                        pending.push(std::mem::replace(body.as_mut(), Body::Empty));
+                    }
+                }
+                Body::Match { scrutinees, rows } => {
+                    for value in std::mem::take(scrutinees) {
+                        crate::kernel::release_term_iteratively(value.value);
+                    }
+                    for row in std::mem::take(rows) {
+                        pending.push(row.body);
+                    }
+                }
+            }
+        }
+
+        let mut pending = Vec::new();
+        drain(self, &mut pending);
+        while let Some(mut body) = pending.pop() {
+            drain(&mut body, &mut pending);
+        }
+    }
+}
+
 impl Body {
-    pub fn with_reusable(self, bindings: &[(Variable, TermRef)]) -> Self {
-        match self {
-            Self::Local {
-                patterns,
-                quant,
-                values,
-                body,
-            } if matches!(patterns.first(), Some(Pattern::Constructor(_, _, _))) => Self::Local {
-                patterns,
-                quant,
-                values,
-                body: Box::new(body.with_reusable(bindings)),
-            },
-            Self::Match { scrutinees, rows } => Self::Match {
-                scrutinees,
-                rows: rows
-                    .into_iter()
-                    .map(|row| Row {
-                        patterns: row.patterns,
-                        body: row.body.with_reusable(bindings),
-                    })
-                    .collect(),
-            },
-            body => bindings
+    pub fn with_reusable(mut self, bindings: &[(Variable, TermRef)]) -> Self {
+        if bindings.is_empty() {
+            return self;
+        }
+        let mut pending = vec![&mut self];
+        while let Some(body) = pending.pop() {
+            let descends = matches!(body, Self::Local { patterns, .. } if matches!(patterns.first(), Some(Pattern::Constructor(_, _, _))));
+            if descends {
+                let Self::Local { body, .. } = body else {
+                    unreachable!()
+                };
+                pending.push(body.as_mut());
+                continue;
+            }
+            if matches!(body, Self::Match { .. }) {
+                let Self::Match { rows, .. } = body else {
+                    unreachable!()
+                };
+                pending.extend(rows.iter_mut().rev().map(|row| &mut row.body));
+                continue;
+            }
+            let original = std::mem::replace(body, Self::Empty);
+            *body = bindings
                 .iter()
                 .rev()
-                .fold(body, |body, (binder, value)| Self::Local {
+                .fold(original, |body, (binder, value)| Self::Local {
                     patterns: vec![Pattern::Variable(binder.clone())],
                     quant: Quant::Many,
                     values: vec![SurfaceTerm::new(Rc::clone(value), None)],
                     body: Box::new(body),
-                }),
+                });
         }
+        self
     }
 
     fn replace(&self, id: usize, replacement: &TermRef, origins: Option<&TermOrigins>) -> Self {
-        match self {
-            Self::Reply(value) => Self::Reply(value.replace(id, replacement, origins)),
-            Self::Local {
-                patterns,
-                quant,
-                values,
-                body,
-            } => Self::Local {
-                patterns: patterns.clone(),
-                quant: *quant,
-                values: values
-                    .iter()
-                    .map(|v| v.replace(id, replacement, origins))
-                    .collect(),
-                body: Box::new(body.replace(id, replacement, origins)),
+        self.map_terms(|value| value.replace(id, replacement, origins))
+    }
+
+    #[expect(
+        clippy::too_many_lines,
+        reason = "The explicit frames keep ordered body traversal and reconstruction together."
+    )]
+    fn map_terms(&self, mut transform: impl FnMut(&SurfaceTerm) -> SurfaceTerm) -> Self {
+        enum Frame<'a> {
+            Local {
+                patterns: Vec<Pattern>,
+                quant: Quant,
+                values: PendingSurface,
             },
-            Self::Match { scrutinees, rows } => Self::Match {
-                scrutinees: scrutinees
-                    .iter()
-                    .map(|v| v.replace(id, replacement, origins))
-                    .collect(),
-                rows: rows
-                    .iter()
-                    .map(|r| Row {
-                        patterns: r.patterns.clone(),
-                        body: r.body.replace(id, replacement, origins),
-                    })
-                    .collect(),
+            Match {
+                scrutinees: PendingSurface,
+                rows: &'a [Row],
+                next: usize,
+                completed: Vec<Row>,
+                patterns: Vec<Pattern>,
             },
+        }
+
+        let mut frames = Vec::<Frame<'_>>::new();
+        let mut current = self;
+        'visit: loop {
+            let mut result = match current {
+                Self::Empty => Self::Empty,
+                Self::Reply(value) => Self::Reply(transform(value)),
+                Self::Local {
+                    patterns,
+                    quant,
+                    values,
+                    body,
+                } => {
+                    let patterns = patterns.clone();
+                    let mut mapped = PendingSurface::default();
+                    for value in values {
+                        mapped.0.push(transform(value));
+                    }
+                    frames.push(Frame::Local {
+                        patterns,
+                        quant: *quant,
+                        values: mapped,
+                    });
+                    current = body;
+                    continue 'visit;
+                }
+                Self::Match { scrutinees, rows } => {
+                    let mut mapped = PendingSurface::default();
+                    for value in scrutinees {
+                        mapped.0.push(transform(value));
+                    }
+                    if let Some(first) = rows.first() {
+                        frames.push(Frame::Match {
+                            scrutinees: mapped,
+                            rows,
+                            next: 1,
+                            completed: Vec::new(),
+                            patterns: first.patterns.clone(),
+                        });
+                        current = &first.body;
+                        continue 'visit;
+                    }
+                    Self::Match {
+                        scrutinees: mapped.take(),
+                        rows: Vec::new(),
+                    }
+                }
+            };
+            loop {
+                match frames.pop() {
+                    None => return result,
+                    Some(Frame::Local {
+                        patterns,
+                        quant,
+                        mut values,
+                    }) => {
+                        result = Self::Local {
+                            patterns,
+                            quant,
+                            values: values.take(),
+                            body: Box::new(result),
+                        };
+                    }
+                    Some(Frame::Match {
+                        mut scrutinees,
+                        rows,
+                        next,
+                        mut completed,
+                        patterns,
+                    }) => {
+                        completed.push(Row {
+                            patterns,
+                            body: result,
+                        });
+                        if let Some(row) = rows.get(next) {
+                            frames.push(Frame::Match {
+                                scrutinees,
+                                rows,
+                                next: next + 1,
+                                completed,
+                                patterns: row.patterns.clone(),
+                            });
+                            current = &row.body;
+                            continue 'visit;
+                        }
+                        result = Self::Match {
+                            scrutinees: scrutinees.take(),
+                            rows: completed,
+                        };
+                    }
+                }
+            }
         }
     }
 }
@@ -382,6 +545,7 @@ fn flatten_at(
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     match body {
+        Body::Empty => unreachable!("body work placeholder escaped"),
         Body::Reply(value) => Ok(vars
             .iter()
             .rev()
@@ -890,6 +1054,362 @@ mod tests {
             .expect("spawn small-stack test")
             .join()
             .expect("small-stack test completed");
+    }
+
+    fn deep_term(depth: usize, leaf: TermRef) -> TermRef {
+        (0..depth).fold(leaf, |value, _| term(Term::Typ(value)))
+    }
+
+    fn deep_body(depth: usize, leaf: TermRef, constructor_pattern: bool) -> Body {
+        let mut body = Body::Reply(SurfaceTerm::new(leaf, None));
+        for _ in 0..depth {
+            let patterns = if constructor_pattern {
+                vec![Pattern::Constructor("C".into(), vec![], 0)]
+            } else {
+                Vec::new()
+            };
+            body = Body::Local {
+                patterns,
+                quant: Quant::Lone,
+                values: Vec::new(),
+                body: Box::new(body),
+            };
+        }
+        body
+    }
+
+    fn body_leaf(mut body: &Body, depth: usize) -> &SurfaceTerm {
+        for _ in 0..depth {
+            let Body::Local { body: next, .. } = body else {
+                panic!("missing body frame")
+            };
+            body = next;
+        }
+        let Body::Reply(value) = body else {
+            panic!("missing reply")
+        };
+        value
+    }
+
+    #[test]
+    fn deep_bodies_clone_replace_and_drop_automatically() {
+        on_small_stack(|| {
+            let input = deep_term(
+                20_000,
+                term(Term::Var {
+                    name: "x".into(),
+                    id: 7,
+                }),
+            );
+            let input_weak = Rc::downgrade(&input);
+            let body = deep_body(20_000, input, false);
+            let cloned = body.clone();
+            assert!(Rc::ptr_eq(
+                &body_leaf(&body, 20_000).value,
+                &body_leaf(&cloned, 20_000).value
+            ));
+            let replacement = term(Term::Rfl);
+            let changed = body.replace(7, &replacement, None);
+            let changed_weak = Rc::downgrade(&body_leaf(&changed, 20_000).value);
+            let mut cursor = &body_leaf(&changed, 20_000).value;
+            for _ in 0..20_000 {
+                let Term::Typ(next) = cursor.as_ref() else {
+                    panic!("missing substituted term")
+                };
+                cursor = next;
+            }
+            assert!(Rc::ptr_eq(cursor, &replacement));
+            drop(body);
+            assert!(input_weak.upgrade().is_some());
+            drop(cloned);
+            assert!(input_weak.upgrade().is_none());
+            drop(changed);
+            assert!(changed_weak.upgrade().is_none());
+            assert_eq!(Rc::strong_count(&replacement), 1);
+        });
+    }
+
+    #[test]
+    fn deep_bodies_drop_automatically_on_error_and_unwind() {
+        on_small_stack(|| {
+            fn fail(_body: Body) -> Result<(), ()> {
+                Err(())
+            }
+            let input = deep_term(20_000, term(Term::Rfl));
+            let weak = Rc::downgrade(&input);
+            fail(deep_body(100_000, input, false)).expect_err("injected error");
+            assert!(weak.upgrade().is_none());
+            let input = deep_term(20_000, term(Term::Rfl));
+            let weak = Rc::downgrade(&input);
+            let outcome = std::panic::catch_unwind(|| {
+                let _body = deep_body(100_000, input, false);
+                panic!("injected unwind");
+            });
+            let _panic = outcome.expect_err("injected unwind must be caught");
+            assert!(weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn deep_reusable_binding_traversal_is_iterative() {
+        on_small_stack(|| {
+            let binder = Variable {
+                name: "z".into(),
+                id: 11,
+            };
+            let replacement = term(Term::Rfl);
+            let mut body = deep_body(20_000, term(Term::Rfl), true)
+                .with_reusable(&[(binder, Rc::clone(&replacement))]);
+            let mut cursor = &mut body;
+            for _ in 0..20_000 {
+                let Body::Local { body, .. } = cursor else {
+                    panic!("missing constructor body")
+                };
+                cursor = body;
+            }
+            let Body::Local {
+                patterns,
+                quant,
+                values,
+                body: tail,
+            } = cursor
+            else {
+                panic!("missing reusable binding")
+            };
+            assert!(matches!(
+                &patterns[0],
+                Pattern::Variable(Variable { id: 11, .. })
+            ));
+            assert_eq!(*quant, Quant::Many);
+            assert!(Rc::ptr_eq(&values[0].value, &replacement));
+            assert!(matches!(tail.as_ref(), Body::Reply(_)));
+            drop(body);
+            assert_eq!(Rc::strong_count(&replacement), 1);
+        });
+    }
+
+    #[test]
+    fn reusable_bindings_preserve_match_row_and_binding_order() {
+        let value_a = term(Term::Rfl);
+        let value_b = term(Term::Qnt);
+        let bindings = vec![
+            (
+                Variable {
+                    name: "a".into(),
+                    id: 1,
+                },
+                Rc::clone(&value_a),
+            ),
+            (
+                Variable {
+                    name: "b".into(),
+                    id: 2,
+                },
+                Rc::clone(&value_b),
+            ),
+        ];
+        let body = Body::Match {
+            scrutinees: Vec::new(),
+            rows: vec![
+                Row {
+                    patterns: vec![],
+                    body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+                },
+                Row {
+                    patterns: vec![],
+                    body: Body::Local {
+                        patterns: vec![Pattern::Constructor("C".into(), vec![], 0)],
+                        quant: Quant::Lone,
+                        values: vec![],
+                        body: Box::new(Body::Reply(SurfaceTerm::new(term(Term::Qnt), None))),
+                    },
+                },
+            ],
+        }
+        .with_reusable(&bindings);
+        let Body::Match { rows, .. } = &body else {
+            panic!("match preserved")
+        };
+        for (index, row) in rows.iter().enumerate() {
+            let mut cursor = &row.body;
+            if index == 1 {
+                let Body::Local { patterns, body, .. } = cursor else {
+                    panic!("constructor local")
+                };
+                assert!(matches!(&patterns[0], Pattern::Constructor(name, _, _) if name == "C"));
+                cursor = body;
+            }
+            for (id, expected) in [(1, &value_a), (2, &value_b)] {
+                let Body::Local {
+                    patterns,
+                    quant,
+                    values,
+                    body,
+                } = cursor
+                else {
+                    panic!("reusable local")
+                };
+                assert!(
+                    matches!(&patterns[0], Pattern::Variable(Variable { id: actual, .. }) if *actual == id)
+                );
+                assert_eq!(*quant, Quant::Many);
+                assert!(Rc::ptr_eq(&values[0].value, expected));
+                cursor = body;
+            }
+            assert!(matches!(cursor, Body::Reply(_)));
+        }
+    }
+
+    #[test]
+    fn body_mapping_preserves_order_and_cleans_partial_values_on_unwind() {
+        on_small_stack(|| {
+            let value = |id| {
+                SurfaceTerm::new(
+                    term(Term::Var {
+                        name: format!("v{id}"),
+                        id,
+                    }),
+                    None,
+                )
+            };
+            let body = Body::Match {
+                scrutinees: vec![value(0), value(1)],
+                rows: vec![
+                    Row {
+                        patterns: vec![],
+                        body: Body::Local {
+                            patterns: vec![],
+                            quant: Quant::Lone,
+                            values: vec![value(2)],
+                            body: Box::new(Body::Reply(value(3))),
+                        },
+                    },
+                    Row {
+                        patterns: vec![],
+                        body: Body::Reply(value(4)),
+                    },
+                ],
+            };
+            let mut seen = Vec::new();
+            let mapped = body.map_terms(|v| {
+                let Term::Var { id, .. } = v.value.as_ref() else {
+                    panic!("expected variable")
+                };
+                seen.push(*id);
+                v.clone()
+            });
+            assert_eq!(seen, [0, 1, 2, 3, 4]);
+            drop(mapped);
+
+            let mut calls = 0;
+            let mut weak = std::rc::Weak::new();
+            let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _ = body.map_terms(|_| {
+                    calls += 1;
+                    if calls == 1 {
+                        let root = deep_term(20_000, term(Term::Rfl));
+                        weak = Rc::downgrade(&root);
+                        SurfaceTerm::new(root, None)
+                    } else {
+                        panic!("injected sibling failure")
+                    }
+                });
+            }));
+            let _panic = outcome.expect_err("injected mapping panic must be caught");
+            assert!(weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn body_drop_preserves_shared_term_owners() {
+        on_small_stack(|| {
+            let root = deep_term(20_000, term(Term::Rfl));
+            let weak = Rc::downgrade(&root);
+            let body = Body::Match {
+                scrutinees: vec![SurfaceTerm::new(Rc::clone(&root), None)],
+                rows: vec![Row {
+                    patterns: vec![],
+                    body: Body::Reply(SurfaceTerm::new(root, None)),
+                }],
+            };
+            drop(body);
+            assert!(weak.upgrade().is_none());
+
+            let root = deep_term(20_000, term(Term::Rfl));
+            let weak = Rc::downgrade(&root);
+            let retained = Rc::clone(&root);
+            let body = Body::Reply(SurfaceTerm::new(root, None));
+            drop(body);
+            assert_eq!(Rc::strong_count(&retained), 1);
+            assert!(weak.upgrade().is_some());
+            // The remaining public Rc owner still requires explicit release.
+            crate::kernel::release_term_iteratively(retained);
+            assert!(weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn body_drop_releases_all_composite_term_families() {
+        on_small_stack(|| {
+            for family in 0..12 {
+                let child = deep_term(20_000, term(Term::Rfl));
+                let weak = Rc::downgrade(&child);
+                let root = term(match family {
+                    0 => Term::Typ(child),
+                    1 => Term::Min(Rc::clone(&child), child),
+                    2 => Term::All {
+                        quant: Quant::Lone,
+                        name: "x".into(),
+                        id: 1,
+                        domain: Rc::clone(&child),
+                        body: child,
+                    },
+                    3 => Term::Lam {
+                        name: "x".into(),
+                        id: 1,
+                        body: child,
+                    },
+                    4 => Term::App(Rc::clone(&child), child),
+                    5 => Term::Adt {
+                        name: "T".into(),
+                        args: vec![Rc::clone(&child), child],
+                        excluded: vec![],
+                    },
+                    6 => Term::Ctr {
+                        name: "C".into(),
+                        args: vec![Rc::clone(&child), child],
+                    },
+                    7 => Term::Mat {
+                        constructor: "C".into(),
+                        arm: Rc::clone(&child),
+                        fallback: child,
+                    },
+                    8 => Term::Eql {
+                        left: Rc::clone(&child),
+                        right: Rc::clone(&child),
+                        ty: child,
+                    },
+                    9 => Term::Rwt {
+                        evidence: Rc::clone(&child),
+                        motive: Rc::clone(&child),
+                        body: child,
+                    },
+                    10 => Term::Ann(Rc::clone(&child), child),
+                    11 => Term::Let {
+                        bindings: vec![LetBinding {
+                            quant: Quant::Lone,
+                            name: "x".into(),
+                            id: 1,
+                            value: Rc::clone(&child),
+                        }],
+                        body: child,
+                    },
+                    _ => unreachable!(),
+                });
+                drop(Body::Reply(SurfaceTerm::new(root, None)));
+                assert!(weak.upgrade().is_none(), "family {family} remained alive");
+            }
+        });
     }
 
     fn nullary_alternatives(count: usize) -> (Vec<SurfaceTerm>, Vec<Row>, Vec<Variable>) {
