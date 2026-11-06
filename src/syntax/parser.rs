@@ -501,16 +501,16 @@ impl Parser<'_> {
         }
         Ok(self.bump())
     }
-    fn flatten_body(&mut self, body: &Body, vars: &[Variable]) -> Result<TermRef, ParseError> {
+    fn flatten_body(&mut self, body: Body, vars: &[Variable]) -> Result<TermRef, ParseError> {
         self.flatten_body_occurrence(body, vars)
             .map(|value| value.value)
     }
     fn flatten_body_occurrence(
         &mut self,
-        body: &Body,
+        body: Body,
         vars: &[Variable],
     ) -> Result<Occurrence, ParseError> {
-        if !vars.is_empty() || !matches!(body, Body::Reply(_)) {
+        if !vars.is_empty() || !matches!(&body, Body::Reply(_)) {
             self.require_semantic_prefix()?;
         }
         flatten_occurrence(
@@ -994,7 +994,7 @@ impl Parser<'_> {
             clauses.push((all, b, line));
         }
         let body = self.body(0)?;
-        let mut ty = self.flatten_body(&body, &[])?;
+        let mut ty = self.flatten_body(body, &[])?;
         for (all, b, line) in clauses.into_iter().rev() {
             ty = if all {
                 arrows(&[b], ty)
@@ -1129,7 +1129,7 @@ impl Parser<'_> {
             foreign: false,
         }));
         let body = self.body(0)?;
-        let value = self.flatten_body(&body, &vars)?;
+        let value = self.flatten_body(body, &vars)?;
         // Specializations minted in the body precede their caller. Removing
         // only the temporary event preserves those separately checked defs.
         self.book.declarations.remove(temporary);
@@ -1625,7 +1625,7 @@ impl Parser<'_> {
                 let reusable = self.is_reusable(&out);
                 let v = self.bind_variable(name.clone(), reusable);
                 let body = self.body(self.current().column.saturating_sub(1))?;
-                out = self.flatten_body_occurrence(&body, &[v])?;
+                out = self.flatten_body_occurrence(body, &[v])?;
                 if let Some(origins) = &mut self.templates.diagnostics {
                     origins.node(&out, &self.label, line);
                 }
@@ -1854,7 +1854,7 @@ impl Parser<'_> {
         }
         if self.take("(") {
             let body = self.body(self.current().column.saturating_sub(1))?;
-            let mut out = self.flatten_body_occurrence(&body, &[])?;
+            let mut out = self.flatten_body_occurrence(body, &[])?;
             if self.take(",") {
                 let mut values = vec![out];
                 loop {
@@ -2076,7 +2076,7 @@ impl Parser<'_> {
         self.scope.truncate(old);
         self.take(";");
         let body = self.body(self.current().column.saturating_sub(1))?;
-        let body = self.flatten_body_occurrence(&body, &[])?;
+        let body = self.flatten_body_occurrence(body, &[])?;
         let proof_motive = self.lambda(name, e.id, motive);
         if let Some(origins) = &mut self.templates.diagnostics {
             origins.node(&proof_motive, &self.label, binder_line);
@@ -2227,7 +2227,7 @@ impl Parser<'_> {
         let rebindings = std::mem::take(&mut self.reusable);
         let tail = self.do_statement(module, types, result, column)?;
         let tail = self.flatten_body_occurrence(
-            &Body::Reply(self.surface_term(tail)).with_reusable(&rebindings),
+            Body::Reply(self.surface_term(tail)).with_reusable(&rebindings),
             &[],
         )?;
         self.scope.truncate(old);

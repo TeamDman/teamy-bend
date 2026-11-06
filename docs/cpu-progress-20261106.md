@@ -114,6 +114,15 @@ Rust recursion from variable-only columns and skipped binders. It preserves the
 nested-body recursion and the input/kernel boundaries remain. Its focused and
 before/after evidence is recorded separately from the prior complete test set.
 
+The subsequent [unified body/match driver](cpu-unified-body-match.md) replaces
+the compiler's nested body-to-match calls with explicit continuations and moves
+parsed bodies into those frames. The original `"hi"` still reaches the same
+64-level compilation guard. Retiring that guard requires a shared work and
+allocation policy covering body mapping, pattern copying and term substitution;
+the distinct input and kernel limits remain afterward. The complete bounded
+test set passed 1,420 tests, with zero failures and 49 ignored; the uninterrupted
+standard gate was not rerun and the prior timeout remains incomplete.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source

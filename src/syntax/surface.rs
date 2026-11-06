@@ -524,117 +524,86 @@ impl From<&str> for FlattenError {
 }
 
 pub(super) fn flatten_occurrence(
-    body: &Body,
+    body: Body,
     vars: &[Variable],
     fresh: &mut usize,
     display_fresh: &mut usize,
     origins: Option<&TermOrigins>,
 ) -> Result<Occurrence, FlattenError> {
-    flatten_at(body, vars, fresh, display_fresh, 0, origins).map(SurfaceTerm::into_occurrence)
+    flatten_driver(
+        Current::Body {
+            body,
+            vars: vars.to_vec(),
+            depth: 0,
+        },
+        fresh,
+        display_fresh,
+        origins,
+        64,
+    )
+    .map(SurfaceTerm::into_occurrence)
 }
 
-fn flatten_at(
-    body: &Body,
-    vars: &[Variable],
-    fresh: &mut usize,
-    display_fresh: &mut usize,
-    depth: usize,
+struct LocalFrame {
+    vars: Vec<Variable>,
+    bindings: Vec<Variable>,
+    quant: Quant,
+    values: Vec<SurfaceTerm>,
+}
+
+fn finish_local(
+    frame: LocalFrame,
+    mut tail: SurfaceTerm,
     origins: Option<&TermOrigins>,
 ) -> Result<SurfaceTerm, FlattenError> {
-    if depth >= 64 {
-        return Err("pattern compilation exceeds the resource limit of 64 levels".into());
-    }
-    match body {
-        Body::Empty => unreachable!("body work placeholder escaped"),
-        Body::Reply(value) => Ok(vars
-            .iter()
-            .rev()
-            .fold(value.clone(), |v, b| v.lambda(b, origins))),
-        Body::Match { scrutinees, rows } => flatten_match(
-            scrutinees,
-            rows,
-            vars,
-            fresh,
-            display_fresh,
-            depth + 1,
-            origins,
-        ),
-        Body::Local {
-            patterns,
-            quant,
-            values,
-            body,
-        } => {
-            if let [Pattern::Constructor(_, _, _)] = patterns.as_slice() {
-                return flatten_match(
-                    values,
-                    &[Row {
-                        patterns: patterns.clone(),
-                        body: *body.clone(),
-                    }],
-                    vars,
-                    fresh,
-                    display_fresh,
-                    depth + 1,
-                    origins,
-                );
-            }
-            let bindings = patterns
-                .iter()
-                .map(|p| match p {
-                    Pattern::Variable(v) => Ok(v.clone()),
-                    Pattern::Constructor(_, _, _) => {
-                        Err("a parallel let can bind only names".to_owned())
-                    }
-                })
-                .collect::<Result<Vec<_>, _>>()?;
-            let mut tail = flatten_at(body, &bindings, fresh, display_fresh, depth + 1, origins)?;
-            for binder in &bindings {
-                match tail.value.as_ref() {
-                    Term::Lam { body, .. } => {
-                        let origin = origins.and_then(|o| o.child_source(&tail.value, 0, body));
-                        let mut next = SurfaceTerm::new(Rc::clone(body), origins);
-                        next.explicit_source =
-                            origins.and_then(|o| o.occurrence_source(&tail.value, 0));
-                        if let Some(origin) = origin {
-                            next.origin = origin;
-                        }
-                        tail = next;
-                    }
-                    _ => {
-                        return Err(FlattenError::LocalBinding { binder: binder.id });
-                    }
+    let LocalFrame {
+        vars,
+        bindings,
+        quant,
+        values,
+    } = frame;
+    for binder in &bindings {
+        match tail.value.as_ref() {
+            Term::Lam { body, .. } => {
+                let origin = origins.and_then(|o| o.child_source(&tail.value, 0, body));
+                let mut next = SurfaceTerm::new(Rc::clone(body), origins);
+                next.explicit_source = origins.and_then(|o| o.occurrence_source(&tail.value, 0));
+                if let Some(origin) = origin {
+                    next.origin = origin;
                 }
+                tail = next;
             }
-            let value = term(Term::Let {
-                bindings: bindings
-                    .iter()
-                    .zip(values)
-                    .map(|(b, v)| LetBinding {
-                        quant: *quant,
-                        name: b.name.clone(),
-                        id: b.id,
-                        value: Rc::clone(&v.value),
-                    })
-                    .collect(),
-                body: tail.value,
-            });
-            if let Some(origins) = origins {
-                origins.occurrence_children(
-                    &value,
-                    std::iter::once(tail.explicit_source)
-                        .chain(values.iter().map(|v| v.explicit_source)),
-                );
+            _ => {
+                return Err(FlattenError::LocalBinding { binder: binder.id });
             }
-            if let Some(origins) = origins
-                && let Some(binder) = bindings.first()
-            {
-                origins.binder_node(binder.id, &value);
-            }
-            let value = SurfaceTerm::parent(value, [Some(tail.origin), None, None], origins);
-            Ok(vars.iter().rev().fold(value, |v, b| v.lambda(b, origins)))
         }
     }
+    let value = term(Term::Let {
+        bindings: bindings
+            .iter()
+            .zip(&values)
+            .map(|(b, v)| LetBinding {
+                quant,
+                name: b.name.clone(),
+                id: b.id,
+                value: Rc::clone(&v.value),
+            })
+            .collect(),
+        body: tail.value,
+    });
+    if let Some(origins) = origins {
+        origins.occurrence_children(
+            &value,
+            std::iter::once(tail.explicit_source).chain(values.iter().map(|v| v.explicit_source)),
+        );
+    }
+    if let Some(origins) = origins
+        && let Some(binder) = bindings.first()
+    {
+        origins.binder_node(binder.id, &value);
+    }
+    let value = SurfaceTerm::parent(value, [Some(tail.origin), None, None], origins);
+    Ok(vars.iter().rev().fold(value, |v, b| v.lambda(b, origins)))
 }
 
 struct MatchState {
@@ -645,6 +614,9 @@ struct MatchState {
 
 enum MatchStep {
     Done(SurfaceTerm),
+    Body {
+        depth: usize,
+    },
     Continue {
         next: MatchState,
         wrap: Option<Variable>,
@@ -697,6 +669,8 @@ enum SavedMatch<'a> {
         parent: MatchCall<'a>,
         wrap: Option<Variable>,
     },
+    BodyReturn(MatchCall<'a>),
+    Local(LocalFrame),
 }
 
 struct MatchCall<'a> {
@@ -706,6 +680,16 @@ struct MatchCall<'a> {
     depth: usize,
 }
 
+enum Current<'a> {
+    Match(MatchCall<'a>),
+    Body {
+        body: Body,
+        vars: Vec<Variable>,
+        depth: usize,
+    },
+}
+
+#[cfg(test)]
 fn flatten_match(
     scrutinees: &[SurfaceTerm],
     rows: &[Row],
@@ -727,9 +711,9 @@ fn flatten_match(
     )
 }
 
+#[cfg(test)]
 #[expect(
     clippy::too_many_arguments,
-    clippy::too_many_lines,
     reason = "The match frame carries the existing traversal inputs and bound."
 )]
 fn flatten_match_bounded(
@@ -742,161 +726,290 @@ fn flatten_match_bounded(
     origins: Option<&TermOrigins>,
     limit: usize,
 ) -> Result<SurfaceTerm, FlattenError> {
-    let mut current = MatchCall {
-        initial: Some((scrutinees, rows, vars)),
-        state: None,
-        pending: Vec::new(),
-        depth,
-    };
-    let mut saved: Vec<SavedMatch<'_>> = Vec::new();
+    flatten_driver(
+        Current::Match(MatchCall {
+            initial: Some((scrutinees, rows, vars)),
+            state: None,
+            pending: Vec::new(),
+            depth,
+        }),
+        fresh,
+        display_fresh,
+        origins,
+        limit,
+    )
+}
+
+#[expect(
+    clippy::too_many_lines,
+    reason = "The shared driver preserves body and match continuation order."
+)]
+fn flatten_driver<'a>(
+    mut current: Current<'a>,
+    fresh: &mut usize,
+    display_fresh: &mut usize,
+    origins: Option<&TermOrigins>,
+    limit: usize,
+) -> Result<SurfaceTerm, FlattenError> {
+    let mut saved: Vec<SavedMatch<'a>> = Vec::new();
     'compile: loop {
-        if current.depth + current.pending.len() >= limit {
-            return Err("pattern compilation exceeds the resource limit of 64 levels".into());
-        }
-        let (scrutinees, rows, vars) = if let Some(state) = &current.state {
-            (
-                state.scrutinees.as_slice(),
-                state.rows.as_slice(),
-                state.vars.as_slice(),
-            )
-        } else {
-            current.initial.expect("initial or owned match state")
-        };
-        match flatten_match_step(
-            scrutinees,
-            rows,
-            vars,
-            fresh,
-            display_fresh,
-            current.depth,
-            origins,
-        )? {
-            MatchStep::Done(mut value) => loop {
-                if let Some((constructor, constructor_origin, fallback)) = current.pending.pop() {
-                    let site = fallback.scrutinees[0].match_site;
-                    let next = MatchCall {
-                        initial: None,
-                        state: Some(fallback),
-                        pending: Vec::new(),
-                        depth: current.depth + 1,
-                    };
-                    let parent = std::mem::replace(&mut current, next);
-                    saved.push(SavedMatch::Fallback(SavedFallback {
-                        parent: Some(parent),
-                        constructor,
-                        constructor_origin,
-                        site,
-                        arm: Some(value),
-                    }));
-                    continue 'compile;
+        let (mut value, mut parent) = match current {
+            Current::Body {
+                mut body,
+                vars,
+                depth,
+            } => {
+                if depth >= limit {
+                    return Err(
+                        "pattern compilation exceeds the resource limit of 64 levels".into(),
+                    );
                 }
-                let Some(previous) = saved.pop() else {
-                    return Ok(value);
-                };
-                match previous {
-                    SavedMatch::Continue { parent, wrap } => {
-                        if let Some(binder) = wrap {
-                            value = value.lambda(&binder, origins);
-                        }
-                        current = parent;
-                    }
-                    SavedMatch::Fallback(mut previous) => {
-                        value = SurfaceTerm::matched(
-                            std::mem::take(&mut previous.constructor),
-                            previous.arm.take().expect("saved match arm"),
-                            value,
-                            Some(previous.site),
-                            Some(previous.constructor_origin),
-                            origins,
-                        );
-                        current = previous.parent.take().expect("saved parent call");
-                    }
-                    SavedMatch::Arm(previous) => {
-                        let next = MatchCall {
-                            initial: None,
-                            state: Some(previous.fallback),
-                            pending: Vec::new(),
-                            depth: previous.parent.depth + 1,
+                match &mut body {
+                    Body::Empty => unreachable!("body work placeholder escaped"),
+                    Body::Reply(value) => (
+                        vars.iter()
+                            .rev()
+                            .fold(value.clone(), |v, binder| v.lambda(binder, origins)),
+                        None,
+                    ),
+                    Body::Match { scrutinees, rows } => {
+                        let state = MatchState {
+                            scrutinees: std::mem::take(scrutinees),
+                            rows: std::mem::take(rows),
+                            vars,
                         };
-                        saved.push(SavedMatch::Fallback(SavedFallback {
-                            parent: Some(previous.parent),
-                            constructor: previous.constructor,
-                            constructor_origin: previous.constructor_origin,
-                            site: previous.site,
-                            arm: Some(value),
+                        current = Current::Match(MatchCall {
+                            initial: None,
+                            state: Some(state),
+                            pending: Vec::new(),
+                            depth: depth + 1,
+                        });
+                        continue 'compile;
+                    }
+                    Body::Local {
+                        patterns,
+                        quant,
+                        values,
+                        body: inner,
+                    } => {
+                        if let [Pattern::Constructor(_, _, _)] = patterns.as_slice() {
+                            let row = Row {
+                                patterns: std::mem::take(patterns),
+                                body: std::mem::replace(inner.as_mut(), Body::Empty),
+                            };
+                            let state = MatchState {
+                                scrutinees: std::mem::take(values),
+                                rows: vec![row],
+                                vars,
+                            };
+                            current = Current::Match(MatchCall {
+                                initial: None,
+                                state: Some(state),
+                                pending: Vec::new(),
+                                depth: depth + 1,
+                            });
+                            continue 'compile;
+                        }
+                        let bindings = patterns
+                            .iter()
+                            .map(|pattern| match pattern {
+                                Pattern::Variable(v) => Ok(v.clone()),
+                                Pattern::Constructor(_, _, _) => {
+                                    Err("a parallel let can bind only names".to_owned())
+                                }
+                            })
+                            .collect::<Result<Vec<_>, _>>()?;
+                        let child = std::mem::replace(inner.as_mut(), Body::Empty);
+                        saved.push(SavedMatch::Local(LocalFrame {
+                            vars,
+                            bindings: bindings.clone(),
+                            quant: *quant,
+                            values: std::mem::take(values),
                         }));
-                        current = next;
+                        current = Current::Body {
+                            body: child,
+                            vars: bindings,
+                            depth: depth + 1,
+                        };
                         continue 'compile;
                     }
                 }
-            },
-            MatchStep::Continue { next, wrap } => {
-                let child = MatchCall {
-                    initial: None,
-                    state: Some(next),
-                    pending: Vec::new(),
-                    depth: current.depth + 1,
-                };
-                let parent = std::mem::replace(&mut current, child);
-                saved.push(SavedMatch::Continue { parent, wrap });
             }
-            MatchStep::SkipBinder(binder) => {
-                // A skipped binder does not change scrutinees or rows. Move
-                // an owned state instead of cloning the whole case tree for
-                // every skipped binder. Borrowed initial input is copied once.
-                let mut next = current.state.take().unwrap_or_else(|| {
-                    let (scrutinees, rows, vars) = current.initial.expect("initial match state");
-                    MatchState {
-                        scrutinees: scrutinees.to_vec(),
-                        rows: rows.to_vec(),
-                        vars: vars.to_vec(),
+            Current::Match(mut call) => {
+                if call.depth + call.pending.len() >= limit {
+                    return Err(
+                        "pattern compilation exceeds the resource limit of 64 levels".into(),
+                    );
+                }
+                let (scrutinees, rows, vars) = if let Some(state) = &call.state {
+                    (
+                        state.scrutinees.as_slice(),
+                        state.rows.as_slice(),
+                        state.vars.as_slice(),
+                    )
+                } else {
+                    call.initial.expect("initial or owned match state")
+                };
+                match flatten_match_step(
+                    scrutinees,
+                    rows,
+                    vars,
+                    fresh,
+                    display_fresh,
+                    call.depth,
+                    limit,
+                    origins,
+                )? {
+                    MatchStep::Done(value) => (value, Some(call)),
+                    MatchStep::Body { depth } => {
+                        let (body, vars) = if let Some(state) = &mut call.state {
+                            (
+                                std::mem::replace(&mut state.rows[0].body, Body::Empty),
+                                state.vars.clone(),
+                            )
+                        } else {
+                            let (_, rows, vars) = call.initial.expect("initial match state");
+                            (rows[0].body.clone(), vars.to_vec())
+                        };
+                        saved.push(SavedMatch::BodyReturn(call));
+                        current = Current::Body { body, vars, depth };
+                        continue 'compile;
                     }
-                });
-                next.vars.remove(0);
-                let child = MatchCall {
-                    initial: None,
-                    state: Some(next),
-                    pending: Vec::new(),
-                    depth: current.depth + 1,
-                };
-                let parent = std::mem::replace(&mut current, child);
-                saved.push(SavedMatch::Continue {
-                    parent,
-                    wrap: Some(binder),
-                });
+                    MatchStep::Continue { next, wrap } => {
+                        let child = MatchCall {
+                            initial: None,
+                            state: Some(next),
+                            pending: Vec::new(),
+                            depth: call.depth + 1,
+                        };
+                        saved.push(SavedMatch::Continue { parent: call, wrap });
+                        current = Current::Match(child);
+                        continue 'compile;
+                    }
+                    MatchStep::SkipBinder(binder) => {
+                        let mut next = call.state.take().unwrap_or_else(|| {
+                            let (scrutinees, rows, vars) =
+                                call.initial.expect("initial match state");
+                            MatchState {
+                                scrutinees: scrutinees.to_vec(),
+                                rows: rows.to_vec(),
+                                vars: vars.to_vec(),
+                            }
+                        });
+                        next.vars.remove(0);
+                        let child = MatchCall {
+                            initial: None,
+                            state: Some(next),
+                            pending: Vec::new(),
+                            depth: call.depth + 1,
+                        };
+                        saved.push(SavedMatch::Continue {
+                            parent: call,
+                            wrap: Some(binder),
+                        });
+                        current = Current::Match(child);
+                        continue 'compile;
+                    }
+                    MatchStep::Nullary {
+                        constructor,
+                        constructor_origin,
+                        next,
+                        fallback,
+                    } => {
+                        call.pending
+                            .push((constructor, constructor_origin, fallback));
+                        call.state = Some(next);
+                        current = Current::Match(call);
+                        continue 'compile;
+                    }
+                    MatchStep::Constructor {
+                        constructor,
+                        constructor_origin,
+                        next,
+                        fallback,
+                    } => {
+                        let site = fallback.scrutinees[0].match_site;
+                        let child = MatchCall {
+                            initial: None,
+                            state: Some(next),
+                            pending: Vec::new(),
+                            depth: call.depth + 1,
+                        };
+                        saved.push(SavedMatch::Arm(SavedArm {
+                            parent: call,
+                            constructor,
+                            constructor_origin,
+                            site,
+                            fallback,
+                        }));
+                        current = Current::Match(child);
+                        continue 'compile;
+                    }
+                }
             }
-            MatchStep::Nullary {
-                constructor,
-                constructor_origin,
-                next,
-                fallback,
-            } => {
-                current
-                    .pending
-                    .push((constructor, constructor_origin, fallback));
-                current.state = Some(next);
-            }
-            MatchStep::Constructor {
-                constructor,
-                constructor_origin,
-                next,
-                fallback,
-            } => {
+        };
+        loop {
+            if let Some(mut call) = parent.take()
+                && let Some((constructor, constructor_origin, fallback)) = call.pending.pop()
+            {
                 let site = fallback.scrutinees[0].match_site;
-                let child = MatchCall {
+                let next = MatchCall {
                     initial: None,
-                    state: Some(next),
+                    state: Some(fallback),
                     pending: Vec::new(),
-                    depth: current.depth + 1,
+                    depth: call.depth + 1,
                 };
-                let parent = std::mem::replace(&mut current, child);
-                saved.push(SavedMatch::Arm(SavedArm {
-                    parent,
+                saved.push(SavedMatch::Fallback(SavedFallback {
+                    parent: Some(call),
                     constructor,
                     constructor_origin,
                     site,
-                    fallback,
+                    arm: Some(value),
                 }));
+                current = Current::Match(next);
+                continue 'compile;
+            }
+            match saved.pop() {
+                None => return Ok(value),
+                Some(SavedMatch::Continue { parent: call, wrap }) => {
+                    if let Some(binder) = wrap {
+                        value = value.lambda(&binder, origins);
+                    }
+                    parent = Some(call);
+                }
+                Some(SavedMatch::Fallback(mut previous)) => {
+                    value = SurfaceTerm::matched(
+                        std::mem::take(&mut previous.constructor),
+                        previous.arm.take().expect("saved match arm"),
+                        value,
+                        Some(previous.site),
+                        Some(previous.constructor_origin),
+                        origins,
+                    );
+                    parent = Some(previous.parent.take().expect("saved parent call"));
+                }
+                Some(SavedMatch::Arm(previous)) => {
+                    let next = MatchCall {
+                        initial: None,
+                        state: Some(previous.fallback),
+                        pending: Vec::new(),
+                        depth: previous.parent.depth + 1,
+                    };
+                    saved.push(SavedMatch::Fallback(SavedFallback {
+                        parent: Some(previous.parent),
+                        constructor: previous.constructor,
+                        constructor_origin: previous.constructor_origin,
+                        site: previous.site,
+                        arm: Some(value),
+                    }));
+                    current = Current::Match(next);
+                    continue 'compile;
+                }
+                Some(SavedMatch::BodyReturn(call)) => parent = Some(call),
+                Some(SavedMatch::Local(frame)) => {
+                    value = finish_local(frame, value, origins)?;
+                    parent = None;
+                }
             }
         }
     }
@@ -904,6 +1017,7 @@ fn flatten_match_bounded(
 
 #[expect(
     clippy::too_many_lines,
+    clippy::too_many_arguments,
     reason = "Direct translation of upstream's first-row pattern compilation algorithm"
 )]
 fn flatten_match_step(
@@ -913,18 +1027,16 @@ fn flatten_match_step(
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
+    limit: usize,
     origins: Option<&TermOrigins>,
 ) -> Result<MatchStep, FlattenError> {
-    if depth >= 64 {
+    if depth >= limit {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     if scrutinees.is_empty() {
         return rows.first().map_or_else(
             || Err("a match needs a case to return".into()),
-            |r| {
-                flatten_at(&r.body, vars, fresh, display_fresh, depth + 1, origins)
-                    .map(MatchStep::Done)
-            },
+            |_| Ok(MatchStep::Body { depth: depth + 1 }),
         );
     }
     let Some(first) = vars.first() else {
@@ -1205,6 +1317,142 @@ mod tests {
             };
         }
         body
+    }
+
+    #[test]
+    fn unified_body_driver_handles_deep_success_error_and_unwind() {
+        on_small_stack(|| {
+            let leaf = term(Term::Rfl);
+            let weak = Rc::downgrade(&leaf);
+            let body = deep_body(10_000, leaf, false);
+            let result = flatten_driver(
+                Current::Body {
+                    body,
+                    vars: vec![],
+                    depth: 0,
+                },
+                &mut 0,
+                &mut 0,
+                None,
+                10_010,
+            )
+            .unwrap_or_else(|e| panic!("deep local: {}", e.message()));
+            assert!(weak.upgrade().is_some());
+            drop(result);
+            assert!(weak.upgrade().is_none());
+
+            let leaf = term(Term::Rfl);
+            let weak = Rc::downgrade(&leaf);
+            let body = deep_body(10_000, leaf, false);
+            let Err(error) = flatten_driver(
+                Current::Body {
+                    body,
+                    vars: vec![],
+                    depth: 0,
+                },
+                &mut 0,
+                &mut 0,
+                None,
+                5_000,
+            ) else {
+                panic!("depth guard")
+            };
+            assert_eq!(
+                error.message(),
+                "pattern compilation exceeds the resource limit of 64 levels"
+            );
+            assert!(weak.upgrade().is_none());
+
+            let retained = (0..10_000).fold(term(Term::Rfl), |child, _| term(Term::Typ(child)));
+            let weak = Rc::downgrade(&retained);
+            let body = deep_body(10_000, Rc::clone(&retained), false);
+            let Err(_error) = flatten_driver(
+                Current::Body {
+                    body,
+                    vars: vec![],
+                    depth: 0,
+                },
+                &mut 0,
+                &mut 0,
+                None,
+                5_000,
+            ) else {
+                panic!("depth guard")
+            };
+            assert!(weak.upgrade().is_some());
+            drop(retained);
+            assert!(weak.upgrade().is_none());
+
+            let anchor = term(Term::Rfl);
+            let weak = Rc::downgrade(&anchor);
+            let var = Variable {
+                name: "x".into(),
+                id: 1,
+            };
+            let mut body = Body::Empty;
+            for _ in 0..3_000 {
+                body = Body::Local {
+                    patterns: vec![Pattern::Variable(var.clone())],
+                    quant: Quant::Many,
+                    values: vec![SurfaceTerm::new(Rc::clone(&anchor), None)],
+                    body: Box::new(body),
+                };
+            }
+            drop(anchor);
+            let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _ = flatten_driver(
+                    Current::Body {
+                        body,
+                        vars: vec![],
+                        depth: 0,
+                    },
+                    &mut 0,
+                    &mut 0,
+                    None,
+                    4_000,
+                );
+            }));
+            assert!(outcome.is_err(), "invalid body placeholder must unwind");
+            assert!(weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn unified_driver_handles_nested_matches_on_small_stack() {
+        on_small_stack(|| {
+            let x = Variable {
+                name: "x".into(),
+                id: 7,
+            };
+            let leaf = term(Term::Rfl);
+            let weak = Rc::downgrade(&leaf);
+            let mut body = Body::Reply(SurfaceTerm::new(leaf, None));
+            for _ in 0..128 {
+                body = Body::Match {
+                    scrutinees: vec![SurfaceTerm::new(x.term(), None)],
+                    rows: vec![Row {
+                        patterns: vec![Pattern::Variable(x.clone())],
+                        body,
+                    }],
+                };
+            }
+            let result = flatten_driver(
+                Current::Body {
+                    body,
+                    vars: vec![x],
+                    depth: 0,
+                },
+                &mut 8,
+                &mut 0,
+                None,
+                512,
+            )
+            .unwrap_or_else(|error| panic!("nested match: {}", error.message()));
+            assert!(matches!(result.value.as_ref(), Term::Lam { .. }));
+            assert!(weak.upgrade().is_some());
+            drop(result);
+            assert!(weak.upgrade().is_none());
+        });
     }
 
     fn body_leaf(mut body: &Body, depth: usize) -> &SurfaceTerm {

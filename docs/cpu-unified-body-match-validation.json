@@ -1,0 +1,109 @@
+{
+  "base_commit": "928bde016ea4d4c7be4c6d8136005cad343ee4ab",
+  "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "source_sha256": {
+    "src/syntax/surface.rs": "e5b85d852fed10e28e1a0665ec0537402aee2df611865b891b45a3c1ea1092d8",
+    "src/syntax/parser.rs": "c00286ecfd8f6b1f7e4cba7fee87e37c5d5789344f734d0dcc9ec7f7f44caf8c"
+  },
+  "focused_tests": {
+    "passed": 130,
+    "failed": 0,
+    "ignored": 0,
+    "surface": 22,
+    "pattern_constructor_cleanup": 26,
+    "parser_diagnostics": 82
+  },
+  "earlier_attempts": [
+    "initial driver prototype failed two surface tests; missing reply lambdas corrected",
+    "initial production Clippy failed four lint/dead-code diagnostics; fixed"
+  ],
+  "differential": {
+    "fixtures": 55,
+    "matched_observations": 220,
+    "baseline_binary_sha256": "3b5dd9505a18322cd28a7780a3e9841d11124eae78fd531d5089e9d33c952577",
+    "candidate_binary_sha256": "403b0b62d8b899e9f938e5ea07a5057dad54979979a5b2eb011c631a9c1d4d85",
+    "note": "Only test-code changes followed candidate build; production logic unchanged."
+  },
+  "stages": {
+    "final-surface-v3": {
+      "exit": 0,
+      "elapsed_seconds": 10.0,
+      "stopped": null
+    },
+    "targets": {
+      "exit": 0,
+      "elapsed_seconds": 82.03,
+      "stopped": null
+    },
+    "parser-targets": {
+      "exit": 0,
+      "elapsed_seconds": 336.07,
+      "stopped": null
+    },
+    "upstream": {
+      "exit": 0,
+      "elapsed_seconds": 18.0,
+      "stopped": null
+    },
+    "differential": {
+      "exit": 0,
+      "elapsed_seconds": 130.04,
+      "stopped": null
+    },
+    "final-clippy": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "allfeatures-build": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "provider": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "full-lib": {
+      "exit": 0,
+      "elapsed_seconds": 116.03,
+      "stopped": null
+    },
+    "full-doc": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "full-first": {
+      "exit": 0,
+      "elapsed_seconds": 738.25,
+      "stopped": null
+    },
+    "full-second": {
+      "exit": 0,
+      "elapsed_seconds": 666.21,
+      "stopped": null
+    }
+  },
+  "standard_gate": "not rerun; prior 1200-second gate timed out and remains incomplete",
+  "complete_bounded_set": {
+    "passed": 1420,
+    "failed": 0,
+    "ignored": 49,
+    "integration_targets": 202,
+    "includes": "library, binary, documentation and integration tests"
+  },
+  "limits": {
+    "batch_timeout_seconds": 1200,
+    "comparison_subprocess_seconds": 30,
+    "workspace_preflight_gib": 11,
+    "workspace_active_gib": 10,
+    "tmp_floor_gib": 1,
+    "additional_os_memory_cap": "none",
+    "requested_stack_bytes": 65536,
+    "core_dumps": "disabled in fault probes"
+  },
+  "original_witness": "upstream True{}; candidate check and run refused at compiler guard 64",
+  "gpu_and_other_hosts": "unrun"
+}
