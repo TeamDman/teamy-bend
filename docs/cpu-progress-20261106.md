@@ -64,6 +64,13 @@ build and Node provider checks, then timed out at 1,200 seconds with 952
 passed, zero failed and 48 ignored in completed groups; its active group was
 interrupted and subsequent groups were unrun.
 
+The subsequent [iterative nullary fallback change](cpu-pattern-stack.md)
+replaces recursive fallback calls with explicit frames and protects suspended
+partial arms on covered failure/unwind paths. It retains the existing guards;
+the original `"hi"` source still fails at the 64-level pattern guard. Other
+compiler/kernel recursion and ordinary public term destruction remain open.
+See its report for final-source validation and precise limits.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source

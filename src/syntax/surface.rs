@@ -443,6 +443,31 @@ enum MatchStep {
     },
 }
 
+// A suspended nullary fallback owns the arm already compiled. On an error or
+// unwind, release that partial term without recursively destroying its graph.
+struct SavedFallback<'a> {
+    parent: Option<MatchCall<'a>>,
+    constructor: String,
+    constructor_origin: usize,
+    site: MatchSite,
+    arm: Option<SurfaceTerm>,
+}
+
+impl Drop for SavedFallback<'_> {
+    fn drop(&mut self) {
+        if let Some(arm) = self.arm.take() {
+            crate::kernel::release_term_iteratively(arm.value);
+        }
+    }
+}
+
+struct MatchCall<'a> {
+    initial: Option<(&'a [SurfaceTerm], &'a [Row], &'a [Variable])>,
+    state: Option<MatchState>,
+    pending: Vec<(String, usize, MatchState)>,
+    depth: usize,
+}
+
 fn flatten_match(
     scrutinees: &[SurfaceTerm],
     rows: &[Row],
@@ -452,56 +477,103 @@ fn flatten_match(
     depth: usize,
     origins: Option<&TermOrigins>,
 ) -> Result<SurfaceTerm, FlattenError> {
-    // A nullary constructor consumes a column without introducing field
-    // binders. Continue that arm iteratively: a fixed-width word has one Bool
-    // column per bit, which need not double its Rust recursion depth. Retain
-    // bounded pending work and compile fallbacks only after their arms, keeping
-    // the original term, fresh-name sequence and first-error ordering.
-    let mut state: Option<MatchState> = None;
-    let mut pending: Vec<(String, usize, MatchState)> = Vec::new();
-    loop {
-        if depth + pending.len() >= 64 {
+    flatten_match_bounded(
+        scrutinees,
+        rows,
+        vars,
+        fresh,
+        display_fresh,
+        depth,
+        origins,
+        64,
+    )
+}
+
+#[expect(
+    clippy::too_many_arguments,
+    reason = "The match frame carries the existing traversal inputs and bound."
+)]
+fn flatten_match_bounded(
+    scrutinees: &[SurfaceTerm],
+    rows: &[Row],
+    vars: &[Variable],
+    fresh: &mut usize,
+    display_fresh: &mut usize,
+    depth: usize,
+    origins: Option<&TermOrigins>,
+    limit: usize,
+) -> Result<SurfaceTerm, FlattenError> {
+    let mut current = MatchCall {
+        initial: Some((scrutinees, rows, vars)),
+        state: None,
+        pending: Vec::new(),
+        depth,
+    };
+    let mut saved: Vec<SavedFallback<'_>> = Vec::new();
+    'compile: loop {
+        if current.depth + current.pending.len() >= limit {
             return Err("pattern compilation exceeds the resource limit of 64 levels".into());
         }
-        let (scrutinees, rows, vars) = state.as_ref().map_or((scrutinees, rows, vars), |s| {
+        let (scrutinees, rows, vars) = if let Some(state) = &current.state {
             (
-                s.scrutinees.as_slice(),
-                s.rows.as_slice(),
-                s.vars.as_slice(),
+                state.scrutinees.as_slice(),
+                state.rows.as_slice(),
+                state.vars.as_slice(),
             )
-        });
-        match flatten_match_step(scrutinees, rows, vars, fresh, display_fresh, depth, origins)? {
-            MatchStep::Done(mut value) => {
-                for (constructor, constructor_origin, fallback) in pending.into_iter().rev() {
+        } else {
+            current.initial.expect("initial or owned match state")
+        };
+        match flatten_match_step(
+            scrutinees,
+            rows,
+            vars,
+            fresh,
+            display_fresh,
+            current.depth,
+            origins,
+        )? {
+            MatchStep::Done(mut value) => loop {
+                if let Some((constructor, constructor_origin, fallback)) = current.pending.pop() {
                     let site = fallback.scrutinees[0].match_site;
-                    let fallback = flatten_match(
-                        &fallback.scrutinees,
-                        &fallback.rows,
-                        &fallback.vars,
-                        fresh,
-                        display_fresh,
-                        depth + 1,
-                        origins,
-                    )?;
-                    value = SurfaceTerm::matched(
+                    let next = MatchCall {
+                        initial: None,
+                        state: Some(fallback),
+                        pending: Vec::new(),
+                        depth: current.depth + 1,
+                    };
+                    let parent = std::mem::replace(&mut current, next);
+                    saved.push(SavedFallback {
+                        parent: Some(parent),
                         constructor,
-                        value,
-                        fallback,
-                        Some(site),
-                        Some(constructor_origin),
-                        origins,
-                    );
+                        constructor_origin,
+                        site,
+                        arm: Some(value),
+                    });
+                    continue 'compile;
                 }
-                return Ok(value);
-            }
+                let Some(mut previous) = saved.pop() else {
+                    return Ok(value);
+                };
+                value = SurfaceTerm::matched(
+                    std::mem::take(&mut previous.constructor),
+                    previous.arm.take().expect("saved match arm"),
+                    value,
+                    Some(previous.site),
+                    Some(previous.constructor_origin),
+                    origins,
+                );
+                current = previous.parent.take().expect("saved parent call");
+            },
             MatchStep::Nullary {
                 constructor,
                 constructor_origin,
                 next,
                 fallback,
             } => {
-                pending.push((constructor, constructor_origin, fallback));
-                state = Some(next);
+                current
+                    .pending
+                    .push((constructor, constructor_origin, fallback));
+                current.state = Some(next);
             }
         }
     }
@@ -713,6 +785,200 @@ fn flatten_match_step(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn on_small_stack(f: impl FnOnce() + Send + 'static) {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(f)
+            .expect("spawn small-stack test")
+            .join()
+            .expect("small-stack test completed");
+    }
+
+    fn nullary_alternatives(count: usize) -> (Vec<SurfaceTerm>, Vec<Row>, Vec<Variable>) {
+        let variable = Variable {
+            name: "x".into(),
+            id: 0,
+        };
+        let scrutinees = vec![SurfaceTerm::new(variable.term(), None)];
+        let rows = (0..count)
+            .map(|i| Row {
+                patterns: vec![Pattern::Constructor(format!("C{i}"), vec![], 0)],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            })
+            .collect();
+        (scrutinees, rows, vec![variable])
+    }
+
+    #[test]
+    fn nullary_fallbacks_compile_on_small_stack_and_keep_depth_boundary() {
+        on_small_stack(|| {
+            for count in [48, 63] {
+                let (scrutinees, rows, vars) = nullary_alternatives(count);
+                let result = flatten_match(&scrutinees, &rows, &vars, &mut 1, &mut 0, 0, None)
+                    .unwrap_or_else(|error| panic!("unexpected error: {}", error.message()));
+                let mut cursor = &result.value;
+                for i in 0..count {
+                    let Term::Mat {
+                        constructor,
+                        arm,
+                        fallback,
+                    } = cursor.as_ref()
+                    else {
+                        panic!("missing alternative {i}");
+                    };
+                    assert_eq!(constructor, &format!("C{i}"));
+                    assert!(matches!(arm.as_ref(), Term::Rfl));
+                    cursor = fallback;
+                }
+                assert!(matches!(cursor.as_ref(), Term::Efq));
+                crate::kernel::release_term_iteratively(result.value);
+            }
+            let (scrutinees, rows, vars) = nullary_alternatives(64);
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 1, &mut 0, 0, None)
+            else {
+                panic!("existing depth limit must still apply");
+            };
+            assert_eq!(
+                error.message(),
+                "pattern compilation exceeds the resource limit of 64 levels"
+            );
+        });
+    }
+
+    #[test]
+    fn many_pending_nullary_columns_use_explicit_frames() {
+        on_small_stack(|| {
+            let vars = (0..256)
+                .map(|id| Variable {
+                    name: format!("v{id}"),
+                    id,
+                })
+                .collect::<Vec<_>>();
+            let scrutinees = vars
+                .iter()
+                .map(|v| SurfaceTerm::new(v.term(), None))
+                .collect::<Vec<_>>();
+            let rows = vec![Row {
+                patterns: (0..256)
+                    .map(|_| Pattern::Constructor("C".into(), vec![], 0))
+                    .collect(),
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            }];
+            // This private test raises only this driver's bound; public callers still use 64,
+            // and the remaining recursive calls in this case stay at depth one.
+            let result =
+                flatten_match_bounded(&scrutinees, &rows, &vars, &mut 256, &mut 0, 0, None, 512)
+                    .unwrap_or_else(|error| panic!("unexpected error: {}", error.message()));
+            let mut cursor = &result.value;
+            for _ in 0..256 {
+                let Term::Mat {
+                    constructor,
+                    arm,
+                    fallback,
+                } = cursor.as_ref()
+                else {
+                    panic!("missing column")
+                };
+                assert_eq!(constructor, "C");
+                assert!(matches!(fallback.as_ref(), Term::Efq));
+                cursor = arm;
+            }
+            assert!(matches!(cursor.as_ref(), Term::Rfl));
+            crate::kernel::release_term_iteratively(result.value);
+        });
+    }
+
+    #[test]
+    fn suspended_fallback_releases_deep_arm_on_unwind() {
+        on_small_stack(|| {
+            let mut deep = term(Term::Rfl);
+            for _ in 0..20_000 {
+                deep = term(Term::Typ(deep));
+            }
+            let weak = Rc::downgrade(&deep);
+            let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _frame = SavedFallback {
+                    parent: None,
+                    constructor: "C".into(),
+                    constructor_origin: 0,
+                    site: MatchSite::Expression(0),
+                    arm: Some(SurfaceTerm::new(deep, None)),
+                };
+                panic!("exercise unwind cleanup");
+            }));
+            let _panic = outcome.expect_err("the injected panic must be caught");
+            assert!(weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn fallback_error_preserves_order_and_shared_arm_ownership() {
+        on_small_stack(|| {
+            let (scrutinees, mut rows, vars) = nullary_alternatives(2);
+            let shared = term(Term::Rfl);
+            rows[0].body = Body::Reply(SurfaceTerm::new(Rc::clone(&shared), None));
+            rows.push(Row {
+                patterns: vec![Pattern::Constructor(
+                    "C1".into(),
+                    vec![Pattern::Variable(Variable {
+                        name: "y".into(),
+                        id: 1,
+                    })],
+                    0,
+                )],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            });
+            let before = Rc::strong_count(&shared);
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 2, &mut 0, 0, None)
+            else {
+                panic!("inconsistent constructor arity must fail");
+            };
+            assert_eq!(
+                error.message(),
+                "constructor C1 has the wrong number of fields"
+            );
+            assert_eq!(Rc::strong_count(&shared), before);
+
+            rows[0].body = Body::Local {
+                patterns: vec![
+                    Pattern::Variable(vars[0].clone()),
+                    Pattern::Constructor("Bad".into(), vec![], 0),
+                ],
+                quant: Quant::Lone,
+                values: vec![],
+                body: Box::new(Body::Reply(SurfaceTerm::new(term(Term::Rfl), None))),
+            };
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 2, &mut 0, 0, None)
+            else {
+                panic!("invalid positive arm must fail before its fallback");
+            };
+            assert_eq!(error.message(), "a parallel let can bind only names");
+        });
+    }
+
+    #[test]
+    fn suspended_fallback_keeps_shared_deep_arm_alive() {
+        on_small_stack(|| {
+            let mut shared = term(Term::Rfl);
+            for _ in 0..20_000 {
+                shared = term(Term::Typ(shared));
+            }
+            let weak = Rc::downgrade(&shared);
+            let saved = SavedFallback {
+                parent: None,
+                constructor: "C".into(),
+                constructor_origin: 0,
+                site: MatchSite::Expression(0),
+                arm: Some(SurfaceTerm::new(Rc::clone(&shared), None)),
+            };
+            drop(saved);
+            assert_eq!(Rc::strong_count(&shared), 1);
+            assert!(weak.upgrade().is_some());
+            crate::kernel::release_term_iteratively(shared);
+            assert!(weak.upgrade().is_none());
+        });
+    }
 
     #[test]
     fn generated_match_edges_preserve_distinct_reply_origins_and_shared_values() {
