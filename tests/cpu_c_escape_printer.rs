@@ -59,7 +59,14 @@ fn c_escape_spelling_and_literal_readback_match_without_changing_other_lanes() {
                 .unwrap()
                 .normalize_definition("main")
                 .unwrap();
-            assert_eq!(normal.to_string(), case.port_normalized);
+            assert_eq!(normal.to_string(), case.expected);
+            let historical = teamy_bend::syntax::parse_term(&case.port_normalized).unwrap();
+            assert_eq!(
+                normalization_shape::shape_in_book(&normal, &book).unwrap(),
+                normalization_shape::shape_in_book(&historical, &book).unwrap(),
+                "{}",
+                case.case
+            );
             Some(normal)
         };
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
@@ -70,7 +77,7 @@ fn c_escape_spelling_and_literal_readback_match_without_changing_other_lanes() {
                 .unwrap(),
             0
         );
-        assert_eq!(stdout, format!("{}\n", case.port_normalized).as_bytes());
+        assert_eq!(stdout, format!("{}\n", case.expected).as_bytes());
         assert!(stderr.is_empty());
         let executable = executable_c_compiler::compile(
             &artifacts.0,

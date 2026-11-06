@@ -68,14 +68,6 @@ fn prefix_markers_execute_in_native_c_and_javascript() {
     for path in paths {
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
         let expected = std::fs::read(path.with_extension("stdout")).unwrap();
-        // The existing native String printer exposes constructors. Keep its
-        // exact residual mismatch separate from the complete value comparison.
-        let native = path.with_extension("native-stdout");
-        let native = if native.exists() {
-            std::fs::read(native).unwrap()
-        } else {
-            expected.clone()
-        };
         let (mut stdout, mut stderr) = (Vec::new(), Vec::new());
         assert_eq!(
             checked
@@ -83,7 +75,7 @@ fn prefix_markers_execute_in_native_c_and_javascript() {
                 .unwrap(),
             0
         );
-        assert_eq!(stdout, native, "{}", path.display());
+        assert_eq!(stdout, expected, "{}", path.display());
         assert!(stderr.is_empty());
         let executable = executable_c_compiler::compile(
             &artifacts.0,

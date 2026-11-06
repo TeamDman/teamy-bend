@@ -175,6 +175,47 @@ pub struct Book {
 pub fn term(value: Term) -> TermRef {
     Rc::new(value)
 }
+
+/// Release an owned term graph without recursively dropping uniquely owned
+/// children. Shared children remain alive until their other owners release them.
+///
+/// This is an explicit cleanup operation: ordinary `Rc<Term>` destruction is
+/// unchanged and can still recurse. Callers holding another deep root must also
+/// release that root iteratively. Temporary storage is proportional to pending
+/// graph edges, and no semantic validation or resource budget is bypassed.
+pub fn release_term_iteratively(root: TermRef) {
+    let mut pending = vec![root];
+    while let Some(value) = pending.pop() {
+        let Ok(value) = Rc::try_unwrap(value) else {
+            continue;
+        };
+        match value {
+            Term::Var { .. }
+            | Term::Ref(_)
+            | Term::GpuRef(_)
+            | Term::Qnt
+            | Term::Qua(_)
+            | Term::Efq
+            | Term::Rfl
+            | Term::Hole(_) => {}
+            Term::Typ(value) | Term::Lam { body: value, .. } => pending.push(value),
+            Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => pending.extend([a, b]),
+            Term::All { domain, body, .. } => pending.extend([domain, body]),
+            Term::Adt { args, .. } | Term::Ctr { args, .. } => pending.extend(args),
+            Term::Mat { arm, fallback, .. } => pending.extend([arm, fallback]),
+            Term::Eql { left, right, ty } => pending.extend([left, right, ty]),
+            Term::Rwt {
+                evidence,
+                motive,
+                body,
+            } => pending.extend([evidence, motive, body]),
+            Term::Let { bindings, body } => {
+                pending.extend(bindings.into_iter().map(|binding| binding.value));
+                pending.push(body);
+            }
+        }
+    }
+}
 /// Form the dependent function telescope over a list of binders.
 #[must_use]
 pub fn arrows(binders: &[Binder], mut result: TermRef) -> TermRef {
@@ -226,117 +267,242 @@ pub(crate) fn map_constructor(
 }
 
 /// Capture-free substitution for terms whose binder IDs are globally unique.
+/// Traversal uses explicit heap frames; the returned `Rc<Term>` still has
+/// ordinary recursive destruction unless explicitly released iteratively.
+///
+/// # Panics
+/// Panics if an internal traversal-frame invariant is violated.
 #[must_use]
-pub fn substitute(value: &TermRef, target: usize, replacement: &TermRef) -> TermRef {
-    let sub = |x: &TermRef| substitute(x, target, replacement);
-    match value.as_ref() {
-        Term::Var { id, .. } if *id == target => Rc::clone(replacement),
-        Term::Var { .. }
-        | Term::Ref(_)
-        | Term::GpuRef(_)
-        | Term::Qnt
-        | Term::Qua(_)
-        | Term::Efq
-        | Term::Rfl
-        | Term::Hole(_) => Rc::clone(value),
-        Term::Typ(g) => term(Term::Typ(sub(g))),
-        Term::Min(a, b) => term(Term::Min(sub(a), sub(b))),
-        Term::All {
-            quant,
-            name,
-            id,
-            domain,
-            body,
-        } => term(Term::All {
-            quant: *quant,
-            name: name.clone(),
-            id: *id,
-            domain: sub(domain),
-            body: if *id == target {
-                Rc::clone(body)
-            } else {
-                sub(body)
-            },
-        }),
-        Term::Lam { name, id, body } => {
-            if *id == target {
-                Rc::clone(value)
-            } else {
-                term(Term::Lam {
-                    name: name.clone(),
-                    id: *id,
-                    body: sub(body),
-                })
+#[expect(
+    clippy::too_many_lines,
+    reason = "Every core term variant must preserve its substitution and binder rules."
+)]
+pub fn substitute(root: &TermRef, target: usize, replacement: &TermRef) -> TermRef {
+    enum Task<'a> {
+        Visit(&'a TermRef),
+        Build(&'a TermRef),
+    }
+    let mut tasks = vec![Task::Visit(root)];
+    let mut results: Vec<TermRef> = Vec::new();
+    while let Some(task) = tasks.pop() {
+        match task {
+            Task::Visit(node) => {
+                match node.as_ref() {
+                    Term::Var { id, .. } if *id == target => {
+                        results.push(Rc::clone(replacement));
+                        continue;
+                    }
+                    Term::Var { .. }
+                    | Term::Ref(_)
+                    | Term::GpuRef(_)
+                    | Term::Qnt
+                    | Term::Qua(_)
+                    | Term::Efq
+                    | Term::Rfl
+                    | Term::Hole(_) => {
+                        results.push(Rc::clone(node));
+                        continue;
+                    }
+                    Term::Lam { id, .. } if *id == target => {
+                        results.push(Rc::clone(node));
+                        continue;
+                    }
+                    Term::Typ(_)
+                    | Term::Min(..)
+                    | Term::All { .. }
+                    | Term::Lam { .. }
+                    | Term::App(..)
+                    | Term::Adt { .. }
+                    | Term::Ctr { .. }
+                    | Term::Mat { .. }
+                    | Term::Eql { .. }
+                    | Term::Rwt { .. }
+                    | Term::Ann(..)
+                    | Term::Let { .. } => {}
+                }
+                tasks.push(Task::Build(node));
+                match node.as_ref() {
+                    Term::Typ(a) | Term::Lam { body: a, .. } => tasks.push(Task::Visit(a)),
+                    Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => {
+                        tasks.push(Task::Visit(b));
+                        tasks.push(Task::Visit(a));
+                    }
+                    Term::All {
+                        id, domain, body, ..
+                    } => {
+                        if *id != target {
+                            tasks.push(Task::Visit(body));
+                        }
+                        tasks.push(Task::Visit(domain));
+                    }
+                    Term::Adt { args, .. } | Term::Ctr { args, .. } => {
+                        tasks.extend(args.iter().rev().map(Task::Visit));
+                    }
+                    Term::Mat { arm, fallback, .. } => {
+                        tasks.push(Task::Visit(fallback));
+                        tasks.push(Task::Visit(arm));
+                    }
+                    Term::Eql { left, right, ty } => {
+                        tasks.push(Task::Visit(ty));
+                        tasks.push(Task::Visit(right));
+                        tasks.push(Task::Visit(left));
+                    }
+                    Term::Rwt {
+                        evidence,
+                        motive,
+                        body,
+                    } => {
+                        tasks.push(Task::Visit(body));
+                        tasks.push(Task::Visit(motive));
+                        tasks.push(Task::Visit(evidence));
+                    }
+                    Term::Let { bindings, body } => {
+                        if !bindings.iter().any(|b| b.id == target) {
+                            tasks.push(Task::Visit(body));
+                        }
+                        tasks.extend(bindings.iter().rev().map(|b| Task::Visit(&b.value)));
+                    }
+                    Term::Var { .. }
+                    | Term::Ref(_)
+                    | Term::GpuRef(_)
+                    | Term::Qnt
+                    | Term::Qua(_)
+                    | Term::Efq
+                    | Term::Rfl
+                    | Term::Hole(_) => unreachable!("leaf handled before scheduling"),
+                }
+            }
+            Task::Build(node) => {
+                let mut pop = || results.pop().unwrap();
+                let next = match node.as_ref() {
+                    Term::Typ(_) => term(Term::Typ(pop())),
+                    Term::Min(..) => {
+                        let b = pop();
+                        let a = pop();
+                        term(Term::Min(a, b))
+                    }
+                    Term::All {
+                        quant,
+                        name,
+                        id,
+                        body,
+                        ..
+                    } => {
+                        let b = if *id == target {
+                            Rc::clone(body)
+                        } else {
+                            pop()
+                        };
+                        let a = pop();
+                        term(Term::All {
+                            quant: *quant,
+                            name: name.clone(),
+                            id: *id,
+                            domain: a,
+                            body: b,
+                        })
+                    }
+                    Term::Lam { name, id, .. } => term(Term::Lam {
+                        name: name.clone(),
+                        id: *id,
+                        body: pop(),
+                    }),
+                    Term::App(a, b) => {
+                        let y = pop();
+                        let x = pop();
+                        if Rc::ptr_eq(a, &x) && Rc::ptr_eq(b, &y) {
+                            Rc::clone(node)
+                        } else {
+                            term(Term::App(x, y))
+                        }
+                    }
+                    Term::Adt {
+                        name,
+                        args,
+                        excluded,
+                    } => {
+                        let out = results.split_off(results.len() - args.len());
+                        term(Term::Adt {
+                            name: name.clone(),
+                            args: out,
+                            excluded: excluded.clone(),
+                        })
+                    }
+                    Term::Ctr { name, args } => {
+                        let out = results.split_off(results.len() - args.len());
+                        if args.iter().zip(&out).all(|(a, b)| Rc::ptr_eq(a, b)) {
+                            Rc::clone(node)
+                        } else {
+                            term(Term::Ctr {
+                                name: name.clone(),
+                                args: out,
+                            })
+                        }
+                    }
+                    Term::Mat { constructor, .. } => {
+                        let fallback = pop();
+                        let arm = pop();
+                        term(Term::Mat {
+                            constructor: constructor.clone(),
+                            arm,
+                            fallback,
+                        })
+                    }
+                    Term::Eql { .. } => {
+                        let ty = pop();
+                        let right = pop();
+                        let left = pop();
+                        term(Term::Eql { left, right, ty })
+                    }
+                    Term::Rwt { .. } => {
+                        let body = pop();
+                        let motive = pop();
+                        let evidence = pop();
+                        term(Term::Rwt {
+                            evidence,
+                            motive,
+                            body,
+                        })
+                    }
+                    Term::Ann(..) => {
+                        let ty = pop();
+                        let value = pop();
+                        term(Term::Ann(value, ty))
+                    }
+                    Term::Let { bindings, body } => {
+                        let body = if bindings.iter().any(|b| b.id == target) {
+                            Rc::clone(body)
+                        } else {
+                            pop()
+                        };
+                        let mapped = results.split_off(results.len() - bindings.len());
+                        let bindings = bindings
+                            .iter()
+                            .zip(mapped)
+                            .map(|(b, value)| LetBinding {
+                                quant: b.quant,
+                                name: b.name.clone(),
+                                id: b.id,
+                                value,
+                            })
+                            .collect();
+                        term(Term::Let { bindings, body })
+                    }
+                    Term::Var { .. }
+                    | Term::Ref(_)
+                    | Term::GpuRef(_)
+                    | Term::Qnt
+                    | Term::Qua(_)
+                    | Term::Efq
+                    | Term::Rfl
+                    | Term::Hole(_) => unreachable!("leaf cannot have a build frame"),
+                };
+                results.push(next);
             }
         }
-        Term::App(f, x) => map_application(value, f, x, sub),
-        Term::Adt {
-            name,
-            args,
-            excluded,
-        } => term(Term::Adt {
-            name: name.clone(),
-            args: args.iter().map(sub).collect(),
-            excluded: excluded.clone(),
-        }),
-        Term::Ctr { name, args } => map_constructor(value, name, args, sub),
-        Term::Mat {
-            constructor,
-            arm,
-            fallback,
-        } => term(Term::Mat {
-            constructor: constructor.clone(),
-            arm: sub(arm),
-            fallback: sub(fallback),
-        }),
-        Term::Eql { left, right, ty } => term(Term::Eql {
-            left: sub(left),
-            right: sub(right),
-            ty: sub(ty),
-        }),
-        Term::Rwt {
-            evidence,
-            motive,
-            body,
-        } => term(Term::Rwt {
-            evidence: sub(evidence),
-            motive: sub(motive),
-            body: sub(body),
-        }),
-        Term::Ann(x, t) => term(Term::Ann(sub(x), sub(t))),
-        Term::Let { bindings, body } => term(Term::Let {
-            bindings: bindings
-                .iter()
-                .map(|b| LetBinding {
-                    quant: b.quant,
-                    name: b.name.clone(),
-                    id: b.id,
-                    value: sub(&b.value),
-                })
-                .collect(),
-            body: if bindings.iter().any(|b| b.id == target) {
-                Rc::clone(body)
-            } else {
-                sub(body)
-            },
-        }),
     }
-}
-
-fn map_application(
-    value: &TermRef,
-    f: &TermRef,
-    x: &TermRef,
-    mut transform: impl FnMut(&TermRef) -> TermRef,
-) -> TermRef {
-    // An unrelated binder must not copy an already shared computation.
-    let next_f = transform(f);
-    let next_x = transform(x);
-    if Rc::ptr_eq(f, &next_f) && Rc::ptr_eq(x, &next_x) {
-        Rc::clone(value)
-    } else {
-        term(Term::App(next_f, next_x))
-    }
+    assert_eq!(results.len(), 1);
+    results.pop().unwrap()
 }
 
 pub(crate) fn inspect(value: &TermRef) -> Result<usize, super::KernelError> {
@@ -668,6 +834,14 @@ fn constructor(
         }
         return Ok(());
     }
+    if let Some(character) = literal_character(value) {
+        f.write_str("'")?;
+        write_character(f, character, '\'')?;
+        return f.write_str("'");
+    }
+    if let Some((prefix, quoted_tail)) = string_plan(value) {
+        return print_string(f, value, scope, prefix, quoted_tail);
+    }
     if complete_list(value) {
         return list_literal(f, value, scope);
     }
@@ -698,6 +872,115 @@ fn constructor(
     write!(f, "{name}{{")?;
     list(f, args, scope)?;
     f.write_str("}")
+}
+
+// Match term_show structurally: a partial string is never evaluated or
+// silently truncated, and a character's U32 may contain annotations.
+fn literal_character(value: &Term) -> Option<u32> {
+    let Term::Ctr { name, args } = value else {
+        return None;
+    };
+    if name != "Chr" {
+        return None;
+    }
+    let [number] = args.as_slice() else {
+        return None;
+    };
+    let mut number = number;
+    while let Term::Ann(inner, _) = number.as_ref() {
+        number = inner;
+    }
+    let Term::Ctr { name, args } = number.as_ref() else {
+        return None;
+    };
+    if name != "U32" {
+        return None;
+    }
+    let [word] = args.as_slice() else {
+        return None;
+    };
+    literal_word(word)
+}
+
+// Find the longest literal suffix in one pass. A partially open string must
+// retain its constructors; repeatedly rescanning each suffix would be quadratic.
+fn string_plan(mut value: &Term) -> Option<(usize, bool)> {
+    let mut length = 0;
+    let mut last_nonliteral = 0;
+    loop {
+        match value {
+            Term::Ctr { name, args } if name == "SNil" && args.is_empty() => {
+                return Some((last_nonliteral, true));
+            }
+            Term::Ctr { name, args } if name == "SCon" && args.len() == 2 => {
+                length += 1;
+                if literal_character(&args[0]).is_none() {
+                    last_nonliteral = length;
+                }
+                value = &args[1];
+            }
+            _ => return (length != 0).then_some((length, false)),
+        }
+    }
+}
+
+fn print_string(
+    f: &mut fmt::Formatter<'_>,
+    mut value: &Term,
+    scope: PrintScope<'_>,
+    prefix: usize,
+    quoted_tail: bool,
+) -> fmt::Result {
+    for _ in 0..prefix {
+        let Term::Ctr { args, .. } = value else {
+            unreachable!("validated string prefix")
+        };
+        let [head, tail] = args.as_slice() else {
+            unreachable!("validated string arity")
+        };
+        write!(f, "SCon{{{}, ", within(head, scope))?;
+        value = tail;
+    }
+    if quoted_tail {
+        f.write_str("\"")?;
+        while let Term::Ctr { name, args } = value {
+            if name == "SNil" {
+                break;
+            }
+            let [head, tail] = args.as_slice() else {
+                unreachable!("validated string tail")
+            };
+            write_character(
+                f,
+                literal_character(head).expect("validated character"),
+                '"',
+            )?;
+            value = tail;
+        }
+        f.write_str("\"")?;
+    } else {
+        write!(f, "{}", within(value, scope))?;
+    }
+    for _ in 0..prefix {
+        f.write_str("}")?;
+    }
+    Ok(())
+}
+
+fn write_character(f: &mut fmt::Formatter<'_>, value: u32, quote: char) -> fmt::Result {
+    match value {
+        10 => f.write_str("\\n"),
+        9 => f.write_str("\\t"),
+        13 => f.write_str("\\r"),
+        0 => f.write_str("\\0"),
+        92 => f.write_str("\\\\"),
+        39 if quote == '\'' => f.write_str("\\'"),
+        34 if quote == '"' => f.write_str("\\\""),
+        1..=31 | 127 | 0xd800..=0xdfff | 0x0011_0000..=u32::MAX => {
+            write!(f, "\\u{{{value:x}}}")
+        }
+        _ => write!(f, "{}", char::from_u32(value).expect("valid scalar")),
+    }
 }
 
 // Pinned term_show flattens only complete ALeaf/ANode trees. Inspect syntax

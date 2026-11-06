@@ -62,8 +62,13 @@ fn uppercase_unicode_preserves_values_normalization_and_execution() {
                 .unwrap()
                 .normalize_definition("main")
                 .unwrap();
-            assert_eq!(normal.to_string(), case.port_normalized);
+            assert_eq!(normal.to_string(), case.expected);
             let expected = teamy_bend::syntax::parse_term(&case.expected).unwrap();
+            let historical = teamy_bend::syntax::parse_term(&case.port_normalized).unwrap();
+            assert_eq!(
+                normalization_shape::shape_in_book(&historical, &book).unwrap(),
+                normalization_shape::shape_in_book(&expected, &book).unwrap()
+            );
             assert_eq!(
                 normalization_shape::shape_in_book(&normal, &book).unwrap(),
                 normalization_shape::shape_in_book(&expected, &book).unwrap()
@@ -72,14 +77,7 @@ fn uppercase_unicode_preserves_values_normalization_and_execution() {
         let checked = check_executable(&load_executable(&path).unwrap()).unwrap();
         // Pure run_main is normalization; the explicit IO control exercises native execution.
         // Generated C/JS remain separate executable evidence.
-        let native_expected = format!(
-            "{}\n",
-            if case.io {
-                &case.expected
-            } else {
-                &case.port_normalized
-            }
-        );
+        let native_expected = format!("{}\n", case.expected);
         for _ in 0..2 {
             let (mut stdout, mut stderr) = (Vec::new(), Vec::new());
             assert_eq!(

@@ -1,5 +1,11 @@
 # Compact string-pattern design: no production adoption
 
+**Updated direction:** the user has since directed that depth thresholds be
+treated as temporary implementation constraints and retired when the relevant
+paths are stack-safe, with meaningful work and memory protections. Earlier
+requests below for a separate decision about changing guard accounting are
+historical. No unsafe guard removal or production adoption is implied.
+
 The unchanged original still refuses at the 64-level pattern compiler guard.
 The earlier field-fragment experiment only moved failure to the 128 input guard.
 This follow-up investigates an existing-core typed local continuation, without

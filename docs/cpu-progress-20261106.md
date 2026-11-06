@@ -52,6 +52,18 @@ completed by that run. See [NaN validation](cpu-float-nan-overflow.md). The
 subsequent string-normalization investigation changed only research fixtures,
 a standalone probe and reports, not production code.
 
+The subsequent [core String and Char rendering change](cpu-core-string-printing.md)
+addresses a native pure-output mismatch while preserving the normalized value
+graphs. Alongside iterative substitution and explicit release, its final-source
+complete offline test set passed in bounded batches: **1,382 passed / 0 failed /
+49 ignored**, covering all 200 integration targets plus library, binary and
+documentation tests. This is separate from an uninterrupted standard gate. The
+string-pattern depth issue remains unresolved.
+The final-source standard gate passed formatting, strict production Clippy,
+build and Node provider checks, then timed out at 1,200 seconds with 952
+passed, zero failed and 48 ignored in completed groups; its active group was
+interrupted and subsequent groups were unrun.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
@@ -129,6 +141,13 @@ assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-invento
    the expanded string matcher acceptable or implement production lowering.
    General large native Nat computation and cancellation
    boundaries remain incomplete or unmeasured.
+   The user has directed that the depth thresholds be treated as temporary
+   implementation constraints. Removing them safely requires iterative
+   traversal and stack-safe cleanup across every consumer while retaining
+   meaningful work and memory safeguards; changing one guard alone is unsafe.
+   [Iterative substitution and explicit release](cpu-stack-safe-substitution.md)
+   provide initial stack-safe paths; they do not yet remove any end-to-end
+   depth guard or make ordinary `Rc<Term>` destruction stack-safe.
 3. **Runtime and library breadth.** Systematically measure the unlinked corpus
    in each applicable lane, and reproduce failures before repair. Exercise
    concurrency under multiple worker profiles, cancellation, ownership and
