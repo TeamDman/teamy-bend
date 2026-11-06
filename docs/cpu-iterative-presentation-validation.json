@@ -1,0 +1,122 @@
+{
+  "base_commit": "72beb81f7b5196a685b618e7bddea801ca69bbf7",
+  "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "source_sha256": {
+    "src/kernel/mod.rs": "9273fbcfa65dee3144e4acb57440f58144485a0ba85f0eea1e5357b42ea6114d",
+    "src/kernel/term.rs": "3aa3edbfd6e50fea8581e88e260e9c2d653fc33d950c5c23306244232f55cb7f",
+    "src/syntax/parser.rs": "170465d9fe201d9546258a81647438ec19f360442cee5ee6f27f856a55794281",
+    "src/syntax/surface.rs": "128646e228417de03bd4f5ca4c1cb4139458ddd8a238061030062d472a79385f",
+    "tests/kernel_deep_pattern_safety.rs": "8e636e41b896308c2bc23364c84d47d4ad6f9a698039af7d72bc5b989dc70f4f"
+  },
+  "bounded_test_set": {
+    "passed": 1425,
+    "failed": 0,
+    "ignored": 49,
+    "integration_targets": 203,
+    "includes": "library, binary, documentation and integration tests"
+  },
+  "stages": {
+    "safe-final-clippy": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "safe-final-lib": {
+      "exit": 0,
+      "elapsed_seconds": 436.1,
+      "stopped": null
+    },
+    "safe-final-targets": {
+      "exit": 0,
+      "elapsed_seconds": 60.03,
+      "stopped": null
+    },
+    "safe-full-doc": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "safe-full-first": {
+      "exit": 0,
+      "elapsed_seconds": 736.25,
+      "stopped": null
+    },
+    "safe-full-second": {
+      "exit": 0,
+      "elapsed_seconds": 660.22,
+      "stopped": null
+    },
+    "safe-final-bins": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "safe-final-build": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "safe-final-upstream": {
+      "exit": 0,
+      "elapsed_seconds": 18.01,
+      "stopped": null
+    },
+    "safe-final-diff": {
+      "exit": 0,
+      "elapsed_seconds": 128.06,
+      "stopped": null
+    },
+    "safe-allfeatures-build": {
+      "exit": 0,
+      "elapsed_seconds": 8.0,
+      "stopped": null
+    },
+    "safe-provider": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    }
+  },
+  "comparisons": {
+    "fixtures": 55,
+    "observations": 220,
+    "matched": 220,
+    "baseline_commit": "928bde016ea4d4c7be4c6d8136005cad343ee4ab",
+    "baseline_binary_sha256": "3b5dd9505a18322cd28a7780a3e9841d11124eae78fd531d5089e9d33c952577",
+    "candidate_binary_sha256": "757b1f5cad34c97409f6c57cc7b2a346d4b42caf53b5aa59814cceb25ca27259",
+    "baseline_qualification": "the same 220 observations previously matched base 72beb81"
+  },
+  "unpublished_experiment": {
+    "compiler_guard": "temporarily removed then restored",
+    "original_hi": "reached kernel input nesting refusal",
+    "input_guard": "temporarily bypassed then restored; original reached engine nesting refusal",
+    "bool122": "stack overflow SIGABRT on requested 2 MiB checker thread",
+    "candidate_65_nat": "True{} matching upstream",
+    "growth_64_char": {
+      "depth": 4354,
+      "occurrences": 19396,
+      "unique_nodes": 15044,
+      "peak_rss_kib": 472704
+    }
+  },
+  "standard_gate": "not rerun; prior 1200-second gate timed out and remains incomplete",
+  "limits": {
+    "batch_timeout_seconds": 1200,
+    "comparison_subprocess_seconds": 30,
+    "workspace_preflight_gib": 11,
+    "workspace_active_gib": 10,
+    "tmp_floor_gib": 1,
+    "additional_os_memory_cap": "none",
+    "requested_stack_bytes": 65536,
+    "checker_crash_stack_bytes": 2097152,
+    "core_dumps": "disabled in crash probes"
+  },
+  "earlier_attempts": [
+    "no-guard integration run aborted on bool-122 checker stack overflow; guard restored",
+    "initial Clippy attempts failed on lint diagnostics; corrected and rerun",
+    "initial temporary rustc debug probe named an rlib incorrectly; corrected and rerun"
+  ],
+  "original_witness": "production candidate check and run refuse at compiler guard 64",
+  "gpu_and_other_hosts": "unrun",
+  "post_test_change": "Documentation-only correction to substitute comment; production code unchanged."
+}

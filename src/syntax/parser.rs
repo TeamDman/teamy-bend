@@ -2986,105 +2986,202 @@ fn within_term_depth(value: &TermRef, limit: usize) -> bool {
     true
 }
 
+#[expect(
+    clippy::too_many_lines,
+    reason = "Every term variant retains its operator qualification behavior."
+)]
 fn qualify_operators(value: &TermRef, namespace: &str) -> TermRef {
-    let go = |t: &TermRef| qualify_operators(t, namespace);
-    match value.as_ref() {
-        // Relative module identities may begin with ../ or a dot-directory.
-        // Only parser-generated operator placeholders need a type namespace.
-        Term::Ref(name) | Term::GpuRef(name)
-            if matches!(
-                name.as_str(),
-                ".add"
-                    | ".sub"
-                    | ".mul"
-                    | ".div"
-                    | ".mod"
-                    | ".is_lt"
-                    | ".is_le"
-                    | ".is_gt"
-                    | ".is_ge"
-                    | ".or"
-                    | ".xor"
-                    | ".and"
-                    | ".shln"
-                    | ".shrn"
-            ) =>
-        {
-            term(if matches!(value.as_ref(), Term::GpuRef(_)) {
-                Term::GpuRef(format!("{namespace}{name}"))
-            } else {
-                Term::Ref(format!("{namespace}{name}"))
-            })
-        }
-        Term::Typ(t) => term(Term::Typ(go(t))),
-        Term::Min(a, b) => term(Term::Min(go(a), go(b))),
-        Term::All {
-            quant,
-            name,
-            id,
-            domain,
-            body,
-        } => term(Term::All {
-            quant: *quant,
-            name: name.clone(),
-            id: *id,
-            domain: go(domain),
-            body: go(body),
-        }),
-        Term::Lam { name, id, body } => term(Term::Lam {
-            name: name.clone(),
-            id: *id,
-            body: go(body),
-        }),
-        Term::App(a, b) => term(Term::App(go(a), go(b))),
-        Term::Adt {
-            name,
-            args,
-            excluded,
-        } => term(Term::Adt {
-            name: name.clone(),
-            args: args.iter().map(go).collect(),
-            excluded: excluded.clone(),
-        }),
-        Term::Ctr { name, args } => crate::kernel::map_constructor(value, name, args, go),
-        Term::Mat {
-            constructor,
-            arm,
-            fallback,
-        } => term(Term::Mat {
-            constructor: constructor.clone(),
-            arm: go(arm),
-            fallback: go(fallback),
-        }),
-        Term::Eql { left, right, ty } => term(Term::Eql {
-            left: go(left),
-            right: go(right),
-            ty: go(ty),
-        }),
-        Term::Rwt {
-            evidence,
-            motive,
-            body,
-        } => term(Term::Rwt {
-            evidence: go(evidence),
-            motive: go(motive),
-            body: go(body),
-        }),
-        Term::Ann(a, b) => term(Term::Ann(go(a), go(b))),
-        Term::Let { bindings, body } => term(Term::Let {
-            bindings: bindings
-                .iter()
-                .map(|b| crate::kernel::LetBinding {
-                    quant: b.quant,
-                    name: b.name.clone(),
-                    id: b.id,
-                    value: go(&b.value),
-                })
-                .collect(),
-            body: go(body),
-        }),
-        _ => Rc::clone(value),
+    enum Task<'a> {
+        Visit(&'a TermRef),
+        Build(&'a TermRef),
     }
+    let mut tasks = vec![Task::Visit(value)];
+    let mut results = Vec::<TermRef>::new();
+    while let Some(task) = tasks.pop() {
+        match task {
+            Task::Visit(node) => {
+                match node.as_ref() {
+                    Term::Ref(name) | Term::GpuRef(name)
+                        if matches!(
+                            name.as_str(),
+                            ".add"
+                                | ".sub"
+                                | ".mul"
+                                | ".div"
+                                | ".mod"
+                                | ".is_lt"
+                                | ".is_le"
+                                | ".is_gt"
+                                | ".is_ge"
+                                | ".or"
+                                | ".xor"
+                                | ".and"
+                                | ".shln"
+                                | ".shrn"
+                        ) =>
+                    {
+                        results.push(term(if matches!(node.as_ref(), Term::GpuRef(_)) {
+                            Term::GpuRef(format!("{namespace}{name}"))
+                        } else {
+                            Term::Ref(format!("{namespace}{name}"))
+                        }));
+                        continue;
+                    }
+                    Term::Typ(_)
+                    | Term::Min(..)
+                    | Term::All { .. }
+                    | Term::Lam { .. }
+                    | Term::App(..)
+                    | Term::Adt { .. }
+                    | Term::Ctr { .. }
+                    | Term::Mat { .. }
+                    | Term::Eql { .. }
+                    | Term::Rwt { .. }
+                    | Term::Ann(..)
+                    | Term::Let { .. } => {}
+                    _ => {
+                        results.push(Rc::clone(node));
+                        continue;
+                    }
+                }
+                tasks.push(Task::Build(node));
+                match node.as_ref() {
+                    Term::Typ(a) | Term::Lam { body: a, .. } => tasks.push(Task::Visit(a)),
+                    Term::Min(a, b) | Term::App(a, b) | Term::Ann(a, b) => {
+                        tasks.push(Task::Visit(b));
+                        tasks.push(Task::Visit(a));
+                    }
+                    Term::All { domain, body, .. } => {
+                        tasks.push(Task::Visit(body));
+                        tasks.push(Task::Visit(domain));
+                    }
+                    Term::Adt { args, .. } | Term::Ctr { args, .. } => {
+                        tasks.extend(args.iter().rev().map(Task::Visit));
+                    }
+                    Term::Mat { arm, fallback, .. } => {
+                        tasks.push(Task::Visit(fallback));
+                        tasks.push(Task::Visit(arm));
+                    }
+                    Term::Eql { left, right, ty } => {
+                        tasks.push(Task::Visit(ty));
+                        tasks.push(Task::Visit(right));
+                        tasks.push(Task::Visit(left));
+                    }
+                    Term::Rwt {
+                        evidence,
+                        motive,
+                        body,
+                    } => {
+                        tasks.push(Task::Visit(body));
+                        tasks.push(Task::Visit(motive));
+                        tasks.push(Task::Visit(evidence));
+                    }
+                    Term::Let { bindings, body } => {
+                        tasks.push(Task::Visit(body));
+                        tasks.extend(bindings.iter().rev().map(|b| Task::Visit(&b.value)));
+                    }
+                    _ => unreachable!("leaf handled before build"),
+                }
+            }
+            Task::Build(node) => {
+                let count = match node.as_ref() {
+                    Term::Typ(_) | Term::Lam { .. } => 1,
+                    Term::Min(..)
+                    | Term::All { .. }
+                    | Term::App(..)
+                    | Term::Mat { .. }
+                    | Term::Ann(..) => 2,
+                    Term::Eql { .. } | Term::Rwt { .. } => 3,
+                    Term::Adt { args, .. } | Term::Ctr { args, .. } => args.len(),
+                    Term::Let { bindings, .. } => bindings.len() + 1,
+                    _ => unreachable!("leaf handled before build"),
+                };
+                let start = results.len() - count;
+                let mut children = results.drain(start..);
+                let mapped = match node.as_ref() {
+                    Term::Typ(_) => term(Term::Typ(children.next().unwrap())),
+                    Term::Min(..) => term(Term::Min(
+                        children.next().unwrap(),
+                        children.next().unwrap(),
+                    )),
+                    Term::All {
+                        quant, name, id, ..
+                    } => term(Term::All {
+                        quant: *quant,
+                        name: name.clone(),
+                        id: *id,
+                        domain: children.next().unwrap(),
+                        body: children.next().unwrap(),
+                    }),
+                    Term::Lam { name, id, .. } => term(Term::Lam {
+                        name: name.clone(),
+                        id: *id,
+                        body: children.next().unwrap(),
+                    }),
+                    Term::App(..) => term(Term::App(
+                        children.next().unwrap(),
+                        children.next().unwrap(),
+                    )),
+                    Term::Adt { name, excluded, .. } => term(Term::Adt {
+                        name: name.clone(),
+                        args: children.by_ref().collect(),
+                        excluded: excluded.clone(),
+                    }),
+                    Term::Ctr { name, args } => {
+                        let mapped: Vec<_> = children.by_ref().collect();
+                        // Unchanged constructors retain their identity and
+                        // loader provenance, as before qualification.
+                        if args.iter().zip(&mapped).all(|(a, b)| Rc::ptr_eq(a, b)) {
+                            Rc::clone(node)
+                        } else {
+                            term(Term::Ctr {
+                                name: name.clone(),
+                                args: mapped,
+                            })
+                        }
+                    }
+                    Term::Mat { constructor, .. } => term(Term::Mat {
+                        constructor: constructor.clone(),
+                        arm: children.next().unwrap(),
+                        fallback: children.next().unwrap(),
+                    }),
+                    Term::Eql { .. } => term(Term::Eql {
+                        left: children.next().unwrap(),
+                        right: children.next().unwrap(),
+                        ty: children.next().unwrap(),
+                    }),
+                    Term::Rwt { .. } => term(Term::Rwt {
+                        evidence: children.next().unwrap(),
+                        motive: children.next().unwrap(),
+                        body: children.next().unwrap(),
+                    }),
+                    Term::Ann(..) => term(Term::Ann(
+                        children.next().unwrap(),
+                        children.next().unwrap(),
+                    )),
+                    Term::Let { bindings, .. } => {
+                        let bindings = bindings
+                            .iter()
+                            .map(|b| crate::kernel::LetBinding {
+                                quant: b.quant,
+                                name: b.name.clone(),
+                                id: b.id,
+                                value: children.next().unwrap(),
+                            })
+                            .collect();
+                        term(Term::Let {
+                            bindings,
+                            body: children.next().unwrap(),
+                        })
+                    }
+                    _ => unreachable!("leaf handled before build"),
+                };
+                drop(children);
+                results.push(mapped);
+            }
+        }
+    }
+    results.pop().expect("one qualified term")
 }
 
 // Structural keys distinguish references from variables and constructor names
@@ -4656,6 +4753,105 @@ mod pattern_stack_tests {
                 drop(pattern);
             });
         });
+    }
+
+    #[test]
+    fn operator_qualification_handles_deep_terms_and_constructor_sharing() {
+        on_small_stack(|| {
+            let leaf = term(Term::Ref("ordinary".into()));
+            let shared = term(Term::Ctr {
+                name: "C".into(),
+                args: vec![Rc::clone(&leaf)],
+            });
+            let unchanged = qualify_operators(&shared, "Nat");
+            assert!(Rc::ptr_eq(&shared, &unchanged));
+            let changed = term(Term::Ctr {
+                name: "C".into(),
+                args: vec![Rc::clone(&leaf), term(Term::Ref(".add".into()))],
+            });
+            let result = qualify_operators(&changed, "Nat");
+            let Term::Ctr { args, .. } = result.as_ref() else {
+                panic!("constructor")
+            };
+            assert!(!Rc::ptr_eq(&changed, &result));
+            assert!(Rc::ptr_eq(&args[0], &leaf));
+            assert!(matches!(args[1].as_ref(), Term::Ref(name) if name == "Nat.add"));
+
+            let root = (0..50_000).fold(term(Term::Ref(".sub".into())), |child, _| {
+                term(Term::Typ(child))
+            });
+            let weak = Rc::downgrade(&root);
+            let mapped = qualify_operators(&root, "Nat");
+            let mut current = &mapped;
+            for _ in 0..50_000 {
+                let Term::Typ(child) = current.as_ref() else {
+                    panic!("type")
+                };
+                current = child;
+            }
+            assert!(matches!(current.as_ref(), Term::Ref(name) if name == "Nat.sub"));
+            drop(root);
+            assert!(weak.upgrade().is_none());
+            let mapped_weak = Rc::downgrade(&mapped);
+            let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let _mapped = mapped;
+                panic!("cleanup probe");
+            }));
+            assert!(outcome.is_err());
+            assert!(mapped_weak.upgrade().is_none());
+        });
+    }
+
+    #[test]
+    fn operator_qualification_preserves_field_order_and_scheduling() {
+        let op = |name: &str| term(Term::Ref(name.into()));
+        let value = term(Term::Let {
+            bindings: vec![crate::kernel::LetBinding {
+                quant: Quant::Lone,
+                name: "x".into(),
+                id: 7,
+                value: op(".add"),
+            }],
+            body: term(Term::Mat {
+                constructor: "C".into(),
+                arm: term(Term::Eql {
+                    left: op(".sub"),
+                    right: term(Term::GpuRef(".mul".into())),
+                    ty: op("T"),
+                }),
+                fallback: term(Term::Rwt {
+                    evidence: op(".div"),
+                    motive: op(".mod"),
+                    body: op(".or"),
+                }),
+            }),
+        });
+        let result = qualify_operators(&value, "Nat");
+        let Term::Let { bindings, body } = result.as_ref() else {
+            panic!("let")
+        };
+        assert_eq!((bindings[0].quant, bindings[0].id), (Quant::Lone, 7));
+        assert!(matches!(bindings[0].value.as_ref(), Term::Ref(name) if name == "Nat.add"));
+        let Term::Mat { arm, fallback, .. } = body.as_ref() else {
+            panic!("match")
+        };
+        let Term::Eql { left, right, ty } = arm.as_ref() else {
+            panic!("equality")
+        };
+        assert!(matches!(left.as_ref(), Term::Ref(name) if name == "Nat.sub"));
+        assert!(matches!(right.as_ref(), Term::GpuRef(name) if name == "Nat.mul"));
+        assert!(matches!(ty.as_ref(), Term::Ref(name) if name == "T"));
+        let Term::Rwt {
+            evidence,
+            motive,
+            body,
+        } = fallback.as_ref()
+        else {
+            panic!("rewrite")
+        };
+        assert!(matches!(evidence.as_ref(), Term::Ref(name) if name == "Nat.div"));
+        assert!(matches!(motive.as_ref(), Term::Ref(name) if name == "Nat.mod"));
+        assert!(matches!(body.as_ref(), Term::Ref(name) if name == "Nat.or"));
     }
 
     #[test]

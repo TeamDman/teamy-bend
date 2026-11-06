@@ -539,7 +539,7 @@ pub(super) fn flatten_occurrence(
         fresh,
         display_fresh,
         origins,
-        64,
+        Some(64),
     )
     .map(SurfaceTerm::into_occurrence)
 }
@@ -736,7 +736,7 @@ fn flatten_match_bounded(
         fresh,
         display_fresh,
         origins,
-        limit,
+        Some(limit),
     )
 }
 
@@ -749,8 +749,11 @@ fn flatten_driver<'a>(
     fresh: &mut usize,
     display_fresh: &mut usize,
     origins: Option<&TermOrigins>,
-    limit: usize,
+    limit: Option<usize>,
 ) -> Result<SurfaceTerm, FlattenError> {
+    // Production currently retains this bound while recursive kernel checking
+    // can overflow on newly admitted deep patterns. Tests can exercise the
+    // explicit driver without that bound.
     let mut saved: Vec<SavedMatch<'a>> = Vec::new();
     'compile: loop {
         let (mut value, mut parent) = match current {
@@ -759,7 +762,7 @@ fn flatten_driver<'a>(
                 vars,
                 depth,
             } => {
-                if depth >= limit {
+                if limit.is_some_and(|limit| depth >= limit) {
                     return Err(
                         "pattern compilation exceeds the resource limit of 64 levels".into(),
                     );
@@ -836,7 +839,8 @@ fn flatten_driver<'a>(
                 }
             }
             Current::Match(mut call) => {
-                if call.depth + call.pending.len() >= limit {
+                if limit.is_some_and(|limit| call.depth.saturating_add(call.pending.len()) >= limit)
+                {
                     return Err(
                         "pattern compilation exceeds the resource limit of 64 levels".into(),
                     );
@@ -1027,10 +1031,10 @@ fn flatten_match_step(
     fresh: &mut usize,
     display_fresh: &mut usize,
     depth: usize,
-    limit: usize,
+    limit: Option<usize>,
     origins: Option<&TermOrigins>,
 ) -> Result<MatchStep, FlattenError> {
-    if depth >= limit {
+    if limit.is_some_and(|limit| depth >= limit) {
         return Err("pattern compilation exceeds the resource limit of 64 levels".into());
     }
     if scrutinees.is_empty() {
@@ -1334,7 +1338,7 @@ mod tests {
                 &mut 0,
                 &mut 0,
                 None,
-                10_010,
+                Some(10_010),
             )
             .unwrap_or_else(|e| panic!("deep local: {}", e.message()));
             assert!(weak.upgrade().is_some());
@@ -1353,7 +1357,7 @@ mod tests {
                 &mut 0,
                 &mut 0,
                 None,
-                5_000,
+                Some(5_000),
             ) else {
                 panic!("depth guard")
             };
@@ -1375,7 +1379,7 @@ mod tests {
                 &mut 0,
                 &mut 0,
                 None,
-                5_000,
+                Some(5_000),
             ) else {
                 panic!("depth guard")
             };
@@ -1409,7 +1413,7 @@ mod tests {
                     &mut 0,
                     &mut 0,
                     None,
-                    4_000,
+                    Some(4_000),
                 );
             }));
             assert!(outcome.is_err(), "invalid body placeholder must unwind");
@@ -1445,7 +1449,7 @@ mod tests {
                 &mut 8,
                 &mut 0,
                 None,
-                512,
+                Some(512),
             )
             .unwrap_or_else(|error| panic!("nested match: {}", error.message()));
             assert!(matches!(result.value.as_ref(), Term::Lam { .. }));
@@ -1905,6 +1909,57 @@ mod tests {
             }
             assert!(matches!(cursor.as_ref(), Term::Lam { .. }));
             crate::kernel::release_term_iteratively(result.value);
+        });
+    }
+
+    #[test]
+    fn unbounded_driver_compiles_deep_field_patterns_on_small_stack() {
+        on_small_stack(|| {
+            let x = Variable {
+                name: "x".into(),
+                id: 0,
+            };
+            let mut pattern = Pattern::Variable(Variable {
+                name: "y".into(),
+                id: 1,
+            });
+            for _ in 0..512 {
+                pattern = Pattern::Constructor("C".into(), vec![pattern], 0);
+            }
+            let scrutinees = vec![SurfaceTerm::new(x.term(), None)];
+            let vars = vec![x];
+            let leaf = term(Term::Rfl);
+            let weak = Rc::downgrade(&leaf);
+            let rows = vec![Row {
+                patterns: vec![pattern],
+                body: Body::Reply(SurfaceTerm::new(leaf, None)),
+            }];
+            let result = flatten_driver(
+                Current::Match(MatchCall {
+                    initial: Some((&scrutinees, &rows, &vars)),
+                    state: None,
+                    pending: Vec::new(),
+                    depth: 0,
+                }),
+                &mut 2,
+                &mut 0,
+                None,
+                None,
+            )
+            .unwrap_or_else(|error| panic!("deep field: {}", error.message()));
+            let mut cursor = &result.value;
+            for _ in 0..512 {
+                let Term::Mat { arm, fallback, .. } = cursor.as_ref() else {
+                    panic!("match")
+                };
+                assert!(matches!(fallback.as_ref(), Term::Efq));
+                cursor = arm;
+            }
+            assert!(matches!(cursor.as_ref(), Term::Lam { .. }));
+            drop(rows);
+            assert!(weak.upgrade().is_some());
+            drop(result);
+            assert!(weak.upgrade().is_none());
         });
     }
 

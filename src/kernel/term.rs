@@ -57,7 +57,7 @@ pub struct LetBinding {
 }
 
 /// Bend's first-order core syntax. Surface matches elaborate to `Mat`/`Efq`.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub enum Term {
     Var {
         name: String,
@@ -116,6 +116,182 @@ pub enum Term {
         bindings: Vec<LetBinding>,
         body: TermRef,
     },
+}
+
+// Keep the compact structural spelling while traversing children iteratively.
+// Alternate pretty-debug formatting uses the same compact layout.
+impl fmt::Debug for Term {
+    #[expect(
+        clippy::too_many_lines,
+        reason = "All term variants use one explicit debug traversal."
+    )]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        enum Task<'a> {
+            Term(&'a Term),
+            Text(&'static str),
+            Str(&'a str),
+            Number(usize),
+            Quant(Quant),
+            Strings(&'a [String]),
+        }
+        use Task::Number;
+        use Task::Quant as Q;
+        use Task::Str;
+        use Task::Term as Node;
+        use Task::Text;
+        let mut tasks = vec![Node(self)];
+        while let Some(task) = tasks.pop() {
+            match task {
+                Text(s) => f.write_str(s)?,
+                Str(s) => write!(f, "{s:?}")?,
+                Number(n) => write!(f, "{n}")?,
+                Q(q) => write!(f, "{q:?}")?,
+                Task::Strings(v) => write!(f, "{v:?}")?,
+                Node(value) => {
+                    let mut out = Vec::new();
+                    match value {
+                        Term::Var { name, id } => out.extend([
+                            Text("Var { name: "),
+                            Str(name),
+                            Text(", id: "),
+                            Number(*id),
+                            Text(" }"),
+                        ]),
+                        Term::Ref(s) => out.extend([Text("Ref("), Str(s), Text(")")]),
+                        Term::GpuRef(s) => out.extend([Text("GpuRef("), Str(s), Text(")")]),
+                        Term::Typ(a) => out.extend([Text("Typ("), Node(a), Text(")")]),
+                        Term::Qnt => out.push(Text("Qnt")),
+                        Term::Qua(q) => out.extend([Text("Qua("), Q(*q), Text(")")]),
+                        Term::Min(a, b) => {
+                            out.extend([Text("Min("), Node(a), Text(", "), Node(b), Text(")")]);
+                        }
+                        Term::All {
+                            quant,
+                            name,
+                            id,
+                            domain,
+                            body,
+                        } => out.extend([
+                            Text("All { quant: "),
+                            Q(*quant),
+                            Text(", name: "),
+                            Str(name),
+                            Text(", id: "),
+                            Number(*id),
+                            Text(", domain: "),
+                            Node(domain),
+                            Text(", body: "),
+                            Node(body),
+                            Text(" }"),
+                        ]),
+                        Term::Lam { name, id, body } => out.extend([
+                            Text("Lam { name: "),
+                            Str(name),
+                            Text(", id: "),
+                            Number(*id),
+                            Text(", body: "),
+                            Node(body),
+                            Text(" }"),
+                        ]),
+                        Term::App(a, b) => {
+                            out.extend([Text("App("), Node(a), Text(", "), Node(b), Text(")")]);
+                        }
+                        Term::Adt {
+                            name,
+                            args,
+                            excluded,
+                        } => {
+                            out.extend([Text("Adt { name: "), Str(name), Text(", args: [")]);
+                            for (i, arg) in args.iter().enumerate() {
+                                if i != 0 {
+                                    out.push(Text(", "));
+                                }
+                                out.push(Node(arg));
+                            }
+                            out.extend([
+                                Text("], excluded: "),
+                                Task::Strings(excluded),
+                                Text(" }"),
+                            ]);
+                        }
+                        Term::Ctr { name, args } => {
+                            out.extend([Text("Ctr { name: "), Str(name), Text(", args: [")]);
+                            for (i, arg) in args.iter().enumerate() {
+                                if i != 0 {
+                                    out.push(Text(", "));
+                                }
+                                out.push(Node(arg));
+                            }
+                            out.push(Text("] }"));
+                        }
+                        Term::Mat {
+                            constructor,
+                            arm,
+                            fallback,
+                        } => out.extend([
+                            Text("Mat { constructor: "),
+                            Str(constructor),
+                            Text(", arm: "),
+                            Node(arm),
+                            Text(", fallback: "),
+                            Node(fallback),
+                            Text(" }"),
+                        ]),
+                        Term::Efq => out.push(Text("Efq")),
+                        Term::Eql { left, right, ty } => out.extend([
+                            Text("Eql { left: "),
+                            Node(left),
+                            Text(", right: "),
+                            Node(right),
+                            Text(", ty: "),
+                            Node(ty),
+                            Text(" }"),
+                        ]),
+                        Term::Rfl => out.push(Text("Rfl")),
+                        Term::Rwt {
+                            evidence,
+                            motive,
+                            body,
+                        } => out.extend([
+                            Text("Rwt { evidence: "),
+                            Node(evidence),
+                            Text(", motive: "),
+                            Node(motive),
+                            Text(", body: "),
+                            Node(body),
+                            Text(" }"),
+                        ]),
+                        Term::Hole(s) => out.extend([Text("Hole("), Str(s), Text(")")]),
+                        Term::Ann(a, b) => {
+                            out.extend([Text("Ann("), Node(a), Text(", "), Node(b), Text(")")]);
+                        }
+                        Term::Let { bindings, body } => {
+                            out.push(Text("Let { bindings: ["));
+                            for (i, b) in bindings.iter().enumerate() {
+                                if i != 0 {
+                                    out.push(Text(", "));
+                                }
+                                out.extend([
+                                    Text("LetBinding { quant: "),
+                                    Q(b.quant),
+                                    Text(", name: "),
+                                    Str(&b.name),
+                                    Text(", id: "),
+                                    Number(b.id),
+                                    Text(", value: "),
+                                    Node(&b.value),
+                                    Text(" }"),
+                                ]);
+                            }
+                            out.extend([Text("], body: "), Node(body), Text(" }")]);
+                        }
+                    }
+                    tasks.extend(out.into_iter().rev());
+                }
+            }
+        }
+        Ok(())
+    }
 }
 
 /// An algebraic datatype declaration.
@@ -414,32 +590,9 @@ pub fn lambdas(binders: &[Binder], mut body: TermRef) -> TermRef {
     body
 }
 
-// Keep loader provenance when a constructor is unchanged. Mapped fields that
-// actually change produce a new, untracked node instead of a guessed origin.
-pub(crate) fn map_constructor(
-    value: &TermRef,
-    name: &str,
-    args: &[TermRef],
-    transform: impl FnMut(&TermRef) -> TermRef,
-) -> TermRef {
-    let mapped: Vec<_> = args.iter().map(transform).collect();
-    if args
-        .iter()
-        .zip(&mapped)
-        .all(|(old, new)| Rc::ptr_eq(old, new))
-    {
-        Rc::clone(value)
-    } else {
-        term(Term::Ctr {
-            name: name.into(),
-            args: mapped,
-        })
-    }
-}
-
 /// Capture-free substitution for terms whose binder IDs are globally unique.
-/// Traversal uses explicit heap frames; the returned `Rc<Term>` still has
-/// ordinary recursive destruction unless explicitly released iteratively.
+/// Traversal uses explicit heap frames; ordinary destruction of the returned
+/// `Rc<Term>` also releases its uniquely owned graph iteratively.
 ///
 /// # Panics
 /// Panics if an internal traversal-frame invariant is violated.
@@ -794,15 +947,6 @@ struct PrintScope<'a> {
     diagnostic: bool,
 }
 
-impl PrintScope<'_> {
-    fn with_binders<'a>(self, binders: &'a [(usize, &'a str)]) -> PrintScope<'a> {
-        PrintScope {
-            binders,
-            diagnostic: self.diagnostic,
-        }
-    }
-}
-
 pub(super) fn scoped<'a>(
     value: &'a Term,
     binders: &'a [(usize, &'a str)],
@@ -844,221 +988,419 @@ impl fmt::Display for Term {
 
 impl fmt::Display for ScopedTerm<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let scope = self.scope;
-        match self.value {
-            Term::Var { name, id } => {
-                f.write_str(name)?;
-                if let Some(level) = scope.binders.iter().position(|(bound, _)| bound == id)
-                    && scope.binders.iter().rposition(|(_, bound)| *bound == name) != Some(level)
-                {
-                    write!(f, "^{level}")?;
-                }
-                Ok(())
-            }
-            Term::Ref(name) => reference(f, name, false, scope),
-            Term::GpuRef(name) => reference(f, name, true, scope),
-            Term::Typ(g) => match g.as_ref() {
-                Term::Qua(Quant::Lone) => f.write_str("Type"),
-                Term::Qua(Quant::Many) => f.write_str("Data"),
-                _ => write!(f, "Kind({})", within(g, scope)),
-            },
-            Term::Qnt => f.write_str("Quant"),
-            Term::Qua(q) => write!(
-                f,
-                "&{}",
-                match q {
-                    Quant::None => 0,
-                    Quant::Lone => 1,
-                    Quant::Many => 2,
-                }
-            ),
-            Term::Min(a, b) => {
-                if !scope.diagnostic {
-                    f.write_str("(")?;
-                }
-                infix_operand(f, a, scope)?;
-                f.write_str(" <&> ")?;
-                infix_operand(f, b, scope)?;
-                if !scope.diagnostic {
-                    f.write_str(")")?;
-                }
-                Ok(())
-            }
-            Term::All {
-                quant,
-                name,
-                domain,
-                body,
-                id,
-            } => {
-                write!(f, "@{quant}{name}:")?;
-                infix_operand(f, domain, scope)?;
-                let mut body_scope = scope.binders.to_vec();
-                body_scope.push((*id, name));
-                write!(f, " -> {}", within(body, scope.with_binders(&body_scope)))
-            }
-            Term::Lam { name, id, body } => {
-                let mut body_scope = scope.binders.to_vec();
-                body_scope.push((*id, name));
-                write!(
-                    f,
-                    "{name} => {}",
-                    within(body, scope.with_binders(&body_scope))
-                )
-            }
-            Term::App(..) => application(f, self.value, scope),
-            Term::Adt {
-                name,
-                args,
-                excluded,
-            } => {
-                f.write_str(name)?;
-                if !args.is_empty() || !excluded.is_empty() {
-                    f.write_str("<")?;
-                    list(f, args, scope)?;
-                    f.write_str(">")?;
-                }
-                for constructor in excluded {
-                    write!(f, " - {constructor}{{}}")?;
-                }
-                Ok(())
-            }
-            Term::Ctr { name, args } => constructor(f, self.value, name, args, scope),
-            Term::Mat { .. } => match_term(f, self.value, scope),
-            Term::Efq => f.write_str("\\{}"),
-            Term::Eql { left, right, ty } => equation(f, left, right, ty, scope),
-            Term::Rfl => f.write_str("{==}"),
-            Term::Rwt {
-                evidence,
-                motive,
-                body,
-            } => rewrite(f, evidence, motive, body, scope),
-            Term::Hole(name) => write!(f, "?{name}"),
-            Term::Ann(x, t) => write!(f, "{{{} : {}}}", within(x, scope), within(t, scope)),
-            Term::Let { bindings, body } => {
-                let mut body_scope = scope.binders.to_vec();
-                for b in bindings {
-                    write!(f, "{}{} = {}; ", b.quant, b.name, within(&b.value, scope))?;
-                    body_scope.push((b.id, &b.name));
-                }
-                write!(f, "{}", within(body, scope.with_binders(&body_scope)))
-            }
+        iterative_display(f, self.value, self.scope)
+    }
+}
+
+#[derive(Clone, Copy)]
+enum PrintContext {
+    Root,
+    Branch,
+    Argument,
+    Infix,
+    Head,
+    ConsHead,
+}
+
+enum PrintTask<'a> {
+    Render(&'a Term, PrintContext),
+    Raw(&'a Term),
+    Text(&'a str),
+    Owned(String),
+    Escaped(u32, char),
+    Push(usize, &'a str),
+    Pop(usize),
+}
+
+fn group(value: &Term, context: PrintContext, diagnostic: bool) -> bool {
+    match context {
+        PrintContext::Root => false,
+        PrintContext::Branch => matches!(
+            value,
+            Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. }
+        ),
+        PrintContext::Argument => matches!(value, Term::Let { .. }),
+        PrintContext::Infix => {
+            matches!(value, Term::All { .. })
+                || (diagnostic && matches!(value, Term::Min(..)))
+                || open_nat(value)
+                || open_list(value)
+                || refined_datatype(value)
+        }
+        PrintContext::Head => {
+            matches!(
+                value,
+                Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
+            ) || (diagnostic && matches!(value, Term::Min(..)))
+                || open_nat(value)
+                || open_list(value)
+                || refined_datatype(value)
+        }
+        PrintContext::ConsHead => {
+            matches!(
+                value,
+                Term::Lam { .. }
+                    | Term::Let { .. }
+                    | Term::Rwt { .. }
+                    | Term::All { .. }
+                    | Term::Min(..)
+            ) || open_nat(value)
+                || open_list(value)
+                || refined_datatype(value)
         }
     }
 }
 
-fn reference(
+#[expect(
+    clippy::too_many_lines,
+    reason = "One explicit stack implements all existing term-show branches."
+)]
+fn iterative_display<'a>(
     f: &mut fmt::Formatter<'_>,
-    name: &str,
-    gpu: bool,
-    scope: PrintScope<'_>,
+    value: &'a Term,
+    scope: PrintScope<'a>,
 ) -> fmt::Result {
-    f.write_str(name)?;
-    if scope.binders.iter().any(|(_, bound)| *bound == name) {
-        f.write_str("^")?;
-    }
-    if gpu {
-        f.write_str("!")?;
+    use PrintContext::Argument;
+    use PrintContext::Branch;
+    use PrintContext::ConsHead;
+    use PrintContext::Head;
+    use PrintContext::Infix;
+    use PrintContext::Root;
+    use PrintTask::Escaped;
+    use PrintTask::Owned;
+    use PrintTask::Pop;
+    use PrintTask::Push;
+    use PrintTask::Raw;
+    use PrintTask::Render;
+    use PrintTask::Text;
+    let mut binders = scope.binders.to_vec();
+    let mut tasks = vec![Render(value, Root)];
+    while let Some(task) = tasks.pop() {
+        match task {
+            Text(text) => f.write_str(text)?,
+            Owned(text) => f.write_str(&text)?,
+            Escaped(value, quote) => write_character(f, value, quote)?,
+            Push(id, name) => binders.push((id, name)),
+            Pop(n) => binders.truncate(binders.len() - n),
+            Render(value, context) => {
+                if group(value, context, scope.diagnostic) {
+                    f.write_str("(")?;
+                    tasks.push(Text(")"));
+                }
+                tasks.push(Raw(value));
+            }
+            Raw(value) => {
+                let mut sequence = Vec::new();
+                match value {
+                    Term::Var { name, id } => {
+                        f.write_str(name)?;
+                        if let Some(level) = binders.iter().position(|(bound, _)| bound == id)
+                            && binders.iter().rposition(|(_, bound)| *bound == name) != Some(level)
+                        {
+                            write!(f, "^{level}")?;
+                        }
+                    }
+                    Term::Ref(name) | Term::GpuRef(name) => {
+                        f.write_str(name)?;
+                        if binders.iter().any(|(_, bound)| *bound == name) {
+                            f.write_str("^")?;
+                        }
+                        if matches!(value, Term::GpuRef(_)) {
+                            f.write_str("!")?;
+                        }
+                    }
+                    Term::Typ(g) => match g.as_ref() {
+                        Term::Qua(Quant::Lone) => f.write_str("Type")?,
+                        Term::Qua(Quant::Many) => f.write_str("Data")?,
+                        _ => sequence.extend([Text("Kind("), Render(g, Root), Text(")")]),
+                    },
+                    Term::Qnt => f.write_str("Quant")?,
+                    Term::Qua(q) => f.write_str(match q {
+                        Quant::None => "&0",
+                        Quant::Lone => "&1",
+                        Quant::Many => "&2",
+                    })?,
+                    Term::Min(a, b) => {
+                        if !scope.diagnostic {
+                            sequence.push(Text("("));
+                        }
+                        sequence.extend([Render(a, Infix), Text(" <&> "), Render(b, Infix)]);
+                        if !scope.diagnostic {
+                            sequence.push(Text(")"));
+                        }
+                    }
+                    Term::All {
+                        quant,
+                        name,
+                        id,
+                        domain,
+                        body,
+                    } => {
+                        sequence.push(Owned(format!("@{quant}{name}:")));
+                        sequence.extend([
+                            Render(domain, Infix),
+                            Text(" -> "),
+                            Push(*id, name),
+                            Render(body, Root),
+                            Pop(1),
+                        ]);
+                    }
+                    Term::Lam { name, id, body } => sequence.extend([
+                        Text(name),
+                        Text(" => "),
+                        Push(*id, name),
+                        Render(body, Root),
+                        Pop(1),
+                    ]),
+                    Term::App(..) => {
+                        let mut head = value;
+                        let mut args = Vec::new();
+                        while let Term::App(fun, arg) = head {
+                            args.push(arg.as_ref());
+                            head = fun;
+                        }
+                        sequence.push(Render(head, Head));
+                        sequence.push(Text("("));
+                        for (i, arg) in args.into_iter().rev().enumerate() {
+                            if i != 0 {
+                                sequence.push(Text(", "));
+                            }
+                            sequence.push(Render(arg, Argument));
+                        }
+                        sequence.push(Text(")"));
+                    }
+                    Term::Adt {
+                        name,
+                        args,
+                        excluded,
+                    } => {
+                        sequence.push(Text(name));
+                        if !args.is_empty() || !excluded.is_empty() {
+                            sequence.push(Text("<"));
+                            for (i, arg) in args.iter().enumerate() {
+                                if i != 0 {
+                                    sequence.push(Text(", "));
+                                }
+                                sequence.push(Render(arg, Root));
+                            }
+                            sequence.push(Text(">"));
+                        }
+                        for name in excluded {
+                            sequence.extend([Text(" - "), Text(name), Text("{}")]);
+                        }
+                    }
+                    Term::Ctr { name, args } => {
+                        if let Some((count, tail)) = nat_spine(value) {
+                            sequence.push(Owned(format!("{count}n")));
+                            if !empty_constructor(tail, "Zero") {
+                                sequence.extend([Text("+"), Render(tail, Branch)]);
+                            }
+                        } else if let Some(ch) = literal_character(value) {
+                            sequence.extend([Text("'"), Escaped(ch, '\''), Text("'")]);
+                        } else if let Some((prefix, quoted_tail)) = string_plan(value) {
+                            let mut tail = value;
+                            for _ in 0..prefix {
+                                let Term::Ctr { args, .. } = tail else {
+                                    unreachable!("validated string")
+                                };
+                                let [head, next] = args.as_slice() else {
+                                    unreachable!("validated string arity")
+                                };
+                                sequence.extend([Text("SCon{"), Render(head, Root), Text(", ")]);
+                                tail = next;
+                            }
+                            if quoted_tail {
+                                sequence.push(Text("\""));
+                                while let Term::Ctr { name, args } = tail {
+                                    if name == "SNil" {
+                                        break;
+                                    }
+                                    let [head, next] = args.as_slice() else {
+                                        unreachable!("validated string tail")
+                                    };
+                                    sequence.push(Escaped(
+                                        literal_character(head).expect("validated character"),
+                                        '"',
+                                    ));
+                                    tail = next;
+                                }
+                                sequence.push(Text("\""));
+                            } else {
+                                sequence.push(Render(tail, Root));
+                            }
+                            for _ in 0..prefix {
+                                sequence.push(Text("}"));
+                            }
+                        } else if complete_list(value) {
+                            sequence.push(Text("["));
+                            let mut tail = value;
+                            let mut first = true;
+                            while let Term::Ctr { args, .. } = tail {
+                                let [head, next] = args.as_slice() else { break };
+                                if !first {
+                                    sequence.push(Text(", "));
+                                }
+                                sequence.push(Render(head, Argument));
+                                tail = next;
+                                first = false;
+                            }
+                            sequence.push(Text("]"));
+                        } else if open_list(value) {
+                            let mut tail = value;
+                            while let Term::Ctr { name, args } = tail {
+                                if name != "Con" || args.len() != 2 {
+                                    break;
+                                }
+                                sequence.extend([Render(&args[0], ConsHead), Text(" <> ")]);
+                                tail = &args[1];
+                            }
+                            sequence.push(Render(tail, Branch));
+                        } else if name == "Tuple" && args.len() == 2 {
+                            sequence.push(Text("("));
+                            let mut tail = value;
+                            while let Term::Ctr { name, args } = tail {
+                                if name != "Tuple" {
+                                    break;
+                                }
+                                let [head, next] = args.as_slice() else { break };
+                                sequence.extend([Render(head, Argument), Text(", ")]);
+                                tail = next;
+                            }
+                            sequence.extend([Render(tail, Argument), Text(")")]);
+                        } else if matches!(name.as_str(), "ALeaf" | "ANode")
+                            && let Some(elements) = array_elements(value)
+                        {
+                            sequence.push(Text("["));
+                            for (i, element) in elements.into_iter().enumerate() {
+                                if i != 0 {
+                                    sequence.push(Text(", "));
+                                }
+                                sequence.push(Render(element, Argument));
+                            }
+                            sequence.push(Text("]"));
+                        } else if name == "U32"
+                            && let [word] = args.as_slice()
+                            && let Some(number) = literal_word(word)
+                        {
+                            sequence.push(Owned(number.to_string()));
+                        } else {
+                            sequence.extend([Text(name), Text("{")]);
+                            for (i, arg) in args.iter().enumerate() {
+                                if i != 0 {
+                                    sequence.push(Text(", "));
+                                }
+                                sequence.push(Render(arg, Root));
+                            }
+                            sequence.push(Text("}"));
+                        }
+                    }
+                    Term::Mat { .. } => {
+                        sequence.push(Text("\\{"));
+                        let mut current = value;
+                        let mut first = true;
+                        while let Term::Mat {
+                            constructor,
+                            arm,
+                            fallback,
+                        } = current
+                        {
+                            if !first {
+                                sequence.push(Text("; "));
+                            }
+                            sequence.extend([Text(constructor), Text(": "), Render(arm, Branch)]);
+                            current = fallback;
+                            first = false;
+                        }
+                        if !matches!(current, Term::Efq) {
+                            sequence.extend([Text("; "), Render(current, Branch)]);
+                        }
+                        sequence.push(Text("}"));
+                    }
+                    Term::Efq => f.write_str("\\{}")?,
+                    Term::Eql { left, right, ty } => sequence.extend([
+                        Text("{"),
+                        Render(left, Branch),
+                        Text(" == "),
+                        Render(right, Branch),
+                        Text(" : "),
+                        Render(ty, Branch),
+                        Text("}"),
+                    ]),
+                    Term::Rfl => f.write_str("{==}")?,
+                    Term::Rwt {
+                        evidence,
+                        motive,
+                        body,
+                    } => {
+                        sequence.push(Text("%"));
+                        let outer = without_annotations(motive);
+                        let inner = if let Term::Lam { body, .. } = outer {
+                            without_annotations(body)
+                        } else {
+                            outer
+                        };
+                        let (printed, binds) = if let (
+                            Term::Lam {
+                                name: endpoint,
+                                id: endpoint_id,
+                                ..
+                            },
+                            Term::Lam { name, id, body },
+                        ) = (outer, inner)
+                        {
+                            if !name.is_empty() {
+                                sequence.extend([Text(name), Text("@")]);
+                            }
+                            (
+                                body.as_ref(),
+                                Some((*endpoint_id, endpoint.as_str(), *id, name.as_str())),
+                            )
+                        } else {
+                            (motive.as_ref(), None)
+                        };
+                        sequence.extend([Render(evidence, Branch), Text(" : ")]);
+                        if let Some((a, an, b, bn)) = binds {
+                            sequence.extend([
+                                Push(a, an),
+                                Push(b, bn),
+                                Render(printed, Branch),
+                                Pop(2),
+                            ]);
+                        } else {
+                            sequence.push(Render(printed, Branch));
+                        }
+                        sequence.extend([Text("; "), Render(body, Root)]);
+                    }
+                    Term::Hole(name) => sequence.extend([Text("?"), Text(name)]),
+                    Term::Ann(x, t) => sequence.extend([
+                        Text("{"),
+                        Render(x, Root),
+                        Text(" : "),
+                        Render(t, Root),
+                        Text("}"),
+                    ]),
+                    Term::Let { bindings, body } => {
+                        for b in bindings {
+                            sequence.extend([
+                                Owned(b.quant.to_string()),
+                                Text(&b.name),
+                                Text(" = "),
+                                Render(&b.value, Root),
+                                Text("; "),
+                            ]);
+                        }
+                        for b in bindings {
+                            sequence.push(Push(b.id, &b.name));
+                        }
+                        sequence.push(Render(body, Root));
+                        sequence.push(Pop(bindings.len()));
+                    }
+                }
+                tasks.extend(sequence.into_iter().rev());
+            }
+        }
     }
     Ok(())
-}
-
-fn match_term(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    // Upstream term_show prints a consecutive fallback chain as
-    // ordered arms in one match. An empty final fallback is implicit.
-    f.write_str("\\{")?;
-    let mut current = value;
-    let mut first = true;
-    while let Term::Mat {
-        constructor,
-        arm,
-        fallback,
-    } = current
-    {
-        if !first {
-            f.write_str("; ")?;
-        }
-        write!(f, "{constructor}: ")?;
-        match_branch(f, arm, scope)?;
-        current = fallback;
-        first = false;
-    }
-    if !matches!(current, Term::Efq) {
-        f.write_str("; ")?;
-        match_branch(f, current, scope)?;
-    }
-    f.write_str("}")
-}
-
-fn equation(
-    f: &mut fmt::Formatter<'_>,
-    left: &Term,
-    right: &Term,
-    ty: &Term,
-    scope: PrintScope<'_>,
-) -> fmt::Result {
-    f.write_str("{")?;
-    match_branch(f, left, scope)?;
-    f.write_str(" == ")?;
-    match_branch(f, right, scope)?;
-    f.write_str(" : ")?;
-    match_branch(f, ty, scope)?;
-    f.write_str("}")
-}
-
-fn constructor(
-    f: &mut fmt::Formatter<'_>,
-    value: &Term,
-    name: &str,
-    args: &[TermRef],
-    scope: PrintScope<'_>,
-) -> fmt::Result {
-    if let Some((count, tail)) = nat_spine(value) {
-        write!(f, "{count}n")?;
-        if !empty_constructor(tail, "Zero") {
-            f.write_str("+")?;
-            match_branch(f, tail, scope)?;
-        }
-        return Ok(());
-    }
-    if let Some(character) = literal_character(value) {
-        f.write_str("'")?;
-        write_character(f, character, '\'')?;
-        return f.write_str("'");
-    }
-    if let Some((prefix, quoted_tail)) = string_plan(value) {
-        return print_string(f, value, scope, prefix, quoted_tail);
-    }
-    if complete_list(value) {
-        return list_literal(f, value, scope);
-    }
-    if open_list(value) {
-        return cons_chain(f, value, scope);
-    }
-    if name == "Tuple" && args.len() == 2 {
-        return tuple_literal(f, value, scope);
-    }
-    if matches!(name, "ALeaf" | "ANode")
-        && let Some(elements) = array_elements(value)
-    {
-        f.write_str("[")?;
-        for (index, element) in elements.into_iter().enumerate() {
-            if index != 0 {
-                f.write_str(", ")?;
-            }
-            argument(f, element, scope)?;
-        }
-        return f.write_str("]");
-    }
-    if name == "U32"
-        && let [word] = args
-        && let Some(value) = literal_word(word)
-    {
-        return write!(f, "{value}");
-    }
-    write!(f, "{name}{{")?;
-    list(f, args, scope)?;
-    f.write_str("}")
 }
 
 // Match term_show structurally: a partial string is never evaluated or
@@ -1109,49 +1451,6 @@ fn string_plan(mut value: &Term) -> Option<(usize, bool)> {
             _ => return (length != 0).then_some((length, false)),
         }
     }
-}
-
-fn print_string(
-    f: &mut fmt::Formatter<'_>,
-    mut value: &Term,
-    scope: PrintScope<'_>,
-    prefix: usize,
-    quoted_tail: bool,
-) -> fmt::Result {
-    for _ in 0..prefix {
-        let Term::Ctr { args, .. } = value else {
-            unreachable!("validated string prefix")
-        };
-        let [head, tail] = args.as_slice() else {
-            unreachable!("validated string arity")
-        };
-        write!(f, "SCon{{{}, ", within(head, scope))?;
-        value = tail;
-    }
-    if quoted_tail {
-        f.write_str("\"")?;
-        while let Term::Ctr { name, args } = value {
-            if name == "SNil" {
-                break;
-            }
-            let [head, tail] = args.as_slice() else {
-                unreachable!("validated string tail")
-            };
-            write_character(
-                f,
-                literal_character(head).expect("validated character"),
-                '"',
-            )?;
-            value = tail;
-        }
-        f.write_str("\"")?;
-    } else {
-        write!(f, "{}", within(value, scope))?;
-    }
-    for _ in 0..prefix {
-        f.write_str("}")?;
-    }
-    Ok(())
 }
 
 fn write_character(f: &mut fmt::Formatter<'_>, value: u32, quote: char) -> fmt::Result {
@@ -1217,20 +1516,6 @@ fn open_nat(value: &Term) -> bool {
     nat_spine(value).is_some_and(|(_, tail)| !empty_constructor(tail, "Zero"))
 }
 
-fn infix_operand(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    // Arrow domains and quantitative-meet operands use upstream precedence 2.
-    if matches!(value, Term::All { .. })
-        || (scope.diagnostic && matches!(value, Term::Min(..)))
-        || open_nat(value)
-        || open_list(value)
-        || refined_datatype(value)
-    {
-        write!(f, "({})", within(value, scope))
-    } else {
-        write!(f, "{}", within(value, scope))
-    }
-}
-
 fn refined_datatype(value: &Term) -> bool {
     // Pinned ADT exclusions have precedence 1. Inspect syntax only: printing
     // cannot evaluate parameters or change the ordered semantic exclusion list.
@@ -1255,75 +1540,6 @@ fn complete_list(mut value: &Term) -> bool {
 fn open_list(value: &Term) -> bool {
     matches!(value, Term::Ctr { name, args } if name == "Con" && args.len() == 2)
         && !complete_list(value)
-}
-
-fn cons_chain(f: &mut fmt::Formatter<'_>, mut value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    while let Term::Ctr { name, args } = value {
-        if name != "Con" || args.len() != 2 {
-            break;
-        }
-        let head = args[0].as_ref();
-        if matches!(
-            head,
-            Term::Lam { .. }
-                | Term::Let { .. }
-                | Term::Rwt { .. }
-                | Term::All { .. }
-                | Term::Min(_, _)
-        ) || open_nat(head)
-            || open_list(head)
-            || refined_datatype(head)
-        {
-            write!(f, "({})", within(head, scope))?;
-        } else {
-            write!(f, "{}", within(head, scope))?;
-        }
-        f.write_str(" <> ")?;
-        value = &args[1];
-    }
-    match_branch(f, value, scope)
-}
-
-fn list_literal(
-    f: &mut fmt::Formatter<'_>,
-    mut value: &Term,
-    scope: PrintScope<'_>,
-) -> fmt::Result {
-    f.write_str("[")?;
-    let mut first = true;
-    while let Term::Ctr { args, .. } = value {
-        let [head, tail] = args.as_slice() else {
-            break;
-        };
-        if !first {
-            f.write_str(", ")?;
-        }
-        argument(f, head, scope)?;
-        value = tail;
-        first = false;
-    }
-    f.write_str("]")
-}
-
-fn tuple_literal(
-    f: &mut fmt::Formatter<'_>,
-    mut value: &Term,
-    scope: PrintScope<'_>,
-) -> fmt::Result {
-    f.write_str("(")?;
-    while let Term::Ctr { name, args } = value {
-        if name != "Tuple" {
-            break;
-        }
-        let [head, tail] = args.as_slice() else {
-            break;
-        };
-        argument(f, head, scope)?;
-        f.write_str(", ")?;
-        value = tail;
-    }
-    argument(f, value, scope)?;
-    f.write_str(")")
 }
 
 // Recognize the pinned term_show numeric spelling only for complete structural
@@ -1362,88 +1578,6 @@ fn literal_word(mut word: &TermRef) -> Option<u32> {
         .then_some(value)
 }
 
-fn application(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    // Pinned term_show un-applies only the function spine, then prints its
-    // arguments in source order. An annotation is a boundary, not another App.
-    let mut head = value;
-    let mut arguments = Vec::new();
-    while let Term::App(function, argument) = head {
-        arguments.push(argument.as_ref());
-        head = function;
-    }
-    // The head uses precedence 2; lambda/let/rewrite/arrow heads need grouping.
-    if matches!(
-        head,
-        Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. } | Term::All { .. }
-    ) || (scope.diagnostic && matches!(head, Term::Min(..)))
-        || open_nat(head)
-        || open_list(head)
-        || refined_datatype(head)
-    {
-        write!(f, "({})", within(head, scope))?;
-    } else {
-        write!(f, "{}", within(head, scope))?;
-    }
-    f.write_str("(")?;
-    for (index, value) in arguments.into_iter().rev().enumerate() {
-        if index != 0 {
-            f.write_str(", ")?;
-        }
-        argument(f, value, scope)?;
-    }
-    f.write_str(")")
-}
-
-fn argument(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    // Arguments and literal sequence elements use upstream precedence 0.
-    if matches!(value, Term::Let { .. }) {
-        write!(f, "({})", within(value, scope))
-    } else {
-        write!(f, "{}", within(value, scope))
-    }
-}
-
-fn rewrite(
-    f: &mut fmt::Formatter<'_>,
-    evidence: &Term,
-    motive: &Term,
-    body: &Term,
-    scope: PrintScope<'_>,
-) -> fmt::Result {
-    // A surface rewrite stores two motive binders: the endpoint `_`, then the
-    // optional equation name. Print under them without evaluating the motive.
-    f.write_str("%")?;
-    let outer = without_annotations(motive);
-    let inner = if let Term::Lam { body, .. } = outer {
-        without_annotations(body)
-    } else {
-        outer
-    };
-    let mut motive_scope = scope.binders.to_vec();
-    let printed_motive = if let (
-        Term::Lam {
-            name: endpoint,
-            id: endpoint_id,
-            ..
-        },
-        Term::Lam { name, id, body },
-    ) = (outer, inner)
-    {
-        motive_scope.push((*endpoint_id, endpoint));
-        motive_scope.push((*id, name));
-        if !name.is_empty() {
-            write!(f, "{name}@")?;
-        }
-        body.as_ref()
-    } else {
-        motive
-    };
-    match_branch(f, evidence, scope)?;
-    f.write_str(" : ")?;
-    match_branch(f, printed_motive, scope.with_binders(&motive_scope))?;
-    write!(f, "; {}", within(body, scope))
-}
-
 fn without_annotations(mut value: &Term) -> &Term {
     while let Term::Ann(inner, _) = value {
         value = inner;
@@ -1451,27 +1585,52 @@ fn without_annotations(mut value: &Term) -> &Term {
     value
 }
 
-fn match_branch(f: &mut fmt::Formatter<'_>, value: &Term, scope: PrintScope<'_>) -> fmt::Result {
-    // Match branches use upstream precedence 1. These low-precedence forms
-    // need parentheses; nested matches retain their own explicit delimiters.
-    if matches!(
-        value,
-        Term::Lam { .. } | Term::Let { .. } | Term::Rwt { .. }
-    ) {
-        write!(f, "({})", within(value, scope))
-    } else {
-        write!(f, "{}", within(value, scope))
-    }
-}
+#[cfg(test)]
+mod iterative_display_tests {
+    use super::*;
 
-fn list(f: &mut fmt::Formatter<'_>, values: &[TermRef], scope: PrintScope<'_>) -> fmt::Result {
-    for (i, x) in values.iter().enumerate() {
-        if i > 0 {
-            f.write_str(", ")?;
-        }
-        write!(f, "{}", within(x, scope))?;
+    #[test]
+    fn deep_display_and_formatter_error_are_stack_safe() {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(|| {
+                let root = (0..20_000).fold(term(Term::Rfl), |child, _| term(Term::Typ(child)));
+                let weak = Rc::downgrade(&root);
+                let rendered = root.to_string();
+                assert!(rendered.starts_with("Kind(Kind("));
+                assert!(rendered.ends_with(")"));
+                assert_eq!(rendered.matches("Kind(").count(), 20_000);
+                let debug = format!("{root:?}");
+                assert_eq!(debug.matches("Typ(").count(), 20_000);
+                struct FailAfter(usize);
+                impl fmt::Write for FailAfter {
+                    fn write_str(&mut self, _: &str) -> fmt::Result {
+                        self.0 = self.0.checked_sub(1).ok_or(fmt::Error)?;
+                        Ok(())
+                    }
+                }
+                assert!(fmt::write(&mut FailAfter(12), format_args!("{root}")).is_err());
+                drop(root);
+                assert!(weak.upgrade().is_none());
+
+                let root = (0..10_000).fold(term(Term::Rfl), |arm, i| {
+                    term(Term::Mat {
+                        constructor: format!("C{i}"),
+                        arm,
+                        fallback: term(Term::Efq),
+                    })
+                });
+                let weak = Rc::downgrade(&root);
+                let rendered = root.to_string();
+                assert!(rendered.starts_with("\\{C9999: "));
+                assert!(rendered.contains("C0: {==}"));
+                drop(root);
+                assert!(weak.upgrade().is_none());
+            })
+            .unwrap()
+            .join()
+            .unwrap();
     }
-    Ok(())
 }
 
 #[cfg(test)]

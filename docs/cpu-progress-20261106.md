@@ -123,6 +123,14 @@ the distinct input and kernel limits remain afterward. The complete bounded
 test set passed 1,420 tests, with zero failures and 49 ignored; the uninterrupted
 standard gate was not rerun and the prior timeout remains incomplete.
 
+The subsequent [iterative qualification and presentation change](cpu-iterative-presentation.md)
+removes host recursion from operator qualification and core-term Display and
+compact Debug. A no-guard experiment moved the original `"hi"` witness to the
+kernel input guard and ran `nat65`, but exposed a 2 MiB checker stack overflow
+on an existing 122-level Nat pattern. The port's 64-level compiler guard remains
+because of that measured host-safety blocker; it is not an upstream language
+limit. The report records growth measurements and the remaining kernel work.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
