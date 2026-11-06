@@ -1,0 +1,143 @@
+# CPU rewrite progress and remaining work — 2026-11-06
+
+This report concerns the pinned Bend 2.0.5 reference
+`e6676b080f25b1bc1bf5b5b7d7a17e22f8022599`. The port is an experimental
+supported subset, not a drop-in replacement. It does not estimate a completion
+percentage: fixture links and tests have no common weighted denominator for
+language features, runtimes, host interfaces and the separate Poche goal.
+The former 55–65% estimate was withdrawn.
+
+## Implemented and verified boundaries
+
+The port has parsing, proof checking and pure normalization; executable checking
+is deliberately separate from strict proof checking. Native CPU execution and
+generated C/JavaScript implement selected pure and effectful programs, including
+console IO, tasks, timers, channels, environment, files and TCP/UDP. Generated C
+also has a bounded CPU worker pool. These statements describe capabilities,
+not complete compatibility. [Compatibility](compatibility.md) and the
+[implementation plan](implementation-plan.md) give the contracts and limits.
+
+The preserved nested-array checkpoint `ea4cc7d` covers two unchanged upstream
+originals, owner-transfer and split/rejoin controls, and affine/Data negatives.
+Its focused array suite passed 12 tests and strict targeted Clippy passed. The
+fresh final-source matrix completed 132 observations, with zero timeouts. The
+statuses and both streams of 120 path-independent observations, plus all 24
+generated-artifact hashes, match the preserved baseline. Fifty successful
+executions, 18 checker-negative observations and ten runtime refusals remain
+distinct. The port-C array-depth diagnostic is
+one unwaived discrepancy; matching refusals are not proof of compatibility.
+The two originals returned 135 and 145896, respectively, in all five executable
+lanes twice. These controls do not prove general memory safety, physical sharing
+or destruction timing. See the [preserved checkpoint](https://github.com/TeamDman/teamy-bend/blob/ea4cc7d2fd9e4e2f028cf3602499da3a93a214da/docs/cpu-pause-20261026.md).
+
+The standard gate at `ea4cc7d` passed formatting, strict Clippy, all-feature
+build and the real Node TCP/UDP provider checks, then hit its unchanged
+1,200-second outer deadline. The completed test groups contained 941 passed,
+zero failed and 48 ignored; another group was interrupted, and remaining tests
+were unrun in that attempt. It is not a passing full gate. The source-bound
+matrix used binary SHA-256 `93ab25d9ece882309e3485ce5e74acfba19ec91c3245a8867a8f5d41f36789b1`;
+the raw matrix receipt SHA-256 was `8722a92794b0cd330b50e52bd267eef98b3184a4bc1f6e4da0fe01fad935ee52`.
+A separate complete test run on the same clean source and test feature set
+passed **1,366 / 0 / 49 ignored**: all 197 Cargo integration targets in two
+bounded batches, plus explicit library, binary and documentation tests. These
+batches supplement the successful pre-test gate stages; they do not turn the
+interrupted single-command gate into a pass. Results, hashes, selection and
+limits are recorded in [the validation receipt](cpu-resumption-20261106-validation.json).
+
+## Inventory by applicable mode
+
+The inventory was regenerated from the clean pinned reference: all 1,302 source
+and expectation rows reproduce the published inventory SHA-256
+`04378ce0661f27c819cbe99860b7f11539b634e40308a6a8d14f86e85c038fb0`.
+This is a source census, not an execution run. Categories reflect the pinned
+upstream gate's candidate selection, not guaranteed printability or successful
+execution. An interpreter-only case can still contain executable concepts; a
+candidate lane can be blocked by foreign companions or host requirements.
+
+| Gate classification | Fixtures | Mixed detailed receipt links | No such link |
+| --- | ---: | ---: | ---: |
+| Expected checker rejection | 439 | 183 | 256 |
+| Checking without main | 12 | 11 | 1 |
+| Interpretation only | 164 | 152 | 12 |
+| Interpretation and compiled candidates | 687 | 178 | 509 |
+| Total | 1,302 | 524 | 778 |
+
+The 687 compiled candidates include 687 JS and 671 C candidates by the gate's
+source-level selection rules. The 524 links are the union of the 36 evidence
+files listed in [the gap inventory](cpu-incomplete-character-gap-inventory.json)
+and the three subsequent array evidence files, joined by fixture name and exact
+source hash. A link can describe checking, normalization, a passing execution,
+a refusal or an incomplete result. It is not a pass count and its absence does
+not establish an implementation defect. Rows can have multiple links. The
+checkpoint's two original array fixtures are additional to this historical
+524; their new matrix is summarized above and is not silently added to the
+older linked ledger.
+
+The source scan also flags 11 filesystem, 14 network, 11 clock/timer, four
+environment and 20 foreign-companion fixtures, plus one window and one audio
+fixture and 13 offload-review fixtures. These counts overlap and are textual
+hints only; they do not establish reachability, successful execution or full
+API coverage.
+
+The separate historical [runtime ledger](cpu-runtime-evidence.csv) has 112
+original rows at their recorded source revisions. It records 110 native, 109 C
+and 111 JS port `pass` labels, alongside explicit foreign, safety-limit or
+inapplicable results; upstream C/JS have their own unavailable and failed
+lanes. These labels have individual receipt scopes and do not cover the full
+corpus or establish current-head runtime parity. The 206-row interpretation
+ledger and checking/other evidence overlap these rows and cannot be added to
+obtain execution coverage. Platform/API references in
+[cpu-applicability.json](cpu-applicability.json) are source hints, not proof
+of reachability or lane qualification.
+
+The last whole checking comparison remains historical at `c5edea8`: 366 both
+accepted, 405 exact rejections, 494 acceptance disagreements, 31 different
+rejections and six upstream stack failures. Outside the fixed 385-row IO cohort,
+109 acceptance and 31 rejection disagreements remained. These are not a
+current residual count or runtime results; strict-proof and executable
+assumptions differ. See [the gap inventory](cpu-incomplete-character-gap-inventory.json).
+
+## Remaining work, ordered by dependency
+
+1. **Correctness of known CPU differences.** Keep the depth-32 generated-C
+   resource diagnostic discrepancy unwaived; investigate it without changing
+   allocation limits. Resolve argument-recovery lowering, Base source locations,
+   source holes/TODO behavior and remaining diagnostic provenance. `nat_first`
+   has a documented pinned C versus JS error-order conflict; a narrow exception
+   remains a decision, not an assumed approval. F32.read has three documented
+   backend-specific differences, so a uniform rule needs an explicit contract.
+2. **Representation and normalization.** Compact Nat and string-pattern
+   lowering needs typed continuation construction and canonical normalization,
+   preserving open terms, demand, error order, resource accounting and existing
+   guards. The [prototype](cpu-compact-patterns.md) is research, not support for
+   the original source. General large native Nat computation and cancellation
+   boundaries remain incomplete or unmeasured.
+3. **Runtime and library breadth.** Systematically measure the unlinked corpus
+   in each applicable lane, and reproduce failures before repair. Exercise
+   concurrency under multiple worker profiles, cancellation, ownership and
+   resource exhaustion. Arbitrary native foreign callbacks remain unsupported;
+   host/oracle limitations, window/audio effects, and whole-library behavior
+   need their own qualification. Base is mode-dependent. A lexical recount finds 367 top-level type/law/def
+   forms in strict Base and another 95 in its execution-only overlay, versus
+   467 in upstream Base. Names overlap and some forms have different contracts;
+   these counts are not a missing-feature count or proof of equivalence.
+   A top-level name comparison finds 15 upstream names absent from both
+   source files: six window-dependent `App` helpers, five `Window` names,
+   and four `Audio` names. This is a lexical inventory, not an API signature
+   or implementation audit. Intrinsics and foreign interfaces need separate
+   review. Upstream gate candidate counts do not include all API uses.
+4. **Interfaces beyond the corpus.** Audit external library consumers and CLI
+   compatibility, including callers that must inspect `CliOutput.exit_code()`
+   even when `invoke` returns `Ok`. Audit emitters and callbacks, imports,
+   packaging and host behavior; local repository callers are not an external
+   compatibility survey. Hub fetch/publish remains unfinished.
+5. **Hardware and integration.** Fresh Windows/macOS host validation, CUDA/GPU
+   execution and sanitizer qualification, other GPU targets, and broader Poche
+   formalization/integration are separate from this Linux CPU run. Existing
+   hardware receipts retain their exact historical revisions; ignored tests are
+   not passes. Supplementary all-target lint failures also remain unqualified.
+
+The size of each item is uncertain because uncovered cases can share a root
+cause or reveal new contracts; no defensible time or completion percentage can
+be derived from the current census. Preserve the pinned upstream, toolchains,
+dependencies, safety budgets and negative controls while pursuing these items.
