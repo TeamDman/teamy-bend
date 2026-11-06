@@ -645,6 +645,11 @@ struct MatchState {
 
 enum MatchStep {
     Done(SurfaceTerm),
+    Continue {
+        next: MatchState,
+        wrap: Option<Variable>,
+    },
+    SkipBinder(Variable),
     Nullary {
         constructor: String,
         constructor_origin: usize,
@@ -688,6 +693,10 @@ struct SavedArm<'a> {
 enum SavedMatch<'a> {
     Arm(SavedArm<'a>),
     Fallback(SavedFallback<'a>),
+    Continue {
+        parent: MatchCall<'a>,
+        wrap: Option<Variable>,
+    },
 }
 
 struct MatchCall<'a> {
@@ -785,6 +794,12 @@ fn flatten_match_bounded(
                     return Ok(value);
                 };
                 match previous {
+                    SavedMatch::Continue { parent, wrap } => {
+                        if let Some(binder) = wrap {
+                            value = value.lambda(&binder, origins);
+                        }
+                        current = parent;
+                    }
                     SavedMatch::Fallback(mut previous) => {
                         value = SurfaceTerm::matched(
                             std::mem::take(&mut previous.constructor),
@@ -815,6 +830,41 @@ fn flatten_match_bounded(
                     }
                 }
             },
+            MatchStep::Continue { next, wrap } => {
+                let child = MatchCall {
+                    initial: None,
+                    state: Some(next),
+                    pending: Vec::new(),
+                    depth: current.depth + 1,
+                };
+                let parent = std::mem::replace(&mut current, child);
+                saved.push(SavedMatch::Continue { parent, wrap });
+            }
+            MatchStep::SkipBinder(binder) => {
+                // A skipped binder does not change scrutinees or rows. Move
+                // an owned state instead of cloning the whole case tree for
+                // every skipped binder. Borrowed initial input is copied once.
+                let mut next = current.state.take().unwrap_or_else(|| {
+                    let (scrutinees, rows, vars) = current.initial.expect("initial match state");
+                    MatchState {
+                        scrutinees: scrutinees.to_vec(),
+                        rows: rows.to_vec(),
+                        vars: vars.to_vec(),
+                    }
+                });
+                next.vars.remove(0);
+                let child = MatchCall {
+                    initial: None,
+                    state: Some(next),
+                    pending: Vec::new(),
+                    depth: current.depth + 1,
+                };
+                let parent = std::mem::replace(&mut current, child);
+                saved.push(SavedMatch::Continue {
+                    parent,
+                    wrap: Some(binder),
+                });
+            }
             MatchStep::Nullary {
                 constructor,
                 constructor_origin,
@@ -907,16 +957,14 @@ fn flatten_match_step(
                 }
             })
             .collect::<Vec<_>>();
-        return flatten_match(
-            &scrutinees[1..],
-            &rows,
-            vars,
-            fresh,
-            display_fresh,
-            depth + 1,
-            origins,
-        )
-        .map(MatchStep::Done);
+        return Ok(MatchStep::Continue {
+            next: MatchState {
+                scrutinees: scrutinees[1..].to_vec(),
+                rows,
+                vars: vars.to_vec(),
+            },
+            wrap: None,
+        });
     }
     if binder.is_some_and(|v| v.id == first.id) {
         let Some((name, fields, constructor_origin)) = constructor else {
@@ -1028,24 +1076,105 @@ fn flatten_match_step(
             },
         })
     } else {
-        Ok(MatchStep::Done(
-            flatten_match(
-                scrutinees,
-                rows,
-                &vars[1..],
-                fresh,
-                display_fresh,
-                depth + 1,
-                origins,
-            )?
-            .lambda(first, origins),
-        ))
+        Ok(MatchStep::SkipBinder(first.clone()))
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn variable_columns_and_skipped_binders_preserve_result_and_guard() {
+        on_small_stack(|| {
+            for count in [1, 30, 60] {
+                let mut fresh = count;
+                let vars = (0..count)
+                    .map(|id| Variable {
+                        name: format!("v{id}"),
+                        id,
+                    })
+                    .collect::<Vec<_>>();
+                let scrutinees = vars
+                    .iter()
+                    .map(|v| SurfaceTerm::new(v.term(), None))
+                    .collect::<Vec<_>>();
+                let rows = vec![Row {
+                    patterns: vars.iter().cloned().map(Pattern::Variable).collect(),
+                    body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+                }];
+                let result = flatten_match(&scrutinees, &rows, &vars, &mut fresh, &mut 0, 0, None)
+                    .unwrap_or_else(|error| panic!("variable column: {}", error.message()));
+                let mut cursor = &result.value;
+                for expected in &vars {
+                    let Term::Lam { id, body, .. } = cursor.as_ref() else {
+                        panic!("missing variable lambda")
+                    };
+                    assert_eq!(*id, expected.id);
+                    cursor = body;
+                }
+                assert!(matches!(cursor.as_ref(), Term::Rfl));
+
+                let rows = vec![Row {
+                    patterns: vec![Pattern::Constructor("C".into(), vec![], 0)],
+                    body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+                }];
+                let last = vec![SurfaceTerm::new(vars.last().unwrap().term(), None)];
+                let result = flatten_match(&last, &rows, &vars, &mut fresh, &mut 0, 0, None)
+                    .unwrap_or_else(|error| panic!("skipped binder: {}", error.message()));
+                let mut cursor = &result.value;
+                for expected in &vars[..count - 1] {
+                    let Term::Lam { id, body, .. } = cursor.as_ref() else {
+                        panic!("missing skipped lambda")
+                    };
+                    assert_eq!(*id, expected.id);
+                    cursor = body;
+                }
+                assert!(matches!(cursor.as_ref(), Term::Mat { .. }));
+            }
+            let vars = (0..63)
+                .map(|id| Variable {
+                    name: format!("v{id}"),
+                    id,
+                })
+                .collect::<Vec<_>>();
+            let scrutinees = vars
+                .iter()
+                .map(|v| SurfaceTerm::new(v.term(), None))
+                .collect::<Vec<_>>();
+            let rows = vec![Row {
+                patterns: vars.iter().cloned().map(Pattern::Variable).collect(),
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            }];
+            let Err(error) = flatten_match(&scrutinees, &rows, &vars, &mut 63, &mut 0, 0, None)
+            else {
+                panic!("variable-column depth guard must remain");
+            };
+            assert_eq!(
+                error.message(),
+                "pattern compilation exceeds the resource limit of 64 levels"
+            );
+
+            let rows = vec![Row {
+                patterns: vec![Pattern::Constructor("C".into(), vec![], 0)],
+                body: Body::Reply(SurfaceTerm::new(term(Term::Rfl), None)),
+            }];
+            let vars = (0..64)
+                .map(|id| Variable {
+                    name: format!("v{id}"),
+                    id,
+                })
+                .collect::<Vec<_>>();
+            let last = vec![SurfaceTerm::new(vars.last().unwrap().term(), None)];
+            let Err(error) = flatten_match(&last, &rows, &vars, &mut 64, &mut 0, 0, None) else {
+                panic!("skipped-binder depth guard must remain");
+            };
+            assert_eq!(
+                error.message(),
+                "pattern compilation exceeds the resource limit of 64 levels"
+            );
+        });
+    }
 
     fn on_small_stack(f: impl FnOnce() + Send + 'static) {
         std::thread::Builder::new()

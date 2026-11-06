@@ -1,0 +1,78 @@
+{
+  "base_commit": "3d4f4de5f8e04e6279b70657c1624ad08a351cfc",
+  "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "surface_sha256": "62c748b92a05b1eca9e0b1e43e87110a824c1c9e037fe547d15ae249044fd5c8",
+  "focused_tests": {
+    "passed": 46,
+    "failed": 0,
+    "ignored": 0
+  },
+  "previous_focused_run": "failed due to skipped-binder boundary test expectation, corrected and rerun",
+  "differential": {
+    "fixtures": 55,
+    "matched_observations": 220,
+    "baseline_binary_sha256": "18ee4309c6ad3a7c64ef61d5ed81342d061d7856a20a2ffc7bf3d17a56632e20",
+    "candidate_binary_sha256": "3b5dd9505a18322cd28a7780a3e9841d11124eae78fd531d5089e9d33c952577"
+  },
+  "stages": {
+    "final-surface-fixed": {
+      "exit": 0,
+      "elapsed_seconds": 8.0,
+      "stopped": null
+    },
+    "final-clippy": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "final-build": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "final-upstream": {
+      "exit": 0,
+      "elapsed_seconds": 18.01,
+      "stopped": null
+    },
+    "final-differential": {
+      "exit": 0,
+      "elapsed_seconds": 130.03,
+      "stopped": null
+    },
+    "final-targets": {
+      "exit": 0,
+      "elapsed_seconds": 54.01,
+      "stopped": null
+    },
+    "allfeatures-build": {
+      "exit": 0,
+      "elapsed_seconds": 6.0,
+      "stopped": null
+    },
+    "provider": {
+      "exit": 0,
+      "elapsed_seconds": 2.0,
+      "stopped": null
+    },
+    "extra-targets-fixed": {
+      "exit": 0,
+      "elapsed_seconds": 22.0,
+      "stopped": null
+    }
+  },
+  "standard_gate": "not rerun; previous 1200-second gate incomplete",
+  "complete_bounded_test_set": "not rerun on this intermediate change",
+  "limits": {
+    "batch_timeout_seconds": 1200,
+    "comparison_subprocess_seconds": 30,
+    "workspace_preflight_gib": 11,
+    "workspace_active_gib": 10,
+    "tmp_floor_gib": 1,
+    "additional_os_memory_cap": "none",
+    "requested_stack_bytes": 65536
+  },
+  "original_witness": "upstream True{}; candidate check and run refused at compiler guard 64",
+  "gpu_and_other_hosts": "unrun",
+  "prior_target_selection": "failed: a fixture directory was named as a Cargo test target; no tests ran; corrected selection passed"
+}

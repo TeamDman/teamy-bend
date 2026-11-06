@@ -108,6 +108,12 @@ complete bounded test set passed 1,417 tests, with zero failures and 49
 ignored. The standard uninterrupted gate was not rerun; the prior timeout
 remains incomplete.
 
+The subsequent [match-continuation change](cpu-match-continuations.md) removes
+Rust recursion from variable-only columns and skipped binders. It preserves the
+64-level compiler guard, so the unchanged `"hi"` witness still refuses there;
+nested-body recursion and the input/kernel boundaries remain. Its focused and
+before/after evidence is recorded separately from the prior complete test set.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source
