@@ -84,6 +84,12 @@ A reduced automatic-destruction model handles deep shared cleanup, but adding
 `Drop` to the public `Term` enum breaks existing owned-field matches; no
 production ownership change or guard removal is claimed.
 
+The subsequent [private pattern-tree change](cpu-pattern-tree-stack.md)
+converts parser pattern traversal and cloning to explicit work and makes private
+pattern destruction automatic and iterative. The unchanged `"hi"` witness
+still refuses at 64 levels; public term destruction and other recursive surface
+and kernel paths remain open.
+
 ## Inventory by applicable mode
 
 The inventory was regenerated from the clean pinned reference: all 1,302 source

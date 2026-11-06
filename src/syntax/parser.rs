@@ -387,6 +387,11 @@ struct Parser<'a> {
     origin: SourceOrigin,
 }
 
+#[cfg(test)]
+thread_local! {
+    static PANIC_AFTER_PATTERN_PAIR_FIRST: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
 impl Parser<'_> {
     fn current(&self) -> &Token {
         &self.tokens[self.at]
@@ -2394,77 +2399,125 @@ impl Parser<'_> {
         }
         self.error(message)
     }
+    #[expect(
+        clippy::too_many_lines,
+        reason = "The traversal keeps constructor validation and diagnostic order together."
+    )]
     fn pattern(&mut self, value: &TermRef, source: Option<usize>) -> Result<Pattern, ParseError> {
-        if self.is_compile_binding(value) {
-            if matches!(value.as_ref(), Term::Ref(_))
-                && let Some(origins) = &mut self.templates.diagnostics
-            {
-                origins.unsupported_pattern(value, source);
-            }
-            return Err(self.error("a template argument cannot be rebound as a pattern"));
+        struct Frame<'a> {
+            value: &'a TermRef,
+            name: &'a str,
+            args: &'a [TermRef],
+            next: usize,
+            fields: Vec<Pattern>,
         }
-        match value.as_ref() {
-            Term::Ref(name) | Term::Var { name, .. } => {
-                if self.book.declarations.iter().any(|d|matches!(d,Declaration::Adt(a) if a.constructors.iter().any(|c|c.name==self.resolve(name)))) {return Err(self.error(format!("constructor pattern {name} requires braces")));}
-                if name.contains('.') || name.contains('/') {
-                    return Err(self.error("a pattern binder must be one unqualified name"));
-                }
-                let reusable = self.is_reusable(value);
-                let reusable_start = self.reusable.len();
-                let variable = self.bind_variable(name.clone(), reusable);
-                if let Some(origins) = &self.templates.diagnostics {
-                    // Flattening closes pattern fields with generated lambdas.
-                    // Keep the pattern's span on that fresh binder, without
-                    // changing the parsed reference or its shared identity.
-                    let source = origins.tracker.source(value);
-                    origins.tracker.binder_source(variable.id, source);
-                    for (binding, _) in &self.reusable[reusable_start..] {
-                        origins.tracker.binder_source(binding.id, source);
-                    }
-                }
-                Ok(Pattern::Variable(variable))
-            }
-            Term::Ctr { name, args } => {
-                let constructor = self.book.declarations.iter().find_map(|d| match d {
-                    Declaration::Adt(a) => a.constructors.iter().find(|c| c.name == *name),
-                    Declaration::Def(_) => None,
-                });
-                let Some(c) = constructor else {
-                    if let Some(origins) = &mut self.templates.diagnostics {
-                        origins.unknown_pattern(name, value);
-                    }
-                    return Err(self.error(format!("unknown constructor pattern: {name}")));
-                };
-                if c.fields.len() != args.len() {
-                    return Err(self.error(format!(
-                        "constructor {name} expects {} fields",
-                        c.fields.len()
-                    )));
-                }
-                let fields =
-                    args.iter()
-                        .enumerate()
-                        .map(|(index, argument)| {
-                            let source = self.templates.diagnostics.as_ref().and_then(|origins| {
-                                origins.tracker.occurrence_source(value, index)
-                            });
-                            self.pattern(argument, source)
-                        })
-                        .collect::<Result<Vec<_>, _>>()?;
-                Ok(Pattern::Constructor(
-                    name.clone(),
-                    fields,
-                    self.templates.diagnostics.as_ref().map_or_else(
-                        || Rc::as_ptr(value) as usize,
-                        |origins| origins.tracker.source(value),
-                    ),
-                ))
-            }
-            _ => {
-                if let Some(origins) = &mut self.templates.diagnostics {
+
+        let mut frames = Vec::<Frame<'_>>::new();
+        let mut current = (value, source);
+        loop {
+            let (value, source) = current;
+            if self.is_compile_binding(value) {
+                if matches!(value.as_ref(), Term::Ref(_))
+                    && let Some(origins) = &mut self.templates.diagnostics
+                {
                     origins.unsupported_pattern(value, source);
                 }
-                Err(self.error("a pattern must be a binder or constructor"))
+                return Err(self.error("a template argument cannot be rebound as a pattern"));
+            }
+            let mut result = match value.as_ref() {
+                Term::Ref(name) | Term::Var { name, .. } => {
+                    if self.book.declarations.iter().any(|d| matches!(d, Declaration::Adt(a) if a.constructors.iter().any(|c| c.name == self.resolve(name)))) {
+                        return Err(self.error(format!("constructor pattern {name} requires braces")));
+                    }
+                    if name.contains('.') || name.contains('/') {
+                        return Err(self.error("a pattern binder must be one unqualified name"));
+                    }
+                    let reusable = self.is_reusable(value);
+                    let reusable_start = self.reusable.len();
+                    let variable = self.bind_variable(name.clone(), reusable);
+                    if let Some(origins) = &self.templates.diagnostics {
+                        let source = origins.tracker.source(value);
+                        origins.tracker.binder_source(variable.id, source);
+                        for (binding, _) in &self.reusable[reusable_start..] {
+                            origins.tracker.binder_source(binding.id, source);
+                        }
+                    }
+                    Pattern::Variable(variable)
+                }
+                Term::Ctr { name, args } => {
+                    let constructor = self.book.declarations.iter().find_map(|d| match d {
+                        Declaration::Adt(a) => a.constructors.iter().find(|c| c.name == *name),
+                        Declaration::Def(_) => None,
+                    });
+                    let Some(c) = constructor else {
+                        if let Some(origins) = &mut self.templates.diagnostics {
+                            origins.unknown_pattern(name, value);
+                        }
+                        return Err(self.error(format!("unknown constructor pattern: {name}")));
+                    };
+                    if c.fields.len() != args.len() {
+                        return Err(self.error(format!(
+                            "constructor {name} expects {} fields",
+                            c.fields.len()
+                        )));
+                    }
+                    if let Some(first) = args.first() {
+                        let first_source = self
+                            .templates
+                            .diagnostics
+                            .as_ref()
+                            .and_then(|origins| origins.tracker.occurrence_source(value, 0));
+                        frames.push(Frame {
+                            value,
+                            name,
+                            args,
+                            next: 1,
+                            fields: Vec::new(),
+                        });
+                        current = (first, first_source);
+                        continue;
+                    }
+                    let origin = self.templates.diagnostics.as_ref().map_or_else(
+                        || Rc::as_ptr(value) as usize,
+                        |origins| origins.tracker.source(value),
+                    );
+                    Pattern::Constructor(name.clone(), Vec::new(), origin)
+                }
+                _ => {
+                    if let Some(origins) = &mut self.templates.diagnostics {
+                        origins.unsupported_pattern(value, source);
+                    }
+                    return Err(self.error("a pattern must be a binder or constructor"));
+                }
+            };
+            loop {
+                let Some(frame) = frames.last_mut() else {
+                    return Ok(result);
+                };
+                frame.fields.push(result);
+                #[cfg(test)]
+                if frame.args.len() == 2
+                    && frame.fields.len() == 1
+                    && PANIC_AFTER_PATTERN_PAIR_FIRST.with(|flag| flag.replace(false))
+                {
+                    panic!("injected pattern conversion unwind");
+                }
+                if frame.next < frame.args.len() {
+                    let index = frame.next;
+                    frame.next += 1;
+                    let source =
+                        self.templates.diagnostics.as_ref().and_then(|origins| {
+                            origins.tracker.occurrence_source(frame.value, index)
+                        });
+                    current = (&frame.args[index], source);
+                    break;
+                }
+                let frame = frames.pop().expect("pattern frame exists");
+                let origin = self.templates.diagnostics.as_ref().map_or_else(
+                    || Rc::as_ptr(frame.value) as usize,
+                    |origins| origins.tracker.source(frame.value),
+                );
+                result = Pattern::Constructor(frame.name.to_owned(), frame.fields, origin);
             }
         }
     }
@@ -4486,3 +4539,239 @@ mod literal_decode_tests {
 
 #[cfg(test)]
 mod raw_apostrophe_tests;
+
+#[cfg(test)]
+mod pattern_stack_tests {
+    use super::*;
+
+    struct InputRoot(Option<TermRef>);
+    impl Drop for InputRoot {
+        fn drop(&mut self) {
+            if let Some(root) = self.0.take() {
+                crate::kernel::release_term_iteratively(root);
+            }
+        }
+    }
+
+    fn constructor(name: &str, args: Vec<TermRef>) -> TermRef {
+        term(Term::Ctr {
+            name: name.into(),
+            args,
+        })
+    }
+
+    fn nested(depth: usize) -> TermRef {
+        (0..depth).fold(term(Term::Ref("leaf".into())), |value, _| {
+            constructor("C", vec![value])
+        })
+    }
+
+    fn declared_book() -> Book {
+        let field = || Binder {
+            quant: Quant::Lone,
+            name: "x".into(),
+            id: 0,
+            ty: term(Term::Rfl),
+        };
+        Book {
+            declarations: vec![Declaration::Adt(AdtDecl {
+                name: "T".into(),
+                parameters: vec![],
+                kind: term(Term::Rfl),
+                constructors: vec![
+                    ConstructorDecl {
+                        name: "C".into(),
+                        fields: vec![field()],
+                    },
+                    ConstructorDecl {
+                        name: "Pair".into(),
+                        fields: vec![field(), field()],
+                    },
+                ],
+            })],
+        }
+    }
+
+    fn with_parser(f: impl FnOnce(&mut Parser<'_>)) {
+        let mut book = declared_book();
+        let mut fresh = 0;
+        let mut templates = Templates::default();
+        let mut parser = Parser {
+            tokens: lex("", "<pattern-test>").unwrap(),
+            at: 0,
+            label: "<pattern-test>".into(),
+            namespace: String::new(),
+            aliases: BTreeMap::new(),
+            scope: Vec::new(),
+            fresh: &mut fresh,
+            display_fresh: 0,
+            book: &mut book,
+            depth: 0,
+            reusable: Vec::new(),
+            reusable_markers: BTreeSet::new(),
+            templates: &mut templates,
+            instance_name: None,
+            instance_arguments: VecDeque::new(),
+            compile_bindings: BTreeMap::new(),
+            foreign: None,
+            constructor_tags: None,
+            origin: SourceOrigin::Standalone,
+        };
+        f(&mut parser);
+    }
+
+    fn on_small_stack(f: impl FnOnce() + Send + 'static) {
+        std::thread::Builder::new()
+            .stack_size(64 * 1024)
+            .spawn(f)
+            .expect("spawn small-stack test")
+            .join()
+            .expect("small-stack test completed");
+    }
+
+    #[test]
+    fn deep_term_to_pattern_uses_explicit_frames_and_drops_pattern() {
+        on_small_stack(|| {
+            let root = InputRoot(Some(nested(20_000)));
+            with_parser(|parser| {
+                let value = root.0.as_ref().unwrap();
+                let pattern = parser.pattern(value, None).unwrap();
+                let (mut source, mut current) = (value, &pattern);
+                for _ in 0..20_000 {
+                    let Term::Ctr { args, .. } = source.as_ref() else {
+                        panic!("missing source constructor")
+                    };
+                    let Pattern::Constructor(name, fields, origin) = current else {
+                        panic!("missing pattern constructor")
+                    };
+                    assert_eq!(name, "C");
+                    assert_eq!(*origin, Rc::as_ptr(source) as usize);
+                    source = &args[0];
+                    current = &fields[0];
+                }
+                assert!(
+                    matches!(current, Pattern::Variable(Variable { name, id: 0 }) if name == "leaf")
+                );
+                assert_eq!(*parser.fresh, 1);
+                drop(pattern);
+            });
+        });
+    }
+
+    #[test]
+    fn parser_error_drops_completed_deep_pattern_automatically() {
+        on_small_stack(|| {
+            let root = InputRoot(Some(constructor(
+                "Pair",
+                vec![nested(20_000), constructor("Missing", vec![])],
+            )));
+            with_parser(|parser| {
+                let Err(error) = parser.pattern(root.0.as_ref().unwrap(), None) else {
+                    panic!("unknown constructor must fail")
+                };
+                assert_eq!(error.message, "unknown constructor pattern: Missing");
+                assert_eq!(*parser.fresh, 1);
+                assert_eq!(parser.scope.len(), 1);
+            });
+        });
+    }
+
+    #[test]
+    fn parser_unwind_drops_completed_deep_pattern_automatically() {
+        on_small_stack(|| {
+            let root = InputRoot(Some(constructor(
+                "Pair",
+                vec![nested(20_000), constructor("Missing", vec![])],
+            )));
+            with_parser(|parser| {
+                PANIC_AFTER_PATTERN_PAIR_FIRST.with(|flag| flag.set(true));
+                let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    let _ = parser.pattern(root.0.as_ref().unwrap(), None);
+                }));
+                let _panic = outcome.expect_err("injected conversion panic must be caught");
+                assert_eq!(*parser.fresh, 1);
+                assert_eq!(parser.scope.len(), 1);
+            });
+        });
+    }
+
+    #[test]
+    fn parser_reports_first_invalid_field_before_later_fields() {
+        with_parser(|parser| {
+            let root = constructor(
+                "Pair",
+                vec![
+                    constructor("MissingFirst", vec![]),
+                    constructor("MissingSecond", vec![]),
+                ],
+            );
+            let Err(error) = parser.pattern(&root, None) else {
+                panic!("unknown constructor must fail")
+            };
+            assert_eq!(error.message, "unknown constructor pattern: MissingFirst");
+            assert_eq!(*parser.fresh, 0);
+        });
+    }
+
+    #[test]
+    fn pattern_conversion_rejects_every_non_pattern_term_family() {
+        with_parser(|parser| {
+            let leaf = || term(Term::Rfl);
+            let invalid = vec![
+                term(Term::GpuRef("gpu".into())),
+                term(Term::Typ(leaf())),
+                term(Term::Qnt),
+                term(Term::Qua(Quant::Lone)),
+                term(Term::Min(leaf(), leaf())),
+                term(Term::All {
+                    quant: Quant::Lone,
+                    name: "x".into(),
+                    id: 9,
+                    domain: leaf(),
+                    body: leaf(),
+                }),
+                term(Term::Lam {
+                    name: "x".into(),
+                    id: 9,
+                    body: leaf(),
+                }),
+                term(Term::App(leaf(), leaf())),
+                term(Term::Adt {
+                    name: "T".into(),
+                    args: vec![],
+                    excluded: vec![],
+                }),
+                term(Term::Mat {
+                    constructor: "C".into(),
+                    arm: leaf(),
+                    fallback: leaf(),
+                }),
+                term(Term::Efq),
+                term(Term::Eql {
+                    left: leaf(),
+                    right: leaf(),
+                    ty: leaf(),
+                }),
+                leaf(),
+                term(Term::Rwt {
+                    evidence: leaf(),
+                    motive: leaf(),
+                    body: leaf(),
+                }),
+                term(Term::Hole("h".into())),
+                term(Term::Ann(leaf(), leaf())),
+                term(Term::Let {
+                    bindings: vec![],
+                    body: leaf(),
+                }),
+            ];
+            for value in &invalid {
+                let Err(error) = parser.pattern(value, None) else {
+                    panic!("non-pattern term must fail")
+                };
+                assert_eq!(error.message, "a pattern must be a binder or constructor");
+                assert_eq!(*parser.fresh, 0);
+            }
+        });
+    }
+}

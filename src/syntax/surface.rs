@@ -59,10 +59,56 @@ impl Variable {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub(super) enum Pattern {
     Variable(Variable),
     Constructor(String, Vec<Pattern>, usize),
+}
+
+// Pattern trees can be much deeper than the syntax that names them: string
+// patterns expand characters into word constructors. Clone and destruction
+// use explicit work instead of putting every constructor on the host stack.
+impl Clone for Pattern {
+    fn clone(&self) -> Self {
+        enum Work<'a> {
+            Visit(&'a Pattern),
+            Constructor(&'a str, usize, usize),
+        }
+
+        let mut pending = vec![Work::Visit(self)];
+        let mut values = Vec::<Pattern>::new();
+        while let Some(work) = pending.pop() {
+            match work {
+                Work::Visit(Self::Variable(variable)) => {
+                    values.push(Self::Variable(variable.clone()));
+                }
+                Work::Visit(Self::Constructor(name, fields, origin)) => {
+                    pending.push(Work::Constructor(name, fields.len(), *origin));
+                    pending.extend(fields.iter().rev().map(Work::Visit));
+                }
+                Work::Constructor(name, count, origin) => {
+                    let start = values.len() - count;
+                    let fields = values.split_off(start);
+                    values.push(Self::Constructor(name.to_owned(), fields, origin));
+                }
+            }
+        }
+        values.pop().expect("pattern clone has one root")
+    }
+}
+
+impl Drop for Pattern {
+    fn drop(&mut self) {
+        let Self::Constructor(_, fields, _) = self else {
+            return;
+        };
+        let mut pending = std::mem::take(fields);
+        while let Some(mut value) = pending.pop() {
+            if let Self::Constructor(_, fields, _) = &mut value {
+                pending.append(fields);
+            }
+        }
+    }
 }
 
 impl Pattern {
@@ -859,6 +905,68 @@ mod tests {
             })
             .collect();
         (scrutinees, rows, vec![variable])
+    }
+
+    fn deep_pattern(depth: usize, branching: bool) -> Pattern {
+        let mut value = Pattern::Variable(Variable {
+            name: "leaf".into(),
+            id: 7,
+        });
+        for index in 0..depth {
+            let fields = if branching {
+                vec![
+                    Pattern::Variable(Variable {
+                        name: "side".into(),
+                        id: index,
+                    }),
+                    value,
+                ]
+            } else {
+                vec![value]
+            };
+            value = Pattern::Constructor("C".into(), fields, index);
+        }
+        value
+    }
+
+    #[test]
+    fn deep_patterns_clone_and_drop_automatically_on_small_stack() {
+        on_small_stack(|| {
+            let original = deep_pattern(100_000, false);
+            let copy = original.clone();
+            let mut current = &copy;
+            for index in (0..100_000).rev() {
+                let Pattern::Constructor(name, fields, origin) = current else {
+                    panic!("missing cloned constructor")
+                };
+                assert_eq!(name, "C");
+                assert_eq!(*origin, index);
+                assert_eq!(fields.len(), 1);
+                current = &fields[0];
+            }
+            assert!(
+                matches!(current, Pattern::Variable(Variable { name, id: 7 }) if name == "leaf")
+            );
+            drop(original);
+            drop(copy);
+            // A deep, branching tree exercises pending-sibling storage as well.
+            drop(deep_pattern(8_192, true));
+        });
+    }
+
+    #[test]
+    fn deep_patterns_drop_automatically_on_error_and_unwind() {
+        on_small_stack(|| {
+            fn fail(_value: Pattern) -> Result<(), ()> {
+                Err(())
+            }
+            fail(deep_pattern(100_000, false)).expect_err("injected error");
+            let outcome = std::panic::catch_unwind(|| {
+                let _value = deep_pattern(100_000, false);
+                panic!("injected unwind");
+            });
+            let _panic = outcome.expect_err("injected unwind must be caught");
+        });
     }
 
     #[test]

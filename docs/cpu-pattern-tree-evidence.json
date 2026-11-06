@@ -1,0 +1,2332 @@
+{
+  "base_commit": "cd17e5309fe90ec39a7ea1f22d32f3a3e4e61b31",
+  "upstream_commit": "e6676b080f25b1bc1bf5b5b7d7a17e22f8022599",
+  "source_sha256": {
+    "src/syntax/parser.rs": "4fefee73fcafe35b8bc047fcb322f92a00b221344ac9eee4e97d1686601b2664",
+    "src/syntax/surface.rs": "933393606d38d3faa4a627587da952f22df41061660b4fb7e0644941f8e5985e",
+    "src/kernel/term.rs": "c30a50080bbcd4d6dce3710a7645fe72759795638c3f5f0483f645bb3f8f82ed"
+  },
+  "baseline_binary_sha256": "f9213964e453e04941af30828396d64cffca6208417be88a059fb76e1d4b421e",
+  "candidate_binary_sha256": "0d9e5de969b39c338fb72c992f569d0fbb8504be9a9bc59ecda3f35042cd54a6",
+  "comparison": "Exact status and output stream hashes match before and after; matching refusal is not success.",
+  "per_process_timeout_seconds": 30,
+  "observations": [
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-0.bend",
+      "source": "8269f0a3077118da32a325223bfe03cd17c385894acfe8ce64a5b7bef3c0d4bb",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-0.bend",
+      "source": "8269f0a3077118da32a325223bfe03cd17c385894acfe8ce64a5b7bef3c0d4bb",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-0.bend",
+      "source": "8269f0a3077118da32a325223bfe03cd17c385894acfe8ce64a5b7bef3c0d4bb",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-0.bend",
+      "source": "8269f0a3077118da32a325223bfe03cd17c385894acfe8ce64a5b7bef3c0d4bb",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-1.bend",
+      "source": "ce988f0c286e32bbb08a0d35339443642f028dddcd76840b5af1279495e44f70",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-1.bend",
+      "source": "ce988f0c286e32bbb08a0d35339443642f028dddcd76840b5af1279495e44f70",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-1.bend",
+      "source": "ce988f0c286e32bbb08a0d35339443642f028dddcd76840b5af1279495e44f70",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-1.bend",
+      "source": "ce988f0c286e32bbb08a0d35339443642f028dddcd76840b5af1279495e44f70",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-122.bend",
+      "source": "a0131043bb27de8628150a3e6d4bdf0e67920a68627c94c93639b87b2fc6e8b9",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "67c5e4d4dffe73692f829d7734088cdf2f64e1f67c7c2575f26df28b0999a6de"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-122.bend",
+      "source": "a0131043bb27de8628150a3e6d4bdf0e67920a68627c94c93639b87b2fc6e8b9",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "67c5e4d4dffe73692f829d7734088cdf2f64e1f67c7c2575f26df28b0999a6de"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-122.bend",
+      "source": "a0131043bb27de8628150a3e6d4bdf0e67920a68627c94c93639b87b2fc6e8b9",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "67c5e4d4dffe73692f829d7734088cdf2f64e1f67c7c2575f26df28b0999a6de"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-122.bend",
+      "source": "a0131043bb27de8628150a3e6d4bdf0e67920a68627c94c93639b87b2fc6e8b9",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "67c5e4d4dffe73692f829d7734088cdf2f64e1f67c7c2575f26df28b0999a6de"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-129.bend",
+      "source": "905e914bf85302d0f152c83db41404b39b55ad2a72a328b09b9b57b28e21290c",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "742c14acf4e557246d79f81aebdc50c4114b4d0d7a7d61d6fc3f17ccb8f04c91"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-129.bend",
+      "source": "905e914bf85302d0f152c83db41404b39b55ad2a72a328b09b9b57b28e21290c",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "742c14acf4e557246d79f81aebdc50c4114b4d0d7a7d61d6fc3f17ccb8f04c91"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-129.bend",
+      "source": "905e914bf85302d0f152c83db41404b39b55ad2a72a328b09b9b57b28e21290c",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "742c14acf4e557246d79f81aebdc50c4114b4d0d7a7d61d6fc3f17ccb8f04c91"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-129.bend",
+      "source": "905e914bf85302d0f152c83db41404b39b55ad2a72a328b09b9b57b28e21290c",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "742c14acf4e557246d79f81aebdc50c4114b4d0d7a7d61d6fc3f17ccb8f04c91"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-58.bend",
+      "source": "3053f53d8b6740d173f9d7d12357d519f7c3929beab5c6845bdabdcf8e10301e",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-58.bend",
+      "source": "3053f53d8b6740d173f9d7d12357d519f7c3929beab5c6845bdabdcf8e10301e",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-58.bend",
+      "source": "3053f53d8b6740d173f9d7d12357d519f7c3929beab5c6845bdabdcf8e10301e",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-58.bend",
+      "source": "3053f53d8b6740d173f9d7d12357d519f7c3929beab5c6845bdabdcf8e10301e",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-59.bend",
+      "source": "89fc51e86b5e9582314d70d9e5ef49199ae0261c0f6a06c588e36d245e12c3aa",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-59.bend",
+      "source": "89fc51e86b5e9582314d70d9e5ef49199ae0261c0f6a06c588e36d245e12c3aa",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-59.bend",
+      "source": "89fc51e86b5e9582314d70d9e5ef49199ae0261c0f6a06c588e36d245e12c3aa",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-59.bend",
+      "source": "89fc51e86b5e9582314d70d9e5ef49199ae0261c0f6a06c588e36d245e12c3aa",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-60.bend",
+      "source": "baa6b4cb5cb2be080ed2346240fbde8485a367050dd6a2d20df8c72e9192b5a8",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a404d03ea2d290f01824e79d2ed30dffcd3be5ea82aeca28e354486b00c146f1"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-60.bend",
+      "source": "baa6b4cb5cb2be080ed2346240fbde8485a367050dd6a2d20df8c72e9192b5a8",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a404d03ea2d290f01824e79d2ed30dffcd3be5ea82aeca28e354486b00c146f1"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-60.bend",
+      "source": "baa6b4cb5cb2be080ed2346240fbde8485a367050dd6a2d20df8c72e9192b5a8",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a404d03ea2d290f01824e79d2ed30dffcd3be5ea82aeca28e354486b00c146f1"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-60.bend",
+      "source": "baa6b4cb5cb2be080ed2346240fbde8485a367050dd6a2d20df8c72e9192b5a8",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a404d03ea2d290f01824e79d2ed30dffcd3be5ea82aeca28e354486b00c146f1"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-61.bend",
+      "source": "206a14bf83456a71b977d6a970719b9e75fa36860f097b3ec4d6d9d877d543d5",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "d65195aab738af0e6bee6fd0c74a7ab18d0892145474ecd198e7f2b2f0dd498a"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-61.bend",
+      "source": "206a14bf83456a71b977d6a970719b9e75fa36860f097b3ec4d6d9d877d543d5",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "d65195aab738af0e6bee6fd0c74a7ab18d0892145474ecd198e7f2b2f0dd498a"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-61.bend",
+      "source": "206a14bf83456a71b977d6a970719b9e75fa36860f097b3ec4d6d9d877d543d5",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "d65195aab738af0e6bee6fd0c74a7ab18d0892145474ecd198e7f2b2f0dd498a"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-61.bend",
+      "source": "206a14bf83456a71b977d6a970719b9e75fa36860f097b3ec4d6d9d877d543d5",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "d65195aab738af0e6bee6fd0c74a7ab18d0892145474ecd198e7f2b2f0dd498a"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-62.bend",
+      "source": "3a28ccfd3debb529ef81244d839f80e1f5263c3976fba9fb970421a8d2ae779f",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "652fbcfef2d13758a85792d1f663e95d442ba77ab2554efaed628cc51790b9bf"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-62.bend",
+      "source": "3a28ccfd3debb529ef81244d839f80e1f5263c3976fba9fb970421a8d2ae779f",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "652fbcfef2d13758a85792d1f663e95d442ba77ab2554efaed628cc51790b9bf"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-62.bend",
+      "source": "3a28ccfd3debb529ef81244d839f80e1f5263c3976fba9fb970421a8d2ae779f",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "652fbcfef2d13758a85792d1f663e95d442ba77ab2554efaed628cc51790b9bf"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/bool-62.bend",
+      "source": "3a28ccfd3debb529ef81244d839f80e1f5263c3976fba9fb970421a8d2ae779f",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "652fbcfef2d13758a85792d1f663e95d442ba77ab2554efaed628cc51790b9bf"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-0.bend",
+      "source": "7e61ce6b74e65e97753a0ed3223b708e65295ef0d94f1321e9fcfc096e964394",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-0.bend",
+      "source": "7e61ce6b74e65e97753a0ed3223b708e65295ef0d94f1321e9fcfc096e964394",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-0.bend",
+      "source": "7e61ce6b74e65e97753a0ed3223b708e65295ef0d94f1321e9fcfc096e964394",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-0.bend",
+      "source": "7e61ce6b74e65e97753a0ed3223b708e65295ef0d94f1321e9fcfc096e964394",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-1.bend",
+      "source": "9dbea9e4a2d5cdb580e1c4b445233989ffb32c3a132cfeeb233056fab895e17c",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-1.bend",
+      "source": "9dbea9e4a2d5cdb580e1c4b445233989ffb32c3a132cfeeb233056fab895e17c",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-1.bend",
+      "source": "9dbea9e4a2d5cdb580e1c4b445233989ffb32c3a132cfeeb233056fab895e17c",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-1.bend",
+      "source": "9dbea9e4a2d5cdb580e1c4b445233989ffb32c3a132cfeeb233056fab895e17c",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-122.bend",
+      "source": "9d7d753757121d288e204db25b5e4c5875ebbfbb4a6fc54d047aadfa6004d543",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "05a71266d4e01c7d83785a92d167b82bc59c67a8b28e24c54bca381d8e2e9672"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-122.bend",
+      "source": "9d7d753757121d288e204db25b5e4c5875ebbfbb4a6fc54d047aadfa6004d543",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "05a71266d4e01c7d83785a92d167b82bc59c67a8b28e24c54bca381d8e2e9672"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-122.bend",
+      "source": "9d7d753757121d288e204db25b5e4c5875ebbfbb4a6fc54d047aadfa6004d543",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "05a71266d4e01c7d83785a92d167b82bc59c67a8b28e24c54bca381d8e2e9672"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-122.bend",
+      "source": "9d7d753757121d288e204db25b5e4c5875ebbfbb4a6fc54d047aadfa6004d543",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "05a71266d4e01c7d83785a92d167b82bc59c67a8b28e24c54bca381d8e2e9672"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-129.bend",
+      "source": "a0aa645cf518ebea09d9dcd8df1d0d1b4b0da5883464e8e69cbfadf04f2582e8",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "c6ac2eadd1486f9bc45bd889e7dba08c68c3fc3fa5b1c8af71c68b3d80551931"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-129.bend",
+      "source": "a0aa645cf518ebea09d9dcd8df1d0d1b4b0da5883464e8e69cbfadf04f2582e8",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "c6ac2eadd1486f9bc45bd889e7dba08c68c3fc3fa5b1c8af71c68b3d80551931"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-129.bend",
+      "source": "a0aa645cf518ebea09d9dcd8df1d0d1b4b0da5883464e8e69cbfadf04f2582e8",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "c6ac2eadd1486f9bc45bd889e7dba08c68c3fc3fa5b1c8af71c68b3d80551931"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-129.bend",
+      "source": "a0aa645cf518ebea09d9dcd8df1d0d1b4b0da5883464e8e69cbfadf04f2582e8",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "c6ac2eadd1486f9bc45bd889e7dba08c68c3fc3fa5b1c8af71c68b3d80551931"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-58.bend",
+      "source": "5c536d7f940fca64e5a6c3bcc84ce28adc9745ea1611dce6300ee04d0ec36f50",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-58.bend",
+      "source": "5c536d7f940fca64e5a6c3bcc84ce28adc9745ea1611dce6300ee04d0ec36f50",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-58.bend",
+      "source": "5c536d7f940fca64e5a6c3bcc84ce28adc9745ea1611dce6300ee04d0ec36f50",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-58.bend",
+      "source": "5c536d7f940fca64e5a6c3bcc84ce28adc9745ea1611dce6300ee04d0ec36f50",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-59.bend",
+      "source": "69ee8fdf76a914d3354dc3ee18fde8de85a6e94a2ea0c6c9d0f646df022150b4",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-59.bend",
+      "source": "69ee8fdf76a914d3354dc3ee18fde8de85a6e94a2ea0c6c9d0f646df022150b4",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-59.bend",
+      "source": "69ee8fdf76a914d3354dc3ee18fde8de85a6e94a2ea0c6c9d0f646df022150b4",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-59.bend",
+      "source": "69ee8fdf76a914d3354dc3ee18fde8de85a6e94a2ea0c6c9d0f646df022150b4",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-60.bend",
+      "source": "89c47e13713af326eff2e1b4f8e628bc524d6f6bd0a65371d8bd14561d38d4f1",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "53e90507d7e2493f2ad1362ab5f0b977084e85d57991a889f84206f5ca959815"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-60.bend",
+      "source": "89c47e13713af326eff2e1b4f8e628bc524d6f6bd0a65371d8bd14561d38d4f1",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "53e90507d7e2493f2ad1362ab5f0b977084e85d57991a889f84206f5ca959815"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-60.bend",
+      "source": "89c47e13713af326eff2e1b4f8e628bc524d6f6bd0a65371d8bd14561d38d4f1",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "53e90507d7e2493f2ad1362ab5f0b977084e85d57991a889f84206f5ca959815"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-60.bend",
+      "source": "89c47e13713af326eff2e1b4f8e628bc524d6f6bd0a65371d8bd14561d38d4f1",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "53e90507d7e2493f2ad1362ab5f0b977084e85d57991a889f84206f5ca959815"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-61.bend",
+      "source": "0f45f920e2f06f1c3cfca141c90993d9b977b5283906e28750abd0a5e52e48c8",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "184f0ed8c587c4be04b451ef36f9154397981a4eab91620d8408ca74ffecab9c"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-61.bend",
+      "source": "0f45f920e2f06f1c3cfca141c90993d9b977b5283906e28750abd0a5e52e48c8",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "184f0ed8c587c4be04b451ef36f9154397981a4eab91620d8408ca74ffecab9c"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-61.bend",
+      "source": "0f45f920e2f06f1c3cfca141c90993d9b977b5283906e28750abd0a5e52e48c8",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "184f0ed8c587c4be04b451ef36f9154397981a4eab91620d8408ca74ffecab9c"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-61.bend",
+      "source": "0f45f920e2f06f1c3cfca141c90993d9b977b5283906e28750abd0a5e52e48c8",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "184f0ed8c587c4be04b451ef36f9154397981a4eab91620d8408ca74ffecab9c"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-62.bend",
+      "source": "bad6a98aa672113a6507c605e1375569ea50bb9b27865021600dfa81f0d294c1",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "71bfe5c97771273408af509d0689bc1ab7f41470a6499af62c3cd99d1ba6af8e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-62.bend",
+      "source": "bad6a98aa672113a6507c605e1375569ea50bb9b27865021600dfa81f0d294c1",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "71bfe5c97771273408af509d0689bc1ab7f41470a6499af62c3cd99d1ba6af8e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-62.bend",
+      "source": "bad6a98aa672113a6507c605e1375569ea50bb9b27865021600dfa81f0d294c1",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "71bfe5c97771273408af509d0689bc1ab7f41470a6499af62c3cd99d1ba6af8e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/controls/u32-62.bend",
+      "source": "bad6a98aa672113a6507c605e1375569ea50bb9b27865021600dfa81f0d294c1",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "71bfe5c97771273408af509d0689bc1ab7f41470a6499af62c3cd99d1ba6af8e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+      "source": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ff5214e6a1ee6b8aba382d2bc690cc0c0395830bb45bad0483c92ce7c2e9be9e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+      "source": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ff5214e6a1ee6b8aba382d2bc690cc0c0395830bb45bad0483c92ce7c2e9be9e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+      "source": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ff5214e6a1ee6b8aba382d2bc690cc0c0395830bb45bad0483c92ce7c2e9be9e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_chain.bend",
+      "source": "81fcaaa8db549fc99d98699793ea8d21211845674da602aea9b28816d02397aa",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ff5214e6a1ee6b8aba382d2bc690cc0c0395830bb45bad0483c92ce7c2e9be9e"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+      "source": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "990d3dcef011f1a81b94b8cd802160b866f8930375c6606d1f553f6940332a11"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+      "source": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "990d3dcef011f1a81b94b8cd802160b866f8930375c6606d1f553f6940332a11"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+      "source": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "990d3dcef011f1a81b94b8cd802160b866f8930375c6606d1f553f6940332a11"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/nat_table.bend",
+      "source": "b007fa2c5ab110f0f7146f980306f95e82e2d442f0bd3e05aa927ec839dcfc5d",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "990d3dcef011f1a81b94b8cd802160b866f8930375c6606d1f553f6940332a11"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+      "source": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+      "source": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+      "source": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-above.bend",
+      "source": "9fad112aebbdda68cc3ab2491ff92970ce27c0ffea8aa97d9431ef977bb0b8d5",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+      "source": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+      "source": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+      "source": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-below.bend",
+      "source": "35de34ba660404f22419dd4abb9da89c4bfefb45e5e0ac6cf69b270f43549e43",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+      "source": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+      "source": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+      "source": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/bool-hit.bend",
+      "source": "bcc83301bb43218a5ad2aef7503737785d8d664ae6b5b21850d89e9ef57235ed",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+      "source": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+      "source": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+      "source": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-above.bend",
+      "source": "13c9972c15eb097413a25bc47b52a3db7d636600c003bf9de817c57b8f37cacf",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+      "source": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+      "source": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+      "source": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-below.bend",
+      "source": "22f074c83947b784ddaae45a957e28ef7de848cbd48e6727232112b74e8935d4",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+      "source": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+      "source": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+      "source": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-nat-pattern-depth/near/u32-hit.bend",
+      "source": "b99b54f2032c3e184eda464ea1e514514a80b6f55436dce079173f4b0920849f",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_field_000.bend",
+      "source": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "4a56ed2f1f5781cb1381db0aaca3afbe5cd4087e93408404fee6023149a77fdf"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_field_000.bend",
+      "source": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "4a56ed2f1f5781cb1381db0aaca3afbe5cd4087e93408404fee6023149a77fdf"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_field_000.bend",
+      "source": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "4a56ed2f1f5781cb1381db0aaca3afbe5cd4087e93408404fee6023149a77fdf"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_field_000.bend",
+      "source": "191d833bc09e3ce0950cb31ab920a98ceb71e053a6c7315590e090c7720d500d",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "4a56ed2f1f5781cb1381db0aaca3afbe5cd4087e93408404fee6023149a77fdf"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_reuse.bend",
+      "source": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "02ef39cac143797b6db11d0ddec99010a35f4ee9dc4b540ac6b9c5b4c7449e3e"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_reuse.bend",
+      "source": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "02ef39cac143797b6db11d0ddec99010a35f4ee9dc4b540ac6b9c5b4c7449e3e"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_reuse.bend",
+      "source": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "02ef39cac143797b6db11d0ddec99010a35f4ee9dc4b540ac6b9c5b4c7449e3e"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/check/negative_data_reuse.bend",
+      "source": "65aeaf7484d6dadb9a0ec968110a5d79ff8a35ebb9acab57d1d14d21e3c2ce46",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "02ef39cac143797b6db11d0ddec99010a35f4ee9dc4b540ac6b9c5b4c7449e3e"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/fallback.bend",
+      "source": "de90ff853245bea301737b0c87a612a7cbfb9d4fffcdbf43a89708b42fce85f5",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "3c8d3ee5ccd274c0f8c654db96cd1f4f1f611ccad4489f8d21bbe1d7d939def8"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/fallback.bend",
+      "source": "de90ff853245bea301737b0c87a612a7cbfb9d4fffcdbf43a89708b42fce85f5",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "3c8d3ee5ccd274c0f8c654db96cd1f4f1f611ccad4489f8d21bbe1d7d939def8"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/fallback.bend",
+      "source": "de90ff853245bea301737b0c87a612a7cbfb9d4fffcdbf43a89708b42fce85f5",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "3c8d3ee5ccd274c0f8c654db96cd1f4f1f611ccad4489f8d21bbe1d7d939def8"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/fallback.bend",
+      "source": "de90ff853245bea301737b0c87a612a7cbfb9d4fffcdbf43a89708b42fce85f5",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "3c8d3ee5ccd274c0f8c654db96cd1f4f1f611ccad4489f8d21bbe1d7d939def8"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/first-field.bend",
+      "source": "7ea39d8b2f6d0df0fac045fcc8b80f9e53b5fd208952cc7363136737bc69f56c",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "48e784b72ea77d43f1287f3e9fce74656a4c087e297dfd7b59a35ce33af01e16"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/first-field.bend",
+      "source": "7ea39d8b2f6d0df0fac045fcc8b80f9e53b5fd208952cc7363136737bc69f56c",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "48e784b72ea77d43f1287f3e9fce74656a4c087e297dfd7b59a35ce33af01e16"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/first-field.bend",
+      "source": "7ea39d8b2f6d0df0fac045fcc8b80f9e53b5fd208952cc7363136737bc69f56c",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "48e784b72ea77d43f1287f3e9fce74656a4c087e297dfd7b59a35ce33af01e16"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/first-field.bend",
+      "source": "7ea39d8b2f6d0df0fac045fcc8b80f9e53b5fd208952cc7363136737bc69f56c",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "48e784b72ea77d43f1287f3e9fce74656a4c087e297dfd7b59a35ce33af01e16"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/helper.bend",
+      "source": "32809e9a9654c71e91f708a67514f7ab42b92d9bc219b7d05f0e142d8ce14103",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "29211d22449ade74700e2ea57ee14aa534c3ce69e66c71266e0582c296642ff6"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/helper.bend",
+      "source": "32809e9a9654c71e91f708a67514f7ab42b92d9bc219b7d05f0e142d8ce14103",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "29211d22449ade74700e2ea57ee14aa534c3ce69e66c71266e0582c296642ff6"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/helper.bend",
+      "source": "32809e9a9654c71e91f708a67514f7ab42b92d9bc219b7d05f0e142d8ce14103",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "29211d22449ade74700e2ea57ee14aa534c3ce69e66c71266e0582c296642ff6"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/helper.bend",
+      "source": "32809e9a9654c71e91f708a67514f7ab42b92d9bc219b7d05f0e142d8ce14103",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "29211d22449ade74700e2ea57ee14aa534c3ce69e66c71266e0582c296642ff6"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/main.bend",
+      "source": "eaeaf6397c246d44c46081c2482bfb28e5bfce8afc5f0a78c9dff68d8753ebf5",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "955e0524fa396ccbec537c8020fab1b185f0be71c3ffb3f3629affb96afbfd22"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/main.bend",
+      "source": "eaeaf6397c246d44c46081c2482bfb28e5bfce8afc5f0a78c9dff68d8753ebf5",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "955e0524fa396ccbec537c8020fab1b185f0be71c3ffb3f3629affb96afbfd22"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/main.bend",
+      "source": "eaeaf6397c246d44c46081c2482bfb28e5bfce8afc5f0a78c9dff68d8753ebf5",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "955e0524fa396ccbec537c8020fab1b185f0be71c3ffb3f3629affb96afbfd22"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/imported/main.bend",
+      "source": "eaeaf6397c246d44c46081c2482bfb28e5bfce8afc5f0a78c9dff68d8753ebf5",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "955e0524fa396ccbec537c8020fab1b185f0be71c3ffb3f3629affb96afbfd22"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/multiline.bend",
+      "source": "a62bc4cdee10c19e16cb484e4e6878c947599a91b990e91d3ef70a783f02a9df",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "b692da5b31b5439ac2c11cbd8a20f680ab215d96657373d031b277f4abb7390f"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/multiline.bend",
+      "source": "a62bc4cdee10c19e16cb484e4e6878c947599a91b990e91d3ef70a783f02a9df",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "b692da5b31b5439ac2c11cbd8a20f680ab215d96657373d031b277f4abb7390f"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/multiline.bend",
+      "source": "a62bc4cdee10c19e16cb484e4e6878c947599a91b990e91d3ef70a783f02a9df",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "b692da5b31b5439ac2c11cbd8a20f680ab215d96657373d031b277f4abb7390f"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/multiline.bend",
+      "source": "a62bc4cdee10c19e16cb484e4e6878c947599a91b990e91d3ef70a783f02a9df",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "b692da5b31b5439ac2c11cbd8a20f680ab215d96657373d031b277f4abb7390f"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/nested.bend",
+      "source": "32efec026929ecf90c8d5c0b627139e4f987906b4420a8d1b5b7ec0a978d7241",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "fd43865e8165b395aca165b718e040943e3fe9c98bdb1325027ed58e69638b4d"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/nested.bend",
+      "source": "32efec026929ecf90c8d5c0b627139e4f987906b4420a8d1b5b7ec0a978d7241",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "fd43865e8165b395aca165b718e040943e3fe9c98bdb1325027ed58e69638b4d"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/nested.bend",
+      "source": "32efec026929ecf90c8d5c0b627139e4f987906b4420a8d1b5b7ec0a978d7241",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "fd43865e8165b395aca165b718e040943e3fe9c98bdb1325027ed58e69638b4d"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/nested.bend",
+      "source": "32efec026929ecf90c8d5c0b627139e4f987906b4420a8d1b5b7ec0a978d7241",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "fd43865e8165b395aca165b718e040943e3fe9c98bdb1325027ed58e69638b4d"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/reusable-refusal.bend",
+      "source": "04ca5e18c09c3ca3c35e62121820ad7a3c3c0dfb0de247b0919c529b45740523",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "cc42705375715b9aa7296af2e6b72ef1cd46e5ca04a7ae2d414fa5963af676be"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/reusable-refusal.bend",
+      "source": "04ca5e18c09c3ca3c35e62121820ad7a3c3c0dfb0de247b0919c529b45740523",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "cc42705375715b9aa7296af2e6b72ef1cd46e5ca04a7ae2d414fa5963af676be"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/reusable-refusal.bend",
+      "source": "04ca5e18c09c3ca3c35e62121820ad7a3c3c0dfb0de247b0919c529b45740523",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "cc42705375715b9aa7296af2e6b72ef1cd46e5ca04a7ae2d414fa5963af676be"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/reusable-refusal.bend",
+      "source": "04ca5e18c09c3ca3c35e62121820ad7a3c3c0dfb0de247b0919c529b45740523",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "cc42705375715b9aa7296af2e6b72ef1cd46e5ca04a7ae2d414fa5963af676be"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/row-priority.bend",
+      "source": "4704fe97095f33314d0395b5882349aa25ea88b39562c2bc2cf48d184cee21f0",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "17c5c7f0e27ca3e1a90b5f3eaa111f2dae709509063c33590cc2e41d18f93533"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/row-priority.bend",
+      "source": "4704fe97095f33314d0395b5882349aa25ea88b39562c2bc2cf48d184cee21f0",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "17c5c7f0e27ca3e1a90b5f3eaa111f2dae709509063c33590cc2e41d18f93533"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/row-priority.bend",
+      "source": "4704fe97095f33314d0395b5882349aa25ea88b39562c2bc2cf48d184cee21f0",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "17c5c7f0e27ca3e1a90b5f3eaa111f2dae709509063c33590cc2e41d18f93533"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/row-priority.bend",
+      "source": "4704fe97095f33314d0395b5882349aa25ea88b39562c2bc2cf48d184cee21f0",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "17c5c7f0e27ca3e1a90b5f3eaa111f2dae709509063c33590cc2e41d18f93533"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/shadowed.bend",
+      "source": "a1059dccc548332a1fc422354f948dd9528882cce15aad13bac8220475fb4444",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "f07c163af4ec4bf387523024dabb4e93e62440338d73b25112d504c3d197e634"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/shadowed.bend",
+      "source": "a1059dccc548332a1fc422354f948dd9528882cce15aad13bac8220475fb4444",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "f07c163af4ec4bf387523024dabb4e93e62440338d73b25112d504c3d197e634"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/shadowed.bend",
+      "source": "a1059dccc548332a1fc422354f948dd9528882cce15aad13bac8220475fb4444",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "f07c163af4ec4bf387523024dabb4e93e62440338d73b25112d504c3d197e634"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/shadowed.bend",
+      "source": "a1059dccc548332a1fc422354f948dd9528882cce15aad13bac8220475fb4444",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "f07c163af4ec4bf387523024dabb4e93e62440338d73b25112d504c3d197e634"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/synthetic-field.bend",
+      "source": "11b6a3d770d563e5921c2945fafcf8af5168d4715f8bc5c5bb65dd259b8be3bd",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "27d58fb1870ddfcf4e2d629e81a766136f9988902a6364b7ec405ed41e97a513"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/synthetic-field.bend",
+      "source": "11b6a3d770d563e5921c2945fafcf8af5168d4715f8bc5c5bb65dd259b8be3bd",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "27d58fb1870ddfcf4e2d629e81a766136f9988902a6364b7ec405ed41e97a513"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/synthetic-field.bend",
+      "source": "11b6a3d770d563e5921c2945fafcf8af5168d4715f8bc5c5bb65dd259b8be3bd",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "27d58fb1870ddfcf4e2d629e81a766136f9988902a6364b7ec405ed41e97a513"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/controls/synthetic-field.bend",
+      "source": "11b6a3d770d563e5921c2945fafcf8af5168d4715f8bc5c5bb65dd259b8be3bd",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "27d58fb1870ddfcf4e2d629e81a766136f9988902a6364b7ec405ed41e97a513"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/halt/contraction_growth.bend",
+      "source": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "2b6a4d2c5ecde83ee622e9f258695807847095e67d75ff8124af7192d6b845bc"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/halt/contraction_growth.bend",
+      "source": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "2b6a4d2c5ecde83ee622e9f258695807847095e67d75ff8124af7192d6b845bc"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/halt/contraction_growth.bend",
+      "source": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "2b6a4d2c5ecde83ee622e9f258695807847095e67d75ff8124af7192d6b845bc"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/halt/contraction_growth.bend",
+      "source": "63fbe35b9065d982fd1d85b44025f89eb5c5afaad87ecd10cfb999473f252b66",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "2b6a4d2c5ecde83ee622e9f258695807847095e67d75ff8124af7192d6b845bc"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/nested.bend",
+      "source": "bebd7003e769528206bc2f94c1fa58bf8fd2434e446e8773bf434c8355ed03e0",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "9f02408810f81f8ab7ef7c839d9e281d185068f32bfd2bd45f978576fde5f64b",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/nested.bend",
+      "source": "bebd7003e769528206bc2f94c1fa58bf8fd2434e446e8773bf434c8355ed03e0",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "9f02408810f81f8ab7ef7c839d9e281d185068f32bfd2bd45f978576fde5f64b",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/nested.bend",
+      "source": "bebd7003e769528206bc2f94c1fa58bf8fd2434e446e8773bf434c8355ed03e0",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "d904d04a80a5c069624d4f319d6aa7a9fd343036c77c0f04473bed1337f1b193",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/nested.bend",
+      "source": "bebd7003e769528206bc2f94c1fa58bf8fd2434e446e8773bf434c8355ed03e0",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "d904d04a80a5c069624d4f319d6aa7a9fd343036c77c0f04473bed1337f1b193",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/reuse.bend",
+      "source": "dfba3afbe0d91c7144a3178526c8e9422305808829b0e59d8257a38e1a729c54",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "b3b06c0f6a0ae3e5cefce88b38d8d800f2dc2507ceac7ad46a8ae78a3e380862",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/reuse.bend",
+      "source": "dfba3afbe0d91c7144a3178526c8e9422305808829b0e59d8257a38e1a729c54",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "b3b06c0f6a0ae3e5cefce88b38d8d800f2dc2507ceac7ad46a8ae78a3e380862",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/reuse.bend",
+      "source": "dfba3afbe0d91c7144a3178526c8e9422305808829b0e59d8257a38e1a729c54",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "28fe61319b56fd9a8f14f461d4846d10a7af3f4c1fb36984f8015a96a1803568",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-pattern-locations/positive/reuse.bend",
+      "source": "dfba3afbe0d91c7144a3178526c8e9422305808829b0e59d8257a38e1a729c54",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "28fe61319b56fd9a8f14f461d4846d10a7af3f4c1fb36984f8015a96a1803568",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/columns65.bend",
+      "source": "97a0377d11b0e071c9a5e0c4ade837171555f56d60af18bf07f2d024c115a6a3",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a3104ba05394d879841ef8f0abf0f0e28a8b4ff4f858fae170bbdbde2c6b57c3"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/columns65.bend",
+      "source": "97a0377d11b0e071c9a5e0c4ade837171555f56d60af18bf07f2d024c115a6a3",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a3104ba05394d879841ef8f0abf0f0e28a8b4ff4f858fae170bbdbde2c6b57c3"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/columns65.bend",
+      "source": "97a0377d11b0e071c9a5e0c4ade837171555f56d60af18bf07f2d024c115a6a3",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a3104ba05394d879841ef8f0abf0f0e28a8b4ff4f858fae170bbdbde2c6b57c3"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/columns65.bend",
+      "source": "97a0377d11b0e071c9a5e0c4ade837171555f56d60af18bf07f2d024c115a6a3",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "a3104ba05394d879841ef8f0abf0f0e28a8b4ff4f858fae170bbdbde2c6b57c3"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/nat65.bend",
+      "source": "18ef5ddd69e05b8da5295c042b7aaeb89f39163e45fe0155b55ca00bf5aa8392",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "129d78ac91f232b357e1c85d57a88060db40f9eef7b921997f12c282d3ca53ca"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/nat65.bend",
+      "source": "18ef5ddd69e05b8da5295c042b7aaeb89f39163e45fe0155b55ca00bf5aa8392",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "129d78ac91f232b357e1c85d57a88060db40f9eef7b921997f12c282d3ca53ca"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/nat65.bend",
+      "source": "18ef5ddd69e05b8da5295c042b7aaeb89f39163e45fe0155b55ca00bf5aa8392",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "129d78ac91f232b357e1c85d57a88060db40f9eef7b921997f12c282d3ca53ca"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/nat65.bend",
+      "source": "18ef5ddd69e05b8da5295c042b7aaeb89f39163e45fe0155b55ca00bf5aa8392",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "129d78ac91f232b357e1c85d57a88060db40f9eef7b921997f12c282d3ca53ca"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/wrong-type.bend",
+      "source": "4fd26931d0f0f6b06507dce5f9fde67371c8930777b0f9d29ad4807c8928559e",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "bab8676289e2015a1b2431c8b5eb2fc1ae6f9f3488126506617bc4a7baf920e5"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/wrong-type.bend",
+      "source": "4fd26931d0f0f6b06507dce5f9fde67371c8930777b0f9d29ad4807c8928559e",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "bab8676289e2015a1b2431c8b5eb2fc1ae6f9f3488126506617bc4a7baf920e5"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/wrong-type.bend",
+      "source": "4fd26931d0f0f6b06507dce5f9fde67371c8930777b0f9d29ad4807c8928559e",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "bab8676289e2015a1b2431c8b5eb2fc1ae6f9f3488126506617bc4a7baf920e5"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/negative/wrong-type.bend",
+      "source": "4fd26931d0f0f6b06507dce5f9fde67371c8930777b0f9d29ad4807c8928559e",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "bab8676289e2015a1b2431c8b5eb2fc1ae6f9f3488126506617bc4a7baf920e5"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/original/string_pattern_sugar.bend",
+      "source": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+      "operation": "check",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ce1d2819455f4bc5cb3c68c465b39603e8af237069ad4456617dddcde39613fe"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/original/string_pattern_sugar.bend",
+      "source": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+      "operation": "check",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ce1d2819455f4bc5cb3c68c465b39603e8af237069ad4456617dddcde39613fe"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/original/string_pattern_sugar.bend",
+      "source": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+      "operation": "run",
+      "rep": 1,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ce1d2819455f4bc5cb3c68c465b39603e8af237069ad4456617dddcde39613fe"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/original/string_pattern_sugar.bend",
+      "source": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+      "operation": "run",
+      "rep": 2,
+      "exit": 1,
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "ce1d2819455f4bc5cb3c68c465b39603e8af237069ad4456617dddcde39613fe"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-hit.bend",
+      "source": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-hit.bend",
+      "source": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-hit.bend",
+      "source": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-hit.bend",
+      "source": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-miss.bend",
+      "source": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-miss.bend",
+      "source": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-miss.bend",
+      "source": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/ascii-miss.bend",
+      "source": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-hit.bend",
+      "source": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-hit.bend",
+      "source": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-hit.bend",
+      "source": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-hit.bend",
+      "source": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-miss.bend",
+      "source": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-miss.bend",
+      "source": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-miss.bend",
+      "source": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/empty-miss.bend",
+      "source": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-hit.bend",
+      "source": "c85eaf8099b1f81667cbbc32865e1bb439d8534c9c47b4ead4a4ccd055fb0130",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-hit.bend",
+      "source": "c85eaf8099b1f81667cbbc32865e1bb439d8534c9c47b4ead4a4ccd055fb0130",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-hit.bend",
+      "source": "c85eaf8099b1f81667cbbc32865e1bb439d8534c9c47b4ead4a4ccd055fb0130",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-hit.bend",
+      "source": "c85eaf8099b1f81667cbbc32865e1bb439d8534c9c47b4ead4a4ccd055fb0130",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-inner-fallback.bend",
+      "source": "ea74c51f95caef0cf6b647ba5356ed08b4c8c5f86e01708614ee2da71d1c8663",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-inner-fallback.bend",
+      "source": "ea74c51f95caef0cf6b647ba5356ed08b4c8c5f86e01708614ee2da71d1c8663",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-inner-fallback.bend",
+      "source": "ea74c51f95caef0cf6b647ba5356ed08b4c8c5f86e01708614ee2da71d1c8663",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-inner-fallback.bend",
+      "source": "ea74c51f95caef0cf6b647ba5356ed08b4c8c5f86e01708614ee2da71d1c8663",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-outer-fallback.bend",
+      "source": "1938a87ba4488c638a9d93c44428fbf2f443c211b4c1727afad9c67dc3933089",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-outer-fallback.bend",
+      "source": "1938a87ba4488c638a9d93c44428fbf2f443c211b4c1727afad9c67dc3933089",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a6e36e7029752d3285824b4787aa69eac2809e85c79a822d9415ed9e537921c9",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-outer-fallback.bend",
+      "source": "1938a87ba4488c638a9d93c44428fbf2f443c211b4c1727afad9c67dc3933089",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/nested-field-outer-fallback.bend",
+      "source": "1938a87ba4488c638a9d93c44428fbf2f443c211b4c1727afad9c67dc3933089",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/prefix-miss.bend",
+      "source": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/prefix-miss.bend",
+      "source": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/prefix-miss.bend",
+      "source": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/prefix-miss.bend",
+      "source": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-hit.bend",
+      "source": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-hit.bend",
+      "source": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-hit.bend",
+      "source": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-hit.bend",
+      "source": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-miss.bend",
+      "source": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1",
+      "operation": "check",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-miss.bend",
+      "source": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1",
+      "operation": "check",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "de0538ca605255b0a05bcf06c314100ce848a1e7a34b22088644c80a097afb78",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-miss.bend",
+      "source": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1",
+      "operation": "run",
+      "rep": 1,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "tests/fixtures/cpu-string-pattern-depth/positive/unicode-miss.bend",
+      "source": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1",
+      "operation": "run",
+      "rep": 2,
+      "exit": 0,
+      "stdout": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstream_comparison": {
+    "original_sha256": "44b3907ace3402fa1e69f265baf39539e247efc4308e16a62bf43a9d6bde97ed",
+    "fixture_hashes": {
+      "ascii-hit.bend": "b0b7ba4080e76fcaa18652b1c94062952b2917e4692b9ae2d24d27bbe42e44e3",
+      "ascii-miss.bend": "caad7fcfeca0a847a77aa8e9a571cd43d476173ccb1c2f2635f79c15d0486daa",
+      "empty-hit.bend": "00357f9a1b3b4538917070a02140e18977b9cf37657c27d4100ab02a9711b8e6",
+      "empty-miss.bend": "1d531e1b88d19b855fc945f994155b554cfec72f0ab7fde41a2b4ed429e6c655",
+      "nested-field-hit.bend": "c85eaf8099b1f81667cbbc32865e1bb439d8534c9c47b4ead4a4ccd055fb0130",
+      "nested-field-inner-fallback.bend": "ea74c51f95caef0cf6b647ba5356ed08b4c8c5f86e01708614ee2da71d1c8663",
+      "nested-field-outer-fallback.bend": "1938a87ba4488c638a9d93c44428fbf2f443c211b4c1727afad9c67dc3933089",
+      "prefix-miss.bend": "737025b38978ac2e82b3e56bd7321bd1c628d5202ca90e64a64ff38840f43751",
+      "unicode-hit.bend": "8c0cf97a4344af404f776a91aee408785bd30329318e3150ed0d25b8376ce2e5",
+      "unicode-miss.bend": "e4e2533bfccb034e71476bdf555b8450e5ec1087d13ec984d1399edb234128b1"
+    },
+    "rows": [
+      {
+        "label": "ascii-hit:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-hit:port:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-hit:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-hit:port:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-miss:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-miss:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-miss:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "ascii-miss:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-hit:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-hit:port:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-hit:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-hit:port:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-miss:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-miss:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-miss:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "empty-miss:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-hit:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-hit:port:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-hit:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-hit:port:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-inner-fallback:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-inner-fallback:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-inner-fallback:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-inner-fallback:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-outer-fallback:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-outer-fallback:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-outer-fallback:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "nested-field-outer-fallback:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "prefix-miss:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "prefix-miss:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "prefix-miss:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "prefix-miss:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-hit:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-hit:port:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-hit:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-hit:port:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-miss:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-miss:port:1",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-miss:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "unicode-miss:port:2",
+        "exit": 0,
+        "stdout_sha256": "e4c48023cd491cf91d029c766523a47bdbd7dfa2e040add5b220029cb674fd17",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "original:upstream:1",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "original:port-check:1",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+      },
+      {
+        "label": "original:upstream:2",
+        "exit": 0,
+        "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "original:port-check:2",
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+      }
+    ],
+    "scope": "Ten controls match upstream twice. The original upstream succeeds but port still refuses at the 64-level guard."
+  },
+  "original_check_run_controls": [
+    {
+      "lane": "upstream",
+      "repeat": 1,
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-check",
+      "repeat": 1,
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    },
+    {
+      "lane": "port-run",
+      "repeat": 1,
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    },
+    {
+      "lane": "upstream",
+      "repeat": 2,
+      "exit": 0,
+      "stdout_sha256": "a360ca08850666c30c44561a5778029a369ea1e25881fa9012cf51e87fd4a977",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "lane": "port-check",
+      "repeat": 2,
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    },
+    {
+      "lane": "port-run",
+      "repeat": 2,
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d6a565bcb31b2e9518a4a3ecc490f7385c8cd319a23480a5678f0937a0bc09a6"
+    }
+  ],
+  "small_stack_controls": {
+    "requested_stack_bytes": 65536,
+    "pattern_depth": 100000,
+    "branching_depth": 8192,
+    "parser_direct_input_depth": 20000,
+    "normal_error_unwind": "passed",
+    "surface_single_run_max_rss_kib": 27196,
+    "parser_error_single_run_max_rss_kib": 16204,
+    "rss_note": "Illustrative Linux child peak RSS, not memory ceilings or general bounds."
+  },
+  "public_owned_term_consumer": "Compiled and ran without an API change."
+}
